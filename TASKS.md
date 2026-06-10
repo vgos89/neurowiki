@@ -4,6 +4,16 @@
 
 (none)
 
+### NIHSS-ANTICOAG-MOBILE — Discrete "quiet chip" restyle of the eligibility controls — Class C
+- **Status:** ready_for_merge (committed this session)
+- **User-visible goal:** On a phone, the anticoagulant class selector, the per-drug toggles, and the mRS read lighter and shorter. The 44px pills become small (28px), low-contrast, square-cornered chips (Variation C); the excluding value (DOAC <48h, INR >1.7, aPTT >40s) tints amber; the filled amber caution box becomes a thin inline note. No content, claim, or logic changes (pure presentation of the already-reviewed NIHSS-ANTICOAG-ELIG surface).
+- **Non-goals:** no change to the BP threshold box (separate element); no copy/claim/citation changes; Stroke Code unchanged (controls gated to showThrombolysisTiming).
+- **Files:** src/components/shared/PatientContextPanel.tsx; docs/specs/PATIENT_CONTEXT_MOBILE_DISCRETE_SPEC.md (+ untracked mockups under docs/specs/mockups/).
+- **Acceptance checks:** all passed — tsc clean; build green; check:claims pass (4 ivt-anticoag data-claim tags intact); check:humanizer pass; live-preview verified at 375px + 768px (dense chips, amber caution chip, thin "!" note, mRS 0-5 squares). Design via ui-architect (3 variations specced; V picked C + thin note).
+- **Clinical impact:** none (presentation only; rendered strings byte-identical to the clinically-reviewed NIHSS-ANTICOAG-ELIG version).
+- **Follow-up:** accessibility pass on 28px tap targets (meets WCAG 2.2 AA 24px floor; confirm against project AA interpretation).
+- **Rollback plan:** `git revert <merge commit>` restores the 44px pills + amber caution boxes. No data-model or content change.
+
 ### NIHSS-ANTICOAG-ELIG — Patient-context anticoagulant/antiplatelet IVT-eligibility redesign — Class E-clinical
 - **Status:** ready_for_merge (committed this session)
 - **User-visible goal:** On the NIHSS calculator's Patient Context panel, the anticoagulant row becomes a four-class selector (Antiplatelet, DOAC, Warfarin, Heparin/LMWH; "None" dropped, empty = none). Each selected class reveals a per-drug IV-thrombolysis eligibility input in the existing pill vocabulary: DOAC last-dose <48h vs >=48h (plus optional drug name) with an "individualize, safety unknown" note; warfarin INR <=1.7 vs >1.7; Heparin/LMWH aPTT <=40s vs >40s; the latter two with an "excluded" note. Antiplatelet shows a "not a contraindication" note. Every caution reuses the existing amber alert box. Pre-stroke mRS trimmed to 0-5 (no grade 6) with the redundant modal removed. All per-drug inputs gated to the NIHSS surface; Stroke Code unchanged.

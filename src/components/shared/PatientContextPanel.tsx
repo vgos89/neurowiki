@@ -179,11 +179,18 @@ const ANTICOAG_LABELS: Record<Anticoag, string> = {
 /** Display + render order for the anticoag chips and their sub-rows. */
 const ANTICOAG_KEYS: Anticoag[] = ['antiplatelet', 'doac', 'warfarin', 'heparin'];
 
-/** Shared pill classes — the exact existing anticoag/mRS chip vocabulary. */
-const PILL_BASE =
-  'min-h-[44px] py-1.5 px-3 -my-1 text-xs font-semibold rounded-full border transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none';
-const PILL_ON = 'bg-neuro-50 border-neuro-200 text-neuro-700';
-const PILL_OFF = 'bg-white border-slate-200 text-slate-500 hover:border-slate-300';
+/**
+ * Dense "quiet chip" classes for the eligibility controls (Variation C, V pick
+ * 2026-06-10). Smaller (h-7), lower-contrast, square-cornered (rounded-md) so the
+ * panel reads lighter and shorter on a 375px phone. 28px height meets WCAG 2.2 AA
+ * target size (24px floor); the chips sit in 44px rows with gap spacing.
+ * CHIP_CAUT is the amber selected-state for a value that excludes / cautions IVT.
+ */
+const CHIP_BASE =
+  'h-7 px-2.5 inline-flex items-center justify-center text-[11px] font-medium rounded-md border transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none';
+const CHIP_ON = 'bg-neuro-50 border-neuro-200 text-neuro-700';
+const CHIP_OFF = 'bg-white border-slate-200 text-slate-400 hover:border-slate-300 hover:text-slate-500';
+const CHIP_CAUT = 'bg-amber-50 border-amber-200 text-amber-700';
 
 export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
   values,
@@ -539,7 +546,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
                     key={key}
                     type="button"
                     onClick={() => toggleAnticoag(key)}
-                    className={`${PILL_BASE} ${selected ? PILL_ON : PILL_OFF}`}
+                    className={`${CHIP_BASE} ${selected ? CHIP_ON : CHIP_OFF}`}
                     aria-pressed={selected}
                   >
                     {ANTICOAG_LABELS[key]}
@@ -552,8 +559,8 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
           {/* Per-drug IV-thrombolysis eligibility sub-rows. Only on the
               thrombolysis surface (NIHSS via showThrombolysisTiming); Stroke
               Code keeps its own engine and sees only the class selector above.
-              Each selected class reveals its eligibility input in the same pill
-              vocabulary; the contraindication cue is the existing amber box.
+              Each selected class reveals its eligibility input as dense quiet
+              chips (Variation C); the contraindication cue is a thin inline note.
               Criteria: AHA/ASA 2026 §4.6.1 (antiplatelet not a contraindication)
               and §4.6.5 + Table 8 (DOAC <48h relative; INR >1.7 and aPTT >40s
               absolute). */}
@@ -575,7 +582,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
                     return (
                       <button key={val} type="button"
                         onClick={() => onChange({ ...values, doacTiming: selected ? undefined : val })}
-                        className={`${PILL_BASE} ${selected ? PILL_ON : PILL_OFF}`} aria-pressed={selected}>
+                        className={`${CHIP_BASE} ${selected ? (val === 'lt48h' ? CHIP_CAUT : CHIP_ON) : CHIP_OFF}`} aria-pressed={selected}>
                         {lbl}
                       </button>
                     );
@@ -591,9 +598,9 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
                 </div>
               </div>
               {values.doacTiming === 'lt48h' && (
-                <div data-claim="ivt-anticoag-doac-48h" className="mx-4 mb-1 flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2" role="status" aria-live="polite">
-                  <span className="text-amber-500 flex-shrink-0 mt-0.5" aria-hidden="true">⚠</span>
-                  <p className="text-xs text-amber-800 leading-snug">{'DOAC <48h: individualize, IV thrombolysis safety unknown.'}</p>
+                <div data-claim="ivt-anticoag-doac-48h" className="px-4 pb-2 -mt-0.5 flex items-start gap-1.5" role="status" aria-live="polite">
+                  <span className="text-amber-500 text-xs font-bold flex-shrink-0 leading-snug" aria-hidden="true">!</span>
+                  <p className="text-xs text-amber-700 leading-snug">{'DOAC <48h: individualize, IV thrombolysis safety unknown.'}</p>
                 </div>
               )}
             </>
@@ -609,7 +616,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
                     return (
                       <button key={val} type="button"
                         onClick={() => onChange({ ...values, warfarinInr: selected ? undefined : val })}
-                        className={`${PILL_BASE} ${selected ? PILL_ON : PILL_OFF}`} aria-pressed={selected}>
+                        className={`${CHIP_BASE} ${selected ? (val === 'gt1_7' ? CHIP_CAUT : CHIP_ON) : CHIP_OFF}`} aria-pressed={selected}>
                         {lbl}
                       </button>
                     );
@@ -617,9 +624,9 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
                 </div>
               </div>
               {values.warfarinInr === 'gt1_7' && (
-                <div data-claim="ivt-anticoag-warfarin-inr" className="mx-4 mb-1 flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2" role="status" aria-live="polite">
-                  <span className="text-amber-500 flex-shrink-0 mt-0.5" aria-hidden="true">⚠</span>
-                  <p className="text-xs text-amber-800 leading-snug">{'INR >1.7: excluded from IV thrombolysis.'}</p>
+                <div data-claim="ivt-anticoag-warfarin-inr" className="px-4 pb-2 -mt-0.5 flex items-start gap-1.5" role="status" aria-live="polite">
+                  <span className="text-amber-500 text-xs font-bold flex-shrink-0 leading-snug" aria-hidden="true">!</span>
+                  <p className="text-xs text-amber-700 leading-snug">{'INR >1.7: excluded from IV thrombolysis.'}</p>
                 </div>
               )}
             </>
@@ -635,7 +642,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
                     return (
                       <button key={val} type="button"
                         onClick={() => onChange({ ...values, heparinAptt: selected ? undefined : val })}
-                        className={`${PILL_BASE} ${selected ? PILL_ON : PILL_OFF}`} aria-pressed={selected}>
+                        className={`${CHIP_BASE} ${selected ? (val === 'gt40s' ? CHIP_CAUT : CHIP_ON) : CHIP_OFF}`} aria-pressed={selected}>
                         {lbl}
                       </button>
                     );
@@ -643,9 +650,9 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
                 </div>
               </div>
               {values.heparinAptt === 'gt40s' && (
-                <div data-claim="ivt-anticoag-ufh-aptt" className="mx-4 mb-1 flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2" role="status" aria-live="polite">
-                  <span className="text-amber-500 flex-shrink-0 mt-0.5" aria-hidden="true">⚠</span>
-                  <p className="text-xs text-amber-800 leading-snug">{'IV heparin, aPTT >40 s: excluded from IV thrombolysis.'}</p>
+                <div data-claim="ivt-anticoag-ufh-aptt" className="px-4 pb-2 -mt-0.5 flex items-start gap-1.5" role="status" aria-live="polite">
+                  <span className="text-amber-500 text-xs font-bold flex-shrink-0 leading-snug" aria-hidden="true">!</span>
+                  <p className="text-xs text-amber-700 leading-snug">{'IV heparin, aPTT >40 s: excluded from IV thrombolysis.'}</p>
                 </div>
               )}
             </>
@@ -676,10 +683,8 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
                         prestrokeMrs: selected ? undefined : grade,
                       })
                     }
-                    className={`w-8 h-8 flex items-center justify-center rounded-full text-xs font-semibold border transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
-                      selected
-                        ? 'bg-neuro-50 border-neuro-200 text-neuro-700'
-                        : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300'
+                    className={`h-7 w-7 inline-flex items-center justify-center rounded-md text-[11px] font-medium border transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
+                      selected ? CHIP_ON : CHIP_OFF
                     }`}
                     aria-pressed={selected}
                     aria-label={`Pre-stroke mRS ${grade}`}
