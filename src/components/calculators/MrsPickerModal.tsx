@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { X } from 'lucide-react';
 import type { MRSGrade } from '../shared/PatientContextPanel';
 
@@ -28,8 +28,37 @@ export const MrsPickerModal: React.FC<MrsPickerModalProps> = ({
   onChange,
   maxGrade = 6,
 }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  // Move focus into the dialog on open (WCAG 2.4.3).
+  useEffect(() => {
+    if (!isOpen) return;
+    const id = setTimeout(() => {
+      dialogRef.current
+        ?.querySelector<HTMLElement>('button, [href], [tabindex]:not([tabindex="-1"])')
+        ?.focus();
+    }, 10);
+    return () => clearTimeout(id);
+  }, [isOpen]);
+
   if (!isOpen) return null;
   const grades = GRADES.filter((g) => g.grade <= maxGrade);
+
+  // Escape-to-close + Tab focus trap (WCAG 2.1.1, ARIA dialog pattern).
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') { onClose(); return; }
+    if (e.key !== 'Tab') return;
+    const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
+      'button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])'
+    );
+    if (!focusable || focusable.length === 0) return;
+    const firstEl = focusable[0];
+    const lastEl = focusable[focusable.length - 1];
+    if (e.shiftKey ? document.activeElement === firstEl : document.activeElement === lastEl) {
+      e.preventDefault();
+      (e.shiftKey ? lastEl : firstEl).focus();
+    }
+  };
 
   return (
     <div
@@ -37,13 +66,18 @@ export const MrsPickerModal: React.FC<MrsPickerModalProps> = ({
       onClick={onClose}
     >
       <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="mrs-modal-title"
+        onKeyDown={handleKeyDown}
         className="w-full sm:max-w-sm bg-white rounded-t-2xl sm:rounded-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
           <div>
-            <p className="text-sm font-semibold text-slate-900">Pre-stroke mRS</p>
+            <p id="mrs-modal-title" className="text-sm font-semibold text-slate-900">Pre-stroke mRS</p>
             <p className="text-xs text-slate-400 mt-0.5">Baseline function before this event</p>
           </div>
           <button
@@ -64,6 +98,7 @@ export const MrsPickerModal: React.FC<MrsPickerModalProps> = ({
               <button
                 key={g.grade}
                 type="button"
+                aria-pressed={isSelected}
                 onClick={() => onChange(isSelected ? undefined : g.grade)}
                 className={
                   isSelected

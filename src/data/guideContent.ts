@@ -778,7 +778,7 @@ For patients with ischemic stroke and Atrial Fibrillation, the optimal timing to
 ## 1. Immediate Assessment (The "Golden Hour")
 *   **Establish Last Known Well (LKW):** Critical for eligibility. If wake-up stroke, LKW is time last seen normal before sleep.
 *   **Vitals:** BP, HR, O2 Sat, Temp.
-*   **POC Glucose:** Rule out hypoglycemia (< 50 mg/dL), which is a common mimic.
+*   **POC Glucose:** Rule out hypoglycemia (<60 mg/dL), which is a common mimic.
 *   **[NIHSS](/calculators/nihss):** Perform baseline assessment by certified examiner.
     *   *Pearls:* Specifically assess for disabling deficits (e.g., isolated aphasia, visual field cut, hand weakness) even if total score is low.
     *   *History:* Screen for trauma, recent surgery (<14 days), active bleeding, anticoagulant use (time of last dose).

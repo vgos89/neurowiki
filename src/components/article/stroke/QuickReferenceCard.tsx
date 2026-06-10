@@ -147,7 +147,6 @@ export const QuickReferenceCard: React.FC = () => {
                 'Intracranial / intraspinal surgery < 3 months',
                 'Recent MI < 3 months',
                 'BP not controlled after treatment (>185/110)',
-                'Glucose < 50 or > 400 mg/dL (uncorrected)',
                 'INR > 1.7 / anti-Xa above therapeutic range',
                 'Platelet count < 100,000/mm³',
               ].map(item => (

@@ -190,7 +190,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'contraindications-absolute',
         title: 'Absolute Contraindications',
-        content: 'Acute ICH on imaging. Active internal bleeding. BP >185/110 uncontrolled. Platelet <100K. INR >1.7. Therapeutic LMWH <24h. Direct thrombin/Factor Xa inhibitors. Recent neurosurgery/severe head trauma <3mo. Blood glucose <50 mg/dL (hypoglycemia mimic).',
+        content: 'Acute ICH on imaging. Active internal bleeding. BP >185/110 uncontrolled. Platelet <100K. INR >1.7. Therapeutic LMWH <24h. Direct thrombin/Factor Xa inhibitors. Recent neurosurgery/severe head trauma <3mo. (Hypoglycemia is corrected and reassessed, not an absolute contraindication: if a focal deficit persists after glucose normalizes to ≥60 mg/dL, tPA proceeds.)',
         type: 'pearl',
         section: 'step-1',
         evidenceClass: 'III',
@@ -666,7 +666,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'glucose-mandatory-deep',
         title: 'Why Glucose is Mandatory',
-        content: 'Point-of-care glucose is the ONLY mandatory lab because: (1) Hypoglycemia (<50) can perfectly mimic stroke with focal deficits - 10-second test prevents inappropriate tPA. (2) Hyperglycemia (>200) worsens ischemia - treat but don\'t delay. (3) All other labs can run during tPA infusion. Exception: Known anticoagulation requires INR/aPTT.',
+        content: 'Point-of-care glucose is the ONLY mandatory lab because: (1) Hypoglycemia (<60 mg/dL) can perfectly mimic stroke with focal deficits - the 10-second POC test catches it before tPA. (2) Hyperglycemia (>200) worsens ischemia - treat but don\'t delay. (3) All other labs can run during tPA infusion. Exception: Known anticoagulation requires INR/aPTT.',
         type: 'pearl',
         section: 'step-3',
         evidenceClass: 'I',
@@ -806,7 +806,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'glucose-deep',
         title: 'Glucose Management',
-        content: 'Hypoglycemia (<50): Can perfectly mimic stroke with focal deficits, seizures. Give D50 50mL IV → recheck. If symptoms persist after normoglycemia, stroke confirmed. Hyperglycemia (>200): Worsens ischemia, decreases recanalization, increases ICH risk (RIBO 2005). Target 140-180 mg/dL with insulin drip. CRITICAL: Avoid hypoglycemia - more dangerous than hyperglycemia.',
+        content: 'Hypoglycemia (<60 mg/dL): Can perfectly mimic stroke with focal deficits, seizures. Give D50 50mL IV → recheck. If symptoms persist after normoglycemia, stroke confirmed. Hyperglycemia (>200): Worsens ischemia, decreases recanalization, increases ICH risk (RIBO 2005). Target 140-180 mg/dL with insulin drip. CRITICAL: Avoid hypoglycemia - more dangerous than hyperglycemia.',
         type: 'pearl',
         section: 'step-4',
         evidence: 'Ribo et al, Stroke 2005',

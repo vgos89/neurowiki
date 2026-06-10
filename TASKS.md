@@ -4,6 +4,15 @@
 
 (none)
 
+### NIHSS-A11Y-GLUCOSE — Eligibility-control accessibility pass + glucose <50/<60 consistency — Class C + E-clinical
+- **Status:** ready_for_merge (committed this session)
+- **User-visible goal:** (accessibility) the patient-panel eligibility controls now meet WCAG 2.1 AA: unselected chip text and the amber caution glyphs have higher contrast (slate-500 / amber-600), the mRS "?" help button is a 24px tap target, and the mRS explainer is a proper dialog (role + aria-modal + aria-labelledby, focus moves in on open, Tab trap, Escape to close, return focus to the "?", aria-pressed on each grade). (glucose) the app's historical <50 glucose numbers are corrected to 2026: hypoglycemia-mimic references move to <60 (the §4.5 treat-threshold), and glucose is removed from the "Absolute Contraindications" lists (the 2026 guideline lists no glucose contraindication; hypoglycemia is correct-and-reassess, not absolute).
+- **Non-goals:** no change to the LMWH/DOAC absolute-vs-relative phrasing in two unrelated pearls (separate pre-existing issue, tracked as a follow-up task); no claim-binding added to the non-scanned narrative surfaces.
+- **Files:** src/components/shared/PatientContextPanel.tsx; src/components/calculators/MrsPickerModal.tsx; src/data/guideContent.ts; src/data/strokeClinicalPearls.ts; src/components/article/stroke/QuickReferenceCard.tsx; docs/reviews/clinical-PR-glucose-threshold-consistency.md
+- **Acceptance checks:** tsc clean; build green; check:claims pass; check:humanizer pass; accessibility-specialist audit (5 must-fix + 3 should-fix all applied); live-preview verified at 375px (mRS dialog has role/aria-modal/labelledby, focus moves in, 6 grade buttons aria-pressed, "?" is 24x24, no console errors); clinical §17.2 approve (glucose corrections sourced to §4.5 + §4.6.5 / Table 8; no new citation needed).
+- **Clinical impact:** medium (glucose-threshold consistency on stroke reference surfaces) plus accessibility.
+- **Rollback plan:** `git revert <merge commit>` restores the 18px "?", the non-dialog modal, the slate-400 chip text, and the <50 glucose numbers. No data-model change.
+
 ### NIHSS-HYPOGLYCEMIA-NOTES — Hypoglycemia caution + thin-note unification + mRS explainer — Class E-clinical
 - **Status:** ready_for_merge (committed this session)
 - **User-visible goal:** (1) the patient panel's BP caution box becomes the same thin "!" inline note as the per-drug cautions, unifying the caution style across the panel; (2) a new hypoglycemia "!" note appears on the NIHSS panel when glucose <60 mg/dL, mirroring the Stroke Code pathway alert ("treat with D50 50 mL IV, recheck, reassess for tPA if symptoms persist"); (3) the Stroke Code hypoglycemia alert threshold is corrected from <50 to <60 (CodeModeStep1 trigger + CodeModeStep3 copy), completing the earlier audit stroke-code-glucose-threshold-60; (4) the pre-stroke mRS slide-up explainer is restored via a "?" next to the label (capped at grades 0-5) so users who do not know the scale can read each grade.

@@ -188,9 +188,10 @@ const ANTICOAG_KEYS: Anticoag[] = ['antiplatelet', 'doac', 'warfarin', 'heparin'
  * CHIP_CAUT is the amber selected-state for a value that excludes / cautions IVT.
  */
 const CHIP_BASE =
-  'h-7 px-2.5 inline-flex items-center justify-center text-[11px] font-medium rounded-md border transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none';
+  'h-7 px-2.5 inline-flex items-center justify-center text-[11px] font-medium rounded-md border transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:ring-offset-1 focus-visible:outline-none';
 const CHIP_ON = 'bg-neuro-50 border-neuro-200 text-neuro-700';
-const CHIP_OFF = 'bg-white border-slate-200 text-slate-400 hover:border-slate-300 hover:text-slate-500';
+// slate-500 (not slate-400) so unselected chip text clears WCAG AA 4.5:1 on white.
+const CHIP_OFF = 'bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-600';
 const CHIP_CAUT = 'bg-amber-50 border-amber-200 text-amber-700';
 
 export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
@@ -213,6 +214,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
   );
   const recognitionRef = useRef<InstanceType<SpeechRecognitionCtor> | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const mrsHelpRef = useRef<HTMLButtonElement>(null);
 
   // Refs so onresult always sees fresh values without stale closure.
   const onChangeRef = useRef(onChange);
@@ -370,7 +372,8 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
       <button
         type="button"
         onClick={lockExpanded ? undefined : () => setExpanded((v) => !v)}
-        disabled={lockExpanded}
+        aria-disabled={lockExpanded ? true : undefined}
+        tabIndex={lockExpanded ? -1 : undefined}
         className={`w-full min-h-[44px] flex items-center justify-between px-4 py-2.5 border-b text-left transition-colors ${
           lockExpanded
             ? 'bg-slate-50 border-slate-100 cursor-default'
@@ -509,7 +512,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
                 role="status"
                 aria-live="polite"
               >
-                <span className="text-amber-500 text-xs font-bold flex-shrink-0 leading-snug" aria-hidden="true">!</span>
+                <span className="text-amber-600 text-xs font-bold flex-shrink-0 leading-snug" aria-hidden="true">!</span>
                 <p className="text-xs text-amber-700 leading-snug">
                   {ivt?.inWindow
                     ? 'If thrombolysis planned: BP goal <185/110'
@@ -550,7 +553,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
                 role="status"
                 aria-live="polite"
               >
-                <span className="text-amber-500 text-xs font-bold flex-shrink-0 leading-snug" aria-hidden="true">!</span>
+                <span className="text-amber-600 text-xs font-bold flex-shrink-0 leading-snug" aria-hidden="true">!</span>
                 <p className="text-xs text-amber-700 leading-snug">
                   {'Hypoglycemia (glucose <60): treat with D50 50 mL IV, recheck, reassess for tPA if symptoms persist.'}
                 </p>
@@ -623,7 +626,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
               </div>
               {values.doacTiming === 'lt48h' && (
                 <div data-claim="ivt-anticoag-doac-48h" className="px-4 pb-2 -mt-0.5 flex items-start gap-1.5" role="status" aria-live="polite">
-                  <span className="text-amber-500 text-xs font-bold flex-shrink-0 leading-snug" aria-hidden="true">!</span>
+                  <span className="text-amber-600 text-xs font-bold flex-shrink-0 leading-snug" aria-hidden="true">!</span>
                   <p className="text-xs text-amber-700 leading-snug">{'DOAC <48h: individualize, IV thrombolysis safety unknown.'}</p>
                 </div>
               )}
@@ -649,7 +652,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
               </div>
               {values.warfarinInr === 'gt1_7' && (
                 <div data-claim="ivt-anticoag-warfarin-inr" className="px-4 pb-2 -mt-0.5 flex items-start gap-1.5" role="status" aria-live="polite">
-                  <span className="text-amber-500 text-xs font-bold flex-shrink-0 leading-snug" aria-hidden="true">!</span>
+                  <span className="text-amber-600 text-xs font-bold flex-shrink-0 leading-snug" aria-hidden="true">!</span>
                   <p className="text-xs text-amber-700 leading-snug">{'INR >1.7: excluded from IV thrombolysis.'}</p>
                 </div>
               )}
@@ -675,7 +678,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
               </div>
               {values.heparinAptt === 'gt40s' && (
                 <div data-claim="ivt-anticoag-ufh-aptt" className="px-4 pb-2 -mt-0.5 flex items-start gap-1.5" role="status" aria-live="polite">
-                  <span className="text-amber-500 text-xs font-bold flex-shrink-0 leading-snug" aria-hidden="true">!</span>
+                  <span className="text-amber-600 text-xs font-bold flex-shrink-0 leading-snug" aria-hidden="true">!</span>
                   <p className="text-xs text-amber-700 leading-snug">{'IV heparin, aPTT >40 s: excluded from IV thrombolysis.'}</p>
                 </div>
               )}
@@ -695,11 +698,12 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
                   separate from the label so the label no longer doubles as the
                   modal trigger (V removed that dual interaction). */}
               <button
+                ref={mrsHelpRef}
                 type="button"
                 onClick={() => setMrsModalOpen(true)}
                 aria-label="What do the mRS grades mean?"
                 aria-haspopup="dialog"
-                className="w-[18px] h-[18px] inline-flex items-center justify-center rounded-full border border-slate-300 text-[11px] font-bold leading-none text-slate-400 hover:text-neuro-600 hover:border-neuro-300 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+                className="w-6 h-6 inline-flex items-center justify-center rounded-full border border-slate-400 text-[11px] font-bold leading-none text-slate-500 hover:text-neuro-600 hover:border-neuro-300 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
               >
                 ?
               </button>
@@ -791,7 +795,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
                 UX. Only visible while mic is active and browser is
                 mid-phrase. */}
             {isListening && interimText && (
-              <p className="mt-1 px-1 text-xs text-slate-400 italic leading-snug">
+              <p className="mt-1 px-1 text-xs text-slate-500 italic leading-snug" aria-live="polite" aria-atomic="false">
                 {interimText}
                 <span className="inline-block w-1.5 h-3 bg-slate-300 ml-0.5 animate-pulse rounded-sm align-middle" aria-hidden />
               </p>
@@ -844,7 +848,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
           to the mRS label. maxGrade=5 (grade 6 "Dead" is not a baseline). */}
       <MrsPickerModal
         isOpen={mrsModalOpen}
-        onClose={() => setMrsModalOpen(false)}
+        onClose={() => { setMrsModalOpen(false); mrsHelpRef.current?.focus(); }}
         value={values.prestrokeMrs}
         maxGrade={5}
         onChange={(grade) => {
