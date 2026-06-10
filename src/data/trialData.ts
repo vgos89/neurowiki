@@ -14206,8 +14206,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         label: 'at 3 Months'
       },
       pValue: {
-        value: 'PP NI Only',
-        label: 'Nuanced Result'
+        value: 'Met per-protocol',
+        label: 'Not in main (ITT) analysis'
       },
       effectSize: {
         value: '+3%',
