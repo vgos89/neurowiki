@@ -14188,7 +14188,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'TASTE Trial',
     subtitle: 'Tenecteplase vs Alteplase with Perfusion-Imaging Selection',
     category: 'Neuro Trials',
-    primaryDesign: 'bayesian-noninferiority',
+    primaryDesign: 'noninferiority',
     primaryResult: 'noninferiority-established',
     applicability: {
       imagingSelection: 'CT perfusion mismatch required. Results apply to imaging-selected early-window stroke only',
