@@ -78,6 +78,8 @@ export interface SavedCaseData {
     doacDrug?: string;
     warfarinInr?: 'le1_7' | 'gt1_7';
     heparinAptt?: 'le40s' | 'gt40s';
+    /** Pre-stroke baseline mRS grade (0-5). */
+    prestrokeMrs?: 0 | 1 | 2 | 3 | 4 | 5;
   };
 
   /** Stroke timestamps. Two storage modes:

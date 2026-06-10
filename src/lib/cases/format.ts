@@ -134,6 +134,23 @@ export function formatSavedCaseAsEmrText(c: SavedCase): string {
     } else {
       contextLines.push(`Anti-Coag/Antiplatelet: None`);
     }
+    // Per-drug IV-thrombolysis eligibility detail (mirrors the on-screen inputs).
+    if (anticoagList.includes('doac')) {
+      const doacParts = [
+        pc.doacDrug || undefined,
+        pc.doacTiming === 'lt48h' ? 'last dose <48 h' : pc.doacTiming === 'gte48h' ? 'last dose ≥48 h' : undefined,
+      ].filter(Boolean);
+      if (doacParts.length) contextLines.push(`DOAC: ${doacParts.join(', ')}`);
+    }
+    if (anticoagList.includes('warfarin') && pc.warfarinInr) {
+      contextLines.push(`Warfarin INR: ${pc.warfarinInr === 'gt1_7' ? '>1.7' : '≤1.7'}`);
+    }
+    if (anticoagList.includes('heparin') && pc.heparinAptt) {
+      contextLines.push(`Heparin/LMWH aPTT: ${pc.heparinAptt === 'gt40s' ? '>40 s' : '≤40 s'}`);
+    }
+    if (pc.prestrokeMrs !== undefined) {
+      contextLines.push(`Pre-stroke mRS: ${pc.prestrokeMrs}`);
+    }
     if (pc.preExistingDeficits) {
       contextLines.push(`Pre-existing deficits: ${pc.preExistingDeficits}`);
     }

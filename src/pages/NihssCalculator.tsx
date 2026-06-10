@@ -233,6 +233,7 @@ const NihssCalculator: React.FC = () => {
             doacDrug: pc.doacDrug,
             warfarinInr: pc.warfarinInr,
             heparinAptt: pc.heparinAptt,
+            prestrokeMrs: pc.prestrokeMrs,
           });
         }
         // Restore stroke timestamps — only in absolute mode. Relative-mode
@@ -450,6 +451,27 @@ const NihssCalculator: React.FC = () => {
       const mm = min % 60;
       return hh > 0 ? `${hh} h ${mm} min` : `${mm} min`;
     };
+    // Per-drug IV-thrombolysis eligibility detail for the copy export. Mirrors
+    // the on-screen inputs (DOAC last-dose timing + drug name, warfarin INR,
+    // heparin/LMWH aPTT); emitted only for a selected drug with a value entered.
+    const eligibilityLines: string[] = [];
+    if (patientContext.anticoag.has('doac')) {
+      const doacParts = [
+        patientContext.doacDrug || undefined,
+        patientContext.doacTiming === 'lt48h'
+          ? 'last dose <48 h'
+          : patientContext.doacTiming === 'gte48h'
+          ? 'last dose ≥48 h'
+          : undefined,
+      ].filter(Boolean);
+      if (doacParts.length) eligibilityLines.push(`DOAC: ${doacParts.join(', ')}`);
+    }
+    if (patientContext.anticoag.has('warfarin') && patientContext.warfarinInr) {
+      eligibilityLines.push(`Warfarin INR: ${patientContext.warfarinInr === 'gt1_7' ? '>1.7' : '≤1.7'}`);
+    }
+    if (patientContext.anticoag.has('heparin') && patientContext.heparinAptt) {
+      eligibilityLines.push(`Heparin/LMWH aPTT: ${patientContext.heparinAptt === 'gt40s' ? '>40 s' : '≤40 s'}`);
+    }
     const contextLines: string[] = [
       performedAt
         ? `Exam Performed: ${formatClinicalDateTime(performedAt)}`
@@ -471,14 +493,18 @@ const NihssCalculator: React.FC = () => {
       patientContext.anticoag.size > 0
         ? `Anti-Coag/Antiplatelet: ${Array.from(patientContext.anticoag).map((k) => ANTICOAG_LABELS[k]).join(', ')}`
         : `Anti-Coag/Antiplatelet: None`,
-      // Last anticoagulant dose surfaces only when DOAC or warfarin is
-      // selected and a value has been entered. Antiplatelets/none never
-      // print a dose line.
+      // Per-drug eligibility detail (DOAC timing/drug, warfarin INR, heparin aPTT).
+      ...eligibilityLines,
+      // Legacy last-dose line: only fires for cases saved before the per-drug
+      // inputs shipped (lastAnticoagDose is no longer set by the current UI).
       (patientContext.anticoag.has('doac') || patientContext.anticoag.has('warfarin')) &&
       patientContext.lastAnticoagDose !== undefined
         ? patientContext.lastAnticoagDose === null
           ? 'Last anticoag dose: Unknown'
           : `Last anticoag dose: ${formatClinicalDateTime(patientContext.lastAnticoagDose)}`
+        : null,
+      patientContext.prestrokeMrs !== undefined
+        ? `Pre-stroke mRS: ${patientContext.prestrokeMrs}`
         : null,
       patientContext.preExistingDeficits
         ? `Pre-existing deficits: ${patientContext.preExistingDeficits}`
@@ -891,6 +917,7 @@ const NihssCalculator: React.FC = () => {
                 doacDrug: patientContext.doacDrug || undefined,
                 warfarinInr: patientContext.warfarinInr,
                 heparinAptt: patientContext.heparinAptt,
+                prestrokeMrs: patientContext.prestrokeMrs,
               },
               strokeTimestamps: hasAnyStamp ? stamps : undefined,
               strokeTimestampsMode: hasAnyStamp

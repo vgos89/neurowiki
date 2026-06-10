@@ -4,6 +4,15 @@
 
 (none)
 
+### NIHSS-COPY-TEMPLATE-FIELDS — Wire per-drug eligibility + pre-stroke mRS into copy/share — Class C
+- **Status:** ready_for_merge (committed this session)
+- **User-visible goal:** the anticoagulant eligibility inputs (DOAC last-dose timing + drug name, warfarin INR, heparin/LMWH aPTT) and the pre-stroke mRS now appear in the NIHSS copy export and the saved-case share text when entered. The pre-stroke mRS is also now persisted with a saved case (it was previously lost on save, while the per-drug fields already persisted).
+- **Non-goals:** no on-screen UI change; no new clinical claim (these lines document the clinician's entered values).
+- **Files:** src/pages/NihssCalculator.tsx; src/lib/cases/format.ts; src/lib/cases/types.ts
+- **Acceptance checks:** tsc clean; build green; check:claims pass; check:humanizer pass; runtime-verified copy output includes "DOAC: apixaban, last dose <48 h", "Warfarin INR: >1.7", "Pre-stroke mRS: 2".
+- **Clinical impact:** none (documentation wiring).
+- **Rollback plan:** `git revert <merge commit>` removes the per-drug + mRS lines from the export; the additive prestrokeMrs save field is ignored by old code.
+
 ### NIHSS-A11Y-GLUCOSE — Eligibility-control accessibility pass + glucose <50/<60 consistency — Class C + E-clinical
 - **Status:** ready_for_merge (committed this session)
 - **User-visible goal:** (accessibility) the patient-panel eligibility controls now meet WCAG 2.1 AA: unselected chip text and the amber caution glyphs have higher contrast (slate-500 / amber-600), the mRS "?" help button is a 24px tap target, and the mRS explainer is a proper dialog (role + aria-modal + aria-labelledby, focus moves in on open, Tab trap, Escape to close, return focus to the "?", aria-pressed on each grade). (glucose) the app's historical <50 glucose numbers are corrected to 2026: hypoglycemia-mimic references move to <60 (the §4.5 treat-threshold), and glucose is removed from the "Absolute Contraindications" lists (the 2026 guideline lists no glucose contraindication; hypoglycemia is correct-and-reassess, not absolute).
