@@ -315,10 +315,13 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
       : formatClinicalDateShort(values.lkw);
 
   // Thrombolysis-timing aid (opt-in via showThrombolysisTiming, currently
-  // NIHSS). Computes time since a witnessed LKW and the standard 4.5h IV
-  // thrombolysis window state. Recomputed each render so it stays current as
-  // the clinician interacts. Returns null unless a real LKW Date is set
-  // (wake-up / unknown / unset have no onset clock). AHA/ASA 2026 §4.6.1/§4.6.2.
+  // NIHSS). Computes time since a witnessed LKW and the IV thrombolysis window
+  // tier. Recomputed each render so it stays current as the clinician
+  // interacts. Returns null unless a real LKW Date is set (wake-up / unknown /
+  // unset have no onset clock). Standard ≤4.5h per AHA/ASA 2026 §4.6.1/§4.6.2;
+  // perfusion/MRI-selected extended 4.5–9h per EXTEND + WAKE-UP (COR 2a). Note:
+  // §4.6.3 is the separate late-window TNK-for-LVO recommendation (4.5–24h), not
+  // this extended IVT window.
   const ivt = (() => {
     if (!showThrombolysisTiming || !(values.lkw instanceof Date)) return null;
     const elapsedMin = Math.max(0, Math.floor((Date.now() - values.lkw.getTime()) / 60000));
@@ -326,10 +329,24 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
     const mm = elapsedMin % 60;
     const elapsedLabel = hh > 0 ? `${hh} h ${mm} min` : `${mm} min`;
     const elapsedHours = elapsedMin / 60;
-    const inWindow = elapsedHours <= 4.5;
+    // Three tiers: standard ≤4.5h, perfusion-selected extended 4.5–9h, outside
+    // >9h. inWindow stays the ≤4.5h standard window (it gates the BP prompt and
+    // the countdown; V direction: BP prompt only in the 4.5h window).
+    const tier = elapsedHours <= 4.5 ? 'standard' : elapsedHours <= 9 ? 'extended' : 'outside';
+    const inWindow = tier === 'standard';
     const minutesLeft = Math.max(0, Math.round((4.5 - elapsedHours) * 60));
     const lastHalfHour = inWindow && minutesLeft <= 30;
-    return { elapsedLabel, inWindow, minutesLeft, lastHalfHour };
+    // Window-chip appearance: green standard, orange extended, red outside.
+    // The amber countdown sits between green and orange in the final 30 min.
+    const chip =
+      tier === 'standard'
+        ? lastHalfHour
+          ? { cls: 'text-amber-700 bg-amber-50 border-amber-200', label: `${minutesLeft} min left` }
+          : { cls: 'text-emerald-700 bg-emerald-50 border-emerald-200', label: 'Within 4.5h' }
+        : tier === 'extended'
+        ? { cls: 'text-orange-700 bg-orange-50 border-orange-200', label: '4.5–9h window' }
+        : { cls: 'text-rose-700 bg-rose-50 border-rose-200', label: 'Beyond 9h' };
+    return { elapsedLabel, inWindow, minutesLeft, lastHalfHour, tier, chip };
   })();
 
   return (
@@ -403,8 +420,9 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
           </button>
 
           {/* Thrombolysis timing — opt-in (NIHSS). Time since onset plus a
-              within/beyond-4.5h chip. Live bedside aid; the chip is not part
-              of the copy export (only the time-since-onset line is). */}
+              three-tier window chip (green ≤4.5h, orange 4.5–9h, red >9h).
+              Live bedside aid; the chip is not part of the copy export (only
+              the time-since-onset line is). */}
           {ivt && (
             <div
               data-claim="ivt-window-4.5h"
@@ -414,17 +432,9 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
             >
               <span className="text-xs text-slate-500">~{ivt.elapsedLabel} since onset</span>
               <span
-                className={`inline-flex items-center text-[11px] font-semibold rounded-full px-2 py-0.5 border ${
-                  ivt.inWindow && !ivt.lastHalfHour
-                    ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
-                    : 'text-amber-700 bg-amber-50 border-amber-200'
-                }`}
+                className={`inline-flex items-center text-[11px] font-semibold rounded-full px-2 py-0.5 border ${ivt.chip.cls}`}
               >
-                {ivt.inWindow
-                  ? ivt.lastHalfHour
-                    ? `${ivt.minutesLeft} min left`
-                    : 'Within 4.5h'
-                  : 'Beyond 4.5h'}
+                {ivt.chip.label}
               </span>
             </div>
           )}

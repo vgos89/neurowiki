@@ -135,6 +135,33 @@ export const CITATION_REGISTRY: CitationRegistry = {
     quoted_text: 'Intravenous tenecteplase (0.25 mg/kg) is a reasonable alternative to alteplase for all patients presenting with acute ischaemic stroke who meet standard criteria for thrombolysis.',
   },
 
+  // ─── Foundational extended-window IVT trials (4.5–9h / unknown onset) ──────
+  // EXTEND + WAKE-UP underpin the 4.5–9h perfusion-selected / DWI-FLAIR-mismatch
+  // extended IV thrombolysis window (COR 2a per AHA/ASA 2026). Distinct from the
+  // late-window TNK-for-LVO recommendation (TRACE-III/TIMELESS, §4.6.3, 4.5–24h).
+  'extend-trial-2019': {
+    id: 'extend-trial-2019',
+    source: 'trial',
+    title: 'Thrombolysis Guided by Perfusion Imaging up to 9 Hours after Onset of Stroke (EXTEND)',
+    year: 2019,
+    url: 'https://www.nejm.org/doi/10.1056/NEJMoa1813046',
+    pmid: '31067369',
+    last_reviewed: '2026-06-10',
+    review_window_months: 36,
+    quoted_text: 'Among the patients in this trial who had ischemic stroke and salvageable brain tissue, the use of alteplase between 4.5 and 9.0 hours after stroke onset or at the time the patient awoke (if within 9 hours after the midpoint of sleep) resulted in a higher percentage of patients with no or minor neurologic deficits than the use of placebo. There were more cases of symptomatic cerebral hemorrhage in the alteplase group than in the placebo group.',
+  },
+  'wake-up-trial-2018': {
+    id: 'wake-up-trial-2018',
+    source: 'trial',
+    title: 'MRI-Guided Thrombolysis for Stroke with Unknown Time of Onset (WAKE-UP)',
+    year: 2018,
+    url: 'https://www.nejm.org/doi/10.1056/NEJMoa1804355',
+    pmid: '29766770',
+    last_reviewed: '2026-06-10',
+    review_window_months: 36,
+    quoted_text: 'In patients with acute stroke with an unknown time of onset, intravenous alteplase guided by a mismatch between diffusion-weighted imaging and FLAIR in the region of ischemia resulted in a significantly better functional outcome and numerically more intracranial hemorrhages than placebo at 90 days.',
+  },
+
   // ─── 2022–2023 trials: post-EVT BP harm ──────────────────────────────────
   'optimal-bp-trial-2023': {
     id: 'optimal-bp-trial-2023',
@@ -461,7 +488,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2026-4.6.3': {
     id: 'aha-asa-2026-4.6.3',
     source: 'guideline',
-    title: '2026 AHA/ASA Guideline — §4.6.3 (Extended-window IV thrombolysis)',
+    title: '2026 AHA/ASA Guideline, §4.6.3 (Late-window tenecteplase for LVO without thrombectomy access)',
     year: 2026,
     section: '§4.6.3',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',

@@ -277,9 +277,9 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
 
   'late-window-selection-guideline-summary': {
     id: 'late-window-selection-guideline-summary',
-    citation_ids: ['aha-asa-2026-4.6.3'],
+    citation_ids: ['extend-trial-2019', 'wake-up-trial-2018'],
     surfaces: [DATA_SURFACE],
-    description: 'GuidelineSummaryCard on /trials/q/late-window-selection. Surfaces AHA/ASA 2026 §4.6.3 (Extended Time Windows for IV Thrombolysis): IVT reasonable in patients with salvageable penumbra on perfusion imaging who are 4.5–9h from LKW or wake with symptoms within 9h of sleep midpoint (COR 2a, LOE B-R).',
+    description: 'GuidelineSummaryCard on /trials/q/late-window-selection. Surfaces the extended-window IV thrombolysis recommendation (COR 2a, LOE B-R per AHA/ASA 2026): IVT is reasonable in patients with salvageable penumbra on perfusion imaging who are 4.5–9h from LKW, or who wake with symptoms or have unknown onset with DWI-FLAIR mismatch. Established by EXTEND (alteplase 4.5–9h, perfusion mismatch) and WAKE-UP (unknown onset, DWI-FLAIR mismatch). Distinct from the late-window tenecteplase-for-LVO recommendation (TRACE-III/TIMELESS, §4.6.3, 4.5–24h, Class IIb).',
   },
 
   'lvo-evt-guideline-summary': {
@@ -979,8 +979,8 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   },
   'ivt-window-4.5h': {
     id: 'ivt-window-4.5h',
-    citation_ids: ['aha-asa-2026-4.6.1', 'aha-asa-2026-4.6.2'],
+    citation_ids: ['aha-asa-2026-4.6.1', 'aha-asa-2026-4.6.2', 'extend-trial-2019', 'wake-up-trial-2018'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
-    description: 'NIHSS thrombolysis-timing chip in PatientContextPanel (opt-in via showThrombolysisTiming). When a witnessed LKW is set, shows time since onset plus a window chip: "Within 4.5h" (with a minutes-left countdown in the final 30 min) when elapsed time is ≤4.5h, "Beyond 4.5h" otherwise. The 4.5h standard IV thrombolysis window applies to both alteplase and tenecteplase per AHA/ASA 2026 §4.6.1 (COR 1) and §4.6.2 (agent equivalence within 4.5h). On-screen real-time aid only; the chip is not emitted to the NIHSS copy export (only the time-since-onset line is).',
+    description: 'NIHSS thrombolysis-timing chip in PatientContextPanel (opt-in via showThrombolysisTiming). When a witnessed LKW is set, shows time since onset plus a three-tier IV thrombolysis window chip: green "Within 4.5h" (with a minutes-left countdown in the final 30 min) for the standard window per AHA/ASA 2026 §4.6.1 (COR 1) and §4.6.2 (alteplase/tenecteplase equivalence within 4.5h); orange "4.5–9h window" for the perfusion-imaging-selected extended window (COR 2a per AHA/ASA 2026), established by EXTEND (alteplase 4.5–9h, perfusion mismatch) and WAKE-UP (unknown onset, DWI-FLAIR mismatch); red "Beyond 9h" once past the extended IV thrombolysis window. The chip states factual onset-clock time bands, not eligibility determinations (the extended window in particular is imaging-gated). On-screen real-time aid only; the chip is not emitted to the NIHSS copy export (only the time-since-onset line is).',
   },
 };
