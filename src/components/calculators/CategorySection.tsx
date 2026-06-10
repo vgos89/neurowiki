@@ -120,8 +120,12 @@ export const CategorySection: React.FC<Props> = ({
         onToggle={onToggle}
       />
 
+      {/* pl-[18px] nests the row list one level under the category label —
+          each row's dot aligns beneath the category title rather than the
+          category dot — so the hierarchy reads at a glance. (V direction
+          2026-06-10.) */}
       {!isCollapsed && (
-        <div id={`calc-section-body-${meta.id}`}>
+        <div id={`calc-section-body-${meta.id}`} className="pl-[18px]">
           {calculators.map((calc) => (
             <ToolRowCard
               key={calc.id}

@@ -18,6 +18,12 @@ import { useFavorites } from '../hooks/useFavorites';
 // HUB_SPEC §9 gate 4 — dynamic SEO title
 const BASE_TITLE = 'Neurology Calculators — NIHSS, ICH Score, GCS & More | NeuroWiki';
 
+// Groups expanded on first load. Clinicians reach for Severity + Risk far more
+// than Classification (NIHSS, GCS, ICH, ABCD² all live in the first two), so
+// those open by default; the rest stay collapsed for a tidy hub.
+// (V direction 2026-06-10.)
+const DEFAULT_OPEN_CATEGORIES: FnCategory[] = ['severity', 'risk'];
+
 export default function Calculators() {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -33,12 +39,18 @@ export default function Calculators() {
 
   const { isFavorite, toggleFavorite } = useFavorites();
 
-  // Collapsed-by-default category accordions, mirroring the trials catalog
-  // pattern. Single Set holds the categories that the user has explicitly
-  // collapsed; combined with the auto-expand rules below, this lets a single
-  // active pill or favourites filter override the default-collapsed state.
+  // Category accordions, mirroring the trials catalog pattern. Single Set holds
+  // the categories the user has explicitly collapsed; combined with the
+  // auto-expand rules below, this lets a single active pill or favourites filter
+  // override the default state. Severity + Risk start open (see
+  // DEFAULT_OPEN_CATEGORIES); everything else starts collapsed.
   const [collapsedCategories, setCollapsedCategories] = useState<Set<FnCategory>>(
-    () => new Set(FN_CATEGORIES.map((c) => c.id)),
+    () =>
+      new Set(
+        FN_CATEGORIES.filter((c) => !DEFAULT_OPEN_CATEGORIES.includes(c.id)).map(
+          (c) => c.id,
+        ),
+      ),
   );
 
   const toggleCategory = (cat: FnCategory) => {
