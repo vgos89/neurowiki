@@ -475,6 +475,12 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
               (values.systolic !== '' && !isNaN(sys) && sys >= 185) ||
               (values.diastolic !== '' && !isNaN(dia) && dia >= 110);
             if (!elevated) return null;
+            // On the thrombolysis-timing surface (NIHSS), only prompt the BP
+            // target when the patient is confirmed inside the 4.5h window. Out
+            // of window, or before LKW is entered, the <185/110 pre-thrombolysis
+            // target does not apply, so no BP prompt is shown. Surfaces without
+            // the timing aid keep the generic note. (V direction 2026-06-10.)
+            if (showThrombolysisTiming && !ivt?.inWindow) return null;
             return (
               <div
                 data-claim="bp-ivt-threshold-185-110"

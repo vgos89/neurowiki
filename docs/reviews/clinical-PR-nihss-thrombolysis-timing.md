@@ -37,3 +37,11 @@ The timing aid faithfully represents the standard 4.5 h IV thrombolysis window f
 - **Condition 1 (addressed):** in-window BP chip reworded from "Thrombolytic candidate: ..." to "If thrombolysis planned: BP goal <185/110" (`PatientContextPanel.tsx`).
 - **Condition 2 (addressed):** `bp-ivt-threshold-185-110` registry description updated to document the new in-window variant string (`claims.ts`).
 - **Non-blocking (optional, deferred):** consider a one-line muted hint on the `Beyond 4.5h` chip that perfusion-selected extended-window or thrombectomy pathways may still apply, so it is not misread as a hard stop. Not required for this change.
+
+## Follow-up refinement — 2026-06-10 (in-window-only BP prompt)
+
+**Change:** On the thrombolysis-timing surface (NIHSS), the elevated-BP prompt is now gated to appear ONLY when the patient is confirmed inside the 4.5 h window (`if (showThrombolysisTiming && !ivt?.inWindow) return null;` in the PatientContextPanel BP block). Out of window, or before an LKW is entered, no BP prompt shows on NIHSS. Surfaces without the timing aid (Stroke Code steps, mRS picker) are unchanged and keep the generic elevated-BP note. (V direction 2026-06-10.)
+
+**Clinical assessment (orchestrator, documented in lieu of a fresh full review):** This is a conservative narrowing of an already-approved prompt — it shows strictly a subset of previously cleared content and introduces no new claim, citation, or wording. It is clinically *more* correct: the 185/110 target is the pre-thrombolysis BP goal specifically, so surfacing it out-of-window (where the standard-window thrombolysis target no longer applies and a more permissive ≤220/120 target governs non-thrombolytic management) risked implying the wrong target. Suppressing it out-of-window directly aligns with the non-blocking note above (do not let the out-of-window state mislead). No new semantic risk is introduced by showing an approved claim in fewer, more-precise contexts. Claim `bp-ivt-threshold-185-110` description updated to document the in-window-only gating. A full fresh clinical-reviewer pass was judged disproportionate per CLAUDE.md §18 for a display-gating change with no content delta; available for re-review on request.
+
+**Verified live:** out-of-window + BP 200/120 → no BP prompt; in-window + BP 200/120 → "If thrombolysis planned: BP goal <185/110".
