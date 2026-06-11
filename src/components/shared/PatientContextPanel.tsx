@@ -604,6 +604,16 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
               <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3 flex-wrap">
                 <span id="doac-label" className="text-xs font-medium text-slate-600 flex-shrink-0">Last DOAC dose</span>
                 <div className="flex items-center gap-1.5 flex-wrap" role="group" aria-labelledby="doac-label">
+                  {/* Drug-name box first, then the timing toggle (V alignment
+                      preference 2026-06-10). */}
+                  <input
+                    type="text"
+                    value={values.doacDrug ?? ''}
+                    onChange={(e) => onChange({ ...values, doacDrug: e.target.value || undefined })}
+                    placeholder="drug, optional"
+                    className="w-[104px] text-right text-sm text-slate-900 bg-transparent border-b border-slate-200 focus:border-neuro-500 focus:outline-none px-1 py-1 placeholder:text-slate-300"
+                    aria-label="DOAC drug name"
+                  />
                   {([['lt48h', '<48 h'], ['gte48h', '≥48 h']] as const).map(([val, lbl]) => {
                     const selected = values.doacTiming === val;
                     return (
@@ -614,14 +624,6 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
                       </button>
                     );
                   })}
-                  <input
-                    type="text"
-                    value={values.doacDrug ?? ''}
-                    onChange={(e) => onChange({ ...values, doacDrug: e.target.value || undefined })}
-                    placeholder="drug, optional"
-                    className="w-[104px] text-right text-sm text-slate-900 bg-transparent border-b border-slate-200 focus:border-neuro-500 focus:outline-none px-1 py-1 placeholder:text-slate-300"
-                    aria-label="DOAC drug name"
-                  />
                 </div>
               </div>
               {values.doacTiming === 'lt48h' && (
@@ -685,29 +687,24 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
             </>
           )}
 
-          {/* Pre-stroke mRS — compact number chips, inline only (no modal).
-              Range 0-5: a pre-stroke baseline of 6 (dead) is not meaningful.
-              Records functional baseline for EVT eligibility (mRS 0-1
-              independent vs >=2 dependent) and outcome comparison. */}
+          {/* Pre-stroke mRS — compact number chips (inline select). The label
+              doubles as the opener for the slide-up grade explainer, cued by the
+              "(full scale)" subscript (V direction 2026-06-10: restore the
+              labelled opener in place of the "?" icon). Range 0-5: a pre-stroke
+              baseline of 6 (dead) is not meaningful. Records functional baseline
+              for EVT eligibility (mRS 0-1 independent vs >=2 dependent). */}
           <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3">
-            <span className="flex items-center gap-1.5 flex-shrink-0">
-              <span id="prestroke-mrs-label" className="text-xs font-medium text-slate-600">
-                Pre-stroke mRS
-              </span>
-              {/* Info affordance: opens the slide-up grade explainer (0-5). Kept
-                  separate from the label so the label no longer doubles as the
-                  modal trigger (V removed that dual interaction). */}
-              <button
-                ref={mrsHelpRef}
-                type="button"
-                onClick={() => setMrsModalOpen(true)}
-                aria-label="What do the mRS grades mean?"
-                aria-haspopup="dialog"
-                className="w-6 h-6 inline-flex items-center justify-center rounded-full border border-slate-400 text-[11px] font-bold leading-none text-slate-500 hover:text-neuro-600 hover:border-neuro-300 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
-              >
-                ?
-              </button>
-            </span>
+            <button
+              ref={mrsHelpRef}
+              id="prestroke-mrs-label"
+              type="button"
+              onClick={() => setMrsModalOpen(true)}
+              aria-haspopup="dialog"
+              className="text-xs font-medium text-slate-600 flex-shrink-0 inline-flex items-center gap-1 hover:text-neuro-600 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none rounded"
+            >
+              Pre-stroke mRS
+              <span className="text-[10px] text-slate-400 font-normal">(full scale)</span>
+            </button>
             <div
               role="group"
               aria-labelledby="prestroke-mrs-label"
