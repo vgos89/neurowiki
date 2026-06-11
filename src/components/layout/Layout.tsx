@@ -9,7 +9,6 @@ import { replayTour } from '../../lib/consent';
 import { MobileBottomNav } from './MobileBottomNav';
 import { DesktopRail } from './DesktopRail';
 import { DesktopTopBar } from './DesktopTopBar';
-import FeedbackButton from '../FeedbackButton';
 import { SearchProvider } from '../search/SearchProvider';
 import { STATIC_ROUTE_DEFINITIONS } from '../../config/routeManifest';
 
@@ -92,10 +91,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
       </div>
 
-      {/* Floating feedback button — global, bottom-right.
-          Lifts above MobileBottomNav (60px) and BottomLineDrawer (per FeedbackButton.tsx
-          and BottomLineDrawer.tsx — they publish drawer floor height for this button). */}
-      <FeedbackButton />
+      {/* Feedback now lives in the search-bar header (DesktopTopBar + MobileHeader)
+          so it is always visible; the floating bottom-right button was retired
+          (2026-06-11, frees the crowded corner next to the timestamp FAB). The
+          drawer floor-height plumbing it used is now unused (separate cleanup). */}
 
       {/* Smart search overlay — lazy, opens via ⌘K / "/" / search button click. */}
       <React.Suspense fallback={null}>

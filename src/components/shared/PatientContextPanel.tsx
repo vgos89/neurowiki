@@ -312,6 +312,10 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
 
   // Header eyebrow shows summary chips if any value is set + collapsed
   const summaryChips = !expanded && hasAnyValue ? buildSummaryChips(values) : null;
+  // Attention cue (V-approved Option A): a slow breathing indigo highlight on
+  // the collapsed, still-empty optional panel so clinicians notice it. Stops
+  // the moment the panel is opened or any value is entered.
+  const showAttentionCue = !expanded && !lockExpanded && !hasAnyValue;
 
   const toggleAnticoag = (key: Anticoag) => {
     const next = new Set(values.anticoag);
@@ -379,24 +383,26 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
             ? 'bg-slate-50 border-slate-100 cursor-default'
             : expanded
               ? 'bg-neuro-50 border-neuro-100 hover:bg-neuro-100 cursor-pointer'
-              : 'bg-slate-50 border-slate-100 hover:bg-slate-100 cursor-pointer'
+              : showAttentionCue
+                ? 'pc-attention bg-neuro-50 border-neuro-100 hover:bg-neuro-100 cursor-pointer'
+                : 'bg-slate-50 border-slate-100 hover:bg-slate-100 cursor-pointer'
         }`}
         aria-expanded={lockExpanded ? undefined : expanded}
         aria-controls={lockExpanded ? undefined : 'patient-context-body'}
       >
         <div className="flex flex-col min-w-0">
-          <span className={`text-[10px] font-bold uppercase tracking-widest ${expanded && !lockExpanded ? 'text-neuro-500' : 'text-slate-400'}`}>
+          <span className={`text-[10px] font-bold uppercase tracking-widest ${(expanded || showAttentionCue) && !lockExpanded ? 'text-neuro-500' : 'text-slate-400'}`}>
             {label ?? (expanded ? 'Patient context' : '+ Patient context (optional)')}
           </span>
           {!expanded && (
             <span className="text-xs text-slate-500 mt-0.5 truncate">
-              {summaryChips ?? 'tap to add LKW · BP · glucose · anticoag · mRS'}
+              {summaryChips ?? 'Tap to add last known well, blood pressure, glucose, anticoagulation, and pre-stroke mRS'}
             </span>
           )}
         </div>
         {!lockExpanded && (
           <ChevronDown
-            className={`w-4 h-4 flex-shrink-0 motion-safe:transition-transform ${expanded ? 'rotate-180 text-neuro-500' : 'text-slate-400'}`}
+            className={`w-4 h-4 flex-shrink-0 motion-safe:transition-transform ${expanded ? 'rotate-180 text-neuro-500' : showAttentionCue ? 'text-neuro-400' : 'text-slate-400'}`}
             aria-hidden
           />
         )}

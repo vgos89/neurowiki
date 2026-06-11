@@ -4,6 +4,15 @@
 
 (none)
 
+### SHELL-ACCORDION-FEEDBACK — Patient-context accordion attention cue + feedback-in-header — Class C
+- **Status:** ready_for_merge (committed this session)
+- **User-visible goal:** (1) the collapsed, still-empty "Patient context" panel gets a calm slow-breathing indigo highlight (V-approved Option A) so clinicians notice it is tappable; the cue stops the moment the panel is opened or any value is entered, and reduce-motion users get a static left accent. The collapsed hint text is rewritten from abbreviations to clean prose ("Tap to add last known well, blood pressure, glucose, anticoagulation, and pre-stroke mRS"). (2) The feedback button moves from the floating bottom-right pill into the search-bar header (desktop + mobile, beside the favourites star) so it is always visible and the crowded bottom-right corner is freed.
+- **Non-goals:** no change to the timestamp FAB; the now-unused drawer floor-height plumbing (calculator pages + BottomLineDrawer) is left for a separate cleanup.
+- **Files:** index.css (pc-attention keyframe + reduce-motion guard); src/components/shared/PatientContextPanel.tsx (cue + hint text); src/components/FeedbackButton.tsx (header variant); src/components/layout/{DesktopTopBar,MobileHeader,Layout}.tsx (mount header button, retire floating).
+- **Acceptance checks:** all passed — tsc clean; build green; check:claims pass; check:humanizer pass; live-preview verified at 1280px + 375px (cue shows collapsed+empty with neuro tint + breathing ring, disappears on expand; clean prose hint; feedback icon in both headers opens the modal with correct page context; floating button gone; no console errors). Design via approved mockup docs/specs/mockups/patient-context-accordion-attention.html.
+- **Clinical impact:** none (shell UI polish).
+- **Rollback plan:** `git revert <merge commit>` restores the flat collapsed header, the abbreviated hint text, and the floating feedback button.
+
 ### NIHSS-COPY-TEMPLATE-FIELDS — Wire per-drug eligibility + pre-stroke mRS into copy/share — Class C
 - **Status:** ready_for_merge (committed this session)
 - **User-visible goal:** the anticoagulant eligibility inputs (DOAC last-dose timing + drug name, warfarin INR, heparin/LMWH aPTT) and the pre-stroke mRS now appear in the NIHSS copy export and the saved-case share text when entered. The pre-stroke mRS is also now persisted with a saved case (it was previously lost on save, while the per-drug fields already persisted).

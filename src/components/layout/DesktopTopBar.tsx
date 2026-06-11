@@ -3,6 +3,7 @@
 // Search opens the smart-search overlay via SearchProvider.
 import React from 'react';
 import { FavouritesStarButton } from './FavouritesStarButton';
+import FeedbackButton from '../FeedbackButton';
 import { useSearch } from '../search/SearchProvider';
 
 export const DesktopTopBar: React.FC = () => {
@@ -30,8 +31,9 @@ export const DesktopTopBar: React.FC = () => {
         </kbd>
       </button>
 
-      {/* Right: favourites star — LAYOUT_SPEC §6.2.3 */}
-      <div className="flex-1 flex justify-end">
+      {/* Right: feedback + favourites star — LAYOUT_SPEC §6.2.3 */}
+      <div className="flex-1 flex justify-end items-center gap-1">
+        <FeedbackButton variant="header" />
         <FavouritesStarButton />
       </div>
     </header>

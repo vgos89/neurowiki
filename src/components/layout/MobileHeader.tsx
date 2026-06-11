@@ -4,6 +4,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FavouritesStarButton } from './FavouritesStarButton';
+import FeedbackButton from '../FeedbackButton';
 import { useSearch } from '../search/SearchProvider';
 
 export const MobileHeader: React.FC = () => {
@@ -43,6 +44,9 @@ export const MobileHeader: React.FC = () => {
             <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/>
           </svg>
         </button>
+        {/* Feedback — opens the feedback modal. Relocated here from the floating
+            bottom-right button so it is always visible and frees that corner. */}
+        <FeedbackButton variant="header" />
         {/* Favourites star — LAYOUT_SPEC §1.3.2 */}
         <FavouritesStarButton />
       </div>
