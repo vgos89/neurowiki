@@ -37,7 +37,7 @@ export const ArticleLayout: React.FC<ArticleLayoutProps> = ({
                 className="flex items-center gap-2 p-1.5 -ml-1.5 text-slate-400 hover:text-slate-600 rounded-lg transition-colors cursor-pointer bg-transparent border-0"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 12H5M12 19l-7-7 7-7" />
                 </svg>
                 <span className="text-sm font-medium">
                   {source.category || getBackLabel()}
@@ -77,8 +77,8 @@ export const ArticleLayout: React.FC<ArticleLayoutProps> = ({
       <article className="max-w-2xl mx-auto px-5 md:px-8 py-8 md:py-12">
         {/* Title */}
         <header className="mb-8">
-          <p className="text-sm text-blue-600 font-medium mb-2">{category}</p>
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight mb-3">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">{category}</p>
+          <h1 className="text-[22px] md:text-[28px] font-medium text-slate-900 tracking-[-0.01em] mb-3">
             {title}
           </h1>
           <p className="text-slate-500">{subtitle}</p>
@@ -105,7 +105,7 @@ export const ArticleLayout: React.FC<ArticleLayoutProps> = ({
                 <Link 
                   key={idx} 
                   to={link.href} 
-                  className="text-blue-600 hover:text-blue-800 hover:underline"
+                  className="text-neuro-600 hover:text-neuro-700 hover:underline"
                 >
                   {link.title}
                 </Link>

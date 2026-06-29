@@ -14,7 +14,7 @@ export const Term: React.FC<TermProps> = ({ children, detail }) => {
         onClick={() => setExpanded(!expanded)}
         className={`cursor-pointer border-b border-dotted transition-colors ${
           expanded 
-            ? 'text-blue-700 border-blue-300' 
+            ? 'text-neuro-700 border-neuro-200'
             : 'border-slate-400 hover:border-slate-600'
         }`}
       >

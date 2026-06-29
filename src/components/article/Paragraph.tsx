@@ -30,7 +30,7 @@ export const Paragraph: React.FC<ParagraphProps> = ({
           {!isExpanded && viewMode === 'quick' && (
             <span 
               onClick={() => setManualExpanded(true)}
-              className="ml-1 text-blue-600 hover:text-blue-800 cursor-pointer text-sm font-medium"
+              className="ml-1 text-neuro-500 hover:text-neuro-600 cursor-pointer text-sm font-medium"
             >
               [+]
             </span>

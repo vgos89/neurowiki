@@ -24,6 +24,8 @@ The single most important finding: **most guide pages are thin wrappers around s
 
 ### S1. `ArticleLayout` + article primitives use forbidden `blue-*` and off-spec typography
 One fix benefits ~14 guide pages.
+
+**STATUS: SHIPPED 2026-06-29** (Class C, presentational; tracked in TASKS.md). Forbidden `blue-*` removed, eyebrow and H1 typography aligned to the design system, and the canonical back-arrow adopted across ArticleLayout, Paragraph, and Term. Verified via production build (171 of 171 prerendered) plus a prerendered-HTML marker check on 6 guide pages; no clinical text touched.
 - `src/components/article/ArticleLayout.tsx:80` category eyebrow `text-blue-600` -> `text-neuro-500` (or slate-400 if muted).
 - `ArticleLayout.tsx:105/108` related links `text-blue-600 hover:text-blue-800` -> `text-neuro-600 hover:text-neuro-700`.
 - `src/components/article/Paragraph.tsx:33` expand `[+]` `text-blue-600` -> `text-neuro-500`.
