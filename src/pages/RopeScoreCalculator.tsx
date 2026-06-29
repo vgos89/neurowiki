@@ -75,7 +75,7 @@ const ROPE_SEVERITY_TOKENS: Record<RoPESeverity, SeverityTokens> = {
     headerHover: 'hover:bg-amber-100',
     labelClass: 'text-[10px] font-bold text-amber-700 uppercase tracking-widest',
     statClass: 'text-sm font-medium text-amber-700',
-    chevronClass: 'text-amber-600',
+    chevronClass: 'text-amber-700',
   },
   low: {
     borderColor: '#e2e8f0',

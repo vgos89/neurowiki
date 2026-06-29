@@ -777,7 +777,7 @@ const NihssCalculator: React.FC = () => {
  ? 'text-red-600'
  : lvoData.label === 'Moderate'
  ? 'text-amber-700'
- : 'text-green-600'
+ : 'text-emerald-600'
  }`}>
               {lvoData.label}
             </span>
@@ -850,7 +850,7 @@ const NihssCalculator: React.FC = () => {
               onClick={() => setNihssMode('rapid')}
               className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                 nihssMode === 'rapid'
-                  ? 'bg-white text-slate-900 shadow-sm'
+                  ? 'bg-white text-slate-900'
                   : 'text-slate-500 hover:text-slate-900'
               }`}
             >
@@ -861,7 +861,7 @@ const NihssCalculator: React.FC = () => {
               onClick={() => setNihssMode('detailed')}
               className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                 nihssMode === 'detailed'
-                  ? 'bg-white text-slate-900 shadow-sm'
+                  ? 'bg-white text-slate-900'
                   : 'text-slate-500 hover:text-slate-900'
               }`}
             >

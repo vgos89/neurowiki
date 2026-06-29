@@ -40,6 +40,8 @@ Every calculator passes `borderColor: '#hex'` to CalculatorDrawer via the `Sever
 ### S3. `shadow-sm` on mode toggles (forbidden)
 - `MrsCalculator.tsx:344,355,572,583` and `NihssCalculator.tsx:792,803` apply `shadow-sm` to active toggle segments. CALCULATOR_SPEC §3.1 active segment is `bg-white text-slate-900`, no shadow. Remove.
 
+**STATUS: SHIPPED 2026-06-29.** shadow-sm removed from all active toggle segments (MrsCalculator context and mode toggles, 4 spots; NihssCalculator Rapid/Detailed toggle, 2 spots).
+
 ### S4. `divide-y divide-slate-200` vs explicit `divider-hair` element
 - IchScore, Heidelberg, Mrs, ABCD2 use `divide-y` on the radiogroup wrapper. RoPE correctly uses `<div className="divider-hair" />` between options. Spec §2.2 wants the hairline as a distinct element (keeps the border out of the interactive target). Medium priority, cosmetic-equivalent.
 
@@ -49,6 +51,8 @@ Every calculator passes `borderColor: '#hex'` to CalculatorDrawer via the `Sever
 - `MrsCalculator.tsx:155` grade-2 `sky-*` tokens (no design-system mapping; needs a design decision).
 - `StrokeBasicsWorkflowV2.tsx:816-819` `blue-50`/`blue-600` gradients -> flat `bg-neuro-50`/`bg-neuro-500`.
 - `ResidentToolkit.tsx` pervasive `red-*/violet-*/orange-*/teal-*/emerald-*` + gradients (see §5).
+
+**STATUS: point-fixes SHIPPED 2026-06-29** (Thrombectomy indigo to neuro-600; NihssCalculator green to emerald-600; RoPE chevron amber-600 to amber-700). Still open: MrsCalculator grade-2 sky-* (needs a design decision); StrokeBasicsWorkflowV2 gradients (folded into the high-gap rebuild). ResidentToolkit has since been deleted.
 
 ### S6. `DiscreteFAQ` rendered as a sibling of `ArticleLayout` with `max-w-3xl`
 - `Gbs.tsx`, `HeadacheWorkup.tsx`, `Meningitis.tsx`, `MultipleSclerosis.tsx`, plus `IvTpa.tsx`: the FAQ block sits outside the article at `max-w-3xl` while the article body is `max-w-2xl`, a visible width mismatch. Decision needed: should `ArticleLayout` own the FAQ slot? Resolve before fixing the width.

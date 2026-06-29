@@ -341,7 +341,7 @@ const MrsCalculator: React.FC = () => {
           onClick={() => setContext('pre-stroke')}
           className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-colors ${
             context === 'pre-stroke'
-              ? 'bg-white text-slate-900 shadow-sm'
+              ? 'bg-white text-slate-900'
               : 'text-slate-500 hover:text-slate-900'
           }`}
         >
@@ -352,7 +352,7 @@ const MrsCalculator: React.FC = () => {
           onClick={() => setContext('current')}
           className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-colors ${
             context === 'current'
-              ? 'bg-white text-slate-900 shadow-sm'
+              ? 'bg-white text-slate-900'
               : 'text-slate-500 hover:text-slate-900'
           }`}
         >
@@ -570,7 +570,7 @@ const MrsCalculator: React.FC = () => {
               onClick={() => switchMode('direct')}
               className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                 mode === 'direct'
-                  ? 'bg-white text-slate-900 shadow-sm'
+                  ? 'bg-white text-slate-900'
                   : 'text-slate-500 hover:text-slate-900'
               }`}
             >
@@ -581,7 +581,7 @@ const MrsCalculator: React.FC = () => {
               onClick={() => switchMode('guided')}
               className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                 mode === 'guided'
-                  ? 'bg-white text-slate-900 shadow-sm'
+                  ? 'bg-white text-slate-900'
                   : 'text-slate-500 hover:text-slate-900'
               }`}
             >
