@@ -219,6 +219,8 @@ Identical to HUB_SPEC §1.4:
 - Active: slate-50 bg, no border colour change, slate-900 text, semibold
 - 6×6px coloured dot inside each non-All pill
 
+> **Implementation note (2026-06-29):** Home's active pill currently uses the solid cobalt fill (neuro-500 bg, white text), not slate-50, per V's explicit decision for at-a-glance wayfinding. This is an intentional deviation from the shared slate-50 contract above. Whether the hubs also adopt cobalt or Home is formally documented as an exception is a separate design-guardian reconciliation (see docs/AUDIT.md P1 #4). Do not revert to slate-50 without V.
+
 ### 1.3.2 Pill state and URL
 
 - The active pill is determined by `?scenario={id}` query param
