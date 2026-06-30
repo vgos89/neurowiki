@@ -114,6 +114,8 @@ AcuteStrokeMgmt, IchManagement, IvTpa, Thrombectomy, AlteredMentalStatus, Gbs, H
 
 ### 4.3 Pathway pages
 - **PostStrokeLipidManagement** (high-gap): horizontal dot-strip step indicator (PATHWAY_SPEC §3.9 abolished this in favor of the vertical rail); inline `boxShadow` on Card; `max-w-xl` content vs `max-w-2xl` header; lucide checkmarks in step nodes (spec: no checkmarks); `rounded-xl` option buttons (spec: `rounded-full`); `font-semibold` eyebrow (spec: `font-bold`). Migrating the step pattern to the vertical rail is a dedicated Class C, not a one-liner.
+
+  **STATUS (2026-06-29):** Step indicator SHIPPED. The horizontal numbered dot-strip was replaced with a vertical, spec-aesthetic progress indicator (filled cobalt = done, cobalt ring = current, slate = upcoming) and the checkmarks removed. The page keeps its wizard interaction (one step visible at a time); a full Pattern A stacked-rail conversion was deliberately NOT done (out of scope, separate task). Design V-approved via mockup. STILL OPEN on this page: inline boxShadow on Card, max-w-xl vs max-w-2xl, rounded-xl option buttons, font-semibold eyebrow.
 - **StrokeBasics / StrokeBasicsWorkflowV2** (high-gap via V2): `blue-50`/`blue-600` gradients; `rounded-2xl`; `shadow-sm/md/lg/2xl` throughout; icon-tile flourish (spec-rejected); modal `max-w-4xl` exceeds the content zone (confirm with mobile-first before changing).
 
 ### 4.4 Top-level pages

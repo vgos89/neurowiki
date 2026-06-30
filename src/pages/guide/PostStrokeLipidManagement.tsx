@@ -240,26 +240,30 @@ const PostStrokeLipidManagement: React.FC = () => {
 
         {/* ── Step progress indicator (ischemic arm only, after entry) ──── */}
         {strokeType === 'ischemic' && step >= 1 && (
-          <div className="flex items-center gap-0 px-1">
-            {STEPS.map((s, i) => (
-              <React.Fragment key={s.id}>
-                <div className="flex flex-col items-center gap-1">
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[12px] font-bold border-2 transition-all ${
-                    step > s.id
-                      ? 'bg-neuro-500 border-neuro-500 text-white'
-                      : step === s.id
-                        ? 'bg-white border-neuro-500 text-neuro-600'
-                        : 'bg-white border-slate-300 text-slate-400'
-                  }`}>
-                    {step > s.id ? <Check size={12} /> : s.id}
+          <div className="flex flex-col px-1" aria-label={`Step ${step} of ${STEPS.length}`}>
+            {STEPS.map((s, i) => {
+              const done = step > s.id;
+              const current = step === s.id;
+              return (
+                <React.Fragment key={s.id}>
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-center w-4 shrink-0">
+                      <div className={`rounded-full transition-all ${
+                        done
+                          ? 'w-3 h-3 bg-neuro-500'
+                          : current
+                            ? 'w-4 h-4 bg-white border-2 border-neuro-500'
+                            : 'w-3.5 h-3.5 bg-white border-2 border-slate-300'
+                      }`} />
+                    </div>
+                    <span className={`text-[13px] transition-colors ${step >= s.id ? 'text-neuro-600 font-medium' : 'text-slate-400'}`}>{s.title}</span>
                   </div>
-                  <span className={`text-[10px] font-semibold uppercase tracking-widest ${step >= s.id ? 'text-neuro-600' : 'text-slate-400'}`}>{s.title}</span>
-                </div>
-                {i < STEPS.length - 1 && (
-                  <div className={`flex-1 h-0.5 mb-4 ${step > s.id ? 'bg-neuro-500' : 'bg-slate-200'}`} />
-                )}
-              </React.Fragment>
-            ))}
+                  {i < STEPS.length - 1 && (
+                    <div className={`w-0.5 h-3.5 my-0.5 ml-[7px] ${done ? 'bg-neuro-500' : 'bg-slate-200'}`} />
+                  )}
+                </React.Fragment>
+              );
+            })}
           </div>
         )}
 
