@@ -236,7 +236,7 @@ export default function TrialsPage() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search trials, conditions, authors…"
-          className="w-full h-11 md:h-12 pl-9 pr-12 rounded-xl border border-slate-200 text-sm text-slate-900 placeholder-slate-400 bg-white focus:outline-none focus:border-[#1746A2] focus:shadow-[0_0_0_4px_rgba(23,70,162,0.08)] transition-[border-color,box-shadow] duration-150"
+          className="w-full h-11 md:h-12 pl-9 pr-12 rounded-xl border border-slate-200 text-sm text-slate-900 placeholder-slate-400 bg-white focus:outline-none focus:border-neuro-500 focus:ring-4 focus:ring-neuro-500/8 transition-[border-color,box-shadow] duration-150"
           aria-label="Search trials"
         />
         {/* ⌘K hint. Desktop only */}
@@ -338,7 +338,7 @@ export default function TrialsPage() {
       {/* Desktop: 2-col grid inside a white card */}
       <div className="hidden md:block p-6">
         <div className="max-w-[800px] mx-auto">
-          <div className="bg-white border border-slate-100 rounded-lg overflow-hidden">
+          <div className="bg-white border border-slate-100 rounded-xl overflow-hidden">
             <div className="grid grid-cols-2">
               {TRIAL_QUESTIONS.map((q, i) => {
                 const isRightCol = (i + 1) % 2 === 0;
@@ -389,7 +389,7 @@ export default function TrialsPage() {
             onClick={() => { setActiveCategory(null); setShowFavoritesOnly(false); setShowRecentOnly(false); setShowNewOnly(false); }}
             className={`inline-flex items-center gap-[5px] px-3 py-[5px] rounded-full text-xs font-medium border whitespace-nowrap flex-shrink-0 transition-colors ${
  !activeCategory && !showFavoritesOnly && !showRecentOnly && !showNewOnly
- ? 'bg-[rgba(23,70,162,0.08)] border-[rgba(23,70,162,0.2)] text-[#1746A2] font-semibold'
+ ? 'bg-neuro-500/8 border-neuro-500/20 text-neuro-500 font-semibold'
  : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50'
  }`}
           >
@@ -408,7 +408,7 @@ export default function TrialsPage() {
                 onClick={() => setActiveCategory((prev) => (prev === cat ? null : cat))}
                 className={`inline-flex items-center gap-[5px] px-3 py-[5px] rounded-full text-xs font-medium border whitespace-nowrap flex-shrink-0 transition-colors ${
  isActive
- ? 'bg-[rgba(23,70,162,0.08)] border-[rgba(23,70,162,0.2)] text-[#1746A2] font-semibold'
+ ? 'bg-neuro-500/8 border-neuro-500/20 text-neuro-500 font-semibold'
  : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50'
  }`}
                 role="radio"
@@ -520,7 +520,7 @@ export default function TrialsPage() {
             return (
               <div
                 key={cat}
-                className="mb-0 md:mb-4 md:bg-white md: md:border md:border-slate-100 md: md:rounded-lg md:overflow-hidden"
+                className="mb-0 md:mb-4 md:bg-white md:border md:border-slate-100 md:rounded-xl md:overflow-hidden"
               >
                 {/* Section header */}
                 {!activeCategory && !searchQuery && (
@@ -599,7 +599,7 @@ export default function TrialsPage() {
               </p>
               <button
                 onClick={() => { setShowFavoritesOnly(false); setShowRecentOnly(false); setShowNewOnly(false); setActiveCategory(null); setSearchQuery(''); }}
-                className="mt-4 px-4 py-2 text-sm text-[#1746A2] hover:text-[#0E2D6B] font-medium"
+                className="mt-4 px-4 py-2 text-sm text-neuro-500 hover:text-neuro-700 font-medium"
               >
                 Clear filters
               </button>
