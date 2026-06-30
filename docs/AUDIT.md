@@ -57,6 +57,8 @@ Every calculator passes `borderColor: '#hex'` to CalculatorDrawer via the `Sever
 ### S6. `DiscreteFAQ` rendered as a sibling of `ArticleLayout` with `max-w-3xl`
 - `Gbs.tsx`, `HeadacheWorkup.tsx`, `Meningitis.tsx`, `MultipleSclerosis.tsx`, plus `IvTpa.tsx`: the FAQ block sits outside the article at `max-w-3xl` while the article body is `max-w-2xl`, a visible width mismatch. Decision needed: should `ArticleLayout` own the FAQ slot? Resolve before fixing the width.
 
+**STATUS: SHIPPED 2026-06-29** (Class C, presentational). All five FAQ wrappers aligned to the article container (`max-w-2xl mx-auto px-5 md:px-8`): the four `max-w-3xl` wrappers narrowed and IvTpa's bare DiscreteFAQ wrapped. The "ArticleLayout owns a FAQ slot" refactor was NOT done (deferred as an architectural follow-up); the minimal width-match resolves the visible mismatch.
+
 ---
 
 ## 3. Prioritized fix list

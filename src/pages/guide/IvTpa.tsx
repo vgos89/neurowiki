@@ -175,7 +175,9 @@ export default function IvTpa() {
       )}
     </ArticleLayout>
     {/* Discrete FAQ — V approval 2026-05-21 Option A. Same data feeds JSON-LD FAQPage schema via getSchemaForRoute. */}
-    <DiscreteFAQ items={getFAQsForPath('/guide/iv-tpa')} />
+    <div className="max-w-2xl mx-auto px-5 md:px-8">
+      <DiscreteFAQ items={getFAQsForPath('/guide/iv-tpa')} />
+    </div>
     </>
   );
 }

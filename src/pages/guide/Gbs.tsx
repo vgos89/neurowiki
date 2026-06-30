@@ -92,7 +92,7 @@ export default function Gbs() {
       )}
     </ArticleLayout>
     {/* Discrete FAQ — V approval 2026-05-21 Option A. Same data feeds JSON-LD FAQPage schema via getSchemaForRoute. */}
-    <div className="max-w-3xl mx-auto px-4 sm:px-6">
+    <div className="max-w-2xl mx-auto px-5 md:px-8">
       <DiscreteFAQ items={getFAQsForPath('/guide/gbs')} />
     </div>
     </>
