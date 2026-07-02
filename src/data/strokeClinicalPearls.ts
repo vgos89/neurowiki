@@ -199,7 +199,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'contraindications-relative',
         title: 'Relative Contraindications (Often Safe)',
-        content: 'Age >80 (IST-3: similar benefit, higher mortality from comorbidities). Mild stroke NIHSS <6 (20-30% still disabled at 3mo). Severe stroke NIHSS >25 (greatest benefit, NNT=3). Recent MI <3mo (risk myocardial rupture). Recent surgery <14d. Seizure at onset (91% of neurologists would treat). Unruptured aneurysm <7mm (appears safe, no ruptures reported).',
+        content: 'Age >80 (IST-3: similar benefit, higher mortality from comorbidities). Mild stroke NIHSS <6 (20-30% still disabled at 3mo). Severe stroke NIHSS >25 (still benefits; no severity-specific NNT established). Recent MI <3mo (risk myocardial rupture). Recent surgery <14d. Seizure at onset (91% of neurologists would treat). Unruptured aneurysm <7mm (appears safe, no ruptures reported).',
         type: 'pearl',
         section: 'step-1',
         evidence: 'Fugate & Rabinstein, Neurohospitalist 2015',

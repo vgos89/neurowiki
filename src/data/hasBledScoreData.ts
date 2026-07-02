@@ -36,18 +36,25 @@ export interface HASBLEDResult {
   bleedsPer100PatientYears: number;
 }
 
-/** Major bleeding events per 100 patient-years (Pisters et al. Chest 2010) */
+/**
+ * Major bleeding events per 100 patient-years (Pisters et al. Chest 2010, Table 4).
+ * Scores 0-4 reflect derivation-cohort event rates from Pisters 2010.
+ * Score 5: Pisters 2010 had n=1 patient; published rate ~12.5/100 py but based on a single event.
+ * Scores 6-9: No patients in the Pisters 2010 derivation cohort; these rates are extrapolated
+ * from the score-4 value (8.70) as a conservative floor and are NOT measured rates.
+ * Clinicians should interpret scores >=5 with caution: rates are derived from very sparse or absent data.
+ */
 export const HASBLED_BLEEDS_PER_100: Record<number, number> = {
   0: 1.13,
   1: 1.02,
   2: 1.88,
   3: 3.74,
   4: 8.70,
-  5: 8.70,
-  6: 8.70,
-  7: 8.70,
-  8: 8.70,
-  9: 8.70,
+  5: 8.70, // Extrapolated floor; Pisters 2010 n=1, published rate ~12.5/100 py (single event, unreliable)
+  6: 8.70, // Extrapolated floor; no derivation-cohort data at this score
+  7: 8.70, // Extrapolated floor; no derivation-cohort data at this score
+  8: 8.70, // Extrapolated floor; no derivation-cohort data at this score
+  9: 8.70, // Extrapolated floor; no derivation-cohort data at this score
 };
 
 export const HASBLED_RISK_LABELS: Record<HASBLEDRisk, string> = {

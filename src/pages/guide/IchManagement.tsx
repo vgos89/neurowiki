@@ -84,9 +84,9 @@ export default function IchManagement() {
 
           <Paragraph
             viewMode={viewMode}
-            detail="STICH: no benefit for most. STICH II: lobar ICH 10–100 ml, GCS 5–14, superficial, no IVH — surgery within 12 h had small benefit. Cerebellar >3 cm with neurological decline or brainstem compression or hydrocephalus: evacuate (Class I, Level B). EVD for hydrocephalus from IVH."
+            detail="STICH: no benefit for most. STICH II: lobar ICH 10–100 ml, GCS 5–14, superficial, no IVH — early surgery did not meet its primary endpoint (41% vs 38%, P=0.367); non-significant mortality trend favored surgery; consider in selected cases. Cerebellar ICH with neurological decline, brainstem compression, hydrocephalus, or diameter >3 cm: evacuate (Class 1, Level B-NR, 2022 AHA/ASA ICH). EVD for hydrocephalus from IVH."
           >
-            Most supratentorial ICH: medical. <Term detail="superficial lobar, 10–100 ml">STICH II</Term>-type — consider evacuation. Cerebellar hemorrhage <Value>&gt;3 cm</Value> with neurological decline or brainstem compression or hydrocephalus: <Critical>evacuate</Critical> (Class I, Level B). EVD for hydrocephalus from IVH.
+            Most supratentorial ICH: medical. <Term detail="superficial lobar, 10–100 ml">STICH II</Term>-type — consider evacuation. Cerebellar hemorrhage with neurological decline, brainstem compression, hydrocephalus, or diameter <Value>&gt;3 cm</Value>: <Critical>evacuate</Critical> (Class 1, Level B-NR). EVD for hydrocephalus from IVH.
           </Paragraph>
 
           <Section number={6} title="ICU and Complications" />

@@ -766,7 +766,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     },
     "subtitle": "DAPT for Atherosclerotic Minor Stroke or TIA Within 72 Hours",
     "source": "Gao Y, et al. (NEJM 2023)",
-    "timeline": "Enrolled 2019–2023; published NEJM 2024",
+    "timeline": "Enrolled 2019-2023; published NEJM December 2023",
     "listCategory": "antiplatelets",
     "listDescription": "DAPT for atherosclerotic minor stroke/TIA within 72 hours. NNT=53. AHA 2026 COR 2a.",
     "bottomLineSummary": "INSPIRES extends the DAPT initiation window to 72 hours for atherosclerotic minor stroke/TIA. New stroke at 90 days: 7.3% vs 9.2% (HR 0.79, 95% CI 0.66–0.94, P=0.008; NNT ≈ 53). Bleeding HR 2.08 (NNH ≈ 200). AHA/ASA 2026 §4.8 COR 2a.",
@@ -1142,14 +1142,14 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "legend": {
       "finding": "Pre-EVT IV tirofiban did not improve outcome and raised sICH 9.7% vs 6.4%.",
       "bottomLineTag": "NS / Harm",
-      "keyStat": "cOR 1.08 (0.87–1.34)"
+      "keyStat": "cOR 1.08 (0.86-1.36)"
     },
     "subtitle": "Intravenous Tirofiban Before Endovascular Thrombectomy",
     "source": "RESCUE BT Investigators (JAMA 2022)",
     "timeline": "Enrolled 2018-2021",
     "listCategory": "thrombectomy",
     "listDescription": "Adjunct pre-EVT tirofiban trial showing no functional benefit.",
-    "bottomLineSummary": "Chinese double-blind placebo-controlled trial of peri-procedural IV tirofiban vs placebo during thrombectomy in LVO stroke within 24 hours. Adjusted common OR 1.08 (95% CI 0.87-1.34, P = 0.51): no functional benefit. Symptomatic ICH significantly higher with tirofiban (9.7% vs 6.4%, P = 0.04). Net harm signal.",
+    "bottomLineSummary": "Chinese double-blind placebo-controlled trial of peri-procedural IV tirofiban vs placebo during thrombectomy in LVO stroke within 24 hours. Adjusted common OR 1.08 (95% CI 0.86-1.36, P = 0.50): no functional benefit. Symptomatic ICH significantly higher with tirofiban (9.7% vs 6.4%, P = 0.04). Net harm signal.",
     "doi": "10.1001/jama.2022.12584"
   },
   "rescue-japan-limit-trial": {
@@ -1163,8 +1163,8 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "source": "Yoshimura S et al. (NEJM 2022;386:1303-1313)",
     "timeline": "Enrolled November 2018 to September 2021",
     "listCategory": "thrombectomy",
-    "listDescription": "First positive large-core EVT trial: ASPECTS 3-5; mRS 0-3 31% vs 13%; NNT 5.",
-    "bottomLineSummary": "RESCUE-Japan LIMIT was the first randomized trial to show EVT benefit in large-core stroke (ASPECTS 3-5). Among 203 Japanese patients with ICA or M1 occlusion within 24 hours of LKW, EVT increased mRS 0-3 at 90 days from 12.7% to 31.0% (RR 2.43, 95% CI 1.35-4.37, P=0.002, NNT 5). The any-ICH rate nearly doubled (58.0% vs 31.4%, P<0.001) but symptomatic ICH and 90-day mortality were not significantly different. The trial opened the large-core EVT question that SELECT2, ANGEL-ASPECT, TENSION, and LASTE confirmed. AHA/ASA 2026 §4.7.2 supports Class I large-core EVT based in part on this index trial.",
+    "listDescription": "First positive large-core EVT trial: ASPECTS 3-5; mRS 0-3 31% vs 13%; NNT 5-6.",
+    "bottomLineSummary": "RESCUE-Japan LIMIT was the first randomized trial to show EVT benefit in large-core stroke (ASPECTS 3-5). Among 203 Japanese patients with ICA or M1 occlusion within 24 hours of LKW, EVT increased mRS 0-3 at 90 days from 12.7% to 31.0% (RR 2.43, 95% CI 1.35-4.37, P=0.002, NNT 5-6). The any-ICH rate nearly doubled (58.0% vs 31.4%, P<0.001) but symptomatic ICH and 90-day mortality were not significantly different. The trial opened the large-core EVT question that SELECT2, ANGEL-ASPECT, TENSION, and LASTE confirmed. AHA/ASA 2026 §4.7.2 supports Class I large-core EVT based in part on this index trial.",
     "doi": "10.1056/NEJMoa2118191"
   },
   "respect-original-trial": {
@@ -1507,7 +1507,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "legend": {
       "finding": "Early DOAC (≤4 d) after AF-related ischemic stroke noninferior to delayed start.",
       "bottomLineTag": "NI met",
-      "keyStat": "RD −1.79%"
+      "keyStat": "RD -1.79% (95% CI -5.31 to +1.74)"
     },
     "subtitle": "Early vs Delayed NOAC Initiation After AF-Related Ischemic Stroke",
     "source": "Oldgren et al. (Circulation 2022)",

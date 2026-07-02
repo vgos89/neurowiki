@@ -1313,7 +1313,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     id: 'robblee-ahs-2025',
     source: 'guideline',
     title: 'AHS Consensus Statement — Acute Treatment of Migraine in Adults (Robblee et al., Headache 2026;66:53–76)',
-    year: 2025,
+    year: 2026,
     section: 'Full guideline; published online 2025, print Headache 2026;66:53–76',
     url: 'https://doi.org/10.1111/head.70016',
     last_reviewed: '2026-05-25',

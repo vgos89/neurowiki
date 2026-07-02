@@ -99,8 +99,8 @@ export type ABCD2Severity = ABCD2Risk;
 // BLOCKING abcd2-dapt-cross-reference; the explanations now surface the
 // DAPT recommendation rather than implying observation alone.
 const ABCD2_DRAWER_EXPLANATION: Record<ABCD2Risk, string> = {
-  low: 'Urgent outpatient workup within 48h. All TIA patients need urgent evaluation regardless of score. Single antiplatelet therapy if no contraindication.',
-  moderate: 'High-risk TIA. Start DAPT within 24h × 21 days (clopidogrel + aspirin, loading dose) then SAPT per AHA/ASA 2026 §4.8 (COR 1, LOE A; CHANCE/POINT/INSPIRES). Consider admission or same-day urgent evaluation for workup.',
+  low: 'Urgent outpatient workup within 48h. All TIA patients need urgent evaluation regardless of score. DAPT is not indicated below ABCD2 4; single antiplatelet therapy is appropriate for this tier.',
+  moderate: 'ABCD2 score 4-5 meets the guideline threshold for high-risk TIA (ABCD2 ≥4). Start DAPT within 24h × 21 days (clopidogrel + aspirin, loading dose) then SAPT per AHA/ASA 2026 §4.8 (COR 1, LOE A; CHANCE/POINT/INSPIRES). Consider admission or same-day urgent evaluation for workup.',
   high: 'High-risk TIA. Start DAPT within 24h × 21 days (clopidogrel + aspirin, loading dose) then SAPT per AHA/ASA 2026 §4.8 (COR 1, LOE A; CHANCE/POINT/INSPIRES). Admit for workup and stroke prevention.',
 };
 

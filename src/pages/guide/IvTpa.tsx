@@ -38,7 +38,7 @@ export default function IvTpa() {
         <>
           <Term detail="recombinant tissue plasminogen activator">Alteplase (tPA)</Term> and{' '}
           <Term detail="single-bolus thrombolytic, non-inferior to tPA">tenecteplase (TNK)</Term>{' '}
-          are the two IV thrombolytics for acute ischemic stroke. Door-to-needle <Value>&lt;45 min</Value>.
+          are the two IV thrombolytics for acute ischemic stroke. Door-to-needle <Value>&lt;60 min</Value> (goal <Value>&#x2264;30 min</Value>).
         </>
       }
       relatedLinks={[

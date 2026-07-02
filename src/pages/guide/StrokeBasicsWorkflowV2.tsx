@@ -517,10 +517,10 @@ const MainContent: React.FC = () => {
                       The &quot;last known well&quot; (LKW) time determines eligibility for time-sensitive reperfusion therapies and is the most important piece of information in acute stroke management. For IV thrombolysis (tPA/TNK), the standard window is <strong>0-4.5 hours</strong>, with extended windows possible up to 9 hours using perfusion imaging (<Trial name="EXTEND" path="/trials/extend-trial" />). For mechanical thrombectomy, treatment is possible <strong>up to 24 hours</strong> with appropriate imaging showing salvageable tissue (<Trial name="DAWN" path="/trials/dawn-trial" />/<Trial name="DEFUSE-3" path="/trials/defuse-3-trial" /> trials).
                     </p>
                     <p className="text-sm text-blue-800 leading-relaxed">
-                      <strong>Time is Brain:</strong> During untreated stroke, 1.9 million neurons die per minute. Every 15-minute delay in treatment reduces the probability of good outcome by 4% (Emberson et al, Lancet 2014).
+                      <strong>Time is Brain:</strong> During untreated stroke, 1.9 million neurons die per minute. Earlier treatment yields greater proportional benefit: disability-free survival gain is approximately 10% if treated within 3h vs approximately 5% at 3-4.5h (Emberson et al, Lancet 2014).
                     </p>
                     <p className="text-sm text-blue-800 leading-relaxed">
-                      <strong>Wake-Up Strokes:</strong> If the patient woke with symptoms, LKW is when they were last seen normal before sleep, NOT when they woke up. The <Trial name="WAKE-UP" path="/trials/wake-up-trial" /> trial (2018) showed MRI-guided treatment using DWI-FLAIR mismatch resulted in 53.3% vs 41.8% favorable outcomes.
+                      <strong>Wake-Up Strokes:</strong> If the patient woke with symptoms, LKW is when they were last seen normal before sleep, NOT when they woke up. The <Trial name="WAKE-UP" path="/trials/wake-up-trial" /> trial (2018) showed MRI-guided treatment using DWI-FLAIR mismatch resulted in 53.3% vs 41.8% achieving an excellent outcome (mRS 0-1) at 90 days.
                     </p>
                     <div className="pt-2 border-t border-blue-200">
                       <p className="text-xs text-blue-700">

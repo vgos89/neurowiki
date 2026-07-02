@@ -377,7 +377,7 @@ const MrsCalculator: React.FC = () => {
       if (isPrestroke) {
         if (grade <= 1) {
           headline = 'Standard EVT and IVT eligibility';
-          body     = 'Prestroke mRS 0–1 satisfies the baseline-function criterion for EVT in standard and extended windows, and for IVT within 4.5 h, per AHA/ASA 2026. No baseline-disability exclusion applies.';
+          body     = 'Prestroke mRS 0–1 satisfies the baseline-function criterion for EVT in standard and extended windows per AHA/ASA 2026. IVT within 4.5 h carries no prestroke-mRS eligibility gate. No baseline-disability exclusion applies to EVT at this mRS level.';
         } else if (grade === 2) {
           headline = 'EVT can reasonably be considered (COR 2a)';
           body     = 'Prestroke mRS 2 is not a contraindication. Per AHA/ASA 2026, for anterior-circulation proximal LVO within 6 h with NIHSS ≥6 and ASPECTS ≥6, EVT can reasonably be considered (COR 2a, Level B-NR). The landmark trials (DAWN, DEFUSE-3, SELECT-2) enrolled prestroke mRS 0–1, so trial-level evidence is strongest at mRS 0–1; the mRS 2 recommendation reflects current guidance. Individualize and document.';
@@ -388,7 +388,7 @@ const MrsCalculator: React.FC = () => {
       } else {
         if (grade <= 2) {
           headline = '"Good outcome" — functional independence';
-          body     = 'mRS 0–2 is the standard "good outcome" in most acute stroke RCTs (NINDS, DAWN, DEFUSE-3, SELECT-2). At 90 days, mRS ≤2 represents independent function.';
+          body     = 'mRS 0–2 is the standard "good outcome" in most acute stroke thrombectomy RCTs (DAWN, DEFUSE-3, SELECT-2). At 90 days, mRS ≤2 represents independent function. Note: NINDS used mRS 0–1 within a 4-scale global statistic, not mRS 0–2.';
         } else if (grade === 3) {
           headline = 'Dependent for some activities; ambulatory';
           body     = 'mRS 3 falls below the mRS 0–2 "good outcome" threshold used in most stroke trials, but the patient retains independent ambulation. Relevant for rehabilitation goal-setting and trajectory discussions.';

@@ -48,7 +48,7 @@ export default function Thrombectomy() {
           <Section number={1} title="Indications" />
 
           <Paragraph viewMode={viewMode}>
-            <strong>Occlusion:</strong> Proximal LVO (ICA, M1). <strong>Pre-stroke:</strong> <Term detail="modified Rankin Scale 0–1">mRS</Term> 0–1. <strong>Time:</strong> 0–24 h from LKW.
+            <strong>Occlusion:</strong> Proximal LVO (ICA, M1). <strong>NIHSS:</strong> <Value>&ge;6</Value>. <strong>ASPECTS:</strong> <Value>3-10</Value> (0-6 h) or <Value>&ge;6</Value> (6-24 h). <strong>Pre-stroke:</strong> <Term detail="modified Rankin Scale 0–1">mRS</Term> 0–1. <strong>Time:</strong> 0–24 h from LKW.
           </Paragraph>
 
           <Section number={2} title="Selection by Time Window" />

@@ -88,9 +88,9 @@ export default function AcuteStrokeMgmt() {
 
           <Paragraph
             viewMode={viewMode}
-            detail="NIHSS &gt;20, carotid T, early CT hypodensity = high risk. HOB 30°, mannitol or 3% saline. Hemicraniectomy within 24–48 h for &lt;60 y with midline shift — can be life-saving."
+            detail="NIHSS &gt;20, carotid T, early CT hypodensity = high risk. HOB 30°, mannitol or 3% saline. Hemicraniectomy within 24–48 h for malignant cerebral edema with neurological deterioration: COR 1 in patients &le;60 y (AHA/ASA 2026); may be considered in selected patients &gt;60 y (COR 2a, individualized)."
           >
-            <strong>Malignant edema:</strong> ~80% mortality untreated. Risk: <Term detail="NIH Stroke Scale">NIHSS</Term> <Value>&gt;20</Value>, carotid T, early hypodensity. HOB <Value>&gt;30°</Value>, hyperosmolar therapy. <Critical>Hemicraniectomy</Critical> within 24–48 h if &lt;60 y.
+            <strong>Malignant edema:</strong> ~80% mortality untreated. Risk: <Term detail="NIH Stroke Scale">NIHSS</Term> <Value>&gt;20</Value>, carotid T, early hypodensity. HOB <Value>&gt;30°</Value>, hyperosmolar therapy. <Critical>Hemicraniectomy</Critical> within 24–48 h: COR 1 if &le;60 y; COR 2a if &gt;60 y (individualized).
           </Paragraph>
 
           <Paragraph

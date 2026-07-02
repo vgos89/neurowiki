@@ -816,7 +816,7 @@ const PostStrokeLipidManagement: React.FC = () => {
             {/* SPARCL pearl */}
             <PathwayLearningPearl
               title="SPARCL: Secondary stroke prevention"
-              content="Atorvastatin 80 mg reduced recurrent stroke by 16% relative (NNT 53 over 4.9 years) but increased haemorrhagic stroke risk (HR 1.66, 95% CI 1.08–2.55). In ischaemic stroke patients, the net benefit is strongly positive. In patients with prior haemorrhagic stroke, statin use requires an explicit risk-benefit discussion. See the ICH arm of this pathway."
+              content="Atorvastatin 80 mg reduced recurrent stroke by 16% relative (NNT 46 over ~5 years; 2.2% ARR) but increased haemorrhagic stroke risk (HR 1.66, 95% CI 1.08–2.55). In ischaemic stroke patients, the net benefit is strongly positive. In patients with prior haemorrhagic stroke, statin use requires an explicit risk-benefit discussion. See the ICH arm of this pathway."
             />
           </div>
         )}

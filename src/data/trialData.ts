@@ -1088,7 +1088,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       pValue: {
         value: '0.04',
-        label: 'Statistically Sig.'
+        label: 'Adjusted only (unadjusted P=0.35)'
       },
       effectSize: {
         value: '5.9%',
@@ -1357,7 +1357,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       effectSize: {
         value: '-2.9%',
-        label: 'No Benefit'
+        label: 'Secondary: visual improvement rate, no benefit'
       }
     },
     trialDesign: {
@@ -2091,7 +2091,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       effectSize: {
         value: '+31%',
-        label: 'mRS 0-2 Benefit'
+        label: 'Secondary: mRS 0-2 benefit'
       }
     },
     trialDesign: {
@@ -4323,7 +4323,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     archetypeId: 'B' as const,
     listCategory: 'thrombectomy',
     listDescription: 'Adjunct pre-EVT tirofiban trial showing no functional benefit.',
-    ordinalStats: { commonOR: 1.08, ciLow: 0.87, ciHigh: 1.34, direction: 'positive' as const, pValue: 0.51 },
+    ordinalStats: { commonOR: 1.08, ciLow: 0.86, ciHigh: 1.36, direction: 'neutral' as const, pValue: 0.50 },
     howToReadChart: [
       {
         question: 'What does the chart show?',
@@ -4331,7 +4331,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'How is the test judged here?',
-        answer: 'The trial was a superiority design. Adjusted common OR was 1.08 (95% CI 0.87-1.34, P = 0.51), which crosses 1.0 and is not statistically significant. mRS 0-1 was 36.3% (tirofiban) vs 32.4% (placebo) and mRS 0-2 was approximately 53-54% in both arms.',
+        answer: 'The trial was a superiority design. Adjusted common OR was 1.08 (95% CI 0.86-1.36, P = 0.50), which crosses 1.0 and is not statistically significant. mRS 0-1 was 36.3% (tirofiban) vs 32.4% (placebo) and mRS 0-2 was approximately 53-54% in both arms.',
       },
       {
         question: 'What about safety and secondary outcomes?',
@@ -4340,13 +4340,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     /* claimId: rescue-bt-ordinal | source: RESCUE BT Investigators JAMA 2022 */
     howToInterpret: {
-      proves: 'In Chinese patients with acute LVO stroke treated with thrombectomy within 24 hours, peri-procedural IV tirofiban did not improve 90-day functional outcome compared with placebo (adjusted common OR 1.08, 95% CI 0.87-1.34, P = 0.51). Symptomatic ICH was significantly higher with tirofiban (9.7% vs 6.4%, P = 0.04). The combination of null efficacy and a significant safety signal argues against routine peri-EVT tirofiban use.',
+      proves: 'In Chinese patients with acute LVO stroke treated with thrombectomy within 24 hours, peri-procedural IV tirofiban did not improve 90-day functional outcome compared with placebo (adjusted common OR 1.08, 95% CI 0.86-1.36, P = 0.50). Symptomatic ICH was significantly higher with tirofiban (9.7% vs 6.4%, P = 0.04). The combination of null efficacy and a significant safety signal argues against routine peri-EVT tirofiban use.',
       doesNotProve: 'The trial does not exclude potential benefit in narrowly defined subgroups (for example, intracranial atherosclerotic disease with rescue stenting), which were not the primary question. It does not address tirofiban given for other indications such as carotid stenting or post-procedural reocclusion management.',
       cautions: 'Single-country (China) cohort, which limits generalizability. The enrolled population was anterior-circulation LVO only (intracranial ICA, M1, or M2); posterior-circulation occlusion was excluded, so these results do not speak to basilar or other posterior-circulation thrombectomy. The sICH increase (P = 0.04) is the most actionable finding from a null efficacy trial: when adding an antiplatelet agent does not help and increases bleeding, the default position is not to add it. Reperfusion rates were similar (~83%), so the harm is not offset by mechanical benefit.',
     },
     /* claimId: rescue-bt-bedside | source: RESCUE BT Investigators JAMA 2022 */
     bedsidePearl: 'Do not give peri-procedural IV tirofiban as routine adjunct to thrombectomy. RESCUE BT showed no functional benefit and a significant increase in symptomatic ICH (9.7% vs 6.4%). Reserve GP IIb/IIIa inhibitors for selected indications such as rescue stenting in intracranial atherosclerosis, not for general LVO thrombectomy.',
-    bottomLineSummary: 'Chinese double-blind placebo-controlled trial of peri-procedural IV tirofiban vs placebo during thrombectomy in LVO stroke within 24 hours. Adjusted common OR 1.08 (95% CI 0.87-1.34, P = 0.51): no functional benefit. Symptomatic ICH significantly higher with tirofiban (9.7% vs 6.4%, P = 0.04). Net harm signal.',
+    bottomLineSummary: 'Chinese double-blind placebo-controlled trial of peri-procedural IV tirofiban vs placebo during thrombectomy in LVO stroke within 24 hours. Adjusted common OR 1.08 (95% CI 0.86-1.36, P = 0.50): no functional benefit. Symptomatic ICH significantly higher with tirofiban (9.7% vs 6.4%, P = 0.04). Net harm signal.',
     inclusionCriteria: [
       'Age 18 to 80',
       'Acute ischemic stroke with anterior-circulation intracranial LVO (ICA, M1, or M2)',
@@ -4369,7 +4369,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     legend: {
       finding: 'Pre-EVT IV tirofiban did not improve outcome and raised sICH 9.7% vs 6.4%.',
       bottomLineTag: 'NS / Harm',
-      keyStat: 'cOR 1.08 (0.87–1.34)',
+      keyStat: 'cOR 1.08 (0.86-1.36)',
     },
   },
   'enchanted-trial': {
@@ -4525,7 +4525,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     category: 'Neuro Trials',
     trialResult: 'NEUTRAL',
     primaryDesign: 'estimation-strategy',
-    primaryResult: 'futility-stopped',
+    /* primaryResult intentionally omitted: estimation-strategy schema contract leaves both primaryDesign and primaryResult unset (CLAUDE.md §trialData schema line 355). BEST-II completed full enrollment; the futility P=0.93 did not cross the pre-specified futility boundary. */
     stats: {
       sampleSize: {
         value: '120',
@@ -5046,7 +5046,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     bedsidePearl: 'CHARM stopped early for COVID and was underpowered; results are inconclusive. Glibenclamide did not significantly improve disability and caused 3-fold higher hypoglycemia. Do not use IV glibenclamide for malignant edema outside a clinical trial. Hemicraniectomy (DESTINY II, HAMLET, DECIMAL) remains the only intervention with survival evidence in eligible malignant MCA infarction patients.',
     bottomLineSummary: 'Phase 3 double-blind trial of IV glibenclamide vs placebo for large hemispheric infarction in 535 patients across 143 centers. Stopped early for COVID-19. Primary outcome (mRS ordinal shift at 90 days, age 18-70) was null: cOR 1.17, 95% CI 0.80-1.71, P=0.42. Mortality numerically higher with glibenclamide; hypoglycemia 6% vs 2%. Findings are inconclusive due to underpowering from early stopping.',
     inclusionCriteria: [
-      'Age 18-80 (primary efficacy analysis age 18-70)',
+      'Age 18-85 years (primary efficacy analysis restricted to 18-70)',
       'Large hemispheric infarction: ASPECTS 1-5 or DWI core 80-300 mL',
       'Study drug initiated within 10 hours of stroke onset',
       'Patient or surrogate able to provide consent',
@@ -5965,7 +5965,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       effectSize: {
         value: '-1.79%',
-        label: 'Absolute Risk Difference'
+        label: 'ARD (95% CI -5.31% to +1.74%)'
       }
     },
     trialDesign: {
@@ -6089,7 +6089,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     /* claimId: timing-interpret | source: Oldgren et al. Circulation 2022 */
     howToInterpret: {
-      proves: 'In 888 patients with AF-related ischemic stroke, early NOAC initiation within 4 days was non-inferior to delayed initiation (5-10 days) for the 90-day composite of recurrent stroke, symptomatic ICH, or death. The absolute risk difference was -1.79 percentage points (early 6.89% vs delayed 8.68%), and the upper confidence interval bound did not exceed the prespecified non-inferiority margin (P for NI = 0.004). No symptomatic intracranial hemorrhages occurred in either arm.',
+      proves: 'In 888 patients with AF-related ischemic stroke, early NOAC initiation within 4 days was non-inferior to delayed initiation (5-10 days) for the 90-day composite of recurrent stroke, symptomatic ICH, or death. The absolute risk difference was -1.79 percentage points (95% CI -5.31% to +1.74%; early 6.89% vs delayed 8.68%); the CI upper bound of +1.74 pp did not exceed the prespecified 3 pp NI margin (P for NI = 0.004). No symptomatic intracranial hemorrhages occurred in either arm.',
       doesNotProve: 'TIMING does not establish superiority of early over delayed NOAC initiation. The trial cannot determine the optimal specific day of initiation within the early window (any day from 1-4 was grouped together). It does not address initiation within 24 hours, or patients with large infarcts, active hemorrhagic transformation, or significant leukoaraiosis. The open-label design means prescribing behavior could differ between arms.',
       cautions: 'Registry-based randomization via the Swedish Stroke Register is pragmatic but less controlled than a hospital-based double-blind RCT. The sample size (888 patients) was designed for a 3 percentage point NI margin; smaller absolute differences would require larger trials. Event rates were low overall (6.89% and 8.68%), meaning conclusions apply primarily to patients at modest-to-moderate risk. OPTIMAS (3621 patients, 100 UK hospitals) provides a larger, more definitive NI result with a wider delayed-initiation window (7-14 days).',
     },
@@ -6113,7 +6113,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     legend: {
       finding: 'Early DOAC (≤4 d) after AF-related ischemic stroke noninferior to delayed start.',
       bottomLineTag: 'NI met',
-      keyStat: 'RD −1.79%',
+      keyStat: 'RD -1.79% (95% CI -5.31 to +1.74)',
     },
   },
   'optimas-trial': {
@@ -8006,7 +8006,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Acute basilar artery occlusion confirmed on CTA/MRA/DSA',
       'NIHSS ≥10 at randomization',
       'Within 12 hours of estimated onset',
-      'PC-ASPECTS ≥6 (<80y) or ≥8 (≥80y); pre-stroke mRS ≤2',
+      'PC-ASPECTS ≥6 (<80y) or ≥8 (≥80y); pre-stroke mRS ≤2 (<80y) or mRS 0 only (≥80y)',
     ],
     exclusionCriteria: [
       'Anterior circulation LVO (use HERMES-era evidence)',
@@ -10406,7 +10406,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         'Second factor: intensive vs standard statin (independent)',
         'Treatment window: within 72 hours of symptom onset'
       ],
-      timeline: 'Enrolled 2019–2023; published NEJM 2024',
+      timeline: 'Enrolled 2019-2023; published NEJM December 2023',
       sampleSize: {
         value: '6,100 patients',
         info: '2×2 factorial simultaneously testing antiplatelet and statin intensification in atherosclerotic stroke. Powered for 20% relative risk reduction.'
@@ -13476,9 +13476,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
     ],
     howToInterpret: {
-      proves: 'STOPPED FOR HARM. In patients with moderate-to-severe acute ischemic stroke (NIHSS ≥6) treated within 4.5 hours, tenecteplase 0.4 mg/kg was inferior to standard-dose alteplase for excellent functional outcome (32% vs 51%, OR 0.45, 95% CI 0.25-0.82, P=0.006), with 6× higher sICH (6% vs 1%) and 3× higher mortality (16% vs 5%). The DSMB terminated the trial early for safety.',
+      proves: 'STOPPED FOR HARM. In patients with moderate-to-severe acute ischemic stroke (NIHSS ≥6) treated within 4.5 hours, tenecteplase 0.4 mg/kg was inferior to standard-dose alteplase for excellent functional outcome (32% vs 51%, OR 0.45, 95% CI 0.25-0.80, P=0.006), with 6× higher sICH (6% vs 1%) and 3× higher mortality (16% vs 5%). The DSMB terminated the trial early for safety.',
       doesNotProve: 'NOR-TEST 2 Part A does not prove that tenecteplase at any dose is harmful. The harm was specific to the 0.4 mg/kg dose in moderate-severe stroke. It does not apply to tenecteplase 0.25 mg/kg, which has been validated as safe and non-inferior to alteplase in multiple large RCTs.',
-      cautions: 'N=204 (stopped early), so estimates are imprecise. The trial was designed as a non-inferiority study for the 0.4 mg/kg dose; the harm signal emerged despite, not because of, the NI framing. The confidence interval for OR (0.25-0.82) does not cross 1.0, making the harm finding robust despite small sample size.',
+      cautions: 'N=204 (stopped early), so estimates are imprecise. The trial was designed as a non-inferiority study for the 0.4 mg/kg dose; the harm signal emerged despite, not because of, the NI framing. The confidence interval for OR (0.25-0.80) does not cross 1.0, making the harm finding robust despite small sample size.',
     },
     bedsidePearl: 'NOR-TEST 2 Part A is a clear harm signal: tenecteplase 0.4 mg/kg in moderate-severe stroke caused 6× more sICH and 3× more deaths than alteplase. The 0.4 mg/kg dose is not used in practice. Current guidelines endorse tenecteplase 0.25 mg/kg as a safe alternative based on entirely separate trials (AcT, TRACE-2). Do not conflate the doses.',
     bottomLineSummary: 'NOR-TEST 2 Part A was stopped early for harm after tenecteplase 0.4 mg/kg showed substantially worse outcomes than alteplase in moderate-severe stroke: mRS 0-1 32% vs 51%, sICH 6% vs 1%, and mortality 16% vs 5%. The 0.4 mg/kg dose is contraindicated. This trial does not affect the safety profile of tenecteplase 0.25 mg/kg.',
@@ -14487,7 +14487,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       { arm: 'Placebo', n: 229, pct: [13.5, 13.1, 15.7, 14.8, 17.9, 5.7, 19.2] },
     ],
     ordinalStats: { commonOR: 1.13, ciLow: 0.82, ciHigh: 1.57, direction: 'positive' as const, pValue: 0.45 },
-    bedsidePearl: 'TIMELESS is not evidence against late-window IVT in all settings. It is specifically negative for bridging tenecteplase before thrombectomy in the 4.5-24 hour window (77% of patients underwent EVT). The contrast is TRACE-III: in perfusion-selected LVO patients without EVT access, late-window tenecteplase improved mRS 0-1 from 24.2% to 33.0% (NNT 11). The rule is: late-window IVT may help when EVT is unavailable; it adds nothing as a bridge when EVT is being performed.',
+    bedsidePearl: 'TIMELESS is not evidence against late-window IVT in all settings. It is specifically negative for bridging tenecteplase before thrombectomy in the 4.5-24 hour window (77% of patients underwent EVT). The contrast is TRACE-III (Xiong et al., Lancet 2024): in perfusion-selected LVO patients without EVT access, late-window tenecteplase improved mRS 0-1 from 24.2% to 33.0% (NNT 11). The rule is: late-window IVT may help when EVT is unavailable; it adds nothing as a bridge when EVT is being performed.',
     bottomLineSummary: 'In perfusion-selected LVO patients treated 4.5-24 hours after stroke onset, tenecteplase 0.25 mg/kg before planned thrombectomy (77% of patients) did not improve 90-day mRS distribution (adjusted cOR 1.13, 95% CI 0.82-1.57, p=0.45). Functional independence occurred in 46.0% vs 42.4%. Symptomatic ICH was 3.2% vs 2.3%. TIMELESS and TRACE-III together define the role of late-window IVT: benefit only when EVT is unavailable.',
     legend: {
       finding: 'IV tenecteplase 4.5–24 h with perfusion mismatch did not improve mRS shift; not a verdict against late IVT broadly.',
@@ -14837,7 +14837,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalContext: 'IMS-III tested whether adding endovascular therapy to IV alteplase improved outcomes. Most patients in the endovascular arm did not have CTA-confirmed vessel occlusion, and coil-based retrieval devices achieved modest reperfusion rates. The trial demonstrates why device generation and imaging selection are the critical variables.',
     pearls: [
       'Stopped early for futility: no benefit of adding endovascular to IV alteplase',
-      'mRS 0-2 at 90 days: 40.8% vs 38.7% (adjusted RR 1.05, 95% CI 0.85-1.30)',
+      'mRS 0-2 at 90 days: 40.8% vs 38.7% (adjusted RR 1.05, 95% CI 0.83-1.30)',
       'Endovascular arm used mostly older coil-based devices; modern stent retrievers unavailable',
       'Less than half of endovascular-arm patients had CTA-confirmed vessel occlusion',
     ],
@@ -15079,7 +15079,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     trialDesign: {
       type: [
-        'Multicenter phase 2 RCT, 9 US centers',
+        'Multicenter phase 2 RCT, 22 North American centers',
         'MRI or CT perfusion penumbral-mismatch stratification prior to randomization',
         'Mechanical embolectomy (MERCI retriever or Penumbra system) vs standard care',
         'Proximal anterior circulation LVO required (CTA or MRA confirmed)',
@@ -15881,7 +15881,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT03702413',
     source: 'Yoshimura S et al. (NEJM 2022;386:1303-1313)',
     listCategory: 'thrombectomy',
-    listDescription: 'First positive large-core EVT trial: ASPECTS 3-5; mRS 0-3 31% vs 13%; NNT 5.',
+    listDescription: 'First positive large-core EVT trial: ASPECTS 3-5; mRS 0-3 31% vs 13%; NNT 5-6.',
     harmSignal: 'Any ICH within 48h was 58.0% vs 31.4% (RR 1.85, 95% CI 1.33-2.58, P<0.001); symptomatic ICH numerically higher (9.0% vs 4.9%) but not significant',
     applicability: {
       populationExclusions: [
@@ -15956,7 +15956,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     pearls: [
       'First positive RCT showing EVT benefit in ASPECTS 3-5. Opened the large-core EVT question that SELECT2, ANGEL-ASPECT, TENSION, and LASTE subsequently confirmed.',
       'Primary outcome mRS 0-3 at 90 days reached 31.0% with EVT vs 12.7% with medical care alone (RR 2.43, 95% CI 1.35-4.37, P=0.002).',
-      'NNT 5 from the binary primary outcome. Among the largest absolute treatment effects in the EVT literature.',
+      'NNT 5-6 from the binary primary outcome (18.3 pp ARD; 1/0.183 = 5.46). Among the largest absolute treatment effects in the EVT literature.',
       'Safety trade-off: any intracranial hemorrhage within 48 hours was 58.0% with EVT vs 31.4% with medical care alone (RR 1.85, 95% CI 1.33-2.58, P<0.001). Symptomatic ICH was higher but not significant (9.0% vs 4.9%, P=0.25).',
       'No mortality difference at 90 days (18.0% EVT vs 23.5% medical, RR 0.77, 95% CI 0.44-1.32, P=0.33). The hemorrhage signal did not translate to excess death.',
       'Inclusion: age 18 or older, NIHSS 6 or greater, pre-stroke mRS 0 or 1, ICA or M1 occlusion, ASPECTS 3-5, within 6 hours of LKW or 6-24 hours with no FLAIR signal change.',
@@ -15973,8 +15973,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Open-label design without sham. mRS at 90 days assessed by physicians or physical therapists who were unaware of group assignment.',
       'No industry involvement. Funded by Mihara Cerebrovascular Disorder Research Promotion Fund and Japanese Society for Neuroendovascular Therapy.',
     ],
-    bedsidePearl: 'For ASPECTS 3-5 anterior LVO within 6 hours of LKW, or 6-24 hours without FLAIR signal change, EVT improved mRS 0-3 at 90 days from 12.7% to 31.0% (RR 2.43, NNT 5). The trade-off is a near-doubling of any-ICH rate (58% vs 31%, P<0.001), although symptomatic ICH and mortality were not significantly different. Quote both numbers when consenting: 5 patients treated to gain one functional outcome, against the higher hemorrhage rate.',
-    bottomLineSummary: 'RESCUE-Japan LIMIT was the first randomized trial to show EVT benefit in large-core stroke (ASPECTS 3-5). Among 203 Japanese patients with ICA or M1 occlusion within 24 hours of LKW, EVT increased mRS 0-3 at 90 days from 12.7% to 31.0% (RR 2.43, 95% CI 1.35-4.37, P=0.002, NNT 5). The any-ICH rate nearly doubled (58.0% vs 31.4%, P<0.001) but symptomatic ICH and 90-day mortality were not significantly different. The trial opened the large-core EVT question that SELECT2, ANGEL-ASPECT, TENSION, and LASTE confirmed. AHA/ASA 2026 §4.7.2 supports Class I large-core EVT based in part on this index trial.',
+    bedsidePearl: 'For ASPECTS 3-5 anterior LVO within 6 hours of LKW, or 6-24 hours without FLAIR signal change, EVT improved mRS 0-3 at 90 days from 12.7% to 31.0% (RR 2.43, NNT 5-6). The trade-off is a near-doubling of any-ICH rate (58% vs 31%, P<0.001), although symptomatic ICH and mortality were not significantly different. Quote both numbers when consenting: approximately 5 to 6 patients treated to gain one functional outcome, against the higher hemorrhage rate.',
+    bottomLineSummary: 'RESCUE-Japan LIMIT was the first randomized trial to show EVT benefit in large-core stroke (ASPECTS 3-5). Among 203 Japanese patients with ICA or M1 occlusion within 24 hours of LKW, EVT increased mRS 0-3 at 90 days from 12.7% to 31.0% (RR 2.43, 95% CI 1.35-4.37, P=0.002, NNT 5-6). The any-ICH rate nearly doubled (58.0% vs 31.4%, P<0.001) but symptomatic ICH and 90-day mortality were not significantly different. The trial opened the large-core EVT question that SELECT2, ANGEL-ASPECT, TENSION, and LASTE confirmed. AHA/ASA 2026 §4.7.2 supports Class I large-core EVT based in part on this index trial.',
     howToReadChart: [
       {
         question: 'What does the chart show?',
@@ -15982,7 +15982,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What should I look at first?',
-        answer: 'The 18 percentage-point gap. That translates to NNT 5: for every 5 to 6 patients with ASPECTS 3-5 LVO treated with EVT instead of medical care, one additional patient achieves mRS 0-3. This is one of the largest absolute treatment effects in stroke EVT.',
+        answer: 'The 18 percentage-point gap. That translates to NNT 5-6: for every 5 to 6 patients with ASPECTS 3-5 LVO treated with EVT instead of medical care, one additional patient achieves mRS 0-3. This is one of the largest absolute treatment effects in stroke EVT.',
       },
       {
         question: 'What does it mean for my patient?',
@@ -15994,7 +15994,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
     ],
     howToInterpret: {
-      proves: 'In Japanese adults 18 or older with NIHSS 6 or greater, pre-stroke mRS 0 or 1, and ICA or M1 occlusion, with ASPECTS 3-5 by CT or MRI, EVT within 6 hours of LKW (or 6-24 hours with no FLAIR signal change) improves the chance of mRS 0-3 at 90 days vs medical care alone (RR 2.43, NNT 5).',
+      proves: 'In Japanese adults 18 or older with NIHSS 6 or greater, pre-stroke mRS 0 or 1, and ICA or M1 occlusion, with ASPECTS 3-5 by CT or MRI, EVT within 6 hours of LKW (or 6-24 hours with no FLAIR signal change) improves the chance of mRS 0-3 at 90 days vs medical care alone (RR 2.43, NNT 5-6).',
       doesNotProve: 'It does not prove benefit for ASPECTS 0-2 (excluded; addressed by LASTE 2024). It does not prove benefit in non-Japanese populations directly; SELECT2, ANGEL-ASPECT, and TENSION subsequently confirmed the finding in US, Chinese, and European cohorts. It does not address posterior circulation (see ATTENTION and BAOCHE). The narrow rt-PA use and Japanese low-dose alteplase limit direct application to settings where 0.9 mg/kg alteplase is standard.',
       cautions: 'The any-ICH rate was significantly higher with EVT (58.0% vs 31.4%, P<0.001), although symptomatic ICH was not significantly different (9.0% vs 4.9%, P=0.25). Open-label design with blinded mRS assessment. Per-protocol analysis excluded 14 patients but showed results consistent with the primary analysis. Subgroup and post hoc analyses were exploratory; no multiplicity adjustment. ASPECTS determined by MRI in 88% of patients; MRI ASPECTS may classify infarcts one level lower than CT, so CT-equivalent ASPECTS in this cohort may have been 4-6.',
     },
@@ -17323,7 +17323,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     calculations: {
       nnt: 28,
-      nntExplanation: 'Authors reported NNT ~28 to prevent one recurrent clinical ischemic stroke over 24 months among patients 18–59 with cryptogenic stroke and PFO who received transcatheter closure with Gore HELEX or Cardioform plus antiplatelet vs antiplatelet alone. Søndergaard et al., NEJM 2017;377:1033, Discussion p.1040. Computed from the 24-month event-rate difference of approximately 4 percentage points.',
+      nntExplanation: 'Authors reported NNT ~28 to prevent one recurrent clinical ischemic stroke over 24 months among patients 18-59 with cryptogenic stroke and PFO who received transcatheter closure with Gore HELEX or Cardioform plus antiplatelet vs antiplatelet alone. Sondergaard et al., NEJM 2017;377:1033, Discussion p.1040. Derived from the Kaplan-Meier 24-month event-rate difference (~3.6 percentage points; 1/0.036 is approximately 28), not from the overall 3.2-year crude event-rate gap of 4.0 percentage points.',
     },
     safetyProfile: {
       adverseEvents: { evt: 6.6, control: 0.4, label: 'Atrial fibrillation or flutter', tooltip: 'Atrial fibrillation/flutter: 29/441 (6.6%) PFO closure vs 1/223 (0.4%) antiplatelet alone, P<0.001. Largest absolute AF signal of the three 2017 PFO trials. 83% of closure-arm AF detected within 45 days of procedure; 59% resolved within 2 weeks of onset. Predominantly transient periprocedural AF. 1 of 29 patients with post-closure AF had a recurrent stroke. Source: Søndergaard et al., NEJM 2017, Table 3.', color: 'warning' },

@@ -644,7 +644,7 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
       'aha-asa-2026-4.8',
     ],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
-    description: 'NIHSS portal drawer severity-band clinical interpretation. Minor (1–4): IVT pivots on disabling vs non-disabling deficit per §4.6.1 COR 3 No Benefit for non-disabling; DAPT × 21d per §4.8 COR 1 LOE A. Moderate (5–15): disabling deficit; IVT within 4.5h indicated; NIHSS ≥6 + cortical signs triggers CTA per §4.7.2. Moderate-to-severe (16–20): typical proximal LVO range; expedite EVT pathway per §4.7.2; post-IVT BP ≤180/105. Severe (≥21): large-territory infarct risk; reassess ASPECTS, age, prestroke mRS before EVT; sICH risk elevated.',
+    description: 'NIHSS portal drawer severity-band clinical interpretation. Minor (1–4): IVT pivots on disabling vs non-disabling deficit per §4.6.1 COR 3 No Benefit for non-disabling; DAPT × 21d per §4.8 COR 1 LOE A. Moderate (5–15): disabling deficit; IVT within 4.5h indicated; NIHSS ≥6 + cortical signs triggers CTA head/neck for EVT triage (vascular imaging recommendation lives in AHA/ASA 2026 Section 3 Imaging, not §4.7.2 — a new aha-asa-2026-3.x citation is needed in registry.ts for this clause). Moderate-to-severe (16–20): typical proximal LVO range; expedite EVT pathway per §4.7.2; post-IVT BP ≤180/105. Severe (≥21): large-territory infarct risk; reassess ASPECTS, age, prestroke mRS before EVT; sICH risk elevated.',
   },
 
   // ─── 2026 ACC/AHA Dyslipidemia §4.2.6 — secondary prevention after stroke ────
@@ -934,16 +934,16 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
 
   'mrs-prestroke-evt-eligibility': {
     id: 'mrs-prestroke-evt-eligibility',
-    citation_ids: ['aha-asa-2026-4.7.2', 'aha-asa-2026-4.6.1'],
+    citation_ids: ['aha-asa-2026-4.7.2'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
-    description: 'Pre-stroke mRS eligibility interpretation in the mRS calculator drawer: mRS 0–1 = standard EVT/IVT eligibility criterion (AHA/ASA 2026 §4.7.2 COR 1 LOE A for EVT standard window; §4.6.1 for IVT within 4.5h). mRS 2 = guideline-permissive, NOT a contraindication: for anterior-circulation ICA/M1 LVO within 6h with NIHSS ≥6 and ASPECTS ≥6, EVT can reasonably be considered (COR 2a, LOE B-NR per §4.7.2). Note the trial-inclusion history separately: most landmark trials (DAWN, DEFUSE-3, SELECT-2) enrolled only prestroke mRS 0–1, which is a study-population fact, not current guidance. mRS 3–4 within the same criteria: EVT might be reasonable (COR 2b, LOE B-NR). mRS 5 = high baseline disability, not guideline-supported for routine acute intervention.',
+    description: 'Pre-stroke mRS eligibility interpretation in the mRS calculator drawer. IVT (§4.6.1) carries NO prestroke-mRS eligibility criterion; the prestroke mRS threshold applies to EVT only. mRS 0–1 = standard EVT baseline-function criterion (AHA/ASA 2026 §4.7.2 COR 1 LOE A for the standard window). mRS 2 = guideline-permissive for EVT, NOT a contraindication: for anterior-circulation ICA/M1 LVO within 6h with NIHSS ≥6 and ASPECTS ≥6, EVT can reasonably be considered (COR 2a, LOE B-NR per §4.7.2). Note the trial-inclusion history separately: most landmark trials (DAWN, DEFUSE-3, SELECT-2) enrolled only prestroke mRS 0–1, which is a study-population fact, not current guidance. mRS 3–4 within the same criteria: EVT might be reasonable (COR 2b, LOE B-NR). mRS 5 = high baseline disability, not guideline-supported for routine acute intervention.',
   },
 
   'mrs-outcome-context': {
     id: 'mrs-outcome-context',
     citation_ids: ['van-swieten-mrs-1988', 'aha-asa-2026-4.7.2'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
-    description: 'Current/outcome context interpretation in the mRS calculator drawer: mRS 0–2 at 90 days = "good outcome" threshold used as primary endpoint in NINDS tPA trial, DAWN, DEFUSE-3, SELECT-2, and most acute stroke RCTs. mRS 3 = dependent but ambulatory; below good-outcome threshold. mRS 4–5 = poor functional outcome range.',
+    description: 'Current/outcome context interpretation in the mRS calculator drawer: mRS 0–2 at 90 days = "good outcome" threshold used as primary endpoint in DAWN, DEFUSE-3, SELECT-2, and most acute stroke RCTs. NOTE: NINDS (1995) did NOT use mRS 0-2 as a standalone primary — its favorable outcome was a global statistic across four scales (Barthel, Rankin, Glasgow, NIHSS), with the Rankin component dichotomized at 0-1 (not 0-2). mRS 3 = dependent but ambulatory; below good-outcome threshold. mRS 4–5 = poor functional outcome range.',
   },
 
   // ─── NIHSS minor-stroke disabling-features checklist ────────────────────
