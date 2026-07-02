@@ -716,21 +716,30 @@ export const CITATION_REGISTRY: CitationRegistry = {
   // Greenberg SM et al. 2022 Guideline for the Management of Patients With
   // Spontaneous Intracerebral Hemorrhage. Stroke 2022;53:e282–e361.
   // Registered 2026-05-23 to support the ich-anticoagulation-reversal
-  // clinical synthesis card. Covers VKA reversal (4F-PCC + vitamin K),
-  // dabigatran reversal (idarucizumab), FXa reversal (andexanet alfa or
-  // 4F-PCC), and platelet transfusion (Class III: Harm for antiplatelet-
-  // associated ICH outside of planned neurosurgery, per PATCH).
+  // clinical synthesis card. Reconciled 2026-07-01 (Class D-clinical
+  // citation-registry consolidation): this is now the single canonical entry
+  // for the §5.2 Hemostasis and Coagulopathy reversal recommendations — the
+  // duplicate 'aha-asa-ich-2022-reversal' entry was deleted and its
+  // dependents repointed here. The reversal recommendations live in §5.2.1
+  // (anticoagulant reversal) and §5.2.2 (antiplatelet reversal), NOT §7.3.
+  // Grades corrected per the evidence-verifier table:
+  //   §5.2.1 VKA → 4F-PCC over FFP: Class 1, LOE B-R (concurrent IV vitamin K)
+  //   §5.2.1 dabigatran → idarucizumab: Class 2a, LOE B-NR
+  //   §5.2.1 FXa-inhibitor → andexanet alfa: Class 2a, LOE B-NR
+  //   §5.2.1 FXa-inhibitor → 4F-PCC or aPCC: Class 2b, LOE B-NR
+  //   §5.2.2 antiplatelet → platelet transfusion (no emergency neurosurgery):
+  //          Class 3: Harm, LOE B-R (per PATCH)
   // 6-month review window per §13.7.
   'aha-asa-2022-ich-anticoag-reversal': {
     id: 'aha-asa-2022-ich-anticoag-reversal',
     source: 'guideline',
     title: '2022 AHA/ASA Spontaneous ICH Guideline — Anticoagulant and antiplatelet reversal',
     year: 2022,
-    section: '§7.3 Hemostatic Therapies',
+    section: '§5.2 Hemostasis and Coagulopathy (§5.2.1 anticoagulant, §5.2.2 antiplatelet)',
     url: 'https://www.ahajournals.org/doi/10.1161/STR.0000000000000407',
     pmid: '35579034',
-    last_reviewed: '2026-05-23',
-    quoted_text: 'For patients with VKA-associated ICH, 4-factor prothrombin complex concentrate is recommended over fresh frozen plasma to rapidly correct the international normalized ratio (Class 1, Level B-R). Vitamin K should be administered IV concurrently to maintain reversal. For dabigatran-associated ICH, idarucizumab is recommended (Class 1, Level B-NR). For FXa-inhibitor-associated ICH, andexanet alfa or 4F-PCC may be considered (Class 2b, Level C-LD). In patients with antiplatelet-associated ICH, platelet transfusions are considered harmful and should not be administered outside of a planned neurosurgical procedure (Class 3: Harm, Level B-R, citing the PATCH trial).',
+    last_reviewed: '2026-07-01',
+    quoted_text: 'For VKA-associated ICH with an elevated INR, 4-factor prothrombin complex concentrate is recommended over fresh frozen plasma for rapid INR correction (Class 1, Level B-R; §5.2.1), with concurrent IV vitamin K. For dabigatran-associated ICH, idarucizumab is reasonable (Class 2a, Level B-NR; §5.2.1). For FXa-inhibitor-associated ICH, andexanet alfa is reasonable (Class 2a, Level B-NR; §5.2.1), and 4F-PCC or aPCC may be considered (Class 2b, Level B-NR; §5.2.1). For antiplatelet-associated ICH not undergoing emergency neurosurgery, platelet transfusions are potentially harmful and should not be administered (Class 3: Harm, Level B-R; §5.2.2), per PATCH.',
   },
 
   // ─── 2020 AAO Retinal and Ophthalmic Artery Occlusions PPP ────────────────
@@ -1166,7 +1175,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   // FFP) in 202 VKA-treated patients with major bleeding. Hemostatic
   // efficacy NI established (+7.1 pp, 95% CI -5.8 to +19.9; margin -10 pp).
   // INR <=1.3 at 30 min superior (+52.6 pp, 95% CI 39.4-65.9). Underwrites
-  // FDA approval of Kcentra (April 2013) and AHA/ASA 2022 Class I, Level A
+  // FDA approval of Kcentra (April 2013) and AHA/ASA 2022 Class 1, Level B-R
   // for 4F-PCC > FFP in VKA-associated ICH. 36-month review window per
   // §13.7. Verified against PubMed PMID 23935011 on 2026-05-21. See
   // docs/evidence-packets/sarode-2013-2026-05-21.md.
@@ -1180,26 +1189,6 @@ export const CITATION_REGISTRY: CitationRegistry = {
     last_reviewed: '2026-05-21',
     review_window_months: 36,
     quoted_text: 'In the intention-to-treat efficacy population (4F-PCC n=98; plasma n=104), hemostatic efficacy was effective in 72.4% of subjects in the 4F-PCC group compared with 65.4% in the plasma group (difference, 7.1%; 95% confidence interval, -5.8 to 19.9). The primary end point of rapid INR reduction was achieved in significantly more subjects in the 4F-PCC group (62.2%) than in the plasma group (9.6%; difference, 52.6%; 95% confidence interval, 39.4 to 65.9). The safety profile (adverse events, serious adverse events, thromboembolic events, and deaths) was similar between groups; thromboembolic event rate was 7.8% with 4F-PCC and 6.4% with plasma. 4F-PCC is non-inferior to plasma for effective hemostasis and superior for rapid INR reduction in patients with major bleeding during vitamin K antagonist therapy.',
-  },
-
-  // ─── AHA/ASA 2022 ICH Guideline anchors for the reversal chain ───────────
-  // Greenberg SM et al., Stroke 2022;53(7):e282-e361. Three sections cited
-  // by the reversal-chain trial entries:
-  //   §5.2.1 — 4F-PCC > FFP for VKA-associated ICH (Class I, Level A)
-  //   §5.2.2 — andexanet alfa for FXa-inhibitor ICH (Class IIa, Level B-NR)
-  //   §5.2.4 — platelet transfusion in antiplatelet-ICH is HARMFUL (Class III: Harm, Level B-R)
-  // 24-month review window per §13.7 (current management guideline).
-  'aha-asa-ich-2022-reversal': {
-    id: 'aha-asa-ich-2022-reversal',
-    source: 'guideline',
-    title: '2022 Guideline for the Management of Patients With Spontaneous Intracerebral Hemorrhage — Anticoagulation and Antiplatelet Reversal',
-    year: 2022,
-    section: '5.2 — Reversal of Anticoagulant and Antiplatelet Agents',
-    url: 'https://www.ahajournals.org/doi/10.1161/STR.0000000000000407',
-    pmid: '35579034',
-    last_reviewed: '2026-05-21',
-    review_window_months: 24,
-    quoted_text: 'In patients with VKA-associated ICH with an elevated INR, 4-factor PCC may be preferred over FFP to improve moderate hemostatic correction and possibly clinical outcomes (Class 1, Level A). In patients with rivaroxaban-, apixaban-, or edoxaban-associated ICH, andexanet alfa can be useful for reversal (Class 2a, Level B-NR). In patients with ICH and a history of antiplatelet use, platelet transfusions should not be administered because they may worsen outcomes (Class 3: Harm, Level B-R).',
   },
 
   // ─── 2026 ACC/AHA Multisociety Dyslipidemia Guideline — §4.2.6 ──────────────

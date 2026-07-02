@@ -393,7 +393,7 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
       'astrazeneca-andexxa-withdrawal-2025',
     ],
     surfaces: [DATA_SURFACE],
-    description: 'ClinicalSynthesisCard on /trials/q/ich-anticoagulation-reversal. Agent-specific reversal: 4F-PCC + IV vitamin K for VKA, idarucizumab for dabigatran, 4F-PCC 50 U/kg for FXa inhibitors (default since Dec 22 2025 US withdrawal of andexanet alfa per FDA risk-benefit conclusion). Explicitly surfaces PATCH (2016) HARM finding — DO NOT transfuse platelets for antiplatelet-associated ICH outside a planned neurosurgical procedure (AHA/ASA 2022 Class III: Harm). Grounded in 2022 AHA/ASA Spontaneous ICH Guideline §7.3; updated 2026-05-24 to incorporate FDA Nov-2024 advisory committee finding (full ANNEXA-I dataset: total thromboembolic events 14.6% vs 6.9%, thrombosis-related deaths at day 30 2.5% vs 0.9%) and AstraZeneca voluntary BLA withdrawal effective 2025-12-22.',
+    description: 'ClinicalSynthesisCard on /trials/q/ich-anticoagulation-reversal. Agent-specific reversal: 4F-PCC + IV vitamin K for VKA, idarucizumab for dabigatran, 4F-PCC 50 U/kg for FXa inhibitors (default since Dec 22 2025 US withdrawal of andexanet alfa per FDA risk-benefit conclusion). Explicitly surfaces PATCH (2016) HARM finding — DO NOT transfuse platelets for antiplatelet-associated ICH outside a planned neurosurgical procedure (AHA/ASA 2022 Class III: Harm). Grounded in 2022 AHA/ASA Spontaneous ICH Guideline §5.2.1; updated 2026-05-24 to incorporate FDA Nov-2024 advisory committee finding (full ANNEXA-I dataset: total thromboembolic events 14.6% vs 6.9%, thrombosis-related deaths at day 30 2.5% vs 0.9%) and AstraZeneca voluntary BLA withdrawal effective 2025-12-22.',
   },
 
   // ─── FXa-inhibitor ICH reversal — bedside surfaces (andexanet US withdrawal) ─
@@ -415,7 +415,7 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
       'astrazeneca-andexxa-withdrawal-2025',
     ],
     surfaces: [DATA_SURFACE],
-    description: 'Bedside FXa-inhibitor ICH reversal recommendation across the ICH/hemorrhage protocol data objects and quick pearls. Leads with 4-factor PCC 50 U/kg IV and notes andexanet alfa was withdrawn from the US market (US commercial sales ended 2025-12-22 per FDA risk-benefit conclusion + AstraZeneca voluntary withdrawal). Warfarin (4F-PCC + IV vitamin K) and dabigatran (idarucizumab 5 g IV) recommendations unchanged. Grounded in 2022 AHA/ASA Spontaneous ICH Guideline §7.3 reversal framework. Tagged surfaces: StrokeIchProtocolStep ICH_PROTOCOL_ITEMS reversal item, CodeModeStep4 stat-ct-decline order, HemorrhageProtocol STEPS reversal item, strokeClinicalPearls hemorrhage-management-quick and hemorrhage-reversal-protocol.',
+    description: 'Bedside FXa-inhibitor ICH reversal recommendation across the ICH/hemorrhage protocol data objects and quick pearls. Leads with 4-factor PCC 50 U/kg IV and notes andexanet alfa was withdrawn from the US market (US commercial sales ended 2025-12-22 per FDA risk-benefit conclusion + AstraZeneca voluntary withdrawal). Warfarin (4F-PCC + IV vitamin K) and dabigatran (idarucizumab 5 g IV) recommendations unchanged. Grounded in 2022 AHA/ASA Spontaneous ICH Guideline §5.2.1 reversal framework. Tagged surfaces: StrokeIchProtocolStep ICH_PROTOCOL_ITEMS reversal item, CodeModeStep4 stat-ct-decline order, HemorrhageProtocol STEPS reversal item, strokeClinicalPearls hemorrhage-management-quick and hemorrhage-reversal-protocol.',
   },
 
   // ─── Hemicraniectomy clinical synthesis ─────────────────────────────────────
@@ -607,21 +607,21 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   //     See docs/evidence-packets/{patch-2016,annexa-4-2019,sarode-2013}-2026-05-21.md
   'patch-platelet-transfusion-harm-2016': {
     id: 'patch-platelet-transfusion-harm-2016',
-    citation_ids: ['baharoglu-patch-2016', 'aha-asa-ich-2022-reversal'],
+    citation_ids: ['baharoglu-patch-2016', 'aha-asa-2022-ich-anticoag-reversal'],
     surfaces: [DATA_SURFACE],
     description: 'PATCH trial: in adults with spontaneous supratentorial ICH on antiplatelet therapy presenting within 6 h, platelet transfusion within 90 min of imaging vs standard care increased the odds of death or dependence at 3 months on mRS (adjusted common OR 2.05, 95% CI 1.18-3.56, P=0.0114). Serious adverse events 42% vs 30%; death 24% vs 17%. The trial that established AHA/ASA 2022 Class III: Harm against routine platelet transfusion in antiplatelet-associated ICH. Open-label PROBE design with masked endpoint adjudication. Excluded patients with planned neurosurgical evacuation. ESO 2022 also strongly recommends against routine platelet transfusion. No subsequent RCT has been mounted to challenge the harm signal.',
   },
   'annexa-4-fxa-reversal-2019': {
     id: 'annexa-4-fxa-reversal-2019',
-    citation_ids: ['connolly-annexa-4-2019', 'aha-asa-ich-2022-reversal'],
+    citation_ids: ['connolly-annexa-4-2019', 'aha-asa-2022-ich-anticoag-reversal'],
     surfaces: [DATA_SURFACE],
     description: 'ANNEXA-4: single-arm, open-label prospective cohort study of andexanet alfa in 352 patients with acute major bleeding within 18 h of FXa-inhibitor dose (apixaban, rivaroxaban, edoxaban, enoxaparin). Bleeding was predominantly intracranial (64%). Anti-FXa activity fell 92% with andexanet for both apixaban (149.7 to 11.1 ng/mL, 95% CI 91-93%) and rivaroxaban (211.8 to 14.2 ng/mL, 95% CI 88-94%). Excellent or good hemostatic efficacy at 12 h in 204/249 (82%). 30-day mortality 14%; thrombotic events 10%. The cohort behind FDA accelerated approval (May 2018) and AHA/ASA 2022 Class IIa, Level B-NR for andexanet in FXa-inhibitor-associated ICH. Single-arm design cannot establish efficacy or attribute thrombotic events causally. Confirmed in randomized framework specifically in ICH by ANNEXA-I (Connolly NEJM 2024, PMID 38804514).',
   },
   'sarode-4fpcc-vka-reversal-2013': {
     id: 'sarode-4fpcc-vka-reversal-2013',
-    citation_ids: ['sarode-4fpcc-2013', 'aha-asa-ich-2022-reversal'],
+    citation_ids: ['sarode-4fpcc-2013', 'aha-asa-2022-ich-anticoag-reversal'],
     surfaces: [DATA_SURFACE],
-    description: 'Sarode 2013: multicenter open-label noninferiority RCT (phase IIIb) of 4-factor PCC (Kcentra/Beriplex) vs fresh frozen plasma in 202 VKA-treated adults with acute major bleeding (GI 38%, intracranial ~14%, visible ~13%). Both arms received vitamin K 5-10 mg IV. Coprimary endpoints: 24-h hemostatic efficacy and INR <=1.3 at 0.5 h post-infusion. Hemostatic efficacy 72.4% (4F-PCC) vs 65.4% (FFP); difference +7.1 pp (95% CI -5.8 to +19.9) — noninferiority established (margin -10 pp). INR <=1.3 at 0.5 h: 62.2% vs 9.6%; difference +52.6 pp (95% CI 39.4-65.9) — superiority established. Mortality (5.1% vs 4.8%) and thromboembolic events (6.8% vs 6.4%) comparable; fluid overload less common with 4F-PCC (2.9% vs 11.9%); median infusion volume 99 mL vs 814 mL. Population was general VKA major bleeding, not ICH-specific. Underwrote FDA approval of Kcentra (April 2013) and AHA/ASA 2022 Class I, Level A for 4F-PCC > FFP in VKA-associated ICH. ICH-specific confirmation comes from INCH (Steiner Lancet Neurol 2016) — halted early at interim for INR reversal favoring 4F-PCC.',
+    description: 'Sarode 2013: multicenter open-label noninferiority RCT (phase IIIb) of 4-factor PCC (Kcentra/Beriplex) vs fresh frozen plasma in 202 VKA-treated adults with acute major bleeding (GI 38%, intracranial ~14%, visible ~13%). Both arms received vitamin K 5-10 mg IV. Coprimary endpoints: 24-h hemostatic efficacy and INR <=1.3 at 0.5 h post-infusion. Hemostatic efficacy 72.4% (4F-PCC) vs 65.4% (FFP); difference +7.1 pp (95% CI -5.8 to +19.9) — noninferiority established (margin -10 pp). INR <=1.3 at 0.5 h: 62.2% vs 9.6%; difference +52.6 pp (95% CI 39.4-65.9) — superiority established. Mortality (5.1% vs 4.8%) and thromboembolic events (6.8% vs 6.4%) comparable; fluid overload less common with 4F-PCC (2.9% vs 11.9%); median infusion volume 99 mL vs 814 mL. Population was general VKA major bleeding, not ICH-specific. Underwrote FDA approval of Kcentra (April 2013) and AHA/ASA 2022 Class 1, Level B-R (§5.2.1) for 4F-PCC > FFP in VKA-associated ICH. ICH-specific confirmation comes from INCH (Steiner Lancet Neurol 2016) — halted early at interim for INR reversal favoring 4F-PCC.',
   },
 
   // ─── NIHSS portal drawer — severity-band clinical interpretation ──────────

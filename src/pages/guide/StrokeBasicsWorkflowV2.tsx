@@ -609,7 +609,7 @@ const MainContent: React.FC = () => {
                   </summary>
                   <div className="px-4 pb-4 pt-1 space-y-3">
                     <p className="text-sm text-neuro-800 leading-relaxed">
-                      LVO accounts for about 30% of acute ischemic strokes. HERMES (Lancet 2016, pooled 5 RCTs): thrombectomy gave 46% vs 29% functional independence at 90 days (NNT 2.6). If LVO is present, activate IR in parallel with IV thrombolysis.
+                      LVO accounts for about 30% of acute ischemic strokes. HERMES (Lancet 2016, pooled 5 RCTs): thrombectomy gave 46.0% vs 26.5% functional independence (mRS 0 to 2) at 90 days (NNT about 5). The trial's primary outcome was reduced disability, a 1-point-or-greater shift on the mRS, for which the NNT was 2.6. If LVO is present, activate IR in parallel with IV thrombolysis.
                     </p>
                     <p className="text-sm text-neuro-800 leading-relaxed">
                       <strong>Extended windows:</strong> DAWN (NEJM 2018) — clinical-core mismatch selection, 6–24h from LKW, 48.6% vs 13.1% functional independence (NNT 3). DEFUSE-3 (NEJM 2018) — perfusion mismatch selection, 6–16h, 44.6% vs 16.7% functional independence.
