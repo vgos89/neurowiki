@@ -1,14 +1,14 @@
 /**
- * ASPECTS Score Calculator — rebuilt against CALCULATOR_SPEC.md v1.1
+ * ASPECTS Score Calculator - rebuilt against CALCULATOR_SPEC.md v1.1
  * Archetype 2 visual treatment (A2 option-row anatomy, hairline dividers, selected-option class)
- * with role="checkbox" retained — each region is an independent binary toggle per arch review.
+ * with role="checkbox" retained - each region is an independent binary toggle per arch review.
  *
  * Spec citations:
  *   §1.1 Sticky header tokens · §1.2 Main content · §1.3 Drawer anatomy (Portal)
  *   §2.2–2.3 Option row anatomy (shared with A2) · §3.2 Item labels · §5 Drawer state machine
  *
  * Architect conditions (arch-l55c-aspects-boston-rebuild.md):
- *   - Keep role="checkbox" — ASPECTS regions are independent binary toggles, not radio-single-select
+ *   - Keep role="checkbox" - ASPECTS regions are independent binary toggles, not radio-single-select
  *   - Section headers: text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3
  *   - Bespoke-per-file is the accepted L5.5 pattern; extraction deferred to L5.6
  *   - No new clinical claim surfaces introduced
@@ -56,11 +56,18 @@ const SUBCORTICAL_REGIONS = [
 type RegionId = (typeof CORTICAL_REGIONS)[number]['id'] | (typeof SUBCORTICAL_REGIONS)[number]['id'];
 
 // ── Score interpretation ─────────────────────────────────────────────────────
-// 3–5 and 0–2 strings updated 2026-05-22 to align with AHA/ASA 2026 §4.7.2.
-// Both strata now carry all four mirror qualifiers (age <80, NIHSS ≥6,
-// prestroke mRS 0–1, no significant mass effect) and the correct COR/LOE.
-// See docs/audits/aha-2026-audit-2026-05-22.md §4.2 + clinical review
-// docs/reviews/clinical-PR-aspects-cor-2a-correction-2026-05-22.md.
+// 3–5 and 0–2 strings aligned to AHA/ASA 2026 §4.7.2 (see evtRecommendations
+// .adults in src/data/aha2026StrokeGuideline.ts).
+// The 3–5 string is TWO-TIER: within 6h it falls under the ASPECTS 3–10
+// recommendation (COR 1, LOE A) gated only on NIHSS ≥6 and prestroke mRS 0–1
+// (no age or mass-effect gate); at 6–24h it is COR 1, LOE A in selected
+// patients (age <80, NIHSS ≥6, prestroke mRS 0–1, no significant mass effect).
+// The 0–2 string is COR 2a, LOE B-R within 6h in selected patients (same four
+// qualifiers). Do NOT re-flatten 3–5 to a single window - that wrongly implies
+// 3–5 is not COR 1 within 6h. Trials: SELECT-2/ANGEL-ASPECT/TENSION underwrite
+// 3–5; LASTE underwrites 0–2.
+// History: original 2026-05-22 correction - docs/audits/aha-2026-audit-2026-05-22.md
+// §4.2 + docs/reviews/clinical-PR-aspects-cor-2a-correction-2026-05-22.md.
 
 interface ScoreInfo {
   label: string;
@@ -74,14 +81,14 @@ function getScoreInfo(score: number): ScoreInfo {
   if (score >= 8) {
     return {
       label: 'Small or No Infarct',
-      evtText: 'EVT strongly indicated — Class I recommendation (AHA/ASA 2026). Small or no established infarct core; excellent candidacy.',
+      evtText: 'EVT strongly indicated - Class I recommendation (AHA/ASA 2026). Small or no established infarct core; excellent candidacy.',
       badgeBg: 'bg-emerald-500',
     };
   }
   if (score >= 6) {
     return {
       label: 'Moderate Core',
-      evtText: 'EVT generally indicated — Class I recommendation (AHA/ASA 2026). ASPECTS ≥6 is the primary threshold for EVT eligibility across early and late windows.',
+      evtText: 'EVT generally indicated - Class I recommendation (AHA/ASA 2026). ASPECTS ≥6 is the primary threshold for EVT eligibility across early and late windows.',
       badgeBg: 'bg-yellow-500',
     };
   }
@@ -89,7 +96,7 @@ function getScoreInfo(score: number): ScoreInfo {
     return {
       label: 'Large Core',
       evtText:
-        'EVT recommended (AHA/ASA 2026 §4.7.2, COR 1, LOE A) in selected patients with anterior-circulation proximal LVO (ICA/M1), presenting 6–24 hours from onset, age <80, NIHSS ≥6, prestroke mRS 0–1, ASPECTS 3–5, and no significant mass effect. Supported by SELECT-2, ANGEL-ASPECT, TENSION, and LASTE.',
+        'EVT recommended (AHA/ASA 2026 §4.7.2, COR 1, LOE A) for anterior-circulation proximal LVO (ICA/M1). Within 6 hours from onset, ASPECTS 3–5 falls under the ASPECTS 3–10 recommendation with NIHSS ≥6 and prestroke mRS 0–1 (no age or mass-effect gate). From 6 to 24 hours, EVT is recommended in selected patients with age <80, NIHSS ≥6, prestroke mRS 0–1, and no significant mass effect. Supported by SELECT-2, ANGEL-ASPECT, and TENSION. Very large core (ASPECTS 0–2) within 6 hours is COR 2a, LOE B-R in selected patients (LASTE).',
       badgeBg: 'bg-orange-500',
       claimId: 'aspects-evt-eligibility-2026',
     };
@@ -103,7 +110,7 @@ function getScoreInfo(score: number): ScoreInfo {
   };
 }
 
-// ── Severity tokens — CALCULATOR_SPEC.md §6 ──────────────────────────────────
+// ── Severity tokens - CALCULATOR_SPEC.md §6 ──────────────────────────────────
 
 type AspectsSeverity = 'small' | 'moderate' | 'large' | 'extensive';
 
@@ -208,7 +215,7 @@ const AspectScoreCalculator: React.FC = () => {
       regionLine = `Involved regions (${involved.size}): ${[...involved].join(', ')}.`;
     }
     return [
-      `ASPECTS — ${score}/10 (${scoreInfo.label})`,
+      `ASPECTS - ${score}/10 (${scoreInfo.label})`,
       regionLine,
     ].join('\n');
   };
@@ -253,7 +260,7 @@ const AspectScoreCalculator: React.FC = () => {
   };
 
   // ── Drawer content ─────────────────────────────────────────────────────────
-  // DrawerContent stays per-calculator — clinical interpretation prose is unique.
+  // DrawerContent stays per-calculator - clinical interpretation prose is unique.
 
   const DrawerContent = () => (
     <div
@@ -264,13 +271,13 @@ const AspectScoreCalculator: React.FC = () => {
     >
       <div className="px-5 pt-4 pb-6">
         <p className="text-xl font-semibold text-slate-900 leading-tight">
-          ASPECTS {score}/10 — {scoreInfo.label}
+          ASPECTS {score}/10 - {scoreInfo.label}
         </p>
         {/* Render variant: when the current scoreInfo carries a claimId, emit
             a literal data-claim="aspects-evt-eligibility-2026" attribute so the
             pre-commit claim scanner (jsx-surface regex matches literal strings
             only) picks it up. The ≥6 and ≥8 branches deliberately do not
-            carry the claim — they fall under separate citation coverage. */}
+            carry the claim - they fall under separate citation coverage. */}
         {scoreInfo.claimId === 'aspects-evt-eligibility-2026' ? (
           <p
             data-claim="aspects-evt-eligibility-2026"
@@ -304,9 +311,9 @@ const AspectScoreCalculator: React.FC = () => {
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
     <>
-      <h1 className="sr-only">ASPECTS Score Calculator — Alberta Stroke Program Early CT Score</h1>
+      <h1 className="sr-only">ASPECTS Score Calculator - Alberta Stroke Program Early CT Score</h1>
 
-      {/* ── Sticky header — §1.1 ──────────────────────────────────────────── */}
+      {/* ── Sticky header - §1.1 ──────────────────────────────────────────── */}
       <CalculatorHeader
         name="ASPECTS Score"
         scoreDisplay={
@@ -358,11 +365,11 @@ const AspectScoreCalculator: React.FC = () => {
         }}
       />
 
-      {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}
+      {/* ── Main scrollable content - §1.2 ───────────────────────────────── */}
       <main className="max-w-2xl mx-auto px-5 pt-6 pb-4">
         <div className="space-y-10">
 
-          {/* Cortical regions section — A2 visual treatment, role="checkbox" per arch review */}
+          {/* Cortical regions section - A2 visual treatment, role="checkbox" per arch review */}
           <section aria-labelledby="aspects-cortical-label">
             <h2
               id="aspects-cortical-label"
@@ -466,7 +473,7 @@ const AspectScoreCalculator: React.FC = () => {
             >
               <div>
                 <div className="text-sm font-semibold text-neuro-700">Assess full EVT eligibility</div>
-                <div className="text-xs text-neuro-600 mt-0.5">EVT Eligibility Pathway — time window, NIHSS, occlusion type</div>
+                <div className="text-xs text-neuro-600 mt-0.5">EVT Eligibility Pathway - time window, NIHSS, occlusion type</div>
               </div>
               <svg
                 width="18"
@@ -487,11 +494,11 @@ const AspectScoreCalculator: React.FC = () => {
 
         </div>{/* end space-y-10 */}
 
-        {/* Trials informing thresholds — STRONG-confidence per
+        {/* Trials informing thresholds - STRONG-confidence per
             calculatorTrialMap (V approval 2026-05-21). */}
         <CalculatorTrialEvidence calculatorId="aspects-score" />
 
-        {/* Page footer — §1.2 */}
+        {/* Page footer - §1.2 */}
         <CalculatorFooter
           citation={
             <>
@@ -513,12 +520,12 @@ const AspectScoreCalculator: React.FC = () => {
           disclaimer="Educational use only. This tool is for clinical decision support and education. It is not a substitute for professional medical judgment or formal radiology interpretation. Do not enter patient-identifying information. Verify independently when used in patient care."
         />
 
-        {/* Drawer spacer — §1.3 */}
+        {/* Drawer spacer - §1.3 */}
         <div className={drawerOpen ? 'drawer-spacer-expanded' : 'drawer-spacer-collapsed'} />
 
       </main>
 
-      {/* ── Drawer portal — fixed above mobile bottom nav §1.3 ───────────── */}
+      {/* ── Drawer portal - fixed above mobile bottom nav §1.3 ───────────── */}
       <CalculatorDrawer
         state={drawerState}
         tokens={tokens}
@@ -531,7 +538,7 @@ const AspectScoreCalculator: React.FC = () => {
         <DrawerContent />
       </CalculatorDrawer>
 
-      {/* ── Toast notification — z-[60] above drawer ─────────────────────── */}
+      {/* ── Toast notification - z-[60] above drawer ─────────────────────── */}
       <CalculatorToast message={toast} />
     </>
   );

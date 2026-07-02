@@ -214,7 +214,7 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
       { type: 'data', field: 'claimId' },
       { type: 'jsx', attribute: 'data-claim' },
     ],
-    description: 'ASPECTS calculator EVT eligibility interpretation for the 3–5 stratum (COR 1, LOE A, 6–24h) and 0–2 stratum (COR 2a, LOE B-R, 0–6h) per AHA/ASA 2026 §4.7.2. Both require age <80, NIHSS ≥6, prestroke mRS 0–1, ASPECTS in range, no significant mass effect, anterior-circulation proximal LVO of ICA or M1. Trial basis: SELECT-2 / ANGEL-ASPECT / TENSION (2023) and LASTE (2024).',
+    description: 'ASPECTS calculator EVT eligibility interpretation, two-tier for the 3–5 stratum plus the 0–2 stratum, per AHA/ASA 2026 §4.7.2. ASPECTS 3–5 within 6h: COR 1, LOE A as part of the ASPECTS 3–10 recommendation, gated on NIHSS ≥6 and prestroke mRS 0–1 only (no age or mass-effect gate). ASPECTS 3–5 at 6–24h: COR 1, LOE A in selected patients (age <80, NIHSS ≥6, prestroke mRS 0–1, no significant mass effect). ASPECTS 0–2 within 6h: COR 2a, LOE B-R in selected patients (age <80, NIHSS ≥6, prestroke mRS 0–1, no significant mass effect). All strata require anterior-circulation proximal LVO of ICA or M1. Trial basis: SELECT-2 / ANGEL-ASPECT / TENSION (2023) underwrite the ASPECTS 3–5 strata; LASTE (2024) underwrites the ASPECTS 0–2 stratum.',
   },
 
   'anticoagulation-guideline-summary': {
