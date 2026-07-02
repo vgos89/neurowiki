@@ -92,14 +92,6 @@ const HASBLED_SEVERITY_TOKENS: Record<HASBLEDRisk, SeverityTokens> = {
     statClass: 'text-sm font-medium text-red-700',
     chevronClass: 'text-red-600',
   },
-  very_high: {
-    borderColor: '#f87171',
-    headerBg: 'bg-red-100',
-    headerHover: 'hover:bg-red-200',
-    labelClass: 'text-[10px] font-bold text-red-800 uppercase tracking-widest',
-    statClass: 'text-sm font-medium text-red-800',
-    chevronClass: 'text-red-700',
-  },
 };
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -211,7 +203,7 @@ export default function HasBledScoreCalculator() {
           <strong>{result.bleedsPer100PatientYears}</strong> major bleeds per 100 patient-years.{' '}
           {result.risk === 'low' && 'Low bleeding risk. Continue to address modifiable factors.'}
           {result.risk === 'moderate' && 'Moderate risk. Address modifiable factors and monitor.'}
-          {(result.risk === 'high' || result.risk === 'very_high') && 'High risk. Fix modifiable risks (BP, alcohol, NSAIDs, INR control); do not withhold anticoagulation for stroke prevention alone.'}
+          {result.risk === 'high' && 'High risk. Fix modifiable risks (BP, alcohol, NSAIDs, INR control); do not withhold anticoagulation for stroke prevention alone.'}
         </p>
 
         {/* Important callout */}

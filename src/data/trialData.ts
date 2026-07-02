@@ -7612,7 +7612,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       effectSize: {
         value: '8.8%',
-        label: 'Absolute Increase'
+        label: 'Absolute Increase in mRS 0-1; relative rate 1.37 (95% CI 1.04-1.81)',
+        info: 'Primary outcome mRS 0-1 at 90 days: 33.0% tenecteplase vs 24.2% standard treatment. The 8.8 percentage-point absolute increase is the difference of the two arm rates. TRACE-III reported its effect size as a relative rate of 1.37 (95% CI 1.04-1.81, P=0.03); the publication does not report a separate 95% CI for the absolute difference. Source: Xiong Y et al., NEJM 2024 (NEJMoa2402980), Table 2.',
       }
     },
     trialDesign: {
@@ -7729,7 +7730,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does this chart show?',
-        answer: 'mRS 0-1 (no disability) at 90 days in patients with ICA/MCA occlusion treated 4.5-24 hours after stroke onset when EVT was not available. Tenecteplase reached 33.0 per 100; standard medical treatment 24.2. The 8.8 pp absolute difference (relative rate 1.37, P=0.03, NNT 11) was statistically significant.',
+        answer: 'mRS 0-1 (no disability) at 90 days in patients with ICA/MCA occlusion treated 4.5-24 hours after stroke onset when EVT was not available. Tenecteplase reached 33.0 per 100; standard medical treatment 24.2. The 8.8 pp absolute difference (relative rate 1.37, 95% CI 1.04-1.81, P=0.03, NNT 11) was statistically significant.',
       },
       {
         question: 'Why is sICH higher but mortality similar?',
@@ -9960,7 +9961,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     /* claimId: elan.bedside-pearl | source: Fischer U et al. NEJM 2023;388:2411-2421 */
     bedsidePearl: 'ELAN showed sICH 0.2% in both groups, recurrent ischemic stroke 1.4% (early) vs 2.5% (later). The trial supports early DOAC in AF stroke when imaging allows it. The risk difference upper bound of +0.47pp means early treatment could be at most marginally worse than delayed, not substantially more dangerous.',
     bottomLineSummary: 'ELAN was an estimation trial showing that early DOAC initiation after AF-related ischemic stroke, timed by imaging-based severity classification, was not significantly more harmful than the traditional delayed approach. The primary composite event rate was 2.9% with early vs 4.1% with later initiation, with identical symptomatic ICH rates. The result supports early anticoagulation when clinically indicated and imaging permits.',
-    listCategory: 'antiplatelets',
+    // 2026-07-02 (audit item): corrected from 'antiplatelets' to 'acute'. ELAN tests
+    // early vs later DOAC (anticoagulant) initiation after AF-associated stroke, so
+    // 'antiplatelets' was wrong. Matches the in-repo category of its direct AF-DOAC-timing
+    // peers TIMING and OPTIMAS (both 'acute'). A dedicated 'anticoagulant'/'secondary-prevention'
+    // enum value would be a schema change (parked for V — see TASKS.md parking lot).
+    listCategory: 'acute',
     listDescription: 'Early vs delayed DOAC in AF stroke: estimation trial supporting early initiation when imaging allows it.',
     archetypeId: 'A' as const,
     applicability: {

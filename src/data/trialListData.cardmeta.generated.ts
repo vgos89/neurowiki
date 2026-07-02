@@ -604,7 +604,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "subtitle": "Early versus Later Anticoagulation for Stroke with Atrial Fibrillation",
     "source": "Fischer U, et al. N Engl J Med. 2023;388(26):2411-2421",
     "timeline": "Enrolled Nov 2017 – Sep 2022, 103 sites, 15 countries",
-    "listCategory": "antiplatelets",
+    "listCategory": "acute",
     "listDescription": "Early vs delayed DOAC in AF stroke: estimation trial supporting early initiation when imaging allows it.",
     "bottomLineSummary": "ELAN was an estimation trial showing that early DOAC initiation after AF-related ischemic stroke, timed by imaging-based severity classification, was not significantly more harmful than the traditional delayed approach. The primary composite event rate was 2.9% with early vs 4.1% with later initiation, with identical symptomatic ICH rates. The result supports early anticoagulation when clinically indicated and imaging permits.",
     "doi": "10.1056/NEJMoa2303048"

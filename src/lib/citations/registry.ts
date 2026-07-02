@@ -79,9 +79,12 @@ export const CITATION_REGISTRY: CitationRegistry = {
   },
 
   // ─── 2022 trials: posterior-circulation EVT ──────────────────────────────
-  // Quotes are MEDIUM confidence per Batch 3B evidence packet (NEJM publisher
-  // pages were 403-blocked; quotes derived from secondary sources). Will be
-  // replaced with verbatim NEJM abstract sentences when access is available.
+  // Quotes are HIGH confidence: verbatim RESULTS + CONCLUSIONS sentences from
+  // the NEJM abstracts, retrieved 2026-07-02 via NCBI E-utilities efetch
+  // (PMIDs 36239645 / 36239644). These replaced the earlier Batch 3B
+  // secondary-source syntheses. Primary mRS 0-3 outcome is reported as an
+  // adjusted rate ratio per the trials' analysis (no NNT — see trial-statistics
+  // skill). Guideline COR/LOE for basilar EVT is NOT asserted here (held for V).
   'baoche-trial-2022': {
     id: 'baoche-trial-2022',
     source: 'trial',
@@ -89,8 +92,8 @@ export const CITATION_REGISTRY: CitationRegistry = {
     year: 2022,
     url: 'https://www.nejm.org/doi/full/10.1056/NEJMoa2207576',
     pmid: '36239645',
-    last_reviewed: '2026-05-19',
-    quoted_text: 'Among patients with stroke due to basilar artery occlusion who presented 6–24 hours after symptom onset, endovascular thrombectomy led to a higher rate of good functional status at 90 days versus standard medical therapy alone. Thrombectomy was associated with procedural complications and more cerebral hemorrhages. [Secondary-source synthesis pending verbatim NEJM access.]',
+    last_reviewed: '2026-07-02',
+    quoted_text: 'A modified Rankin scale score of 0 to 3 (primary outcome) occurred in 51 patients (46%) in the thrombectomy group and in 26 (24%) in the control group (adjusted rate ratio, 1.81; 95% confidence interval [CI], 1.26 to 2.60; P<0.001). Among patients with stroke due to basilar-artery occlusion who presented 6 to 24 hours after symptom onset, thrombectomy led to a higher percentage with good functional status at 90 days than medical therapy but was associated with procedural complications and more cerebral hemorrhages.',
   },
   'attention-trial-2022': {
     id: 'attention-trial-2022',
@@ -99,8 +102,8 @@ export const CITATION_REGISTRY: CitationRegistry = {
     year: 2022,
     url: 'https://www.nejm.org/doi/full/10.1056/NEJMoa2206317',
     pmid: '36239644',
-    last_reviewed: '2026-05-19',
-    quoted_text: 'Among Chinese patients with acute ischemic stroke due to basilar-artery occlusion, the addition of endovascular thrombectomy to best medical care within 12 hours after symptom onset resulted in better functional outcomes at 90 days than best medical care alone but was associated with procedural complications and intracerebral hemorrhage. [Secondary-source synthesis pending verbatim NEJM access.]',
+    last_reviewed: '2026-07-02',
+    quoted_text: 'Good functional status at 90 days occurred in 104 patients (46%) in the thrombectomy group and in 26 (23%) in the control group (adjusted rate ratio, 2.06; 95% confidence interval [CI], 1.46 to 2.91, P<0.001). In a trial involving Chinese patients with basilar-artery occlusion, approximately one third of whom received intravenous thrombolysis, endovascular thrombectomy within 12 hours after stroke onset led to better functional outcomes at 90 days than best medical care but was associated with procedural complications and intracerebral hemorrhage.',
   },
 
   // ─── 2022–2024 trials: extended-window thrombolysis ──────────────────────
@@ -253,6 +256,12 @@ export const CITATION_REGISTRY: CitationRegistry = {
     last_reviewed: '2026-06-10',
     quoted_text: 'The safety and efficacy of IV thrombolysis for AIS in patients with platelets <100,000/mm3, INR>1.7, aPTT>40s, or PT>15s is unknown though may substantially increase risk of harm and should not be administered. In patients without recent use of warfarin or heparin, treatment with IV thrombolysis can be initiated before availability of coagulation test results but should be discontinued if INR >1.7, PT, or PTT is abnormal by local laboratory standards.',
   },
+  // Verbatim from the §4.3 BP recommendation tables in the 2026 guideline
+  // (mirrored in src/data/aha2026StrokeGuideline.ts: beforeReperfusion,
+  // afterIVT, afterEVT). Expanded 2026-07-02 so the quoted_text covers the
+  // full peri-reperfusion BP framework surfaced by bp-control-guideline-summary
+  // (pre-IVT ≤185/110, post-IVT ≤180/105, and the intensive-lowering
+  // recommendations). The prior quote captured only the post-EVT harm row.
   'aha-asa-2026-4.3': {
     id: 'aha-asa-2026-4.3',
     source: 'guideline',
@@ -260,8 +269,8 @@ export const CITATION_REGISTRY: CitationRegistry = {
     year: 2026,
     section: '§4.3',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
-    last_reviewed: '2026-05-19',
-    quoted_text: 'After successful endovascular thrombectomy of an anterior-circulation large vessel occlusion, intensive systolic blood pressure lowering to <140 mmHg for 72 hours is harmful (Class III: Harm, Level A).',
+    last_reviewed: '2026-07-02',
+    quoted_text: 'Patients with AIS who have elevated BP and are otherwise eligible for IVT should have their SBP lowered to <185 mm Hg and DBP <110 mm Hg before IVT therapy is initiated to reduce hemorrhagic complications (COR 1, LOE B-NR). BP should be maintained at <180/105 mm Hg for at least the first 24 hours after IVT treatment (COR 1, LOE B-R). In patients with mild to moderate severity AIS who have been treated with IVT, intensive SBP reduction (target of <140 mm Hg compared with <180 mm Hg) should not be used routinely because it is not associated with an improvement in functional outcome (COR 3: No Benefit, LOE B-R). In patients with AIS with LVO of the anterior circulation who have been successfully recanalized by EVT (mTICI 2b, 2c, or 3) and without other indication for BP management target, intensive SBP reduction target of <140 mm Hg for the first 72 hours is harmful and should be avoided (COR 3: Harm, LOE A).',
   },
   'aha-asa-2026-4.5': {
     id: 'aha-asa-2026-4.5',
@@ -683,16 +692,26 @@ export const CITATION_REGISTRY: CitationRegistry = {
   // asymptomatic-carotid clinical synthesis card.
   // 36-month review window per §13.7 (landmark trial — modern-medical-
   // management comparator anchors the field for years).
+  // CANONICAL CREST-2 entry. Consolidated 2026-07-02 (audit item D): the
+  // former duplicate `brott-crest-2-2025` mapped to the SAME publication
+  // (NEJM 2026;394(3):219-231, DOI 10.1056/NEJMoa2508800, PMID 41269206) and
+  // was deleted; the claim that referenced it (crest-2-asymptomatic-2025) now
+  // points here. Title corrected 2026-07-02 to the exact published title
+  // (verified via NCBI E-utilities, PMID 41269206). Keeps the richer effect-size detail from this
+  // entry; per-arm rates, P values, and RRs are abstract-verified (PMID
+  // 41269206), while the stenting absolute-risk-reduction 95% CI (0.6 to
+  // 5.9) is from the full-text results table and is medium-confidence
+  // pending full-text re-verification.
   'brott-crest-2-2026': {
     id: 'brott-crest-2-2026',
     source: 'trial',
-    title: 'CREST-2: Carotid Revascularization and Medical Management for Asymptomatic Carotid Stenosis',
+    title: 'Medical Management and Revascularization for Asymptomatic Carotid Stenosis',
     year: 2026,
     url: 'https://www.nejm.org/doi/10.1056/NEJMoa2508800',
     pmid: '41269206',
-    last_reviewed: '2026-05-23',
+    last_reviewed: '2026-07-02',
     review_window_months: 36,
-    quoted_text: 'In the stenting trial, the 4-year primary composite of periprocedural stroke or death plus ipsilateral stroke occurred in 2.8% of patients in the carotid-artery stenting + intensive medical management group vs 6.0% in the medical-management-alone group (ARD −3.2 percentage points, 95% CI −5.9 to −0.6, P=0.02). In the endarterectomy trial, the corresponding rates were 3.7% vs 5.3% (ARD −1.6 pp, P=0.24).',
+    quoted_text: 'In the stenting trial, the 4-year primary composite of periprocedural stroke or death plus ipsilateral stroke occurred in 2.8% of patients in the carotid-artery stenting + intensive medical management group vs 6.0% in the medical-management-alone group (absolute risk reduction 3.2 percentage points, 95% CI 0.6 to 5.9, P=0.02). In the endarterectomy trial, the corresponding rates were 3.7% vs 5.3% (absolute difference 1.6 pp, P=0.24). Among patients with high-grade stenosis without recent symptoms, the addition of stenting led to a lower risk of a composite of perioperative stroke or death or ipsilateral stroke within 4 years than intensive medical management alone. Carotid endarterectomy did not lead to a significant benefit.',
   },
 
   // ─── 2021 AHA/ASA Secondary Prevention — §5.3 Carotid Artery Disease ──────
@@ -927,26 +946,16 @@ export const CITATION_REGISTRY: CitationRegistry = {
     quoted_text: 'AstraZeneca confirmed that it will end U.S. commercial sales of Andexxa (andexanet alfa) on December 22, 2025, following the FDA safety communication and submission of a request to voluntarily withdraw the BLA for commercial reasons.',
   },
 
-  // ─── 2026 trial: CREST-2 — revascularization vs modern intensive medical management
-  //     for asymptomatic high-grade carotid stenosis (two parallel RCTs) ───────────
-  // Brott TG et al., NEJM 2026. Two parallel observer-blinded RCTs at 155 sites;
-  // stenting trial primary met (P=0.02, ARD 3.2 pp, NNT 31), endarterectomy trial
-  // not met (P=0.24). Closes the asymptomatic-carotid question against modern
-  // intensive medical management (SBP <130, LDL <70, PCSK9 access). Verbatim
-  // quote from NEJM PDF read by medical-scientist on 2026-05-20 (V supplied full
-  // text). 36-month review window per §13.7 (landmark trial — defines the modern
-  // asymptomatic-carotid management paradigm).
-  'brott-crest-2-2025': {
-    id: 'brott-crest-2-2025',
-    source: 'trial',
-    title: 'Medical Management and Revascularization for Asymptomatic Carotid Stenosis',
-    year: 2026,
-    url: 'https://www.nejm.org/doi/10.1056/NEJMoa2508800',
-    pmid: '41269206',
-    last_reviewed: '2026-05-20',
-    review_window_months: 36,
-    quoted_text: 'Among patients with high-grade stenosis without recent symptoms, the addition of stenting led to a lower risk of a composite of perioperative stroke or death or ipsilateral stroke within 4 years than intensive medical management alone. Carotid endarterectomy did not lead to a significant benefit.',
-  },
+  // ─── CREST-2 duplicate REMOVED 2026-07-02 (audit item D) ──────────────────
+  // The former `brott-crest-2-2025` entry mapped to the SAME publication as
+  // `brott-crest-2-2026` above (NEJM 2026;394(3):219-231,
+  // DOI 10.1056/NEJMoa2508800, PMID 41269206). It was a duplicate created with
+  // a misleading year suffix (id said 2025; the paper published in 2026) and a
+  // vaguer quoted_text. Consolidated into the canonical `brott-crest-2-2026`
+  // entry (which carries the exact published title plus the full verbatim
+  // effect sizes). The one claim that referenced it — crest-2-asymptomatic-2025
+  // in claims.ts — was repointed to `brott-crest-2-2026`. No live reference to
+  // `brott-crest-2-2025` remains.
 
   // ─── 2017 PFO closure cluster — three NEJM trials published together ─────
   //     CLOSE (Mas), RESPECT long-term (Saver), REDUCE (Søndergaard) — all in

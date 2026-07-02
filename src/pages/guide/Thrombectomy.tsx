@@ -66,9 +66,9 @@ export default function Thrombectomy() {
 
           <Paragraph
             viewMode={viewMode}
-            detail="DAWN uses clinical–core mismatch (age, NIHSS, core volume). DEFUSE-3 uses core &lt;70 ml, mismatch ratio ≥1.8, volume ≥15 ml. Need CTP or MRI."
+            detail="Two qualifying paths per AHA/ASA 2026: ASPECTS ≥6 (COR 1, LOE A), or ASPECTS 3–5 in selected patients (age &lt;80, no significant mass effect; COR 1, LOE A). Perfusion mismatch (DAWN clinical–core, or DEFUSE-3 core &lt;70 ml, ratio ≥1.8, volume ≥15 ml) is one qualifying path, not required for all."
           >
-            <Trial name="DAWN" path="/trials/dawn-trial" /> or <Trial name="DEFUSE-3" path="/trials/defuse-3-trial" /> criteria. CTP or MRI to show <Term detail="small core, large deficit or penumbra">clinical–core mismatch</Term>.
+            NCCT ASPECTS <Value>&ge;6</Value> (COR 1, LOE A; NIHSS ≥6, prestroke mRS 0–1), or <Value>3–5</Value> in selected patients (age &lt;80, no significant mass effect). Perfusion mismatch on CTP or MRI (<Trial name="DAWN" path="/trials/dawn-trial" />, <Trial name="DEFUSE-3" path="/trials/defuse-3-trial" />) is one qualifying path.
           </Paragraph>
 
           <Section number={3} title="Posterior Circulation and Distal Occlusions" />
@@ -77,7 +77,7 @@ export default function Thrombectomy() {
             viewMode={viewMode}
             detail="Basilar: ATTENTION and BAOCHE. M2/M3, ACA, PCA: consider by technical feasibility and deficit; DISTAL/ESCAPE-MeVO did not show benefit for routine MeVO."
           >
-            <strong>Basilar:</strong> EVT up to 24 h (<Trial name="ATTENTION" path="/trials/attention-trial" />, <Trial name="BAOCHE" path="/trials/baoche-trial" />). <strong>Distal/MeVO:</strong> M2/M3, ACA, PCA — by feasibility and deficit; evidence for routine EVT is limited.
+            <strong>Basilar:</strong> EVT up to 24 h (<Trial name="ATTENTION" path="/trials/attention-trial" />, <Trial name="BAOCHE" path="/trials/baoche-trial" />). <strong>Distal/MeVO:</strong> For proximal nondominant/codominant M2, distal MCA, ACA, or PCA occlusion, EVT should not be used routinely (COR 3: No Benefit, LOE A).
           </Paragraph>
 
           <Section number={4} title="Procedural Management" />
