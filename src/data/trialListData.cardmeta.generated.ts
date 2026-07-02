@@ -510,7 +510,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "legend": {
       "finding": "Direct EVT met NI at a wide −10 pp margin after early stopping.",
       "bottomLineTag": "Non-inferior",
-      "keyStat": "+7.7% (−2.9 to 18.2)"
+      "keyStat": "+7.7% (1-sided 97.5% CI -5.1)"
     },
     "subtitle": "Direct EVT vs Alteplase Plus EVT",
     "source": "Zi et al. (JAMA 2021)",
@@ -597,9 +597,9 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
   "elan-study": {
     "title": "ELAN Trial",
     "legend": {
-      "finding": "Early DOAC start after AF-related stroke is non-inferior with reassuring safety (sICH 0.2% both arms).",
-      "bottomLineTag": "NI met",
-      "keyStat": "RD −1.18%"
+      "finding": "Early DOAC start was not significantly more harmful than delayed (RD −1.18 pp, 95% CI −2.84 to +0.47); sICH 0.2% both arms.",
+      "bottomLineTag": "Early start safe",
+      "keyStat": "RD −1.18% (−2.84 to +0.47)"
     },
     "subtitle": "Early versus Later Anticoagulation for Stroke with Atrial Fibrillation",
     "source": "Fischer U, et al. N Engl J Med. 2023;388(26):2411-2421",
@@ -628,7 +628,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "title": "ENRICH Trial",
     "legend": {
       "finding": "Minimally invasive parafascicular surgery for lobar ICH 30–80 mL improves utility-weighted mRS at 180 d.",
-      "bottomLineTag": "NNT 12",
+      "bottomLineTag": "P(sup)=0.981",
       "keyStat": "0.458 vs 0.374"
     },
     "subtitle": "Minimally Invasive Surgical Evacuation of Intracerebral Hemorrhage",
@@ -904,16 +904,16 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
   "ninds-trial": {
     "title": "NINDS Trial",
     "legend": {
-      "finding": "Alteplase within 3 h improves functional independence (42.6% vs 27.2% mRS 0–1).",
-      "bottomLineTag": "+15 / 100",
-      "keyStat": "NNT 6.5"
+      "finding": "Alteplase within 3 h improves minimal disability (39% vs 26% mRS 0–1).",
+      "bottomLineTag": "+13 / 100",
+      "keyStat": "NNT 7.7"
     },
     "subtitle": "IV tPA for Acute Ischemic Stroke (0-3 Hours)",
     "source": "The National Institute of Neurological Disorders and Stroke rt-PA Stroke Study Group (NEJM 1995)",
     "timeline": "Enrolled 1991-1994",
     "listCategory": "thrombolysis",
-    "listDescription": "Foundational trial establishing IV tPA within 3 hours; 42.6% vs 27.2% favorable outcome.",
-    "bottomLineSummary": "NINDS is the foundational trial for IV alteplase in acute ischemic stroke 0–3 hours from onset. Functional independence (mRS 0–1) at 90 days improved from 27.2% to 42.6% (Part 2 favorable global outcome OR 1.7, 95% CI 1.2–2.6). sICH 6.4% vs 0.6% (P<0.001); 90-day mortality unchanged. AHA/ASA 2026 §4.6.1 COR 1.",
+    "listDescription": "Foundational trial establishing IV tPA within 3 hours; 39% vs 26% mRS 0–1 favorable outcome.",
+    "bottomLineSummary": "NINDS is the foundational trial for IV alteplase in acute ischemic stroke 0–3 hours from onset. Minimal disability (mRS 0–1) at 90 days improved from 26% to 39% (Part 2 favorable global outcome OR 1.7, 95% CI 1.2–2.6). sICH 6.4% vs 0.6% (P<0.001); 90-day mortality unchanged. AHA/ASA 2026 §4.6.1 COR 1.",
     "doi": "10.1056/NEJM199512143332401"
   },
   "nor-test-2-part-a-trial": {
@@ -1046,7 +1046,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "United States; May 2014 to December 2016",
     "listCategory": "thrombolysis",
     "listDescription": "Alteplase vs aspirin for minor nondisabling stroke; no efficacy benefit with sICH signal; stopped early at 33%.",
-    "bottomLineSummary": "PRISMS found no functional benefit of alteplase over aspirin in minor nondisabling stroke (78.2% vs 81.5%, adjusted RD −1.1%, NS) and a 3.2% sICH rate versus 0% for aspirin. The trial was stopped at 33% enrollment and results are inconclusive for the primary endpoint. The sICH signal supports caution about routine thrombolysis for clearly nondisabling deficits.",
+    "bottomLineSummary": "PRISMS found no functional benefit of alteplase over aspirin in minor nondisabling stroke (78.2% vs 81.5%, adjusted RD −1.1%, 95% CI −9.4 to +7.3%, NS) and a 3.2% sICH rate versus 0% for aspirin. The trial was stopped at 33% enrollment and results are inconclusive for the primary endpoint. The sICH signal supports caution about routine thrombolysis for clearly nondisabling deficits.",
     "doi": "10.1001/jama.2018.8496"
   },
   "profess-trial": {
@@ -1375,7 +1375,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "legend": {
       "finding": "Solitaire EVT after IV tPA raised independence from 35% to 60% in anterior LVO ≤6 h.",
       "bottomLineTag": "+25 / 100",
-      "keyStat": "cOR 2.75 (1.53–4.95)"
+      "keyStat": "cOR 2.63 (1.57–4.40)"
     },
     "subtitle": "Stent-Retriever EVT Plus IV tPA vs IV tPA Alone",
     "source": "Saver et al. (NEJM 2015)",

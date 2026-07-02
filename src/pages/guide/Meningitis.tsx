@@ -59,9 +59,9 @@ export default function Meningitis() {
 
           <Paragraph
             viewMode={viewMode}
-            detail="Image first if: focal deficit, papilledema, GCS &lt;10, immunocompromised, seizure, known mass. Otherwise LP can come first. If you image and it delays abx &gt;1 h, give abx before the scan."
+            detail="Image first if: focal deficit, papilledema, altered level of consciousness (GCS &lt;15; IDSA 2004 uses any abnormal level of consciousness), immunocompromised, seizure, known mass. Otherwise LP can come first. If you image and it delays abx &gt;1 h, give abx before the scan."
           >
-            CT before LP if: focal deficit, papilledema, <CalcRef name="GCS" path="/calculators/glasgow-coma-scale">GCS</CalcRef> <Value>&lt;10</Value>, immunocompromised, seizure, known mass. Otherwise LP first. If imaging delays antibiotics &gt;1 h, give antibiotics before the scan.
+            CT before LP if: focal deficit, papilledema, altered level of consciousness (<CalcRef name="GCS" path="/calculators/glasgow-coma-scale">GCS</CalcRef> <Value>&lt;15</Value>), immunocompromised, seizure, known mass. Otherwise LP first. If imaging delays antibiotics &gt;1 h, give antibiotics before the scan.
           </Paragraph>
 
           <Section number={3} title="LP and CSF" />

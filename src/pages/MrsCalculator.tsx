@@ -379,8 +379,8 @@ const MrsCalculator: React.FC = () => {
           headline = 'Standard EVT and IVT eligibility';
           body     = 'Prestroke mRS 0–1 satisfies the baseline-function criterion for EVT in standard and extended windows, and for IVT within 4.5 h, per AHA/ASA 2026. No baseline-disability exclusion applies.';
         } else if (grade === 2) {
-          headline = 'Borderline — document the discussion';
-          body     = 'Most landmark EVT trials (DAWN, DEFUSE-3, SELECT-2) used prestroke mRS 0–1 as an inclusion criterion. Prestroke mRS 2 is a relative contraindication. Individualize and document if proceeding.';
+          headline = 'EVT can reasonably be considered (COR 2a)';
+          body     = 'Prestroke mRS 2 is not a contraindication. Per AHA/ASA 2026, for anterior-circulation proximal LVO within 6 h with NIHSS ≥6 and ASPECTS ≥6, EVT can reasonably be considered (COR 2a, Level B-NR). The landmark trials (DAWN, DEFUSE-3, SELECT-2) enrolled prestroke mRS 0–1, so trial-level evidence is strongest at mRS 0–1; the mRS 2 recommendation reflects current guidance. Individualize and document.';
         } else {
           headline = 'High baseline disability — goals-of-care discussion';
           body     = 'Standard EVT and IVT trials excluded prestroke mRS ≥2 as routine care. At mRS 3–5, a goals-of-care discussion with the patient and family is appropriate before committing to acute intervention.';

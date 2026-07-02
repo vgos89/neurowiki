@@ -565,15 +565,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the chart show?',
-        answer: 'Two arms of 100 dots each. A filled dot is a patient with minimal disability (mRS 0 or 1) at 3 months. Alteplase 42.6 dots, placebo 27.2 dots. The cobalt band marks the extra 15 per 100 on alteplase.',
+        answer: 'Two arms of 100 dots each. A filled dot is a patient with minimal disability (mRS 0 or 1) at 3 months. Alteplase 39 dots, placebo 26 dots. The cobalt band marks the extra 13 per 100 on alteplase.',
       },
       {
         question: 'What should I look at first?',
-        answer: 'The size of the gap: ~15 extra patients per 100 reached minimal disability on alteplase. This is one of the largest absolute benefits in stroke trials.',
+        answer: 'The size of the gap: ~13 extra patients per 100 reached minimal disability on alteplase. This is one of the largest absolute benefits in stroke trials.',
       },
       {
         question: 'What does it mean for my patient?',
-        answer: 'NNT ~7 to achieve one additional mRS 0–1. The sICH cost is 6.4% vs 0.6%. Quote both numbers. Time within the window still matters: earlier is better (Marler 2000).',
+        answer: 'NNT ~7.7 to achieve one additional mRS 0–1. The sICH cost is 6.4% vs 0.6%. Quote both numbers. Time within the window still matters: earlier is better (Marler 2000).',
       },
     ],
     howToInterpret: {
@@ -581,8 +581,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       doesNotProve: 'It does not prove benefit beyond 3 hours (ECASS III addresses 3–4.5h). It does not isolate which time window within 0–3h benefits most. That came later from Marler 2000.',
       cautions: 'Symptomatic ICH rose ten-fold (6.4% vs 0.6%). Strict BP control (<185/110) is non-negotiable and originated from this trial. 90-day mortality was unchanged (17% vs 21%, P=0.30): the bleeding cost is real but does not translate to net mortality harm. Excluded mild/rapidly-improving strokes, late presenters, and severely hypertensive patients. Extrapolation outside trial criteria is unsupported.',
     },
-    bedsidePearl: 'NINDS established IV alteplase for 0–3 h acute ischemic stroke (NNT ~7 for mRS 0–1). Time-stratified analysis (Marler 2000) confirmed earlier treatment is better. Door-to-needle <60 min, target <30 min.',
-    bottomLineSummary: 'NINDS is the foundational trial for IV alteplase in acute ischemic stroke 0–3 hours from onset. Functional independence (mRS 0–1) at 90 days improved from 27.2% to 42.6% (Part 2 favorable global outcome OR 1.7, 95% CI 1.2–2.6). sICH 6.4% vs 0.6% (P<0.001); 90-day mortality unchanged. AHA/ASA 2026 §4.6.1 COR 1.',
+    bedsidePearl: 'NINDS established IV alteplase for 0–3 h acute ischemic stroke (NNT ~7.7 for mRS 0–1). Time-stratified analysis (Marler 2000) confirmed earlier treatment is better. Door-to-needle <60 min, target <30 min.',
+    bottomLineSummary: 'NINDS is the foundational trial for IV alteplase in acute ischemic stroke 0–3 hours from onset. Minimal disability (mRS 0–1) at 90 days improved from 26% to 39% (Part 2 favorable global outcome OR 1.7, 95% CI 1.2–2.6). sICH 6.4% vs 0.6% (P<0.001); 90-day mortality unchanged. AHA/ASA 2026 §4.6.1 COR 1.',
     stats: {
       sampleSize: {
         value: '624',
@@ -597,13 +597,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         label: 'Statistically Sig.'
       },
       effectSize: {
-        value: '15.4%',
+        value: '13%',
         label: 'Absolute Increase'
       },
       absoluteReduction: {
-        value: '15.4 pp',
+        value: '13 pp',
         label: 'Global OR 1.7 (95% CI 1.2–2.6)',
-        info: 'Part 2 mRS 0–1 favorable outcome: 42.6% (tPA) vs 27.2% (placebo). 1995 NEJM publication reports the global favorable-outcome odds ratio (OR 1.7, 95% CI 1.2–2.6, P=0.008) across the four assessment scales; a frequentist 95% CI for the dichotomous mRS 0–1 absolute risk difference itself is not published in the primary paper, so the OR CI is shown alongside the point-estimate ARD.',
+        info: 'Part 2 mRS 0–1 favorable outcome: 39% (tPA) vs 26% (placebo). 1995 NEJM publication reports the global favorable-outcome odds ratio (OR 1.7, 95% CI 1.2–2.6, P=0.008) across the four assessment scales; a frequentist 95% CI for the dichotomous mRS 0–1 absolute risk difference itself is not published in the primary paper, so the OR CI is shown alongside the point-estimate ARD.',
         highlight: true,
       },
     },
@@ -617,12 +617,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     efficacyResults: {
       treatment: {
-        percentage: 42.6,
+        percentage: 39,
         label: 'Minimal disability (mRS 0-1) at 3 months',
         name: 'tPA Group'
       },
       control: {
-        percentage: 27.2,
+        percentage: 26,
         label: 'Minimal disability (mRS 0-1) at 3 months',
         name: 'Placebo Group'
       }
@@ -657,8 +657,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     clinicalContext: 'The NINDS tPA Stroke Study established intravenous alteplase (tPA) as the first FDA-approved treatment for acute ischemic stroke.',
     calculations: {
-      nnt: 6.5, // 1 / (0.426 - 0.272) = 6.5
-      nntExplanation: 'For every 6.5 patients treated with tPA, one additional patient achieves minimal disability (mRS 0-1) compared to placebo'
+      nnt: 7.7, // 1 / (0.39 - 0.26) = 7.7
+      nntExplanation: 'For every 7.7 patients treated with tPA, one additional patient achieves minimal disability (mRS 0-1) compared to placebo'
     },
     pearls: [
       'Time is Brain: Established the 3-hour window',
@@ -671,11 +671,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'The National Institute of Neurological Disorders and Stroke rt-PA Stroke Study Group (NEJM 1995)',
     // no clinicalTrialsId: NINDS (1995) predates ClinicalTrials.gov; NCT00000292 was a wrong-trial link (NIDA cocaine study) removed 2026-06-08
     listCategory: 'thrombolysis',
-    listDescription: 'Foundational trial establishing IV tPA within 3 hours; 42.6% vs 27.2% favorable outcome.',
+    listDescription: 'Foundational trial establishing IV tPA within 3 hours; 39% vs 26% mRS 0–1 favorable outcome.',
     legend: {
-      finding: 'Alteplase within 3 h improves functional independence (42.6% vs 27.2% mRS 0–1).',
-      bottomLineTag: '+15 / 100',
-      keyStat: 'NNT 6.5',
+      finding: 'Alteplase within 3 h improves minimal disability (39% vs 26% mRS 0–1).',
+      bottomLineTag: '+13 / 100',
+      keyStat: 'NNT 7.7',
     },
   },
   'original-trial': {
@@ -2442,16 +2442,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     bedsidePearl: 'For an alteplase-eligible LVO patient inside 6 hours with a small infarct core, SWIFT PRIME supports proceeding to Solitaire thrombectomy without delay. The primary mRS shift was significant and the functional independence gap was the largest of any 2015 trial that used a uniform device protocol (60% vs 35%, NNT of 4 from the secondary mRS 0-2 outcome).',
     bottomLineSummary: 'SWIFT PRIME showed that adding Solitaire stent-retriever thrombectomy to IV alteplase in anterior circulation LVO patients within 6 hours of onset shifted the entire mRS distribution toward better outcomes and raised functional independence from 35% to 60%. The trial was stopped early for efficacy.',
     ordinalStats: {
-      commonOR: 2.75,
-      ciLow: 1.53,
-      ciHigh: 4.95,
+      commonOR: 2.63,
+      ciLow: 1.57,
+      ciHigh: 4.40,
       direction: 'positive',
       pValue: 0.001,
     },
     legend: {
       finding: 'Solitaire EVT after IV tPA raised independence from 35% to 60% in anterior LVO ≤6 h.',
       bottomLineTag: '+25 / 100',
-      keyStat: 'cOR 2.75 (1.53–4.95)',
+      keyStat: 'cOR 2.63 (1.57–4.40)',
     },
   },
   'thrace-trial': {
@@ -2895,15 +2895,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the bar show?',
-        answer: 'Proportion achieving functional independence (mRS 0-2) at 90 days. Direct EVT 54.3% vs IV alteplase plus EVT 46.6%. Risk difference +7.7 percentage points (95% CI -2.9 to 18.2).',
+        answer: 'Proportion achieving functional independence (mRS 0-2) at 90 days. Direct EVT 54.3% vs IV alteplase plus EVT 46.6%. Risk difference +7.7 percentage points (two-sided 95% CI -2.9 to 18.2). The non-inferiority decision instead used the one-sided 97.5% CI (lower bound -5.1 pp).',
       },
       {
         question: 'How is non-inferiority judged here?',
-        answer: 'The pre-specified non-inferiority margin was -10 percentage points. The lower CI bound (-2.9 pp) cleared this margin (P for NI = 0.003), meeting the NI threshold. The trial was stopped early at interim analysis.',
+        answer: 'The pre-specified non-inferiority margin was -10 percentage points. The non-inferiority decision used the one-sided 97.5% CI, whose lower bound (-5.1 pp) cleared this margin (P for NI = 0.003), meeting the NI threshold. The two-sided 95% CI (-2.9 to 18.2) is a separate descriptive estimate. The trial was stopped early at interim analysis.',
       },
       {
         question: 'Why is the wide NI margin a concern?',
-        answer: 'A -10 pp margin is clinically large. The trial could meet NI while still permitting up to a 10-percentage-point absolute reduction in functional independence. Early stopping further inflates effect estimates. sICH (4.3% vs 3.4%) and mortality (14.7% vs 18.8%) were not significantly different.',
+        answer: 'A -10 pp margin is clinically large. The trial could meet NI while still permitting up to a 10-percentage-point absolute reduction in functional independence. Early stopping further inflates effect estimates. sICH (6.1% vs 6.8%) and mortality (17.2% vs 17.8%) were not significantly different.',
       },
     ],
     /* claimId: devt-noninferiority | source: Zi JAMA 2021 */
@@ -2918,7 +2918,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     legend: {
       finding: 'Direct EVT met NI at a wide −10 pp margin after early stopping.',
       bottomLineTag: 'Non-inferior',
-      keyStat: '+7.7% (−2.9 to 18.2)',
+      keyStat: '+7.7% (1-sided 97.5% CI -5.1)',
     },
   },
   'skip-trial': {
@@ -4394,8 +4394,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         label: 'No Functional Difference'
       },
       effectSize: {
-        value: 'OR 0.75',
-        label: 'Less Any ICH'
+        value: 'cOR 1.01',
+        label: 'Primary mRS Shift (Null)'
       }
     },
     trialDesign: {
@@ -4889,12 +4889,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What does adjusted OR 0.56 mean?',
-        answer: 'An adjusted OR of 0.56 for functional independence (95% CI 0.33-0.96, P=0.03) means patients on intensive BP management had 44% lower odds of achieving mRS 0-2 at 3 months. Combined with nearly 8-fold higher malignant cerebral edema (adjusted OR 7.88, 95% CI 1.05-59.0, P=0.01), the signal against SBP <140 mm Hg after successful EVT is consistent across multiple outcomes.',
+        answer: 'An adjusted OR of 0.56 for functional independence (95% CI 0.33-0.96, P=0.03) means patients on intensive BP management had 44% lower odds of achieving mRS 0-2 at 3 months. Combined with nearly 8-fold higher malignant cerebral edema (adjusted OR 7.88, 95% CI 1.57-39.39, P=0.01), the signal against SBP <140 mm Hg after successful EVT is consistent across multiple outcomes.',
       },
     ],
     /* claimId: optimal-bp-interpret | source: Nam et al. JAMA 2023 */
     howToInterpret: {
-      proves: 'STOPPED FOR SAFETY. In 306 patients at 19 South Korean stroke centers, intensive BP management targeting SBP <140 mm Hg after successful EVT caused significantly lower functional independence compared with conventional management targeting SBP 140-180 mm Hg (39.4% vs 54.4%, absolute difference -15.1 percentage points, adjusted OR 0.56, 95% CI 0.33-0.96, P=0.03). Malignant cerebral edema was nearly 8-fold more frequent in the intensive arm (adjusted OR 7.88, 95% CI 1.05-59.0, P=0.01). The DSMB terminated enrollment at 306 of 450 planned patients.',
+      proves: 'STOPPED FOR SAFETY. In 306 patients at 19 South Korean stroke centers, intensive BP management targeting SBP <140 mm Hg after successful EVT caused significantly lower functional independence compared with conventional management targeting SBP 140-180 mm Hg (39.4% vs 54.4%, absolute difference -15.1 percentage points, adjusted OR 0.56, 95% CI 0.33-0.96, P=0.03). Malignant cerebral edema was nearly 8-fold more frequent in the intensive arm (adjusted OR 7.88, 95% CI 1.57-39.39, P=0.01). The DSMB terminated enrollment at 306 of 450 planned patients.',
       doesNotProve: 'The harm is specific to targeting SBP <140 mm Hg; it does not prove that any BP reduction below 180 mm Hg is harmful. Symptomatic ICH rates did not significantly differ between groups, so sICH was not the mechanism of harm. This was a Korean population; the magnitude of harm may differ in other populations.',
       cautions: 'Open-label design with blinded endpoint assessment. Terminated early at 68% of planned enrollment; early stopping can inflate treatment effect estimates. Single-country Korean cohort at 19 centers. The mechanism by which intensive BP lowering increased malignant edema (possibly reduced collateral perfusion post-reperfusion) is biologically plausible but not definitively established.',
     },
@@ -9972,9 +9972,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     doi: '10.1056/NEJMoa2303048',
     legend: {
-      finding: 'Early DOAC start after AF-related stroke is non-inferior with reassuring safety (sICH 0.2% both arms).',
-      bottomLineTag: 'NI met',
-      keyStat: 'RD −1.18%',
+      finding: 'Early DOAC start was not significantly more harmful than delayed (RD −1.18 pp, 95% CI −2.84 to +0.47); sICH 0.2% both arms.',
+      bottomLineTag: 'Early start safe',
+      keyStat: 'RD −1.18% (−2.84 to +0.47)',
     },
   },
 
@@ -11582,7 +11582,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     listDescription: 'First positive randomized minimally-invasive surgical ICH trial; 30-day mortality 9.3% vs 18.0% (Bayesian P>0.98). NEJM 2024.',
     legend: {
       finding: 'Minimally invasive parafascicular surgery for lobar ICH 30–80 mL improves utility-weighted mRS at 180 d.',
-      bottomLineTag: 'NNT 12',
+      bottomLineTag: 'P(sup)=0.981',
       keyStat: '0.458 vs 0.374',
     },
   },
@@ -13640,7 +13640,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does this chart show?',
-        answer: 'mRS 0-1 at 90 days. Aspirin (control) reached 81.5 per 100; alteplase (treatment) reached only 78.2. The adjusted risk difference was −1.1% (95% CI −5.6 to +3.4%), not statistically significant. Aspirin arm had marginally better outcomes and zero sICH.',
+        answer: 'mRS 0-1 at 90 days. Aspirin (control) reached 81.5 per 100; alteplase (treatment) reached only 78.2. The adjusted risk difference was −1.1% (95% CI −9.4 to +7.3%), not statistically significant. Aspirin arm had marginally better outcomes and zero sICH.',
       },
       {
         question: 'Why does the aspirin (control) arm have the winning accent?',
@@ -13652,12 +13652,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
     ],
     howToInterpret: {
-      proves: 'In patients with minor nondisabling acute ischemic stroke treated within 3 hours, alteplase 0.9 mg/kg did not improve excellent functional outcome at 90 days versus aspirin (78.2% vs 81.5%, adjusted RD −1.1%, 95% CI −5.6 to +3.4%, P not significant), with symptomatic intracranial hemorrhage occurring only in the alteplase arm (3.2% vs 0%).',
+      proves: 'In patients with minor nondisabling acute ischemic stroke treated within 3 hours, alteplase 0.9 mg/kg did not improve excellent functional outcome at 90 days versus aspirin (78.2% vs 81.5%, adjusted RD −1.1%, 95% CI −9.4 to +7.3%, P not significant), with symptomatic intracranial hemorrhage occurring only in the alteplase arm (3.2% vs 0%).',
       doesNotProve: 'PRISMS does not definitively prove that alteplase is harmful or ineffective in minor stroke. The trial was stopped at 33% enrollment and was severely underpowered for its primary endpoint. It also does not apply to patients with disabling stroke, where alteplase retains a strong evidence base.',
       cautions: 'The trial was stopped early after the steering committee determined it was unlikely to achieve its primary endpoint, not for a formal safety finding. At 33% enrollment, findings are inconclusive rather than definitively negative; the observed direction may not represent the true effect. The sICH signal (3.2% vs 0%) is the most robust finding and aligns with the known hemorrhagic risk of alteplase.',
     },
     bedsidePearl: 'PRISMS tested alteplase vs aspirin in minor nondisabling stroke and found no functional benefit with a 3.2% sICH rate vs 0% for aspirin. The trial was underpowered (stopped at 33%), so findings are inconclusive rather than definitively negative. In clinical practice: for clearly nondisabling minor stroke, shared decision-making about thrombolysis is appropriate, with aspirin or DAPT as reasonable alternatives.',
-    bottomLineSummary: 'PRISMS found no functional benefit of alteplase over aspirin in minor nondisabling stroke (78.2% vs 81.5%, adjusted RD −1.1%, NS) and a 3.2% sICH rate versus 0% for aspirin. The trial was stopped at 33% enrollment and results are inconclusive for the primary endpoint. The sICH signal supports caution about routine thrombolysis for clearly nondisabling deficits.',
+    bottomLineSummary: 'PRISMS found no functional benefit of alteplase over aspirin in minor nondisabling stroke (78.2% vs 81.5%, adjusted RD −1.1%, 95% CI −9.4 to +7.3%, NS) and a 3.2% sICH rate versus 0% for aspirin. The trial was stopped at 33% enrollment and results are inconclusive for the primary endpoint. The sICH signal supports caution about routine thrombolysis for clearly nondisabling deficits.',
     legend: {
       finding: 'Alteplase vs aspirin in minor nondisabling stroke shows no functional benefit and sICH 3.2% vs 0%.',
       bottomLineTag: 'No benefit',
@@ -14025,7 +14025,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       geography: 'China',
       populationExclusions: [
         'Reteplase is not approved in the US or EU. Regulatory availability required',
-        'Higher sICH rate than alteplase (3.1% vs 2.0%) warrants caution outside trial context',
+        'sICH was similar to alteplase (2.4% vs 2.0%, RR 1.21, P not significant); any intracranial hemorrhage was higher (7.7% vs 4.9%), which warrants caution outside trial context',
       ],
     },
     stats: {
@@ -18586,7 +18586,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'ANNEXA-4',
     subtitle: 'Andexanet Alfa for FXa-Inhibitor-Associated Major Bleeding (Single-Arm Cohort)',
     category: 'Neuro Trials',
-    trialResult: 'POSITIVE',
+    trialResult: 'SAFETY_MET',
     pmid: '30730782',
     doi: '10.1056/NEJMoa1814051',
     primaryDesign: 'single-arm-registry',

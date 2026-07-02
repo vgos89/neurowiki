@@ -681,7 +681,7 @@ const NihssCalculator: React.FC = () => {
             <span className="font-semibold text-amber-700">Moderate (5–15).</span> Disabling deficit. IVT is clearly indicated within 4.5 h absent contraindications. NIHSS ≥6 with cortical signs raises LVO probability and triggers urgent vascular imaging (CTA head and neck) for EVT triage per §4.7.2.
           </p>
           <p>
-            <span className="font-semibold text-red-600">Moderate to severe (16–20).</span> Typical proximal LVO range. Expedite CTA, mobilize the EVT pathway, and confirm prestroke mRS 0–1 and ASPECTS ≥6 for standard early-window selection. Post-IVT BP target ≤180/105.
+            <span className="font-semibold text-red-600">Moderate to severe (16–20).</span> Typical proximal LVO range. Expedite CTA, mobilize the EVT pathway, and confirm prestroke mRS 0–1 and ASPECTS 3–10 for standard 0–6 h selection (ASPECTS ≥6 applies to the 6–24 h window). Post-IVT BP target ≤180/105.
           </p>
           <p>
             <span className="font-semibold text-red-700">Severe (≥21).</span> Large-territory infarct risk. Reassess core size (ASPECTS), age, and prestroke function before EVT; large-core EVT (ASPECTS 3–5) remains supported per §4.7.2 in selected patients. Symptomatic hemorrhage risk after IVT is elevated; document the IVT discussion when proceeding.

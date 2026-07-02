@@ -936,7 +936,7 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     id: 'mrs-prestroke-evt-eligibility',
     citation_ids: ['aha-asa-2026-4.7.2', 'aha-asa-2026-4.6.1'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
-    description: 'Pre-stroke mRS eligibility interpretation in the mRS calculator drawer: mRS 0–1 = standard EVT/IVT eligibility criterion (AHA/ASA 2026 §4.7.2 COR 1 LOE A for EVT standard window; §4.6.1 for IVT within 4.5h). mRS 2 = borderline/relative contraindication — most landmark trials (DAWN, DEFUSE-3, SELECT-2) excluded prestroke mRS ≥2. mRS 3–5 = high baseline disability, not guideline-supported for routine acute intervention.',
+    description: 'Pre-stroke mRS eligibility interpretation in the mRS calculator drawer: mRS 0–1 = standard EVT/IVT eligibility criterion (AHA/ASA 2026 §4.7.2 COR 1 LOE A for EVT standard window; §4.6.1 for IVT within 4.5h). mRS 2 = guideline-permissive, NOT a contraindication: for anterior-circulation ICA/M1 LVO within 6h with NIHSS ≥6 and ASPECTS ≥6, EVT can reasonably be considered (COR 2a, LOE B-NR per §4.7.2). Note the trial-inclusion history separately: most landmark trials (DAWN, DEFUSE-3, SELECT-2) enrolled only prestroke mRS 0–1, which is a study-population fact, not current guidance. mRS 3–4 within the same criteria: EVT might be reasonable (COR 2b, LOE B-NR). mRS 5 = high baseline disability, not guideline-supported for routine acute intervention.',
   },
 
   'mrs-outcome-context': {

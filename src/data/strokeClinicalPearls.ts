@@ -253,7 +253,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'ist3-trial',
         title: 'IST-3 Trial (Elderly Patients)',
-        content: '1,617 patients >80 years. 37% vs 35% alive & independent at 6 months. Age did not attenuate treatment benefit (adjusted analysis); IST-3 supports treating eligible patients >80y. Similar sICH rates. Age alone should NOT exclude treatment.',
+        content: '1,617 (53%) of 3,035 patients were >80 years. Overall primary outcome: 37% vs 35% alive & independent at 6 months (Oxford Handicap Score 0-2; adjusted OR 1.13, 95% CI 0.95-1.35, P=0.18, non-significant). Age did not attenuate treatment benefit (adjusted analysis); IST-3 supports treating eligible patients >80y. Similar sICH rates. Age alone should NOT exclude treatment.',
         type: 'trial',
         section: 'step-1',
         link: '/trials/ist-3',
@@ -967,7 +967,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'ct-protocol-deep',
         title: 'CT Imaging Protocol',
-        content: 'Routine CT: 24h post-tPA before starting antithrombotics. Detects delayed hemorrhage. Emergency CT: Any neurological worsening (NIHSS ↑≥4), severe headache, nausea/vomiting, seizure, BP spike. ECASS-3 definition of sICH: Any ICH + NIHSS ↑≥4 points, OR any ICH + death, OR ICH requiring surgical intervention.',
+        content: 'Routine CT: 24h post-tPA before starting antithrombotics. Detects delayed hemorrhage. Emergency CT: Any neurological worsening (NIHSS ↑≥4), severe headache, nausea/vomiting, seizure, BP spike. ECASS-3 definition of sICH: any ICH with an NIHSS increase ≥4 points versus baseline or the lowest value within the first 7 days, OR any ICH leading to death, where the hemorrhage is the predominant cause of neurological deterioration.',
         type: 'pearl',
         section: 'step-5',
         evidence: 'ECASS-3 2008',
@@ -1092,7 +1092,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'sich-definition',
         title: 'sICH Definition (ECASS-3)',
-        content: 'Symptomatic intracranial hemorrhage requires: (1) Any ICH on imaging + NIHSS increase ≥4 points within 24h, OR (2) Any ICH + death within 7 days, OR (3) Any ICH requiring surgical intervention. Distinction: Asymptomatic ICH occurs in ~15% but doesn\'t worsen outcomes.',
+        content: 'Symptomatic intracranial hemorrhage requires any ICH on CT/MRI with an NIHSS increase ≥4 points versus baseline or the lowest value within the first 7 days, OR any ICH leading to death, where the hemorrhage is the predominant cause of neurological deterioration. Distinction: Asymptomatic ICH occurs in ~15% but doesn\'t worsen outcomes.',
         type: 'pearl',
         section: 'step-6',
         evidence: 'ECASS-3 2008',
@@ -1121,10 +1121,10 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'hemorrhage-reversal-protocol',
         title: 'Coagulopathy Reversal Protocol',
-        content: 'STEP 1: Stop the tPA infusion. STEP 2: Cryoprecipitate 10 units IV push to replace fibrinogen; target >150 mg/dL and recheck q30min until you hit it. STEP 3: Do not give TXA routinely. TICH-2 showed no benefit and a signal for thromboembolic harm (Class III, Level A; AHA/ASA 2022 ICH). STEP 4: Do not transfuse platelets routinely; PATCH 2016 showed worse outcomes in spontaneous ICH on antiplatelets. Reserve for severe thrombocytopenia or emergency surgery. STEP 5: Reverse the anticoagulant. Warfarin: 4-factor PCC 25–50 units/kg IV plus vitamin K 10 mg IV, goal INR <1.4; use FFP only if PCC is unavailable. Dabigatran: idarucizumab 5 g IV. Apixaban/rivaroxaban/edoxaban: 4-factor PCC 50 units/kg IV is the default in the US. Andexanet alfa was withdrawn from the US market (commercial sales ended Dec 22, 2025) after the FDA concluded its thromboembolic risks outweighed its benefits.',
+        content: 'STEP 1: Stop the tPA infusion. STEP 2: Cryoprecipitate 10 units IV push to replace fibrinogen; target >150 mg/dL and recheck q30min until you hit it. STEP 3: Give tranexamic acid 1000 mg IV over 10 min (or aminocaproic acid 4-5 g IV) alongside cryoprecipitate for post-thrombolysis sICH (COR 1, LOE C-EO; AHA/ASA 2026). This applies to sICH after IVT. In contrast, TXA is NOT recommended for spontaneous ICH, where TICH-2 showed no benefit and a signal for thromboembolic harm (Class III, Level A; AHA/ASA 2022 ICH). STEP 4: Do not transfuse platelets routinely; PATCH 2016 showed worse outcomes in spontaneous ICH on antiplatelets. Reserve for severe thrombocytopenia or emergency surgery. STEP 5: Reverse the anticoagulant. Warfarin: 4-factor PCC 25–50 units/kg IV plus vitamin K 10 mg IV, goal INR <1.4; use FFP only if PCC is unavailable. Dabigatran: idarucizumab 5 g IV. Apixaban/rivaroxaban/edoxaban: 4-factor PCC 50 units/kg IV is the default in the US. Andexanet alfa was withdrawn from the US market (commercial sales ended Dec 22, 2025) after the FDA concluded its thromboembolic risks outweighed its benefits.',
         type: 'pearl',
         section: 'step-6',
-        evidence: 'AHA/ASA 2022 ICH Guidelines, Sections 5.1, 6.2; TICH-2 2018',
+        evidence: 'AHA/ASA 2026 (post-IVT sICH bundle, COR 1, LOE C-EO); AHA/ASA 2022 ICH Guidelines, Sections 5.1, 6.2; TICH-2 2018 (spontaneous ICH)',
         evidenceClass: 'I',
         evidenceLevel: 'C',
         claimId: 'fxa-reversal-4fpcc-andexanet-withdrawn',
@@ -1132,7 +1132,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'tich2-trial',
         title: 'TICH-2 Trial (TXA)',
-        content: 'Tranexamic acid in spontaneous ICH. 2,325 patients. TXA did not improve functional outcomes; possible increase in thromboembolic events. 2022 AHA/ASA ICH: TXA NOT recommended for routine use (Class III, Level A). Not recommended for tPA-related ICH as routine therapy.',
+        content: 'Tranexamic acid in spontaneous ICH. 2,325 patients. TXA did not improve functional outcomes; possible increase in thromboembolic events. 2022 AHA/ASA ICH: TXA NOT recommended for routine use in spontaneous ICH (Class III, Level A). This does not extend to post-thrombolysis sICH, where TXA is given as part of the reversal bundle (2026 AHA/ASA, COR 1, Level C-EO).',
         type: 'trial',
         section: 'step-6',
         link: '/trials/tich-2',

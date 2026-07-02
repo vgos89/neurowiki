@@ -59,7 +59,7 @@ export default function Thrombectomy() {
             viewMode={viewMode}
             detail="ASPECTS 6–10 = small core. ASPECTS 3–5 = large core; SELECT2 and ANGEL-ASPECT showed benefit. Don't dismiss based on core alone."
           >
-            NCCT <Term detail="Alberta Stroke Program Early CT Score, 0–10">ASPECTS</Term> <Value>≥6</Value> (small core). <Trial name="SELECT2" path="/trials/select2-trial" /> and <Trial name="ANGEL-ASPECT" path="/trials/angel-aspect-trial" />: large core (ASPECTS 3–5 or core <Value>&gt;50 ml</Value>) also benefits.
+            NCCT <Term detail="Alberta Stroke Program Early CT Score, 0–10">ASPECTS</Term> <Value>3–10</Value> (COR 1, LOE A; with NIHSS ≥6 and prestroke mRS 0–1). <Trial name="SELECT2" path="/trials/select2-trial" /> and <Trial name="ANGEL-ASPECT" path="/trials/angel-aspect-trial" /> establish benefit in the large-core subset (ASPECTS 3–5 or core <Value>&gt;50 ml</Value>).
           </Paragraph>
 
           <SubSection title="Late Window (6–24 h)" />

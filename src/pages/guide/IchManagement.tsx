@@ -69,9 +69,9 @@ export default function IchManagement() {
 
           <Paragraph
             viewMode={viewMode}
-            detail="INTERACT-2, ATACH-2: SBP <140 within 1 h when feasible (Class I, Level A). Avoid SBP <110. Nicardipine or labetalol. Avoid rapid drop >90 mmHg in 1 h."
+            detail="Mild-to-moderate ICH, SBP 150-220: acute lowering to target SBP 140 (goal 130-150) may be reasonable within 1 h (Class IIb, Level B-R). Avoid SBP <130 (potentially harmful, Class III). Nicardipine or labetalol. Avoid rapid drop >90 mmHg in 1 h. INTERACT-2 and ATACH-2 did not meet their primary endpoints."
           >
-            SBP <Value>&lt;140 mmHg</Value> within 1 hour when feasible (Class I, Level A). Nicardipine or labetalol. Avoid SBP &lt;110 mmHg; avoid rapid drop (e.g. &gt;<Value>90</Value> mmHg in 1 h). Evidence: INTERACT-2, ATACH-2; 2022 AHA/ASA ICH Guidelines.
+            For mild-to-moderate ICH presenting with SBP 150-220 mmHg, acute lowering to a target of SBP <Value>140 mmHg</Value> (goal range 130-150) may be reasonable within 1 hour (Class IIb, Level B-R). Nicardipine or labetalol. Avoid lowering SBP &lt;130 mmHg (potentially harmful, Class III); avoid rapid drop (e.g. &gt;<Value>90</Value> mmHg in 1 h). Evidence: INTERACT-2 and ATACH-2 did not meet their primary endpoints; 2022 AHA/ASA ICH Guidelines.
           </Paragraph>
 
           <Section number={5} title="ICP and Herniation" />
