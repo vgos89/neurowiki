@@ -261,7 +261,7 @@ const getNextRenderedField = (
       } else if (!isNaN(lateAspects) && lateAspects >= 3 && lateAspects <= 5) {
         ordered = ['aspects', 'massEffect', 'severeHypodensity26', 'core', 'mismatchVol', 'mismatchRatio'];
       } else {
-        // CTP supports fallback DAWN/DEFUSE-3 routing when no ASPECTS-based branch applies.
+        // Path B (CT perfusion) routing — DAWN/DEFUSE-3 — when no ASPECTS-based branch applies.
         ordered = ['aspects', 'core', 'mismatchVol', 'mismatchRatio'];
       }
     } else if (isMevo) {
@@ -321,7 +321,7 @@ const getEvidenceBadge = (result: Result): string | null => {
     case "Late Window mRS 3-4":
       return "Outside Guideline";
     case "Late Window ASPECTS ≥6 - Class I":
-      return "COR 1 · DAWN/DEFUSE-3";
+      return "COR 1 · §4.7.2 Rec #2";
     case "Late Window ASPECTS 3–5 - Severe Hypodensity Warning":
       return "SELECT2 Safety Caveat";
     case "Late Window ASPECTS 3–5 - Class I":
@@ -558,7 +558,7 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
               status: "Eligible",
               criteriaName: "Late Window ASPECTS ≥6 - Class I",
               reason: `ASPECTS ${aspectsLate}, NIHSS ≥6, mRS 0–1`,
-              details: "In patients with anterior circulation LVO (ICA or M1) presenting between 6 and 24 hours, with NIHSS ≥6, prestroke mRS 0–1, and ASPECTS ≥6, EVT is strongly recommended. Class I recommendation supported by DAWN and DEFUSE-3.",
+              details: "In patients with anterior circulation LVO (ICA or M1) presenting between 6 and 24 hours, with NIHSS ≥6, prestroke mRS 0–1, and ASPECTS ≥6, EVT is strongly recommended. Class I (LOE A) per AHA/ASA 2026 §4.7.2 Rec #2 — late-window selection by NCCT ASPECTS ≥6 does not require perfusion imaging. DAWN and DEFUSE-3 established late-window EVT by perfusion / clinical-core mismatch and remain a recognized selection route; perfusion is not a prerequisite once ASPECTS ≥6 qualifies.",
               variant: 'success'
           };
       }
@@ -1391,7 +1391,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                 <div className="pt-2 border-t border-slate-100 space-y-1 mt-2">
                   <PathwayLearningPearl
                     title="2026 Guideline Update"
-                    content="The 2026 AHA/ASA Guidelines (Section 4.7.2) — Early anterior window (0–6h): Class I for ASPECTS 3–10, NIHSS ≥6, mRS 0–1; Class IIa (§4.7.2 Rec #5, LOE B-NR) for prestroke mRS 2 with ASPECTS ≥6; Class IIb (§4.7.2 Rec #6, LOE B-NR) for prestroke mRS 3–4 with ASPECTS ≥6; Class IIa for ASPECTS 0–2 (age <80, no significant mass effect). Late anterior window (6–24h): Class I for ASPECTS ≥6 with NIHSS ≥6 and mRS 0–1 (anchored by DAWN/DEFUSE-3, ASPECTS ≥6), and Class I for selected ASPECTS 3–5 patients age <80 without significant mass effect (anchored by RESCUE-Japan LIMIT / ANGEL-ASPECT / SELECT2 / TENSION / LASTE — HERMES does NOT support ASPECTS 3–5; HERMES enrolled ASPECTS ≥6 only). Basilar EVT uses a separate unified 0–24h pathway anchored by baseline mRS 0–1, pc-ASPECTS ≥6, and NIHSS severity."
+                    content="The 2026 AHA/ASA Guidelines (Section 4.7.2) — Early anterior window (0–6h): Class I for ASPECTS 3–10, NIHSS ≥6, mRS 0–1; Class IIa (§4.7.2 Rec #5, LOE B-NR) for prestroke mRS 2 with ASPECTS ≥6; Class IIb (§4.7.2 Rec #6, LOE B-NR) for prestroke mRS 3–4 with ASPECTS ≥6; Class IIa for ASPECTS 0–2 (age <80, no significant mass effect). Late anterior window (6–24h): Class I for ASPECTS ≥6 with NIHSS ≥6 and mRS 0–1 (NCCT ASPECTS alone — perfusion mismatch not required; DAWN/DEFUSE-3 remain a recognized perfusion-selected route), and Class I for selected ASPECTS 3–5 patients age <80 without significant mass effect (anchored by RESCUE-Japan LIMIT / ANGEL-ASPECT / SELECT2 / TENSION / LASTE — HERMES does NOT support ASPECTS 3–5; HERMES enrolled ASPECTS ≥6 only). Basilar EVT uses a separate unified 0–24h pathway anchored by baseline mRS 0–1, pc-ASPECTS ≥6, and NIHSS severity."
                   />
                   <PathwayLearningPearl
                     title="Tenecteplase dose — 0.25 mg/kg only"
@@ -1550,23 +1550,30 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
 
                     return (
                       <div>
-                        <div className="bg-slate-50 p-4 rounded-xl text-slate-700 text-sm mb-4 border border-slate-200">
+                        <div className="bg-slate-50 p-4 rounded-xl text-slate-700 text-sm mb-4 border border-slate-200" role="status" aria-live="polite">
                           <h4 className="font-bold flex items-center mb-2"><Info size={16} className="mr-2"/> Late Window Imaging (6–24h)</h4>
                           {aspectsHighEnough ? (
-                            <p><strong>ASPECTS {lateAspectsNum} ≥ 6 — Class I criteria met.</strong> No perfusion imaging required per 2026 AHA/ASA guidelines (Rec #2, LOE A). Tap <strong>Next</strong> to see your result.</p>
+                            <p><strong>ASPECTS {lateAspectsNum} ≥ 6 — Class I criteria met</strong> (Path A, §4.7.2 Rec #2, LOE A). No perfusion imaging required. Tap <strong>Next</strong> to see your result.</p>
                           ) : (
-                            <p><strong>ASPECTS ≥6 → Class I</strong> (Rec #2, LOE A) — no perfusion required. <strong>ASPECTS 3–5, age &lt;80, no mass effect, and no severe CT hypodensity &gt;=26 mL → Class I</strong> (Rec #3). For borderline/ASPECTS &lt;3 or non-qualifying large-core cases, enter perfusion values (DAWN/DEFUSE-3 criteria below).</p>
+                            <>
+                              <p className="mb-2">Two qualifying paths per AHA/ASA 2026 — <strong>enter whichever imaging you have</strong>. Perfusion is not required when ASPECTS already qualifies.</p>
+                              <ul className="space-y-2 pl-1">
+                                <li><strong>Path A · NCCT ASPECTS.</strong> ASPECTS ≥6 qualifies alone; ASPECTS 3–5 qualifies if age &lt;80, no significant mass effect, and no severe CT hypodensity &gt;=26 mL.</li>
+                                <li><strong>Path B · CT perfusion / MRI mismatch.</strong> Selection by perfusion / clinical–core mismatch — DAWN, or DEFUSE-3 (core &lt;70 mL, ratio ≥1.8, volume ≥15 mL).</li>
+                              </ul>
+                            </>
                           )}
                         </div>
-                        {/* ASPECTS — primary criterion for Class I in 6-24h (Recs #2 and #3) */}
-                        <div id="field-aspects" ref={el => { fieldRefs.current['aspects'] = el; }} className="mb-4">
-                          <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">ASPECTS from NCCT</label>
-                          <p className="text-xs text-slate-500 mb-2">ASPECTS ≥6 → Class I (no other criteria needed). ASPECTS 3–5 → Class I if age &lt;80 + no mass effect + no severe CT hypodensity &gt;=26 mL. Enter 0–10 or leave blank to use perfusion criteria instead.</p>
-                          <input type="text" inputMode="numeric" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 7" value={inputs.aspects} onChange={(e) => updateInput('aspects', e.target.value)} />
+                        {/* Path A card — NCCT ASPECTS (Class I via §4.7.2 Rec #2/#3). Co-equal card with Path B below. */}
+                        <div id="field-aspects" ref={el => { fieldRefs.current['aspects'] = el; }} role="group" aria-labelledby="lw-pathA-label" className="rounded-xl border border-slate-200 bg-white p-4 mb-3">
+                          <div id="lw-pathA-label" className="text-xs font-bold uppercase tracking-widest text-slate-600 mb-2">Path A · NCCT ASPECTS</div>
+                          <label htmlFor="lw-aspects" className="block text-xs font-semibold text-slate-600 mb-1">ASPECTS score (0–10)</label>
+                          <p id="lw-aspects-help" className="text-xs text-slate-500 mb-2">ASPECTS ≥6 qualifies alone. ASPECTS 3–5 qualifies if age &lt;80, no mass effect, and no severe CT hypodensity &gt;=26 mL. Or use Path B (CT perfusion) below.</p>
+                          <input id="lw-aspects" aria-describedby="lw-aspects-help" type="text" inputMode="numeric" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 7" value={inputs.aspects} onChange={(e) => updateInput('aspects', e.target.value)} />
                           <button
                             type="button"
                             onClick={() => setShowAspectsModal(true)}
-                            className="mt-2 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-neuro-200 bg-neuro-50 text-neuro-700 hover:bg-neuro-100 transition-colors text-sm font-medium"
+                            className="mt-2 w-full flex items-center justify-center gap-2 py-2.5 px-4 min-h-[44px] touch-manipulation rounded-xl border border-neuro-200 bg-neuro-50 text-neuro-700 hover:bg-neuro-100 transition-colors text-sm font-medium"
                           >
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                               <rect x="4" y="2" width="16" height="20" rx="2" />
@@ -1584,7 +1591,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
 
                           {/* Mass effect — only relevant for ASPECTS 3–5 (Rec #3) and ASPECTS 0–2 */}
                           {showMassEffect && (
-                            <div className="mt-4 space-y-1">
+                            <div className="mt-4 space-y-1 pt-3 border-t border-slate-100">
                               <div id="field-massEffect" ref={el => { fieldRefs.current['massEffect'] = el; }}>
                                 <p className="text-xs text-slate-500 mb-2">Required for ASPECTS 3–5 Class I pathway (Rec #3).</p>
                                 <PathwayCategoryRow
@@ -1617,22 +1624,32 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                           )}
                         </div>
 
-                        {/* CTP perfusion fields — only needed when ASPECTS <6 or not entered (DAWN/DEFUSE-3 path) */}
+                        {/* Co-equal divider between Path A and Path B (decorative; group semantics carry the alternative) */}
                         {showCtp && (
-                          <div className="space-y-4">
+                          <div className="flex items-center gap-3 my-3" aria-hidden="true">
+                            <div className="h-px flex-1 bg-slate-200" />
+                            <span className="text-xs font-medium uppercase tracking-widest text-slate-400">or</span>
+                            <div className="h-px flex-1 bg-slate-200" />
+                          </div>
+                        )}
+
+                        {/* Path B card — CT perfusion / MRI mismatch (DAWN/DEFUSE-3). Co-equal card; hidden once ASPECTS >=6 already establishes Class I. */}
+                        {showCtp && (
+                          <div role="group" aria-labelledby="lw-pathB-label" className="rounded-xl border border-slate-200 bg-white p-4">
+                            <div id="lw-pathB-label" className="text-xs font-bold uppercase tracking-widest text-slate-600 mb-2">Path B · CT Perfusion / MRI Mismatch</div>
                             <div id="field-core" ref={el => { fieldRefs.current['core'] = el; }}>
-                              <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Ischemic Core Volume (ml)</label>
-                              <p className="text-xs text-slate-500 mb-2">For DAWN/DEFUSE-3 eligibility. Leave blank if using ASPECTS-based pathway.</p>
-                              <input type="text" inputMode="numeric" className="w-full p-4 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-lg" placeholder="CBF < 30%" value={inputs.core} onChange={(e) => updateInput('core', e.target.value)} />
+                              <label htmlFor="lw-core" className="block text-xs font-semibold text-slate-600 mb-1">Ischemic core volume (mL)</label>
+                              <p id="lw-core-help" className="text-xs text-slate-500 mb-2">Perfusion-selected route (DAWN / DEFUSE-3). Enter core and mismatch if you have a perfusion study; you do not need ASPECTS as well.</p>
+                              <input id="lw-core" aria-describedby="lw-core-help" type="text" inputMode="numeric" className="w-full p-4 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-lg" placeholder="CBF < 30%" value={inputs.core} onChange={(e) => updateInput('core', e.target.value)} />
                             </div>
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-2 gap-4 mt-4">
                               <div id="field-mismatchVol" ref={el => { fieldRefs.current['mismatchVol'] = el; }}>
-                                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Mismatch Volume</label>
-                                <input type="text" inputMode="numeric" className="w-full p-4 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-lg" placeholder="Volume" value={inputs.mismatchVol} onChange={(e) => updateInput('mismatchVol', e.target.value)} />
+                                <label htmlFor="lw-mmvol" className="block text-xs font-semibold text-slate-600 mb-1">Mismatch volume (mL)</label>
+                                <input id="lw-mmvol" type="text" inputMode="numeric" className="w-full p-4 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-lg" placeholder="Volume" value={inputs.mismatchVol} onChange={(e) => updateInput('mismatchVol', e.target.value)} />
                               </div>
                               <div id="field-mismatchRatio" ref={el => { fieldRefs.current['mismatchRatio'] = el; }}>
-                                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Mismatch Ratio</label>
-                                <input type="text" inputMode="decimal" step="0.1" className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-slate-600 text-lg" placeholder="Ratio" value={inputs.mismatchRatio} onChange={(e) => updateInput('mismatchRatio', e.target.value)} />
+                                <label htmlFor="lw-mmratio" className="block text-xs font-semibold text-slate-600 mb-1">Mismatch ratio</label>
+                                <input id="lw-mmratio" type="text" inputMode="decimal" step="0.1" className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-slate-600 text-lg" placeholder="Ratio" value={inputs.mismatchRatio} onChange={(e) => updateInput('mismatchRatio', e.target.value)} />
                               </div>
                             </div>
                           </div>
