@@ -51,7 +51,7 @@ const CALCULATORS_HUB_SCHEMA = {
   '@graph': [
     {
       '@type': 'WebPage',
-      name: 'Neurology Calculators — NIHSS, ICH Score, GCS & More | NeuroWiki',
+      name: 'Neurology Calculators: NIHSS, ICH Score, GCS & More | NeuroWiki',
       description: 'Free online neurology calculators: NIHSS, ICH Score, ABCD2, GCS, HAS-BLED, RoPE, Heidelberg, Boston Criteria 2.0. Stroke and neurocritical care tools for physicians.',
       url: `${BASE_URL}/calculators`,
       audience: { '@type': 'MedicalAudience', audienceType: 'Physician, Neurologist, Resident' },
@@ -88,7 +88,7 @@ const GUIDE_HUB_SCHEMA = {
   '@graph': [
     {
       '@type': 'WebPage',
-      name: 'Neurology Resident Guide — Protocols & Clinical Reference | NeuroWiki',
+      name: 'Neurology Resident Guide: Protocols & Clinical Reference | NeuroWiki',
       description: 'Neurology protocols and clinical guides for residents, attendings, and medical students.',
       url: `${BASE_URL}/guide`,
       audience: { '@type': 'MedicalAudience', audienceType: 'Physician, Neurologist, Resident' },
@@ -128,26 +128,26 @@ const TRIALS_HUB_SCHEMA = {
       name: 'Landmark Stroke Clinical Trials',
       description: 'Evidence summaries for 79 landmark vascular neurology trials covering thrombolysis, thrombectomy, secondary prevention, and surgical interventions.',
       itemListElement: [
-        { '@type': 'ListItem', position: 1,  name: 'NINDS Trial — IV tPA 3-hour window',                  url: `${BASE_URL}/trials/ninds-trial` },
-        { '@type': 'ListItem', position: 2,  name: 'DAWN Trial — late-window thrombectomy 6–24h',         url: `${BASE_URL}/trials/dawn-trial` },
-        { '@type': 'ListItem', position: 3,  name: 'DEFUSE-3 — perfusion-selected EVT 6–16h',             url: `${BASE_URL}/trials/defuse-3-trial` },
-        { '@type': 'ListItem', position: 4,  name: 'ORIGINAL — tenecteplase vs alteplase',                url: `${BASE_URL}/trials/original-trial` },
-        { '@type': 'ListItem', position: 5,  name: 'TRACE-III — late-window tenecteplase',                url: `${BASE_URL}/trials/trace-iii-trial` },
-        { '@type': 'ListItem', position: 6,  name: 'MR CLEAN — first modern thrombectomy trial',          url: `${BASE_URL}/trials/mr-clean-trial` },
-        { '@type': 'ListItem', position: 7,  name: 'SELECT-2 — large core EVT (ASPECTS 3–5)',             url: `${BASE_URL}/trials/select2-trial` },
-        { '@type': 'ListItem', position: 8,  name: 'ANGEL-ASPECT — large core EVT',                      url: `${BASE_URL}/trials/angel-aspect-trial` },
-        { '@type': 'ListItem', position: 9,  name: 'LASTE — large core thrombectomy',                     url: `${BASE_URL}/trials/laste-trial` },
-        { '@type': 'ListItem', position: 10, name: 'TENSION — large core EVT (non-contrast CT)',          url: `${BASE_URL}/trials/tension-trial` },
-        { '@type': 'ListItem', position: 11, name: 'ELAN — DOAC timing after cardioembolic stroke',       url: `${BASE_URL}/trials/elan-study` },
-        { '@type': 'ListItem', position: 12, name: 'CHANCE — dual antiplatelet minor stroke/TIA',         url: `${BASE_URL}/trials/chance-trial` },
-        { '@type': 'ListItem', position: 13, name: 'POINT — clopidogrel + aspirin after TIA',             url: `${BASE_URL}/trials/point-trial` },
-        { '@type': 'ListItem', position: 14, name: 'INSPIRES — DAPT within 72h atherosclerotic stroke',   url: `${BASE_URL}/trials/inspires-trial` },
-        { '@type': 'ListItem', position: 15, name: 'ENRICH — minimally invasive ICH surgery',             url: `${BASE_URL}/trials/enrich-trial` },
-        { '@type': 'ListItem', position: 16, name: 'WAKE-UP — MRI-guided wake-up stroke thrombolysis',    url: `${BASE_URL}/trials/wake-up-trial` },
-        { '@type': 'ListItem', position: 17, name: 'ECASS-3 — alteplase 3–4.5h extended window',          url: `${BASE_URL}/trials/ecass3-trial` },
-        { '@type': 'ListItem', position: 18, name: 'RAISE — reteplase vs alteplase thrombolysis',         url: `${BASE_URL}/trials/raise-trial` },
-        { '@type': 'ListItem', position: 19, name: 'BEST-MSU — mobile stroke unit trial',                 url: `${BASE_URL}/trials/best-msu-trial` },
-        { '@type': 'ListItem', position: 20, name: 'SPARCL — high-dose statin after stroke',              url: `${BASE_URL}/trials/sparcl-trial` },
+        { '@type': 'ListItem', position: 1,  name: 'NINDS Trial: IV tPA 3-hour window',                  url: `${BASE_URL}/trials/ninds-trial` },
+        { '@type': 'ListItem', position: 2,  name: 'DAWN Trial: late-window thrombectomy 6–24h',         url: `${BASE_URL}/trials/dawn-trial` },
+        { '@type': 'ListItem', position: 3,  name: 'DEFUSE-3: perfusion-selected EVT 6–16h',             url: `${BASE_URL}/trials/defuse-3-trial` },
+        { '@type': 'ListItem', position: 4,  name: 'ORIGINAL: tenecteplase vs alteplase',                url: `${BASE_URL}/trials/original-trial` },
+        { '@type': 'ListItem', position: 5,  name: 'TRACE-III: late-window tenecteplase',                url: `${BASE_URL}/trials/trace-iii-trial` },
+        { '@type': 'ListItem', position: 6,  name: 'MR CLEAN: first modern thrombectomy trial',          url: `${BASE_URL}/trials/mr-clean-trial` },
+        { '@type': 'ListItem', position: 7,  name: 'SELECT-2: large core EVT (ASPECTS 3–5)',             url: `${BASE_URL}/trials/select2-trial` },
+        { '@type': 'ListItem', position: 8,  name: 'ANGEL-ASPECT: large core EVT',                      url: `${BASE_URL}/trials/angel-aspect-trial` },
+        { '@type': 'ListItem', position: 9,  name: 'LASTE: large core thrombectomy',                     url: `${BASE_URL}/trials/laste-trial` },
+        { '@type': 'ListItem', position: 10, name: 'TENSION: large core EVT (non-contrast CT)',          url: `${BASE_URL}/trials/tension-trial` },
+        { '@type': 'ListItem', position: 11, name: 'ELAN: DOAC timing after cardioembolic stroke',       url: `${BASE_URL}/trials/elan-study` },
+        { '@type': 'ListItem', position: 12, name: 'CHANCE: dual antiplatelet minor stroke/TIA',         url: `${BASE_URL}/trials/chance-trial` },
+        { '@type': 'ListItem', position: 13, name: 'POINT: clopidogrel + aspirin after TIA',             url: `${BASE_URL}/trials/point-trial` },
+        { '@type': 'ListItem', position: 14, name: 'INSPIRES: DAPT within 72h atherosclerotic stroke',   url: `${BASE_URL}/trials/inspires-trial` },
+        { '@type': 'ListItem', position: 15, name: 'ENRICH: minimally invasive ICH surgery',             url: `${BASE_URL}/trials/enrich-trial` },
+        { '@type': 'ListItem', position: 16, name: 'WAKE-UP: MRI-guided wake-up stroke thrombolysis',    url: `${BASE_URL}/trials/wake-up-trial` },
+        { '@type': 'ListItem', position: 17, name: 'ECASS-3: alteplase 3–4.5h extended window',          url: `${BASE_URL}/trials/ecass3-trial` },
+        { '@type': 'ListItem', position: 18, name: 'RAISE: reteplase vs alteplase thrombolysis',         url: `${BASE_URL}/trials/raise-trial` },
+        { '@type': 'ListItem', position: 19, name: 'BEST-MSU: mobile stroke unit trial',                 url: `${BASE_URL}/trials/best-msu-trial` },
+        { '@type': 'ListItem', position: 20, name: 'SPARCL: high-dose statin after stroke',              url: `${BASE_URL}/trials/sparcl-trial` },
       ],
     },
   ],
@@ -185,7 +185,7 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
   '/calculators/nihss': [
     {
       question: 'What is the NIHSS calculator used for?',
-      answer: 'The NIHSS (NIH Stroke Scale) calculator quantifies stroke severity across 11 domains — consciousness, gaze, visual fields, facial palsy, motor arm/leg, limb ataxia, sensory, language, dysarthria, and extinction. Scores range 0–42; higher scores indicate greater deficits. It guides tPA and EVT eligibility and predicts outcomes.',
+      answer: 'The NIHSS (NIH Stroke Scale) calculator quantifies stroke severity across 11 domains: consciousness, gaze, visual fields, facial palsy, motor arm/leg, limb ataxia, sensory, language, dysarthria, and extinction. Scores range 0–42; higher scores indicate greater deficits. It guides tPA and EVT eligibility and predicts outcomes.',
     },
     {
       question: 'What NIHSS score qualifies for IV thrombolysis?',
@@ -203,7 +203,7 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
     },
     {
       question: 'What is the EVT time window for stroke thrombectomy?',
-      answer: 'The EVT time window has two phases. The early window (0–6 hours from last known well) permits thrombectomy for any LVO without perfusion imaging requirements; ASPECTS does not preclude eligibility. The extended window (6–24 hours) requires additional imaging: DAWN criteria (clinical-imaging mismatch — infarct core ≤51 mL for age ≥80 or ≤31 mL for NIHSS ≥10 and age <80) or DEFUSE-3 criteria (core <70 mL, mismatch ratio ≥1.8, mismatch volume ≥15 mL). For basilar artery occlusion, EVT can be considered up to 24 hours based on ATTENTION and BAOCHE trials. Wake-up stroke with favorable perfusion imaging also qualifies at experienced centers. Every 30-minute reduction in time-to-reperfusion significantly improves functional outcomes — time is neurons.',
+      answer: 'The EVT time window has two phases. The early window (0–6 hours from last known well) permits thrombectomy for any LVO without perfusion imaging requirements; ASPECTS does not preclude eligibility. The extended window (6–24 hours) requires additional imaging: DAWN criteria (clinical-imaging mismatch: infarct core ≤51 mL for age ≥80 or ≤31 mL for NIHSS ≥10 and age <80) or DEFUSE-3 criteria (core <70 mL, mismatch ratio ≥1.8, mismatch volume ≥15 mL). For basilar artery occlusion, EVT can be considered up to 24 hours based on ATTENTION and BAOCHE trials. Wake-up stroke with favorable perfusion imaging also qualifies at experienced centers. Every 30-minute reduction in time-to-reperfusion significantly improves functional outcomes; time is neurons.',
     },
     {
       question: 'What ASPECTS score is required for mechanical thrombectomy?',
@@ -211,7 +211,7 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
     },
     {
       question: 'Should IV tPA be given before EVT (bridging therapy)?',
-      answer: 'IV thrombolysis before EVT — known as bridging therapy — is recommended when the patient is eligible for both treatments. Per AHA/ASA 2026 guidelines, IV alteplase or tenecteplase should not be withheld in tPA-eligible patients who also qualify for EVT. Giving tPA first does not significantly delay thrombectomy and may improve recanalization of distal emboli. Multiple trials (MR CLEAN-NOIV, SKIP, DIRECT-MT) tested direct EVT versus bridging; pooled data favor bridging for most patients. Tenecteplase is increasingly preferred over alteplase for its single-bolus administration and superior vessel recanalization. Door-to-needle target is <60 minutes and must not delay door-to-puncture target of <90 minutes. In patients with clear tPA contraindications (recent surgery, therapeutic anticoagulation), direct EVT is performed without bridging.',
+      answer: 'IV thrombolysis before EVT (known as bridging therapy) is recommended when the patient is eligible for both treatments. Per AHA/ASA 2026 guidelines, IV alteplase or tenecteplase should not be withheld in tPA-eligible patients who also qualify for EVT. Giving tPA first does not significantly delay thrombectomy and may improve recanalization of distal emboli. Multiple trials (MR CLEAN-NOIV, SKIP, DIRECT-MT) tested direct EVT versus bridging; pooled data favor bridging for most patients. Tenecteplase is increasingly preferred over alteplase for its single-bolus administration and superior vessel recanalization. Door-to-needle target is <60 minutes and must not delay door-to-puncture target of <90 minutes. In patients with clear tPA contraindications (recent surgery, therapeutic anticoagulation), direct EVT is performed without bridging.',
     },
     {
       question: 'What is the procedure for mechanical thrombectomy (EVT)?',
@@ -249,11 +249,11 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
   '/calculators/glasgow-coma-scale': [
     {
       question: 'What is a normal GCS score?',
-      answer: 'A total Glasgow Coma Scale of 15 is the maximum and indicates full eye-opening, oriented verbal response, and obeys-commands motor response. A GCS of 15 does not exclude neurologic injury — focal deficits, confusion that scores 4 verbal, or subtle motor signs can coexist with a 15, which is why component scores (E, V, M) should always be reported separately, not just the total.',
+      answer: 'A total Glasgow Coma Scale of 15 is the maximum and indicates full eye-opening, oriented verbal response, and obeys-commands motor response. A GCS of 15 does not exclude neurologic injury; focal deficits, confusion that scores 4 verbal, or subtle motor signs can coexist with a 15, which is why component scores (E, V, M) should always be reported separately, not just the total.',
     },
     {
       question: 'What GCS score indicates coma?',
-      answer: 'Coma is conventionally defined as GCS ≤8 in the original Teasdale-Jennett framework, and this is also the most commonly cited threshold to consider endotracheal intubation for airway protection in head injury. However, the clinical decision to intubate is not driven by GCS alone — gag reflex, secretions, expected trajectory, and the cause of the depressed consciousness all factor in. A GCS of 8 from a reversible cause (postictal, intoxication) is managed differently than a GCS of 8 from intracerebral hemorrhage.',
+      answer: 'Coma is conventionally defined as GCS ≤8 in the original Teasdale-Jennett framework, and this is also the most commonly cited threshold to consider endotracheal intubation for airway protection in head injury. However, the clinical decision to intubate is not driven by GCS alone; gag reflex, secretions, expected trajectory, and the cause of the depressed consciousness all factor in. A GCS of 8 from a reversible cause (postictal, intoxication) is managed differently than a GCS of 8 from intracerebral hemorrhage.',
     },
     {
       question: 'How do you score GCS in an intubated patient?',
@@ -265,7 +265,7 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
     },
     {
       question: 'Why report E, V, and M separately instead of just the total?',
-      answer: 'The same total score can come from very different neurologic patterns. A GCS 10 with E4 V1 M5 (alert, aphasic, follows commands) is clinically distinct from a GCS 10 with E2 V3 M5 (drowsy, confused, follows commands) — the first suggests an aphasic stroke, the second a metabolic encephalopathy. Component scores communicate the localization and trajectory that the total obscures. Modern reporting standards (and most trial inclusion criteria) require all three components, not just the sum.',
+      answer: 'The same total score can come from very different neurologic patterns. A GCS 10 with E4 V1 M5 (alert, aphasic, follows commands) is clinically distinct from a GCS 10 with E2 V3 M5 (drowsy, confused, follows commands); the first suggests an aphasic stroke, the second a metabolic encephalopathy. Component scores communicate the localization and trajectory that the total obscures. Modern reporting standards (and most trial inclusion criteria) require all three components, not just the sum.',
     },
     {
       question: 'How is pediatric GCS different from adult GCS?',
@@ -279,7 +279,7 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
     },
     {
       question: 'What is the 2021 AMA E/M MDM framework?',
-      answer: 'Since January 2021, outpatient E/M codes (99202–99215) are selected based on Medical Decision-Making (MDM) or total time — not documentation of history and physical exam. MDM has three elements: (1) Number and complexity of problems addressed, (2) Amount and/or complexity of data reviewed and analyzed, and (3) Risk of complications and/or morbidity or mortality of patient management. The overall MDM level is determined by meeting at least 2 of 3 elements at a given level (minimal, low, moderate, or high).',
+      answer: 'Since January 2021, outpatient E/M codes (99202–99215) are selected based on Medical Decision-Making (MDM) or total time, not documentation of history and physical exam. MDM has three elements: (1) Number and complexity of problems addressed, (2) Amount and/or complexity of data reviewed and analyzed, and (3) Risk of complications and/or morbidity or mortality of patient management. The overall MDM level is determined by meeting at least 2 of 3 elements at a given level (minimal, low, moderate, or high).',
     },
     {
       question: 'What CPT codes do hospitalists use for inpatient billing?',
@@ -287,11 +287,11 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
     },
     {
       question: 'Can I bill E/M codes by time in 2023?',
-      answer: 'Yes. Since 2021, total physician time on the date of service is a valid sole basis for E/M level selection for office and outpatient visits (99202–99215). For inpatient and subsequent visits (99221–99233), time-based billing is also permitted. Emergency department visits (99281–99285) are the exception — per 2023 AMA guidelines, time is not a valid basis for ED E/M code selection; MDM must be used.',
+      answer: 'Yes. Since 2021, total physician time on the date of service is a valid sole basis for E/M level selection for office and outpatient visits (99202–99215). For inpatient and subsequent visits (99221–99233), time-based billing is also permitted. Emergency department visits (99281–99285) are the exception: per 2023 AMA guidelines, time is not a valid basis for ED E/M code selection; MDM must be used.',
     },
     {
       question: 'What is the difference between MDM-based and time-based E/M billing?',
-      answer: 'MDM-based billing selects the CPT code based on problem complexity, data reviewed, and management risk — regardless of how long the visit takes. Time-based billing selects the CPT code based on total physician time on the date of the encounter (including pre-charting, exam, counseling, and documentation). You may choose whichever method supports the highest code for any given encounter. Neither method requires documenting that you chose it — simply meet the criteria for the level you are billing.',
+      answer: 'MDM-based billing selects the CPT code based on problem complexity, data reviewed, and management risk, regardless of how long the visit takes. Time-based billing selects the CPT code based on total physician time on the date of the encounter (including pre-charting, exam, counseling, and documentation). You may choose whichever method supports the highest code for any given encounter. Neither method requires documenting that you chose it; simply meet the criteria for the level you are billing.',
     },
     {
       question: 'What is a -GC modifier and when is it used for E/M billing?',
@@ -333,11 +333,11 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
   '/guide/meningitis': [
     {
       question: 'What is the empiric antibiotic regimen for bacterial meningitis?',
-      answer: 'Empiric therapy for community-acquired bacterial meningitis is vancomycin (15–20 mg/kg IV q8–12h, target trough 15–20 µg/mL) plus a third-generation cephalosporin — ceftriaxone 2 g IV q12h (or cefotaxime 2 g IV q4–6h). Add ampicillin 2 g IV q4h to cover Listeria monocytogenes for patients >50 years, immunocompromised, pregnant, or with alcohol use disorder. Substitute meropenem 2 g IV q8h for the cephalosporin if Pseudomonas is suspected (post-neurosurgical, penetrating head trauma, CSF shunt). Antibiotics should be given within 60 minutes of presentation; do not delay for LP or imaging if access is delayed.',
+      answer: 'Empiric therapy for community-acquired bacterial meningitis is vancomycin (15–20 mg/kg IV q8–12h, target trough 15–20 µg/mL) plus a third-generation cephalosporin: ceftriaxone 2 g IV q12h (or cefotaxime 2 g IV q4–6h). Add ampicillin 2 g IV q4h to cover Listeria monocytogenes for patients >50 years, immunocompromised, pregnant, or with alcohol use disorder. Substitute meropenem 2 g IV q8h for the cephalosporin if Pseudomonas is suspected (post-neurosurgical, penetrating head trauma, CSF shunt). Antibiotics should be given within 60 minutes of presentation; do not delay for LP or imaging if access is delayed.',
     },
     {
       question: 'When should dexamethasone be given in bacterial meningitis?',
-      answer: 'Dexamethasone 0.15 mg/kg IV every 6 hours for 4 days, started 10–20 minutes before — or concurrently with — the first dose of antibiotics. Adjunctive dexamethasone reduces mortality and unfavorable outcomes in pneumococcal meningitis (de Gans & van de Beek, NEJM 2002; IDSA 2004 guidelines). Continue only if CSF Gram stain or culture confirms Streptococcus pneumoniae or Haemophilus influenzae. If a different pathogen is identified or cultures are negative, dexamethasone is generally discontinued. Do not start dexamethasone after antibiotics have already been given — the meningeal inflammatory effect that the steroid blunts has already occurred.',
+      answer: 'Dexamethasone 0.15 mg/kg IV every 6 hours for 4 days, started 10–20 minutes before (or concurrently with) the first dose of antibiotics. Adjunctive dexamethasone reduces mortality and unfavorable outcomes in pneumococcal meningitis (de Gans & van de Beek, NEJM 2002; IDSA 2004 guidelines). Continue only if CSF Gram stain or culture confirms Streptococcus pneumoniae or Haemophilus influenzae. If a different pathogen is identified or cultures are negative, dexamethasone is generally discontinued. Do not start dexamethasone after antibiotics have already been given; the meningeal inflammatory effect that the steroid blunts has already occurred.',
     },
     {
       question: 'When is LP contraindicated before antibiotics, and what should I do instead?',
@@ -347,11 +347,11 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
   '/guide/gbs': [
     {
       question: 'What CSF findings support a diagnosis of Guillain-Barré syndrome?',
-      answer: 'The classic CSF finding in GBS is albumino-cytologic dissociation — elevated protein (typically >45 mg/dL, often 100–1000 mg/dL) with a normal or only minimally elevated white cell count (<10 cells/µL, predominantly mononuclear). This pattern develops over the first week of illness: CSF protein is normal in approximately 50% of patients within the first 3 days, rises in 75% by the end of week 1, and exceeds 80–90% by week 2. A normal CSF protein early in the course does not exclude GBS. WBC >50 cells/µL should prompt evaluation for alternative diagnoses including HIV seroconversion, Lyme, sarcoidosis, or carcinomatous meningitis.',
+      answer: 'The classic CSF finding in GBS is albumino-cytologic dissociation: elevated protein (typically >45 mg/dL, often 100–1000 mg/dL) with a normal or only minimally elevated white cell count (<10 cells/µL, predominantly mononuclear). This pattern develops over the first week of illness: CSF protein is normal in approximately 50% of patients within the first 3 days, rises in 75% by the end of week 1, and exceeds 80–90% by week 2. A normal CSF protein early in the course does not exclude GBS. WBC >50 cells/µL should prompt evaluation for alternative diagnoses including HIV seroconversion, Lyme, sarcoidosis, or carcinomatous meningitis.',
     },
     {
       question: 'When should IVIG versus plasmapheresis be used in Guillain-Barré syndrome?',
-      answer: 'IVIG and plasma exchange are equally effective for GBS — neither is superior on disability at 4 weeks (Hughes Cochrane review). IVIG 0.4 g/kg/day for 5 days is the most common first-line treatment because it is more widely available, easier to administer, and does not require central venous access. Plasma exchange (5 sessions over 1–2 weeks, total exchange volume ~250 mL/kg) is preferred when IVIG is contraindicated (IgA deficiency, severe renal failure, hypercoagulable state) or when cardiac instability makes the volume load of IVIG hazardous. Combining IVIG with plasmapheresis offers no additional benefit and is not recommended. Treatment should begin within 2–4 weeks of symptom onset; benefit is greatest when started in patients still able to walk independently.',
+      answer: 'IVIG and plasma exchange are equally effective for GBS; neither is superior on disability at 4 weeks (Hughes Cochrane review). IVIG 0.4 g/kg/day for 5 days is the most common first-line treatment because it is more widely available, easier to administer, and does not require central venous access. Plasma exchange (5 sessions over 1–2 weeks, total exchange volume ~250 mL/kg) is preferred when IVIG is contraindicated (IgA deficiency, severe renal failure, hypercoagulable state) or when cardiac instability makes the volume load of IVIG hazardous. Combining IVIG with plasmapheresis offers no additional benefit and is not recommended. Treatment should begin within 2–4 weeks of symptom onset; benefit is greatest when started in patients still able to walk independently.',
     },
     {
       question: 'What respiratory monitoring is required in Guillain-Barré syndrome?',
@@ -365,17 +365,17 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
     },
     {
       question: 'What is the treatment for an acute multiple sclerosis relapse?',
-      answer: 'Acute MS relapses with new disabling neurologic deficit are treated with high-dose corticosteroids: methylprednisolone 1 g IV daily for 3–5 days, or oral methylprednisolone 1000 mg daily for 3–5 days (oral and IV are equivalent per multiple RCTs and the 2018 AAN guideline). An oral prednisone taper is not routinely required. Steroids shorten the duration of relapse but do not alter long-term disability. Plasma exchange (5–7 exchanges over 10–14 days) is the standard of care for steroid-refractory, severely disabling relapses (AAN 2011, Class I, Level A) — particularly tumefactive demyelination, severe optic neuritis, or transverse myelitis with paraplegia. IVIG is not recommended for acute MS relapse treatment.',
+      answer: 'Acute MS relapses with new disabling neurologic deficit are treated with high-dose corticosteroids: methylprednisolone 1 g IV daily for 3–5 days, or oral methylprednisolone 1000 mg daily for 3–5 days (oral and IV are equivalent per multiple RCTs and the 2018 AAN guideline). An oral prednisone taper is not routinely required. Steroids shorten the duration of relapse but do not alter long-term disability. Plasma exchange (5–7 exchanges over 10–14 days) is the standard of care for steroid-refractory, severely disabling relapses (AAN 2011, Class I, Level A), particularly tumefactive demyelination, severe optic neuritis, or transverse myelitis with paraplegia. IVIG is not recommended for acute MS relapse treatment.',
     },
     {
       question: 'What are the high-efficacy disease-modifying therapies for multiple sclerosis?',
-      answer: 'High-efficacy DMTs for relapsing MS include the anti-CD20 monoclonals ocrelizumab and ofatumumab, natalizumab (anti-VLA-4), alemtuzumab (anti-CD52), and cladribine. Recent evidence — including the TREAT-MS trial and large registry analyses — supports an early high-efficacy strategy (starting one of these agents at diagnosis) over the traditional escalation approach (starting an injectable platform therapy and escalating only after breakthrough activity). Choice among high-efficacy agents balances efficacy, safety monitoring requirements (JC virus serology for natalizumab, immunoglobulin levels for anti-CD20s, autoimmunity surveillance for alemtuzumab), and patient factors (pregnancy planning, infection risk, vaccination status).',
+      answer: 'High-efficacy DMTs for relapsing MS include the anti-CD20 monoclonals ocrelizumab and ofatumumab, natalizumab (anti-VLA-4), alemtuzumab (anti-CD52), and cladribine. Recent evidence (including the TREAT-MS trial and large registry analyses) supports an early high-efficacy strategy (starting one of these agents at diagnosis) over the traditional escalation approach (starting an injectable platform therapy and escalating only after breakthrough activity). Choice among high-efficacy agents balances efficacy, safety monitoring requirements (JC virus serology for natalizumab, immunoglobulin levels for anti-CD20s, autoimmunity surveillance for alemtuzumab), and patient factors (pregnancy planning, infection risk, vaccination status).',
     },
   ],
   '/guide/headache-workup': [
     {
       question: 'What are the SNOOP4 red flags for secondary headache?',
-      answer: 'SNOOP4 is a mnemonic for red flags suggesting secondary headache: S — Systemic symptoms (fever, weight loss) or Secondary risk factors (HIV, cancer); N — Neurologic signs or symptoms (focal deficit, papilledema, altered mental status); O — Onset sudden (thunderclap, peaking in <1 minute); O — Older age at onset (>50 years suggests temporal arteritis); P — Pattern change (progressive, change from prior pattern), Positional (worse lying down → ICP), Precipitated by Valsalva (cough, exertion, sexual activity), Progressive, Pregnancy or Postpartum (cerebral venous thrombosis, PRES, RCVS). Any positive red flag warrants neuroimaging and targeted workup; thunderclap onset specifically mandates evaluation for subarachnoid hemorrhage.',
+      answer: 'SNOOP4 is a mnemonic for red flags suggesting secondary headache: S: Systemic symptoms (fever, weight loss) or Secondary risk factors (HIV, cancer); N: Neurologic signs or symptoms (focal deficit, papilledema, altered mental status); O: Onset sudden (thunderclap, peaking in <1 minute); O: Older age at onset (>50 years suggests temporal arteritis); P: Pattern change (progressive, change from prior pattern), Positional (worse lying down → ICP), Precipitated by Valsalva (cough, exertion, sexual activity), Progressive, Pregnancy or Postpartum (cerebral venous thrombosis, PRES, RCVS). Any positive red flag warrants neuroimaging and targeted workup; thunderclap onset specifically mandates evaluation for subarachnoid hemorrhage.',
     },
     {
       question: 'When is lumbar puncture indicated after a negative CT for thunderclap headache?',
@@ -383,7 +383,7 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
     },
     {
       question: 'What imaging is preferred for suspected subarachnoid hemorrhage?',
-      answer: 'Non-contrast CT head is the first-line imaging study for suspected SAH — fast, widely available, and ~100% sensitive within 6 hours of symptom onset. If CT confirms SAH, CT angiography of the head and neck identifies the aneurysm or other vascular cause in >95% of cases and guides definitive treatment (clipping vs coiling). If CT is negative but clinical suspicion remains, LP for RBC count and xanthochromia is the standard next step beyond 6 hours from onset. MRI with FLAIR and gradient-echo sequences is useful in subacute SAH (>1 week) when CT sensitivity has dropped, and is preferred in pregnancy to limit ionizing radiation, paired with MRA for vascular evaluation. Catheter angiography remains the gold standard when CTA is negative but suspicion for aneurysm remains high.',
+      answer: 'Non-contrast CT head is the first-line imaging study for suspected SAH: fast, widely available, and ~100% sensitive within 6 hours of symptom onset. If CT confirms SAH, CT angiography of the head and neck identifies the aneurysm or other vascular cause in >95% of cases and guides definitive treatment (clipping vs coiling). If CT is negative but clinical suspicion remains, LP for RBC count and xanthochromia is the standard next step beyond 6 hours from onset. MRI with FLAIR and gradient-echo sequences is useful in subacute SAH (>1 week) when CT sensitivity has dropped, and is preferred in pregnancy to limit ionizing radiation, paired with MRA for vascular evaluation. Catheter angiography remains the gold standard when CTA is negative but suspicion for aneurysm remains high.',
     },
   ],
   '/guide/stroke-basics': [
@@ -582,13 +582,13 @@ const QUESTION_META: Record<string, { title: string; description: string; answer
   },
   'late-window-selection': {
     title: 'Perfusion vs Non-Contrast CT for Late-Window EVT · NeuroWiki',
-    description: 'How to select patients for late-window EVT — perfusion mismatch (DAWN, DEFUSE-3) versus plain-CT large-core approach (LASTE, TENSION, SELECT2).',
+    description: 'How to select patients for late-window EVT: perfusion mismatch (DAWN, DEFUSE-3) versus plain-CT large-core approach (LASTE, TENSION, SELECT2).',
     answer: 'Late-window EVT selection evolved from mandatory perfusion imaging in DAWN and DEFUSE-3 (6–24 h) to plain non-contrast CT for large-core trials (LASTE, TENSION, SELECT2, ANGEL-ASPECT). Both strategies show benefit; choice depends on imaging availability, time, and core size.',
   },
   'aspiration-vs-stentriever': {
     title: 'Aspiration vs Stent Retriever for Thrombectomy · NeuroWiki',
     description: 'Three RCTs (ASTER, COMPASS, ASTER2) comparing direct aspiration first versus stent-retriever-first thrombectomy. No clear winner on functional outcomes.',
-    answer: 'Three RCTs — ASTER, COMPASS, and ASTER2 — found no statistically significant difference in functional outcomes between aspiration-first and stent-retriever-first strategies. Reperfusion rates were similar. Device choice is largely operator-dependent.',
+    answer: 'Three RCTs (ASTER, COMPASS, and ASTER2) found no statistically significant difference in functional outcomes between aspiration-first and stent-retriever-first strategies. Reperfusion rates were similar. Device choice is largely operator-dependent.',
   },
   'evt-adjunct-pharmacotherapy': {
     title: 'Adjunct Pharmacotherapy During EVT · NeuroWiki',
@@ -596,13 +596,13 @@ const QUESTION_META: Record<string, { title: string; description: string; answer
     answer: 'ESCAPE-NA1 found nerinetide neutral overall. CHOICE showed adjunct intra-arterial alteplase after successful EVT may improve excellent outcomes. RESCUE BT found tirofiban did not improve functional outcomes globally, though signals emerged in non-large-artery atherosclerosis.',
   },
   'minor-stroke-choice': {
-    title: 'Minor Stroke — tPA, DAPT, or Aspirin? · NeuroWiki',
+    title: 'Minor Stroke: tPA, DAPT, or Aspirin? · NeuroWiki',
     description: 'PRISMS, ARAMIS, CHANCE, POINT, and INSPIRES define the evidence for treating minor non-disabling ischemic stroke without thrombolysis.',
     answer: 'PRISMS showed alteplase did not outperform aspirin in minor non-disabling stroke and caused more symptomatic ICH. ARAMIS confirmed DAPT was noninferior to alteplase. CHANCE and POINT established short-course DAPT; INSPIRES extended DAPT to atherosclerotic minor stroke within 72 h.',
   },
   'mevo-distal-evt': {
     title: 'EVT for MeVO or Distal Occlusion · NeuroWiki',
-    description: 'ESCAPE-MeVO and DISTAL — the first two RCTs in medium-vessel and distal occlusions — both failed their primary endpoints. Evidence summary.',
+    description: 'ESCAPE-MeVO and DISTAL (the first two RCTs in medium-vessel and distal occlusions) both failed their primary endpoints. Evidence summary.',
     answer: 'ESCAPE-MeVO (M2/M3, ACA, PCA) and DISTAL both failed their primary functional outcome endpoints, suggesting that EVT benefit does not extend reliably to medium-vessel and distal occlusions under current evidence. Routine EVT for MeVO cannot be recommended based on these RCTs.',
   },
   'post-evt-bp-target': {
@@ -619,7 +619,7 @@ const QUESTION_META: Record<string, { title: string; description: string; answer
   'lvo-evt': {
     title: 'EVT for Large Vessel Occlusion Stroke · NeuroWiki',
     description: 'Mechanical thrombectomy for LVO stroke: early window (HERMES meta-analysis), late window (DAWN, DEFUSE-3), and large-core (SELECT2, ANGEL-ASPECT, LASTE, TENSION).',
-    answer: 'EVT is COR 1 for ICA, M1, or basilar occlusion within 6 h based on HERMES meta-analysis (MR CLEAN, ESCAPE, EXTEND-IA, SWIFT PRIME, REVASCAT). Late-window EVT (6–24 h) requires clinical-imaging mismatch (DAWN) or perfusion mismatch (DEFUSE-3). Large-core EVT (ASPECTS 3–5) is now COR 1 based on five positive RCTs — RESCUE-Japan LIMIT, SELECT2, ANGEL-ASPECT, TENSION, and LASTE. ESCAPE-MeVO and DISTAL did not establish benefit for medium-vessel or distal occlusions.',
+    answer: 'EVT is COR 1 for ICA, M1, or basilar occlusion within 6 h based on HERMES meta-analysis (MR CLEAN, ESCAPE, EXTEND-IA, SWIFT PRIME, REVASCAT). Late-window EVT (6–24 h) requires clinical-imaging mismatch (DAWN) or perfusion mismatch (DEFUSE-3). Large-core EVT (ASPECTS 3–5) is now COR 1 based on five positive RCTs: RESCUE-Japan LIMIT, SELECT2, ANGEL-ASPECT, TENSION, and LASTE. ESCAPE-MeVO and DISTAL did not establish benefit for medium-vessel or distal occlusions.',
   },
   'anticoagulation': {
     title: 'When to Anticoagulate After Stroke · NeuroWiki',
@@ -629,7 +629,7 @@ const QUESTION_META: Record<string, { title: string; description: string; answer
   'hemicraniectomy': {
     title: 'Decompressive Hemicraniectomy for Malignant MCA Stroke · NeuroWiki',
     description: 'Evidence for decompressive surgery in malignant MCA infarction: DECIMAL, DESTINY, HAMLET pooled analysis, and DESTINY II for age >60.',
-    answer: 'Decompressive hemicraniectomy within 48 h of malignant MCA infarction reduces mortality from approximately 70% to 20–30% in patients ≤60 years (pooled DECIMAL, DESTINY, HAMLET — Vahedi Lancet Neurology 2007). In patients >60 years, DESTINY II showed survival benefit but with most survivors at mRS 4–5; the decision is individualized around acceptable disability outcomes. CHARM (2024) tested glibenclamide for malignant edema prevention as an adjunct in the same population. The 2026 AHA/ASA guideline supports hemicraniectomy as COR 1 for patients ≤60 years and COR 2a for older patients with appropriate goals-of-care discussion.',
+    answer: 'Decompressive hemicraniectomy within 48 h of malignant MCA infarction reduces mortality from approximately 70% to 20–30% in patients ≤60 years (pooled DECIMAL, DESTINY, HAMLET, Vahedi Lancet Neurology 2007). In patients >60 years, DESTINY II showed survival benefit but with most survivors at mRS 4–5; the decision is individualized around acceptable disability outcomes. CHARM (2024) tested glibenclamide for malignant edema prevention as an adjunct in the same population. The 2026 AHA/ASA guideline supports hemicraniectomy as COR 1 for patients ≤60 years and COR 2a for older patients with appropriate goals-of-care discussion.',
   },
   'bp-control': {
     title: 'Blood Pressure Targets in Acute Stroke · NeuroWiki',
@@ -639,17 +639,17 @@ const QUESTION_META: Record<string, { title: string; description: string; answer
   'dapt': {
     title: 'Dual Antiplatelet Therapy After Stroke or TIA · NeuroWiki',
     description: 'Short-course DAPT for minor stroke and TIA: CHANCE, POINT, THALES, CHANCE-2, INSPIRES, and ARAMIS. SPS3 defines the duration boundary.',
-    answer: 'Short-course DAPT (clopidogrel + aspirin for 21 days, then aspirin monotherapy) reduces 90-day stroke recurrence by approximately 25% in minor ischemic stroke (NIHSS ≤3) or high-risk TIA (ABCD2 ≥4) — established by CHANCE (2013, China) and confirmed by POINT (2018, North America). THALES (2020) showed ticagrelor + aspirin also works. CHANCE-2 (2021) addressed CYP2C19 loss-of-function carriers with ticagrelor. INSPIRES (2024) extended DAPT to atherosclerotic minor stroke/TIA within 72 h. SPS3 (2012) showed long-term DAPT for lacunar stroke causes net harm — duration must be limited to ~21 days.',
+    answer: 'Short-course DAPT (clopidogrel + aspirin for 21 days, then aspirin monotherapy) reduces 90-day stroke recurrence by approximately 25% in minor ischemic stroke (NIHSS ≤3) or high-risk TIA (ABCD2 ≥4), established by CHANCE (2013, China) and confirmed by POINT (2018, North America). THALES (2020) showed ticagrelor + aspirin also works. CHANCE-2 (2021) addressed CYP2C19 loss-of-function carriers with ticagrelor. INSPIRES (2024) extended DAPT to atherosclerotic minor stroke/TIA within 72 h. SPS3 (2012) showed long-term DAPT for lacunar stroke causes net harm; duration must be limited to ~21 days.',
   },
   'basilar-evt': {
     title: 'EVT for Basilar Artery Occlusion · NeuroWiki',
     description: 'Basilar artery occlusion thrombectomy evidence: BEST and BASICS neutral, ATTENTION and BAOCHE positive. EVT now recommended up to 24 hours.',
-    answer: 'Early basilar EVT trials BEST (2020, stopped early; substantial crossover) and BASICS (2021, neutral; 80% of controls received IV alteplase) did not establish benefit. Two later Chinese trials — ATTENTION (2022, 0–12 h) and BAOCHE (2022, 6–24 h, stopped early for benefit) — both showed improved functional outcomes with EVT. AHA/ASA 2026 endorses basilar EVT within 24 h based on ATTENTION and BAOCHE; BAOCHE was stopped early and effect size may be overestimated.',
+    answer: 'Early basilar EVT trials BEST (2020, stopped early; substantial crossover) and BASICS (2021, neutral; 80% of controls received IV alteplase) did not establish benefit. Two later Chinese trials, ATTENTION (2022, 0–12 h) and BAOCHE (2022, 6–24 h, stopped early for benefit), both showed improved functional outcomes with EVT. AHA/ASA 2026 endorses basilar EVT within 24 h based on ATTENTION and BAOCHE; BAOCHE was stopped early and effect size may be overestimated.',
   },
   'ich-surgery': {
     title: 'Surgical Evacuation for Intracerebral Hemorrhage · NeuroWiki',
     description: 'Four decades of ICH surgery trials: STICH I and STICH II neutral, MISTIE III neutral on function, ENRICH positive for minimally invasive parafascicular surgery.',
-    answer: 'STICH I (2005) and STICH II (2013) found no overall benefit from open craniotomy for supratentorial ICH, though STICH II suggested directional benefit in superficial lobar hemorrhage. MISTIE III (2019) showed minimally invasive catheter aspiration plus tPA reduced clot volume but did not improve mRS at 1 year. ENRICH (2024) — using a Bayesian design — showed minimally invasive parafascicular surgery improved 180-day utility-weighted mRS for lobar and anterior basal ganglia ICH. ENRICH supports a new role for minimally invasive surgery in selected ICH; AHA/ASA 2022 guidelines pre-date ENRICH and rate minimally invasive surgery COR 2b.',
+    answer: 'STICH I (2005) and STICH II (2013) found no overall benefit from open craniotomy for supratentorial ICH, though STICH II suggested directional benefit in superficial lobar hemorrhage. MISTIE III (2019) showed minimally invasive catheter aspiration plus tPA reduced clot volume but did not improve mRS at 1 year. ENRICH (2024), using a Bayesian design, showed minimally invasive parafascicular surgery improved 180-day utility-weighted mRS for lobar and anterior basal ganglia ICH. ENRICH supports a new role for minimally invasive surgery in selected ICH; AHA/ASA 2022 guidelines pre-date ENRICH and rate minimally invasive surgery COR 2b.',
   },
   'msu-dispatch': {
     title: 'Mobile Stroke Unit Dispatch · NeuroWiki',
@@ -659,12 +659,12 @@ const QUESTION_META: Record<string, { title: string; description: string; answer
   'icas-stenting': {
     title: 'Stenting for Intracranial Atherosclerosis · NeuroWiki',
     description: 'SAMMPRIS established harm from PTAS for symptomatic intracranial atherosclerotic stenosis; WEAVE provides post-market on-label safety data.',
-    answer: 'SAMMPRIS (2011) was stopped early for harm and futility: percutaneous transluminal angioplasty and stenting with the Wingspan stent showed 14.7% 30-day stroke or death versus 5.8% with aggressive medical management for symptomatic 70–99% intracranial stenosis. WEAVE (2019) — an FDA-mandated post-market registry of on-label Wingspan use — reported a 2.6% 72-hour periprocedural event rate, much lower than SAMMPRIS, supporting that careful patient selection improves safety. Stenting is not first-line for symptomatic intracranial atherosclerosis; aggressive medical management with DAPT and statin remains the standard.',
+    answer: 'SAMMPRIS (2011) was stopped early for harm and futility: percutaneous transluminal angioplasty and stenting with the Wingspan stent showed 14.7% 30-day stroke or death versus 5.8% with aggressive medical management for symptomatic 70–99% intracranial stenosis. WEAVE (2019), an FDA-mandated post-market registry of on-label Wingspan use, reported a 2.6% 72-hour periprocedural event rate, much lower than SAMMPRIS, supporting that careful patient selection improves safety. Stenting is not first-line for symptomatic intracranial atherosclerosis; aggressive medical management with DAPT and statin remains the standard.',
   },
   'tnk-vs-alteplase': {
     title: 'Tenecteplase vs Alteplase for Stroke Thrombolysis · NeuroWiki',
     description: 'Head-to-head IVT trials from NOR-TEST (2017) to RAISE (2024): tenecteplase 0.25 mg/kg is noninferior to alteplase, easier to administer, and now COR 1 in AHA/ASA 2026.',
-    answer: 'Tenecteplase 0.25 mg/kg single bolus is noninferior to alteplase across multiple RCTs — AcT (2022, Canada), TRACE-2 (2023, China), ORIGINAL (2024, China) — and showed superior angiographic reperfusion in EXTEND-IA TNK (2018) for LVO patients prior to EVT. NOR-TEST 2 Part A (2022) showed harm with high-dose 0.4 mg/kg TNK; the dose ceiling is 0.25 mg/kg. RAISE (2024) found reteplase superior to alteplase, expanding the agent-choice landscape. The 2026 AHA/ASA guideline lists tenecteplase 0.25 mg/kg as COR 1 alongside alteplase 0.9 mg/kg; tenecteplase is preferred operationally for its single-bolus administration.',
+    answer: 'Tenecteplase 0.25 mg/kg single bolus is noninferior to alteplase across multiple RCTs (AcT [2022, Canada], TRACE-2 [2023, China], ORIGINAL [2024, China]) and showed superior angiographic reperfusion in EXTEND-IA TNK (2018) for LVO patients prior to EVT. NOR-TEST 2 Part A (2022) showed harm with high-dose 0.4 mg/kg TNK; the dose ceiling is 0.25 mg/kg. RAISE (2024) found reteplase superior to alteplase, expanding the agent-choice landscape. The 2026 AHA/ASA guideline lists tenecteplase 0.25 mg/kg as COR 1 alongside alteplase 0.9 mg/kg; tenecteplase is preferred operationally for its single-bolus administration.',
   },
   'direct-vs-bridging': {
     title: 'Direct EVT vs Bridging IV Thrombolysis · NeuroWiki',
@@ -673,23 +673,23 @@ const QUESTION_META: Record<string, { title: string; description: string; answer
   },
   'pfo-closure-cryptogenic': {
     title: 'PFO Closure for Cryptogenic Stroke · NeuroWiki',
-    description: 'Three NEJM 2017 RCTs — CLOSE, RESPECT long-term, REDUCE — established benefit of PFO closure for cryptogenic stroke, with excess atrial fibrillation as the trade-off.',
-    answer: 'Three RCTs published in NEJM 2017 established benefit of PFO closure for cryptogenic stroke in patients <60 years. CLOSE required atrial septal aneurysm or large shunt (NNT ~20 over 5 y). RESPECT long-term follow-up showed HR 0.55 for stroke recurrence (NNT ~42). REDUCE used a clean antiplatelet comparator and showed HR 0.23 (NNT ~28). All three trials demonstrated excess atrial fibrillation — typically transient and periprocedural — as a consistent trade-off. The earlier CLOSURE-I (2012) and original RESPECT (2013) were neutral; refined patient selection (RoPE score, shunt size, septal aneurysm) was needed for benefit.',
+    description: 'Three NEJM 2017 RCTs (CLOSE, RESPECT long-term, REDUCE) established benefit of PFO closure for cryptogenic stroke, with excess atrial fibrillation as the trade-off.',
+    answer: 'Three RCTs published in NEJM 2017 established benefit of PFO closure for cryptogenic stroke in patients <60 years. CLOSE required atrial septal aneurysm or large shunt (NNT ~20 over 5 y). RESPECT long-term follow-up showed HR 0.55 for stroke recurrence (NNT ~42). REDUCE used a clean antiplatelet comparator and showed HR 0.23 (NNT ~28). All three trials demonstrated excess atrial fibrillation (typically transient and periprocedural) as a consistent trade-off. The earlier CLOSURE-I (2012) and original RESPECT (2013) were neutral; refined patient selection (RoPE score, shunt size, septal aneurysm) was needed for benefit.',
   },
   'asymptomatic-carotid': {
     title: 'Carotid Revascularization vs Medical Management · NeuroWiki',
     description: 'CREST (2010) compared CAS vs CEA; CREST-2 (2025) tested both against modern intensive medical management. CAS met its endpoint; CEA did not.',
-    answer: 'CREST (2010) compared carotid artery stenting (CAS) with carotid endarterectomy (CEA) in mixed symptomatic and asymptomatic stenosis and found no difference in the composite primary endpoint, though periprocedural stroke favored CEA and periprocedural MI favored CAS. CREST-2 (2025) tested CAS and CEA separately against intensive medical management for asymptomatic ≥70% stenosis: stenting met its primary endpoint (P=0.02), while CEA did not (P=0.24). Intensive medical management — high-intensity statin, antiplatelet, BP and glycemic targets — has substantially narrowed the margin for revascularization in asymptomatic carotid stenosis.',
+    answer: 'CREST (2010) compared carotid artery stenting (CAS) with carotid endarterectomy (CEA) in mixed symptomatic and asymptomatic stenosis and found no difference in the composite primary endpoint, though periprocedural stroke favored CEA and periprocedural MI favored CAS. CREST-2 (2025) tested CAS and CEA separately against intensive medical management for asymptomatic ≥70% stenosis: stenting met its primary endpoint (P=0.02), while CEA did not (P=0.24). Intensive medical management (high-intensity statin, antiplatelet, BP and glycemic targets) has substantially narrowed the margin for revascularization in asymptomatic carotid stenosis.',
   },
   'ich-anticoagulation-reversal': {
     title: 'Anticoagulation Reversal in ICH · NeuroWiki',
     description: 'Four-PCC vs FFP for warfarin (Sarode 2013), platelet HARM in antiplatelet-ICH (PATCH), andexanet for FXa inhibitors (ANNEXA-4, ANNEXA-I).',
-    answer: 'For warfarin-associated ICH, Sarode (2013) established 4-factor PCC as noninferior to FFP for hemostasis with faster INR correction — underwriting the AHA/ASA Class I, Level A recommendation. Dose 25–50 units/kg IV with vitamin K 10 mg IV. PATCH (2016) showed platelet transfusion in antiplatelet-associated ICH caused HARM (COR 3: Harm per AHA/ASA 2022 ICH guideline). ANNEXA-4 (2019) — the single-arm cohort behind FDA approval of andexanet alfa for FXa-inhibitor reversal — reported good hemostasis in ~80%. ANNEXA-I (2024) was the first RCT specifically in FXa-inhibitor-associated ICH and showed andexanet improved hemostasis versus usual care, with a small excess of ischemic events (notably ischemic stroke) as the trade-off. Idarucizumab 5 g IV is first-line for dabigatran reversal.',
+    answer: 'For warfarin-associated ICH, Sarode (2013) established 4-factor PCC as noninferior to FFP for hemostasis with faster INR correction, underwriting the AHA/ASA Class I, Level A recommendation. Dose 25–50 units/kg IV with vitamin K 10 mg IV. PATCH (2016) showed platelet transfusion in antiplatelet-associated ICH caused HARM (COR 3: Harm per AHA/ASA 2022 ICH guideline). ANNEXA-4 (2019), the single-arm cohort behind FDA approval of andexanet alfa for FXa-inhibitor reversal, reported good hemostasis in ~80%. ANNEXA-I (2024) was the first RCT specifically in FXa-inhibitor-associated ICH and showed andexanet improved hemostasis versus usual care, with a small excess of ischemic events (notably ischemic stroke) as the trade-off. Idarucizumab 5 g IV is first-line for dabigatran reversal.',
   },
   'crao-management': {
     title: 'CRAO Thrombolysis: EAGLE and THEIA · NeuroWiki',
     description: 'Central retinal artery occlusion: intra-arterial alteplase halted for harm in EAGLE (2010); IV alteplase neutral but directionally favorable in the small THEIA RCT (2025).',
-    answer: 'EAGLE (2010) — intra-arterial alteplase within 24 h of CRAO — was halted for harm versus conservative management; intra-arterial thrombolysis is not recommended. THEIA (2025) was the first RCT of IV alteplase versus aspirin in CRAO within 4.5 h. The trial was small (N=70) and neutral on the primary endpoint, but directionally favored alteplase. Evidence is insufficient to recommend systemic thrombolysis routinely for CRAO; treatment within a 4.5 h ischemia window, weighed against hemorrhagic risk, is reasonable on a case-by-case basis at centers familiar with stroke thrombolysis. CRAO is a stroke equivalent and warrants full stroke workup.',
+    answer: 'EAGLE (2010), intra-arterial alteplase within 24 h of CRAO, was halted for harm versus conservative management; intra-arterial thrombolysis is not recommended. THEIA (2025) was the first RCT of IV alteplase versus aspirin in CRAO within 4.5 h. The trial was small (N=70) and neutral on the primary endpoint, but directionally favored alteplase. Evidence is insufficient to recommend systemic thrombolysis routinely for CRAO; treatment within a 4.5 h ischemia window, weighed against hemorrhagic risk, is reasonable on a case-by-case basis at centers familiar with stroke thrombolysis. CRAO is a stroke equivalent and warrants full stroke workup.',
   },
 };
 

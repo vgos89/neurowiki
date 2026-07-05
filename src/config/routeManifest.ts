@@ -104,7 +104,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'calculators',
     railItem: 'calculators',
     meta: {
-      title: 'Neurology Calculators — NIHSS, ICH Score, GCS | NeuroWiki',
+      title: 'Neurology Calculators: NIHSS, ICH Score, GCS | NeuroWiki',
       description: 'Free online neurology calculators: NIHSS, ICH Score, ABCD2, GCS, HAS-BLED, RoPE, Heidelberg, Boston Criteria 2.0. Tools for stroke and neurocritical care.',
       keywords: 'neurology calculators, NIHSS calculator, stroke calculator, ICH score, GCS calculator, HAS-BLED calculator, medical calculators for residents',
       image: DEFAULT_IMAGE,
@@ -121,7 +121,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'calculators',
     railItem: 'calculators',
     meta: {
-      title: 'ASPECTS Score — Alberta Stroke Program Early CT | NeuroWiki',
+      title: 'ASPECTS Score: Alberta Stroke Program Early CT | NeuroWiki',
       description: 'Free ASPECTS calculator for MCA stroke. Score 10 CT regions (M1–M6, Caudate, Lentiform, Internal Capsule, Insular Ribbon). EVT eligibility per AHA/ASA 2026.',
       keywords: 'ASPECTS score calculator, Alberta Stroke Program Early CT Score, ASPECTS thrombectomy eligibility, ASPECTS score stroke, MCA territory infarct, large core stroke EVT',
     },
@@ -153,7 +153,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'calculators',
     railItem: 'calculators',
     meta: {
-      title: 'NIHSS Calculator — NIH Stroke Scale Online | NeuroWiki',
+      title: 'NIHSS Calculator: NIH Stroke Scale Online | NeuroWiki',
       description: 'Free NIHSS calculator for stroke severity assessment. Step-by-step NIH Stroke Scale scoring with LVO probability estimate and clinical interpretation.',
       keywords: 'NIHSS calculator, NIH stroke scale, stroke severity calculator, stroke assessment tool, LVO probability, neurology calculator online',
       image: DEFAULT_IMAGE,
@@ -170,7 +170,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'calculators',
     railItem: 'calculators',
     meta: {
-      title: 'mRS Calculator — Modified Rankin Scale | NeuroWiki',
+      title: 'mRS Calculator: Modified Rankin Scale | NeuroWiki',
       description: 'Free modified Rankin Scale (mRS) calculator with direct and guided structured-interview modes. Pre-stroke baseline for EVT/IVT eligibility and 90-day outcome tracking.',
       keywords: 'mRS calculator, modified Rankin Scale, mRS score, prestroke mRS, stroke disability scale, mRS 0-6, stroke functional outcome',
       image: DEFAULT_IMAGE,
@@ -187,7 +187,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'calculators',
     railItem: 'calculators',
     meta: {
-      title: 'ICH Score Calculator — Hemorrhage Prognosis | NeuroWiki',
+      title: 'ICH Score Calculator: Hemorrhage Prognosis | NeuroWiki',
       description: 'ICH Score calculator for 30-day mortality prediction in intracerebral hemorrhage. Covers GCS, volume, IVH, location, and age. Neurology clinical tool.',
       keywords: 'ICH score calculator, intracerebral hemorrhage mortality, ICH prognosis, GCS ICH, hemorrhage volume calculator, stroke calculator',
     },
@@ -203,7 +203,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'calculators',
     railItem: 'calculators',
     meta: {
-      title: 'ABCD² Score Calculator — TIA Stroke Risk | NeuroWiki',
+      title: 'ABCD² Score Calculator: TIA Stroke Risk | NeuroWiki',
       description: 'Calculate 2-day stroke risk after TIA using the ABCD² score. Age, BP, clinical features, duration, diabetes. Clinical interpretation per AHA/ASA guidelines.',
       keywords: 'ABCD2 calculator, ABCD2 score TIA, TIA stroke risk, transient ischemic attack risk calculator, 2-day stroke risk after TIA',
     },
@@ -219,7 +219,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'calculators',
     railItem: 'calculators',
     meta: {
-      title: 'HAS-BLED Score — Bleeding Risk, Anticoagulation | NeuroWiki',
+      title: 'HAS-BLED Score: Bleeding Risk, Anticoagulation | NeuroWiki',
       description: 'Estimate major bleeding risk on anticoagulation. Identifies modifiable risk factors. Not a reason to withhold anticoagulation in high-stroke-risk AF.',
       keywords: 'HAS-BLED calculator, HAS-BLED score, bleeding risk anticoagulation, atrial fibrillation bleeding risk, warfarin bleeding risk',
     },
@@ -235,7 +235,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'calculators',
     railItem: 'calculators',
     meta: {
-      title: 'RoPE Score — PFO-Attributable Stroke Risk | NeuroWiki',
+      title: 'RoPE Score: PFO-Attributable Stroke Risk | NeuroWiki',
       description: 'Calculate PFO-attributable fraction in cryptogenic stroke using the RoPE Score. Supports shared decision-making for PFO closure. Based on Kent et al.',
       keywords: 'RoPE score calculator, PFO stroke calculator, patent foramen ovale stroke risk, cryptogenic stroke PFO, PFO closure decision',
     },
@@ -251,7 +251,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'calculators',
     railItem: 'calculators',
     meta: {
-      title: 'CHA₂DS₂-VASc Score — AF Stroke Risk Calculator | NeuroWiki',
+      title: 'CHA₂DS₂-VASc Score: AF Stroke Risk Calculator | NeuroWiki',
       description: 'Calculate stroke risk in non-valvular atrial fibrillation using the CHA₂DS₂-VASc score. Anticoagulation thresholds per 2023 ACC/AHA/ACCP/HRS guidelines.',
       keywords: 'CHA2DS2-VASc calculator, CHA2DS2-VASc score, atrial fibrillation stroke risk, AF anticoagulation decision, AF stroke calculator, warfarin DOAC AF risk',
     },
@@ -299,7 +299,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'calculators',
     railItem: 'calculators',
     meta: {
-      title: 'Boston Criteria 2.0 — CAA Diagnosis | NeuroWiki',
+      title: 'Boston Criteria 2.0: CAA Diagnosis | NeuroWiki',
       description: 'Diagnose CAA using Boston Criteria 2.0. MRI-based classification with anticoagulation risk stratification. Charidimou et al. Lancet Neurology 2022.',
       keywords: 'Boston criteria CAA, cerebral amyloid angiopathy diagnosis, Boston criteria 2.0, CAA MRI criteria, CAA anticoagulation risk, lobar hemorrhage',
     },
@@ -313,7 +313,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'pathways',
     railItem: 'pathways',
     meta: {
-      title: 'Clinical Pathways — Neurology Decision Support | NeuroWiki',
+      title: 'Clinical Pathways: Neurology Decision Support | NeuroWiki',
       description: 'Clinical decision pathways for neurology: Stroke Code, EVT, Extended IVT, ELAN anticoagulation, Status Epilepticus, Migraine, and GCA. Updated for AHA/ASA 2026.',
       keywords: 'neurology clinical pathways, stroke pathway, EVT decision tool, status epilepticus protocol, migraine pathway, GCA pathway, neurology workflows',
     },
@@ -332,7 +332,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     railItem: 'pathways',
     comingSoonMessage: 'ELAN pathway',
     meta: {
-      title: 'ELAN Pathway — Post-Stroke DOAC Timing | NeuroWiki',
+      title: 'ELAN Pathway: Post-Stroke DOAC Timing | NeuroWiki',
       description: 'DOAC anticoagulation timing after ischemic stroke with AF. Based on ELAN trial (NEJM 2023) and AHA/ASA 2026. Covers stroke size and hemorrhagic transformation.',
       keywords: 'ELAN anticoagulation pathway, post-stroke anticoagulation timing, DOAC after stroke, atrial fibrillation stroke anticoagulation, ELAN trial, post-stroke DOAC timing calculator',
     },
@@ -348,7 +348,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     railItem: 'pathways',
     comingSoonMessage: 'EVT pathway',
     meta: {
-      title: 'EVT Eligibility Tool — Thrombectomy Decision | NeuroWiki',
+      title: 'EVT Eligibility Tool: Thrombectomy Decision | NeuroWiki',
       description: 'EVT eligibility pathway for mechanical thrombectomy in acute ischemic stroke. Based on DAWN, DEFUSE-3, SELECT-2, ANGEL-ASPECT, and AHA/ASA 2026.',
       keywords: 'EVT eligibility calculator, thrombectomy eligibility criteria, mechanical thrombectomy decision support, DAWN trial criteria, DEFUSE-3 criteria, EVT pathway stroke, ASPECTS score stroke',
     },
@@ -364,7 +364,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     railItem: 'pathways',
     comingSoonMessage: 'Late Window IVT',
     meta: {
-      title: 'Late Window IVT — Wake-Up Stroke & Thrombolysis | NeuroWiki',
+      title: 'Late Window IVT: Wake-Up Stroke & Thrombolysis | NeuroWiki',
       description: 'Late window IVT for wake-up stroke and perfusion-selected 4.5–9h thrombolysis. Based on WAKE-UP, EXTEND, TIMELESS, TRACE-3, and AHA/ASA 2026.',
       keywords: 'late window IVT, wake-up stroke thrombolysis, extended window tPA, DWI FLAIR mismatch eligibility, WAKE-UP trial criteria, TIMELESS trial tenecteplase, late window thrombolysis calculator, unknown onset stroke tPA',
     },
@@ -380,7 +380,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     railItem: 'pathways',
     comingSoonMessage: 'Status epilepticus pathway',
     meta: {
-      title: 'Status Epilepticus — Management Pathway | NeuroWiki',
+      title: 'Status Epilepticus: Management Pathway | NeuroWiki',
       description: 'Status epilepticus management pathway. Covers early SE, established SE, refractory SE, and super-refractory SE. Based on ESETT trial and NCC guidelines.',
       keywords: 'status epilepticus protocol, status epilepticus treatment algorithm, refractory status epilepticus, status epilepticus first line treatment, benzodiazepine status epilepticus, SE management pathway',
     },
@@ -396,7 +396,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     railItem: 'pathways',
     comingSoonMessage: 'Migraine pathway',
     meta: {
-      title: 'Acute Migraine Pathway — ED & Inpatient | NeuroWiki',
+      title: 'Acute Migraine Pathway: ED & Inpatient | NeuroWiki',
       description: 'Acute migraine management pathway for emergency department and inpatient settings. Migraine cocktail, abortive therapy, and refractory headache protocols.',
       keywords: 'acute migraine treatment protocol, migraine cocktail ED, inpatient migraine management, refractory migraine treatment, acute headache pathway, migraine abortive therapy',
     },
@@ -411,7 +411,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'pathways',
     railItem: 'pathways',
     meta: {
-      title: 'Clinic Headache Pathway — Outpatient Migraine Preventive | NeuroWiki',
+      title: 'Clinic Headache Pathway: Outpatient Migraine Preventive | NeuroWiki',
       description: 'Outpatient migraine management pathway. MIDAS-driven preventive threshold, comorbidity-guided agent selection, CGRP mAb escalation, and MOH prevention.',
       keywords: 'outpatient migraine pathway, migraine preventive therapy, CGRP mAb selection, MIDAS score, medication overuse headache, migraine clinic pathway',
     },
@@ -426,7 +426,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'pathways',
     railItem: 'pathways',
     meta: {
-      title: 'Stroke Code Protocol — Acute Stroke Workflow | NeuroWiki',
+      title: 'Stroke Code Protocol: Acute Stroke Workflow | NeuroWiki',
       description: 'Stroke code workflow covering last known well, thrombolysis eligibility, CTA decision-making, thrombectomy escalation, and resident-ready admit orders.',
       keywords: 'stroke code protocol, acute stroke workflow, stroke code steps, stroke resident guide, thrombolysis checklist, thrombectomy workflow',
     },
@@ -441,7 +441,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'calculators',
     railItem: 'calculators',
     meta: {
-      title: 'E/M Billing Calculator — CPT 99202–99215 | NeuroWiki',
+      title: 'E/M Billing Calculator: CPT 99202–99215 | NeuroWiki',
       description: 'Free E/M billing calculator. Select CPT 99202–99215 or 99221–99233 using 2021 AMA MDM or time-based criteria. For neurology and hospitalist billing.',
       keywords: 'EM billing calculator, E/M billing calculator neurology, CPT 99202 99205 99212 99215 calculator, MDM calculator 2021, medical decision making calculator, evaluation and management billing physician, hospitalist EM billing calculator, inpatient EM coding 99221 99222 99223 99231 99232 99233, time vs MDM calculator, 2021 AMA EM coding, neurology CPT code calculator, evaluation and management calculator free',
     },
@@ -455,7 +455,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'guide',
     railItem: 'guide',
     meta: {
-      title: 'Neurology Toolkit — Clinical Guides & Protocols | NeuroWiki',
+      title: 'Neurology Toolkit: Clinical Guides & Protocols | NeuroWiki',
       description: 'Stroke code, EVT, long-window IVT, status epilepticus, and headache pathways for neurology residents and attendings. Inline NIHSS, ICH, and ASPECTS scoring.',
       keywords: 'neurology toolkit, neurology protocols for residents, neurology resident guide, clinical neurology reference, stroke guide, epilepsy protocol, neurology calculators',
       image: DEFAULT_IMAGE,
@@ -489,7 +489,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'guide',
     railItem: 'guide',
     meta: {
-      title: 'Acute Stroke Basics — Resident Reference Guide | NeuroWiki',
+      title: 'Acute Stroke Basics: Resident Reference Guide | NeuroWiki',
       description: 'Acute ischemic stroke reference for residents: last known well, NIHSS, tPA eligibility, CT/CTA imaging, thrombectomy criteria, and admit orders. AHA/ASA 2026.',
       keywords: 'acute stroke basics, stroke resident reference, ischemic stroke guide, NIHSS, tPA eligibility, thrombectomy criteria, LKW',
       image: DEFAULT_IMAGE,
@@ -506,7 +506,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'guide',
     railItem: 'guide',
     meta: {
-      title: 'IV tPA Protocol — Alteplase & Tenecteplase | NeuroWiki',
+      title: 'IV tPA Protocol: Alteplase & Tenecteplase | NeuroWiki',
       description: 'IV thrombolysis protocol for acute ischemic stroke. Alteplase 0.9 mg/kg and tenecteplase 0.25 mg/kg eligibility, dosing, and monitoring. AHA/ASA 2026 COR 1.',
       keywords: 'IV tPA protocol stroke, alteplase stroke dosing, tenecteplase stroke eligibility, tenecteplase vs alteplase stroke, tPA eligibility criteria, thrombolysis stroke protocol, IV thrombolysis inclusion exclusion, tPA 0.9 mg kg, tenecteplase 0.25 mg kg, tenecteplase alteplase equivalent',
       image: DEFAULT_IMAGE,
@@ -523,7 +523,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'guide',
     railItem: 'guide',
     meta: {
-      title: 'Mechanical Thrombectomy Guide — EVT Criteria | NeuroWiki',
+      title: 'Mechanical Thrombectomy Guide: EVT Criteria | NeuroWiki',
       description: 'Mechanical thrombectomy guide for LVO stroke. EVT eligibility, imaging selection with ASPECTS and perfusion, and post-procedure management.',
       keywords: 'mechanical thrombectomy guide, EVT stroke criteria, thrombectomy eligibility, LVO stroke treatment, ASPECTS score thrombectomy, thrombectomy time window, stent retriever thrombectomy',
     },
@@ -539,7 +539,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'guide',
     railItem: 'guide',
     meta: {
-      title: 'Acute Stroke Management — Inpatient Protocol | NeuroWiki',
+      title: 'Acute Stroke Management: Inpatient Protocol | NeuroWiki',
       description: 'Acute ischemic stroke management: BP targets, glucose control, dysphagia screening, antiplatelet initiation, DVT prophylaxis, and secondary prevention.',
       keywords: 'acute stroke management protocol, stroke inpatient management, stroke blood pressure targets, dual antiplatelet stroke, stroke glucose management, dysphagia stroke screening, secondary prevention stroke',
     },
@@ -555,7 +555,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'guide',
     railItem: 'guide',
     meta: {
-      title: 'Status Epilepticus Guide — First to Refractory | NeuroWiki',
+      title: 'Status Epilepticus Guide: First to Refractory | NeuroWiki',
       description: 'Status epilepticus: lorazepam first, levetiracetam/valproate/fosphenytoin second, propofol/midazolam for refractory SE. Based on ESETT trial.',
       keywords: 'status epilepticus management, status epilepticus treatment protocol, refractory status epilepticus treatment, lorazepam status epilepticus, ESETT trial, super-refractory status epilepticus, SE benzodiazepine',
     },
@@ -571,7 +571,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'guide',
     railItem: 'guide',
     meta: {
-      title: 'ICH Management — Intracerebral Hemorrhage | NeuroWiki',
+      title: 'ICH Management: Intracerebral Hemorrhage | NeuroWiki',
       description: 'Acute ICH management per 2022 AHA/ASA: SBP <140, 4-factor PCC reversal, cerebellar hemorrhage surgery criteria, hematoma expansion prevention.',
       keywords: 'ICH management protocol, intracerebral hemorrhage treatment, ICH blood pressure target, 4-factor PCC reversal, cerebellar hemorrhage surgery, hematoma expansion, ICH guidelines 2022',
     },
@@ -587,7 +587,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'guide',
     railItem: 'guide',
     meta: {
-      title: 'Bacterial Meningitis — Workup & Treatment | NeuroWiki',
+      title: 'Bacterial Meningitis: Workup & Treatment | NeuroWiki',
       description: 'Bacterial meningitis workup and treatment: empiric antibiotics, dexamethasone timing, LP interpretation, CSF analysis, and antibiotic tailoring.',
       keywords: 'bacterial meningitis treatment, meningitis antibiotic protocol, meningitis LP CSF analysis, dexamethasone meningitis, empiric meningitis antibiotics, meningitis workup residents',
     },
@@ -603,7 +603,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'guide',
     railItem: 'guide',
     meta: {
-      title: 'Guillain-Barré Syndrome (GBS) — Diagnosis | NeuroWiki',
+      title: 'Guillain-Barré Syndrome (GBS): Diagnosis | NeuroWiki',
       description: 'GBS clinical guide: Brighton criteria, NCS, CSF dissociation, IVIG vs plasmapheresis, respiratory monitoring with NIF and FVC.',
       keywords: 'Guillain-Barre syndrome treatment, GBS IVIG protocol, GBS plasmapheresis, GBS respiratory monitoring NIF FVC, GBS diagnosis criteria, acute inflammatory demyelinating polyneuropathy',
     },
@@ -619,7 +619,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'guide',
     railItem: 'guide',
     meta: {
-      title: 'Myasthenia Gravis — Crisis & Treatment | NeuroWiki',
+      title: 'Myasthenia Gravis: Crisis & Treatment | NeuroWiki',
       description: 'Myasthenia gravis: pyridostigmine dosing, myasthenic crisis management, IVIG/plasmapheresis, thymectomy indications, long-term immunosuppression.',
       keywords: 'myasthenia gravis treatment, myasthenic crisis management, MG pyridostigmine dosing, IVIG myasthenia gravis, myasthenia gravis thymectomy, acetylcholine receptor antibody MG',
     },
@@ -635,7 +635,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'guide',
     railItem: 'guide',
     meta: {
-      title: 'Multiple Sclerosis — Diagnosis, Relapse & DMT | NeuroWiki',
+      title: 'Multiple Sclerosis: Diagnosis, Relapse & DMT | NeuroWiki',
       description: 'MS clinical guide: McDonald criteria, relapse management with methylprednisolone, disease-modifying therapy overview, and monitoring.',
       keywords: 'multiple sclerosis treatment protocol, MS relapse treatment, MS disease modifying therapy, McDonald criteria MS, MS diagnosis, MS methylprednisolone protocol, MS DMT overview',
     },
@@ -651,7 +651,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'guide',
     railItem: 'guide',
     meta: {
-      title: 'Seizure Workup — First Seizure Evaluation | NeuroWiki',
+      title: 'Seizure Workup: First Seizure Evaluation | NeuroWiki',
       description: 'First seizure evaluation: EEG, MRI brain, LP indications, seizure mimics, AED initiation, and recurrence risk. For neurology residents.',
       keywords: 'first seizure workup, seizure evaluation, new onset seizure diagnosis, EEG first seizure, seizure vs syncope, seizure MRI protocol, AED initiation first seizure',
     },
@@ -667,7 +667,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'guide',
     railItem: 'guide',
     meta: {
-      title: 'Altered Mental Status Workup — Diagnostic | NeuroWiki',
+      title: 'Altered Mental Status Workup: Diagnostic | NeuroWiki',
       description: 'Approach to altered mental status (AMS): differential diagnosis, initial workup, delirium vs. encephalopathy, reversible causes, and empiric treatment.',
       keywords: 'altered mental status workup, AMS differential diagnosis, delirium encephalopathy diagnosis, AMS neurology workup, altered consciousness evaluation, toxic metabolic encephalopathy',
     },
@@ -683,7 +683,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'guide',
     railItem: 'guide',
     meta: {
-      title: 'Headache Workup — Differential & Red Flags | NeuroWiki',
+      title: 'Headache Workup: Differential & Red Flags | NeuroWiki',
       description: 'Headache workup: primary vs. secondary differentiation, thunderclap headache evaluation, SNOOP4 red flags, LP for SAH, and imaging criteria.',
       keywords: 'headache workup, headache differential diagnosis, thunderclap headache evaluation, headache red flags SNOOP, subarachnoid hemorrhage headache, LP after headache CT scan',
     },
@@ -699,7 +699,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'guide',
     railItem: 'guide',
     meta: {
-      title: 'Vertigo — BPPV, Central vs Peripheral & HINTS | NeuroWiki',
+      title: 'Vertigo: BPPV, Central vs Peripheral & HINTS | NeuroWiki',
       description: 'Vertigo clinical guide: BPPV Epley maneuver, HINTS exam for stroke vs. peripheral cause, Dix-Hallpike, vestibular neuritis vs. cerebellar stroke.',
       keywords: 'vertigo diagnosis, HINTS exam stroke, BPPV Epley maneuver, central vs peripheral vertigo, vestibular neuritis treatment, cerebellar stroke vertigo, Dix-Hallpike maneuver',
     },
@@ -715,7 +715,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'guide',
     railItem: 'guide',
     meta: {
-      title: 'Weakness Workup — Upper vs Lower Motor Neuron | NeuroWiki',
+      title: 'Weakness Workup: Upper vs Lower Motor Neuron | NeuroWiki',
       description: 'Systematic weakness evaluation: UMN vs LMN localization, neuromuscular junction, myopathy workup, MRC grading, diagnostic algorithm.',
       keywords: 'weakness workup neurology, upper motor neuron lower motor neuron, UMN LMN weakness, neuromuscular junction weakness, myopathy evaluation, weakness localization neurology, MRC grading weakness',
     },
@@ -730,7 +730,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'guide',
     railItem: 'guide',
     meta: {
-      title: 'Post-Stroke Lipid Management — LDL-C Targets & Escalation | NeuroWiki',
+      title: 'Post-Stroke Lipid Management: LDL-C Targets & Escalation | NeuroWiki',
       description: 'Adaptive lipid management pathway after ischaemic stroke or ICH. VHR vs standard ASCVD targets, ezetimibe and PCSK9 mAb escalation, bempedoic acid, inclisiran, and ICH statin decision. 2026 ACC/AHA.',
       keywords: 'post-stroke lipid management, LDL-C target after stroke, PCSK9 inhibitor stroke, ezetimibe after stroke, statin after ICH, bempedoic acid stroke, very high ASCVD risk, secondary prevention stroke lipids, 2026 ACC AHA dyslipidemia guideline stroke',
       image: DEFAULT_IMAGE,
@@ -745,7 +745,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'trials',
     railItem: 'trials',
     meta: {
-      title: 'Stroke Clinical Trials — Evidence Summaries | NeuroWiki',
+      title: 'Stroke Clinical Trials: Evidence Summaries | NeuroWiki',
       description: '101 landmark stroke trials with NNT and mRS-shift outcomes. DAWN, DEFUSE-3, NINDS, MR CLEAN, ELAN, CHANCE, INSPIRES, ENRICH, TRACE-III all covered.',
       keywords: 'landmark stroke clinical trials, stroke trial results, thrombectomy trials, IV thrombolysis trials, DAWN trial, DEFUSE-3 trial, NINDS tPA trial, ORIGINAL tenecteplase trial, MR CLEAN trial, INSPIRES DAPT stroke, ENRICH ICH surgery, secondary prevention stroke trials, NNT stroke, NEJM stroke trials, vascular neurology clinical trials',
       image: DEFAULT_IMAGE,
@@ -761,7 +761,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     railItem: 'home',
     meta: {
       title: 'Privacy Policy · NeuroWiki',
-      description: 'How NeuroWiki handles your data — Google Analytics, local storage, feedback submissions, and your GDPR/CCPA rights.',
+      description: 'How NeuroWiki handles your data: Google Analytics, local storage, feedback submissions, and your GDPR/CCPA rights.',
       image: DEFAULT_IMAGE,
     },
   },
@@ -774,7 +774,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     railItem: 'home',
     meta: {
       title: 'Terms of Use · NeuroWiki',
-      description: 'Terms of use for NeuroWiki — clinical reference only, no warranty, governing law.',
+      description: 'Terms of use for NeuroWiki: clinical reference only, no warranty, governing law.',
       image: DEFAULT_IMAGE,
     },
   },

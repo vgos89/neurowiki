@@ -188,8 +188,8 @@ const SETTING_SUBTYPES: Record<VisitSetting, { value: VisitType; label: string }
 };
 
 const VISIT_TYPE_LABELS: Record<VisitType, string> = {
-  new_patient_office: 'Office Visit — New Patient',
-  established_patient_office: 'Office Visit — Established Patient',
+  new_patient_office: 'Office Visit: New Patient',
+  established_patient_office: 'Office Visit: Established Patient',
   consult_outpatient: 'Outpatient Consultation',
   initial_inpatient: 'Initial Hospital Inpatient/Observation',
   subsequent_inpatient: 'Subsequent Hospital Inpatient/Observation',
@@ -201,16 +201,16 @@ const VISIT_TYPE_LABELS: Record<VisitType, string> = {
 };
 
 const VISIT_TYPE_POS: Record<VisitType, string> = {
-  new_patient_office: '11 — Office',
-  established_patient_office: '11 — Office',
-  consult_outpatient: '11 — Office',
-  initial_inpatient: '21 — Inpatient Hospital',
-  subsequent_inpatient: '21 — Inpatient Hospital',
-  observation: '21 — Inpatient Hospital',
-  discharge_day: '21 — Inpatient Hospital',
-  consult_inpatient: '21 — Inpatient Hospital',
-  emergency_dept: '23 — Emergency Room',
-  critical_care: '21 — Inpatient Hospital',
+  new_patient_office: '11: Office',
+  established_patient_office: '11: Office',
+  consult_outpatient: '11: Office',
+  initial_inpatient: '21: Inpatient Hospital',
+  subsequent_inpatient: '21: Inpatient Hospital',
+  observation: '21: Inpatient Hospital',
+  discharge_day: '21: Inpatient Hospital',
+  consult_inpatient: '21: Inpatient Hospital',
+  emergency_dept: '23: Emergency Room',
+  critical_care: '21: Inpatient Hospital',
 };
 
 // Visit types that are time-only (no MDM)
@@ -230,7 +230,7 @@ const VISIT_TYPE_MODIFIERS: Record<VisitType, { code: string; label: string; pla
     { code: '-57', label: 'Decision for surgery made at this visit', plain: 'You decided at this visit that major surgery was needed (performed within the next day)' },
   ],
   consult_outpatient: [
-    { code: '-32', label: 'Mandated service (insurance/legal/employer required)', plain: 'This visit was required by a third party — insurance company, employer, or legal requirement' },
+    { code: '-32', label: 'Mandated service (insurance/legal/employer required)', plain: 'This visit was required by a third party: insurance company, employer, or legal requirement' },
     { code: '-25', label: 'Significant, separately identifiable E&M same day as procedure', plain: 'You also performed a procedure on the same day and this visit was a separate, complete evaluation' },
   ],
   initial_inpatient: [
@@ -383,15 +383,15 @@ const PROBLEM_JUSTIFICATION: Record<MdmLevel, string> = {
 const DATA_JUSTIFICATION: Record<MdmLevel, string> = {
   minimal: 'No additional order, review, or data beyond the work of the encounter',
   low: 'Category 1 met: ≥2 items from (prior test results reviewed, tests ordered, external records reviewed, additional historian)',
-  moderate: '1 of 3 categories met — Category 1 (≥3 items); OR Category 2 (independent test interpretation, not separately billed); OR Category 3 (direct discussion with external provider)',
+  moderate: '1 of 3 categories met: Category 1 (≥3 items); OR Category 2 (independent test interpretation, not separately billed); OR Category 3 (direct discussion with external provider)',
   high: 'At least 2 of 3 categories met at the Moderate threshold',
 };
 
 const RISK_JUSTIFICATION: Record<MdmLevel, string> = {
-  minimal: 'Minimal risk — OTC medications, self-limited condition, no Rx management',
-  low: 'Low risk — OTC medications, minor procedure without identified risk factors, physical therapy',
-  moderate: 'Moderate risk — prescription drug management; minor surgery with identified risk factors; or diagnosis/treatment significantly limited by social determinants of health',
-  high: 'High risk — drug therapy requiring intensive monitoring for toxicity; elective major surgery with identified risk factors; decision regarding emergency surgery, hospitalization, or escalation of care; parenteral controlled substances; DNR/goals of care discussion',
+  minimal: 'Minimal risk: OTC medications, self-limited condition, no Rx management',
+  low: 'Low risk: OTC medications, minor procedure without identified risk factors, physical therapy',
+  moderate: 'Moderate risk: prescription drug management; minor surgery with identified risk factors; or diagnosis/treatment significantly limited by social determinants of health',
+  high: 'High risk: drug therapy requiring intensive monitoring for toxicity; elective major surgery with identified risk factors; decision regarding emergency surgery, hospitalization, or escalation of care; parenteral controlled substances; DNR/goals of care discussion',
 };
 
 // ─── CPT Code Tables ──────────────────────────────────────────────────────────
@@ -401,47 +401,47 @@ interface CptEntry { code: string; description: string; epicLabel?: string }
 
 const MDM_CPT: Record<VisitType, Partial<Record<MdmLevel, CptEntry>>> = {
   new_patient_office: {
-    low:      { code: '99202', description: 'New Patient Office — Straightforward MDM',    epicLabel: 'Office Visit New Patient Level 2' },
-    moderate: { code: '99204', description: 'New Patient Office — Moderate Complexity MDM', epicLabel: 'Office Visit New Patient Level 4' },
-    high:     { code: '99205', description: 'New Patient Office — High Complexity MDM',     epicLabel: 'Office Visit New Patient Level 5' },
+    low:      { code: '99202', description: 'New Patient Office: Straightforward MDM',    epicLabel: 'Office Visit New Patient Level 2' },
+    moderate: { code: '99204', description: 'New Patient Office: Moderate Complexity MDM', epicLabel: 'Office Visit New Patient Level 4' },
+    high:     { code: '99205', description: 'New Patient Office: High Complexity MDM',     epicLabel: 'Office Visit New Patient Level 5' },
   },
   established_patient_office: {
-    minimal:  { code: '99211', description: 'Established Patient Office — Minimal (Staff Visit)', epicLabel: 'Office Visit Established Level 1' },
-    low:      { code: '99213', description: 'Established Patient Office — Low Complexity MDM',    epicLabel: 'Office Visit Established Level 3' },
-    moderate: { code: '99214', description: 'Established Patient Office — Moderate Complexity MDM', epicLabel: 'Office Visit Established Level 4' },
-    high:     { code: '99215', description: 'Established Patient Office — High Complexity MDM',     epicLabel: 'Office Visit Established Level 5' },
+    minimal:  { code: '99211', description: 'Established Patient Office: Minimal (Staff Visit)', epicLabel: 'Office Visit Established Level 1' },
+    low:      { code: '99213', description: 'Established Patient Office: Low Complexity MDM',    epicLabel: 'Office Visit Established Level 3' },
+    moderate: { code: '99214', description: 'Established Patient Office: Moderate Complexity MDM', epicLabel: 'Office Visit Established Level 4' },
+    high:     { code: '99215', description: 'Established Patient Office: High Complexity MDM',     epicLabel: 'Office Visit Established Level 5' },
   },
   consult_outpatient: {
-    low:      { code: '99243', description: 'Outpatient Consultation — Low Complexity MDM',      epicLabel: 'Outpatient Consult Level 3' },
-    moderate: { code: '99244', description: 'Outpatient Consultation — Moderate Complexity MDM', epicLabel: 'Outpatient Consult Level 4' },
-    high:     { code: '99245', description: 'Outpatient Consultation — High Complexity MDM',     epicLabel: 'Outpatient Consult Level 5' },
+    low:      { code: '99243', description: 'Outpatient Consultation: Low Complexity MDM',      epicLabel: 'Outpatient Consult Level 3' },
+    moderate: { code: '99244', description: 'Outpatient Consultation: Moderate Complexity MDM', epicLabel: 'Outpatient Consult Level 4' },
+    high:     { code: '99245', description: 'Outpatient Consultation: High Complexity MDM',     epicLabel: 'Outpatient Consult Level 5' },
   },
   initial_inpatient: {
-    low:      { code: '99221', description: 'Initial Hospital Inpatient/Observation — Low Complexity MDM',      epicLabel: 'Initial Hospital Care Level 1' },
-    moderate: { code: '99222', description: 'Initial Hospital Inpatient/Observation — Moderate Complexity MDM', epicLabel: 'Initial Hospital Care Level 2' },
-    high:     { code: '99223', description: 'Initial Hospital Inpatient/Observation — High Complexity MDM',     epicLabel: 'Initial Hospital Care Level 3' },
+    low:      { code: '99221', description: 'Initial Hospital Inpatient/Observation: Low Complexity MDM',      epicLabel: 'Initial Hospital Care Level 1' },
+    moderate: { code: '99222', description: 'Initial Hospital Inpatient/Observation: Moderate Complexity MDM', epicLabel: 'Initial Hospital Care Level 2' },
+    high:     { code: '99223', description: 'Initial Hospital Inpatient/Observation: High Complexity MDM',     epicLabel: 'Initial Hospital Care Level 3' },
   },
   subsequent_inpatient: {
-    low:      { code: '99231', description: 'Subsequent Hospital Inpatient/Observation — Low Complexity MDM',      epicLabel: 'Subsequent Hospital Care Level 1' },
-    moderate: { code: '99232', description: 'Subsequent Hospital Inpatient/Observation — Moderate Complexity MDM', epicLabel: 'Subsequent Hospital Care Level 2' },
-    high:     { code: '99233', description: 'Subsequent Hospital Inpatient/Observation — High Complexity MDM',     epicLabel: 'Subsequent Hospital Care Level 3' },
+    low:      { code: '99231', description: 'Subsequent Hospital Inpatient/Observation: Low Complexity MDM',      epicLabel: 'Subsequent Hospital Care Level 1' },
+    moderate: { code: '99232', description: 'Subsequent Hospital Inpatient/Observation: Moderate Complexity MDM', epicLabel: 'Subsequent Hospital Care Level 2' },
+    high:     { code: '99233', description: 'Subsequent Hospital Inpatient/Observation: High Complexity MDM',     epicLabel: 'Subsequent Hospital Care Level 3' },
   },
   observation: {
-    low:      { code: '99221', description: 'Hospital Observation — Low Complexity MDM',      epicLabel: 'Initial Hospital Care Level 1' },
-    moderate: { code: '99222', description: 'Hospital Observation — Moderate Complexity MDM', epicLabel: 'Initial Hospital Care Level 2' },
-    high:     { code: '99223', description: 'Hospital Observation — High Complexity MDM',     epicLabel: 'Initial Hospital Care Level 3' },
+    low:      { code: '99221', description: 'Hospital Observation: Low Complexity MDM',      epicLabel: 'Initial Hospital Care Level 1' },
+    moderate: { code: '99222', description: 'Hospital Observation: Moderate Complexity MDM', epicLabel: 'Initial Hospital Care Level 2' },
+    high:     { code: '99223', description: 'Hospital Observation: High Complexity MDM',     epicLabel: 'Initial Hospital Care Level 3' },
   },
   discharge_day: {}, // Time-only
   consult_inpatient: {
-    low:      { code: '99252', description: 'Inpatient Consultation — Low Complexity MDM',      epicLabel: 'Inpatient Consult Level 2' },
-    moderate: { code: '99254', description: 'Inpatient Consultation — Moderate Complexity MDM', epicLabel: 'Inpatient Consult Level 4' },
-    high:     { code: '99255', description: 'Inpatient Consultation — High Complexity MDM',     epicLabel: 'Inpatient Consult Level 5' },
+    low:      { code: '99252', description: 'Inpatient Consultation: Low Complexity MDM',      epicLabel: 'Inpatient Consult Level 2' },
+    moderate: { code: '99254', description: 'Inpatient Consultation: Moderate Complexity MDM', epicLabel: 'Inpatient Consult Level 4' },
+    high:     { code: '99255', description: 'Inpatient Consultation: High Complexity MDM',     epicLabel: 'Inpatient Consult Level 5' },
   },
   emergency_dept: {
-    minimal:  { code: '99281', description: 'Emergency Department — Minimal MDM (may not require physician presence)', epicLabel: 'Emergency Department Level 1' },
-    low:      { code: '99282', description: 'Emergency Department — Straightforward MDM',        epicLabel: 'Emergency Department Level 2' },
-    moderate: { code: '99284', description: 'Emergency Department — Moderate Complexity MDM',    epicLabel: 'Emergency Department Level 4' },
-    high:     { code: '99285', description: 'Emergency Department — High Complexity MDM',        epicLabel: 'Emergency Department Level 5' },
+    minimal:  { code: '99281', description: 'Emergency Department: Minimal MDM (may not require physician presence)', epicLabel: 'Emergency Department Level 1' },
+    low:      { code: '99282', description: 'Emergency Department: Straightforward MDM',        epicLabel: 'Emergency Department Level 2' },
+    moderate: { code: '99284', description: 'Emergency Department: Moderate Complexity MDM',    epicLabel: 'Emergency Department Level 4' },
+    high:     { code: '99285', description: 'Emergency Department: High Complexity MDM',        epicLabel: 'Emergency Department Level 5' },
   },
   critical_care: {}, // Time-only
 };
@@ -599,12 +599,12 @@ function getMdmCpt(visitType: VisitType, mdmLevel: MdmLevel): CptEntry | null {
 function getTimeCpt(visitType: VisitType, minutes: number): CptEntry | null {
   if (visitType === 'critical_care') {
     if (minutes < 30) return null;
-    return { code: '99291', description: 'Critical Care Services — First 30–74 minutes', epicLabel: 'MD HB Critical Care 30-74 Min' };
+    return { code: '99291', description: 'Critical Care Services: First 30–74 minutes', epicLabel: 'MD HB Critical Care 30-74 Min' };
   }
   // Discharge day: time-only codes not in MDM_CPT — map epicLabels inline
   if (visitType === 'discharge_day') {
-    if (minutes <= 30) return { code: '99238', description: 'Hospital Discharge Day Management — 30 minutes or less', epicLabel: 'Hospital Discharge 30 Min or Less' };
-    return { code: '99239', description: 'Hospital Discharge Day Management — more than 30 minutes', epicLabel: 'Hospital Discharge More Than 30 Min' };
+    if (minutes <= 30) return { code: '99238', description: 'Hospital Discharge Day Management: 30 minutes or less', epicLabel: 'Hospital Discharge 30 Min or Less' };
+    return { code: '99239', description: 'Hospital Discharge Day Management: more than 30 minutes', epicLabel: 'Hospital Discharge More Than 30 Min' };
   }
   const thresholds = TIME_THRESHOLDS[visitType];
   if (!thresholds) return null;
@@ -616,7 +616,7 @@ function getTimeCpt(visitType: VisitType, minutes: number): CptEntry | null {
       if (entry && entry.code === match.cpt) return { code: match.cpt, description: entry.description, epicLabel: entry.epicLabel };
     }
   }
-  return { code: match.cpt, description: `${VISIT_TYPE_LABELS[visitType]} — ${match.label}` };
+  return { code: match.cpt, description: `${VISIT_TYPE_LABELS[visitType]}: ${match.label}` };
 }
 
 // Critical care add-on codes
@@ -910,9 +910,9 @@ function getMdmNarrative(prob: MdmLevel, data: MdmLevel, risk: MdmLevel, overall
   ].filter((c) => levelToNum(c.level) >= levelToNum(overall)).map((c) => c.name);
 
   if (cols.length >= 2) {
-    return `${cols.join(' + ')} qualify at ${MDM_LEVEL_FULL[overall].toUpperCase()} — 2-of-3 rule satisfied`;
+    return `${cols.join(' + ')} qualify at ${MDM_LEVEL_FULL[overall].toUpperCase()}: 2-of-3 rule satisfied`;
   }
-  return 'Need ≥2 columns at same level — review inputs above';
+  return 'Need ≥2 columns at same level: review inputs above';
 }
 
 // ─── New Focused Generator Functions ─────────────────────────────────────────
@@ -1034,7 +1034,7 @@ function generateCombinedOutput(
     // Name only — no NPI in the copy text
     const signatureLine = state.selectedProvider
       ? `\n— ${providerDisplayName}`
-      : '\n— [Attending Physician — search NPI above to populate]';
+      : '\n— [Attending Physician: search NPI above to populate]';
     output += `\n\n${attestation}${signatureLine}`;
   }
   if (mdmSupport) {
@@ -1389,7 +1389,7 @@ const EmBillingCalculator: React.FC = () => {
             {state.selectedProvider && (
               <div className="mt-3 flex items-center gap-3 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
                 <span className="w-2 h-2 rounded-full bg-green-500 flex-shrink-0" />
-                <span className="text-sm text-green-800 font-medium flex-1">{providerDisplayName} — NPI {state.selectedProvider.npi}</span>
+                <span className="text-sm text-green-800 font-medium flex-1">{providerDisplayName}, NPI {state.selectedProvider.npi}</span>
                 <button onClick={clearProvider} className="text-green-600 hover:text-red-500 transition-colors" aria-label="Clear provider"><X size={14} /></button>
               </div>
             )}
@@ -1431,7 +1431,7 @@ const EmBillingCalculator: React.FC = () => {
               <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Provider Role</label>
               <div className="grid grid-cols-2 gap-2">
                 {([
-                  { role: 'attending_solo' as ProviderRole, label: 'Attending Only', icon: <UserCheck size={14} />, desc: 'Solo visit — no attestation' },
+                  { role: 'attending_solo' as ProviderRole, label: 'Attending Only', icon: <UserCheck size={14} />, desc: 'Solo visit, no attestation' },
                   { role: 'teaching_resident' as ProviderRole, label: 'Teaching + Resident', icon: <GraduationCap size={14} />, desc: '-GC auto-applied' },
                   { role: 'shared_split' as ProviderRole, label: 'Shared / Split', icon: <Users size={14} />, desc: '-FS auto-applied' },
                   { role: 'incident_to' as ProviderRole, label: 'Incident-To (NP/PA)', icon: <AlertTriangle size={14} />, desc: 'Office only · 100% fee' },
@@ -1465,7 +1465,7 @@ const EmBillingCalculator: React.FC = () => {
                     Your name auto-populates from the NPI lookup above. -GC is automatically applied to the billing code.
                   </p>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">Resident Name <span className="font-normal">(optional — auto-fills into attestation)</span></label>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">Resident Name <span className="font-normal">(optional, auto-fills into attestation)</span></label>
                     <input type="text" value={state.residentName} onChange={(e) => set({ residentName: e.target.value })}
                       placeholder="e.g., Dr. Jane Resident"
                       className="w-full px-3 py-2 text-sm bg-white border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
@@ -1506,7 +1506,7 @@ const EmBillingCalculator: React.FC = () => {
                     <span className="text-xs font-bold text-amber-800">Incident-To Requirements</span>
                   </div>
                   <div className="space-y-1.5 text-xs text-amber-800 mb-3">
-                    {['Office visit only (not hospital/facility)', 'Established patient with existing treatment plan', 'MD/DO must be physically present in the suite', 'No new problems — continuation of established plan only', 'NP/PA cannot independently initiate new treatment'].map((item) => (
+                    {['Office visit only (not hospital/facility)', 'Established patient with existing treatment plan', 'MD/DO must be physically present in the suite', 'No new problems: continuation of established plan only', 'NP/PA cannot independently initiate new treatment'].map((item) => (
                       <div key={item} className="flex items-start gap-2">
                         <CheckCircle2 size={12} className="text-amber-600 flex-shrink-0 mt-0.5" />
                         <span>{item}</span>
@@ -1701,7 +1701,7 @@ const EmBillingCalculator: React.FC = () => {
                 {isNoTime && (
                   <p className="mt-2 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
                     <AlertTriangle size={11} className="inline mr-1" />
-                    Emergency Department E/M codes are selected by MDM only — per 2023 AMA guidelines, time is not a coding factor for ED services.
+                    Emergency Department E/M codes are selected by MDM only; per 2023 AMA guidelines, time is not a coding factor for ED services.
                   </p>
                 )}
               </div>
@@ -1711,7 +1711,7 @@ const EmBillingCalculator: React.FC = () => {
               <div className="mb-5 flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
                 <Clock size={14} className="text-slate-500 flex-shrink-0" />
                 <p className="text-xs text-slate-600">
-                  <span className="font-semibold">{VISIT_TYPE_LABELS[state.visitType]}</span> uses time-based coding only — MDM level is not applicable for this visit type.
+                  <span className="font-semibold">{VISIT_TYPE_LABELS[state.visitType]}</span> uses time-based coding only; MDM level is not applicable for this visit type.
                 </p>
               </div>
             )}
@@ -1815,15 +1815,15 @@ const EmBillingCalculator: React.FC = () => {
                       {/* Category 1 */}
                       <div className="px-4 pt-3 pb-1">
                         <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">
-                          Cat 1 — Tests, Documents &amp; Historian
+                          Cat 1: Tests, Documents &amp; Historian
                           <span className="ml-1 font-normal normal-case">
                             (≥2 = Low · ≥3 = Moderate)
                           </span>
                         </p>
                         <div className="space-y-3">
                           {([
-                            { key: 'priorTestResults' as keyof DataReviewed, label: 'Reviewed prior test results', sub: `e.g., ${specialtyEx.labs} — NOT tests you ordered yourself` },
-                            { key: 'orderedTests'      as keyof DataReviewed, label: 'Ordered tests',              sub: `e.g., ordered MRI, CT, LP, EMG, labs — each unique test per CPT` },
+                            { key: 'priorTestResults' as keyof DataReviewed, label: 'Reviewed prior test results', sub: `e.g., ${specialtyEx.labs}; NOT tests you ordered yourself` },
+                            { key: 'orderedTests'      as keyof DataReviewed, label: 'Ordered tests',              sub: `e.g., ordered MRI, CT, LP, EMG, labs; each unique test per CPT` },
                             { key: 'externalRecords'   as keyof DataReviewed, label: 'Reviewed external records',  sub: 'e.g., OSH records, transfer notes, prior specialist notes from outside' },
                             { key: 'additionalHistorian' as keyof DataReviewed, label: 'Additional historian', sub: 'e.g., obtained history from caregiver, family member, or witness' },
                           ] as { key: keyof DataReviewed; label: string; sub: string }[]).map(({ key, label, sub }) => (
@@ -1845,7 +1845,7 @@ const EmBillingCalculator: React.FC = () => {
                       {/* Category 2 */}
                       <div className="px-4 pt-3 pb-1 border-t border-slate-200 mt-2">
                         <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">
-                          Cat 2 — Independent Interpretation
+                          Cat 2: Independent Interpretation
                           <span className="ml-1 font-normal normal-case">(alone = Moderate)</span>
                         </p>
                         <label className="flex items-start gap-3 cursor-pointer mb-3">
@@ -1857,14 +1857,14 @@ const EmBillingCalculator: React.FC = () => {
                           />
                           <div>
                             <span className="text-sm text-slate-700">Personally interpreted a test</span>
-                            <p className="text-xs text-slate-400 mt-0.5">e.g., {specialtyEx.imaging} — viewed raw images/tracings yourself, NOT just a report; NOT separately billed</p>
+                            <p className="text-xs text-slate-400 mt-0.5">e.g., {specialtyEx.imaging}; viewed raw images/tracings yourself, NOT just a report; NOT separately billed</p>
                           </div>
                         </label>
                       </div>
                       {/* Category 3 */}
                       <div className="px-4 pt-3 pb-3 border-t border-slate-200">
                         <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">
-                          Cat 3 — Provider Discussion
+                          Cat 3: Provider Discussion
                           <span className="ml-1 font-normal normal-case">(alone = Moderate)</span>
                         </p>
                         <label className="flex items-start gap-3 cursor-pointer">
@@ -1876,7 +1876,7 @@ const EmBillingCalculator: React.FC = () => {
                           />
                           <div>
                             <span className="text-sm text-slate-700">Spoke directly with external provider</span>
-                            <p className="text-xs text-slate-400 mt-0.5">e.g., called radiology, discussed with neurosurgery, spoke with PCP — re: management or test interpretation; asynchronous OK</p>
+                            <p className="text-xs text-slate-400 mt-0.5">e.g., called radiology, discussed with neurosurgery, spoke with PCP, re: management or test interpretation; asynchronous OK</p>
                           </div>
                         </label>
                       </div>
@@ -1935,7 +1935,7 @@ const EmBillingCalculator: React.FC = () => {
                           Clear selection
                         </button>
                       )}
-                      <p className="text-xs text-slate-400 mt-2 italic">Select the single most complex action — MDM uses the highest risk level only.</p>
+                      <p className="text-xs text-slate-400 mt-2 italic">Select the single most complex action; MDM uses the highest risk level only.</p>
                     </div>
                   </div>
                 </div>
@@ -1970,7 +1970,7 @@ const EmBillingCalculator: React.FC = () => {
                 {TIME_THRESHOLDS[state.visitType] && (
                   <div className="bg-slate-50 rounded-xl border border-slate-200 overflow-hidden mb-4">
                     <div className="px-4 py-2 border-b border-slate-200 bg-white">
-                      <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Time Thresholds — {VISIT_TYPE_LABELS[state.visitType]}</span>
+                      <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Time Thresholds: {VISIT_TYPE_LABELS[state.visitType]}</span>
                     </div>
                     <div className="divide-y divide-slate-100">
                       {TIME_THRESHOLDS[state.visitType]!.map((t) => {
@@ -1990,7 +1990,7 @@ const EmBillingCalculator: React.FC = () => {
                 <div className="bg-slate-50 rounded-xl border border-slate-200 p-4">
                   <p className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-3">
                     Activities performed on date of service
-                    <span className="font-normal text-slate-400 normal-case ml-1">(check all that apply — required for time billing documentation)</span>
+                    <span className="font-normal text-slate-400 normal-case ml-1">(check all that apply, required for time billing documentation)</span>
                   </p>
                   <div className="space-y-2.5">
                     {TIME_ACTIVITIES.map(({ key, label, plain }) => (
@@ -2033,7 +2033,7 @@ const EmBillingCalculator: React.FC = () => {
                   {/* Floor note: when MDM is minimal but visit type has no minimal code */}
                   {effectiveBillingMode === 'mdm' && overallMdm === 'minimal' && !MDM_CPT[state.visitType]?.minimal && (
                     <p className="text-blue-200 text-xs mt-1.5 italic opacity-80">
-                      This visit type has no minimal-complexity code — floor code shown per AMA guidelines.
+                      This visit type has no minimal-complexity code; floor code shown per AMA guidelines.
                     </p>
                   )}
                   {activeCpt.epicLabel && (
@@ -2095,7 +2095,7 @@ const EmBillingCalculator: React.FC = () => {
                 </pre>
                 {!attestationText && state.providerRole === 'attending_solo' && (
                   <p className="mt-2 text-xs text-slate-400 text-center">
-                    No separate attestation needed — sign your progress note as usual.
+                    No separate attestation needed; sign your progress note as usual.
                   </p>
                 )}
                 {!attestationText && isIncidentTo && (
@@ -2133,7 +2133,7 @@ const EmBillingCalculator: React.FC = () => {
                         </div>
                         <div>
                           <p className="font-bold text-blue-800 uppercase tracking-wide text-[10px] mb-1">■ Post-2021 AMA E/M framework</p>
-                          <p className="text-blue-700 leading-relaxed">Since 2021, E/M codes are selected by <strong>MDM or time only</strong> — not by the completeness of history or physical exam documentation. Your attestation needs to establish MDM participation and personal patient evaluation, not document exam components.</p>
+                          <p className="text-blue-700 leading-relaxed">Since 2021, E/M codes are selected by <strong>MDM or time only</strong>, not by the completeness of history or physical exam documentation. Your attestation needs to establish MDM participation and personal patient evaluation, not document exam components.</p>
                         </div>
                         <div>
                           <p className="font-bold text-blue-800 uppercase tracking-wide text-[10px] mb-1.5">■ What the resident's note must contain</p>
@@ -2233,9 +2233,9 @@ const EmBillingCalculator: React.FC = () => {
                   <div>
                     <h3 className="text-xs font-bold text-slate-700 mb-1.5">How to Use: MDM vs Time-Based Billing</h3>
                     <p className="text-sm text-slate-600 leading-relaxed">
-                      Since January 2021, the AMA revised E/M coding so outpatient codes (99202–99215) are selected by <strong>Medical Decision-Making (MDM)</strong> or <strong>total physician time</strong> — not by the completeness of history or physical exam documentation.
+                      Since January 2021, the AMA revised E/M coding so outpatient codes (99202–99215) are selected by <strong>Medical Decision-Making (MDM)</strong> or <strong>total physician time</strong>, not by the completeness of history or physical exam documentation.
                       This calculator supports both methods. For MDM, select your problem complexity, data reviewed, and management risk to calculate the overall MDM level (minimal/low/moderate/high) and the corresponding CPT code.
-                      For time-based billing, enter the total time spent on the date of the encounter — including pre-visit preparation, history, exam, counseling, care coordination, and documentation.
+                      For time-based billing, enter the total time spent on the date of the encounter, including pre-visit preparation, history, exam, counseling, care coordination, and documentation.
                     </p>
                   </div>
                   <div>
@@ -2272,7 +2272,7 @@ const EmBillingCalculator: React.FC = () => {
               {([
                 {
                   q: 'How do I choose between CPT 99205 and 99215?',
-                  a: <><strong>99205</strong> (new patient, high complexity) and <strong>99215</strong> (established patient, high complexity) both require high-complexity MDM: a problem posing a threat to life or bodily function, extensive data review, and high-risk management — such as prescribing IV medications, deciding on major surgery, or managing a drug with intensive monitoring requirements. The only difference is new vs. established patient status. Time thresholds: 99205 requires 60+ minutes; 99215 requires 54+ minutes.</>,
+                  a: <><strong>99205</strong> (new patient, high complexity) and <strong>99215</strong> (established patient, high complexity) both require high-complexity MDM: a problem posing a threat to life or bodily function, extensive data review, and high-risk management, such as prescribing IV medications, deciding on major surgery, or managing a drug with intensive monitoring requirements. The only difference is new vs. established patient status. Time thresholds: 99205 requires 60+ minutes; 99215 requires 54+ minutes.</>,
                 },
                 {
                   q: 'What CPT codes do hospitalists use for inpatient billing?',
@@ -2280,15 +2280,15 @@ const EmBillingCalculator: React.FC = () => {
                 },
                 {
                   q: 'Can I bill by time for E/M visits in 2024?',
-                  a: <>Yes. Total physician time on the date of service is a valid sole basis for E/M level selection for office (99202–99215) and inpatient visits (99221–99233). The <strong>exception</strong> is the emergency department — per 2023 AMA guidelines, time is not a valid coding basis for ED E/M codes (99281–99285); only MDM applies. You may choose MDM or time on a visit-by-visit basis; use whichever supports the more accurate level for the encounter.</>,
+                  a: <>Yes. Total physician time on the date of service is a valid sole basis for E/M level selection for office (99202–99215) and inpatient visits (99221–99233). The <strong>exception</strong> is the emergency department; per 2023 AMA guidelines, time is not a valid coding basis for ED E/M codes (99281–99285); only MDM applies. You may choose MDM or time on a visit-by-visit basis; use whichever supports the more accurate level for the encounter.</>,
                 },
                 {
                   q: 'What is the 2021 AMA MDM framework?',
-                  a: <>MDM is determined by meeting at least 2 of 3 elements at a given level: (1) <strong>Number and complexity of problems</strong> — from self-limited (minimal) to acute illness with systemic symptoms (moderate) to threat to life or bodily function (high); (2) <strong>Amount and complexity of data</strong> — from minimal/none (minimal) to review/order of tests plus independent interpretation or discussion with another provider (high); (3) <strong>Risk of management</strong> — from minor surgery or OTC medication (low) to prescription drug management (moderate) to IV drug therapy, major surgery, or hospitalization decision (high).</>,
+                  a: <>MDM is determined by meeting at least 2 of 3 elements at a given level: (1) <strong>Number and complexity of problems</strong>: from self-limited (minimal) to acute illness with systemic symptoms (moderate) to threat to life or bodily function (high); (2) <strong>Amount and complexity of data</strong>: from minimal/none (minimal) to review/order of tests plus independent interpretation or discussion with another provider (high); (3) <strong>Risk of management</strong>: from minor surgery or OTC medication (low) to prescription drug management (moderate) to IV drug therapy, major surgery, or hospitalization decision (high).</>,
                 },
                 {
                   q: 'When should I use modifier -GC for teaching physician billing?',
-                  a: <>Add <strong>modifier -GC</strong> when an attending teaching physician personally performs or supervises a resident. The attending must be present during the key portion of the service and personally examine the patient. The attestation should confirm the attending's participation and physical presence — not merely supervisory oversight. For critical care with a resident, the attending must be immediately available and personally document their own participation in the critical care services.</>,
+                  a: <>Add <strong>modifier -GC</strong> when an attending teaching physician personally performs or supervises a resident. The attending must be present during the key portion of the service and personally examine the patient. The attestation should confirm the attending's participation and physical presence, not merely supervisory oversight. For critical care with a resident, the attending must be immediately available and personally document their own participation in the critical care services.</>,
                 },
                 {
                   q: 'How does shared/split billing work with the -FS modifier?',
@@ -2319,10 +2319,10 @@ const EmBillingCalculator: React.FC = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10 text-center">
             {[
-              { code: '99215', label: 'Established — High', time: '54+ min' },
-              { code: '99205', label: 'New Patient — High', time: '60+ min' },
-              { code: '99223', label: 'Initial Inpatient — High', time: '75+ min' },
-              { code: '99233', label: 'Subsequent — High', time: '50+ min' },
+              { code: '99215', label: 'Established: High', time: '54+ min' },
+              { code: '99205', label: 'New Patient: High', time: '60+ min' },
+              { code: '99223', label: 'Initial Inpatient: High', time: '75+ min' },
+              { code: '99233', label: 'Subsequent: High', time: '50+ min' },
             ].map(({ code, label, time }) => (
               <div key={code} className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-3">
                 <div className="text-lg font-bold text-neuro-600">{code}</div>
@@ -2336,7 +2336,7 @@ const EmBillingCalculator: React.FC = () => {
             <h3 className="text-sm font-bold text-slate-700 mb-2">Supported Specialties</h3>
             <p className="text-sm text-slate-600 leading-relaxed">
               This E/M billing calculator is designed for practicing physicians across multiple specialties:
-              <strong> Neurology</strong> (stroke, seizure, dementia, headache — including neurohospitalist workflows),
+              <strong> Neurology</strong> (stroke, seizure, dementia, headache, including neurohospitalist workflows),
               <strong> Internal Medicine</strong> and <strong>Hospitalist Medicine</strong> (initial and subsequent inpatient care, discharge planning),
               <strong> Emergency Medicine</strong> (MDM-only ED coding per 2023 AMA),
               <strong> Cardiology</strong>, <strong>Psychiatry</strong>, <strong>Family Medicine</strong>, and <strong>Surgery</strong>.
@@ -2345,7 +2345,7 @@ const EmBillingCalculator: React.FC = () => {
           </div>
 
           <p className="text-xs text-slate-400">
-            CPT codes and E/M guidelines based on 2021/2023 AMA CPT revisions and CMS Medicare Claims Processing Manual. For educational and reference use only — verify with your institutional compliance team. CPT® is a registered trademark of the American Medical Association.
+            CPT codes and E/M guidelines based on 2021/2023 AMA CPT revisions and CMS Medicare Claims Processing Manual. For educational and reference use only; verify with your institutional compliance team. CPT® is a registered trademark of the American Medical Association.
           </p>
         </div>
       </div>
@@ -2390,7 +2390,7 @@ const EmBillingCalculator: React.FC = () => {
 
               {/* Role-specific helper text */}
               {!attestationText && state.providerRole === 'attending_solo' && (
-                <p className="text-xs text-slate-400 text-center">No separate attestation needed — sign your progress note as usual.</p>
+                <p className="text-xs text-slate-400 text-center">No separate attestation needed; sign your progress note as usual.</p>
               )}
               {!attestationText && isIncidentTo && (
                 <p className="text-xs text-amber-700 text-center">Incident-to: MD supervising physician signs the note. No separate attestation block needed.</p>
@@ -2435,7 +2435,7 @@ const EmBillingCalculator: React.FC = () => {
                       </div>
                       <div>
                         <p className="font-bold text-blue-800 uppercase tracking-wide text-[10px] mb-1">■ Post-2021 AMA E/M framework</p>
-                        <p className="text-blue-700 leading-relaxed">Since 2021, E/M codes are selected by <strong>MDM or time only</strong> — not by the completeness of history or physical exam documentation. Your attestation needs to establish MDM participation and personal patient evaluation, not document exam components.</p>
+                        <p className="text-blue-700 leading-relaxed">Since 2021, E/M codes are selected by <strong>MDM or time only</strong>, not by the completeness of history or physical exam documentation. Your attestation needs to establish MDM participation and personal patient evaluation, not document exam components.</p>
                       </div>
                       <div>
                         <p className="font-bold text-blue-800 uppercase tracking-wide text-[10px] mb-1.5">■ What the resident's note must contain</p>
