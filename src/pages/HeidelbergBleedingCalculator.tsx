@@ -188,8 +188,8 @@ const HeidelbergBleedingCalculator: React.FC = () => {
       return 'Heidelberg Bleeding Classification: Select a bleeding class.';
     }
     const headline = result.stat
-      ? `Heidelberg Bleeding Classification — ${result.classification} (${result.stat})`
-      : `Heidelberg Bleeding Classification — ${result.classification}`;
+      ? `Heidelberg Bleeding Classification: ${result.classification} (${result.stat})`
+      : `Heidelberg Bleeding Classification: ${result.classification}`;
     return [
       headline,
       result.interpretation,
@@ -327,7 +327,7 @@ const HeidelbergBleedingCalculator: React.FC = () => {
         scoreAriaLabel={
           isComplete
             ? `Heidelberg ${result!.classification}${result!.stat ? `, ${result!.stat}` : ''}.`
-            : 'Heidelberg Bleeding Classification — no class selected'
+            : 'Heidelberg Bleeding Classification: no class selected'
         }
         onBack={handleBack}
         onReset={handleReset}

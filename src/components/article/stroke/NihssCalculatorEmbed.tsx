@@ -146,7 +146,7 @@ export const NihssCalculatorEmbed: React.FC<NihssCalculatorEmbedProps> = ({
                   <li><strong>7–9:</strong> High (85%) – Very likely LVO</li>
                 </ul>
                 <p className="text-[11px] mt-1.5">
-                  <strong>Pearl:</strong> RACE ≥5 has 85% sensitivity for LVO — prompt urgent CTA/CTP.
+                  <strong>Pearl:</strong> RACE ≥5 has 85% sensitivity for LVO; prompt urgent CTA/CTP.
                 </p>
               </div>
               <p className="text-[9px] text-slate-400 border-t border-slate-100 pt-2">
@@ -282,7 +282,7 @@ export const NihssCalculatorEmbed: React.FC<NihssCalculatorEmbedProps> = ({
           onClick={() => onApply(total)}
           className="min-h-[44px] px-6 py-2 text-sm font-semibold text-white bg-neuro-500 hover:bg-neuro-600 active:bg-neuro-700 rounded-xl transition-colors"
         >
-          Apply score — {total}
+          Apply score: {total}
         </button>
       </div>
     </div>

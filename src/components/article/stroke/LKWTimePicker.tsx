@@ -841,7 +841,7 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
     const bedtime  = buildDate(bdDayOffset, bdHourIdx, bdMinIdx, bdPeriodIdx);
     const wakeTime = buildDate(wkDayOffset, wkHourIdx, wkMinIdx, wkPeriodIdx);
     if (wakeTime <= bedtime) {
-      setSleepError('Wake-up time must be after bedtime — check day or time settings.');
+      setSleepError('Wake-up time must be after bedtime; check day or time settings.');
       return;
     }
     if (wakeTime > now) {

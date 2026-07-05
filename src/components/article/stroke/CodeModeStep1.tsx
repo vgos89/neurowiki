@@ -438,7 +438,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
                 <p className="text-[10px] text-emerald-500">Single bolus</p>
               </div>
             </div>
-            <p className="text-[10px] text-slate-400 italic">Reference only — verify against institutional protocol before administration.</p>
+            <p className="text-[10px] text-slate-400 italic">Reference only, verify against institutional protocol before administration.</p>
           </div>
         </div>
       )}
@@ -496,7 +496,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
                   → No disabling deficit present? DAPT is the recommended pathway.
                 </p>
                 <p className="text-xs text-slate-600 leading-snug">
-                  AHA/ASA 2026 §4.6.1 (COR 3 No Benefit) advises against routine IVT in mild non-disabling deficits within 4.5h. §4.8 (COR 1, LOE A) recommends DAPT (aspirin + clopidogrel × 21 days) within 24h for NIHSS ≤3 noncardioembolic AIS — CHANCE, POINT, INSPIRES.
+                  AHA/ASA 2026 §4.6.1 (COR 3 No Benefit) advises against routine IVT in mild non-disabling deficits within 4.5h. §4.8 (COR 1, LOE A) recommends DAPT (aspirin + clopidogrel × 21 days) within 24h for NIHSS ≤3 noncardioembolic AIS: CHANCE, POINT, INSPIRES.
                 </p>
               </div>
             )}
@@ -519,10 +519,10 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
           <div className="px-4 py-3 space-y-3">
             <p className="text-sm text-slate-700 leading-snug">
               {lkwUnknown
-                ? 'LKW unknown — if patient woke with symptoms, they may qualify for thrombolysis using DWI-FLAIR mismatch criteria.'
+                ? 'LKW unknown: if patient woke with symptoms, they may qualify for thrombolysis using DWI-FLAIR mismatch criteria.'
                 : lkwHours <= 24
-                ? `LKW is ${lkwHours.toFixed(1)}h ago — past the standard 4.5h window. Patient may qualify for extended-window thrombolysis (4.5h–9h) or late-window options (9h–24h).`
-                : `LKW is ${lkwHours.toFixed(1)}h ago — beyond standard thrombolysis windows. Confirm late-window options against current AHA/ASA guidance.`}
+                ? `LKW is ${lkwHours.toFixed(1)}h ago, past the standard 4.5h window. Patient may qualify for extended-window thrombolysis (4.5h–9h) or late-window options (9h–24h).`
+                : `LKW is ${lkwHours.toFixed(1)}h ago, beyond standard thrombolysis windows. Confirm late-window options against current AHA/ASA guidance.`}
             </p>
             <button
               type="button"

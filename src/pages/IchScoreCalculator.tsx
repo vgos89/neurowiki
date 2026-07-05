@@ -186,7 +186,7 @@ const IchScoreCalculator: React.FC = () => {
   // ── Handlers ───────────────────────────────────────────────────────────────
   const buildEmrText = useCallback(() => {
     if (!isComplete || !result) {
-      return 'ICH Score: Incomplete — select all five components.';
+      return 'ICH Score: Incomplete, select all five components.';
     }
     // Build components list — only items that contributed points
     const components: string[] = [];
@@ -200,7 +200,7 @@ const IchScoreCalculator: React.FC = () => {
 
     const componentStr = components.length > 0 ? components.join(', ') : 'none';
     return [
-      `ICH Score — ${result.score}/6 (30-day mortality ${result.mortality}%)`,
+      `ICH Score: ${result.score}/6 (30-day mortality ${result.mortality}%)`,
       `Components: ${componentStr}.`,
     ].join('\n');
   }, [inputs, isComplete, result]);
@@ -308,7 +308,7 @@ const IchScoreCalculator: React.FC = () => {
   return (
     <>
       {/* sr-only h1 — exactly one per page, §7.4 */}
-      <h1 className="sr-only">ICH Score Calculator — Intracerebral Hemorrhage Mortality</h1>
+      <h1 className="sr-only">ICH Score Calculator: Intracerebral Hemorrhage Mortality</h1>
 
       {/* ── Sticky header — §1.1 ──────────────────────────────────────────── */}
       <CalculatorHeader
@@ -334,7 +334,7 @@ const IchScoreCalculator: React.FC = () => {
         scoreAriaLabel={
           isComplete
             ? `ICH Score ${result!.score} of 6. ${result!.mortality}% 30-day mortality.`
-            : 'ICH Score — not yet calculated'
+            : 'ICH Score: not yet calculated'
         }
         onBack={handleBack}
         onReset={handleReset}

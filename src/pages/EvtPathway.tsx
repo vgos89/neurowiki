@@ -368,9 +368,9 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
               eligible: false,
               status: "Consult",
               criteriaName: "Basilar EVT - Prestroke mRS ≥2 (IDD)",
-              reason: "Basilar EVT in prestroke mRS ≥2 — insufficient data to determine",
+              reason: "Basilar EVT in prestroke mRS ≥2: insufficient data to determine",
               details: "For basilar artery occlusion with prestroke mRS ≥2, there is insufficient data to determine the benefit of EVT within 24 hours. The 2026 AHA/ASA basilar trial enrollment criteria (ATTENTION, BAOCHE) restricted enrollment to baseline mRS 0–1; the guideline therefore makes no positive recommendation outside that population. Decision should be individualized in discussion with Vascular Neurology and Neurointerventional based on premorbid trajectory, family/patient goals, and reperfusion feasibility.",
-              exclusionReason: "Basilar EVT in prestroke mRS ≥2 falls outside trial enrollment — insufficient data to determine.",
+              exclusionReason: "Basilar EVT in prestroke mRS ≥2 falls outside trial enrollment; insufficient data to determine.",
               variant: 'warning'
           };
       }
@@ -415,7 +415,7 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
               eligible: false,
               status: "Consult",
               criteriaName: "Basilar EVT - Low NIHSS",
-              reason: `Low NIHSS (< 6) — Specialist Consultation`,
+              reason: `Low NIHSS (< 6): Specialist Consultation`,
               details: "The 2026 AHA/ASA basilar EVT pathway within 24 hours requires baseline mRS 0–1, pc-ASPECTS ≥6, and NIHSS ≥6 for guideline-supported positive recommendations. For basilar occlusion with NIHSS <6, no approval branch is established; discuss urgently with Vascular Neurology and Neurointerventional.",
               variant: 'warning'
           };
@@ -558,7 +558,7 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
               status: "Eligible",
               criteriaName: "Late Window ASPECTS ≥6 - Class I",
               reason: `ASPECTS ${aspectsLate}, NIHSS ≥6, mRS 0–1`,
-              details: "In patients with anterior circulation LVO (ICA or M1) presenting between 6 and 24 hours, with NIHSS ≥6, prestroke mRS 0–1, and ASPECTS ≥6, EVT is strongly recommended. Class I (LOE A) per AHA/ASA 2026 §4.7.2 Rec #2 — late-window selection by NCCT ASPECTS ≥6 does not require perfusion imaging. DAWN and DEFUSE-3 established late-window EVT by perfusion / clinical-core mismatch and remain a recognized selection route; perfusion is not a prerequisite once ASPECTS ≥6 qualifies.",
+              details: "In patients with anterior circulation LVO (ICA or M1) presenting between 6 and 24 hours, with NIHSS ≥6, prestroke mRS 0–1, and ASPECTS ≥6, EVT is strongly recommended. Class I (LOE A) per AHA/ASA 2026 §4.7.2 Rec #2: late-window selection by NCCT ASPECTS ≥6 does not require perfusion imaging. DAWN and DEFUSE-3 established late-window EVT by perfusion / clinical-core mismatch and remain a recognized selection route; perfusion is not a prerequisite once ASPECTS ≥6 qualifies.",
               variant: 'success'
           };
       }
@@ -626,9 +626,9 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
               eligible: false,
               status: "Consult",
               criteriaName: "Very Large Core (>100 mL) — Outside Trial Ceiling",
-              reason: `Very Large Core (${core} mL) — outside SELECT2 enrollment ceiling`,
+              reason: `Very Large Core (${core} mL): outside SELECT2 enrollment ceiling`,
               details: "Core volume >100 mL falls outside the SELECT2 enrollment ceiling. Exploratory analyses (SELECT2 page e54) report diminished treatment benefit, with a higher likelihood of cerebral edema and decompressive hemicraniectomy. EVT is not categorically prohibited, but routine approval is not supported by 2026 AHA/ASA recommendations; decision should be individualized with Vascular Neurology and Neurointerventional, with explicit informed consent regarding diminished treatment benefit, cerebral edema risk, and the possibility of hemicraniectomy.",
-              exclusionReason: "Core >100 mL — outside trial enrollment; diminished treatment benefit and increased cerebral edema / hemicraniectomy risk.",
+              exclusionReason: "Core >100 mL: outside trial enrollment; diminished treatment benefit and increased cerebral edema / hemicraniectomy risk.",
               variant: 'warning'
           };
       }
@@ -681,9 +681,9 @@ const calculateMevoProtocol = (inputs: Inputs): Result => {
                 eligible: false,
                 status: "Consult",
                 criteriaName: "Dominant M2 (DVO), >6h — IDD",
-                reason: "Dominant M2 EVT beyond 6h — benefits are uncertain",
+                reason: "Dominant M2 EVT beyond 6h: benefits are uncertain",
                 details: "For dominant M2 (≥50% of the MCA territory, NOT left/right hemispheric dominance) presenting beyond 6 hours, the benefits are uncertain. The 2026 AHA/ASA §4.7.2 Rec #7 Class IIa recommendation is anchored to 0–6 hour enrollment; insufficient data are available to determine net benefit in the 6–24 hour window. Individualized decision with Vascular Neurology and Neurointerventional.",
-                exclusionReason: "Dominant M2 EVT >6h — insufficient data; benefits are uncertain.",
+                exclusionReason: "Dominant M2 EVT >6h: insufficient data; benefits are uncertain.",
                 variant: 'warning'
             };
         }
@@ -692,7 +692,7 @@ const calculateMevoProtocol = (inputs: Inputs): Result => {
             status: "EVT Reasonable",
             criteriaName: "Selected MeVO (DVO) — Dominant M2, 0–6h",
             reason: "Dominant M2 + Disabling (0–6h)",
-            details: "EVT is reasonable for selected dominant M2 (DVO) occlusions in the 0–6 hour window with disabling deficit, favorable imaging, and technically feasible anatomy. 2026 AHA/ASA §4.7.2 Rec #7, Class IIa (LOE B-R). 'Dominant M2' here means the M2 branch supplying ≥50% of the MCA territory on the affected side — NOT left/right hemispheric dominance. Discuss urgently with Neurointerventional.",
+            details: "EVT is reasonable for selected dominant M2 (DVO) occlusions in the 0–6 hour window with disabling deficit, favorable imaging, and technically feasible anatomy. 2026 AHA/ASA §4.7.2 Rec #7, Class IIa (LOE B-R). 'Dominant M2' here means the M2 branch supplying ≥50% of the MCA territory on the affected side, NOT left/right hemispheric dominance. Discuss urgently with Neurointerventional.",
             variant: 'success'
         };
     }
@@ -707,7 +707,7 @@ const calculateMevoProtocol = (inputs: Inputs): Result => {
             criteriaName: "Class III: No Benefit",
             reason: "Stent-retriever EVT is not beneficial for this MeVO pattern",
             details: "In patients with acute ischemic stroke from proximal nondominant or codominant M2, distal MCA, ACA, or PCA occlusions, endovascular thrombectomy using stent retrievers is of no benefit for improving functional outcomes and is not recommended. This is a Class III (No Benefit) recommendation based on ESCAPE-MeVO and DISTAL, which showed no benefit and possible harm with stent retrievers as a first-pass strategy in these vessels.",
-            exclusionReason: "COR 3: No Benefit — stent retriever EVT for nondominant/codominant or distal vessel location.",
+            exclusionReason: "COR 3: No Benefit; stent retriever EVT for nondominant/codominant or distal vessel location.",
             variant: 'danger'
         };
     }
@@ -922,7 +922,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
       if (inputs.occlusionType === 'lvo') {
           const locLabel = inputs.lvoLocation === 'basilar' ? 'Basilar LVO' : 'Anterior LVO';
           const protocol = result.criteriaName || (inputs.time === '0_6' ? '0–6h standard window' : '6–24h late window');
-          const line1 = `EVT eligibility — ${result.status} (${protocol})`;
+          const line1 = `EVT eligibility: ${result.status} (${protocol})`;
 
           const nihssLabel = inputs.nihss !== 'unknown' ? `NIHSS ${inputs.nihss.replace('_', '–').replace('plus', '+')}` : '';
           const ageLabel   = inputs.age  !== 'unknown' ? `age ${inputs.age.replace('_', '–').replace('plus', '+')}` : '';
@@ -949,7 +949,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
       // MeVO branch
       const mevoLoc  = inputs.mevoLocation !== 'unknown' ? inputs.mevoLocation.replace(/_/g, ' ') : '';
       const timeLabel = inputs.time !== 'unknown' ? (inputs.time === '0_6' ? '0–6h' : '6–24h') : '';
-      const line1 = `EVT eligibility (MeVO) — ${result.status}`;
+      const line1 = `EVT eligibility (MeVO): ${result.status}`;
       const mevoParts = [
           mevoLoc ? `${mevoLoc} occlusion` : '',
           timeLabel,
@@ -1088,7 +1088,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
 
   return (
     <div className={`max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 ${isInModal ? 'pb-8' : 'pb-32'} md:pb-20`}>
-      <h1 className="sr-only">EVT Eligibility Pathway — Mechanical Thrombectomy Decision Support</h1>
+      <h1 className="sr-only">EVT Eligibility Pathway: Mechanical Thrombectomy Decision Support</h1>
       {/* Sticky compact header — PathwayHeader primitive (PATHWAY_SPEC §2 anatomy) */}
       <PathwayHeader
         pathwayLabel="EVT Pathway"
@@ -1306,7 +1306,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
           iconKey="clinical"
           nodeState={isSection1Complete ? 'completed' : activeSection === 1 ? 'active' : 'locked'}
           segmentAboveTraversed={isSection0Complete}
-          lockedAriaLabel="Step 2 Clinical, locked — awaiting completion of Step 1"
+          lockedAriaLabel="Step 2 Clinical, locked; awaiting completion of Step 1"
         >
           {/* Branch chip — only show when step is completed and not active */}
           {isSection1Complete && activeSection !== 1 && getSummary(1) && (
@@ -1391,11 +1391,11 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                 <div className="pt-2 border-t border-slate-100 space-y-1 mt-2">
                   <PathwayLearningPearl
                     title="2026 Guideline Update"
-                    content="The 2026 AHA/ASA Guidelines (Section 4.7.2) — Early anterior window (0–6h): Class I for ASPECTS 3–10, NIHSS ≥6, mRS 0–1; Class IIa (§4.7.2 Rec #5, LOE B-NR) for prestroke mRS 2 with ASPECTS ≥6; Class IIb (§4.7.2 Rec #6, LOE B-NR) for prestroke mRS 3–4 with ASPECTS ≥6; Class IIa for ASPECTS 0–2 (age <80, no significant mass effect). Late anterior window (6–24h): Class I for ASPECTS ≥6 with NIHSS ≥6 and mRS 0–1 (NCCT ASPECTS alone — perfusion mismatch not required; DAWN/DEFUSE-3 remain a recognized perfusion-selected route), and Class I for selected ASPECTS 3–5 patients age <80 without significant mass effect (anchored by RESCUE-Japan LIMIT / ANGEL-ASPECT / SELECT2 / TENSION / LASTE — HERMES does NOT support ASPECTS 3–5; HERMES enrolled ASPECTS ≥6 only). Basilar EVT uses a separate unified 0–24h pathway anchored by baseline mRS 0–1, pc-ASPECTS ≥6, and NIHSS severity."
+                    content="The 2026 AHA/ASA Guidelines (Section 4.7.2): Early anterior window (0–6h): Class I for ASPECTS 3–10, NIHSS ≥6, mRS 0–1; Class IIa (§4.7.2 Rec #5, LOE B-NR) for prestroke mRS 2 with ASPECTS ≥6; Class IIb (§4.7.2 Rec #6, LOE B-NR) for prestroke mRS 3–4 with ASPECTS ≥6; Class IIa for ASPECTS 0–2 (age <80, no significant mass effect). Late anterior window (6–24h): Class I for ASPECTS ≥6 with NIHSS ≥6 and mRS 0–1 (NCCT ASPECTS alone: perfusion mismatch not required; DAWN/DEFUSE-3 remain a recognized perfusion-selected route), and Class I for selected ASPECTS 3–5 patients age <80 without significant mass effect (anchored by RESCUE-Japan LIMIT / ANGEL-ASPECT / SELECT2 / TENSION / LASTE; HERMES does NOT support ASPECTS 3–5; HERMES enrolled ASPECTS ≥6 only). Basilar EVT uses a separate unified 0–24h pathway anchored by baseline mRS 0–1, pc-ASPECTS ≥6, and NIHSS severity."
                   />
                   <PathwayLearningPearl
-                    title="Tenecteplase dose — 0.25 mg/kg only"
-                    content="For IVT in the EVT-eligible patient, tenecteplase 0.25 mg/kg (single bolus, max 25 mg) is the supported dose. Tenecteplase 0.4 mg/kg is Class III: No Benefit per AHA/ASA 2026 §4.6.2 Rec 2 — it is NOT a valid alternative dose."
+                    title="Tenecteplase dose: 0.25 mg/kg only"
+                    content="For IVT in the EVT-eligible patient, tenecteplase 0.25 mg/kg (single bolus, max 25 mg) is the supported dose. Tenecteplase 0.4 mg/kg is Class III: No Benefit per AHA/ASA 2026 §4.6.2 Rec 2; it is NOT a valid alternative dose."
                   />
                   {isLvo && (
                     <PathwayLearningPearl
@@ -1416,7 +1416,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
           iconKey="imaging"
           nodeState={isSection2Complete ? 'completed' : activeSection === 2 ? 'active' : 'locked'}
           segmentAboveTraversed={isSection1Complete}
-          lockedAriaLabel="Step 3 Imaging, locked — awaiting completion of Step 2"
+          lockedAriaLabel="Step 3 Imaging, locked; awaiting completion of Step 2"
         >
           {/* Branch chip — only show when step is completed and not active */}
           {isSection2Complete && activeSection !== 2 && getSummary(2) && (
@@ -1435,7 +1435,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
               {isSection0Complete && isSection1Complete && result && result.status !== 'Incomplete' && result.reason !== 'Pending Imaging' && (
                 <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-700 animate-in fade-in duration-300">
                   <Activity size={14} className="shrink-0 text-slate-500" />
-                  <span>Provisional · <span className="font-medium text-slate-900">{result.status}</span> — complete imaging to confirm</span>
+                  <span>Provisional · <span className="font-medium text-slate-900">{result.status}</span>, complete imaging to confirm</span>
                 </div>
               )}
 
@@ -1516,7 +1516,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                         />
                         <PathwayLearningPearl
                           title="Skip-IVT not recommended"
-                          content="For IVT-eligible patients with LVO who are also candidates for EVT, a strategy to forgo (or 'skip') IVT to facilitate EVT is not recommended. Give IVT first when indicated, then proceed to EVT — do not delay or omit IVT to expedite the procedure. AHA/ASA 2026 §4.7.1 synopsis."
+                          content="For IVT-eligible patients with LVO who are also candidates for EVT, a strategy to forgo (or 'skip') IVT to facilitate EVT is not recommended. Give IVT first when indicated, then proceed to EVT; do not delay or omit IVT to expedite the procedure. AHA/ASA 2026 §4.7.1 synopsis."
                         />
                       </div>
                     </div>
@@ -1553,13 +1553,13 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                         <div className="bg-slate-50 p-4 rounded-xl text-slate-700 text-sm mb-4 border border-slate-200" role="status" aria-live="polite">
                           <h4 className="font-bold flex items-center mb-2"><Info size={16} className="mr-2"/> Late Window Imaging (6–24h)</h4>
                           {aspectsHighEnough ? (
-                            <p><strong>ASPECTS {lateAspectsNum} ≥ 6 — Class I criteria met</strong> (Path A, §4.7.2 Rec #2, LOE A). No perfusion imaging required. Tap <strong>Next</strong> to see your result.</p>
+                            <p><strong>ASPECTS {lateAspectsNum} ≥ 6: Class I criteria met</strong> (Path A, §4.7.2 Rec #2, LOE A). No perfusion imaging required. Tap <strong>Next</strong> to see your result.</p>
                           ) : (
                             <>
-                              <p className="mb-2">Two qualifying paths per AHA/ASA 2026 — <strong>enter whichever imaging you have</strong>. Perfusion is not required when ASPECTS already qualifies.</p>
+                              <p className="mb-2">Two qualifying paths per AHA/ASA 2026: <strong>enter whichever imaging you have</strong>. Perfusion is not required when ASPECTS already qualifies.</p>
                               <ul className="space-y-2 pl-1">
                                 <li><strong>Path A · NCCT ASPECTS.</strong> ASPECTS ≥6 qualifies alone; ASPECTS 3–5 qualifies if age &lt;80, no significant mass effect, and no severe CT hypodensity &gt;=26 mL.</li>
-                                <li><strong>Path B · CT perfusion / MRI mismatch.</strong> Selection by perfusion / clinical–core mismatch — DAWN, or DEFUSE-3 (core &lt;70 mL, ratio ≥1.8, volume ≥15 mL).</li>
+                                <li><strong>Path B · CT perfusion / MRI mismatch.</strong> Selection by perfusion / clinical–core mismatch: DAWN, or DEFUSE-3 (core &lt;70 mL, ratio ≥1.8, volume ≥15 mL).</li>
                               </ul>
                             </>
                           )}
@@ -1730,7 +1730,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
           iconKey="decision"
           nodeState={isSection3Complete ? 'completed' : activeSection === 3 ? 'active' : 'locked'}
           segmentAboveTraversed={isSection2Complete}
-          lockedAriaLabel="Step 4 Decision, locked — awaiting completion of Step 3"
+          lockedAriaLabel="Step 4 Decision, locked; awaiting completion of Step 3"
         >
              {result && (
                <p className="text-center text-sm text-slate-500 py-3">
@@ -2003,15 +2003,15 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
 
                 {/* 2026 peri-procedural pearls (verbatim preservation) */}
                 <PathwayLearningPearl
-                  title="Anesthesia choice — GA or procedural sedation"
-                  content="During EVT, either general anesthesia or procedural sedation are recommended (COR 1, LOE B-R) per AHA/ASA 2026 §4.7.4 Rec 3. Local protocol, hemodynamic stability, and airway risk drive the choice — there is no guideline preference between the two strategies in the average patient."
+                  title="Anesthesia choice: GA or procedural sedation"
+                  content="During EVT, either general anesthesia or procedural sedation are recommended (COR 1, LOE B-R) per AHA/ASA 2026 §4.7.4 Rec 3. Local protocol, hemodynamic stability, and airway risk drive the choice; there is no guideline preference between the two strategies in the average patient."
                 />
                 <PathwayLearningPearl
                   title="Adjunctive intra-arterial thrombolytic after successful EVT (new 2026)"
-                  content="After successful EVT (mTICI 2b/2c/3), adjunctive intra-arterial alteplase, urokinase, or tenecteplase may be reasonable to improve distal reperfusion (COR 2b, LOE B-R) — a new 2026 recommendation per §4.7.4 Rec 8. Decision should be individualized with neurointerventional team based on residual perfusion deficit and bleeding risk."
+                  content="After successful EVT (mTICI 2b/2c/3), adjunctive intra-arterial alteplase, urokinase, or tenecteplase may be reasonable to improve distal reperfusion (COR 2b, LOE B-R), a new 2026 recommendation per §4.7.4 Rec 8. Decision should be individualized with neurointerventional team based on residual perfusion deficit and bleeding risk."
                 />
                 <PathwayLearningPearl
-                  title="Pre-EVT IV tirofiban — not useful"
+                  title="Pre-EVT IV tirofiban: not useful"
                   content="Pre-EVT IV tirofiban is not useful in patients with acute ischemic stroke from LVO (COR 3: No Benefit, LOE B-R) per AHA/ASA 2026 §4.7.4 Rec 9. Do not give upstream tirofiban as a routine adjunct to thrombectomy."
                 />
 

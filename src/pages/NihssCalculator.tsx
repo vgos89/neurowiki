@@ -257,7 +257,7 @@ const NihssCalculator: React.FC = () => {
             // any events they want absolute times on, and opt into absolute
             // storage at next save.
             setStrokeTimestamps({ ...EMPTY_STROKE_TIMESTAMPS });
-            showToast('Timestamps were saved as relative offsets — re-stamp if you need exact times.', 4000);
+            showToast('Timestamps were saved as relative offsets; re-stamp if you need exact times.', 4000);
           }
         }
         // Capture the id so subsequent saves update in place
@@ -785,7 +785,7 @@ const NihssCalculator: React.FC = () => {
             <span className="text-xs text-slate-400">· RACE {lvoData.raceScore}/9</span>
           </div>
           <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-            RACE ≥5 has 85% sensitivity for LVO — consider urgent vascular imaging.
+            RACE ≥5 has 85% sensitivity for LVO; consider urgent vascular imaging.
           </p>
         </div>
 
@@ -833,7 +833,7 @@ const NihssCalculator: React.FC = () => {
 
   return (
     <>
-      <h1 className="sr-only">NIHSS Calculator — NIH Stroke Scale Online</h1>
+      <h1 className="sr-only">NIHSS Calculator: NIH Stroke Scale Online</h1>
 
       {/* ── Sticky header — CALCULATOR_SPEC.md §1.1 + §3.1 ──────────────── */}
       {/* scoreDisplay omitted — NIHSS score lives in the interpretation bar at

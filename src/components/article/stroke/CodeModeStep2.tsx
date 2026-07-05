@@ -134,7 +134,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
             <p className="text-[10px] font-bold uppercase tracking-widest text-red-600">Pre-Thrombolysis BP Control</p>
           </div>
           <div className="px-4 py-3 space-y-2">
-            <p className="text-xs font-semibold text-slate-900">BP &gt;185/110 — treat before giving tPA/TNK (AHA)</p>
+            <p className="text-xs font-semibold text-slate-900">BP &gt;185/110; treat before giving tPA/TNK (AHA)</p>
             <p className="text-xs text-slate-700">
               <strong>Labetalol</strong> 10–20 mg IV push, repeat q10–20 min (max 300 mg)
               {' · '}
@@ -257,7 +257,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
               <div className="px-4 py-3">
                 <p className="text-xs text-slate-700">
                   {isAbsolute
-                    ? 'Do not give tPA/TNK — major exclusion(s) identified.'
+                    ? 'Do not give tPA/TNK: major exclusion(s) identified.'
                     : 'Discuss risk vs benefits before proceeding (AHA).'}
                 </p>
               </div>
@@ -279,7 +279,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
                 sub: outsideThromboWindow
                   ? 'Not indicated (LKW > 9h, outside thrombolytic window)'
                   : weightKg > 0
-                  ? `${tpaDose} mg — bolus ${tpaBolus} + inf ${tpaInfusion}`
+                  ? `${tpaDose} mg: bolus ${tpaBolus} + inf ${tpaInfusion}`
                   : 'Enter weight for dose',
               },
               {
@@ -323,7 +323,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
               </button>
             ))}
             {weightKg > 0 && !outsideThromboWindow && (
-              <p className="text-[10px] text-slate-400 italic">Reference only — verify against institutional protocol before administration.</p>
+              <p className="text-[10px] text-slate-400 italic">Reference only: verify against institutional protocol before administration.</p>
             )}
           </div>
         </div>

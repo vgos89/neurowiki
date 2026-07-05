@@ -430,7 +430,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
             onClick={() => setLkwModalOpen(true)}
             className="w-full min-h-[44px] flex items-center justify-between px-4 py-2 gap-3 hover:bg-slate-50 transition-colors text-left focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
             aria-haspopup="dialog"
-            aria-label={`Set last known well time — currently ${lkwDisplay}`}
+            aria-label={`Set last known well time, currently ${lkwDisplay}`}
           >
             <span className="text-xs font-medium text-slate-600 flex-shrink-0">Last known well</span>
             <span className="flex items-center gap-1">

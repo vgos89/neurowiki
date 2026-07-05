@@ -99,7 +99,7 @@ const calculateElanProtocol = (inputs: Inputs): Result => {
     warnings.push("Recent IV thrombolysis or endovascular thrombectomy warrants extra caution because high-level evidence for immediate full-dose anticoagulation timing after reperfusion therapy remains limited.");
   }
   if (inputs.hasUncontrolledHtn === 'yes') {
-    warnings.push("Sustained SBP >180 or DBP >105 warrants individualized timing — uncontrolled hypertension increases hemorrhagic risk. Consider deferring DOAC initiation until blood pressure is controlled.");
+    warnings.push("Sustained SBP >180 or DBP >105 warrants individualized timing; uncontrolled hypertension increases hemorrhagic risk. Consider deferring DOAC initiation until blood pressure is controlled.");
   }
 
   if (!inputs.onset) return { eligible: true, size: inputs.size, earlyText: '-', earlyDates: '-', lateText: '-', lateDates: '-', reasons: [], warnings };
@@ -238,7 +238,7 @@ const ElanPathway: React.FC = () => {
     else if (result.size === 'moderate') definition = "cortical superficial branch of MCA/ACA/PCA, deep branch MCA, or internal border-zone";
     else if (result.size === 'major') definition = "large territory, ≥2 MCA cortical branches, or brainstem/cerebellum > 1.5 cm";
     const warningText = result.warnings.length ? `\n\nCaution flags:\n- ${result.warnings.join('\n- ')}` : '';
-    return `Post-Stroke DOAC Timing — ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}\nInfarct size: ${result.size.charAt(0).toUpperCase() + result.size.slice(1)} (${definition}).\n\nEarlier DOAC window (ELAN): ${result.earlyText} (${result.earlyDates}).\nLater comparator window: ${result.lateText} (${result.lateDates}).\n\nDecision based on imaging-defined infarct size, exclusion of major intracranial bleeding, and individualized review of hemorrhagic transformation and reperfusion therapy. AHA/ASA 2026 §4.9 — COR 2a. Early oral anticoagulation is reasonable in carefully selected (eg, milder severity) patients with AIS and atrial fibrillation. Efficacy for early recurrence prevention not established..${warningText}\n\nReference: ELAN trial (NEJM 2023), OPTIMAS trial, TIMING trial (Stroke 2022), AHA/ASA 2026 Guideline.`.trim();
+    return `Post-Stroke DOAC Timing: ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}\nInfarct size: ${result.size.charAt(0).toUpperCase() + result.size.slice(1)} (${definition}).\n\nEarlier DOAC window (ELAN): ${result.earlyText} (${result.earlyDates}).\nLater comparator window: ${result.lateText} (${result.lateDates}).\n\nDecision based on imaging-defined infarct size, exclusion of major intracranial bleeding, and individualized review of hemorrhagic transformation and reperfusion therapy. AHA/ASA 2026 §4.9: COR 2a. Early oral anticoagulation is reasonable in carefully selected (eg, milder severity) patients with AIS and atrial fibrillation. Efficacy for early recurrence prevention not established..${warningText}\n\nReference: ELAN trial (NEJM 2023), OPTIMAS trial, TIMING trial (Stroke 2022), AHA/ASA 2026 Guideline.`.trim();
   };
 
   const copySummary = () => {
@@ -355,7 +355,7 @@ const ElanPathway: React.FC = () => {
               <div ref={el => { fieldRefs.current['hasUncontrolledHtn'] = el; }} className="animate-in fade-in slide-in-from-top-2">
                 <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide mt-6">Blood Pressure</h3>
                 <div className="grid grid-cols-1 gap-3">
-                  <SelectionCard title="Uncontrolled BP (sustained SBP >180 or DBP >105)" description="Persistent hypertension despite initial management — consider deferring DOAC until controlled." selected={inputs.hasUncontrolledHtn === 'yes'} onClick={() => updateInput('hasUncontrolledHtn', 'yes')} />
+                  <SelectionCard title="Uncontrolled BP (sustained SBP >180 or DBP >105)" description="Persistent hypertension despite initial management; consider deferring DOAC until controlled." selected={inputs.hasUncontrolledHtn === 'yes'} onClick={() => updateInput('hasUncontrolledHtn', 'yes')} />
                   <SelectionCard title="BP acceptable" description="SBP ≤180 and DBP ≤105, or effectively managed." selected={inputs.hasUncontrolledHtn === 'no'} onClick={() => updateInput('hasUncontrolledHtn', 'no')} />
                 </div>
               </div>
@@ -408,7 +408,7 @@ const ElanPathway: React.FC = () => {
             <div>
               <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Select event size</h3>
               <div className="grid gap-3" ref={el => { fieldRefs.current['size'] = el; }}>
-                <SelectionCard title="TIA" description="Transient event or no persistent infarct (extrapolation — ELAN trial enrolled AIS only; early DOAC is typically appropriate)" selected={inputs.size === 'tia'} onClick={() => updateInput('size', 'tia')} />
+                <SelectionCard title="TIA" description="Transient event or no persistent infarct (extrapolation: ELAN trial enrolled AIS only; early DOAC is typically appropriate)" selected={inputs.size === 'tia'} onClick={() => updateInput('size', 'tia')} />
                 <SelectionCard title="Minor" description="≤ 1.5 cm" selected={inputs.size === 'minor'} onClick={() => updateInput('size', 'minor')} />
                 <SelectionCard title="Moderate" description="Cortical branch, deep MCA, or border-zone" selected={inputs.size === 'moderate'} onClick={() => updateInput('size', 'moderate')} />
                 <SelectionCard title="Major" description="Large territory, ≥2 MCA branches, or brainstem/cerebellum > 1.5 cm" selected={inputs.size === 'major'} onClick={() => updateInput('size', 'major')} />
@@ -520,7 +520,7 @@ const ElanPathway: React.FC = () => {
                         {/* Imaging warning */}
                         <div className="relative z-10 mx-4 my-4 bg-amber-500/10 border border-amber-500/25 rounded-xl px-4 py-3 flex items-start space-x-2.5">
                             <AlertTriangle size={13} className="flex-shrink-0 text-amber-400 mt-0.5" />
-                            <p className="text-xs text-amber-200 leading-relaxed"><span className="font-bold">Repeat imaging required</span> — CT or MRI before starting to exclude hemorrhagic transformation.</p>
+                            <p className="text-xs text-amber-200 leading-relaxed"><span className="font-bold">Repeat imaging required:</span> CT or MRI before starting to exclude hemorrhagic transformation.</p>
                         </div>
 
                         {/* DOAC row: 2×2 on mobile, 4-col on md+ */}
@@ -552,7 +552,7 @@ const ElanPathway: React.FC = () => {
                                 <div className="bg-white/5 px-5 pb-5 space-y-3 animate-in slide-in-from-top-2 duration-200">
                                     {/* Trial summaries — F2 fix: explicit "estimation trial" framing */}
                                     {[
-                                        { label: 'ELAN Trial', year: 'NEJM 2023', detail: 'Composite primary outcome 2.9% (early) vs 4.1% (late), OR 0.70 (95% CI 0.44–1.14) — directional benefit without formal noninferiority conclusion (ELAN was an estimation trial). OPTIMAS subsequently demonstrated noninferiority cleanly.' },
+                                        { label: 'ELAN Trial', year: 'NEJM 2023', detail: 'Composite primary outcome 2.9% (early) vs 4.1% (late), OR 0.70 (95% CI 0.44–1.14): directional benefit without formal noninferiority conclusion (ELAN was an estimation trial). OPTIMAS subsequently demonstrated noninferiority cleanly.' },
                                         { label: 'OPTIMAS Trial', year: '2024', detail: 'Early DOAC (≤4 days) noninferior to delayed DOAC (7–14 days) in 3,648 patients with AIS + AF.' },
                                         { label: 'TIMING Trial', year: 'Stroke 2022', detail: 'Early (≤4 days) vs delayed (5–10 days): 6.9% vs 8.7% primary outcome rate. Noninferior.' },
                                     ].map(t => (
@@ -710,18 +710,18 @@ const ElanPathway: React.FC = () => {
         heading="Trials informing this pathway"
         items={[
           {
-            label: "ELAN — early vs delayed DOAC initiation",
-            description: "NEJM 2023 — estimation trial; directional benefit without formal NI conclusion",
+            label: "ELAN: early vs delayed DOAC initiation",
+            description: "NEJM 2023: estimation trial; directional benefit without formal NI conclusion",
             to: "/trials/elan-study"
           },
           {
-            label: "TIMING — Swedish registry RCT, early DOAC",
-            description: "Stroke 2022 — noninferiority confirmed",
+            label: "TIMING: Swedish registry RCT, early DOAC",
+            description: "Stroke 2022: noninferiority confirmed",
             to: "/trials/timing-trial"
           },
           {
-            label: "OPTIMAS — formal noninferiority for early DOAC",
-            description: "Lancet 2024 — 3,648 patients with AIS + AF",
+            label: "OPTIMAS: formal noninferiority for early DOAC",
+            description: "Lancet 2024: 3,648 patients with AIS + AF",
             to: "/trials/optimas-trial"
           },
         ]}

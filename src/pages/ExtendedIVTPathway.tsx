@@ -373,7 +373,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
     if (pathStage === 'standard') return {
       eligible: false, status: 'Standard Window', variant: 'neutral',
       reason: 'Within 4.5h of LKW',
-      details: 'This patient falls within the standard 4.5-hour thrombolysis window. Use the standard IVT eligibility criteria — extended-window protocols do not apply.',
+      details: 'This patient falls within the standard 4.5-hour thrombolysis window. Use the standard IVT eligibility criteria; extended-window protocols do not apply.',
     };
     if (pathStage === 'outside') return {
       eligible: false, status: 'Outside Window', variant: 'danger',
@@ -388,13 +388,13 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
 
     // Path A
     if (pathStage === 'A') {
-      if (aRecognition === false) return { eligible: false, status: 'Not Eligible', variant: 'danger', reason: 'Outside recognition window', details: 'Path A (WAKE-UP/THAWS) requires treatment within 4.5h of symptom recognition — this window has passed.' };
+      if (aRecognition === false) return { eligible: false, status: 'Not Eligible', variant: 'danger', reason: 'Outside recognition window', details: 'Path A (WAKE-UP/THAWS) requires treatment within 4.5h of symptom recognition; this window has passed.' };
       if (aDwiSmall === false) return { eligible: false, status: 'Not Eligible', variant: 'danger', reason: 'DWI lesion ≥ 1/3 MCA territory', details: 'DWI lesion size criterion not met. Both WAKE-UP and THAWS required a DWI lesion smaller than 1/3 of the MCA territory.' };
-      if (aFlair === false) return { eligible: false, status: 'Not Eligible', variant: 'danger', reason: 'No DWI-FLAIR mismatch', details: 'DWI-FLAIR mismatch not present. A FLAIR-positive lesion in the DWI territory indicates established infarct (>4.5h estimated age) — tissue no longer viable for thrombolysis.' };
+      if (aFlair === false) return { eligible: false, status: 'Not Eligible', variant: 'danger', reason: 'No DWI-FLAIR mismatch', details: 'DWI-FLAIR mismatch not present. A FLAIR-positive lesion in the DWI territory indicates established infarct (>4.5h estimated age); tissue no longer viable for thrombolysis.' };
       if (aRecognition === true && aDwiSmall === true && aFlair === true) return {
         eligible: true, status: 'Eligible', variant: 'success', cor: '2a',
         path: 'A', trialsBasis: ['WAKE-UP', 'THAWS'], showBothAgents: true,
-        reason: 'Path A — Unknown onset with MRI DWI-FLAIR mismatch',
+        reason: 'Path A: Unknown onset with MRI DWI-FLAIR mismatch',
         details: 'In wake-up or unknown-onset stroke, a DWI lesion without FLAIR hyperintensity suggests onset within 4.5 hours. IVT is reasonable when treatment starts within 4.5 hours of symptom recognition.',
       };
     }
@@ -408,8 +408,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
         eligible: false, status: 'Not Eligible', variant: 'danger',
         reason: isCtp ? 'Ischemic core ≥ 70 mL' : 'No PWI perfusion deficit beyond DWI',
         details: isCtp
-          ? 'Core volume ≥ 70 mL indicates a large established infarct — EXTEND trial excluded patients with core ≥ 70 mL (CBF < 30%). Extended-window IVT not supported.'
-          : 'No perfusion deficit beyond the DWI lesion — absence of diffusion-perfusion mismatch means no salvageable penumbra to treat.',
+          ? 'Core volume ≥ 70 mL indicates a large established infarct: EXTEND trial excluded patients with core ≥ 70 mL (CBF < 30%). Extended-window IVT not supported.'
+          : 'No perfusion deficit beyond the DWI lesion; absence of diffusion-perfusion mismatch means no salvageable penumbra to treat.',
       };
       if (mismatchInelig) return {
         eligible: false, status: 'Not Eligible', variant: 'danger',
@@ -420,7 +420,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
       };
       if (bEvt === true) return {
         eligible: false, status: 'EVT Preferred', variant: 'warning',
-        reason: 'Path B/C redirect — rapid EVT planned',
+        reason: 'Path B/C redirect: rapid EVT planned',
         details: 'For patients beyond 4.5 hours with salvageable penumbra and rapid thrombectomy access, extended-window IVT is not indicated and should not delay mechanical reperfusion. TIMELESS did not show a functional-outcome benefit from tenecteplase when rapid EVT was already available.',
       };
       const q1Done = isCtp ? bCtpCore !== null : bMriPwi !== null;
@@ -428,7 +428,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
       if (q1Done && q2Done && bEvt === false) return {
         eligible: true, status: 'Eligible', variant: 'success', cor: '2a',
         path: 'B', trialsBasis: ['EXTEND', 'EPITHET', 'ECASS-4'], showBothAgents: true,
-        reason: `Path B — 4.5–9h perfusion mismatch on ${isCtp ? 'CT perfusion' : 'MRI DWI-PWI'}`,
+        reason: `Path B: 4.5–9h perfusion mismatch on ${isCtp ? 'CT perfusion' : 'MRI DWI-PWI'}`,
         details: 'IVT is reasonable 4.5 to 9 hours from last known well, or in wake-up stroke within 9 hours of the sleep midpoint, when automated perfusion imaging confirms salvageable ischemic penumbra.',
       };
     }
@@ -444,7 +444,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
       };
       if (cLvoEvt === true) return {
         eligible: false, status: 'EVT Preferred', variant: 'warning',
-        reason: 'Path B/C redirect — rapid EVT planned',
+        reason: 'Path B/C redirect: rapid EVT planned',
         details: 'When a patient in the extended window has salvageable tissue and prompt thrombectomy access, EVT should proceed without endorsing late-window IVT. Extended-window thrombolysis in this setting is not supported as beneficial and should not delay mechanical reperfusion.',
       };
       if (cLvoEvt === false && cLvoBarrier !== null && cExpertise === false) return {
@@ -462,8 +462,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
           eligible: true, status: 'Eligible', variant: 'warning', cor: '2b',
           path: 'C-LVO', trialsBasis: ['TRACE-III'], showBothAgents: false,
           reason: isWakeUpC
-            ? 'Path C — 9–24h LVO with no feasible EVT (wake-up extrapolation)'
-            : 'Path C — 9–24h LVO with no feasible EVT',
+            ? 'Path C: 9–24h LVO with no feasible EVT (wake-up extrapolation)'
+            : 'Path C: 9–24h LVO with no feasible EVT',
           details: isWakeUpC
             ? 'IVT with tenecteplase may be considered for acute ischemic stroke caused by an ICA or MCA (M1/M2) occlusion 9 to 24 hours from last known well. Wake-up application is an extrapolation from TRACE-III, which enrolled witnessed-onset patients only; expert oversight and individualized risk discussion are warranted. Requires salvageable penumbra, no feasible rapid EVT pathway, and treatment directed by clinicians with expertise in thrombolytic stroke care.'
             : 'IVT with tenecteplase may be considered for acute ischemic stroke caused by an ICA or MCA (M1/M2) occlusion 9 to 24 hours from last known well. This requires salvageable penumbra, no feasible rapid EVT pathway, and treatment directed by clinicians with expertise in thrombolytic stroke care.',
@@ -555,8 +555,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
     const corLabel = result.cor ? `, Class ${result.cor}` : '';
     const line1Parts = [pathLabel, corLabel].filter(Boolean).join('');
     const line1 = line1Parts
-      ? `Extended IVT eligibility — ${result.status} (${line1Parts})`
-      : `Extended IVT eligibility — ${result.status}`;
+      ? `Extended IVT eligibility: ${result.status} (${line1Parts})`
+      : `Extended IVT eligibility: ${result.status}`;
 
     // Line 2: compressed clinical inputs (LKW state + imaging modality)
     const lkwStr = onsetMode === 'wake-up' && wakeTimestamp && lkwTimestamp && imagingModality === 'ctp'
@@ -582,7 +582,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
       lines.push(`Basis: ${result.trialsBasis.join(', ')}`);
     }
     if (result.cor) {
-      lines.push(`AHA/ASA 2026 — COR ${result.cor}, LOE B-R`);
+      lines.push(`AHA/ASA 2026: COR ${result.cor}, LOE B-R`);
     }
     return lines.filter(Boolean).join('\n');
   };
@@ -670,7 +670,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
   return (
     <div className={`max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 ${isInModal ? 'pb-8' : 'pb-32'} md:pb-20`}>
 
-      <h1 className="sr-only">Late Window IVT — Wake-Up Stroke &amp; Thrombolysis Eligibility</h1>
+      <h1 className="sr-only">Late Window IVT: Wake-Up Stroke &amp; Thrombolysis Eligibility</h1>
 
       {/* ── Sticky header ── */}
       <PathwayHeader
@@ -849,7 +849,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
             {pathStage === 'A' && (
               <div className="space-y-6 animate-in slide-in-from-top-2">
                 <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
-                  <span className="text-xs font-bold uppercase tracking-wider text-neuro-600 bg-neuro-50 px-2 py-0.5 rounded">Path A — DWI-FLAIR Mismatch</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-neuro-600 bg-neuro-50 px-2 py-0.5 rounded">Path A: DWI-FLAIR Mismatch</span>
                   <span className="text-xs text-slate-400">COR 2a · LOE B-R</span>
                 </div>
 
@@ -870,8 +870,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                       }
                       <span className="text-sm font-medium">
                         {minutesSinceWaking <= 270
-                          ? `Within 4.5h — ${Math.round(minutesSinceWaking)} min since waking`
-                          : `Outside window — ${Math.round(minutesSinceWaking)} min since waking`}
+                          ? `Within 4.5h: ${Math.round(minutesSinceWaking)} min since waking`
+                          : `Outside window: ${Math.round(minutesSinceWaking)} min since waking`}
                       </span>
                     </div>
                   ) : (
@@ -902,8 +902,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                       <PathwayCategoryRow
                         label="DWI lesion size"
                         options={[
-                          { value: 'yes', label: 'Yes — Small lesion', description: 'Small lesion — criteria met' },
-                          { value: 'no', label: 'No — Large lesion', description: 'Large lesion ≥ 1/3 MCA' },
+                          { value: 'yes', label: 'Yes, Small lesion', description: 'Small lesion, criteria met' },
+                          { value: 'no', label: 'No, Large lesion', description: 'Large lesion ≥ 1/3 MCA' },
                         ]}
                         value={aDwiSmall === null ? null : aDwiSmall ? 'yes' : 'no'}
                         defaultOpen={aDwiSmall === null}
@@ -921,8 +921,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                       <PathwayCategoryRow
                         label="DWI-FLAIR mismatch"
                         options={[
-                          { value: 'yes', label: 'Yes — Mismatch', description: 'DWI+ and FLAIR negative / subtle' },
-                          { value: 'no', label: 'No — FLAIR positive', description: 'FLAIR shows established infarct' },
+                          { value: 'yes', label: 'Yes, Mismatch', description: 'DWI+ and FLAIR negative / subtle' },
+                          { value: 'no', label: 'No, FLAIR positive', description: 'FLAIR shows established infarct' },
                         ]}
                         value={aFlair === null ? null : aFlair ? 'yes' : 'no'}
                         defaultOpen={aFlair === null}
@@ -930,7 +930,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                       />
                     </div>
                     {aFlair !== null && (
-                      <PathwayLearningPearl title="DWI-FLAIR Mismatch Principle" content="DWI becomes positive within minutes of stroke onset. FLAIR signal changes emerge after ~4.5h. A DWI+/FLAIR− pattern suggests onset < 4.5h — the tissue is still viable." />
+                      <PathwayLearningPearl title="DWI-FLAIR Mismatch Principle" content="DWI becomes positive within minutes of stroke onset. FLAIR signal changes emerge after ~4.5h. A DWI+/FLAIR− pattern suggests onset < 4.5h; the tissue is still viable." />
                     )}
                   </div>
                 )}
@@ -942,7 +942,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
               <div className="space-y-6 animate-in slide-in-from-top-2">
                 <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
                   <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2 py-0.5 rounded">
-                    Path B — {imagingModality === 'ctp' ? 'CT Perfusion' : 'MRI PWI'}
+                    Path B: {imagingModality === 'ctp' ? 'CT Perfusion' : 'MRI PWI'}
                   </span>
                   <span className="text-xs text-slate-400">COR 2a · LOE B-R</span>
                 </div>
@@ -960,8 +960,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                     }
                     <span className="text-sm font-medium">
                       {hoursSinceMidpoint <= 9
-                        ? `Within 9h of sleep midpoint — ${hoursSinceMidpoint.toFixed(1)}h elapsed`
-                        : `Outside EXTEND window — ${hoursSinceMidpoint.toFixed(1)}h since sleep midpoint`}
+                        ? `Within 9h of sleep midpoint: ${hoursSinceMidpoint.toFixed(1)}h elapsed`
+                        : `Outside EXTEND window: ${hoursSinceMidpoint.toFixed(1)}h since sleep midpoint`}
                     </span>
                   </div>
                 )}
@@ -976,8 +976,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                         <PathwayCategoryRow
                           label="Ischemic core volume"
                           options={[
-                            { value: 'yes', label: 'Yes — Core < 70 mL', description: 'Small core — criteria met' },
-                            { value: 'no', label: 'No — Core ≥ 70 mL', description: 'Large established infarct' },
+                            { value: 'yes', label: 'Yes, Core < 70 mL', description: 'Small core, criteria met' },
+                            { value: 'no', label: 'No, Core ≥ 70 mL', description: 'Large established infarct' },
                           ]}
                           value={bCtpCore === null ? null : bCtpCore ? 'yes' : 'no'}
                           defaultOpen={bCtpCore === null}
@@ -993,8 +993,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                           <PathwayCategoryRow
                             label="Mismatch criteria"
                             options={[
-                              { value: 'yes', label: 'Yes — Mismatch met', description: 'Significant salvageable penumbra' },
-                              { value: 'no', label: 'No — Mismatch not met', description: 'Insufficient penumbra' },
+                              { value: 'yes', label: 'Yes, Mismatch met', description: 'Significant salvageable penumbra' },
+                              { value: 'no', label: 'No, Mismatch not met', description: 'Insufficient penumbra' },
                             ]}
                             value={bCtpMismatch === null ? null : bCtpMismatch ? 'yes' : 'no'}
                             defaultOpen={bCtpMismatch === null}
@@ -1019,8 +1019,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                         <PathwayCategoryRow
                           label="PWI perfusion deficit"
                           options={[
-                            { value: 'yes', label: 'Yes — PWI deficit present', description: 'Perfusion delay beyond DWI' },
-                            { value: 'no', label: 'No — No PWI deficit', description: 'No perfusion abnormality' },
+                            { value: 'yes', label: 'Yes, PWI deficit present', description: 'Perfusion delay beyond DWI' },
+                            { value: 'no', label: 'No, No PWI deficit', description: 'No perfusion abnormality' },
                           ]}
                           value={bMriPwi === null ? null : bMriPwi ? 'yes' : 'no'}
                           defaultOpen={bMriPwi === null}
@@ -1036,8 +1036,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                           <PathwayCategoryRow
                             label="Diffusion-perfusion mismatch"
                             options={[
-                              { value: 'yes', label: 'Yes — Mismatch confirmed', description: 'Viable ischemic penumbra present' },
-                              { value: 'no', label: 'No — No mismatch', description: 'No salvageable tissue' },
+                              { value: 'yes', label: 'Yes, Mismatch confirmed', description: 'Viable ischemic penumbra present' },
+                              { value: 'no', label: 'No, No mismatch', description: 'No salvageable tissue' },
                             ]}
                             value={bMriMismatch === null ? null : bMriMismatch ? 'yes' : 'no'}
                             defaultOpen={bMriMismatch === null}
@@ -1059,8 +1059,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                       <PathwayCategoryRow
                         label="EVT indication"
                         options={[
-                          { value: 'yes', label: 'Yes — Rapid EVT planned', description: 'Do not endorse extended IVT' },
-                          { value: 'no', label: 'No — IVT only', description: 'No LVO or EVT not available' },
+                          { value: 'yes', label: 'Yes, Rapid EVT planned', description: 'Do not endorse extended IVT' },
+                          { value: 'no', label: 'No, IVT only', description: 'No LVO or EVT not available' },
                         ]}
                         value={bEvt === null ? null : bEvt ? 'yes' : 'no'}
                         defaultOpen={bEvt === null}
@@ -1079,12 +1079,12 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
             {pathStage === 'C' && (
               <div className="space-y-6 animate-in slide-in-from-top-2">
                 <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
-                  <span className="text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded">Path C — Late-Window LVO Only</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded">Path C: Late-Window LVO Only</span>
                   <span className="text-xs text-slate-400">COR 2b · LOE B-R</span>
                 </div>
                 <div className="flex items-start gap-2.5 px-3 py-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs">
                   <AlertTriangle size={14} className="shrink-0 mt-0.5" />
-                  <span><strong>COR 2b — Weaker Evidence.</strong> Path C is limited to LVO with salvageable penumbra when EVT cannot be performed promptly and treatment is directed by clinicians with expertise in thrombolytic stroke care.</span>
+                  <span><strong>COR 2b: Weaker Evidence.</strong> Path C is limited to LVO with salvageable penumbra when EVT cannot be performed promptly and treatment is directed by clinicians with expertise in thrombolytic stroke care.</span>
                 </div>
 
                 <div>
@@ -1094,8 +1094,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                     <PathwayCategoryRow
                       label="Salvageable penumbra"
                       options={[
-                        { value: 'yes', label: 'Yes — Penumbra confirmed', description: 'Target mismatch present' },
-                        { value: 'no', label: 'No — No penumbra', description: 'No target mismatch' },
+                        { value: 'yes', label: 'Yes, Penumbra confirmed', description: 'Target mismatch present' },
+                        { value: 'no', label: 'No, No penumbra', description: 'No target mismatch' },
                       ]}
                       value={cPenumbra === null ? null : cPenumbra ? 'yes' : 'no'}
                       defaultOpen={cPenumbra === null}
@@ -1103,7 +1103,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                     />
                   </div>
                   {cPenumbra !== null && (
-                    <PathwayLearningPearl title="Path C Trials" content="TRACE-III (NEJM 2024, Xiong et al.) supports the 2026 AHA/ASA §4.6.3 Rec 3 Class 2b recommendation: in AIS due to LVO with salvageable penumbra, 4.5–24h from onset, who cannot receive EVT, IVT directed by clinicians with thrombolytic expertise may be beneficial. TRACE-III's inclusion was restricted to ICA/M1/M2 — this pathway uses that trial population as its evidence base, though the guideline is broader (any LVO). TIMELESS (NEJM 2024) was negative when rapid EVT was available, supporting the redirect away from extended-window IVT in EVT-feasible patients." />
+                    <PathwayLearningPearl title="Path C Trials" content="TRACE-III (NEJM 2024, Xiong et al.) supports the 2026 AHA/ASA §4.6.3 Rec 3 Class 2b recommendation: in AIS due to LVO with salvageable penumbra, 4.5–24h from onset, who cannot receive EVT, IVT directed by clinicians with thrombolytic expertise may be beneficial. TRACE-III's inclusion was restricted to ICA/M1/M2; this pathway uses that trial population as its evidence base, though the guideline is broader (any LVO). TIMELESS (NEJM 2024) was negative when rapid EVT was available, supporting the redirect away from extended-window IVT in EVT-feasible patients." />
                   )}
                 </div>
 
@@ -1115,8 +1115,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                       <PathwayCategoryRow
                         label="LVO status"
                         options={[
-                          { value: 'yes', label: 'Yes — LVO confirmed', description: 'ICA or MCA (M1/M2) occlusion' },
-                          { value: 'no', label: 'No — Non-LVO', description: 'Late Path C does not apply' },
+                          { value: 'yes', label: 'Yes, LVO confirmed', description: 'ICA or MCA (M1/M2) occlusion' },
+                          { value: 'no', label: 'No, Non-LVO', description: 'Late Path C does not apply' },
                         ]}
                         value={cLvo === null ? null : cLvo ? 'yes' : 'no'}
                         defaultOpen={cLvo === null}
@@ -1137,8 +1137,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                         <PathwayCategoryRow
                           label="EVT feasibility"
                           options={[
-                            { value: 'yes', label: 'Yes — EVT feasible', description: 'Refer to EVT pathway' },
-                            { value: 'no', label: 'No — EVT not possible', description: 'Proceed with extended IVT' },
+                            { value: 'yes', label: 'Yes, EVT feasible', description: 'Refer to EVT pathway' },
+                            { value: 'no', label: 'No, EVT not possible', description: 'Proceed with extended IVT' },
                           ]}
                           value={cLvoEvt === null ? null : cLvoEvt ? 'yes' : 'no'}
                           defaultOpen={cLvoEvt === null}
@@ -1168,8 +1168,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                           <PathwayCategoryRow
                             label="Thrombolytic expertise"
                             options={[
-                              { value: 'yes', label: 'Yes — Expert available', description: 'Late IVT can be directed safely' },
-                              { value: 'no', label: 'No — Expertise unavailable', description: 'Do not endorse late IVT at current site' },
+                              { value: 'yes', label: 'Yes, Expert available', description: 'Late IVT can be directed safely' },
+                              { value: 'no', label: 'No, Expertise unavailable', description: 'Do not endorse late IVT at current site' },
                             ]}
                             value={cExpertise === null ? null : cExpertise ? 'yes' : 'no'}
                             defaultOpen={cExpertise === null}
@@ -1247,7 +1247,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                         <Zap size={14} className="text-neuro-600" />
                         <span className="text-xs font-bold text-neuro-800">Tenecteplase (TNK)</span>
                         {result.path === 'A' && (
-                          <span className="text-xs text-neuro-500 font-medium" title="Within 4.5h of symptom recognition — §4.6.2 Rec 1 applies">Preferred</span>
+                          <span className="text-xs text-neuro-500 font-medium" title="Within 4.5h of symptom recognition: §4.6.2 Rec 1 applies">Preferred</span>
                         )}
                         {result.path !== 'A' && (
                           <span className="text-xs text-slate-500 font-medium" title="AHA 2026 §4.6.2 Rec 1 scopes TNK preference to <4.5h; §4.6.3 (4.5h+) is agent-neutral. Extended-window evidence (EXTEND, EPITHET, ECASS-4) is alteplase-based.">§4.6.3 agent-neutral</span>
@@ -1278,7 +1278,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                   {result.cor === '2b' && (
                     <div className="flex items-start gap-2 pt-3 border-t border-slate-100 text-amber-700">
                       <AlertTriangle size={14} className="shrink-0 mt-0.5" />
-                      <p className="text-xs font-medium">COR 2b — document shared decision-making with patient/surrogate before administration</p>
+                      <p className="text-xs font-medium">COR 2b: document shared decision-making with patient/surrogate before administration</p>
                     </div>
                   )}
                 </div>
@@ -1473,7 +1473,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
               <div className="flex items-start gap-2.5 px-3 py-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs">
                 <AlertTriangle size={14} className="shrink-0 mt-0.5" aria-hidden="true" />
                 <span>
-                  Late-window selection criteria met. Standard IV thrombolysis contraindications (BP &gt;185/110, INR &gt;1.7, platelets &lt;100k, DOAC within window, recent surgery/ICH, active bleeding) must still be verified before administration — see{' '}
+                  Late-window selection criteria met. Standard IV thrombolysis contraindications (BP &gt;185/110, INR &gt;1.7, platelets &lt;100k, DOAC within window, recent surgery/ICH, active bleeding) must still be verified before administration, see{' '}
                   <Link to="/guide/iv-tpa" className="font-semibold underline underline-offset-2 hover:text-amber-900">IV tPA exclusions</Link>.
                 </span>
               </div>

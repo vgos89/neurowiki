@@ -52,7 +52,7 @@ const BLEEDING_LAB_CHIPS: Chip[] = [
 const RELATIVE_CHIPS: Chip[] = [
   { id: 'minor_rapid',       label: 'Minor/rapid improvement', detail: 'Mild or rapidly clearing symptoms. Consider if symptoms are still disabling.' },
   { id: 'pregnancy',         label: 'Pregnancy',               detail: 'Get OB consult. Benefit may outweigh risk in severe stroke.' },
-  { id: 'seizure_onset',     label: 'Seizure at onset',        detail: "Seizure at stroke onset with residual deficits. May be Todd's paralysis — imaging helps." },
+  { id: 'seizure_onset',     label: 'Seizure at onset',        detail: "Seizure at stroke onset with residual deficits. May be Todd's paralysis; imaging helps." },
   { id: 'major_surgery',     label: 'Surgery <14d',            detail: 'Major surgery or serious non-head trauma within 14 days.' },
   { id: 'gi_gu_bleed',       label: 'GI/GU bleed <21d',        detail: 'Recent gastrointestinal or urinary tract hemorrhage within 21 days.' },
   { id: 'recent_mi',         label: 'MI <3mo',                 detail: 'Acute myocardial infarction within 3 months. Discuss with cardiology.' },
@@ -100,7 +100,7 @@ const CONTRA_LABELS: Record<string, string> = {
   // 3–4.5h extended window exclusions retired 2026-05-22 per AHA/ASA 2026
   // §4.6.1 (see EXTENDED_WINDOW_CHIPS comment for rationale). EMR labels
   // kept for backward compat in case historical state references these IDs.
-  ext_oral_anticoag:   'Oral anticoagulant use — any (legacy 3–4.5h exclusion, retired)',
+  ext_oral_anticoag:   'Oral anticoagulant use, any (legacy 3–4.5h exclusion, retired)',
   ext_nihss_over25:    'NIHSS >25 (legacy 3–4.5h exclusion, retired)',
   ext_dm_prior_stroke: 'Diabetes mellitus with prior stroke (legacy 3–4.5h exclusion, retired)',
   ext_large_mca:       '>1/3 MCA territory on imaging (legacy 3–4.5h exclusion, retired)',
@@ -178,7 +178,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
     if (activeAbsolute.length > 0)
       return { status: 'absolute-contraindication' as const, label: 'IV tPA CONTRAINDICATED', color: 'red' };
     if (activeRelative.length > 0)
-      return { status: 'relative-contraindication' as const, label: 'RELATIVE — DISCUSS RISK/BENEFIT', color: 'amber' };
+      return { status: 'relative-contraindication' as const, label: 'RELATIVE: DISCUSS RISK/BENEFIT', color: 'amber' };
     return { status: 'eligible' as const, label: 'NO CONTRAINDICATIONS FLAGGED', color: 'emerald' };
   }, [activeAbsolute, activeRelative]);
 

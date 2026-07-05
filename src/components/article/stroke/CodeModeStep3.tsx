@@ -236,7 +236,7 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
         </div>
         <div className="px-4 py-3 flex items-center gap-2">
           <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 flex-shrink-0" aria-hidden="true" />
-          <p className="text-sm font-semibold text-slate-900">Code complete — ready to document</p>
+          <p className="text-sm font-semibold text-slate-900">Code complete, ready to document</p>
         </div>
       </div>
 

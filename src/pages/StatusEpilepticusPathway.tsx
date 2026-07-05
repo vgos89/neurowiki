@@ -49,7 +49,7 @@ const calculateDose = (agent: string, weight: number): string => {
   switch(agent) {
     case "lorazepam": return `${Math.min(4, Math.round(0.1 * weight * 10) / 10)} mg IV (0.1 mg/kg, max 4mg)`;
     // Default midazolam display covers both routes — RAMPART fixed IM scheme via calculateBzdFixedDose
-    case "midazolam": return `${Math.min(10, Math.round(0.2 * weight * 10) / 10)} mg IV (0.2 mg/kg, max 10mg) — or IM fixed 10 mg (>40 kg) / 5 mg (13–40 kg) per RAMPART`;
+    case "midazolam": return `${Math.min(10, Math.round(0.2 * weight * 10) / 10)} mg IV (0.2 mg/kg, max 10mg), or IM fixed 10 mg (>40 kg) / 5 mg (13–40 kg) per RAMPART`;
     case "diazepam": return `${Math.min(10, Math.round(0.15 * weight * 10) / 10)} mg IV (0.15 mg/kg, max 10mg)`;
     case "levetiracetam": return `${Math.min(4500, Math.round(60 * weight))} mg IV (60 mg/kg, max 4500mg)`;
     case "fosphenytoin": return `${Math.min(1500, Math.round(20 * weight))} mg PE IV (20 mg PE/kg, max 1500mg PE)`;
@@ -139,10 +139,10 @@ const StatusEpilepticusPathway: React.FC = () => {
     const avoidPhenytoin = comorbidities.cardiacAvBlock; // 2°/3° AV block — AVOID, not caution
     const cautionPhenytoin = comorbidities.hypotension || comorbidities.cardiacElderly;
     const cautionLevetiracetam = comorbidities.renal;
-    if (comorbidities.pregnancy) warnings.push("Pregnancy: Valproate avoided (teratogenic — neural tube defects, cognitive risk).");
+    if (comorbidities.pregnancy) warnings.push("Pregnancy: Valproate avoided (teratogenic: neural tube defects, cognitive risk).");
     if (comorbidities.liver) warnings.push("Liver disease: Valproate avoided (hepatotoxicity, hyperammonemia).");
     if (comorbidities.pancreatitis) warnings.push("Pancreatitis history: Valproate avoided.");
-    if (comorbidities.carbapenem) warnings.push("Carbapenem co-administration: Lowers valproate levels — avoid combination.");
+    if (comorbidities.carbapenem) warnings.push("Carbapenem co-administration: Lowers valproate levels; avoid combination.");
     if (comorbidities.cardiacAvBlock) warnings.push("2°/3° AV block without pacemaker: AVOID phenytoin, fosphenytoin, lacosamide (Vossler 2025: lacosamide is contraindicated in patients with second- or third-degree AV block without pacemaker).");
     if (comorbidities.cardiacElderly) warnings.push("Elderly without conduction disease: Use slower fosphenytoin infusion rate (≤100 mg PE/min).");
     if (comorbidities.hypotension) warnings.push("Hypotension: Caution with phenytoin/fosphenytoin (slower infusion); avoid phenobarbital.");
@@ -198,7 +198,7 @@ const StatusEpilepticusPathway: React.FC = () => {
         parts.push(`Stage 3: Refractory Management Initiated`);
         if (stage3Agent) parts.push(`Infusion Selected: ${stage3Agent} ${calculateDose(stage3Agent, patient.weight)}`);
     }
-    return `Status Epilepticus — ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}\nWeight: ${patient.weight} kg\n\n${parts.join('\n\n')}`;
+    return `Status Epilepticus: ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}\nWeight: ${patient.weight} kg\n\n${parts.join('\n\n')}`;
   };
 
   const copySummary = useCallback(() => {
@@ -247,8 +247,8 @@ const StatusEpilepticusPathway: React.FC = () => {
 
   // BZD agent options for PathwayCategoryRow
   const bzdOptions: CategoryOption[] = [
-    { value: 'lorazepam', label: 'Lorazepam', description: '0.1 mg/kg IV (max 4 mg) — preferred IV agent' },
-    { value: 'midazolam', label: 'Midazolam', description: patient.ivAccess ? '0.2 mg/kg IV (max 10 mg)' : 'IM fixed dose per RAMPART — preferred without IV access' },
+    { value: 'lorazepam', label: 'Lorazepam', description: '0.1 mg/kg IV (max 4 mg), preferred IV agent' },
+    { value: 'midazolam', label: 'Midazolam', description: patient.ivAccess ? '0.2 mg/kg IV (max 10 mg)' : 'IM fixed dose per RAMPART, preferred without IV access' },
     { value: 'diazepam', label: 'Diazepam', description: '0.15 mg/kg IV (max 10 mg)' },
   ];
 
@@ -360,14 +360,14 @@ const StatusEpilepticusPathway: React.FC = () => {
                   title="Stabilization adjuncts (0–5 min)"
                   content={
                     <ul className="space-y-1.5">
-                      <li>• <strong>Thiamine 100 mg IV</strong> if alcohol use disorder or malnutrition suspected — give before glucose.</li>
+                      <li>• <strong>Thiamine 100 mg IV</strong> if alcohol use disorder or malnutrition suspected; give before glucose.</li>
                       <li>• <strong>Pyridoxine 50–100 mg IV</strong> if isoniazid (INH) overdose or pediatric idiopathic SE suspected.</li>
                       <li>• <strong>Pregnancy + active seizure: consider eclampsia → magnesium 4 g IV over 5–10 min, then 1 g/h</strong> (NOT benzo first). Benzodiazepine escalation is NOT first-line for eclamptic seizures (Mullhi 2025).</li>
                     </ul>
                   }
                 />
                 <PathwayLearningPearl
-                  title="Convulsive SE only — NCSE route-out"
+                  title="Convulsive SE only: NCSE route-out"
                   content="NCSE without coma is an active condition but does not mandate ICU-level care or anesthetic infusion (Vossler 2025). Route to cEEG-guided NCSE workup rather than continuing this convulsive-SE pathway."
                 />
               </div>
@@ -393,7 +393,7 @@ const StatusEpilepticusPathway: React.FC = () => {
           iconKey="clinical"
           nodeState={isSection1Complete ? 'completed' : activeSection === 1 ? 'active' : 'locked'}
           segmentAboveTraversed={isSection0Complete}
-          lockedAriaLabel="Step 2 Benzodiazepines, locked — awaiting Step 1"
+          lockedAriaLabel="Step 2 Benzodiazepines, locked, awaiting Step 1"
         >
           {isSection1Complete && activeSection !== 1 && getSummary(1) && (
             <div className="mb-3">
@@ -479,7 +479,7 @@ const StatusEpilepticusPathway: React.FC = () => {
                               onClick={() => setStage1SecondDoseGiven(true)}
                               className="min-h-[60px] rounded-2xl bg-amber-50 border border-amber-200 text-amber-700 font-semibold text-sm hover:bg-amber-100 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors"
                             >
-                              Persists — Repeat Dose
+                              Persists: Repeat Dose
                             </button>
                           </div>
                         </div>
@@ -504,7 +504,7 @@ const StatusEpilepticusPathway: React.FC = () => {
                               onClick={() => { setStage1Success(false); setActiveSection(2); }}
                               className="min-h-[60px] rounded-2xl bg-amber-50 border border-amber-200 text-amber-700 font-semibold text-sm hover:bg-amber-100 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors"
                             >
-                              Persists — Refractory
+                              Persists: Refractory
                             </button>
                           </div>
                         </div>
@@ -527,7 +527,7 @@ const StatusEpilepticusPathway: React.FC = () => {
               {stage1Agent && (
                 <div className="pt-2 border-t border-slate-100 space-y-1 mt-2">
                   <PathwayLearningPearl
-                    title="RAMPART — IM midazolam"
+                    title="RAMPART: IM midazolam"
                     content="Intramuscular midazolam in a fixed dose of 10 mg (>40 kg) or 5 mg (13–40 kg) was at least as effective as intravenous lorazepam (Silbergleit 2012, PMID 22335736). IM route is preferred when IV access is not yet established."
                   />
                 </div>
@@ -543,7 +543,7 @@ const StatusEpilepticusPathway: React.FC = () => {
           iconKey="imaging"
           nodeState={isSection2Complete ? 'completed' : activeSection === 2 ? 'active' : 'locked'}
           segmentAboveTraversed={isSection1Complete}
-          lockedAriaLabel="Step 3 Urgent Control, locked — awaiting BZD stage"
+          lockedAriaLabel="Step 3 Urgent Control, locked, awaiting BZD stage"
         >
           {isSection2Complete && activeSection !== 2 && getSummary(2) && (
             <div className="mb-3">
@@ -572,7 +572,7 @@ const StatusEpilepticusPathway: React.FC = () => {
                   content={
                     <>
                       <p>{esett.pearl}</p>
-                      <p className="mt-2 text-xs italic text-slate-500">Lacosamide is NOT a Stage 2 ESETT-equivalent option — reserve for Stage 3 add-on per AES 2016 / Vossler 2025.</p>
+                      <p className="mt-2 text-xs italic text-slate-500">Lacosamide is NOT a Stage 2 ESETT-equivalent option; reserve for Stage 3 add-on per AES 2016 / Vossler 2025.</p>
                     </>
                   }
                   visible={true}
@@ -581,7 +581,7 @@ const StatusEpilepticusPathway: React.FC = () => {
 
               {/* Comorbidities */}
               <div className="pt-1">
-                <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Comorbidities — affects drug choice</div>
+                <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Comorbidities: affects drug choice</div>
                 <div className="flex flex-wrap gap-1.5">
                   {([
                     { key: 'hypotension', label: 'Hypotension' },
@@ -638,7 +638,7 @@ const StatusEpilepticusPathway: React.FC = () => {
                   label="Stage 2 Agent"
                   options={esett.options.map(opt => ({
                     value: opt.agent,
-                    label: `${opt.agent.charAt(0).toUpperCase()}${opt.agent.slice(1)}${opt.status === 'avoid' ? ' — AVOID' : opt.status === 'caution' ? ' — Caution' : ''}`,
+                    label: `${opt.agent.charAt(0).toUpperCase()}${opt.agent.slice(1)}${opt.status === 'avoid' ? ': AVOID' : opt.status === 'caution' ? ': Caution' : ''}`,
                     description: opt.note ?? (opt.status === 'preferred' ? 'ESETT-equivalent (lev/fos/VPA)' : undefined),
                   }) as CategoryOption)}
                   value={stage2Agent === 'auto' ? esett.defaultAgent : stage2Agent}
@@ -661,7 +661,7 @@ const StatusEpilepticusPathway: React.FC = () => {
                   onClick={() => { setStage2Success(false); setStage2ActualAgent(finalStage2); setActiveSection(3); }}
                   className="min-h-[60px] rounded-2xl bg-amber-50 border border-amber-200 text-amber-700 font-semibold text-sm hover:bg-amber-100 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors"
                 >
-                  Persists — Refractory
+                  Persists: Refractory
                 </button>
               </div>
 
@@ -669,7 +669,7 @@ const StatusEpilepticusPathway: React.FC = () => {
               <div className="pt-2 border-t border-slate-100 space-y-1 mt-2">
                 <PathwayLearningPearl
                   title="Lacosamide contraindication"
-                  content="lacosamide is contraindicated in patients with second- or third-degree AV block without pacemaker (Vossler 2025). Lacosamide is NOT a Stage 2 option — reserve as Stage 3 add-on. Obtain ECG before loading."
+                  content="lacosamide is contraindicated in patients with second- or third-degree AV block without pacemaker (Vossler 2025). Lacosamide is NOT a Stage 2 option; reserve as Stage 3 add-on. Obtain ECG before loading."
                 />
               </div>
             </div>
@@ -683,7 +683,7 @@ const StatusEpilepticusPathway: React.FC = () => {
           iconKey="decision"
           nodeState={isSection3Complete ? 'completed' : activeSection === 3 ? 'active' : 'locked'}
           segmentAboveTraversed={isSection2Complete}
-          lockedAriaLabel="Step 4 Refractory, locked — awaiting Stage 2"
+          lockedAriaLabel="Step 4 Refractory, locked, awaiting Stage 2"
         >
           {isSection3Complete && activeSection !== 3 && getSummary(3) && (
             <div className="mb-3">
@@ -701,7 +701,7 @@ const StatusEpilepticusPathway: React.FC = () => {
               <div className="pb-3 border-b border-slate-100">
                 <div className="flex items-start gap-2 text-sm text-slate-700 bg-slate-900 text-white rounded-lg px-4 py-3">
                   <Activity size={15} className="shrink-0 mt-0.5 opacity-70" />
-                  <span><strong>Refractory SE — Stage 3</strong> (40+ min from onset OR 1 BZD + 1 non-BZD ASM failure, per Glauser 2016). Intubation and continuous EEG required.</span>
+                  <span><strong>Refractory SE: Stage 3</strong> (40+ min from onset OR 1 BZD + 1 non-BZD ASM failure, per Glauser 2016). Intubation and continuous EEG required.</span>
                 </div>
               </div>
 
@@ -770,10 +770,10 @@ const StatusEpilepticusPathway: React.FC = () => {
               {/* Stage 4 — Super-Refractory SE */}
               <div className="pt-2 border-t border-slate-100 mt-2">
                 <PathwayLearningPearl
-                  title="Super-Refractory SE (Stage 4 — 24h+ on anesthetic)"
+                  title="Super-Refractory SE (Stage 4, 24h+ on anesthetic)"
                   content={
                     <>
-                      <p className="text-xs italic text-slate-500 mb-2">Framed as workup/checklist — expert consensus only. AES 2020 notes insufficient evidence to grade specific recommendations for super-refractory SE.</p>
+                      <p className="text-xs italic text-slate-500 mb-2">Framed as workup/checklist, expert consensus only. AES 2020 notes insufficient evidence to grade specific recommendations for super-refractory SE.</p>
                       <ul className="space-y-1.5 text-sm text-slate-700">
                         <li>• Re-image brain (MRI with contrast); rule out evolving lesion or cerebritis.</li>
                         <li>• Repeat LP; consider autoimmune encephalitis panel (NMDA-R, LGI1, GABA-B, etc.) and paraneoplastic workup.</li>

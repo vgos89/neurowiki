@@ -223,20 +223,20 @@ Tenecteplase (TNK) is a bioengineered variant of alteplase with greater fibrin s
 *   **Intervention:** IV Tenecteplase **0.25 mg/kg** (max 25 mg) single bolus vs IV Alteplase **0.9 mg/kg** (max 90 mg; 10% bolus + 60-min infusion).
 *   **Primary Outcome:** Excellent functional outcome (mRS 0–1) at 90 days. Noninferiority margin: risk ratio ≥ 0.937.
 *   **Results:**
-    *   **mRS 0–1 at 90 days:** **72.7%** (TNK, 532/732) vs **70.3%** (alteplase, 515/733) — RR 1.03 (95% CI 0.97–1.09). **Noninferiority threshold met.**
-    *   **Symptomatic ICH (ECASS III definition):** **1.2%** in both groups — RR 1.01 (95% CI 0.37–2.70). Identical safety profiles.
-    *   **90-day mortality:** 4.6% (TNK) vs 5.8% (alteplase) — RR 0.80 (95% CI 0.51–1.23); numerically lower with TNK, not statistically significant.
+    *   **mRS 0–1 at 90 days:** **72.7%** (TNK, 532/732) vs **70.3%** (alteplase, 515/733); RR 1.03 (95% CI 0.97–1.09). **Noninferiority threshold met.**
+    *   **Symptomatic ICH (ECASS III definition):** **1.2%** in both groups; RR 1.01 (95% CI 0.37–2.70). Identical safety profiles.
+    *   **90-day mortality:** 4.6% (TNK) vs 5.8% (alteplase); RR 0.80 (95% CI 0.51–1.23); numerically lower with TNK, not statistically significant.
 *   **Enrollment:** July 2021 – July 2023.
 
 ## Clinical PEARLS
-*   **Noninferiority confirmed:** RR 1.03 (95% CI 0.97–1.09) — the noninferiority margin of 0.937 was met. Tenecteplase is a safe and effective substitute for alteplase within 4.5 hours.
-*   **Single-bolus advantage:** Eliminates the 60-minute infusion pump — critical for drip-and-ship transfers. Patient can be loaded into the ambulance immediately after the bolus.
+*   **Noninferiority confirmed:** RR 1.03 (95% CI 0.97–1.09); the noninferiority margin of 0.937 was met. Tenecteplase is a safe and effective substitute for alteplase within 4.5 hours.
+*   **Single-bolus advantage:** Eliminates the 60-minute infusion pump, critical for drip-and-ship transfers. Patient can be loaded into the ambulance immediately after the bolus.
 *   **Identical sICH rates:** 1.2% in both groups. Tenecteplase's higher fibrin specificity does not translate to increased hemorrhagic risk at the 0.25 mg/kg dose.
 *   **2026 AHA/ASA Guidelines (COR 1, LOE A):** ORIGINAL, alongside AcT (Canada, 2022) and NOR-TEST 2, forms the evidence base for the 2026 AHA/ASA guideline endorsing tenecteplase and alteplase as equivalent first-line choices.
 *   **Dose clarity:** Only 0.25 mg/kg (max 25 mg) is supported. Higher doses (0.4 mg/kg) increased hemorrhagic risk in earlier trials and are not approved.
-*   **Do not confuse with EAGLE:** The EAGLE trial (Ophthalmology 2010) tested intra-arterial tPA for central retinal artery occlusion — a completely different indication and negative trial.
+*   **Do not confuse with EAGLE:** The EAGLE trial (Ophthalmology 2010) tested intra-arterial tPA for central retinal artery occlusion (a completely different indication and negative trial).
 
-*Source: [Meng X et al. JAMA 2024;332(17):1437–1445. DOI: 10.1001/jama.2024.14721](https://doi.org/10.1001/jama.2024.14721) — ClinicalTrials.gov: NCT04915729*
+*Source: [Meng X et al. JAMA 2024;332(17):1437–1445. DOI: 10.1001/jama.2024.14721](https://doi.org/10.1001/jama.2024.14721); ClinicalTrials.gov: NCT04915729*
 `
   },
 
@@ -316,7 +316,7 @@ While Endovascular Thrombectomy (EVT) is the standard of care for Large Vessel O
 
 ## Clinical PEARLS
 *   **Neutral Result:** The trial failed to show a benefit for EVT in this broad population of medium/distal occlusions.
-*   **Technical Challenges:** Successful reperfusion (TICI 2b-3) was achieved in only **71.7%** of EVT patients, significantly lower than typical LVO trials — distal vessels are harder to access and catheterize reliably.
+*   **Technical Challenges:** Successful reperfusion (TICI 2b-3) was achieved in only **71.7%** of EVT patients, significantly lower than typical LVO trials; distal vessels are harder to access and catheterize reliably.
 *   **Safety Signal:** Symptomatic intracranial hemorrhage (sICH) was more than double in the EVT group (5.9% vs 2.6%).
 *   **Workflow:** Median time from imaging to arterial puncture was 70 minutes, exceeding the 60-minute target.
 
@@ -376,7 +376,7 @@ Historically, mechanical thrombectomy was limited to 6 hours from symptom onset.
 ## Clinical PEARLS
 *   **NNT:** The Number Needed to Treat (NNT) for one additional patient to be functionally independent was **3**.
 *   **Safety:** No significant difference in symptomatic intracranial hemorrhage (sICH) or serious adverse events.
-*   **Late window:** Along with DAWN, DEFUSE-3 shifted selection from time-based to tissue-based — perfusion mismatch over clock.
+*   **Late window:** Along with DAWN, DEFUSE-3 shifted selection from time-based to tissue-based: perfusion mismatch over clock.
 *   **Implementation:** Requires automated perfusion software (e.g., RAPID) for standardized core/penumbra calculation.
 
 *Source: [Albers et al. (NEJM 2018)](https://www.nejm.org/doi/full/10.1056/NEJMoa1706442)*
@@ -431,7 +431,7 @@ Patients with large ischemic cores (ASPECTS < 6 or Core Volume > 50ml) were hist
     *   **Generalized Odds Ratio:** 1.51 (favoring EVT).
 
 ## Clinical PEARLS
-*   **Large core:** No longer an absolute contraindication — SELECT2 showed a clear functional shift even at ASPECTS 3–5.
+*   **Large core:** No longer an absolute contraindication; SELECT2 showed a clear functional shift even at ASPECTS 3–5.
 *   **Risk/Benefit:** While outcomes are generally poorer than small-core patients, EVT still provides a significant shift towards lower disability (e.g., being able to walk vs bedbound).
 *   **Safety:** Symptomatic intracranial hemorrhage (sICH) was low and not significantly different between groups, though any ICH was more frequent in the EVT group.
 
@@ -1088,7 +1088,7 @@ If seizures persist despite 24 hours of anesthesia:
 ## Clinical Context
 THALES tested whether ticagrelor (a more potent, direct-acting P2Y12 inhibitor) could outperform aspirin alone in preventing early recurrent stroke after minor stroke or TIA. It enrolled 11,016 patients across 414 sites in 28 countries with broader eligibility than CHANCE/POINT (NIHSS ≤5 vs ≤3; ABCD2 ≥6 vs ≥4).
 
-**AHA/ASA 2026 verdict: COR 3: No Benefit** — ticagrelor is NOT recommended over aspirin alone for this indication.
+**AHA/ASA 2026 verdict: COR 3: No Benefit**: ticagrelor is NOT recommended over aspirin alone for this indication.
 
 ## Trial Summary
 *   **Design:** Randomized double-blind placebo-controlled; 28 countries, 414 sites.
@@ -1096,15 +1096,15 @@ THALES tested whether ticagrelor (a more potent, direct-acting P2Y12 inhibitor) 
 *   **Intervention:** Ticagrelor 180mg load → 90mg BID + Aspirin × 30 days vs Aspirin alone.
 *   **Primary Outcome:** Stroke or death at 30 days.
 *   **Results:**
-    *   **Stroke/death:** 5.5% (ticagrelor+ASA) vs 6.6% (ASA alone) — HR 0.83, **p=0.02**
-    *   **Absolute reduction:** 1.1% — **NNT = 91**
-    *   **Severe hemorrhage:** 0.5% vs 0.1% — **5× higher**, p<0.001
+    *   **Stroke/death:** 5.5% (ticagrelor+ASA) vs 6.6% (ASA alone); HR 0.83, **p=0.02**
+    *   **Absolute reduction:** 1.1%; **NNT = 91**
+    *   **Severe hemorrhage:** 0.5% vs 0.1%; **5× higher**, p<0.001
 
 ## Why AHA/ASA 2026 Rates This COR 3: No Benefit
 The trial is statistically significant. But net clinical benefit is unfavorable:
 *   **NNT of 91** is far inferior to clopidogrel DAPT: CHANCE NNT=28, POINT NNT=67, INSPIRES NNT=53
 *   **Severe bleeding 5× higher** than aspirin alone (0.5% vs 0.1%)
-*   Ticagrelor offers no advantage over clopidogrel DAPT — and is less safe for this population
+*   Ticagrelor offers no advantage over clopidogrel DAPT, and is less safe for this population
 *   **Exception:** CYP2C19 loss-of-function carriers may benefit from ticagrelor-based DAPT (see CHANCE-2, COR 2b)
 
 ## AHA/ASA 2026 DAPT Comparison (Section 4.8)
@@ -1117,11 +1117,11 @@ The trial is statistically significant. But net clinical benefit is unfavorable:
 | INSPIRES | Clop+ASA (atherosclerotic) | 72h | 53 | Slight ↑ | COR 2a |
 
 ## Clinical PEARLS
-*   **Do NOT use ticagrelor routinely** for minor stroke/TIA — use clopidogrel+aspirin (CHANCE protocol) instead
+*   **Do NOT use ticagrelor routinely** for minor stroke/TIA: use clopidogrel+aspirin (CHANCE protocol) instead
 *   **Only exception:** confirmed CYP2C19 poor/intermediate metabolizer → consider ticagrelor DAPT (CHANCE-2, COR 2b)
-*   Ticagrelor causes dyspnea in ~12% (pharmacologic, not cardiac) — common discontinuation reason
-*   THALES used 30-day therapy; CHANCE/POINT used 21-day — longer duration increases bleeding risk
-*   Broader eligibility (NIHSS ≤5) enrolled more severe minor strokes — different population than CHANCE
+*   Ticagrelor causes dyspnea in ~12% (pharmacologic, not cardiac); common discontinuation reason
+*   THALES used 30-day therapy; CHANCE/POINT used 21-day, longer duration increases bleeding risk
+*   Broader eligibility (NIHSS ≤5) enrolled more severe minor strokes; different population than CHANCE
 
 *Source: [Johnston SC et al. N Engl J Med. 2020;383(3):207–217](https://www.nejm.org/doi/full/10.1056/NEJMoa1916870). DOI: 10.1056/NEJMoa1916870*
 `
@@ -1135,7 +1135,7 @@ The trial is statistically significant. But net clinical benefit is unfavorable:
 ## Clinical Context
 CHANCE established DAPT within 24 hours. INSPIRES extends the evidence to two important clinical gaps: **(1)** patients presenting 24–72 hours after onset, and **(2)** confirmed atherosclerotic etiology (≥50% intracranial or extracranial stenosis). Atherosclerotic stroke is particularly prone to early recurrence due to in-situ thrombosis and plaque instability.
 
-**AHA/ASA 2026: COR 2a** — DAPT reasonable for atherosclerotic minor stroke/TIA within 24–72 hours.
+**AHA/ASA 2026: COR 2a**: DAPT reasonable for atherosclerotic minor stroke/TIA within 24–72 hours.
 
 ## Trial Summary
 *   **Design:** Multicenter randomized double-blind 2×2 factorial trial; 222 centers, China.
@@ -1143,9 +1143,9 @@ CHANCE established DAPT within 24 hours. INSPIRES extends the evidence to two im
 *   **Intervention:** Clopidogrel 300mg load → 75mg/d + Aspirin × 21 days, then clopidogrel alone to 90 days.
 *   **Primary Outcome:** New stroke at 90 days.
 *   **Results:**
-    *   **New stroke:** 7.3% (DAPT) vs 9.2% (aspirin) — HR 0.79 (95% CI 0.66–0.94), **p=0.008**
-    *   **Absolute reduction:** 1.9% — **NNT ≈ 53**
-    *   **Moderate-to-severe bleeding:** 0.9% vs 0.4% — small significant increase
+    *   **New stroke:** 7.3% (DAPT) vs 9.2% (aspirin); HR 0.79 (95% CI 0.66–0.94), **p=0.008**
+    *   **Absolute reduction:** 1.9%; **NNT ≈ 53**
+    *   **Moderate-to-severe bleeding:** 0.9% vs 0.4%; small significant increase
 
 ## Who Qualifies (AHA/ASA 2026 COR 2a)
 1.  Mild ischemic stroke (NIHSS ≤5) OR high-risk TIA (ABCD2 ≥4)
@@ -1155,8 +1155,8 @@ CHANCE established DAPT within 24 hours. INSPIRES extends the evidence to two im
 5.  No indication for anticoagulation (e.g., AF)
 
 ## Clinical PEARLS
-*   **The 72-hour window is the main clinical advance** — for patients who miss the 24h CHANCE window
-*   **Must confirm atherosclerotic etiology on vascular imaging** — NOT applicable to cardioembolic, lacunar, or other etiologies
+*   **The 72-hour window is the main clinical advance**, for patients who miss the 24h CHANCE window
+*   **Must confirm atherosclerotic etiology on vascular imaging**: NOT applicable to cardioembolic, lacunar, or other etiologies
 *   Same regimen as CHANCE: clopidogrel 300mg load → 75mg + aspirin × 21 days → clopidogrel alone to day 90
 *   2×2 factorial statin arm (atorvastatin 40mg vs 20mg) showed neutral effect in separate analysis
 *   Critical use case: patient presents 36–72h post-TIA with confirmed carotid stenosis on CTA → INSPIRES protocol applies
@@ -1175,7 +1175,7 @@ Clopidogrel is a prodrug requiring CYP2C19 enzymatic conversion to its active me
 
 CHANCE-2 is the first large stroke trial using mandatory pharmacogenomic eligibility (only CYP2C19 LOF carriers enrolled), testing whether ticagrelor (a direct-acting, CYP2C19-independent P2Y12 inhibitor) outperforms clopidogrel-based DAPT in these patients.
 
-**AHA/ASA 2026: COR 2b** — ticagrelor-based DAPT may be reasonable over clopidogrel DAPT in confirmed CYP2C19 LOF carriers.
+**AHA/ASA 2026: COR 2b**: ticagrelor-based DAPT may be reasonable over clopidogrel DAPT in confirmed CYP2C19 LOF carriers.
 
 ## Trial Summary
 *   **Design:** Randomized double-blind placebo-controlled; 202 centers, China.
@@ -1183,10 +1183,10 @@ CHANCE-2 is the first large stroke trial using mandatory pharmacogenomic eligibi
 *   **Intervention:** Ticagrelor 180mg load → 90mg BID + Aspirin × 21 days, then ticagrelor monotherapy vs Clopidogrel-based DAPT.
 *   **Primary Outcome:** Stroke recurrence at 90 days.
 *   **Results:**
-    *   **Stroke recurrence:** 6.0% (ticagrelor) vs 7.6% (clopidogrel) — HR 0.77, **p=0.009**
-    *   **Absolute reduction:** 1.6% — **NNT = 63** (AHA/ASA 2026)
-    *   **Severe bleeding:** 0.28% vs 0.39% — **no significant difference**
-    *   **1-year follow-up:** HR 0.80, p=0.007 — durable benefit confirmed
+    *   **Stroke recurrence:** 6.0% (ticagrelor) vs 7.6% (clopidogrel); HR 0.77, **p=0.009**
+    *   **Absolute reduction:** 1.6%; **NNT = 63** (AHA/ASA 2026)
+    *   **Severe bleeding:** 0.28% vs 0.39%; **no significant difference**
+    *   **1-year follow-up:** HR 0.80, p=0.007; durable benefit confirmed
 
 ## CYP2C19 Phenotype Quick Reference
 | Genotype | Phenotype | Clopidogrel Effect | Recommendation |
@@ -1206,11 +1206,11 @@ CHANCE-2 is the first large stroke trial using mandatory pharmacogenomic eligibi
         └── NO → Start clopidogrel + aspirin NOW (COR 1). Do not delay
 
 ## Clinical PEARLS
-*   **Ticagrelor does NOT require CYP2C19** — direct-acting, bypasses the prodrug activation pathway
-*   Dyspnea occurs in ~15% with ticagrelor vs ~5% clopidogrel — pharmacologic, not cardiac; usually mild
-*   **If testing unavailable:** start clopidogrel DAPT NOW — never delay treatment waiting for genotyping
-*   Only LOF carriers benefit from switching — normal metabolizers use standard clopidogrel DAPT
-*   COR 2b (weak) — practical barriers include testing availability, ticagrelor cost, and dyspnea side effect
+*   **Ticagrelor does NOT require CYP2C19**: direct-acting, bypasses the prodrug activation pathway
+*   Dyspnea occurs in ~15% with ticagrelor vs ~5% clopidogrel; pharmacologic, not cardiac; usually mild
+*   **If testing unavailable:** start clopidogrel DAPT NOW; never delay treatment waiting for genotyping
+*   Only LOF carriers benefit from switching; normal metabolizers use standard clopidogrel DAPT
+*   COR 2b (weak); practical barriers include testing availability, ticagrelor cost, and dyspnea side effect
 *   Do NOT confuse with THALES (ticagrelor vs aspirin alone, COR 3): CHANCE-2 compares vs clopidogrel DAPT in a specific genotype
 
 *Source: [Wang Y, et al. N Engl J Med. 2021;385(27):2497–2505](https://www.nejm.org/doi/full/10.1056/NEJMoa2111749). DOI: 10.1056/NEJMoa2111749*
@@ -1225,9 +1225,9 @@ CHANCE-2 is the first large stroke trial using mandatory pharmacogenomic eligibi
     content: `
 ## Clinical Context
 Intracerebral hemorrhage (ICH) carries ~30–40% 30-day mortality and only ~20% functional independence at 1 year. Despite this, three major surgical RCTs all failed:
-*   **STICH I (2005):** Early open craniotomy vs medical management — no benefit
-*   **STICH II (2013):** Early surgery specifically for lobar ICH — no benefit
-*   **MISTIE III (2019):** Stereotactic catheter aspiration + alteplase — no benefit
+*   **STICH I (2005):** Early open craniotomy vs medical management: no benefit
+*   **STICH II (2013):** Early surgery specifically for lobar ICH: no benefit
+*   **MISTIE III (2019):** Stereotactic catheter aspiration + alteplase: no benefit
 
 ENRICH tested a fundamentally different approach: **minimally invasive parafascicular surgery (MIPS)**. Accessing the hematoma through natural sulcal corridors without transgressing brain parenchyma.
 
@@ -1239,8 +1239,8 @@ ENRICH tested a fundamentally different approach: **minimally invasive parafasci
 *   **Intervention:** MIPS using BrainPath® + Myriad® vs guideline-based medical management.
 *   **Primary Outcome:** Utility-weighted mRS (UW-mRS) at 180 days.
 *   **Results:**
-    *   **UW-mRS:** 0.458 (surgery) vs 0.374 (medical) — difference 0.084, **p=0.04**
-    *   **30-day mortality:** **9.3% (surgery) vs 18.0% (medical)** — **NNT≈12**
+    *   **UW-mRS:** 0.458 (surgery) vs 0.374 (medical); difference 0.084, **p=0.04**
+    *   **30-day mortality:** **9.3% (surgery) vs 18.0% (medical)**; **NNT≈12**
     *   Bayesian posterior probability of superiority **>97%**
 
 ## Why ENRICH Succeeded When Prior Trials Failed
@@ -1269,12 +1269,12 @@ ENRICH used utility-weighted mRS (UW-mRS), which assigns quality-of-life weights
 *   A UW-mRS of 0.458 vs 0.374 means the surgical group had on average 8.4% higher quality-adjusted functional survival at 180 days
 
 ## Clinical PEARLS
-*   **30-day mortality benefit is the most striking:** 9.3% vs 18.0% — NNT≈12 to prevent one death
-*   **Primary benefit in LOBAR ICH** — anterior basal ganglia subgroup less robust (underpowered subgroup)
-*   **Requires BrainPath + Myriad (NICO Corporation)** — specialty equipment, needs institutional setup and training
+*   **30-day mortality benefit is the most striking:** 9.3% vs 18.0%; NNT≈12 to prevent one death
+*   **Primary benefit in LOBAR ICH**; anterior basal ganglia subgroup less robust (underpowered subgroup)
+*   **Requires BrainPath + Myriad (NICO Corporation)**: specialty equipment, needs institutional setup and training
 *   MIPS trans-sulcal approach = no cortical transgression = less surgical brain injury vs open craniotomy
 *   Bayesian adaptive design: statistically valid but n=300 smaller than traditional RCTs; subgroup analyses underpowered
-*   **NOT for deep ICH** (thalamic/putaminal) — those patients excluded, different surgical risk profile
+*   **NOT for deep ICH** (thalamic/putaminal): those patients excluded, different surgical risk profile
 *   Complements MISTIE III (stereotactic) and STICH (open): different technique, different results
 
 *Source: [Hanley DF, et al. N Engl J Med. 2024;390(14):1277–1289](https://www.nejm.org/doi/abs/10.1056/NEJMoa2308440). DOI: 10.1056/NEJMoa2308440*

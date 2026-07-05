@@ -281,7 +281,7 @@ const Abcd2ScoreCalculator: React.FC = () => {
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <>
-      <h1 className="sr-only">ABCD² Score Calculator — TIA Stroke Risk</h1>
+      <h1 className="sr-only">ABCD² Score Calculator: TIA Stroke Risk</h1>
 
       {/* ── Sticky header — §1.1 ──────────────────────────────────────────── */}
       <CalculatorHeader
@@ -307,7 +307,7 @@ const Abcd2ScoreCalculator: React.FC = () => {
         scoreAriaLabel={
           isComplete
             ? `ABCD² Score ${result!.score} of 7. ${result!.label}, 2-day stroke risk ${result!.twoDayRiskPercent} percent.`
-            : 'ABCD² Score — not yet calculated'
+            : 'ABCD² Score: not yet calculated'
         }
         onBack={handleBack}
         onReset={handleReset}

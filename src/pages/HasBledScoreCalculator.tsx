@@ -147,7 +147,7 @@ export default function HasBledScoreCalculator() {
     if (inputs.alcohol) positiveFactors.push('alcohol ≥8/wk');
     const factorsLine = positiveFactors.length > 0 ? positiveFactors.join(', ') : 'none';
     return [
-      `HAS-BLED — ${result.score}/9 (major bleed ${result.bleedsPer100PatientYears}/100 patient-years)`,
+      `HAS-BLED: ${result.score}/9 (major bleed ${result.bleedsPer100PatientYears}/100 patient-years)`,
       `Risk factors: ${factorsLine}.`,
     ].join('\n');
   };
@@ -211,7 +211,7 @@ export default function HasBledScoreCalculator() {
           <div className="text-[10px] font-bold text-amber-700 uppercase tracking-widest mb-1">Important</div>
           <p className="text-sm text-slate-700 leading-relaxed">
             HAS-BLED estimates bleeding risk; it does <strong>not</strong> mean &quot;do not anticoagulate.&quot;
-            Address modifiable risks (BP, alcohol, NSAIDs, labile INR) and use for monitoring—not to withhold anticoagulation.
+            Address modifiable risks (BP, alcohol, NSAIDs, labile INR) and use for monitoring, not to withhold anticoagulation.
             Stroke risk (CHA₂DS₂-VASc) and shared decision-making drive anticoagulation.
           </p>
         </div>
@@ -258,7 +258,7 @@ export default function HasBledScoreCalculator() {
         scoreAriaLabel={
           hasInteracted
             ? `HAS-BLED Score ${result.score} of 9. ${HASBLED_RISK_LABELS[result.risk]}.`
-            : 'HAS-BLED Score — not yet calculated'
+            : 'HAS-BLED Score: not yet calculated'
         }
         onBack={handleBack}
         onReset={handleReset}

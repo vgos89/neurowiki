@@ -49,7 +49,7 @@ export const QuickReferenceCard: React.FC = () => {
               <p className="text-xs font-bold uppercase tracking-wide text-neuro-600 mb-2">
                 Alteplase (tPA)
               </p>
-              <p className="text-sm font-semibold text-slate-900">0.9 mg/kg — max 90 mg</p>
+              <p className="text-sm font-semibold text-slate-900">0.9 mg/kg, max 90 mg</p>
               <p className="text-xs text-slate-600 mt-1">
                 10% bolus over 1 min → 90% infusion over 60 min
               </p>
@@ -61,7 +61,7 @@ export const QuickReferenceCard: React.FC = () => {
             {/* TNK */}
             <div className="bg-white rounded-lg border border-neuro-100 p-3">
               <p className="text-xs font-bold uppercase tracking-wide text-neuro-600 mb-2">
-                Tenecteplase (TNK) — COR 1 equal to tPA
+                Tenecteplase (TNK): COR 1 equal to tPA
               </p>
               <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-xs">
                 {[

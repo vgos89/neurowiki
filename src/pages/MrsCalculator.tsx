@@ -58,7 +58,7 @@ const MRS_GRADES: GradeData[] = [
   {
     grade:    0,
     label:    'No symptoms',
-    sublabel: 'No disability — fully active as before',
+    sublabel: 'No disability, fully active as before',
   },
   {
     grade:    1,
@@ -110,7 +110,7 @@ const QUESTIONS: Record<InterviewStep, Question> = {
     id:        'walk',
     preStroke: 'Could they walk without physical help from another person?',
     current:   'Can they walk without physical help from another person?',
-    hint:      'Using a cane, walker, or brace counts as YES — needing another person counts as NO',
+    hint:      'Using a cane, walker, or brace counts as YES; needing another person counts as NO',
   },
   bedridden: {
     id:        'bedridden',
@@ -122,7 +122,7 @@ const QUESTIONS: Record<InterviewStep, Question> = {
     id:        'daily-help',
     preStroke: 'Did they need help from others for daily activities?',
     current:   'Do they need help from others for daily activities?',
-    hint:      'Shopping, cooking, housework, finances — help with any of these counts as YES',
+    hint:      'Shopping, cooking, housework, finances: help with any of these counts as YES',
   },
   activities: {
     id:        'activities',
@@ -134,7 +134,7 @@ const QUESTIONS: Record<InterviewStep, Question> = {
     id:        'symptoms',
     preStroke: 'Did they have any persistent symptoms from a prior neurological event?',
     current:   'Do they have any persistent neurological symptoms?',
-    hint:      'Weakness, speech difficulty, vision change, or coordination problem — even minor',
+    hint:      'Weakness, speech difficulty, vision change, or coordination problem, even minor',
   },
 };
 
@@ -286,7 +286,7 @@ const MrsCalculator: React.FC = () => {
     if (grade === null) return 'mRS: Not yet selected.';
     const g   = MRS_GRADES[grade];
     const ctx = context === 'pre-stroke' ? 'Pre-stroke mRS' : 'mRS';
-    return [`${ctx}: ${grade} — ${g.label}`, g.sublabel + '.'].join('\n');
+    return [`${ctx}: ${grade}: ${g.label}`, g.sublabel + '.'].join('\n');
   }, [grade, context]);
 
   const handleCopy = useCallback(() => {
@@ -382,18 +382,18 @@ const MrsCalculator: React.FC = () => {
           headline = 'EVT can reasonably be considered (COR 2a)';
           body     = 'Prestroke mRS 2 is not a contraindication. Per AHA/ASA 2026, for anterior-circulation proximal LVO within 6 h with NIHSS ≥6 and ASPECTS ≥6, EVT can reasonably be considered (COR 2a, Level B-NR). The landmark trials (DAWN, DEFUSE-3, SELECT-2) enrolled prestroke mRS 0–1, so trial-level evidence is strongest at mRS 0–1; the mRS 2 recommendation reflects current guidance. Individualize and document.';
         } else {
-          headline = 'High baseline disability — goals-of-care discussion';
+          headline = 'High baseline disability: goals-of-care discussion';
           body     = 'Standard EVT and IVT trials excluded prestroke mRS ≥2 as routine care. At mRS 3–5, a goals-of-care discussion with the patient and family is appropriate before committing to acute intervention.';
         }
       } else {
         if (grade <= 2) {
-          headline = '"Good outcome" — functional independence';
+          headline = '"Good outcome": functional independence';
           body     = 'mRS 0–2 is the standard "good outcome" in most acute stroke thrombectomy RCTs (DAWN, DEFUSE-3, SELECT-2). At 90 days, mRS ≤2 represents independent function. Note: NINDS used mRS 0–1 within a 4-scale global statistic, not mRS 0–2.';
         } else if (grade === 3) {
           headline = 'Dependent for some activities; ambulatory';
           body     = 'mRS 3 falls below the mRS 0–2 "good outcome" threshold used in most stroke trials, but the patient retains independent ambulation. Relevant for rehabilitation goal-setting and trajectory discussions.';
         } else {
-          headline = 'Dependent — poor functional outcome range';
+          headline = 'Dependent: poor functional outcome range';
           body     = 'mRS 4–5 corresponds to the "poor outcome" range in stroke trial endpoint analyses. Rehabilitation ceiling and long-term care planning discussions are relevant at this stage.';
         }
       }
@@ -512,7 +512,7 @@ const MrsCalculator: React.FC = () => {
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <>
-      <h1 className="sr-only">mRS Calculator — modified Rankin Scale for Stroke Disability</h1>
+      <h1 className="sr-only">mRS Calculator: modified Rankin Scale for Stroke Disability</h1>
 
       {/* ── Sticky header ─────────────────────────────────────────────────── */}
       <CalculatorHeader
@@ -520,8 +520,8 @@ const MrsCalculator: React.FC = () => {
         scoreDisplay={renderScoreDisplay()}
         scoreAriaLabel={
           grade !== null
-            ? `mRS ${grade} — ${MRS_GRADES[grade].label}`
-            : 'mRS — no grade selected'
+            ? `mRS ${grade}: ${MRS_GRADES[grade].label}`
+            : 'mRS: no grade selected'
         }
         onBack={handleBack}
         onReset={handleReset}
@@ -595,7 +595,7 @@ const MrsCalculator: React.FC = () => {
           <section aria-label="mRS grade selection">
             <div
               role="radiogroup"
-              aria-label="Modified Rankin Scale — select a grade"
+              aria-label="Modified Rankin Scale: select a grade"
               ref={gradeGroupRef}
               className="divide-y divide-slate-200"
             >
@@ -707,7 +707,7 @@ const MrsCalculator: React.FC = () => {
             {/* Grade list with resolved grade highlighted — same rows as direct */}
             <div
               role="radiogroup"
-              aria-label="Modified Rankin Scale — grade resolved by interview"
+              aria-label="Modified Rankin Scale: grade resolved by interview"
               ref={gradeGroupRef}
               className="divide-y divide-slate-200"
             >
@@ -791,7 +791,7 @@ const MrsCalculator: React.FC = () => {
         ariaContentId="mrs-drawer-content"
         stateAText={{ label: 'No grade selected', hint: 'Tap a grade above' }}
         stateBText={{ label: '—', hint: '' }}
-        collapsedStat={grade !== null ? `mRS ${grade} — ${MRS_GRADES[grade].label}` : ''}
+        collapsedStat={grade !== null ? `mRS ${grade}: ${MRS_GRADES[grade].label}` : ''}
         justCompleted={justCompleted}
       >
         <DrawerContent />

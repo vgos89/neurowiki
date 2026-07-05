@@ -337,7 +337,7 @@ const GlasgowComaScaleCalculator: React.FC = () => {
         scoreAriaLabel={
           isComplete
             ? `GCS ${result!.display} of 15. ${result!.label}.`
-            : 'Glasgow Coma Scale — not yet calculated'
+            : 'Glasgow Coma Scale: not yet calculated'
         }
         onBack={handleBack}
         onReset={handleReset}
@@ -457,7 +457,7 @@ const GlasgowComaScaleCalculator: React.FC = () => {
                 className="w-4 h-4 rounded text-neuro-600"
               />
               <span className="text-sm text-slate-600">
-                Verbal not testable (intubated — score displays with T suffix)
+                Verbal not testable (intubated, score displays with T suffix)
               </span>
             </label>
 

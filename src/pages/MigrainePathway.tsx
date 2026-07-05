@@ -185,7 +185,7 @@ const EvidenceBadge = ({ level }: { level: EvidenceLevel }) => {
         type="button"
         onClick={(e) => { e.stopPropagation(); setOpen(v => !v); }}
         className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${EVIDENCE_COLORS[level]}`}
-        aria-label={`Level ${level} evidence — tap for explanation`}
+        aria-label={`Level ${level} evidence: tap for explanation`}
       >Level {level}</button>
       {open && (
         <span className="absolute left-0 top-5 z-30 w-64 bg-white border border-slate-200 rounded-xl shadow-xl p-3 text-xs text-slate-700 font-normal block" role="tooltip">
@@ -844,18 +844,18 @@ const MigrainePathway: React.FC = () => {
                         <div className="font-semibold text-slate-900 text-sm">Oxcarbazepine 600–1200 mg/day</div>
                         <EvidenceBadge level="B" />
                       </div>
-                      <div className="text-xs text-slate-500 mt-1">Better tolerated than carbamazepine. Risk of hyponatremia — monitor electrolytes. Nahas 2024.</div>
+                      <div className="text-xs text-slate-500 mt-1">Better tolerated than carbamazepine. Risk of hyponatremia; monitor electrolytes. Nahas 2024.</div>
                     </div>
                     <div className="bg-white p-3 rounded-lg border border-amber-200">
                       <div className="font-semibold text-slate-900 text-sm mb-0.5">Acute exacerbation rescue</div>
                       <div className="text-xs text-slate-500">IV fosphenytoin 15–20 mg PE/kg OR IV lidocaine 1.5–2 mg/kg over 10–20 min (for pain crises when oral intake is not possible). Nahas 2024 p.298.</div>
                     </div>
                     <div className="bg-red-50 p-3 rounded-lg border border-red-200">
-                      <div className="text-xs font-bold text-red-700">Avoid opioids — not effective and accelerate central sensitization in TN.</div>
+                      <div className="text-xs font-bold text-red-700">Avoid opioids: not effective and accelerate central sensitization in TN.</div>
                     </div>
                     <div className="bg-white p-3 rounded-lg border border-amber-200">
                       <div className="font-semibold text-slate-900 text-sm mb-0.5">Refractory TN</div>
-                      <div className="text-xs text-slate-500">If 2 adequate medication trials fail: microvascular decompression (MVD), stereotactic radiosurgery, or percutaneous rhizotomy — surgical decision individualized by patient anatomy and comorbidities. Nahas 2024.</div>
+                      <div className="text-xs text-slate-500">If 2 adequate medication trials fail: microvascular decompression (MVD), stereotactic radiosurgery, or percutaneous rhizotomy; surgical decision individualized by patient anatomy and comorbidities. Nahas 2024.</div>
                     </div>
                   </div>
                 </div>
@@ -886,7 +886,7 @@ const MigrainePathway: React.FC = () => {
                         <div>• Start: 25 mg TID × 3 days</div>
                         <div>• If partial response: 50 mg TID × 3 days</div>
                         <div>• If still partial: 75 mg TID (max 225 mg/day)</div>
-                        <div className="font-semibold text-amber-700 mt-1">Always co-prescribe a PPI — GI protection required.</div>
+                        <div className="font-semibold text-amber-700 mt-1">Always co-prescribe a PPI: GI protection required.</div>
                         <div className="text-slate-500 mt-1">Complete response = diagnostic. Maintain at lowest effective dose. Goadsby 2024.</div>
                       </div>
                     </div>
@@ -928,7 +928,7 @@ const MigrainePathway: React.FC = () => {
                       <ul className="space-y-1 list-disc list-inside">
                         <li>Mild-to-moderate: NSAIDs / acetaminophen / non-opioid analgesics / caffeine combos.</li>
                         <li>Moderate-severe or NSAID-refractory: triptans (sumatriptan PO 25/50/100 mg, max 200 mg/24 h; rizatriptan 5/10 mg; eletriptan 20/40 mg; zolmitriptan 2.5/5 mg).</li>
-                        <li>Vascular disease or triptan-intolerant: gepants (ubrogepant 50/100 mg PO; rimegepant 75 mg ODT) or ditans (lasmiditan 50/100/200 mg PO — no driving × 8 h).</li>
+                        <li>Vascular disease or triptan-intolerant: gepants (ubrogepant 50/100 mg PO; rimegepant 75 mg ODT) or ditans (lasmiditan 50/100/200 mg PO, no driving × 8 h).</li>
                       </ul>
                     </div>
                   )}
@@ -1027,7 +1027,7 @@ const MigrainePathway: React.FC = () => {
               {(safety.cvRisk || safety.strokeHistory) && (
                 <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-900">
                   <div className="font-bold mb-1">Vascular disease present</div>
-                  <p>Triptans and DHE contraindicated. Outpatient alternatives (no vasoconstriction): ubrogepant 50/100 mg PO, rimegepant 75 mg ODT, lasmiditan 50/100/200 mg PO (no driving × 8 h). Not formulary-IV — flag for outpatient initiation. AHS 2021 Consensus p.1025; Burch 2024 p.352.</p>
+                  <p>Triptans and DHE contraindicated. Outpatient alternatives (no vasoconstriction): ubrogepant 50/100 mg PO, rimegepant 75 mg ODT, lasmiditan 50/100/200 mg PO (no driving × 8 h). Not formulary-IV: flag for outpatient initiation. AHS 2021 Consensus p.1025; Burch 2024 p.352.</p>
                 </div>
               )}
 
@@ -1078,7 +1078,7 @@ const MigrainePathway: React.FC = () => {
                     options={[
                       { value: 'prochlorperazine', label: 'Prochlorperazine 10 mg', description: 'Robblee 2025 Level A: Must Offer. First-line ED antiemetic for acute migraine. May repeat q8h.' },
                       { value: 'metoclopramide', label: 'Metoclopramide 10 mg', description: 'Robblee 2025 Level B: Should Offer. Use if prochlorperazine unavailable or contraindicated. May repeat q8h.' },
-                      { value: 'ondansetron', label: 'Ondansetron 4–8 mg', description: 'Anti-nausea adjunct only — not effective as a migraine analgesic. Use when QT risk excludes dopamine antagonists.' },
+                      { value: 'ondansetron', label: 'Ondansetron 4–8 mg', description: 'Anti-nausea adjunct only, not effective as a migraine analgesic. Use when QT risk excludes dopamine antagonists.' },
                     ] as CategoryOption[]}
                     value={cocktail.antiemetic}
                     onChange={(v) => setCocktail({...cocktail, antiemetic: v as AntiemeticChoice})}
@@ -1099,7 +1099,7 @@ const MigrainePathway: React.FC = () => {
                       options={[
                         { value: '15', label: '15 mg IM/IV', description: 'Robblee 2025 Level B. Use for age >65 or weight <50 kg.' },
                         { value: '30', label: '30 mg IM/IV', description: 'Standard adult dose. May repeat ×1 at 8h PRN.' },
-                        ...(!safety.age65 && !safety.weightLow ? [{ value: '60', label: '60 mg IM/IV', description: 'Higher dose — avoid if age >65 or weight <50 kg.' }] : []),
+                        ...(!safety.age65 && !safety.weightLow ? [{ value: '60', label: '60 mg IM/IV', description: 'Higher dose, avoid if age >65 or weight <50 kg.' }] : []),
                       ] as CategoryOption[]}
                       value={cocktail.ketorolac}
                       onChange={(v) => setCocktail({...cocktail, ketorolac: v as KetorolacDose})}
@@ -1120,7 +1120,7 @@ const MigrainePathway: React.FC = () => {
                       label="Dexamethasone"
                       options={[
                         { value: '8', label: '8 mg IV ×1', description: 'Robblee 2025: Level C (May Offer) for acute pain; Level B (Should Offer) for preventing 24–72 h headache recurrence. Single dose.' },
-                        { value: '10', label: '10 mg IV ×1', description: 'Robblee 2025: Level B for recurrence prevention — the primary reason to use dexamethasone in migraine. Level C for acute pain only. Burch 2024 reference dose.' },
+                        { value: '10', label: '10 mg IV ×1', description: 'Robblee 2025: Level B for recurrence prevention (the primary reason to use dexamethasone in migraine). Level C for acute pain only. Burch 2024 reference dose.' },
                         { value: '16', label: '16 mg IV ×1', description: 'Higher end of Robblee Table 2 range. Level C for acute pain; Level B for recurrence prevention. Single dose.' },
                       ] as CategoryOption[]}
                       value={cocktail.dexamethasone}
@@ -1291,7 +1291,7 @@ const MigrainePathway: React.FC = () => {
                 title="Why prochlorperazine first?"
                 visible={cocktail.antiemetic !== null}
                 content={
-                  <span>Prochlorperazine blocks D2 receptors in the chemoreceptor trigger zone and has direct antimigraine properties beyond antiemesis. Robblee 2025 assigns it Level A (Must Offer) — higher evidence grade than metoclopramide (Level B) or ondansetron (Level U for analgesia). Premedicate with diphenhydramine 25–50 mg to prevent akathisia, an uncomfortable restlessness from dopamine-antagonist side effects. Metoclopramide is appropriate if prochlorperazine is unavailable or contraindicated.</span>
+                  <span>Prochlorperazine blocks D2 receptors in the chemoreceptor trigger zone and has direct antimigraine properties beyond antiemesis. Robblee 2025 assigns it Level A (Must Offer): higher evidence grade than metoclopramide (Level B) or ondansetron (Level U for analgesia). Premedicate with diphenhydramine 25–50 mg to prevent akathisia, an uncomfortable restlessness from dopamine-antagonist side effects. Metoclopramide is appropriate if prochlorperazine is unavailable or contraindicated.</span>
                 }
               />
 

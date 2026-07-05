@@ -292,7 +292,7 @@ const TrialPageNew: React.FC = () => {
           // NNT is derived from observed proportions, NOT from the posterior probability.
           if (isBayesianSuperiorityTrial) {
             nntExplanation = (nntExplanation ? nntExplanation + ' ' : '') +
-              '(Bayesian adaptive trial — superiority established by posterior probability >0.999; NNT calculated from observed proportions.)';
+              '(Bayesian adaptive trial: superiority established by posterior probability >0.999; NNT calculated from observed proportions.)';
           }
         }
       }
@@ -1342,7 +1342,7 @@ const TrialPageNew: React.FC = () => {
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
                 <p className="text-xs text-amber-900 leading-relaxed">
-                  <strong>Protocol amendment:</strong> Primary outcome changed from mRS 0–4 to mRS 0–3 mid-trial (before unblinding). The original mRS 0–4 result was NEGATIVE (RR 1.21, 95% CI 0.95–1.54). Trial stopped early for efficacy at planned interim — effect size may be overestimated.
+                  <strong>Protocol amendment:</strong> Primary outcome changed from mRS 0–4 to mRS 0–3 mid-trial (before unblinding). The original mRS 0–4 result was NEGATIVE (RR 1.21, 95% CI 0.95–1.54). Trial stopped early for efficacy at planned interim; effect size may be overestimated.
                 </p>
               </div>
               <DeltaBandChart
@@ -1422,7 +1422,7 @@ const TrialPageNew: React.FC = () => {
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-red-50 border border-red-200 px-3 py-2">
                 <p className="text-xs text-red-800 leading-relaxed">
-                  <strong>STOPPED FOR HARM:</strong> DSMB halted SAMMPRIS at 451 of 764 planned patients due to excess 30-day stroke/death in the stenting arm (14.7% vs 5.8%, P=0.002). Periprocedural events drove the harm — 25 of 33 PTAS strokes occurred within 24 hours of the procedure. sICH 4.5% vs 0%. Result is specific to Wingspan as INITIAL therapy in this population; on-label salvage use (WEAVE registry) showed acceptable safety.
+                  <strong>STOPPED FOR HARM:</strong> DSMB halted SAMMPRIS at 451 of 764 planned patients due to excess 30-day stroke/death in the stenting arm (14.7% vs 5.8%, P=0.002). Periprocedural events drove the harm: 25 of 33 PTAS strokes occurred within 24 hours of the procedure. sICH 4.5% vs 0%. Result is specific to Wingspan as INITIAL therapy in this population; on-label salvage use (WEAVE registry) showed acceptable safety.
                 </p>
               </div>
               <DeltaBandChart
@@ -1488,12 +1488,12 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(trialMetadata)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Non-inferiority</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: Non-inferiority</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
                 <p className="text-xs text-blue-900 leading-relaxed">
-                  <strong>Non-inferiority design:</strong> The trial asks whether TNK is at least as good as alteplase within a pre-specified margin (RR ≥0.937), not whether TNK is better. NI margin met: RR 1.03 (95% CI 0.97–1.09). Do not derive an NNT from this trial — the design does not establish a superiority effect size.
+                  <strong>Non-inferiority design:</strong> The trial asks whether TNK is at least as good as alteplase within a pre-specified margin (RR ≥0.937), not whether TNK is better. NI margin met: RR 1.03 (95% CI 0.97–1.09). Do not derive an NNT from this trial; the design does not establish a superiority effect size.
                 </p>
               </div>
               <DeltaBandChart
@@ -1560,7 +1560,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(trialMetadata)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Ordinal mRS Shift</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: Ordinal mRS Shift</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
@@ -1639,7 +1639,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(trialMetadata)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Bayesian Superiority</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: Bayesian Superiority</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
@@ -1718,12 +1718,12 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(trialMetadata)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Ordinal mRS Shift</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: Ordinal mRS Shift</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
                 <p className="text-xs text-blue-900 leading-relaxed">
-                  <strong>Ordinal-shift design:</strong> Primary is generalized OR for ordinal mRS shift (gOR 1.51, 95% CI 1.20–1.89). The mRS 0–2 binary shown below (functional independence) is a secondary outcome; frame as "less disability on average", not "independence restored" — only 20% achieve mRS 0–2.
+                  <strong>Ordinal-shift design:</strong> Primary is generalized OR for ordinal mRS shift (gOR 1.51, 95% CI 1.20–1.89). The mRS 0–2 binary shown below (functional independence) is a secondary outcome; frame as "less disability on average", not "independence restored": only 20% achieve mRS 0–2.
                 </p>
               </div>
               <DeltaBandChart
@@ -1797,7 +1797,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(trialMetadata)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Ordinal mRS Shift</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: Ordinal mRS Shift</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
@@ -1876,12 +1876,12 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(trialMetadata)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Bayesian Superiority</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: Bayesian Superiority</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
                 <p className="text-xs text-blue-900 leading-relaxed">
-                  <strong>Bayesian response-adaptive design:</strong> Primary is utility-weighted mRS at 180 days; superiority by posterior P(sup) = 0.981 (threshold 0.975). No frequentist p-value. The 30-day mortality result shown below is the primary SAFETY endpoint, not the primary EFFICACY endpoint. Anterior basal ganglia subgroup was halted for futility — benefit is in LOBAR ICH.
+                  <strong>Bayesian response-adaptive design:</strong> Primary is utility-weighted mRS at 180 days; superiority by posterior P(sup) = 0.981 (threshold 0.975). No frequentist p-value. The 30-day mortality result shown below is the primary SAFETY endpoint, not the primary EFFICACY endpoint. Anterior basal ganglia subgroup was halted for futility; benefit is in LOBAR ICH.
                 </p>
               </div>
               <DeltaBandChart
@@ -1943,7 +1943,7 @@ const TrialPageNew: React.FC = () => {
           <div>
             <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
-              In suspected acute ischemic stroke dispatched in Berlin's EMS system, does mobile stroke unit dispatch improve 90-day disability outcomes compared with conventional ambulance alone? (Allocation by MSU availability — not patient-level randomization.)
+              In suspected acute ischemic stroke dispatched in Berlin's EMS system, does mobile stroke unit dispatch improve 90-day disability outcomes compared with conventional ambulance alone? (Allocation by MSU availability, not patient-level randomization.)
             </p>
             <p className="text-sm text-slate-500 mt-1">
               {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
@@ -1962,12 +1962,12 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(trialMetadata)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Ordinal mRS Shift</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: Ordinal mRS Shift</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
                 <p className="text-xs text-amber-900 leading-relaxed">
-                  <strong>Quasi-experimental — interpret as association, not causation:</strong> Allocation was by MSU availability, not patient-level randomization. Per clinical-trial-audit, NNT is not displayed for observational/registry designs because residual confounding prevents causal absolute-risk-difference interpretation. Primary analysis used ordinal mRS shift (common OR 0.71 for worse mRS).
+                  <strong>Quasi-experimental, interpret as association, not causation:</strong> Allocation was by MSU availability, not patient-level randomization. Per clinical-trial-audit, NNT is not displayed for observational/registry designs because residual confounding prevents causal absolute-risk-difference interpretation. Primary analysis used ordinal mRS shift (common OR 0.71 for worse mRS).
                 </p>
               </div>
               <DeltaBandChart
@@ -1983,7 +1983,7 @@ const TrialPageNew: React.FC = () => {
                 winnerArm="treatment"
               />
               <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2 text-xs text-slate-500">
-                NNT suppressed (quasi-experimental design — see clinical-trial-audit rules)
+                NNT suppressed (quasi-experimental design, see clinical-trial-audit rules)
               </div>
             </div>
           </div>
@@ -3579,7 +3579,7 @@ const TrialPageNew: React.FC = () => {
           {tm.mrsDistribution && tm.ordinalStats && (
             <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">Undifferentiated stroke (all patients)</p>
               </div>
               <div className="p-4">
@@ -3660,7 +3660,7 @@ const TrialPageNew: React.FC = () => {
           {tm.mrsDistribution && tm.ordinalStats && (
             <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">All randomized patients (medium/distal vessel occlusion)</p>
               </div>
               <div className="p-4">
@@ -3729,7 +3729,7 @@ const TrialPageNew: React.FC = () => {
           {tm.mrsDistribution && tm.ordinalStats && (
             <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">Total population (presumed stroke within 3 hours)</p>
               </div>
               <div className="p-4">
@@ -3795,7 +3795,7 @@ const TrialPageNew: React.FC = () => {
           {tm.mrsDistribution && tm.ordinalStats && (
             <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">Ischemic stroke or TIA population (primary endpoint, n=949)</p>
               </div>
               <div className="p-4">
@@ -3861,7 +3861,7 @@ const TrialPageNew: React.FC = () => {
           {tm.mrsDistribution && tm.ordinalStats && (
             <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">Acute ischemic stroke population (primary endpoint, n=104)</p>
               </div>
               <div className="p-4">
@@ -3927,7 +3927,7 @@ const TrialPageNew: React.FC = () => {
           {tm.mrsDistribution && tm.ordinalStats && (
             <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">All treated patients (1777 patients, 39 UK centres)</p>
               </div>
               <div className="p-4">
@@ -3995,7 +3995,7 @@ const TrialPageNew: React.FC = () => {
           {tm.mrsDistribution && tm.ordinalStats && (
             <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">All randomized patients (458 patients, 77% underwent EVT)</p>
               </div>
               <div className="p-4">
@@ -4061,7 +4061,7 @@ const TrialPageNew: React.FC = () => {
           {tm.mrsDistribution && tm.ordinalStats && (
             <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">All randomized patients (578 patients, non-contrast CT selection)</p>
               </div>
               <div className="p-4">
@@ -4311,7 +4311,7 @@ const TrialPageNew: React.FC = () => {
           {/* Section 3: Population */}
           {renderPopulationSection(trialMetadata)}
 
-          {/* Section 4: Primary Outcome — BenchmarkThresholdChart (Archetype G) */}
+          {/* Section 4: Primary Outcome: BenchmarkThresholdChart (Archetype G) */}
           {bm && oer && (
             <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
@@ -4454,7 +4454,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Distribution at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO)</p>
             </div>
             <div className="p-4">
@@ -4534,7 +4534,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Distribution at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (small core, good collaterals)</p>
             </div>
             <div className="p-4">
@@ -4614,7 +4614,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Distribution at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, within 8 hours)</p>
             </div>
             <div className="p-4">
@@ -4771,7 +4771,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Distribution at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, IV alteplase within 4.5 hours)</p>
             </div>
             <div className="p-4">
@@ -4851,7 +4851,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 3 Months</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS 0-2 at 3 Months</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (proximal anterior circulation LVO, NIHSS 10 to 25)</p>
             </div>
             <div className="p-4">
@@ -4932,7 +4932,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Ordinal Shift at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, ASPECTS 5 or lower)</p>
             </div>
             <div className="p-4">
@@ -4961,13 +4961,13 @@ const TrialPageNew: React.FC = () => {
                   <div className="grid grid-cols-2 gap-3">
                     <div style={{ background: '#f0fdf4', border: '1px solid #86efac', borderRadius: 10, padding: '14px 16px', textAlign: 'center' }}>
                       <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#15803d', marginBottom: 4 }}>
-                        Median mRS — Thrombectomy
+                        Median mRS: Thrombectomy
                       </p>
                       <p style={{ fontSize: 32, fontWeight: 700, color: '#15803d', lineHeight: 1.1 }}>4</p>
                     </div>
                     <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: '14px 16px', textAlign: 'center' }}>
                       <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#64748b', marginBottom: 4 }}>
-                        Median mRS — Medical Care
+                        Median mRS: Medical Care
                       </p>
                       <p style={{ fontSize: 32, fontWeight: 700, color: '#475569', lineHeight: 1.1 }}>6</p>
                     </div>
@@ -5046,7 +5046,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Ordinal Shift at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, ASPECTS 3 to 5)</p>
             </div>
             <div className="p-4">
@@ -5075,13 +5075,13 @@ const TrialPageNew: React.FC = () => {
                   <div className="grid grid-cols-2 gap-3">
                     <div style={{ background: '#f0fdf4', border: '1px solid #86efac', borderRadius: 10, padding: '14px 16px', textAlign: 'center' }}>
                       <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#15803d', marginBottom: 4 }}>
-                        Median mRS — EVT
+                        Median mRS: EVT
                       </p>
                       <p style={{ fontSize: 32, fontWeight: 700, color: '#15803d', lineHeight: 1.1 }}>4</p>
                     </div>
                     <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: '14px 16px', textAlign: 'center' }}>
                       <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#64748b', marginBottom: 4 }}>
-                        Median mRS — Medical Treatment
+                        Median mRS: Medical Treatment
                       </p>
                       <p style={{ fontSize: 32, fontWeight: 700, color: '#475569', lineHeight: 1.1 }}>5</p>
                     </div>
@@ -5160,7 +5160,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-1 at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS 0-1 at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (LVO, eTICI 2b50+ reperfusion after thrombectomy)</p>
             </div>
             <div className="p-4">
@@ -5239,7 +5239,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days (Non-inferiority)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Ordinal Shift at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, eligible for IV alteplase)</p>
             </div>
             {/* NI amber banner — mandatory for non-inferiority design */}
@@ -5318,7 +5318,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 90 Days (Non-inferiority)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS 0-2 at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (proximal anterior circulation LVO, alteplase-eligible)</p>
             </div>
             {/* NI amber banner */}
@@ -5396,7 +5396,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 90 Days (Non-inferiority)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS 0-2 at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, within 6 hours)</p>
             </div>
             {/* NI amber banner */}
@@ -5474,8 +5474,8 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Successful Revascularization (mTICI 2b-3)</p>
-              <p className="text-xs text-slate-500 mt-0.5">Procedural endpoint — not a clinical outcome measure</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: Successful Revascularization (mTICI 2b-3)</p>
+              <p className="text-xs text-slate-500 mt-0.5">Procedural endpoint, not a clinical outcome measure</p>
             </div>
             {/* Procedural-endpoint amber banner */}
             <div style={{ background: '#FFFBEB', borderLeft: '3px solid #D97706', margin: '12px 16px 0', borderRadius: '0 6px 6px 0', padding: '10px 14px' }} role="note">
@@ -5553,8 +5553,8 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Near-Total Reperfusion (eTICI 2c-3)</p>
-              <p className="text-xs text-slate-500 mt-0.5">Procedural endpoint — not a clinical outcome measure</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: Near-Total Reperfusion (eTICI 2c-3)</p>
+              <p className="text-xs text-slate-500 mt-0.5">Procedural endpoint, not a clinical outcome measure</p>
             </div>
             {/* Procedural-endpoint amber banner */}
             <div style={{ background: '#FFFBEB', borderLeft: '3px solid #D97706', margin: '12px 16px 0', borderRadius: '0 6px 6px 0', padding: '10px 14px' }} role="note">
@@ -5635,7 +5635,7 @@ const TrialPageNew: React.FC = () => {
           </div>
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 90 Days (Non-inferiority)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS 0-2 at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">LVO stroke within 4.5 h; Japanese low-dose alteplase (0.6 mg/kg) comparator</p>
             </div>
             <div className="p-4">
@@ -5711,7 +5711,7 @@ const TrialPageNew: React.FC = () => {
           </div>
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Ordinal Shift at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">Direct presenters at EVT-capable centers within 4.5 h</p>
             </div>
             <div className="p-4">
@@ -5734,13 +5734,13 @@ const TrialPageNew: React.FC = () => {
                   <div className="grid grid-cols-2 gap-3">
                     <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: '14px 16px', textAlign: 'center' }}>
                       <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#64748b', marginBottom: 4 }}>
-                        Median mRS — Direct EVT
+                        Median mRS: Direct EVT
                       </p>
                       <p style={{ fontSize: 32, fontWeight: 700, color: '#475569', lineHeight: 1.1 }}>3</p>
                     </div>
                     <div style={{ background: '#f0f9ff', border: '1px solid #7dd3fc', borderRadius: 10, padding: '14px 16px', textAlign: 'center' }}>
                       <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#0369a1', marginBottom: 4 }}>
-                        Median mRS — Bridging
+                        Median mRS: Bridging
                       </p>
                       <p style={{ fontSize: 32, fontWeight: 700, color: '#0369a1', lineHeight: 1.1 }}>2</p>
                     </div>
@@ -5810,7 +5810,7 @@ const TrialPageNew: React.FC = () => {
           </div>
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 or Pre-stroke Baseline at 90 Days (Non-inferiority)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS 0-2 or Pre-stroke Baseline at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">LVO within 4.5 h; alteplase or tenecteplase in bridging arm</p>
             </div>
             <div className="p-4">
@@ -5886,7 +5886,7 @@ const TrialPageNew: React.FC = () => {
           </div>
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 90 Days (Non-inferiority)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS 0-2 at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">Anterior circulation proximal LVO; direct presenters within 4.5 h</p>
             </div>
             <div className="p-4">
@@ -5958,7 +5958,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Ordinal Shift at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">948 patients; IV tirofiban vs placebo before and during EVT</p>
             </div>
             <div className="p-4">
@@ -5981,13 +5981,13 @@ const TrialPageNew: React.FC = () => {
                   <div className="grid grid-cols-2 gap-3">
                     <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: '14px 16px', textAlign: 'center' }}>
                       <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#64748b', marginBottom: 4 }}>
-                        mRS 0-1 — Tirofiban
+                        mRS 0-1: Tirofiban
                       </p>
                       <p style={{ fontSize: 32, fontWeight: 700, color: '#475569', lineHeight: 1.1 }}>36.3%</p>
                     </div>
                     <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: '14px 16px', textAlign: 'center' }}>
                       <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#64748b', marginBottom: 4 }}>
-                        mRS 0-1 — Placebo
+                        mRS 0-1: Placebo
                       </p>
                       <p style={{ fontSize: 32, fontWeight: 700, color: '#475569', lineHeight: 1.1 }}>32.4%</p>
                     </div>
@@ -6051,7 +6051,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Radiographic iPH at 24-36 hours</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: Radiographic iPH at 24-36 hours</p>
               <p className="text-xs text-slate-500 mt-0.5">324 patients; SBP 100-129 mm Hg vs 130-185 mm Hg after successful EVT</p>
             </div>
             <div className="p-4">
@@ -6127,7 +6127,7 @@ const TrialPageNew: React.FC = () => {
           </div>
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Utility-Weighted mRS at 90 days (x100)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: Utility-Weighted mRS at 90 days (x100)</p>
               <p className="text-xs text-slate-500 mt-0.5">120 patients; 3-arm futility trial: SBP &lt;140, &lt;160, or &lt;=180 mm Hg after successful EVT</p>
             </div>
             <div className="p-4">
@@ -6200,7 +6200,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Functional Independence (mRS 0-2) at 3 Months</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: Functional Independence (mRS 0-2) at 3 Months</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-red-50 border border-red-200 px-3 py-2">
@@ -6276,7 +6276,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Ordinal Shift at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">2196 patients; intensive SBP 130-140 mm Hg vs guideline below 180 mm Hg for 72 hours</p>
             </div>
             <div className="p-4">
@@ -6296,7 +6296,7 @@ const TrialPageNew: React.FC = () => {
                   </div>
                   <div className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
                     <p className="text-xs text-amber-800 leading-relaxed">
-                      <strong>Pre-specified secondary — any ICH at 24 hours:</strong> 14.8% (intensive) vs 18.7% (guideline), OR 0.75, P=0.014. Significant reduction in hemorrhage was not accompanied by improvement in the primary functional outcome.
+                      <strong>Pre-specified secondary, any ICH at 24 hours:</strong> 14.8% (intensive) vs 18.7% (guideline), OR 0.75, P=0.014. Significant reduction in hemorrhage was not accompanied by improvement in the primary functional outcome.
                     </p>
                   </div>
                   <p style={{ fontSize: 11, color: '#94a3b8', textAlign: 'center' }}>
@@ -6360,7 +6360,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Functional Independence (mRS 0-2) at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: Functional Independence (mRS 0-2) at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">1105 patients; nerinetide vs placebo before or during EVT within 12 hours</p>
             </div>
             <div className="p-4">
@@ -6434,7 +6434,7 @@ const TrialPageNew: React.FC = () => {
           </div>
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days (age 18-70)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Ordinal Shift at 90 Days (age 18-70)</p>
               <p className="text-xs text-slate-500 mt-0.5">535 patients; IV glibenclamide vs placebo within 10 hours of onset</p>
             </div>
             <div className="p-4">
@@ -6511,7 +6511,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Mortality Outcome — 6-Month Survival</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Mortality Outcome: 6-Month Survival</p>
               <p className="text-xs text-slate-500 mt-0.5">38 patients; decompressive hemicraniectomy vs medical therapy alone</p>
             </div>
             <div className="p-4 space-y-3">
@@ -6587,7 +6587,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Mortality Outcome — 30-Day and 6-Month Survival</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Mortality Outcome: 30-Day and 6-Month Survival</p>
               <p className="text-xs text-slate-500 mt-0.5">32 patients; early hemicraniectomy vs conservative therapy</p>
             </div>
             <div className="p-4 space-y-3">
@@ -6663,7 +6663,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Mortality Outcome — 1-Year Survival</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Mortality Outcome: 1-Year Survival</p>
               <p className="text-xs text-slate-500 mt-0.5">64 patients; surgical decompression vs best medical treatment (enrollment up to 96 hours)</p>
             </div>
             <div className="p-4 space-y-3">
@@ -6739,14 +6739,14 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Survival Without Severe Disability (mRS 0-4) at 6 Months</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: Survival Without Severe Disability (mRS 0-4) at 6 Months</p>
               <p className="text-xs text-slate-500 mt-0.5">112 patients aged 61-82; early hemicraniectomy vs conservative intensive care</p>
             </div>
             {/* Mandatory QoL caveat banner — equal weight to the positive result per Modification 1 */}
             <div style={{ background: '#fffbeb', borderLeft: '3px solid #f59e0b', margin: '12px 16px 0', borderRadius: '0 6px 6px 0', padding: '12px 14px' }} role="note">
-              <p style={{ fontSize: 10, fontWeight: 700, color: '#92400e', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>Primary endpoint met — but no patient achieved good functional outcome</p>
+              <p style={{ fontSize: 10, fontWeight: 700, color: '#92400e', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>Primary endpoint met, but no patient achieved good functional outcome</p>
               <p style={{ fontSize: 12, color: '#78350f', lineHeight: 1.5 }}>
-                0% of patients in <strong>either group</strong> achieved mRS 0-2 (independent function). Virtually all surgical survivors who met the primary endpoint had mRS 4 (severe disability, dependent for most bodily needs). Surgery reduces the chance of dying from 70% to 33% — it does not restore function.
+                0% of patients in <strong>either group</strong> achieved mRS 0-2 (independent function). Virtually all surgical survivors who met the primary endpoint had mRS 4 (severe disability, dependent for most bodily needs). Surgery reduces the chance of dying from 70% to 33%; it does not restore function.
               </p>
             </div>
             <div className="p-4">
@@ -6819,7 +6819,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Composite at 90 Days (Non-inferiority)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: Composite at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">888 patients; early NOAC within 4 days vs delayed 5-10 days after AF-related stroke</p>
             </div>
             <div style={{ background: '#FFFBEB', borderLeft: '3px solid #D97706', margin: '12px 16px 0', borderRadius: '0 6px 6px 0', padding: '10px 14px' }} role="note">
@@ -6896,7 +6896,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Composite at 90 Days (Non-inferiority)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: Composite at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">3621 patients at 100 UK hospitals; early DOAC within 4 days vs delayed 7-14 days</p>
             </div>
             <div style={{ background: '#FFFBEB', borderLeft: '3px solid #D97706', margin: '12px 16px 0', borderRadius: '0 6px 6px 0', padding: '10px 14px' }} role="note">
@@ -7132,7 +7132,7 @@ const TrialPageNew: React.FC = () => {
     return renderStubPage(
       trialMetadata,
       'IMS-III',
-      'Primary Outcome — mRS 0-2 at 90 Days',
+      'Primary Outcome: mRS 0-2 at 90 Days',
       '656 patients; endovascular therapy plus IV alteplase vs IV alteplase alone',
       'Adjusted RR (mRS 0-2)',
       '1.05',
@@ -7146,7 +7146,7 @@ const TrialPageNew: React.FC = () => {
     return renderStubPage(
       trialMetadata,
       'SYNTHESIS',
-      'Primary Outcome — Disability-Free Survival (mRS 0-1) at 90 Days',
+      'Primary Outcome: Disability-Free Survival (mRS 0-1) at 90 Days',
       '362 patients; endovascular therapy alone vs IV alteplase within 4.5 hours',
       'Adjusted OR (mRS 0-1)',
       '0.71',
@@ -7160,7 +7160,7 @@ const TrialPageNew: React.FC = () => {
     return renderStubPage(
       trialMetadata,
       'MR RESCUE',
-      'Primary Outcome — Mean mRS at 90 Days',
+      'Primary Outcome: Mean mRS at 90 Days',
       '118 patients; mechanical embolectomy vs standard care; penumbral imaging stratified',
       'Mean mRS (embolectomy vs standard care)',
       '3.9 vs 3.9',
@@ -7174,7 +7174,7 @@ const TrialPageNew: React.FC = () => {
     return renderStubPage(
       trialMetadata,
       'BEST',
-      'Primary Outcome — mRS 0-3 at 90 Days (ITT)',
+      'Primary Outcome: mRS 0-3 at 90 Days (ITT)',
       '131 patients; endovascular thrombectomy vs best medical management; basilar artery occlusion',
       'OR (mRS 0-3, ITT)',
       '1.74',
@@ -7188,7 +7188,7 @@ const TrialPageNew: React.FC = () => {
     return renderStubPage(
       trialMetadata,
       'BASICS',
-      'Primary Outcome — mRS 0-3 at 90 Days',
+      'Primary Outcome: mRS 0-3 at 90 Days',
       '300 patients; EVT plus best medical treatment vs best medical treatment alone; basilar artery occlusion',
       'Rate Ratio (mRS 0-3)',
       '1.18',
@@ -7202,7 +7202,7 @@ const TrialPageNew: React.FC = () => {
     return renderStubPage(
       trialMetadata,
       'MATCH',
-      'Primary Outcome — Composite (Stroke/MI/Vascular Death/Rehospitalization) at 18 Months',
+      'Primary Outcome: Composite (Stroke/MI/Vascular Death/Rehospitalization) at 18 Months',
       '7,599 patients; aspirin added to clopidogrel vs clopidogrel alone; recent stroke or TIA',
       'RR (composite endpoint)',
       '0.94',
@@ -7216,7 +7216,7 @@ const TrialPageNew: React.FC = () => {
     return renderStubPage(
       trialMetadata,
       'CHARISMA',
-      'Primary Outcome — MI/Stroke/Cardiovascular Death at Median 28 Months',
+      'Primary Outcome: MI/Stroke/Cardiovascular Death at Median 28 Months',
       '15,603 patients; aspirin + clopidogrel vs aspirin alone; established CV disease or high-risk',
       'RR (MI/stroke/CV death)',
       '0.93',
@@ -7230,7 +7230,7 @@ const TrialPageNew: React.FC = () => {
     return renderStubPage(
       trialMetadata,
       'STICH I',
-      'Primary Outcome — Favorable Glasgow Outcome Scale at 6 Months',
+      'Primary Outcome: Favorable Glasgow Outcome Scale at 6 Months',
       '1,033 patients; early surgery vs initial conservative management; supratentorial ICH',
       'OR (favorable GOS)',
       '0.89',
@@ -7244,7 +7244,7 @@ const TrialPageNew: React.FC = () => {
     return renderStubPage(
       trialMetadata,
       'STICH II',
-      'Primary Outcome — Unfavorable Outcome at 6 Months',
+      'Primary Outcome: Unfavorable Outcome at 6 Months',
       '601 patients; early craniotomy vs initial conservative management; superficial lobar ICH',
       'OR (unfavorable outcome)',
       '0.86',
@@ -7258,7 +7258,7 @@ const TrialPageNew: React.FC = () => {
     return renderStubPage(
       trialMetadata,
       'MISTIE III',
-      'Primary Outcome — mRS 0-3 at 1 Year',
+      'Primary Outcome: mRS 0-3 at 1 Year',
       '506 patients; image-guided catheter + alteplase vs standard medical management; supratentorial ICH ≥30 mL',
       'OR (mRS 0-3 at 1 year)',
       '1.20',
@@ -7622,7 +7622,7 @@ const TrialPageNew: React.FC = () => {
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
-          {renderTrialDesign(trialMetadata, '414 patients (204 closure / 210 medical therapy) at 29 sites in Europe, Canada, Brazil, and Australia. Enrolled February 2000 to February 2009. Mean follow-up 4.1 years (closure) / 4.0 years (medical). Amplatzer PFO Occluder (St. Jude Medical). Underpowered — only 18 primary events accrued. Published NEJM 2013.')}
+          {renderTrialDesign(trialMetadata, '414 patients (204 closure / 210 medical therapy) at 29 sites in Europe, Canada, Brazil, and Australia. Enrolled February 2000 to February 2009. Mean follow-up 4.1 years (closure) / 4.0 years (medical). Amplatzer PFO Occluder (St. Jude Medical). Underpowered: only 18 primary events accrued. Published NEJM 2013.')}
           {trialMetadata.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>
@@ -7699,7 +7699,7 @@ const TrialPageNew: React.FC = () => {
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
-          {renderTrialDesign(trialMetadata, '980 patients (499 closure / 481 medical therapy) at 69 US + Canadian sites. Enrolled August 2003 to December 2011. Median 2.1-year follow-up. Amplatzer PFO Occluder (St. Jude Medical). Original primary ITT analysis published NEJM 2013;368:1092 — borderline (P=0.08), NOT MET. The 2017 extended follow-up at median 5.9y (catalog entry respect-trial) converted the result (HR 0.55, P=0.046).')}
+          {renderTrialDesign(trialMetadata, '980 patients (499 closure / 481 medical therapy) at 69 US + Canadian sites. Enrolled August 2003 to December 2011. Median 2.1-year follow-up. Amplatzer PFO Occluder (St. Jude Medical). Original primary ITT analysis published NEJM 2013;368:1092: borderline (P=0.08), NOT MET. The 2017 extended follow-up at median 5.9y (catalog entry respect-trial) converted the result (HR 0.55, P=0.046).')}
           {trialMetadata.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>
@@ -7853,7 +7853,7 @@ const TrialPageNew: React.FC = () => {
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Unadjusted risk difference +17.4 pp (95% CI -11.8 to +46.5). Trial was powered for a 30 pp difference; observed aspirin response of 48% (vs assumed 10%) made the trial underpowered for the smaller real difference. p=0.95 reflects no statistical signal — not evidence of no effect.
+                  Unadjusted risk difference +17.4 pp (95% CI -11.8 to +46.5). Trial was powered for a 30 pp difference; observed aspirin response of 48% (vs assumed 10%) made the trial underpowered for the smaller real difference. p=0.95 reflects no statistical signal, not evidence of no effect.
                 </p>
               </div>
             </div>
@@ -7902,7 +7902,7 @@ const TrialPageNew: React.FC = () => {
           <div>
             <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
-              In patients within 48 hours of suspected acute ischaemic stroke, does aspirin 300 mg/day and/or subcutaneous unfractionated heparin reduce death or dependence at 6 months? Factorial 2x2 design enrolling 19,435 patients across 36 countries — one of the largest stroke trials ever conducted.
+              In patients within 48 hours of suspected acute ischaemic stroke, does aspirin 300 mg/day and/or subcutaneous unfractionated heparin reduce death or dependence at 6 months? Factorial 2x2 design enrolling 19,435 patients across 36 countries: one of the largest stroke trials ever conducted.
             </p>
             <p className="text-sm text-slate-500 mt-1">
               {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
@@ -7929,7 +7929,7 @@ const TrialPageNew: React.FC = () => {
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Adjusted 6-month death or dependence: 14 fewer per 1000 (2p=0.03 after adjustment for baseline prognosis). Heparin (any dose) showed no net 6-month benefit and increased 14-day haemorrhagic stroke (1.2% vs 0.4%, 2p&lt;0.00001) — IST is the foundational RCT evidence against routine therapeutic-intensity heparin in acute ischaemic stroke.
+                  Adjusted 6-month death or dependence: 14 fewer per 1000 (2p=0.03 after adjustment for baseline prognosis). Heparin (any dose) showed no net 6-month benefit and increased 14-day haemorrhagic stroke (1.2% vs 0.4%, 2p&lt;0.00001); IST is the foundational RCT evidence against routine therapeutic-intensity heparin in acute ischaemic stroke.
                 </p>
               </div>
             </div>
@@ -7938,7 +7938,7 @@ const TrialPageNew: React.FC = () => {
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
-          {renderTrialDesign(trialMetadata, '19,435 patients at 467 hospitals in 36 countries. Pilot phase January 1991 to February 1993 (984 patients); main trial March 1993 to May 1996. Factorial 2x2: aspirin (any) vs avoid aspirin; heparin (any dose) vs avoid heparin — analysed independently. Open-label with central minimisation allocation; 6-month outcome blinded in most countries. Prospectively planned for joint analysis with CAST. Published Lancet 1997 May 31.')}
+          {renderTrialDesign(trialMetadata, '19,435 patients at 467 hospitals in 36 countries. Pilot phase January 1991 to February 1993 (984 patients); main trial March 1993 to May 1996. Factorial 2x2: aspirin (any) vs avoid aspirin; heparin (any dose) vs avoid heparin: analysed independently. Open-label with central minimisation allocation; 6-month outcome blinded in most countries. Prospectively planned for joint analysis with CAST. Published Lancet 1997 May 31.')}
           {trialMetadata.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>
@@ -7978,7 +7978,7 @@ const TrialPageNew: React.FC = () => {
           <div>
             <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
-              In patients within 48 hours of suspected acute ischaemic stroke, does aspirin 160 mg/day vs matched placebo reduce in-hospital mortality and death or dependence at discharge? Double-blind placebo-controlled trial in 21,106 Chinese patients — the rigorous-blinding counterpart to the open-label IST.
+              In patients within 48 hours of suspected acute ischaemic stroke, does aspirin 160 mg/day vs matched placebo reduce in-hospital mortality and death or dependence at discharge? Double-blind placebo-controlled trial in 21,106 Chinese patients: the rigorous-blinding counterpart to the open-label IST.
             </p>
             <p className="text-sm text-slate-500 mt-1">
               {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
@@ -8065,7 +8065,7 @@ const TrialPageNew: React.FC = () => {
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome (noninferiority)</p>
-              <p className="text-xs text-slate-500 mt-0.5">First recurrent stroke (any type) over mean 2.5-year follow-up — NI margin HR 1.075</p>
+              <p className="text-xs text-slate-500 mt-0.5">First recurrent stroke (any type) over mean 2.5-year follow-up: NI margin HR 1.075</p>
             </div>
             <div className="p-4">
               <DeltaBandChart
@@ -8165,7 +8165,7 @@ const TrialPageNew: React.FC = () => {
               )}
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Composite was driven by hematoma-volume control; NIHSS-change and rescue-therapy components did not differ. Trade-off: ischemic stroke 6.5% vs 1.5% (+5.0 pp, NNH 20); any thrombotic event 10.3% vs 5.6% (P=0.048, NNH 22). No functional benefit (exploratory mRS 0–3 at 30 days: 28.0% vs 31.0%) and no mortality benefit (27.8% vs 25.5%, P=0.51). DSMB-halted early at pre-specified interim — effect size may be overestimated.
+                  Composite was driven by hematoma-volume control; NIHSS-change and rescue-therapy components did not differ. Trade-off: ischemic stroke 6.5% vs 1.5% (+5.0 pp, NNH 20); any thrombotic event 10.3% vs 5.6% (P=0.048, NNH 22). No functional benefit (exploratory mRS 0–3 at 30 days: 28.0% vs 31.0%) and no mortality benefit (27.8% vs 25.5%, P=0.51). DSMB-halted early at pre-specified interim; effect size may be overestimated.
                 </p>
               </div>
             </div>
@@ -8217,7 +8217,7 @@ const TrialPageNew: React.FC = () => {
           <div>
             <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
-              In adults with acute major bleeding (64% intracranial, 26% gastrointestinal) within 18 hours of an FXa-inhibitor dose (apixaban, rivaroxaban, edoxaban, enoxaparin), does andexanet alfa per the FDA-label algorithm reduce anti-FXa activity and achieve hemostatic efficacy at 12 hours? Single-arm prospective cohort that underwrote FDA accelerated approval in May 2018 — no comparator, no efficacy inference in the strict sense.
+              In adults with acute major bleeding (64% intracranial, 26% gastrointestinal) within 18 hours of an FXa-inhibitor dose (apixaban, rivaroxaban, edoxaban, enoxaparin), does andexanet alfa per the FDA-label algorithm reduce anti-FXa activity and achieve hemostatic efficacy at 12 hours? Single-arm prospective cohort that underwrote FDA accelerated approval in May 2018: no comparator, no efficacy inference in the strict sense.
             </p>
             <p className="text-sm text-slate-500 mt-1">
               {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
@@ -8244,7 +8244,7 @@ const TrialPageNew: React.FC = () => {
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Single-arm observational design — no efficacy inference possible. Anti-FXa fell a median 92% (95% CI 91–93% apixaban; 88–94% rivaroxaban). Hemostatic efficacy 204/249 (82%) at 12 h. 30-day mortality 14%; thrombotic events 10% — neither attributable causally to andexanet. The randomized ICH-specific confirmation is ANNEXA-I (NEJM 2024), which quantified the ischemic-stroke trade-off (NNH ~20) that this single-arm dataset could only describe.
+                  Single-arm observational design: no efficacy inference possible. Anti-FXa fell a median 92% (95% CI 91–93% apixaban; 88–94% rivaroxaban). Hemostatic efficacy 204/249 (82%) at 12 h. 30-day mortality 14%; thrombotic events 10%: neither attributable causally to andexanet. The randomized ICH-specific confirmation is ANNEXA-I (NEJM 2024), which quantified the ischemic-stroke trade-off (NNH ~20) that this single-arm dataset could only describe.
                 </p>
               </div>
             </div>
@@ -8253,7 +8253,7 @@ const TrialPageNew: React.FC = () => {
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
-          {renderTrialDesign(trialMetadata, '352 patients enrolled (254 in efficacy population) at 63 centers in North America and Europe. Enrolled April 2015 to May 2018. Single-arm, open-label, prospective cohort — no randomization, no comparator. Adjudicated hemostatic efficacy (excellent/good/poor/none) at 12 h after infusion end. 30-day follow-up. Supported FDA accelerated approval (granted May 2018). Sponsor: Portola Pharmaceuticals (now Alexion AstraZeneca Rare Disease). Published NEJM 2019.')}
+          {renderTrialDesign(trialMetadata, '352 patients enrolled (254 in efficacy population) at 63 centers in North America and Europe. Enrolled April 2015 to May 2018. Single-arm, open-label, prospective cohort: no randomization, no comparator. Adjudicated hemostatic efficacy (excellent/good/poor/none) at 12 h after infusion end. 30-day follow-up. Supported FDA accelerated approval (granted May 2018). Sponsor: Portola Pharmaceuticals (now Alexion AstraZeneca Rare Disease). Published NEJM 2019.')}
           {trialMetadata.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>
@@ -8306,7 +8306,7 @@ const TrialPageNew: React.FC = () => {
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome (noninferiority)</p>
-              <p className="text-xs text-slate-500 mt-0.5">Hemostatic efficacy at 24 h (effective) — NI margin −10 percentage points on lower bound of 95% CI</p>
+              <p className="text-xs text-slate-500 mt-0.5">Hemostatic efficacy at 24 h (effective): NI margin −10 percentage points on lower bound of 95% CI</p>
             </div>
             <div className="p-4">
               <DeltaBandChart
@@ -8323,7 +8323,7 @@ const TrialPageNew: React.FC = () => {
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Noninferiority established: lower bound of CI (−5.8 pp) is above the prespecified −10 pp NI margin. Sequential superiority on rapid INR reduction MET: INR ≤1.3 at 30 minutes 62.2% vs 9.6% (+52.6 pp, 95% CI 39.4–65.9, P&lt;0.001). Median infusion volume 99 mL (4F-PCC) vs 814 mL (FFP); fluid overload 2.9% vs 11.9%. Mortality (5.1% vs 4.8%) and thromboembolic events (6.8% vs 6.4%) comparable. Both arms received vitamin K 5–10 mg IV — never give one without the other.
+                  Noninferiority established: lower bound of CI (−5.8 pp) is above the prespecified −10 pp NI margin. Sequential superiority on rapid INR reduction MET: INR ≤1.3 at 30 minutes 62.2% vs 9.6% (+52.6 pp, 95% CI 39.4–65.9, P&lt;0.001). Median infusion volume 99 mL (4F-PCC) vs 814 mL (FFP); fluid overload 2.9% vs 11.9%. Mortality (5.1% vs 4.8%) and thromboembolic events (6.8% vs 6.4%) comparable. Both arms received vitamin K 5–10 mg IV; never give one without the other.
                 </p>
               </div>
             </div>
@@ -8383,7 +8383,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(trialMetadata)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — ORDINAL SHIFT</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: ORDINAL SHIFT</p>
               <p className="text-xs text-slate-500 mt-0.5">Shift toward death or dependence on the full mRS distribution at 3 months (ordinal logistic regression). Direction: HARM. NNT is not appropriate for ordinal-shift outcomes.</p>
             </div>
             <div className="p-4">
@@ -8401,7 +8401,7 @@ const TrialPageNew: React.FC = () => {
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  HARM trial. The adjusted common odds ratio of 2.05 (95% CI 1.18–3.56, P=0.0114) means platelet transfusion approximately DOUBLED the odds of a worse mRS at 3 months. Mortality 24% vs 17%; serious adverse events 42% vs 30% — same direction as the primary. Hematoma expansion did not differ; mechanism is not simple rebleeding. Trial excluded patients with planned neurosurgical evacuation — does NOT apply to bridging platelet transfusion before craniotomy.
+                  HARM trial. The adjusted common odds ratio of 2.05 (95% CI 1.18–3.56, P=0.0114) means platelet transfusion approximately DOUBLED the odds of a worse mRS at 3 months. Mortality 24% vs 17%; serious adverse events 42% vs 30%: same direction as the primary. Hematoma expansion did not differ; mechanism is not simple rebleeding. Trial excluded patients with planned neurosurgical evacuation; does NOT apply to bridging platelet transfusion before craniotomy.
                 </p>
               </div>
             </div>
@@ -8698,7 +8698,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(trialMetadata)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Stenting Trial</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: Stenting Trial</p>
               <p className="text-xs text-slate-500 mt-0.5">4-year periprocedural stroke/death + ipsilateral stroke (CAS vs medical alone)</p>
             </div>
             <div className="p-4">
@@ -8799,7 +8799,7 @@ const TrialPageNew: React.FC = () => {
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Primary outcome not met. Trial was powered for a 30 percentage-point absolute improvement assuming a 10% aspirin response rate; the observed 48% aspirin response left the trial severely underpowered for the smaller real difference. Unadjusted risk difference +17.4 pp (95% CI −11.8 to +46.5) — directionally favors alteplase but CI is very wide due to N=70. Treat as hypothesis-generating, not as evidence against alteplase. Safety profile reassuring; no symptomatic ICH in either arm.
+                  Primary outcome not met. Trial was powered for a 30 percentage-point absolute improvement assuming a 10% aspirin response rate; the observed 48% aspirin response left the trial severely underpowered for the smaller real difference. Unadjusted risk difference +17.4 pp (95% CI −11.8 to +46.5): directionally favors alteplase but CI is very wide due to N=70. Treat as hypothesis-generating, not as evidence against alteplase. Safety profile reassuring; no symptomatic ICH in either arm.
                 </p>
               </div>
             </div>
@@ -8932,7 +8932,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(trialMetadata)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcomes (descriptive — single arm)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcomes (descriptive: single arm)</p>
               <p className="text-xs text-slate-500 mt-0.5">No comparator arm. Coprimary: anti-FXa reduction + 12-hour hemostatic efficacy.</p>
             </div>
             <div className="p-4 space-y-4">
@@ -8950,7 +8950,7 @@ const TrialPageNew: React.FC = () => {
               </div>
               <div className="pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Single-arm design — no p-value, no NNT. 64% of bleeding events were intracranial. Thrombotic event rate over 30 days: 10.0%. Mortality 14% at 30 days. Effect sizes from uncontrolled cohorts cannot be attributed solely to the intervention; see ANNEXA-I for the randomized ICH-specific confirmation.
+                  Single-arm design: no p-value, no NNT. 64% of bleeding events were intracranial. Thrombotic event rate over 30 days: 10.0%. Mortality 14% at 30 days. Effect sizes from uncontrolled cohorts cannot be attributed solely to the intervention; see ANNEXA-I for the randomized ICH-specific confirmation.
                 </p>
               </div>
             </div>
@@ -9007,7 +9007,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(trialMetadata)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Hemostasis (noninferiority)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: Hemostasis (noninferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">Effective hemostasis at 24h; NI margin −10 pp on lower bound of 95% CI</p>
             </div>
             <div className="p-4">
@@ -9089,7 +9089,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(trialMetadata)}
           <div className="bg-white rounded-xl border-l-4 border-red-400 border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100 bg-red-50">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-red-700">Primary Outcome — HARM</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-red-700">Primary Outcome: HARM</p>
               <p className="text-xs text-red-700 mt-0.5">Ordinal mRS shift at 3 months (worse outcome with intervention)</p>
             </div>
             <div className="p-4">
@@ -9107,7 +9107,7 @@ const TrialPageNew: React.FC = () => {
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Ordinal-shift design — the primary statistic is the shift on the full mRS distribution, not the dichotomized proportion above. Adjusted common OR 2.05 (95% CI 1.18–3.56, P=0.0114) means platelet transfusion <strong className="text-red-700">increased</strong> the odds of a worse mRS outcome. Establishes AHA/ASA 2022 Class III: Harm. Do not routinely transfuse platelets in antiplatelet-associated ICH outside specific surgical indications.
+                  Ordinal-shift design: the primary statistic is the shift on the full mRS distribution, not the dichotomized proportion above. Adjusted common OR 2.05 (95% CI 1.18–3.56, P=0.0114) means platelet transfusion <strong className="text-red-700">increased</strong> the odds of a worse mRS outcome. Establishes AHA/ASA 2022 Class III: Harm. Do not routinely transfuse platelets in antiplatelet-associated ICH outside specific surgical indications.
                 </p>
               </div>
             </div>
@@ -9165,7 +9165,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(trialMetadata)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Aspirin question</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: Aspirin question</p>
               <p className="text-xs text-slate-500 mt-0.5">14-day death or non-fatal recurrent stroke (aspirin vs avoid)</p>
             </div>
             <div className="p-4">
@@ -9183,7 +9183,7 @@ const TrialPageNew: React.FC = () => {
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Aspirin saved 11 deaths or non-fatal recurrent strokes per 1,000 at 14 days (2p=0.02). After adjustment for baseline prognosis, 14 fewer dead or dependent per 1,000 at 6 months (2p=0.03). <strong className="text-slate-700">Heparin caveat (often misremembered):</strong> low- and medium-dose subcutaneous heparin showed no net 6-month benefit — early ischaemic-stroke reduction was offset by haemorrhagic-stroke increase (1.2% vs 0.4%, 2p&lt;0.00001). Medium-dose heparin (12,500 IU bd) was harmful at 14 days. IST is the primary RCT evidence against routine therapeutic-intensity heparin in acute ischaemic stroke.
+                  Aspirin saved 11 deaths or non-fatal recurrent strokes per 1,000 at 14 days (2p=0.02). After adjustment for baseline prognosis, 14 fewer dead or dependent per 1,000 at 6 months (2p=0.03). <strong className="text-slate-700">Heparin caveat (often misremembered):</strong> low- and medium-dose subcutaneous heparin showed no net 6-month benefit; early ischaemic-stroke reduction was offset by haemorrhagic-stroke increase (1.2% vs 0.4%, 2p&lt;0.00001). Medium-dose heparin (12,500 IU bd) was harmful at 14 days. IST is the primary RCT evidence against routine therapeutic-intensity heparin in acute ischaemic stroke.
                 </p>
               </div>
             </div>
@@ -9259,7 +9259,7 @@ const TrialPageNew: React.FC = () => {
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  14% proportional mortality reduction; 5.4 fewer in-hospital deaths per 1,000. Combined 4-week death or non-fatal stroke 5.3% vs 5.9% (2p=0.03; 6.8 fewer per 1,000). Dead-or-dependent at discharge directionally favoured aspirin (30.5% vs 31.6%, 2p=0.08; trend only). Pooled with IST (Chen ZM et al., Stroke 2000): in ~40,000 patients early aspirin prevents ~9 deaths or non-fatal recurrent strokes per 1,000 and causes ~2 additional haemorrhagic strokes per 1,000 — net benefit ~7 per 1,000. Basis of AHA/ASA Class I, Level A.
+                  14% proportional mortality reduction; 5.4 fewer in-hospital deaths per 1,000. Combined 4-week death or non-fatal stroke 5.3% vs 5.9% (2p=0.03; 6.8 fewer per 1,000). Dead-or-dependent at discharge directionally favoured aspirin (30.5% vs 31.6%, 2p=0.08; trend only). Pooled with IST (Chen ZM et al., Stroke 2000): in ~40,000 patients early aspirin prevents ~9 deaths or non-fatal recurrent strokes per 1,000 and causes ~2 additional haemorrhagic strokes per 1,000: net benefit ~7 per 1,000. Basis of AHA/ASA Class I, Level A.
                 </p>
               </div>
             </div>
@@ -9316,7 +9316,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(trialMetadata)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Noninferiority</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: Noninferiority</p>
               <p className="text-xs text-slate-500 mt-0.5">First recurrence of stroke (any type) over mean 2.5 years; NI margin HR 1.075</p>
             </div>
             <div className="p-4">
@@ -9334,7 +9334,7 @@ const TrialPageNew: React.FC = () => {
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Observed HR 1.01 favors neither arm, but the upper 95% CI bound (1.11) crosses the prespecified noninferiority margin (HR 1.075). <strong className="text-slate-700">Noninferiority was not formally established.</strong> Do not interpret this as proof of equivalence — overlapping event curves do not satisfy a failed NI conclusion. Harm signal: ICH 1.4% vs 1.0% favoring clopidogrel (HR 1.42, 95% CI 1.11–1.83). Discontinuation 29.1% vs 22.6% (P&lt;0.001).
+                  Observed HR 1.01 favors neither arm, but the upper 95% CI bound (1.11) crosses the prespecified noninferiority margin (HR 1.075). <strong className="text-slate-700">Noninferiority was not formally established.</strong> Do not interpret this as proof of equivalence; overlapping event curves do not satisfy a failed NI conclusion. Harm signal: ICH 1.4% vs 1.0% favoring clopidogrel (HR 1.42, 95% CI 1.11–1.83). Discontinuation 29.1% vs 22.6% (P&lt;0.001).
                 </p>
               </div>
             </div>
