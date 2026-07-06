@@ -34,7 +34,7 @@ export default function MultipleSclerosis() {
       subtitle="Diagnosis, relapse treatment, and DMTs"
       leadText={
         <>
-          <Term detail="CNS demyelinating disease — relapses and progression">Multiple sclerosis (MS)</Term> is diagnosed by dissemination in space and time. Relapses are treated with high-dose steroids; <Term detail="disease-modifying therapy">DMTs</Term> reduce relapses and disability.
+          <Term detail="CNS demyelinating disease: relapses and progression">Multiple sclerosis (MS)</Term> is diagnosed by dissemination in space and time. Relapses are treated with high-dose steroids; <Term detail="disease-modifying therapy">DMTs</Term> reduce relapses and disability.
         </>
       }
       relatedLinks={[
@@ -59,9 +59,9 @@ export default function MultipleSclerosis() {
 
           <Paragraph
             viewMode={viewMode}
-            detail="New or worsened neurologic deficit, typical of demyelination, lasting &gt;24 h, in absence of fever or infection. Pseudo-relapse: worsening from heat, infection, stress — not a true relapse."
+            detail="New or worsened neurologic deficit, typical of demyelination, lasting &gt;24 h, in absence of fever or infection. Pseudo-relapse: worsening from heat, infection, stress, not a true relapse."
           >
-            New or worse deficit, demyelinating pattern, <Value>&gt;24 h</Value>, no fever/infection. <Term detail="worsening from heat, infection, stress — not new inflammation">Pseudo-relapse</Term>: do not treat with steroids.
+            New or worse deficit, demyelinating pattern, <Value>&gt;24 h</Value>, no fever/infection. <Term detail="worsening from heat, infection, stress, not new inflammation">Pseudo-relapse</Term>: do not treat with steroids.
           </Paragraph>
 
           <SubSection title="Treatment" />
@@ -80,7 +80,7 @@ export default function MultipleSclerosis() {
           <Section number={3} title="Disease-Modifying Therapy" />
 
           <Paragraph viewMode={viewMode} detail="Start DMT early in RRMS. Options: injectables (interferon, glatiramer), orals (fingolimod, dimethyl fumarate, teriflunomide, etc.), infusions (ocrelizumab, natalizumab, etc.). Choice by efficacy, risk, pregnancy plans.">
-            DMT reduces relapses and disability. Start early in <Term detail="relapsing-remitting MS">RRMS</Term>. Choice by efficacy, safety, pregnancy. Injectables, orals, infusions — discuss with patient and neuro.
+            DMT reduces relapses and disability. Start early in <Term detail="relapsing-remitting MS">RRMS</Term>. Choice by efficacy, safety, pregnancy. Injectables, orals, infusions; discuss with patient and neuro.
           </Paragraph>
         </>
       )}

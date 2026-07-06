@@ -27,10 +27,10 @@ export default function SeizureWorkup() {
       category="Epilepsy"
       categoryPath="/guide"
       title="Seizure Workup"
-      subtitle="First seizure and new-onset seizure — labs, imaging, EEG"
+      subtitle="First seizure and new-onset seizure: labs, imaging, EEG"
       leadText={
         <>
-          First seizure: rule out provokeers (metabolic, toxin, infection, mass). If unprovoked, work up for <Term detail="epilepsy — ≥2 unprovoked seizures or 1 plus high recurrence risk">epilepsy</Term> and decide on driving and treatment.
+          First seizure: rule out provokeers (metabolic, toxin, infection, mass). If unprovoked, work up for <Term detail="epilepsy: ≥2 unprovoked seizures or 1 plus high recurrence risk">epilepsy</Term> and decide on driving and treatment.
         </>
       }
       relatedLinks={[
@@ -73,7 +73,7 @@ export default function SeizureWorkup() {
             viewMode={viewMode}
             detail="Recurrence ~40% at 2 years. Higher if abnormal EEG, imaging lesion, or nocturnal. Discuss driving laws. Many start AED after first if high risk or if a second would be devastating; others wait for recurrence."
           >
-            Recurrence ~40% at 2 y. Higher if abnormal EEG, lesion, or nocturnal. <Critical>Driving</Critical> — counsel. AED after first vs after second: shared decision (risk, job, laws).
+            Recurrence ~40% at 2 y. Higher if abnormal EEG, lesion, or nocturnal. <Critical>Driving</Critical>: counsel. AED after first vs after second: shared decision (risk, job, laws).
           </Paragraph>
         </>
       )}

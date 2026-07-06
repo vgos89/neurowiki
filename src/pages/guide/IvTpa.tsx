@@ -53,14 +53,14 @@ export default function IvTpa() {
 
           <Paragraph
             viewMode={viewMode}
-            detail="10% bolus over 1 min, then 90% over 60 min. Max 90 mg. Have BP meds ready before you start — you can't pause the infusion."
+            detail="10% bolus over 1 min, then 90% over 60 min. Max 90 mg. Have BP meds ready before you start; you can't pause the infusion."
           >
             <strong>Alteplase (tPA):</strong> <Value>0.9 mg/kg</Value> (max <Value>90 mg</Value>). Bolus 10% IV push over 1 min; remaining 90% over 60 min.
           </Paragraph>
 
           <Paragraph
             viewMode={viewMode}
-            detail="Single bolus. Better for drip-and-ship: one push before transfer, no pump on the ambulance. Avoid in extended window — less data."
+            detail="Single bolus. Better for drip-and-ship: one push before transfer, no pump on the ambulance. Avoid in extended window: less data."
           >
             <strong>Tenecteplase (TNK):</strong> <Value>0.25 mg/kg</Value> (max <Value>25 mg</Value>) single IV bolus. Equivalent first-line alternative to alteplase (AHA/ASA 2026, Class I); single-bolus delivery simplifies transfer for thrombectomy.
           </Paragraph>
@@ -93,7 +93,7 @@ export default function IvTpa() {
 
           <Section number={4} title="Key Exclusions (Do Not Give)" />
 
-          <Paragraph viewMode={viewMode} detail="Any blood on CT = stop. Subarachnoid, intraparenchymal, subdural — all absolute.">
+          <Paragraph viewMode={viewMode} detail="Any blood on CT = stop. Subarachnoid, intraparenchymal, subdural: all absolute.">
             <strong>Hemorrhage:</strong> Any ICH or SAH on CT.
           </Paragraph>
 
@@ -125,7 +125,7 @@ export default function IvTpa() {
             viewMode={viewMode}
             detail="If the deficit would prevent them from working or living independently, treat. 'Mild' with isolated aphasia or dominant-hand weakness can be disabling."
           >
-            Minor or rapidly improving symptoms — treat if <Critical>disabling</Critical>. Major surgery or trauma &lt;14 days. Seizure at onset — treat if imaging confirms stroke. Pregnancy. Recent MI (&lt;3 months).
+            Minor or rapidly improving symptoms: treat if <Critical>disabling</Critical>. Major surgery or trauma &lt;14 days. Seizure at onset: treat if imaging confirms stroke. Pregnancy. Recent MI (&lt;3 months).
           </Paragraph>
 
           <Section number={6} title="Wake-Up / Unknown Onset" />
@@ -137,11 +137,11 @@ export default function IvTpa() {
             Eligible if: <strong>MRI</strong> DWI+ and FLAIR− suggests onset <Value>&lt;4.5 h</Value>; or <strong>CTP</strong> favorable penumbral profile per <Trial name="WAKE-UP" path="/trials/wake-up" /> / <Trial name="EXTEND" path="/trials/extend-trial" />.
           </Paragraph>
 
-          <Section number={7} title="Tenecteplase vs Alteplase — When to Choose" />
+          <Section number={7} title="Tenecteplase vs Alteplase: When to Choose" />
 
           <Paragraph
             viewMode={viewMode}
-            detail="AHA/ASA 2026 COR 1 / LOE A for both. No need to choose based on efficacy — they are equivalent for outcomes. Choose based on logistics."
+            detail="AHA/ASA 2026 COR 1 / LOE A for both. No need to choose based on efficacy: they are equivalent for outcomes. Choose based on logistics."
           >
             Per <strong>2026 AHA/ASA guidelines</strong>, <Term detail="single IV bolus; 0.25 mg/kg, max 25 mg">tenecteplase</Term> and <Term detail="10% bolus + 60-min infusion; 0.9 mg/kg, max 90 mg">alteplase</Term> are <Critical>equivalent first-line choices</Critical> (COR 1, LOE A). Select based on clinical context.
           </Paragraph>
@@ -156,20 +156,20 @@ export default function IvTpa() {
           </Paragraph>
 
           <Paragraph viewMode={viewMode} detail="ORIGINAL trial (JAMA 2024, n=1,465): TNK 0.25 mg/kg vs alteplase 0.9 mg/kg within 4.5h. Primary outcome mRS 0–1 at 90 days: 72.7% vs 70.3% (RR 1.03, 95% CI 0.97–1.09). Symptomatic ICH 1.2% in both groups. Noninferiority margin (RR ≥0.937) met. 55 centers in China.">
-            Supported by the <Trial name="ORIGINAL" path="/trials/original-trial" /> trial (JAMA 2024), which confirmed noninferiority across 1,465 patients — <strong>mRS 0–1 at 90 days 72.7% vs 70.3%</strong>, identical sICH rates (1.2% each). Simpler single-bolus administration eliminates the 60-minute infusion pump.
+            Supported by the <Trial name="ORIGINAL" path="/trials/original-trial" /> trial (JAMA 2024), which confirmed noninferiority across 1,465 patients: <strong>mRS 0–1 at 90 days 72.7% vs 70.3%</strong>, identical sICH rates (1.2% each). Simpler single-bolus administration eliminates the 60-minute infusion pump.
           </Paragraph>
 
           <SubSection title="Choose Alteplase when:" />
 
           <Paragraph
             viewMode={viewMode}
-            detail="Extended window data (4.5–9h) comes from EXTEND and WAKE-UP — both used alteplase. TNK has less evidence beyond 4.5h. Stick with alteplase until TNK extended-window RCT data matures."
+            detail="Extended window data (4.5–9h) comes from EXTEND and WAKE-UP; both used alteplase. TNK has less evidence beyond 4.5h. Stick with alteplase until TNK extended-window RCT data matures."
           >
             <strong>Extended window (&gt;4.5 h)</strong> perfusion-selected patients: alteplase has more trial data (EXTEND, WAKE-UP). Also use alteplase when institutional protocol or formulary requires it.
           </Paragraph>
 
           <Warning>
-            <strong>Do not use TNK</strong> at doses &gt;0.25 mg/kg — higher doses (0.4 mg/kg) showed increased hemorrhage in early trials. The approved stroke dose is <Value>0.25 mg/kg</Value> IV bolus only.
+            <strong>Do not use TNK</strong> at doses &gt;0.25 mg/kg; higher doses (0.4 mg/kg) showed increased hemorrhage in early trials. The approved stroke dose is <Value>0.25 mg/kg</Value> IV bolus only.
           </Warning>
         </>
       )}

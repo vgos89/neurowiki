@@ -108,7 +108,7 @@ const NON_TRIAL_TOOLS: Record<
   },
   'glasgow-coma-scale': {
     title: 'Glasgow Coma Scale',
-    description: 'Eye, verbal, motor — range 3–15.',
+    description: 'Eye, verbal, motor, range 3–15.',
     href: '/calculators/glasgow-coma-scale',
     category: 'cobalt',
   },

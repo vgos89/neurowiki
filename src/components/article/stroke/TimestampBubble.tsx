@@ -129,7 +129,7 @@ const GWTG_TARGETS: Partial<Record<EventName, GwtgTarget>> = {
     green: 30,
     amber: 45,
     metric: 'IR coordination (process metric)',
-    source: 'Process target — NeuroWiki',
+    source: 'Process target: NeuroWiki',
   },
   // 'Code Activation' is the anchor and has no grade.
   // 'NCC/ICU Sign-out' is not a GWTG metric and shows neutral.

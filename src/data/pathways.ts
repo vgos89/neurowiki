@@ -115,7 +115,7 @@ export const PATHWAYS: PathwayEntry[] = [
   {
     id: 'migraine-pathway',
     name: 'ED Migraine Pathway',
-    description: 'Emergency department acute migraine — cocktail, nerve blocks, refractory rescue.',
+    description: 'Emergency department acute migraine: cocktail, nerve blocks, refractory rescue.',
     scenario: 'severe-headache',
     path: '/pathways/migraine-pathway',
     stepCount: 5,        // Safety Screen / Care Setting / Acute TX / Response / Plan

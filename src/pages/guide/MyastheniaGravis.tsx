@@ -32,7 +32,7 @@ export default function MyastheniaGravis() {
       subtitle="Diagnosis, exacerbations, and myasthenic crisis"
       leadText={
         <>
-          <Term detail="autoimmune disorder — antibodies to AChR or MuSK at the NMJ">Myasthenia gravis (MG)</Term> causes fatigable weakness (eyes, bulbar, limbs). <Term detail="severe exacerbation with respiratory failure">Myasthenic crisis</Term> requires ICU and often plasma exchange or IVIG.
+          <Term detail="autoimmune disorder: antibodies to AChR or MuSK at the NMJ">Myasthenia gravis (MG)</Term> causes fatigable weakness (eyes, bulbar, limbs). <Term detail="severe exacerbation with respiratory failure">Myasthenic crisis</Term> requires ICU and often plasma exchange or IVIG.
         </>
       }
       relatedLinks={[
@@ -72,9 +72,9 @@ export default function MyastheniaGravis() {
 
           <Paragraph
             viewMode={viewMode}
-            detail="ICU. FVC, NIF q2–4h. Intubate when FVC &lt;20 or NIF &gt;−30 or rapid decline. Hold cholinesterase inhibitors when intubated (secretions). PLEX or IVIG — PLEX often faster. Treat infection. Avoid precipitant drugs."
+            detail="ICU. FVC, NIF q2–4h. Intubate when FVC &lt;20 or NIF &gt;−30 or rapid decline. Hold cholinesterase inhibitors when intubated (secretions). PLEX or IVIG; PLEX often faster. Treat infection. Avoid precipitant drugs."
           >
-            ICU. FVC, NIF q2–4h. Intubate when FVC <Value>&lt;20 ml/kg</Value> or NIF &gt;<Value>−30</Value>. Hold <Term detail="pyridostigmine">Mestinon</Term> when intubated. <Critical>Plasma exchange (PLEX)</Critical> or <strong>IVIG</strong> — PLEX often works faster. Treat infection. Avoid precipitant drugs.
+            ICU. FVC, NIF q2–4h. Intubate when FVC <Value>&lt;20 ml/kg</Value> or NIF &gt;<Value>−30</Value>. Hold <Term detail="pyridostigmine">Mestinon</Term> when intubated. <Critical>Plasma exchange (PLEX)</Critical> or <strong>IVIG</strong>; PLEX often works faster. Treat infection. Avoid precipitant drugs.
           </Paragraph>
 
           <Warning>

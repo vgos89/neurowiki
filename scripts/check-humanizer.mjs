@@ -37,8 +37,8 @@
  * by default; pass --strict to treat WARN as failure.
  */
 
-import { readFileSync, existsSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+import { resolve, join } from 'node:path';
 
 const ROOT = process.cwd();
 const STRICT = process.argv.includes('--strict');
@@ -216,7 +216,10 @@ const EMDASH_ALLOWLIST = new Set([
 function countEmDashes(s) {
   // Any em-dash (U+2014) in rendered text. En-dash (U+2013, used in numeric
   // ranges like 3–5 and CIs) is intentionally NOT matched — those are allowed.
-  return (s.match(/—/g) || []).length;
+  // Lone em-dash placeholder glyphs (a quoted single em-dash used as a
+  // missing-value marker, e.g. `x ?? '—'` or `ciLow="—"`) are also ignored.
+  const cleaned = s.replace(/['"]—['"]/g, '');
+  return (cleaned.match(/—/g) || []).length;
 }
 
 function countVocabCluster(s) {
@@ -267,35 +270,32 @@ function detect(str) {
 // File targets
 // ────────────────────────────────────────────────────────────────────────────
 
-const TARGETS = [
-  { path: 'src/data/trialData.ts', extractor: extractDataStrings },
-  { path: 'src/data/trialListData.ts', extractor: extractDataStrings },
-  { path: 'src/data/trialCatalogMeta.ts', extractor: extractDataStrings },
-  { path: 'src/data/trial-questions.ts', extractor: extractDataStrings },
-  { path: 'src/data/clinicalSynthesesByQuestion.ts', extractor: extractDataStrings },
-  { path: 'src/data/strokeClinicalPearls.ts', extractor: extractDataStrings },
-  { path: 'src/data/guideContent.ts', extractor: extractDataStrings },
-  { path: 'src/seo/schema.ts', extractor: extractDataStrings },
-  { path: 'src/seo/routeMeta.ts', extractor: extractDataStrings },
-  { path: 'src/config/routeManifest.ts', extractor: extractDataStrings },
-  { path: 'src/lib/cases/format.ts', extractor: extractDataStrings },
-  { path: 'src/pages/QuestionDetailPage.tsx', extractor: extractJsxStrings },
-  { path: 'src/pages/TrialsPage.tsx', extractor: extractJsxStrings },
-  { path: 'src/pages/trials/TrialPageNew.tsx', extractor: extractJsxStrings },
-  { path: 'src/pages/EvtPathway.tsx', extractor: extractJsxStrings },
-  { path: 'src/pages/ExtendedIVTPathway.tsx', extractor: extractJsxStrings },
-  { path: 'src/pages/StatusEpilepticusPathway.tsx', extractor: extractJsxStrings },
-  { path: 'src/pages/ElanPathway.tsx', extractor: extractJsxStrings },
-  { path: 'src/pages/MigrainePathway.tsx', extractor: extractJsxStrings },
-  { path: 'src/pages/MrsCalculator.tsx', extractor: extractJsxStrings },
-  { path: 'src/pages/IchScoreCalculator.tsx', extractor: extractJsxStrings },
-  { path: 'src/pages/HeidelbergBleedingCalculator.tsx', extractor: extractJsxStrings },
-  { path: 'src/pages/HasBledScoreCalculator.tsx', extractor: extractJsxStrings },
-  { path: 'src/pages/NihssCalculator.tsx', extractor: extractJsxStrings },
-  { path: 'src/pages/GlasgowComaScaleCalculator.tsx', extractor: extractJsxStrings },
-  { path: 'src/pages/Abcd2ScoreCalculator.tsx', extractor: extractJsxStrings },
-  { path: 'src/pages/EmBillingCalculator.tsx', extractor: extractJsxStrings },
+// User-facing content lives under these dirs. The scanner walks them and scans
+// every .ts/.tsx (prose is extracted; comments/code/placeholders are skipped by
+// the extractors) so a stray em-dash anywhere user-visible fails the gate.
+const SCAN_DIRS = ['src/pages', 'src/components', 'src/data', 'src/seo', 'src/config', 'src/lib/cases'];
+const SKIP = [
+  /\.test\.tsx?$/, /\.d\.ts$/, /\/dev\//, /cardmeta\.generated/,
+  // Verbatim external quotes (citation quoted_text) are a no-touch zone.
+  /lib\/citations\//,
 ];
+
+function walkFiles(dir, acc) {
+  const abs = resolve(ROOT, dir);
+  if (!existsSync(abs)) return acc;
+  for (const name of readdirSync(abs)) {
+    const rel = `${dir}/${name}`;
+    if (statSync(resolve(ROOT, rel)).isDirectory()) walkFiles(rel, acc);
+    else if (/\.tsx?$/.test(name)) acc.push(rel);
+  }
+  return acc;
+}
+
+const TARGETS = SCAN_DIRS
+  .flatMap((d) => walkFiles(d, []))
+  .filter((p) => !SKIP.some((re) => re.test(p)))
+  .sort()
+  .map((p) => ({ path: p, extractor: p.endsWith('.tsx') ? extractJsxStrings : extractDataStrings }));
 
 // ────────────────────────────────────────────────────────────────────────────
 // Run

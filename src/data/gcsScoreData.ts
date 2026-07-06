@@ -111,7 +111,7 @@ const INTERPRETATION: Record<GCSSeverity, {
       'Teasdale and Jennett (Lancet 1974) defined this range as mildly impaired wakefulness and' +
       ' responsiveness. The American Congress of Rehabilitation Medicine (ACRM 1993) placed GCS' +
       ' 13–15 at presentation as the threshold for mild traumatic brain injury. A score in this' +
-      ' range does not rule out serious intracranial pathology — CT imaging decisions rest on' +
+      ' range does not rule out serious intracranial pathology; CT imaging decisions rest on' +
       ' clinical context, not GCS alone. Serial reassessment matters: evolving hemorrhage or' +
       ' edema can drive rapid deterioration despite a reassuring initial score.',
   },
@@ -122,7 +122,7 @@ const INTERPRETATION: Record<GCSSeverity, {
     explanation:
       'The GCS 9–12 range reflects significant depression of consciousness, with disorganized' +
       ' or incomplete responses to stimulation. In traumatic brain injury, ACRM 1993 defines' +
-      ' this band as moderate TBI. Airway assessment is essential — protective reflexes may be' +
+      ' this band as moderate TBI. Airway assessment is essential; protective reflexes may be' +
       ' unreliable at this level. Rapid imaging and neurosurgical consultation are warranted if' +
       ' hemorrhage or mass effect is suspected. A GCS of 9 and a GCS of 12 can represent' +
       ' substantially different clinical states; trajectory over time carries more information' +

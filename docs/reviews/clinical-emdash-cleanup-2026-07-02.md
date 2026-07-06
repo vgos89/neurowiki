@@ -26,3 +26,16 @@ An em-dash-only punctuation normalization on clinical copy, deterministically pr
 
 ## Required follow-ups
 - None for this batch. The companion humanizer-gate tightening (widen scanned files + make em-dash density a real check) ships as a separate change and prevents regression.
+
+---
+
+## Wave 2 addendum (2026-07-02) — remaining clinical surfaces + comprehensive gate
+
+**Decision:** approve
+**Reviewer:** clinical-reviewer (model: claude-fable-5), punctuation-appropriateness gate after the same deterministic content-identity proof.
+
+After wave 1 + SEO/billing, a glob-scan of the whole app surfaced **96 more real em-dashes** (the earlier per-line count overcounted comment interiors). Wave 2 cleaned **110 em-dashes across 42 more files**: guide disease-pages (IvTpa, IchManagement, StrokeBasics, MS, MG, GBS, Meningitis, Seizure/Weakness/AMS/Vertigo workups, StatusEpilepticus, Thrombectomy, guideline mindmap), the authoritative guideline mirror `src/data/aha2026StrokeGuideline.ts` (9 — recommendation-text punctuation only), CHA2DS2-VASc / Boston / ROPE calculators, clinical data (gcsScoreData, calculators, trialChainRegistry, mindmap data), and shared components.
+
+Content-identity proven the same way (byte-identical alphanumerics after stripping punctuation). The reviewer scrutinized the highest-risk sites — the guideline mirror's COR 3 negations ("streptokinase should not be administered: does not improve…", "should not be used routinely: did not increase…"), the alteplase dosing line ("0.9 mg/kg IV (max 90 mg): 10% as bolus, 90% over 60 min"), IvTpa dosing/exclusion strings, COR badge displays, and list-flattening commas — and found **no line where the punctuation choice creates clinical ambiguity or inverts a contrast**. Every contrastive-looking em-dash preceded an elaboration or a coordinate independent clause, for which colon/semicolon is correct. Two COR-label changes are minor consistency improvements. No conditions.
+
+**Gate made comprehensive:** `scripts/check-humanizer.mjs` TARGETS is now glob-based over all user-facing dirs (skips tests/dev/generated/verbatim-citation quotes); it passes on the whole cleaned app (0 ERROR) and is negative-tested to catch a regression in any guide page. Total across all waves: ~470 em-dashes removed; the user-facing app is em-dash-clean end-to-end.

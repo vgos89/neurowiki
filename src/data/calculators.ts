@@ -21,7 +21,7 @@ export const CALCULATORS: CalculatorEntry[] = [
   {
     id: 'aspects',
     name: 'ASPECTS',
-    description: 'Alberta Stroke Program Early CT Score — ischemic burden in MCA territory.',
+    description: 'Alberta Stroke Program Early CT Score: ischemic burden in MCA territory.',
     fnCategory: 'severity',
     path: '/calculators/aspects-score',
     scoreRange: { min: '0', max: '10' },
@@ -45,7 +45,7 @@ export const CALCULATORS: CalculatorEntry[] = [
   {
     id: 'mrs',
     name: 'mRS',
-    description: 'Modified Rankin Scale — pre-stroke baseline and outcome disability in 7 grades.',
+    description: 'Modified Rankin Scale: pre-stroke baseline and outcome disability in 7 grades.',
     fnCategory: 'severity',
     path: '/calculators/mrs',
     scoreRange: { min: '0', max: '6' },
@@ -70,7 +70,7 @@ export const CALCULATORS: CalculatorEntry[] = [
   {
     id: 'ascvd-risk',
     name: 'ASCVD 10-Year Risk',
-    description: 'ACC/AHA Pooled Cohort Equations — 10-year atherosclerotic CV event risk.',
+    description: 'ACC/AHA Pooled Cohort Equations: 10-year atherosclerotic CV event risk.',
     fnCategory: 'risk',
     path: '/calculators/ascvd-risk',
     scoreRange: { min: '0%', max: '≥20%' },

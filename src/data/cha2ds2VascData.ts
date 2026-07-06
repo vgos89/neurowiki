@@ -102,7 +102,7 @@ export const RISK_GUIDANCE: Record<Cha2ds2VascRisk, string> = {
   moderate_high:
     'Anticoagulation recommended (COR 1). DOAC preferred over warfarin for non-valvular AF.',
   high:
-    'Anticoagulation recommended (COR 1). DOAC preferred. Substantially elevated annual stroke rate — prioritize anticoagulation and address modifiable bleeding risk factors.',
+    'Anticoagulation recommended (COR 1). DOAC preferred. Substantially elevated annual stroke rate: prioritize anticoagulation and address modifiable bleeding risk factors.',
 };
 
 /**

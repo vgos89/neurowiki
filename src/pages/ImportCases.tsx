@@ -195,7 +195,7 @@ const ImportCases: React.FC = () => {
                   Waiting for the phone to send…
                 </p>
                 <p className="text-[11px] text-slate-500 leading-relaxed">
-                  Once the phone uploads, the cases land here automatically. Encryption stays on the devices — the server only holds an opaque ciphertext.
+                  Once the phone uploads, the cases land here automatically. Encryption stays on the devices; the server only holds an opaque ciphertext.
                 </p>
               </div>
               <Loader2 className="w-4 h-4 text-neuro-500 animate-spin flex-shrink-0" aria-hidden />

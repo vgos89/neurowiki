@@ -612,7 +612,7 @@ const MainContent: React.FC = () => {
                       LVO accounts for about 30% of acute ischemic strokes. HERMES (Lancet 2016, pooled 5 RCTs): thrombectomy gave 46.0% vs 26.5% functional independence (mRS 0 to 2) at 90 days (NNT about 5). The trial's primary outcome was reduced disability, a 1-point-or-greater shift on the mRS, for which the NNT was 2.6. If LVO is present, activate IR in parallel with IV thrombolysis.
                     </p>
                     <p className="text-sm text-neuro-800 leading-relaxed">
-                      <strong>Extended windows:</strong> DAWN (NEJM 2018) — clinical-core mismatch selection, 6–24h from LKW, 48.6% vs 13.1% functional independence (NNT 3). DEFUSE-3 (NEJM 2018) — perfusion mismatch selection, 6–16h, 44.6% vs 16.7% functional independence.
+                      <strong>Extended windows:</strong> DAWN (NEJM 2018): clinical-core mismatch selection, 6–24h from LKW, 48.6% vs 13.1% functional independence (NNT 3). DEFUSE-3 (NEJM 2018): perfusion mismatch selection, 6–16h, 44.6% vs 16.7% functional independence.
                     </p>
                     <div className="pt-2 border-t border-neuro-200">
                       <p className="text-xs text-neuro-700">
@@ -775,7 +775,7 @@ const MainContent: React.FC = () => {
                     </summary>
                     <div className="px-4 pb-4 pt-1">
                       <p className="text-sm text-amber-800 leading-relaxed">
-                        Point-of-care <strong>glucose is the ONLY mandatory lab</strong> before thrombolysis (AHA/ASA 2026). Do not delay tPA for other labs if within 4.5h. Post-thrombolysis: neuro checks, BP &lt;180/105, NPO until swallow passed. <strong>Antiplatelet timing</strong> (AHA/ASA 2026 §4.8): IV aspirin within 90 min of IVT is harmful (COR 3 Harm). Oral antiplatelet within the first 24h after IVT is of uncertain benefit (COR 2b) — consider on a case-by-case basis when there is a concomitant indication; do not treat the 24h mark as an absolute boundary.
+                        Point-of-care <strong>glucose is the ONLY mandatory lab</strong> before thrombolysis (AHA/ASA 2026). Do not delay tPA for other labs if within 4.5h. Post-thrombolysis: neuro checks, BP &lt;180/105, NPO until swallow passed. <strong>Antiplatelet timing</strong> (AHA/ASA 2026 §4.8): IV aspirin within 90 min of IVT is harmful (COR 3 Harm). Oral antiplatelet within the first 24h after IVT is of uncertain benefit (COR 2b): consider on a case-by-case basis when there is a concomitant indication; do not treat the 24h mark as an absolute boundary.
                       </p>
                     </div>
                   </details>
@@ -1028,8 +1028,8 @@ const MainContent: React.FC = () => {
                   : r.path === 'B' ? 'Path B (EXTEND-style 4.5–9h perfusion mismatch)'
                   : 'Path C (TRACE-III-style 9–24h LVO with IVT)';
                 const verdict = r.eligible
-                  ? `Eligible — ${pathLabel}, Class ${r.cor}`
-                  : `Not eligible — ${pathLabel}`;
+                  ? `Eligible: ${pathLabel}, Class ${r.cor}`
+                  : `Not eligible: ${pathLabel}`;
                 const trials = r.trialsBasis && r.trialsBasis.length
                   ? ` · Basis: ${r.trialsBasis.join(', ')}`
                   : '';

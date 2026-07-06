@@ -27,7 +27,7 @@ export default function AlteredMentalStatus() {
       category="General Neurology"
       categoryPath="/guide"
       title="Altered Mental Status"
-      subtitle="Structured workup — toxic-metabolic, CNS, and systemic"
+      subtitle="Structured workup: toxic-metabolic, CNS, and systemic"
       leadText={
         <>
           <Term detail="reduced alertness or cognition">Altered mental status (AMS)</Term> needs a system: glucose, vitals, oxygenation, then toxins and lytes, then CNS and systemic causes.

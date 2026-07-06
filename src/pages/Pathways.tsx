@@ -17,7 +17,7 @@ import { useFavorites } from '../hooks/useFavorites';
 
 // HUB_SPEC §9 gate 4 — dynamic SEO title
 const BASE_TITLE =
-  'Neurology Clinical Pathways — Stroke Code, EVT, Status Epilepticus | NeuroWiki';
+  'Neurology Clinical Pathways: Stroke Code, EVT, Status Epilepticus | NeuroWiki';
 
 export default function Pathways() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -66,7 +66,7 @@ export default function Pathways() {
     if (activeScenario) {
       const meta = PATHWAY_SCENARIOS.find((s) => s.id === activeScenario);
       if (meta) {
-        document.title = `${meta.pillLabel} Pathways — NeuroWiki`;
+        document.title = `${meta.pillLabel} Pathways: NeuroWiki`;
       }
     } else {
       document.title = BASE_TITLE;

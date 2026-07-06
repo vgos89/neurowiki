@@ -27,10 +27,10 @@ export default function Vertigo() {
       category="General Neurology"
       categoryPath="/guide"
       title="Vertigo"
-      subtitle="Peripheral vs central — HINTS and when to image"
+      subtitle="Peripheral vs central: HINTS and when to image"
       leadText={
         <>
-          <Term detail="illusion of motion — often spinning">Vertigo</Term> is peripheral (labyrinth, vestibular nerve) or central (brainstem, cerebellum). Acute, persistent vertigo with nausea and nystagmus: rule out stroke with HINTS.
+          <Term detail="illusion of motion, often spinning">Vertigo</Term> is peripheral (labyrinth, vestibular nerve) or central (brainstem, cerebellum). Acute, persistent vertigo with nausea and nystagmus: rule out stroke with HINTS.
         </>
       }
       relatedLinks={[

@@ -35,7 +35,7 @@ function corDisplayLabel(cor: CorValue): string {
     case '2a': return 'COR 2a';
     case '2b': return 'COR 2b';
     case '3': return 'COR 3';
-    case '3-harm': return 'COR 3 — Harm';
+    case '3-harm': return 'COR 3: Harm';
   }
 }
 

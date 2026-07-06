@@ -46,7 +46,7 @@ export default function WeaknessWorkup() {
             viewMode={viewMode}
             detail="UMN: hyperreflexia, spasticity, upgoing toes, pattern by vascular or cord level. LMN: hyporeflexia, atrophy, fasciculations. Distal symmetric: polyneuropathy. Ascending: GBS. Proximal: myopathy, MG. Fatigable: MG. Bulbar: MG, ALS, brainstem."
           >
-            <Term detail="cortex, cord — hyperreflexia, spasticity">UMN</Term> vs <Term detail="root, nerve, NMJ, muscle — hyporeflexia, atrophy">LMN</Term>. Pattern: hemibody (stroke), level (cord), distal symmetric (polyneuropathy), ascending (GBS), proximal (myopathy, MG), fatigable (MG).
+            <Term detail="cortex, cord: hyperreflexia, spasticity">UMN</Term> vs <Term detail="root, nerve, NMJ, muscle: hyporeflexia, atrophy">LMN</Term>. Pattern: hemibody (stroke), level (cord), distal symmetric (polyneuropathy), ascending (GBS), proximal (myopathy, MG), fatigable (MG).
           </Paragraph>
 
           <Section number={2} title="Acute Weakness" />

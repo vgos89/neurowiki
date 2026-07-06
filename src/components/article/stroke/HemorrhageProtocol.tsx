@@ -21,7 +21,7 @@ export const HemorrhageProtocol: React.FC<HemorrhageProtocolProps> = ({ isLearni
       (step, i) => `${i + 1}. ${step.title}\n   ${step.detail}${step.tip ? `\n   Tip: ${step.tip}` : ''}`,
     ).join('\n\n');
     const content =
-      `TNK/tPA HEMORRHAGE MANAGEMENT — Emergency Protocol\n\n${lines}\n\n` +
+      `TNK/tPA HEMORRHAGE MANAGEMENT: Emergency Protocol\n\n${lines}\n\n` +
       `References: AHA/ASA 2022 Guideline for Management of Spontaneous ICH.`;
     const win = window.open('', '_blank');
     if (win) {

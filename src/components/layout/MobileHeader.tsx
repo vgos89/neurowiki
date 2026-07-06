@@ -37,7 +37,7 @@ export const MobileHeader: React.FC = () => {
         <button
           type="button"
           className="min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center text-slate-700 bg-slate-50 hover:bg-slate-100 active:bg-slate-200 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500"
-          aria-label="Open search — find any trial, calculator, pathway, or guide"
+          aria-label="Open search: find any trial, calculator, pathway, or guide"
           onClick={openSearch}
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

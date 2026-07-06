@@ -41,7 +41,7 @@ export const TRIAL_CHAINS: Record<string, TrialChain> = {
     id: 'basilar-evt',
     name: 'Endovascular therapy for basilar artery occlusion',
     narrative:
-      'BEST and BASICS were the first two RCTs in basilar-artery occlusion and both failed their primary frame — driven by substantial crossover in BEST and a control arm in BASICS that frequently received alteplase. ATTENTION and BAOCHE, both in Chinese populations, established benefit in 0-12 h and 6-24 h windows respectively and shifted guideline support toward EVT for basilar LVO.',
+      'BEST and BASICS were the first two RCTs in basilar-artery occlusion and both failed their primary frame, driven by substantial crossover in BEST and a control arm in BASICS that frequently received alteplase. ATTENTION and BAOCHE, both in Chinese populations, established benefit in 0-12 h and 6-24 h windows respectively and shifted guideline support toward EVT for basilar LVO.',
     startYear: 2020,
   },
   // ─── Phase 2 first wave (2026-05-21) ──────────────────────────────────────
@@ -49,7 +49,7 @@ export const TRIAL_CHAINS: Record<string, TrialChain> = {
     id: 'pfo-closure',
     name: 'PFO closure for cryptogenic stroke',
     narrative:
-      'After a decade of ambiguous evidence (CLOSURE I 2012 negative, original RESPECT 2013 marginal), three trials published together in NEJM September 2017 — CLOSE, RESPECT long-term, and REDUCE — independently confirmed that device closure of patent foramen ovale reduces recurrent stroke in patients under 60 with cryptogenic stroke and a PFO. The trade-off across all three was an increased incidence of atrial fibrillation, mostly transient and periprocedural. Supports AHA/ASA 2021 Class IIa, Level B-R when high-risk PFO features are present.',
+      'After a decade of ambiguous evidence (CLOSURE I 2012 negative, original RESPECT 2013 marginal), three trials published together in NEJM September 2017 (CLOSE, RESPECT long-term, and REDUCE) independently confirmed that device closure of patent foramen ovale reduces recurrent stroke in patients under 60 with cryptogenic stroke and a PFO. The trade-off across all three was an increased incidence of atrial fibrillation, mostly transient and periprocedural. Supports AHA/ASA 2021 Class IIa, Level B-R when high-risk PFO features are present.',
     startYear: 2017,
   },
   carotid: {
@@ -63,7 +63,7 @@ export const TRIAL_CHAINS: Record<string, TrialChain> = {
     id: 'evt-mevo',
     name: 'Endovascular therapy for medium-vessel and distal occlusions',
     narrative:
-      'ESCAPE-MeVO and DISTAL, both published in 2024, were the first RCTs in medium-vessel and distal occlusions (M2/M3, ACA, PCA). Neither met its primary functional endpoint. Together they define the negative boundary of LVO-EVT — the closer a patient is to a non-large-vessel target, the less benefit EVT confers. Practice has shifted toward selective EVT for MeVOs only with severe deficit and accessible anatomy.',
+      'ESCAPE-MeVO and DISTAL, both published in 2024, were the first RCTs in medium-vessel and distal occlusions (M2/M3, ACA, PCA). Neither met its primary functional endpoint. Together they define the negative boundary of LVO-EVT: the closer a patient is to a non-large-vessel target, the less benefit EVT confers. Practice has shifted toward selective EVT for MeVOs only with severe deficit and accessible anatomy.',
     startYear: 2024,
   },
 };

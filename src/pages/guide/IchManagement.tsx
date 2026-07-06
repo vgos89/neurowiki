@@ -30,10 +30,10 @@ export default function IchManagement() {
       category="Vascular Neurology"
       categoryPath="/guide"
       title="ICH Management"
-      subtitle="Acute intracerebral hemorrhage — BP, reversal, and ICU care"
+      subtitle="Acute intracerebral hemorrhage: BP, reversal, and ICU care"
       leadText={
         <>
-          <Term detail="intracerebral hemorrhage — parenchymal bleed">ICH</Term> mortality is high in the first 48 h. Goals: stop expansion, reverse anticoagulation, control BP, and prevent herniation.
+          <Term detail="intracerebral hemorrhage: parenchymal bleed">ICH</Term> mortality is high in the first 48 h. Goals: stop expansion, reverse anticoagulation, control BP, and prevent herniation.
         </>
       }
       relatedLinks={[
@@ -50,7 +50,7 @@ export default function IchManagement() {
             viewMode={viewMode}
             detail="ABCs. GCS, pupil check. NIHSS or similar. Get last known well. On anticoagulants? Which one, last dose."
           >
-            Stabilize ABCs. Baseline exam (<CalcRef name="GCS" path="/calculators/glasgow-coma-scale">GCS</CalcRef>, pupils, focal deficits). <Critical>Anticoagulant history</Critical> — agent and last dose.
+            Stabilize ABCs. Baseline exam (<CalcRef name="GCS" path="/calculators/glasgow-coma-scale">GCS</CalcRef>, pupils, focal deficits). <Critical>Anticoagulant history</Critical>: agent and last dose.
           </Paragraph>
 
           <Section number={2} title="Imaging" />
@@ -84,9 +84,9 @@ export default function IchManagement() {
 
           <Paragraph
             viewMode={viewMode}
-            detail="STICH: no benefit for most. STICH II: lobar ICH 10–100 ml, GCS 5–14, superficial, no IVH — early surgery did not meet its primary endpoint (41% vs 38%, P=0.367); non-significant mortality trend favored surgery; consider in selected cases. Cerebellar ICH with neurological decline, brainstem compression, hydrocephalus, or diameter >3 cm: evacuate (Class 1, Level B-NR, 2022 AHA/ASA ICH). EVD for hydrocephalus from IVH."
+            detail="STICH: no benefit for most. STICH II: lobar ICH 10–100 ml, GCS 5–14, superficial, no IVH; early surgery did not meet its primary endpoint (41% vs 38%, P=0.367); non-significant mortality trend favored surgery; consider in selected cases. Cerebellar ICH with neurological decline, brainstem compression, hydrocephalus, or diameter >3 cm: evacuate (Class 1, Level B-NR, 2022 AHA/ASA ICH). EVD for hydrocephalus from IVH."
           >
-            Most supratentorial ICH: medical. <Term detail="superficial lobar, 10–100 ml">STICH II</Term>-type — consider evacuation. Cerebellar hemorrhage with neurological decline, brainstem compression, hydrocephalus, or diameter <Value>&gt;3 cm</Value>: <Critical>evacuate</Critical> (Class 1, Level B-NR). EVD for hydrocephalus from IVH.
+            Most supratentorial ICH: medical. <Term detail="superficial lobar, 10–100 ml">STICH II</Term>-type: consider evacuation. Cerebellar hemorrhage with neurological decline, brainstem compression, hydrocephalus, or diameter <Value>&gt;3 cm</Value>: <Critical>evacuate</Critical> (Class 1, Level B-NR). EVD for hydrocephalus from IVH.
           </Paragraph>
 
           <Section number={6} title="ICU and Complications" />

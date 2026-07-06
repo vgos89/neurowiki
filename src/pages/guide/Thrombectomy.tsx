@@ -33,7 +33,7 @@ export default function Thrombectomy() {
       subtitle="Indications, time windows, and procedural management"
       leadText={
         <>
-          <Term detail="endovascular thrombectomy — mechanical clot retrieval">EVT</Term> for{' '}
+          <Term detail="endovascular thrombectomy: mechanical clot retrieval">EVT</Term> for{' '}
           <Term detail="ICA, M1, M2 dominant, basilar">large vessel occlusion (LVO)</Term> improves outcomes when core is limited and deficit is severe. Use the <Link to="/pathways/evt" className="text-neuro-600 hover:underline font-medium">Thrombectomy Pathway</Link> to stratify.
         </>
       }
@@ -107,7 +107,7 @@ export default function Thrombectomy() {
           <Section number={5} title="Complications" />
 
           <Paragraph viewMode={viewMode} detail="HT: lower BP post-recanalization, often &lt;140–160 SBP. Groin: hold pressure, check distal pulse. Vessel: dissection, perforation, emboli to new territory.">
-            <strong>Reperfusion injury</strong> (hemorrhagic transformation — strict BP). <strong>Groin:</strong> hematoma, retroperitoneal bleed, limb ischemia. <strong>Vessel:</strong> dissection, perforation, embolization to new territory.
+            <strong>Reperfusion injury</strong> (hemorrhagic transformation: strict BP). <strong>Groin:</strong> hematoma, retroperitoneal bleed, limb ischemia. <strong>Vessel:</strong> dissection, perforation, embolization to new territory.
           </Paragraph>
         </>
       )}

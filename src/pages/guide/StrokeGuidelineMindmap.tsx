@@ -90,8 +90,8 @@ function corLabel(cor: string): string {
   if (cor === '1') return 'COR 1';
   if (cor === '2a') return 'COR 2a';
   if (cor === '2b') return 'COR 2b';
-  if (cor === '3: No Benefit') return 'COR 3 — No Benefit';
-  if (cor === '3: Harm') return 'COR 3 — Harm';
+  if (cor === '3: No Benefit') return 'COR 3: No Benefit';
+  if (cor === '3: Harm') return 'COR 3: Harm';
   return `COR ${cor}`;
 }
 
@@ -1032,16 +1032,16 @@ export default function StrokeGuidelineMindmap() {
         <div className="max-w-screen-xl mx-auto flex flex-wrap items-center gap-x-4 gap-y-1">
           <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">COR Legend:</span>
           <span className="flex items-center gap-1 text-[10px] text-slate-600">
-            <span className="w-3 h-3 rounded-sm bg-emerald-400 inline-block" /> COR 1 — Recommended
+            <span className="w-3 h-3 rounded-sm bg-emerald-400 inline-block" /> COR 1: Recommended
           </span>
           <span className="flex items-center gap-1 text-[10px] text-slate-600">
-            <span className="w-3 h-3 rounded-sm bg-blue-400 inline-block" /> COR 2a — Reasonable
+            <span className="w-3 h-3 rounded-sm bg-blue-400 inline-block" /> COR 2a: Reasonable
           </span>
           <span className="flex items-center gap-1 text-[10px] text-slate-600">
-            <span className="w-3 h-3 rounded-sm bg-amber-400 inline-block" /> COR 2b — May be considered
+            <span className="w-3 h-3 rounded-sm bg-amber-400 inline-block" /> COR 2b: May be considered
           </span>
           <span className="flex items-center gap-1 text-[10px] text-slate-600">
-            <span className="w-3 h-3 rounded-sm bg-red-400 inline-block" /> COR 3 — Not recommended / Harmful
+            <span className="w-3 h-3 rounded-sm bg-red-400 inline-block" /> COR 3: Not recommended / Harmful
           </span>
         </div>
       </div>

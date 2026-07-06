@@ -69,7 +69,7 @@ export const mindmapRoot: MindmapNode = {
       id: 'key-updates',
       label: 'Key 2026\nUpdates',
       color: 'neuro',
-      description: 'The top take-home messages from the 2026 AHA/ASA Guideline — what changed from prior guidelines and what every clinician needs to know.',
+      description: 'The top take-home messages from the 2026 AHA/ASA Guideline: what changed from prior guidelines and what every clinician needs to know.',
       recommendations: topTakeHomeMessages.map((text, i) => ({
         cor: '★',
         loe: String(i + 1),
@@ -106,7 +106,7 @@ export const mindmapRoot: MindmapNode = {
           id: 'msu',
           label: 'Mobile\nStroke Units',
           color: 'neuro',
-          description: 'Mobile stroke units (MSU) enable prehospital IVT administration — COR 1 recommendation and #1 Take-Home Message of the 2026 guideline.',
+          description: 'Mobile stroke units (MSU) enable prehospital IVT administration: COR 1 recommendation and #1 Take-Home Message of the 2026 guideline.',
           recommendations: prehospitalRecommendations.mobileStrokeUnits.map(toRec),
         },
         {
@@ -168,7 +168,7 @@ export const mindmapRoot: MindmapNode = {
             {
               cor: '2a',
               loe: 'B-NR',
-              text: 'A multidisciplinary stroke team — including neurology, nursing, pharmacy, and radiology — should coordinate rapid evaluation and treatment.',
+              text: 'A multidisciplinary stroke team (including neurology, nursing, pharmacy, and radiology) should coordinate rapid evaluation and treatment.',
             },
           ],
         },
@@ -251,7 +251,7 @@ export const mindmapRoot: MindmapNode = {
               id: 'ivt-angioedema',
               label: 'Orolingual\nAngioedema',
               color: 'rose',
-              description: 'Orolingual angioedema is a rare but life-threatening complication of IVT — stop infusion, secure airway, treat with epinephrine/icatibant.',
+              description: 'Orolingual angioedema is a rare but life-threatening complication of IVT: stop infusion, secure airway, treat with epinephrine/icatibant.',
               recommendations: orolyngualAngioedemaRecommendations.map(toRec),
             },
           ],
@@ -262,7 +262,7 @@ export const mindmapRoot: MindmapNode = {
           id: 'evt',
           label: 'Endovascular\nThrombectomy (EVT)',
           color: 'emerald',
-          description: 'Mechanical thrombectomy for LVO — anterior and posterior circulation, including large core infarcts.',
+          description: 'Mechanical thrombectomy for LVO: anterior and posterior circulation, including large core infarcts.',
           children: [
             {
               id: 'evt-anterior',
@@ -303,7 +303,7 @@ export const mindmapRoot: MindmapNode = {
               id: 'bp',
               label: 'Blood Pressure\nManagement',
               color: 'amber',
-              description: 'BP targets before reperfusion, after IVT, and after EVT — including critical post-EVT harm signal.',
+              description: 'BP targets before reperfusion, after IVT, and after EVT, including critical post-EVT harm signal.',
               recommendations: [
                 ...bloodPressureRecommendations.general.map(toRec),
                 ...bloodPressureRecommendations.beforeReperfusion.map(toRec),
@@ -352,7 +352,7 @@ export const mindmapRoot: MindmapNode = {
                   id: 'antiplatelet-ivt',
                   label: 'Antiplatelet\nAfter IVT',
                   color: 'rose',
-                  description: 'Antiplatelet use within 24 h of IVT is generally not recommended — specific restrictions and rare exceptions.',
+                  description: 'Antiplatelet use within 24 h of IVT is generally not recommended: specific restrictions and rare exceptions.',
                   recommendations: antiplateletRecommendations.inSettingOfIVT.map(toRec),
                 },
               ],
@@ -370,9 +370,9 @@ export const mindmapRoot: MindmapNode = {
         // Adjunctive Tx Not Recommended
         {
           id: 'adjunctive',
-          label: 'Adjunctive Tx\n— Not Rec.',
+          label: 'Adjunctive Tx\nNot Rec.',
           color: 'rose',
-          description: 'Treatments with COR 3: No Benefit — hemodilution, neuroprotective agents, and emergency carotid endarterectomy without intracranial clot are not recommended.',
+          description: 'Treatments with COR 3: No Benefit, hemodilution, neuroprotective agents, and emergency carotid endarterectomy without intracranial clot are not recommended.',
           recommendations: adjunctiveTreatmentsNotRecommended.map(toRec),
         },
 

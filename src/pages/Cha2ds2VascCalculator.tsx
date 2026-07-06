@@ -83,7 +83,7 @@ const CHECKBOX_ITEMS: CheckItem[] = [
     key: 'strokeTia',
     label: 'Stroke / TIA / thromboembolism',
     points: 2,
-    sublabel: '2 pts — prior stroke, TIA, or systemic thromboembolism',
+    sublabel: '2 pts: prior stroke, TIA, or systemic thromboembolism',
   },
   {
     key: 'vascularDisease',
@@ -95,7 +95,7 @@ const CHECKBOX_ITEMS: CheckItem[] = [
     key: 'female',
     label: 'Female sex',
     points: 1,
-    sublabel: 'Sex category — adds 1 pt; does not independently indicate anticoagulation',
+    sublabel: 'Sex category: adds 1 pt; does not independently indicate anticoagulation',
   },
 ];
 
@@ -153,7 +153,7 @@ export default function Cha2ds2VascCalculator() {
       type: 'calculator',
       id: 'chads-vasc',
       title: 'CHA₂DS₂-VASc',
-      subtitle: 'AF stroke risk — anticoagulation threshold',
+      subtitle: 'AF stroke risk: anticoagulation threshold',
       category: 'risk',
       trail: '0–9',
     });
@@ -266,7 +266,7 @@ export default function Cha2ds2VascCalculator() {
               <Link to="/calculators/has-bled-score" className="text-neuro-600 hover:underline font-medium">
                 HAS-BLED Score
               </Link>
-              . High HAS-BLED does not contraindicate anticoagulation — address modifiable risks.
+              . High HAS-BLED does not contraindicate anticoagulation; address modifiable risks.
             </p>
           </div>
         )}
@@ -309,7 +309,7 @@ export default function Cha2ds2VascCalculator() {
         scoreAriaLabel={
           hasInteracted
             ? `CHA₂DS₂-VASc Score ${result.score} of 9. ${RISK_LABELS[result.risk]}${result.annualStrokeRate > 0 ? `, ${result.annualStrokeRate}% annual stroke rate.` : '.'}`
-            : 'CHA₂DS₂-VASc Score — not yet calculated'
+            : 'CHA₂DS₂-VASc Score: not yet calculated'
         }
         onBack={handleBack}
         onReset={handleReset}

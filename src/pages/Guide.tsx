@@ -14,7 +14,7 @@ import type { GuideArea } from '../data/guideArticles';
 import { useFavorites } from '../hooks/useFavorites';
 
 // HUB_SPEC §9 gate 4 — dynamic SEO title
-const BASE_TITLE = 'Neurology Guide — Clinical Protocols & References | NeuroWiki';
+const BASE_TITLE = 'Neurology Guide: Clinical Protocols & References | NeuroWiki';
 
 export default function Guide() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -59,7 +59,7 @@ export default function Guide() {
     if (activeArea) {
       const meta = AREA_META.find((a) => a.id === activeArea);
       if (meta) {
-        document.title = `${meta.label} — Guide | NeuroWiki`;
+        document.title = `${meta.label}: Guide | NeuroWiki`;
       }
     } else {
       document.title = BASE_TITLE;

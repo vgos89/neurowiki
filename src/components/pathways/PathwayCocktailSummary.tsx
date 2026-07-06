@@ -73,7 +73,7 @@ export const PathwayCocktailSummary: React.FC<PathwayCocktailSummaryProps> = ({
                 <button
                   type="button"
                   onClick={() => onEditDrug(pill.pillId)}
-                  aria-label={`Edit ${pill.label} — opens ${pill.pillId} accordion`}
+                  aria-label={`Edit ${pill.label}, opens ${pill.pillId} accordion`}
                   className={`inline-flex items-center px-3 py-1.5 rounded-full border text-xs font-medium transition-all min-h-[44px] ${
                     isPendingRemoval
                       ? 'bg-amber-50 border-amber-200 text-amber-700 animate-pulse'

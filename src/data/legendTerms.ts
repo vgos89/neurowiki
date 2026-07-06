@@ -143,7 +143,7 @@ export const LEGEND_TERMS: Record<string, LegendEntry> = {
     term: 'RRR (Relative Risk Reduction)',
     category: 'statistical-measure',
     categoryLabel: 'Statistical Measure',
-    definition: 'ARR expressed as a proportion of the control rate. A large RRR can reflect a small absolute difference — always check the ARR.',
+    definition: 'ARR expressed as a proportion of the control rate. A large RRR can reflect a small absolute difference; always check the ARR.',
   },
   'nnt': {
     id: 'nnt',

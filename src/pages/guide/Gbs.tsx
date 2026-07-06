@@ -35,7 +35,7 @@ export default function Gbs() {
       subtitle="Diagnosis, variants, and when to treat"
       leadText={
         <>
-          <Term detail="acute inflammatory demyelinating polyneuropathy — often post-infectious">Guillain–Barré syndrome (GBS)</Term> is an acute, ascending, areflexic weakness. Respiratory and autonomic failure are the main threats.
+          <Term detail="acute inflammatory demyelinating polyneuropathy, often post-infectious">Guillain–Barré syndrome (GBS)</Term> is an acute, ascending, areflexic weakness. Respiratory and autonomic failure are the main threats.
         </>
       }
       relatedLinks={[
@@ -58,7 +58,7 @@ export default function Gbs() {
 
           <Paragraph
             viewMode={viewMode}
-            detail="CSF: albuminocytologic dissociation — high protein, normal WBC. Can be normal early. NCS/EMG: demyelinating (AIDP) or axonal (AMAN, AMSAN) patterns. LP and EMG support; diagnosis can be clinical in classic cases."
+            detail="CSF: albuminocytologic dissociation: high protein, normal WBC. Can be normal early. NCS/EMG: demyelinating (AIDP) or axonal (AMAN, AMSAN) patterns. LP and EMG support; diagnosis can be clinical in classic cases."
           >
             CSF: <Term detail="elevated protein, normal WBC">albuminocytologic dissociation</Term>. NCS: demyelinating or axonal. LP and EMG support; diagnosis often clinical when classic.
           </Paragraph>

@@ -16,7 +16,7 @@ import type { FnCategory } from '../data/calculators';
 import { useFavorites } from '../hooks/useFavorites';
 
 // HUB_SPEC §9 gate 4 — dynamic SEO title
-const BASE_TITLE = 'Neurology Calculators — NIHSS, ICH Score, GCS & More | NeuroWiki';
+const BASE_TITLE = 'Neurology Calculators: NIHSS, ICH Score, GCS & More | NeuroWiki';
 
 // Groups expanded on first load. Clinicians reach for Severity + Risk far more
 // than Classification (NIHSS, GCS, ICH, ABCD² all live in the first two), so
@@ -90,7 +90,7 @@ export default function Calculators() {
     if (activeCat) {
       const meta = FN_CATEGORIES.find((c) => c.id === activeCat);
       if (meta) {
-        document.title = `${meta.label} Calculators — NeuroWiki`;
+        document.title = `${meta.label} Calculators, NeuroWiki`;
       }
     } else {
       document.title = BASE_TITLE;

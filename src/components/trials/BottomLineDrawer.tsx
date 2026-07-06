@@ -204,7 +204,7 @@ export const BottomLineDrawer: React.FC<BottomLineDrawerProps> = ({
             onClick={toggle}
             className="bldr-handle w-full flex items-center justify-between px-4 py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1746A2] focus-visible:ring-inset"
             aria-expanded={drawerState === 'D'}
-            aria-label="Bottom line summary — tap to expand"
+            aria-label="Bottom line summary, tap to expand"
           >
             <div className="flex items-center gap-2 min-w-0">
               <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 shrink-0">

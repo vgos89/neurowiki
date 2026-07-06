@@ -57,7 +57,7 @@ export const AREA_META: AreaMeta[] = [
   {
     id: 'neuromuscular',
     label: 'Neuromuscular & Neuroimmunology',
-    lede: 'GBS, MG, MS — diagnosis and management',
+    lede: 'GBS, MG, MS: diagnosis and management',
     dotColor: 'bg-emerald-500',
     rowCategory: 'neuromuscular',
   },
@@ -131,7 +131,7 @@ export const GUIDE_ARTICLES: GuideArticle[] = [
     id: 'guide-altered-mental-status',
     path: '/guide/altered-mental-status',
     name: 'Altered Mental Status',
-    description: 'Structured workup — toxic-metabolic, CNS, systemic causes',
+    description: 'Structured workup: toxic-metabolic, CNS, systemic causes',
     area: 'neurocritical',
     readTime: '4 min read',
   },

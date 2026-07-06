@@ -36,7 +36,7 @@ export default function Meningitis() {
       subtitle="Empiric therapy, LP, and when to image first"
       leadText={
         <>
-          <Term detail="inflammation of the meninges — bacterial, viral, fungal">Meningitis</Term> is a clinical diagnosis. Empiric antibiotics before LP when bacterial is suspected; don't delay for imaging unless there are signs of mass or herniation.
+          <Term detail="inflammation of the meninges: bacterial, viral, fungal">Meningitis</Term> is a clinical diagnosis. Empiric antibiotics before LP when bacterial is suspected; don't delay for imaging unless there are signs of mass or herniation.
         </>
       }
       relatedLinks={[
@@ -84,7 +84,7 @@ export default function Meningitis() {
 
           <Paragraph
             viewMode={viewMode}
-            detail="Vancomycin + third-gen cephalosporin (ceftriaxone or cefotaxime). Add ampicillin if &gt;50 y, immunocompromised, or Listeria concern. Dexamethasone with or before first dose for suspected pneumococcal (adults) — check current ID guidance."
+            detail="Vancomycin + third-gen cephalosporin (ceftriaxone or cefotaxime). Add ampicillin if &gt;50 y, immunocompromised, or Listeria concern. Dexamethasone with or before first dose for suspected pneumococcal (adults); check current ID guidance."
           >
             <strong>Empiric:</strong> Vancomycin + ceftriaxone (or cefotaxime). Add ampicillin if <Value>&gt;50</Value> y, immunocompromised, or <Term detail="Listeria monocytogenes">Listeria</Term> risk. Dexamethasone with first dose for suspected pneumococcal (adults).
           </Paragraph>

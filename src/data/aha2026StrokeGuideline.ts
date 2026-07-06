@@ -307,7 +307,7 @@ export const ivtRecommendations = {
     {
       cor: "2b",
       loe: "B-NR",
-      text: "In patients with AIS with high burden of CMBs (>10) on pretreatment MRI, IVT may be associated with increased risk of sICH — weigh risks carefully.",
+      text: "In patients with AIS with high burden of CMBs (>10) on pretreatment MRI, IVT may be associated with increased risk of sICH; weigh risks carefully.",
     },
   ],
 
@@ -318,7 +318,7 @@ export const ivtRecommendations = {
       text: "In adult patients with AIS presenting within 4.5 hours of symptom onset or last known well and eligible for IVT, TENECTEPLASE at 0.25 mg/kg body weight (max 25 mg) OR ALTEPLASE at 0.9 mg/kg body weight (max 90 mg) should be used because it improves functional outcomes. Both agents are equivalent first-line choices.",
       keyDosing: {
         tenecteplase: "0.25 mg/kg IV bolus (max 25 mg)",
-        alteplase: "0.9 mg/kg IV (max 90 mg) — 10% as bolus, 90% over 60 min",
+        alteplase: "0.9 mg/kg IV (max 90 mg): 10% as bolus, 90% over 60 min",
       },
     },
     {
@@ -355,12 +355,12 @@ export const ivtRecommendations = {
     {
       cor: "3: Harm",
       loe: "A",
-      text: "IV streptokinase should not be administered — does not improve functional independence and is associated with increased early mortality.",
+      text: "IV streptokinase should not be administered: does not improve functional independence and is associated with increased early mortality.",
     },
     {
       cor: "3: No Benefit",
       loe: "A",
-      text: "Sonothrombolysis as adjunctive therapy to IVT compared with IVT alone should not be used routinely — did not increase early neurological improvement or improve functional outcome at 90 days.",
+      text: "Sonothrombolysis as adjunctive therapy to IVT compared with IVT alone should not be used routinely: did not increase early neurological improvement or improve functional outcome at 90 days.",
     },
   ],
 
@@ -957,7 +957,7 @@ export const telemedicineRecommendations = [
   {
     cor: "1",
     loe: "B-R",
-    text: "Telestroke consultation — using audio-video technology to enable real-time neurological assessment by a remote stroke specialist — should be used to increase access to IVT and EVT in hospitals without on-site stroke expertise.",
+    text: "Telestroke consultation (using audio-video technology to enable real-time neurological assessment by a remote stroke specialist) should be used to increase access to IVT and EVT in hospitals without on-site stroke expertise.",
   },
   {
     cor: "1",
@@ -967,7 +967,7 @@ export const telemedicineRecommendations = [
   {
     cor: "2a",
     loe: "B-NR",
-    text: "Prehospital telemedicine — connecting paramedics in the ambulance directly to a remote stroke specialist for real-time evaluation — can reasonably be considered to expedite stroke identification, triage, and destination decisions before hospital arrival.",
+    text: "Prehospital telemedicine (connecting paramedics in the ambulance directly to a remote stroke specialist for real-time evaluation) can reasonably be considered to expedite stroke identification, triage, and destination decisions before hospital arrival.",
   },
 ] as const;
 
@@ -1027,7 +1027,7 @@ export const qualityImprovementRecommendations = [
   {
     cor: "2a",
     loe: "B-NR",
-    text: "Continuous quality feedback loops — including regular multidisciplinary case review, door-to-needle time tracking, and protocol update cycles — can reasonably be considered to sustain improvements in stroke care delivery.",
+    text: "Continuous quality feedback loops (including regular multidisciplinary case review, door-to-needle time tracking, and protocol update cycles) can reasonably be considered to sustain improvements in stroke care delivery.",
   },
   {
     cor: "2a",
@@ -1081,7 +1081,7 @@ export const topTakeHomeMessages = [
 
   "For patients with non-disabling deficits (e.g., isolated sensory syndrome) in the 4.5-hour window, IVT should not be used routinely. Dual antiplatelet therapy (DAPT) is preferred.",
 
-  "EVT is now recommended for anterior circulation LVO with ASPECTS 3–5 (large core infarcts) within 24 hours — expanding eligibility compared to prior guidelines.",
+  "EVT is now recommended for anterior circulation LVO with ASPECTS 3–5 (large core infarcts) within 24 hours, expanding eligibility compared to prior guidelines.",
 
   "EVT for basilar artery occlusion should be used for eligible patients within 6 hours (NIHSS ≥10), and it can be considered from 6–24 hours when salvageable tissue is still present.",
 
@@ -1091,7 +1091,7 @@ export const topTakeHomeMessages = [
 
   "Early DOAC initiation for AF-related stroke is safe (noninferior to delayed initiation) but efficacy for reducing recurrent stroke is not established.",
 
-  "Pharyngeal electrical stimulation (PES) is a new recommendation — beneficial for reducing dysphagia severity and aspiration risk in patients with poststroke dysphagia.",
+  "Pharyngeal electrical stimulation (PES) is a new recommendation: beneficial for reducing dysphagia severity and aspiration risk in patients with poststroke dysphagia.",
 ] as const;
 
 // ─────────────────────────────────────────────────────────────────────────────

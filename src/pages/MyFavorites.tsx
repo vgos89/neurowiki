@@ -38,7 +38,7 @@ const FavoriteRow: React.FC<FavoriteRowProps> = ({ entry, onRemove }) => {
       <Link
         to={entry.path}
         className="flex-1 min-w-0 flex items-center gap-3 px-4 py-3 rounded-xl bg-white border border-slate-100 hover:bg-slate-50 hover:border-slate-200 transition-colors min-h-[44px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none group"
-        aria-label={`${entry.title} — ${entry.eyebrow ?? entry.kind}`}
+        aria-label={`${entry.title}, ${entry.eyebrow ?? entry.kind}`}
       >
         <Icon className="w-4 h-4 text-slate-400 flex-shrink-0" aria-hidden />
         <div className="flex-1 min-w-0">

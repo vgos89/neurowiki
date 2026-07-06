@@ -270,7 +270,7 @@ export const DeltaBandChart: React.FC<DeltaBandChartProps> = ({
       )}
       {arr >= 2 && arr < 5 && (
         <p className="text-xs text-amber-600 italic mt-1">
-          Small absolute difference — interpret with caution
+          Small absolute difference, interpret with caution
         </p>
       )}
 

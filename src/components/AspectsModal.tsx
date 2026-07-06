@@ -31,10 +31,10 @@ function scoreColor(score: number): string {
 }
 
 function scoreLabel(score: number): string {
-  if (score >= 8) return 'Small/No Infarct — EVT strongly indicated';
-  if (score >= 6) return 'Moderate — EVT generally indicated';
-  if (score >= 3) return 'Large Core — EVT may benefit (SELECT-2 / ANGEL-ASPECT)';
-  return 'Extensive — EVT typically not indicated';
+  if (score >= 8) return 'Small/No Infarct: EVT strongly indicated';
+  if (score >= 6) return 'Moderate: EVT generally indicated';
+  if (score >= 3) return 'Large Core: EVT may benefit (SELECT-2 / ANGEL-ASPECT)';
+  return 'Extensive: EVT typically not indicated';
 }
 
 // ── Props ─────────────────────────────────────────────────────────────────

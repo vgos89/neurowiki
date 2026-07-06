@@ -162,7 +162,7 @@ export default function RopeScoreCalculator() {
     if (inputs.nonsmoker)         findings.push('nonsmoker');
     if (inputs.corticalInfarct)   findings.push('cortical infarct on imaging');
     return [
-      `RoPE — ${result.score}/10 (PFO-attributable ${result.pfoAttributablePercent}%)`,
+      `RoPE: ${result.score}/10 (PFO-attributable ${result.pfoAttributablePercent}%)`,
       `Findings: ${findings.join(', ')}.`,
     ].join('\n');
   };
@@ -260,7 +260,7 @@ export default function RopeScoreCalculator() {
         scoreAriaLabel={
           hasInteracted
             ? `RoPE Score ${result.score} of 10. PFO-attributable fraction ${result.pfoAttributablePercent}%.`
-            : 'RoPE Score — not yet calculated'
+            : 'RoPE Score: not yet calculated'
         }
         onBack={handleBack}
         onReset={handleReset}

@@ -277,7 +277,7 @@ export default function BostonCriteriaCaaCalculator() {
         scoreAriaLabel={
           hasInteracted
             ? `Boston Criteria result: ${result.label}.`
-            : 'Boston Criteria 2.0 for CAA — not yet calculated'
+            : 'Boston Criteria 2.0 for CAA: not yet calculated'
         }
         onBack={handleBack}
         onReset={handleReset}

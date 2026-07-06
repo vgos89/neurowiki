@@ -90,7 +90,7 @@ export async function createReceiveSession(): Promise<ReceiveSession> {
     // instead of leaking the raw schema-cache message to clinicians.
     if (error.code === 'PGRST204' || /receiver_public_key|column .* schema cache/i.test(error.message)) {
       throw new Error(
-        'Cross-device transfer is being upgraded on this site. Try again in a few minutes — if the issue persists, ask the admin to apply the latest database migration.'
+        'Cross-device transfer is being upgraded on this site. Try again in a few minutes; if the issue persists, ask the admin to apply the latest database migration.'
       );
     }
     throw new Error(`Could not create receive session: ${error.message}`);

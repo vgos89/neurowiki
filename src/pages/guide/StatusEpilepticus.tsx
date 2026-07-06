@@ -33,7 +33,7 @@ export default function StatusEpilepticus() {
       subtitle="Phased treatment from first-line benzos to refractory and super-refractory"
       leadText={
         <>
-          <Term detail="T1=when to treat; T2=when neuronal injury risk rises">ILAE 2015</Term>: convulsive SE — treat at <Value>5 min</Value>, control by <Value>30 min</Value>. Underdosing benzos is the most common cause of failure.
+          <Term detail="T1=when to treat; T2=when neuronal injury risk rises">ILAE 2015</Term>: convulsive SE, treat at <Value>5 min</Value>, control by <Value>30 min</Value>. Underdosing benzos is the most common cause of failure.
         </>
       }
       relatedLinks={[
@@ -46,13 +46,13 @@ export default function StatusEpilepticus() {
           <Section number={1} title="Definition and Classification" />
 
           <Paragraph viewMode={viewMode}>
-            <strong>T1 (time to treat):</strong> <Value>5 min</Value> convulsive — treat. <strong>T2 (time to damage):</strong> <Value>30 min</Value> — must be controlled. <Term detail="seizures on EEG without prominent motor activity">Non-convulsive SE (NCSE)</Term>. <Term detail="fails 2 adequate agents (benzo + AED)">Refractory</Term>. <Term detail="continues &gt;24h despite anesthesia">Super-refractory</Term>.
+            <strong>T1 (time to treat):</strong> <Value>5 min</Value> convulsive, treat. <strong>T2 (time to damage):</strong> <Value>30 min</Value>, must be controlled. <Term detail="seizures on EEG without prominent motor activity">Non-convulsive SE (NCSE)</Term>. <Term detail="fails 2 adequate agents (benzo + AED)">Refractory</Term>. <Term detail="continues &gt;24h despite anesthesia">Super-refractory</Term>.
           </Paragraph>
 
           <Section number={2} title="Phase I: Initial Therapy (0–10 min)" />
 
           <Paragraph viewMode={viewMode} detail="Stop the seizure. Don't wait for EEG. ABCs, glucose. Thiamine 100 mg + D50 if glucose &lt;60.">
-            <Critical>Benzodiazepines first.</Critical> Do not delay for EEG. ABCs. Check glucose — Thiamine 100 mg + D50 if <Value>&lt;60 mg/dL</Value>.
+            <Critical>Benzodiazepines first.</Critical> Do not delay for EEG. ABCs. Check glucose: Thiamine 100 mg + D50 if <Value>&lt;60 mg/dL</Value>.
           </Paragraph>
 
           <SubSection title="Preferred Agents (Choose One)" />
@@ -71,7 +71,7 @@ export default function StatusEpilepticus() {
 
           <Section number={3} title="Phase II: Urgent Control (10–30 min)" />
 
-          <Paragraph viewMode={viewMode} detail="ESETT: LEV, fosphenytoin, valproate ~50% each. Pick one. Start as soon as Phase I fails — don't wait.">
+          <Paragraph viewMode={viewMode} detail="ESETT: LEV, fosphenytoin, valproate ~50% each. Pick one. Start as soon as Phase I fails; don't wait.">
             <Trial name="ESETT" path="/trials/esett" />: <Term detail="levetiracetam">Levetiracetam</Term>, <Term detail="phenytoin prodrug">Fosphenytoin</Term>, and <Term detail="valproic acid">Valproate</Term> equally effective (~50% cessation). Start if seizure continues after Phase I.
           </Paragraph>
 
@@ -107,9 +107,9 @@ export default function StatusEpilepticus() {
 
           <Paragraph
             viewMode={viewMode}
-            detail="Add ketamine if not used. NORSE: consider high-dose steroids, IVIG. Ketogenic diet, hypothermia, VNS — evidence mixed."
+            detail="Add ketamine if not used. NORSE: consider high-dose steroids, IVIG. Ketogenic diet, hypothermia, VNS: evidence mixed."
           >
-            Ketamine. If <Term detail="new-onset refractory SE without clear cause">NORSE</Term>: empiric steroids (e.g. methylprednisolone 1 g × 3–5 d) or IVIG. Ketogenic diet, hypothermia, VNS — mixed evidence.
+            Ketamine. If <Term detail="new-onset refractory SE without clear cause">NORSE</Term>: empiric steroids (e.g. methylprednisolone 1 g × 3–5 d) or IVIG. Ketogenic diet, hypothermia, VNS: mixed evidence.
           </Paragraph>
 
           <Section number={6} title="Diagnostic Workup" />
