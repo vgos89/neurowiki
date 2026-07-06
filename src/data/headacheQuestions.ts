@@ -314,6 +314,24 @@ export const CONDITIONAL_BRANCHES: ConditionalBranch[] = [
       ],
     },
   },
+  // Facial pain detail — fires on sharp/stabbing quality; screens for §13.1 trigeminal neuralgia.
+  {
+    id: 'b-trigeminal',
+    fires: (s) => has(s, 'qual-sharp-stabbing'),
+    question: {
+      id: 'q-trigeminal',
+      screen: 8,
+      eyebrow: 'Facial pain detail',
+      prompt: 'If this is brief, shock-like FACIAL pain, answer these (trigeminal neuralgia screen):',
+      select: 'multi',
+      options: [
+        { id: 'tn-distribution', label: 'Pain is confined to the face in one or more trigeminal areas (cheek, jaw, around the eye), not spreading beyond', chips: ['loc-trigeminal-distribution'] },
+        { id: 'tn-shock', label: 'The pain is electric-shock-like or shooting', chips: ['qual-electric-shock-shooting'] },
+        { id: 'tn-brief', label: 'Each attack lasts from a fraction of a second up to 2 minutes', chips: ['dur-fraction-sec-to-2min'] },
+        { id: 'tn-trigger', label: 'Attacks are triggered by light touch, chewing, talking, brushing teeth, or cold air on the face', chips: ['trigger-innocuous-stimulus'] },
+      ],
+    },
+  },
   // Prolonged attack (>72 h) — fires when the duration is >72 h (§1.4.1 status migrainosus).
   {
     id: 'b-status-migrainosus',

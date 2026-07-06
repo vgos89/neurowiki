@@ -1322,3 +1322,54 @@ describe('§1.4.1 Status migrainosus (Track C — new diagnosis)', () => {
     expect(matches.find(m => m.phenotypeId === 'status-migrainosus')).toBeUndefined();
   });
 });
+
+describe('§13.1.1 Trigeminal neuralgia (Track C — new diagnosis)', () => {
+  const tnFull: ChipId[] = [
+    'loc-unilateral', 'loc-trigeminal-distribution',
+    'dur-fraction-sec-to-2min', 'sev-severe', 'qual-electric-shock-shooting',
+    'trigger-innocuous-stimulus',
+  ];
+
+  it('full match: unilateral trigeminal-distribution + brief + severe + shock + trigger', () => {
+    const matches = evaluateHeadachePhenotypes(select(...tnFull));
+    expect(matches.find(m => m.phenotypeId === 'trigeminal-neuralgia')?.matchStrength).toBe('full');
+  });
+
+  it('full match via the sharp/stabbing quality (tn-B quality OR)', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'loc-unilateral', 'loc-trigeminal-distribution',
+      'dur-fraction-sec-to-2min', 'sev-severe', 'qual-sharp-stabbing',
+      'trigger-innocuous-stimulus',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'trigeminal-neuralgia')?.matchStrength).toBe('full');
+  });
+
+  it('tn-C suppress (DROP): no innocuous-stimulus trigger → absent (pathognomonic substrate)', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'loc-unilateral', 'loc-trigeminal-distribution',
+      'dur-fraction-sec-to-2min', 'sev-severe', 'qual-electric-shock-shooting',
+      // no trigger-innocuous-stimulus → tn-C fails
+    ));
+    expect(matches.find(m => m.phenotypeId === 'trigeminal-neuralgia')).toBeUndefined();
+  });
+
+  it('tn-A suppress (DROP): shock-like pain not in a trigeminal distribution → absent', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'loc-unilateral', // no loc-trigeminal-distribution → tn-A fails
+      'dur-fraction-sec-to-2min', 'sev-severe', 'qual-electric-shock-shooting',
+      'trigger-innocuous-stimulus',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'trigeminal-neuralgia')).toBeUndefined();
+  });
+
+  it('no Probable-TN: a feature miss (not severe) DROPS, never surfaces as probable (§13 has no §X.5)', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'loc-unilateral', 'loc-trigeminal-distribution',
+      'dur-fraction-sec-to-2min', 'qual-electric-shock-shooting',
+      'trigger-innocuous-stimulus',
+      // no sev-severe → tn-B fails (suppress DROP, not demote)
+    ));
+    const tn = matches.find(m => m.phenotypeId === 'trigeminal-neuralgia');
+    expect(tn).toBeUndefined();
+  });
+});

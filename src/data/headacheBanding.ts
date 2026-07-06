@@ -56,6 +56,7 @@ const CHAPTER_ORDER: readonly string[] = [
   'hemicrania-continua',     // §3.4
   'primary-stabbing-headache', // §4.7
   'ndph',                    // §4.10
+  'trigeminal-neuralgia',    // §13.1.1
   'vestibular-migraine',     // §A1.6.6
 ];
 

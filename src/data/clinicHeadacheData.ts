@@ -36,6 +36,8 @@ export type ChipId =
   | 'onset-recurrent-same' | 'onset-new-within-3-months' | 'onset-single-sudden' | 'onset-abrupt-continuous-24h'
   // §4.7 Primary stabbing headache
   | 'onset-spontaneous-stab' | 'dur-stab-seconds' | 'freq-stab-one-to-many-per-day'
+  // §13.1 Trigeminal neuralgia
+  | 'loc-trigeminal-distribution' | 'qual-electric-shock-shooting' | 'dur-fraction-sec-to-2min' | 'trigger-innocuous-stimulus'
   // Pain location
   | 'loc-unilateral' | 'loc-bilateral' | 'loc-orbital-temporal'
   // Pain quality
@@ -112,6 +114,7 @@ export type PhenotypeId =
   | 'hemicrania-continua'
   | 'probable-tac'
   | 'primary-stabbing-headache'     // §4.7 — added 2026-07-06
+  | 'trigeminal-neuralgia'          // §13.1.1 — added 2026-07-06
   | 'ndph'
   | 'vestibular-migraine';
 
@@ -294,6 +297,11 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
       { id: 'sev-severe', label: 'Severe intensity', teachWhenSelected: '1.1 C feature 3 (migraine) at severe; 3.1 B (cluster).' },
       { id: 'sev-very-severe', label: 'Very severe intensity', teachWhenSelected: '3.1 B Cluster: severe or very severe pain.' },
       { id: 'sev-debilitating', label: 'Debilitating (pain and/or symptoms leave the patient unable to function)', teachWhenSelected: 'ICHD-3 1.4.1 C.2 (status migrainosus): pain and/or associated symptoms are debilitating. This is a functional-disability qualifier, distinct from the mild/moderate/severe pain-intensity scale.' },
+      // §13.1 Trigeminal neuralgia
+      { id: 'loc-trigeminal-distribution', label: 'Pain confined to trigeminal-nerve areas of the face (cheek, jaw, around the eye), not spreading beyond', teachWhenSelected: 'ICHD-3 13.1.1 A: unilateral facial pain in one or more trigeminal divisions, with no radiation beyond (Note 1).' },
+      { id: 'qual-electric-shock-shooting', label: 'Electric shock-like or shooting pain', teachWhenSelected: 'ICHD-3 13.1.1 B.3: electric shock-like, shooting, stabbing or sharp (any one satisfies the quality criterion).' },
+      { id: 'dur-fraction-sec-to-2min', label: 'Each attack lasts from a fraction of a second up to 2 minutes', teachWhenSelected: 'ICHD-3 13.1.1 B.1. A minority of patients report attacks lasting >2 minutes (Note 2).' },
+      { id: 'trigger-innocuous-stimulus', label: 'Attacks triggered by light touch, chewing, talking, brushing teeth, or cold air on the face', teachWhenSelected: 'ICHD-3 13.1.1 C / Note 4: precipitated by innocuous stimuli; a trigger history is required even when some attacks appear spontaneous.' },
 
       { id: 'act-aggravated', label: 'Aggravated by or causing avoidance of routine activity', teachWhenSelected: '1.1 C feature 4 (migraine). Also satisfies 3.4 Hemicrania continua criterion C.2 (aggravation of pain by movement).' },
       { id: 'act-not-aggravated', label: 'Not aggravated by routine activity', teachWhenSelected: '2.2 C feature 4 (TTH).' },
@@ -740,6 +748,32 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
       // `onset-abrupt-continuous-24h`, not mere recency (`onset-new-within-3-months`).
       // Recency alone over-called NDPH against any long-standing continuous headache.
       { id: 'ndph-B', label: 'Distinct, clearly-remembered onset; becomes continuous and unremitting within 24 hours', description: 'ICHD-3 4.10 B: distinct and clearly-remembered onset, with pain becoming continuous and unremitting within 24 hours. Confirm with patient that they can pinpoint the exact day or hour of onset.', evaluate: s => has(s, 'onset-abrupt-continuous-24h'), contributingChips: ['onset-abrupt-continuous-24h'], role: 'suppress-gate' },
+    ],
+  },
+
+  // ─── 13.1 Trigeminal neuralgia ───────────────────────────────────────────
+  // ICHD-3 §13.1.1 parent. Flat Class E encoding of the clinical (Stage 1)
+  // criteria A-C. Aetiology subtyping (§13.1.1.1 classical / §13.1.1.2 secondary
+  // / §13.1.1.3 idiopathic) is decided by MRI/electrophysiology and is DEFERRED
+  // to the subtype-hierarchy layer (ADR-2026-07-06). §13 has NO Probable-TN
+  // section, so all three criteria are suppress-gates (binary full/hidden): a
+  // feature miss is unclassified, NOT "probable TN". No attack-count criterion,
+  // no carbamazepine-response gate (response is supportive, not an ICHD-3 criterion).
+  {
+    id: 'trigeminal-neuralgia',
+    name: 'Trigeminal neuralgia',
+    ichd3Section: 'ICHD-3 §13.1.1',
+    teachPearl:
+      'Trigeminal neuralgia is recurrent, brief (a fraction of a second to 2 minutes), severe, electric-shock-like or stabbing unilateral facial pain in one or more trigeminal divisions, triggered by innocuous stimuli (light touch, chewing, talking, cold air). Aetiology is classified by imaging: classical (neurovascular compression WITH morphological change on MRI/surgery), secondary (an underlying disease such as MS, a cerebellopontine-angle tumour, or AVM), or idiopathic (adequate MRI and electrophysiology negative). RED FLAGS for SECONDARY TN, which warrant MRI and referral: sensory deficit on examination, bilateral pain, onset before age 40, or poor response to carbamazepine. Carbamazepine response supports the diagnosis clinically but is NOT an ICHD-3 criterion.',
+    criteria: [
+      // tn-A: suppress-gate (DROP). Anatomical substrate — unilateral trigeminal-
+      // distribution facial pain with no radiation beyond (§13.1.1 A + Note 1).
+      { id: 'tn-A', label: 'Unilateral pain in one or more trigeminal divisions, no radiation beyond', description: 'ICHD-3 13.1.1 A: recurrent paroxysms of unilateral facial pain in the distribution(s) of one or more divisions of the trigeminal nerve, with no radiation beyond.', evaluate: s => has(s, 'loc-unilateral') && has(s, 'loc-trigeminal-distribution'), contributingChips: ['loc-unilateral', 'loc-trigeminal-distribution'], role: 'suppress-gate' },
+      // tn-B: suppress-gate (DROP). ALL of: <=2 min, severe, shock/shooting/stabbing/
+      // sharp. No Probable-TN section, so a feature miss cannot demote — suppress.
+      { id: 'tn-B', label: 'Brief (up to 2 min), severe, electric-shock / shooting / stabbing pain', description: 'ICHD-3 13.1.1 B: pain has all of: 1) lasting a fraction of a second to 2 minutes, 2) severe intensity, 3) electric shock-like, shooting, stabbing or sharp in quality.', evaluate: s => has(s, 'dur-fraction-sec-to-2min') && has(s, 'sev-severe') && (has(s, 'qual-electric-shock-shooting') || has(s, 'qual-sharp-stabbing')), contributingChips: ['dur-fraction-sec-to-2min', 'sev-severe', 'qual-electric-shock-shooting', 'qual-sharp-stabbing'], role: 'suppress-gate' },
+      // tn-C: suppress-gate (DROP). The pathognomonic trigger (§13.1.1 C / Note 4).
+      { id: 'tn-C', label: 'Precipitated by innocuous stimuli in the affected area', description: 'ICHD-3 13.1.1 C: precipitated by innocuous stimuli within the affected trigeminal distribution. Required even when some attacks appear spontaneous (Note 4).', evaluate: s => has(s, 'trigger-innocuous-stimulus'), contributingChips: ['trigger-innocuous-stimulus'], role: 'suppress-gate' },
     ],
   },
 
