@@ -819,6 +819,14 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'ICHD-3 4.10 New daily persistent headache (NDPH): distinct and clearly-remembered onset of headache becoming continuous and unremitting within 24 h; present >3 months; not better accounted for by another ICHD-3 diagnosis. The defining feature is the patient pinpointing the moment the headache began and it never resolving since.',
   },
 
+  'clinic-headache-ichd3-primary-stabbing-criteria': {
+    id: 'clinic-headache-ichd3-primary-stabbing-criteria',
+    citation_ids: ['ichd3-2018'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    // ICHD-3 §4.7 added 2026-07-06 (evidence packet 2026-07-06-ichd3-4-7-primary-stabbing.md).
+    description: 'ICHD-3 4.7 Primary stabbing headache: spontaneous single stab or series of stabs; each stab lasts up to a few seconds (80% are 3 seconds or less); recurring irregularly from one to many per day; NO cranial autonomic symptoms (their presence steers to 3.3 SUNCT/SUNA); not better accounted for by another ICHD-3 diagnosis. §4.7.1 Probable = two only of the three characteristic criteria (seconds duration / irregular one-to-many per day / no autonomic).',
+  },
+
   'clinic-headache-tension-acute-management': {
     id: 'clinic-headache-tension-acute-management',
     citation_ids: ['bendtsen-efns-tth-2010', 'scher-tth-2024-continuum'],

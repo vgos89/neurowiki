@@ -314,6 +314,23 @@ export const CONDITIONAL_BRANCHES: ConditionalBranch[] = [
       ],
     },
   },
+  // Stabbing detail — fires when sharp/stabbing quality is reported (§4.7 primary stabbing).
+  {
+    id: 'b-stabbing',
+    fires: (s) => has(s, 'qual-sharp-stabbing'),
+    question: {
+      id: 'q-stabbing',
+      screen: 7,
+      eyebrow: 'Stabbing detail',
+      prompt: 'About the sharp, stabbing pains:',
+      select: 'multi',
+      options: [
+        { id: 'stab-spontaneous', label: 'They come on spontaneously, as a single stab or a series of stabs', chips: ['onset-spontaneous-stab'] },
+        { id: 'stab-seconds', label: 'Each stab lasts only up to a few seconds', chips: ['dur-stab-seconds'] },
+        { id: 'stab-freq', label: 'They recur irregularly, from one to many per day', chips: ['freq-stab-one-to-many-per-day'] },
+      ],
+    },
+  },
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

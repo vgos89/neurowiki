@@ -53,6 +53,7 @@ const CHAPTER_ORDER: readonly string[] = [
   'paroxysmal-hemicrania',   // §3.2
   'sunct-suna',              // §3.3
   'hemicrania-continua',     // §3.4
+  'primary-stabbing-headache', // §4.7
   'ndph',                    // §4.10
   'vestibular-migraine',     // §A1.6.6
 ];

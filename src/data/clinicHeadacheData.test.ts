@@ -1249,3 +1249,41 @@ it('returns empty array when no phenotype passes its gates (page renders no-matc
   expect(activeMatches.filter(m => m.matchStrength === 'probable').length).toBe(0);
   // Partial matches are acceptable — the page's "no full/probable match" state handles this.
 });
+
+describe('§4.7 Primary stabbing headache (Track C — new diagnosis)', () => {
+  it('full match: spontaneous stab + stabbing quality + seconds + 1-to-many/day + no autonomic', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'onset-spontaneous-stab', 'qual-sharp-stabbing',
+      'dur-stab-seconds', 'freq-stab-one-to-many-per-day',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'primary-stabbing-headache')?.matchStrength).toBe('full');
+  });
+
+  it('probable (§4.7.1): substrate + 2-of-3 (missing the seconds duration) → probable, displaySection §4.7.1', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'onset-spontaneous-stab', 'qual-sharp-stabbing',
+      'freq-stab-one-to-many-per-day', // psh-C ok; psh-B (dur-stab-seconds) missing → one demote miss
+    ));
+    const psh = matches.find(m => m.phenotypeId === 'primary-stabbing-headache');
+    expect(psh?.matchStrength).toBe('probable');
+    expect(psh?.displaySection).toContain('§4.7.1');
+  });
+
+  it('EMIT (set aside): cranial autonomic symptoms present → definitionallyExcluded, steer to SUNCT/SUNA', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'onset-spontaneous-stab', 'qual-sharp-stabbing',
+      'dur-stab-seconds', 'freq-stab-one-to-many-per-day',
+      'sym-autonomic-ipsilateral', // psh-D fails → EMIT
+    ));
+    const psh = matches.find(m => m.phenotypeId === 'primary-stabbing-headache');
+    expect(psh?.definitionallyExcluded).toBe(true);
+  });
+
+  it('psh-A suppress (DROP): stabbing quality without the spontaneous-stab substrate → absent', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'qual-sharp-stabbing', 'dur-stab-seconds', 'freq-stab-one-to-many-per-day',
+      // no onset-spontaneous-stab → psh-A fails (silent DROP)
+    ));
+    expect(matches.find(m => m.phenotypeId === 'primary-stabbing-headache')).toBeUndefined();
+  });
+});

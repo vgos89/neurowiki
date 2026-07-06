@@ -34,6 +34,8 @@ export type ChipId =
   | 'dur-4-to-72-hours' | 'dur-gt-72-hours' | 'dur-continuous'
   // Pattern: onset
   | 'onset-recurrent-same' | 'onset-new-within-3-months' | 'onset-single-sudden' | 'onset-abrupt-continuous-24h'
+  // §4.7 Primary stabbing headache
+  | 'onset-spontaneous-stab' | 'dur-stab-seconds' | 'freq-stab-one-to-many-per-day'
   // Pain location
   | 'loc-unilateral' | 'loc-bilateral' | 'loc-orbital-temporal'
   // Pain quality
@@ -107,6 +109,7 @@ export type PhenotypeId =
   | 'sunct-suna'                    // §3.3 — added 2026-05-25
   | 'hemicrania-continua'
   | 'probable-tac'
+  | 'primary-stabbing-headache'     // §4.7 — added 2026-07-06
   | 'ndph'
   | 'vestibular-migraine';
 
@@ -265,6 +268,10 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
       { id: 'onset-new-within-3-months', label: 'New onset in the last 3 months' },
       { id: 'onset-abrupt-continuous-24h', label: 'Clearly-remembered onset that became continuous within 24 hours', teachWhenSelected: '4.10 NDPH criterion B: a distinct, clearly-remembered onset with pain becoming continuous and unremitting within 24 hours. This is the NDPH signature that distinguishes it from a gradually-evolving chronic daily headache.' },
       { id: 'onset-single-sudden', label: 'Single sudden episode (first-ever)', teachWhenSelected: 'Single sudden attacks need workup. See red flags below.' },
+      // §4.7 Primary stabbing headache
+      { id: 'onset-spontaneous-stab', label: 'Pain comes on spontaneously as a single stab or series of stabs', teachWhenSelected: 'ICHD-3 4.7 A: head pain occurring spontaneously as a single stab or series of stabs.' },
+      { id: 'dur-stab-seconds', label: 'Each stab lasts up to a few seconds (usually 3 seconds or less)', teachWhenSelected: 'ICHD-3 4.7 B / Note 1: 80% of stabs last 3 seconds or less; rarely 10 to 120 seconds.' },
+      { id: 'freq-stab-one-to-many-per-day', label: 'Stabs recur irregularly, from one to many per day', teachWhenSelected: 'ICHD-3 4.7 C: stabs recur with irregular frequency, one to many per day.' },
     ],
   },
   {
@@ -733,6 +740,31 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
     ],
   },
 
+  // ─── 4.7 Primary stabbing headache ───────────────────────────────────────
+  // ICHD-3 §4.7 (with §4.7.1 Probable). Flat additive phenotype, encoded
+  // 2026-07-06 from the source-verified evidence packet (ICHD-3 PDF p. 53-54).
+  // Key discriminator: NO cranial autonomic symptoms (criterion D) — their
+  // presence steers to §3.3 SUNCT/SUNA, so psh-D is an EMIT suppress-gate
+  // ("considered and set aside") rather than a silent drop.
+  {
+    id: 'primary-stabbing-headache',
+    name: 'Primary stabbing headache',
+    ichd3Section: 'ICHD-3 §4.7',
+    teachPearl:
+      'Primary stabbing headache ("ice-pick" pains) is brief, spontaneous stabs lasting up to a few seconds (80% are 3 seconds or less), recurring irregularly from one to many per day, with NO cranial autonomic symptoms. Absence of autonomic features is the key discriminator from 3.3 SUNCT/SUNA. It is more common in people with migraine, where stabs localize to the habitual migraine site. Strictly localized stabs warrant excluding a structural lesion of the affected cranial nerve.',
+    criteria: [
+      // psh-A: suppress-gate (DROP). Substrate — spontaneous stab(s) of stabbing quality.
+      { id: 'psh-A', label: 'Spontaneous single stab or series of stabs', description: 'ICHD-3 4.7 A: head pain occurring spontaneously as a single stab or series of stabs, fulfilling B and C.', evaluate: s => has(s, 'onset-spontaneous-stab') && has(s, 'qual-sharp-stabbing'), contributingChips: ['onset-spontaneous-stab', 'qual-sharp-stabbing'], role: 'suppress-gate' },
+      // psh-B: demote-gate. §4.7.1 Probable ("two only of three") covers a single miss.
+      { id: 'psh-B', label: 'Each stab lasts up to a few seconds', description: 'ICHD-3 4.7 B: each stab lasts for up to a few seconds (80% are 3 seconds or less).', evaluate: s => has(s, 'dur-stab-seconds'), contributingChips: ['dur-stab-seconds'], role: 'demote-gate' },
+      // psh-C: demote-gate. §4.7.1 Probable covers a single miss.
+      { id: 'psh-C', label: 'Stabs recur irregularly, one to many per day', description: 'ICHD-3 4.7 C: stabs recur with irregular frequency, from one to many per day.', evaluate: s => has(s, 'freq-stab-one-to-many-per-day'), contributingChips: ['freq-stab-one-to-many-per-day'], role: 'demote-gate' },
+      // psh-D: suppress-gate (EMIT). Exclusion — cranial autonomic symptoms present is
+      // positive evidence for §3.3 SUNCT/SUNA; surface "considered and set aside."
+      { id: 'psh-D', label: 'No cranial autonomic symptoms', description: 'ICHD-3 4.7 D: no cranial autonomic symptoms. Their presence differentiates 3.3 SUNCT/SUNA from primary stabbing headache.', evaluate: s => !has(s, 'sym-autonomic-ipsilateral'), contributingChips: ['sym-autonomic-ipsilateral'], role: 'suppress-gate' },
+    ],
+  },
+
   // ─── A1.6.6 Vestibular migraine (appendix entity) ────────────────────────
   // ICHD-3 places Vestibular migraine at §A1.6.6 (§A1.6.5 is Alternating
   // hemiplegia of childhood). 2026-07-06 (A-M1): the Bárány/Lempert 2012
@@ -886,14 +918,17 @@ const PROBABLE_SECTION_FOR: Partial<Record<PhenotypeId, string>> = {
   'paroxysmal-hemicrania': 'ICHD-3 §3.5 Probable trigeminal autonomic cephalalgia',
   'sunct-suna': 'ICHD-3 §3.5 Probable trigeminal autonomic cephalalgia',
   'hemicrania-continua': 'ICHD-3 §3.5 Probable trigeminal autonomic cephalalgia',
+  // §4.7.1 is a real ICHD-3 Probable sub-form (unlike §4.10 NDPH, which has none).
+  'primary-stabbing-headache': 'ICHD-3 §4.7.1 Probable primary stabbing headache',
 };
 
 // ─── EMIT set — suppress gates that surface with definitionallyExcluded:true ─
 // tth-D, ctth-D, cm-C: positive-contradicting-evidence suppressions where
 // emitting "considered and set aside" is clinically useful.
+// psh-D: cranial autonomic symptoms present → set aside, steer to §3.3 SUNCT/SUNA.
 // All other suppress gates (aura-B, cm-A, ctth-A, sunct-C, hc-A, hc-D, ph-E,
-// ndph-A, ndph-B, vm-A, vm-B, vm-C, vm-D) DROP silently (substrate-absence).
-const EMIT_CRITERION_IDS = new Set<string>(['tth-D', 'ctth-D', 'cm-C']);
+// ndph-A, ndph-B, vm-A, vm-B, vm-C, vm-D, psh-A) DROP silently (substrate-absence).
+const EMIT_CRITERION_IDS = new Set<string>(['tth-D', 'ctth-D', 'cm-C', 'psh-D']);
 
 // ─── Dev-time invariant: every phenotype must have a suppression path ──────
 // Checked at module-load in dev (import.meta.env.DEV). Fails loudly if a
