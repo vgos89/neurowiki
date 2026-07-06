@@ -524,7 +524,7 @@ describe('Suppression rules (architect §17.1 Condition 3)', () => {
     const ndphMatches = evaluateHeadachePhenotypes(select(
       'dur-continuous',
       'pattern-ge-3-months',
-      'onset-new-within-3-months',
+      'onset-abrupt-continuous-24h',
     ));
     expect(ndphMatches.find(m => m.phenotypeId === 'ndph')).toBeDefined();
 
@@ -885,11 +885,21 @@ describe('SUPPRESS gates — failure drops the phenotype', () => {
     expect(matches.find(m => m.phenotypeId === 'ndph')).toBeUndefined();
   });
 
-  it('4.10 NDPH: full match with onset-new-within-3-months + continuous + ≥3 months', () => {
+  it('4.10 NDPH: full match with onset-abrupt-continuous-24h + continuous + ≥3 months', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'dur-continuous', 'pattern-ge-3-months', 'onset-abrupt-continuous-24h',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'ndph')?.matchStrength).toBe('full');
+  });
+
+  it('4.10 NDPH (A-M3): recency alone (onset-new-within-3-months, no clearly-remembered 24h onset) no longer satisfies ndph-B → absent', () => {
+    // §4.10 B requires a distinct, clearly-remembered onset becoming continuous within 24h.
+    // A long-standing continuous headache that is merely "new in the last 3 months" must
+    // not be called NDPH on recency alone. ndph-B (suppress-gate) drops it.
     const matches = evaluateHeadachePhenotypes(select(
       'dur-continuous', 'pattern-ge-3-months', 'onset-new-within-3-months',
     ));
-    expect(matches.find(m => m.phenotypeId === 'ndph')?.matchStrength).toBe('full');
+    expect(matches.find(m => m.phenotypeId === 'ndph')).toBeUndefined();
   });
 
   it('hemicrania continua: hc-A suppress (DROP) — not unilateral → absent', () => {

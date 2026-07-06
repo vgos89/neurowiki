@@ -33,7 +33,7 @@ export type ChipId =
   | 'dur-15-to-180-min' | 'dur-30min-to-7days'
   | 'dur-4-to-72-hours' | 'dur-gt-72-hours' | 'dur-continuous'
   // Pattern: onset
-  | 'onset-recurrent-same' | 'onset-new-within-3-months' | 'onset-single-sudden'
+  | 'onset-recurrent-same' | 'onset-new-within-3-months' | 'onset-single-sudden' | 'onset-abrupt-continuous-24h'
   // Pain location
   | 'loc-unilateral' | 'loc-bilateral' | 'loc-orbital-temporal'
   // Pain quality
@@ -238,8 +238,12 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
     chips: [
       { id: 'attacks-lt-5', label: 'Fewer than 5 lifetime attacks so far', teachWhenSelected: '1.1 Migraine requires ≥5 attacks. With <5, only 1.5 Probable migraine can apply.' },
       { id: 'attacks-ge-2', label: 'At least 2 lifetime attacks', teachWhenSelected: '§1.2 A Migraine with aura requires ≥2 attacks (fewer than for §1.1\'s ≥5).' },
-      { id: 'attacks-5-to-10', label: '5 to 10 lifetime attacks', teachWhenSelected: 'Meets the ≥5 attack criterion for 1.1 Migraine and 3.1 Cluster headache.' },
-      { id: 'attacks-gt-10', label: 'More than 10 lifetime attacks', teachWhenSelected: 'Meets the ≥10 episode criterion for 2.2 Episodic TTH and the ≥5 criterion for migraine.' },
+      // A-m4 (2026-07-06): boundary made non-overlapping at 10 so §2.2 TTH (≥10 episodes)
+      // is inclusive of exactly 10. The `attacks-5-to-10` id now means 5–9 and
+      // `attacks-gt-10` means ≥10 (per these labels + the question options); no evaluate
+      // logic changed (≥5/≥2 checks OR both, so their union is unaffected).
+      { id: 'attacks-5-to-10', label: '5 to 9 lifetime attacks', teachWhenSelected: 'Meets the ≥5 attack criterion for 1.1 Migraine and 3.1 Cluster headache.' },
+      { id: 'attacks-gt-10', label: '10 or more lifetime attacks', teachWhenSelected: 'Meets the ≥10 episode criterion for 2.2 Episodic TTH and the ≥5 criterion for migraine.' },
 
       { id: 'freq-1-4-per-month', label: '1 to 4 headache days per month' },
       { id: 'freq-5-14-per-month', label: '5 to 14 headache days per month' },
@@ -258,6 +262,7 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
 
       { id: 'onset-recurrent-same', label: 'Recurrent attacks with the same pattern' },
       { id: 'onset-new-within-3-months', label: 'New onset in the last 3 months' },
+      { id: 'onset-abrupt-continuous-24h', label: 'Clearly-remembered onset that became continuous within 24 hours', teachWhenSelected: '4.10 NDPH criterion B: a distinct, clearly-remembered onset with pain becoming continuous and unremitting within 24 hours. This is the NDPH signature that distinguishes it from a gradually-evolving chronic daily headache.' },
       { id: 'onset-single-sudden', label: 'Single sudden episode (first-ever)', teachWhenSelected: 'Single sudden attacks need workup. See red flags below.' },
     ],
   },
@@ -707,7 +712,11 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
       // NO §X.5 Probable counterpart in ICHD-3, so a single miss has no Probable
       // home — must suppress, not demote.
       // 2026-05-27 fix: onset-single-sudden dropped (thunderclap, not NDPH onset).
-      { id: 'ndph-B', label: 'Distinct, clearly-remembered onset; becomes continuous and unremitting within 24 hours', description: 'ICHD-3 4.10 B: distinct and clearly-remembered onset, with pain becoming continuous and unremitting within 24 hours. Confirm with patient that they can pinpoint the exact day or hour of onset.', evaluate: s => has(s, 'onset-new-within-3-months'), contributingChips: ['onset-new-within-3-months'], role: 'suppress-gate' },
+      // 2026-07-06 fix (A-M3): ndph-B now requires the actual §4.10 B signature
+      // (clearly-remembered onset becoming continuous within 24h) via
+      // `onset-abrupt-continuous-24h`, not mere recency (`onset-new-within-3-months`).
+      // Recency alone over-called NDPH against any long-standing continuous headache.
+      { id: 'ndph-B', label: 'Distinct, clearly-remembered onset; becomes continuous and unremitting within 24 hours', description: 'ICHD-3 4.10 B: distinct and clearly-remembered onset, with pain becoming continuous and unremitting within 24 hours. Confirm with patient that they can pinpoint the exact day or hour of onset.', evaluate: s => has(s, 'onset-abrupt-continuous-24h'), contributingChips: ['onset-abrupt-continuous-24h'], role: 'suppress-gate' },
     ],
   },
 

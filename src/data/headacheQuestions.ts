@@ -66,6 +66,7 @@ export const CORE_QUESTIONS: HeadacheQuestion[] = [
     options: [
       { id: 'recurrent', label: 'Separate attacks, the same pattern each time', chips: ['onset-recurrent-same'] },
       { id: 'new-3mo', label: 'New, started in the last 3 months', chips: ['onset-new-within-3-months'] },
+      { id: 'new-continuous-24h', label: 'New, with a clearly-remembered start that became constant within 24 hours', chips: ['onset-abrupt-continuous-24h', 'onset-new-within-3-months', 'dur-continuous'] },
       { id: 'single-sudden', label: 'One sudden, first-ever episode', chips: ['onset-single-sudden'] },
       { id: 'continuous', label: 'Continuous, never fully goes away', chips: ['dur-continuous'] },
     ],
@@ -107,8 +108,8 @@ export const CORE_QUESTIONS: HeadacheQuestion[] = [
     // attacks-ge-2 folded in for the migraine-with-aura floor (≥5 implies ≥2).
     options: [
       { id: 'c-lt5', label: 'Fewer than 5', chips: ['attacks-lt-5'] },
-      { id: 'c-5-10', label: '5 to 10', chips: ['attacks-5-to-10', 'attacks-ge-2'] },
-      { id: 'c-gt10', label: 'More than 10', chips: ['attacks-gt-10', 'attacks-ge-2'] },
+      { id: 'c-5-10', label: '5 to 9', chips: ['attacks-5-to-10', 'attacks-ge-2'] },
+      { id: 'c-gt10', label: '10 or more', chips: ['attacks-gt-10', 'attacks-ge-2'] },
     ],
   },
   {
