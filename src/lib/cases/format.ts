@@ -88,7 +88,7 @@ export function formatSavedCaseAsEmrText(c: SavedCase): string {
 
   // ── Header ─────────────────────────────────────────────────────────
   if (data.nihss) {
-    blocks.push(`NIHSS — ${data.nihss.score} (${nihssSeverityBracket(data.nihss.score)})`);
+    blocks.push(`NIHSS: ${data.nihss.score} (${nihssSeverityBracket(data.nihss.score)})`);
   } else {
     // Generic — read headline from payload, fall back to source.title
     const headline = pickGenericHeadline(data);

@@ -95,6 +95,27 @@ const PATTERNS = {
 // ────────────────────────────────────────────────────────────────────────────
 
 /**
+ * Extract multi-line template literals (backtick strings spanning >1 line).
+ * Single-line strings are handled by the per-line pass; this closes the gap
+ * for multi-line `content` template bodies (guideContent, SEO descriptions).
+ * Interpolations (${...}) stay in the text, so em-dashes in composed copy like
+ * `${name} — ${category}` are caught too. Line = template start line.
+ */
+function extractMultilineTemplates(src) {
+  const out = [];
+  const re = /`(?:[^`\\]|\\.)*`/g;
+  let m;
+  while ((m = re.exec(src)) !== null) {
+    const content = m[0].slice(1, -1);
+    if (!content.includes('\n')) continue;   // single-line handled elsewhere
+    if (content.length < 10) continue;
+    const line = src.slice(0, m.index).split('\n').length;
+    out.push({ line, text: content });
+  }
+  return out;
+}
+
+/**
  * For trialData.ts and trial-questions.ts: extract VALUE STRINGS only.
  * Skip comments, skip imports, skip field-name identifiers.
  */
@@ -117,6 +138,7 @@ function extractDataStrings(src) {
       out.push({ line: i + 1, text: str });
     }
   }
+  out.push(...extractMultilineTemplates(src));
   return out;
 }
 
@@ -158,8 +180,34 @@ function extractJsxStrings(src) {
       out.push({ line: i + 1, text: trimmed });
     }
   }
+  out.push(...extractMultilineTemplates(src));
   return out;
 }
+
+/**
+ * Blank out block comments (/* ... *\/ and JSX {/* ... *\/}) while preserving
+ * line numbers, so multi-line comment interiors are never mistaken for prose.
+ * Line comments (//) are still stripped per-line inside the extractors.
+ */
+function stripBlockComments(src) {
+  return src.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '));
+}
+
+// Strings that legitimately contain an em-dash and are exempt from the
+// em-dash-banned rule (NOT AI-tell prose): code-coupled switch/case keys,
+// verbatim external quotes, and signature/byline dashes. Match is on the exact
+// extracted string (trimmed).
+const EMDASH_ALLOWLIST = new Set([
+  // EvtPathway criteriaName values that double as getEvidenceBadge() switch keys
+  'Very Large Core (>100 mL) — Outside Trial Ceiling',
+  'Dominant M2 (DVO), >6h — IDD',
+  'Selected MeVO (DVO) — Dominant M2, 0–6h',
+  // EmBillingCalculator: verbatim CMS teaching-physician policy quote
+  'The teaching physician may review and verify — not re-document — information recorded by the resident or student.',
+  // EmBillingCalculator: attestation signature bylines (em-dash = signature dash)
+  '\\n— ${providerDisplayName}',
+  '\\n— [Attending Physician: search NPI above to populate]',
+]);
 
 // ────────────────────────────────────────────────────────────────────────────
 // Detection
@@ -224,10 +272,29 @@ const TARGETS = [
   { path: 'src/data/trialListData.ts', extractor: extractDataStrings },
   { path: 'src/data/trialCatalogMeta.ts', extractor: extractDataStrings },
   { path: 'src/data/trial-questions.ts', extractor: extractDataStrings },
+  { path: 'src/data/clinicalSynthesesByQuestion.ts', extractor: extractDataStrings },
   { path: 'src/data/strokeClinicalPearls.ts', extractor: extractDataStrings },
   { path: 'src/data/guideContent.ts', extractor: extractDataStrings },
+  { path: 'src/seo/schema.ts', extractor: extractDataStrings },
+  { path: 'src/seo/routeMeta.ts', extractor: extractDataStrings },
+  { path: 'src/config/routeManifest.ts', extractor: extractDataStrings },
+  { path: 'src/lib/cases/format.ts', extractor: extractDataStrings },
   { path: 'src/pages/QuestionDetailPage.tsx', extractor: extractJsxStrings },
   { path: 'src/pages/TrialsPage.tsx', extractor: extractJsxStrings },
+  { path: 'src/pages/trials/TrialPageNew.tsx', extractor: extractJsxStrings },
+  { path: 'src/pages/EvtPathway.tsx', extractor: extractJsxStrings },
+  { path: 'src/pages/ExtendedIVTPathway.tsx', extractor: extractJsxStrings },
+  { path: 'src/pages/StatusEpilepticusPathway.tsx', extractor: extractJsxStrings },
+  { path: 'src/pages/ElanPathway.tsx', extractor: extractJsxStrings },
+  { path: 'src/pages/MigrainePathway.tsx', extractor: extractJsxStrings },
+  { path: 'src/pages/MrsCalculator.tsx', extractor: extractJsxStrings },
+  { path: 'src/pages/IchScoreCalculator.tsx', extractor: extractJsxStrings },
+  { path: 'src/pages/HeidelbergBleedingCalculator.tsx', extractor: extractJsxStrings },
+  { path: 'src/pages/HasBledScoreCalculator.tsx', extractor: extractJsxStrings },
+  { path: 'src/pages/NihssCalculator.tsx', extractor: extractJsxStrings },
+  { path: 'src/pages/GlasgowComaScaleCalculator.tsx', extractor: extractJsxStrings },
+  { path: 'src/pages/Abcd2ScoreCalculator.tsx', extractor: extractJsxStrings },
+  { path: 'src/pages/EmBillingCalculator.tsx', extractor: extractJsxStrings },
 ];
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -243,11 +310,13 @@ console.log('[check-humanizer] Scanning per humanizer skill v2 rules...\n');
 for (const { path, extractor } of TARGETS) {
   const abs = resolve(ROOT, path);
   if (!existsSync(abs)) continue;
-  const src = readFileSync(abs, 'utf8');
+  const src = stripBlockComments(readFileSync(abs, 'utf8'));
   const strings = extractor(src);
   const fileFindings = [];
   for (const { line, text } of strings) {
+    const allowed = EMDASH_ALLOWLIST.has(text.trim());
     for (const f of detect(text)) {
+      if (f.rule === 'em-dash-banned' && allowed) continue;
       fileFindings.push({ line, ...f });
     }
   }

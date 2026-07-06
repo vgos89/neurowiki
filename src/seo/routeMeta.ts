@@ -13,7 +13,7 @@ const QUESTION_ROUTE_META: Record<string, Pick<MetaData, 'title' | 'description'
   },
   'late-window-selection': {
     title: 'Perfusion vs Non-Contrast CT for Late-Window EVT · NeuroWiki',
-    description: 'How to select patients for late-window EVT — perfusion mismatch (DAWN, DEFUSE-3) versus plain-CT large-core approach (LASTE, TENSION, SELECT2).',
+    description: 'How to select patients for late-window EVT: perfusion mismatch (DAWN, DEFUSE-3) versus plain-CT large-core approach (LASTE, TENSION, SELECT2).',
     keywords: 'late window EVT selection, perfusion imaging thrombectomy, DAWN trial, DEFUSE-3, late window stroke, non-contrast CT EVT selection',
   },
   'aspiration-vs-stentriever': {
@@ -27,13 +27,13 @@ const QUESTION_ROUTE_META: Record<string, Pick<MetaData, 'title' | 'description'
     keywords: 'EVT adjunct therapy, nerinetide ESCAPE-NA1, CHOICE trial IA alteplase, RESCUE BT tirofiban, neuroprotection thrombectomy, adjunct EVT pharmacotherapy',
   },
   'minor-stroke-choice': {
-    title: 'Minor Stroke — tPA, DAPT, or Aspirin? · NeuroWiki',
+    title: 'Minor Stroke: tPA, DAPT, or Aspirin? · NeuroWiki',
     description: 'PRISMS, ARAMIS, CHANCE, POINT, and INSPIRES define the evidence for treating minor non-disabling ischemic stroke without thrombolysis.',
     keywords: 'minor stroke treatment, non-disabling stroke tPA, PRISMS trial, ARAMIS trial, CHANCE DAPT minor stroke, minor stroke thrombolysis DAPT',
   },
   'mevo-distal-evt': {
     title: 'EVT for MeVO or Distal Occlusion · NeuroWiki',
-    description: 'ESCAPE-MeVO and DISTAL — the first two RCTs in medium-vessel and distal occlusions — both failed their primary endpoints. Evidence summary.',
+    description: 'ESCAPE-MeVO and DISTAL (the first two RCTs in medium-vessel and distal occlusions) both failed their primary endpoints. Evidence summary.',
     keywords: 'MeVO EVT, distal occlusion thrombectomy, ESCAPE-MeVO trial, DISTAL trial, medium vessel occlusion, M2 M3 EVT, distal EVT evidence',
   },
   'post-evt-bp-target': {
@@ -101,7 +101,7 @@ const QUESTION_ROUTE_META: Record<string, Pick<MetaData, 'title' | 'description'
   },
   'pfo-closure-cryptogenic': {
     title: 'PFO Closure for Cryptogenic Stroke · NeuroWiki',
-    description: 'Three NEJM 2017 RCTs — CLOSE, RESPECT long-term, REDUCE — established benefit of PFO closure for cryptogenic stroke, with excess atrial fibrillation as the trade-off.',
+    description: 'Three NEJM 2017 RCTs (CLOSE, RESPECT long-term, REDUCE) established benefit of PFO closure for cryptogenic stroke, with excess atrial fibrillation as the trade-off.',
     keywords: 'PFO closure stroke, cryptogenic stroke, CLOSE trial, RESPECT trial, REDUCE trial, patent foramen ovale, PFO recurrent stroke prevention',
   },
   'asymptomatic-carotid': {
@@ -138,7 +138,7 @@ function buildTrialMeta(pathname: string, slug: string): MetaData | null {
 
   return {
     ...DEFAULT_META,
-    title: `${trial.name} — ${categoryNames[trial.category]} | NeuroWiki`,
+    title: `${trial.name}: ${categoryNames[trial.category]} | NeuroWiki`,
     description,
     keywords: `${trial.name} trial, ${trial.name} stroke trial, ${trial.name} results, ${categoryNames[trial.category].toLowerCase()}, stroke clinical trial summary`,
   };
@@ -169,7 +169,7 @@ export const getRouteMeta = (pathname: string): MetaData => {
     const title = questionId.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
     return {
       ...DEFAULT_META,
-      title: `${title} — Clinical Question | NeuroWiki`,
+      title: `${title}: Clinical Question | NeuroWiki`,
       description: `Evidence summary for the clinical question: ${title}. Stroke trials curated by NeuroWiki.`,
     };
   }
