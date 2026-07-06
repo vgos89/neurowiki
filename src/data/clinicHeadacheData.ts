@@ -284,7 +284,7 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
       { id: 'sev-severe', label: 'Severe intensity', teachWhenSelected: '1.1 C feature 3 (migraine) at severe; 3.1 B (cluster).' },
       { id: 'sev-very-severe', label: 'Very severe intensity', teachWhenSelected: '3.1 B Cluster: severe or very severe pain.' },
 
-      { id: 'act-aggravated', label: 'Aggravated by or causing avoidance of routine activity', teachWhenSelected: '1.1 C feature 4 (migraine).' },
+      { id: 'act-aggravated', label: 'Aggravated by or causing avoidance of routine activity', teachWhenSelected: '1.1 C feature 4 (migraine). Also satisfies 3.4 Hemicrania continua criterion C.2 (aggravation of pain by movement).' },
       { id: 'act-not-aggravated', label: 'Not aggravated by routine activity', teachWhenSelected: '2.2 C feature 4 (TTH).' },
     ],
   },
@@ -687,7 +687,13 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
       // hc-C: demote-gate. §3.4 C is an A–D criterion; §3.5.4 covers single miss.
       // Not positive evidence for another phenotype → demote (was definitional:true).
       // Clinical-reviewer §17.2 confirms demote is correct for autonomic/restlessness.
-      { id: 'hc-C', label: 'Ipsilateral autonomic features OR restlessness/movement aggravation', description: 'ICHD-3 3.4 C: ipsilateral cranial autonomic symptoms and/or restlessness or aggravation by movement.', evaluate: s => has(s, 'sym-autonomic-ipsilateral') || has(s, 'sym-restlessness'), contributingChips: ['sym-autonomic-ipsilateral', 'sym-restlessness'], role: 'demote-gate' },
+      // 2026-07-06 fix (A-m6): §3.4 C.2 is "restlessness/agitation OR aggravation of
+      // pain by movement." The label/description already promised the movement clause;
+      // now the logic honors it via the existing `act-aggravated` chip (surfaced as
+      // "Makes it worse, or makes them avoid activity"). Regression-safe: the other HC
+      // gates (hc-A unilateral+continuous+>3mo, hc-D indomethacin) prevent any migraine
+      // patient who ticked `act-aggravated` from spuriously matching HC.
+      { id: 'hc-C', label: 'Ipsilateral autonomic features OR restlessness/movement aggravation', description: 'ICHD-3 3.4 C: ipsilateral cranial autonomic symptoms and/or restlessness or aggravation by movement.', evaluate: s => has(s, 'sym-autonomic-ipsilateral') || has(s, 'sym-restlessness') || has(s, 'act-aggravated'), contributingChips: ['sym-autonomic-ipsilateral', 'sym-restlessness', 'act-aggravated'], role: 'demote-gate' },
       // hc-D: suppress-gate (DROP via the gate). Absent confirmatory test, double-
       // enforced by hiddenUntilTrial gate. Both checks are idempotent (arch §17.1).
       { id: 'hc-D', label: 'Absolute response to therapeutic-dose indomethacin', description: 'ICHD-3 3.4 D: suppress-gate. Complete indomethacin response is required.', evaluate: s => has(s, 'indo-tried-complete'), contributingChips: ['indo-tried-complete'], role: 'suppress-gate' },

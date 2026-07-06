@@ -921,6 +921,18 @@ describe('SUPPRESS gates — failure drops the phenotype', () => {
     expect(matches.find(m => m.phenotypeId === 'hemicrania-continua')).toBeUndefined();
   });
 
+  it('§3.4 HC (A-m6): hc-C satisfied via movement aggravation (act-aggravated) with no autonomic/restlessness → full match', () => {
+    // §3.4 C.2 = "restlessness/agitation OR aggravation of pain by movement." A patient
+    // whose only C-feature is movement-aggravation must still reach full HC.
+    const matches = evaluateHeadachePhenotypes(select(
+      'indo-tried-complete',
+      'loc-unilateral', 'dur-continuous', 'pattern-ge-3-months', // hc-A
+      'sev-moderate',                                            // hc-B
+      'act-aggravated',                                          // hc-C via C.2 movement clause
+    ));
+    expect(matches.find(m => m.phenotypeId === 'hemicrania-continua')?.matchStrength).toBe('full');
+  });
+
   it('PH indomethacin gate: absent without indo-tried-complete (H11)', () => {
     const matches = evaluateHeadachePhenotypes(select(
       'attacks-ge-20', 'loc-unilateral', 'loc-orbital-temporal', 'sev-severe',
