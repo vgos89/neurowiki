@@ -275,9 +275,10 @@ describe('evaluateHeadachePhenotypes', () => {
   describe('appendix labelling — vestibular migraine', () => {
     it('marks vestibular migraine as isAppendix=true', () => {
       const matches = evaluateHeadachePhenotypes(select(
-        'vest-vertigo-migrainous',
+        'vest-vertigo-migrainous', 'vest-episodes-ge-5',
         'migraine-history-established',
-        'sym-photophobia',
+        'vest-intensity-mod-severe', 'vest-duration-5min-72h',
+        'vest-migrainous-half',
       ));
       const vm = matches.find(m => m.phenotypeId === 'vestibular-migraine');
       expect(vm?.isAppendix).toBe(true);
@@ -715,15 +716,49 @@ describe('SUPPRESS gates — failure drops the phenotype', () => {
     expect(matches.find(m => m.phenotypeId === 'vestibular-migraine')).toBeUndefined();
   });
 
-  it('vestibular migraine surfaces when vest-vertigo-migrainous + migraine-history-established + ≥1 migraine feature', () => {
-    // Updated: migraine-history-established is now required (vm-history suppress-gate).
-    // This is the corrected version of the old "VM surfaces on vertigo + phonophobia" test.
+  it('vestibular migraine surfaces (full) only when all four A1.6.6 criteria met (A-M1)', () => {
+    // A-M1: full A1.6.6 encoding. All four criteria (A ≥5 episodes, B migraine history,
+    // C moderate/severe + 5min-72h, D ≥50% episodes with a migraine feature) are
+    // suppress-gates, so VM appears only when the complete picture is affirmed.
     const matches = evaluateHeadachePhenotypes(select(
-      'vest-vertigo-migrainous',
-      'migraine-history-established',
-      'sym-phonophobia',
+      'vest-vertigo-migrainous', 'vest-episodes-ge-5', // vm-A
+      'migraine-history-established',                   // vm-B
+      'vest-intensity-mod-severe', 'vest-duration-5min-72h', // vm-C
+      'vest-migrainous-half',                           // vm-D
     ));
-    expect(matches.find(m => m.phenotypeId === 'vestibular-migraine')).toBeDefined();
+    const vm = matches.find(m => m.phenotypeId === 'vestibular-migraine');
+    expect(vm?.matchStrength).toBe('full');
+  });
+
+  it('A-M1: VM absent with <5 episodes (vm-A count gate) even if intensity/duration/feature/history all present', () => {
+    // Fixes the pre-A-M1 over-call: vertigo + a single feature used to surface VM.
+    const matches = evaluateHeadachePhenotypes(select(
+      'vest-vertigo-migrainous',                        // vertigo present but NO vest-episodes-ge-5
+      'migraine-history-established',
+      'vest-intensity-mod-severe', 'vest-duration-5min-72h',
+      'vest-migrainous-half',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'vestibular-migraine')).toBeUndefined();
+  });
+
+  it('A-M1: VM absent without moderate/severe intensity + 5min-72h duration (vm-C gate)', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'vest-vertigo-migrainous', 'vest-episodes-ge-5',
+      'migraine-history-established',
+      // no vest-intensity-mod-severe, no vest-duration-5min-72h → vm-C fails
+      'vest-migrainous-half',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'vestibular-migraine')).toBeUndefined();
+  });
+
+  it('A-M1: VM absent without the ≥50%-episodes migraine-feature link (vm-D gate) — closes the old feature-conflation over-call', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'vest-vertigo-migrainous', 'vest-episodes-ge-5',
+      'migraine-history-established',
+      'vest-intensity-mod-severe', 'vest-duration-5min-72h',
+      'sym-photophobia', 'sym-phonophobia', // headache-attack photo/phono is NOT the vestibular-episode ≥50% link
+    ));
+    expect(matches.find(m => m.phenotypeId === 'vestibular-migraine')).toBeUndefined();
   });
 
   // ── §1.1 minimum-evidence floor tests ───────────────────────────────────

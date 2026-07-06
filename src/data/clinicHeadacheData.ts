@@ -57,6 +57,7 @@ export type ChipId =
   | 'aura-symptom-unilateral'
   // Vestibular
   | 'vest-vertigo-migrainous' | 'vest-motion-sensitivity'
+  | 'vest-episodes-ge-5' | 'vest-intensity-mod-severe' | 'vest-duration-5min-72h' | 'vest-migrainous-half'
   | 'migraine-history-established'
   // Indomethacin response (hemicrania continua gate)
   | 'indo-not-tried' | 'indo-tried-complete' | 'indo-tried-partial' | 'indo-tried-no-response'
@@ -329,13 +330,19 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
   {
     id: 'vestibular',
     label: 'Vestibular features',
-    eyebrow: 'Vestibular migraine (ICHD-3 Appendix A1.6.5) is research criteria. Treat as a possibility, not a primary classification.',
+    eyebrow: 'Vestibular migraine (ICHD-3 Appendix A1.6.6) is research criteria. Treat as a possibility, not a primary classification.',
     defaultCollapsed: true,
     chips: [
       { id: 'vest-vertigo-migrainous', label: 'Vertigo episodes with migrainous symptoms (photophobia, phonophobia, visual aura)' },
       { id: 'vest-motion-sensitivity', label: 'Motion sensitivity between episodes' },
-      // New chip: A1.6.6 criterion B — established migraine history (suppress gate
-      // for vestibular migraine; substrate-defining). Added 2026-06-04.
+      // A1.6.6 quantitative gates added 2026-07-06 (A-M1) from the source-verified
+      // §A1.6.6 criteria (Bárány/Lempert 2012, adopted verbatim into ICHD-3 2018).
+      { id: 'vest-episodes-ge-5', label: 'At least 5 separate vertigo or dizziness episodes', teachWhenSelected: 'ICHD-3 A1.6.6 criterion A: at least five episodes, each fulfilling criteria C (intensity + duration) and D (migraine features).' },
+      { id: 'vest-intensity-mod-severe', label: 'Vertigo is moderate (interferes with daily activity) or severe (stops daily activity)', teachWhenSelected: 'ICHD-3 A1.6.6 criterion C / Note 3: moderate = interferes with but does not prevent daily activities; severe = daily activities cannot be continued. Mild vertigo does not qualify.' },
+      { id: 'vest-duration-5min-72h', label: 'Each vertigo episode lasts from 5 minutes to 72 hours', teachWhenSelected: 'ICHD-3 A1.6.6 criterion C / Note 4: episode duration 5 minutes to 72 hours (seconds-long recurrent attacks are summed as the total window during which they recur).' },
+      { id: 'vest-migrainous-half', label: 'At least half of the vertigo episodes come with a migraine feature (a migraine-type headache with ≥2 typical features, both light and sound sensitivity together, or visual aura)', teachWhenSelected: 'ICHD-3 A1.6.6 criterion D: ≥50% of episodes accompanied by ≥1 of: migraine-type headache (≥2 of unilateral, pulsating, moderate/severe, activity-aggravated); photophobia AND phonophobia together; or visual aura.' },
+      // A1.6.6 criterion B — established migraine history (suppress gate for VM;
+      // substrate-defining). Added 2026-06-04.
       { id: 'migraine-history-established', label: 'Established current or past history of migraine (with or without aura)', teachWhenSelected: 'ICHD-3 A1.6.6 criterion B: vestibular migraine requires an established 1.1/1.2 migraine diagnosis; distinguishes it from BPPV, Menière, vestibular paroxysmia.' },
     ],
   },
@@ -727,32 +734,38 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
   },
 
   // ─── A1.6.6 Vestibular migraine (appendix entity) ────────────────────────
-  // ICHD-3 places Vestibular migraine at §A1.6.6. §A1.6.5 is Alternating
-  // hemiplegia of childhood. Section relabel per medsci audit (2026-05-25).
-  // Full Bárány/Lempert 2012 criteria expansion is deferred pending source
-  // retrieval; A1.6.6 criterion B (migraine history) added 2026-06-04.
+  // ICHD-3 places Vestibular migraine at §A1.6.6 (§A1.6.5 is Alternating
+  // hemiplegia of childhood). 2026-07-06 (A-M1): the Bárány/Lempert 2012
+  // criteria, adopted verbatim into ICHD-3 2018 §A1.6.6, are now fully encoded
+  // from the source-verified evidence packet. All four core criteria are
+  // suppress-gates (A ≥5 episodes, B migraine history, C moderate/severe +
+  // 5min-72h, D ≥50% of episodes with a migraine feature): VM surfaces only
+  // when the full picture is affirmed, else it is hidden. This closes the prior
+  // over-call (VM fired on vertigo + a single symptom chip) and the
+  // photophobia-OR-phonophobia error (criterion D requires photophobia AND
+  // phonophobia). Probable VM (§A1.6.6.1) is a separate future entity (Track C).
   {
     id: 'vestibular-migraine',
     name: 'Vestibular migraine',
     ichd3Section: 'ICHD-3 Appendix §A1.6.6',
     isAppendix: true,
     teachPearl:
-      'Vestibular migraine lives in the ICHD-3 appendix as research criteria, not main classification. Diagnostic features: ≥5 vertigo episodes of moderate or severe intensity lasting 5 minutes to 72 hours, current or past history of 1.1/1.2 migraine, and ≥1 migraine feature (headache, photophobia/phonophobia, visual aura) during at least half of the vertigo episodes. The Bárány Society / IHS joint criteria are widely used clinically despite appendix status.',
+      'Vestibular migraine lives in the ICHD-3 appendix as research criteria, not main classification. All four criteria are required: (A) at least 5 vertigo episodes; (B) a current or past history of 1.1/1.2 migraine; (C) moderate or severe intensity lasting 5 minutes to 72 hours; (D) a migraine feature (migraine-type headache, photophobia AND phonophobia, or visual aura) during at least half of the episodes. The Bárány Society / IHS joint criteria are widely used clinically despite appendix status.',
     criteria: [
-      // vm-A: suppress-gate (DROP). Vertigo substrate. No vertigo = not vestibular
-      // migraine. Closes V-reported false-positive (2026-05-27).
-      { id: 'vm-A', label: 'Vertigo episodes with migrainous symptoms', description: 'Appendix A1.6.6: vertigo episodes accompanied by migraine features (photophobia, phonophobia, visual aura, headache).', evaluate: s => has(s, 'vest-vertigo-migrainous'), contributingChips: ['vest-vertigo-migrainous'], role: 'suppress-gate' },
-      // vm-B: scorable. This is actually ICHD-3 A1.6.6 criterion C (associated
-      // migrainous features during episodes), mislabeled "B" historically.
-      // Label/description corrected 2026-06-04 (medsci spec §4c, MED-2).
-      // evaluate + contributingChips unchanged; role stays scorable.
-      { id: 'vm-B', label: 'Migrainous features during ≥50% of vertigo episodes (A1.6.6 C)', description: 'Appendix A1.6.6 criterion C: at least one migrainous feature (headache with migraine characteristics, photophobia/phonophobia, or visual aura) present during ≥50% of vestibular episodes.', evaluate: s => has(s, 'sym-photophobia') || has(s, 'sym-phonophobia') || has(s, 'aura-visual'), contributingChips: ['sym-photophobia', 'sym-phonophobia', 'aura-visual'], role: 'scorable' },
-      // vm-history: suppress-gate (DROP). NEW criterion 2026-06-04.
-      // A1.6.6 criterion B — established migraine history. The feature that
-      // distinguishes VM from BPPV, Menière, vestibular paroxysmia. Substrate-
-      // defining; no §X.5 VM home. DROP on failure (substrate-absence, consistent
-      // with vm-A). Clinical-reviewer §17.2 condition 4 confirms DROP.
-      { id: 'vm-history', label: 'Current or past history of 1.1 or 1.2 migraine', description: 'ICHD-3 A1.6.6 B: a current or past history of 1.1 Migraine without aura or 1.2 Migraine with aura.', evaluate: s => has(s, 'migraine-history-established'), contributingChips: ['migraine-history-established'], role: 'suppress-gate' },
+      // vm-A: ICHD-3 A1.6.6 criterion A — ≥5 vestibular episodes (vertigo substrate
+      // present). suppress-gate (DROP): no vertigo or <5 episodes = not VM.
+      { id: 'vm-A', label: 'At least 5 vertigo/dizziness episodes', description: 'ICHD-3 A1.6.6 A: at least five episodes of vestibular symptoms, each fulfilling criteria C and D.', evaluate: s => has(s, 'vest-vertigo-migrainous') && has(s, 'vest-episodes-ge-5'), contributingChips: ['vest-vertigo-migrainous', 'vest-episodes-ge-5'], role: 'suppress-gate' },
+      // vm-B: ICHD-3 A1.6.6 criterion B — established migraine history. suppress-gate
+      // (DROP). The discriminator from BPPV / Menière / vestibular paroxysmia.
+      { id: 'vm-B', label: 'Current or past history of 1.1 or 1.2 migraine', description: 'ICHD-3 A1.6.6 B: a current or past history of 1.1 Migraine without aura or 1.2 Migraine with aura.', evaluate: s => has(s, 'migraine-history-established'), contributingChips: ['migraine-history-established'], role: 'suppress-gate' },
+      // vm-C: ICHD-3 A1.6.6 criterion C — moderate/severe intensity, 5 min–72 h
+      // (Notes 3–4). suppress-gate (DROP): the anti-over-call intensity/duration gate.
+      { id: 'vm-C', label: 'Moderate or severe vertigo lasting 5 minutes to 72 hours', description: 'ICHD-3 A1.6.6 C: vestibular symptoms of moderate (interferes with daily activity) or severe (prevents daily activity) intensity, lasting between 5 minutes and 72 hours.', evaluate: s => has(s, 'vest-intensity-mod-severe') && has(s, 'vest-duration-5min-72h'), contributingChips: ['vest-intensity-mod-severe', 'vest-duration-5min-72h'], role: 'suppress-gate' },
+      // vm-D: ICHD-3 A1.6.6 criterion D — ≥50% of episodes with ≥1 migraine feature.
+      // suppress-gate (DROP). The VM-specific composite chip fixes the prior
+      // photophobia-OR-phonophobia error and the headache-attack vs vertigo-episode
+      // conflation (criterion D is about the vertigo episodes, not headache attacks).
+      { id: 'vm-D', label: 'Migraine features during at least half of the vertigo episodes', description: 'ICHD-3 A1.6.6 D: at least half of episodes accompanied by ≥1 migraine feature: migraine-type headache (≥2 of unilateral, pulsating, moderate/severe, activity-aggravated), photophobia AND phonophobia together, or visual aura.', evaluate: s => has(s, 'vest-migrainous-half'), contributingChips: ['vest-migrainous-half'], role: 'suppress-gate' },
     ],
   },
 
@@ -879,7 +892,7 @@ const PROBABLE_SECTION_FOR: Partial<Record<PhenotypeId, string>> = {
 // tth-D, ctth-D, cm-C: positive-contradicting-evidence suppressions where
 // emitting "considered and set aside" is clinically useful.
 // All other suppress gates (aura-B, cm-A, ctth-A, sunct-C, hc-A, hc-D, ph-E,
-// ndph-A, ndph-B, vm-A, vm-history) DROP silently (substrate-absence).
+// ndph-A, ndph-B, vm-A, vm-B, vm-C, vm-D) DROP silently (substrate-absence).
 const EMIT_CRITERION_IDS = new Set<string>(['tth-D', 'ctth-D', 'cm-C']);
 
 // ─── Dev-time invariant: every phenotype must have a suppression path ──────
@@ -1007,7 +1020,7 @@ export function evaluateHeadachePhenotypes(selected: Set<ChipId>): PhenotypeMatc
         });
       }
       // DROP — substrate-absence (aura-B, cm-A, ctth-A, sunct-C, hc-A, hc-D,
-      // ph-E, ndph-A, ndph-B, vm-A, vm-history): continue silently.
+      // ph-E, ndph-A, ndph-B, vm-A, vm-B, vm-C, vm-D): continue silently.
       continue;
     }
 
