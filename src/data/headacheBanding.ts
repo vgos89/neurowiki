@@ -47,6 +47,7 @@ const CHAPTER_ORDER: readonly string[] = [
   'migraine-without-aura',   // §1.1
   'migraine-with-aura',      // §1.2
   'chronic-migraine',        // §1.3
+  'status-migrainosus',      // §1.4.1
   'episodic-tth',            // §2.2
   'chronic-tth',             // §2.3
   'cluster-headache',        // §3.1

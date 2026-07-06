@@ -827,6 +827,14 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'ICHD-3 4.7 Primary stabbing headache: spontaneous single stab or series of stabs; each stab lasts up to a few seconds (80% are 3 seconds or less); recurring irregularly from one to many per day; NO cranial autonomic symptoms (their presence steers to 3.3 SUNCT/SUNA); not better accounted for by another ICHD-3 diagnosis. §4.7.1 Probable = two only of the three characteristic criteria (seconds duration / irregular one-to-many per day / no autonomic).',
   },
 
+  'clinic-headache-ichd3-status-migrainosus-criteria': {
+    id: 'clinic-headache-ichd3-status-migrainosus-criteria',
+    citation_ids: ['ichd3-2018'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    // ICHD-3 §1.4.1 added 2026-07-06 (evidence packet 2026-07-06-ichd3-1-4-1-status-migrainosus.md).
+    description: 'ICHD-3 1.4.1 Status migrainosus: a debilitating migraine attack lasting more than 72 hours in a patient with established 1.1/1.2 migraine, typical of previous attacks except for its duration and severity; remissions of up to 12 h (medication or sleep) allowed; milder (non-debilitating) cases are coded 1.5.1 Probable migraine without aura; if 8.2 Medication-overuse headache criteria are met, code MOH plus the migraine type instead of 1.4.1.',
+  },
+
   'clinic-headache-tension-acute-management': {
     id: 'clinic-headache-tension-acute-management',
     citation_ids: ['bendtsen-efns-tth-2010', 'scher-tth-2024-continuum'],

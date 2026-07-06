@@ -314,6 +314,22 @@ export const CONDITIONAL_BRANCHES: ConditionalBranch[] = [
       ],
     },
   },
+  // Prolonged attack (>72 h) — fires when the duration is >72 h (§1.4.1 status migrainosus).
+  {
+    id: 'b-status-migrainosus',
+    fires: (s) => has(s, 'dur-gt-72-hours'),
+    question: {
+      id: 'q-status-migrainosus',
+      screen: 7,
+      eyebrow: 'Prolonged attack (>72 h)',
+      prompt: 'This attack has lasted more than 72 hours. About the patient and the attack:',
+      select: 'multi',
+      options: [
+        { id: 'status-migraine-hx', label: 'The patient has an established current or past migraine diagnosis (1.1 or 1.2)', chips: ['migraine-history-established'] },
+        { id: 'status-debilitating', label: 'The pain and/or associated symptoms are debilitating (unable to function)', chips: ['sev-debilitating'] },
+      ],
+    },
+  },
   // Stabbing detail — fires when sharp/stabbing quality is reported (§4.7 primary stabbing).
   {
     id: 'b-stabbing',

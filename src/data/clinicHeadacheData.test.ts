@@ -1287,3 +1287,38 @@ describe('§4.7 Primary stabbing headache (Track C — new diagnosis)', () => {
     expect(matches.find(m => m.phenotypeId === 'primary-stabbing-headache')).toBeUndefined();
   });
 });
+
+describe('§1.4.1 Status migrainosus (Track C — new diagnosis)', () => {
+  it('full match: established migraine + >72h + debilitating', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'migraine-history-established', 'dur-gt-72-hours', 'sev-debilitating',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'status-migrainosus')?.matchStrength).toBe('full');
+  });
+
+  it('probable (§1.5.1): >72h + migraine history but NOT debilitating → probable at §1.5.1 (Note 2)', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'migraine-history-established', 'dur-gt-72-hours',
+      // no sev-debilitating → sm-C2 demote miss
+    ));
+    const sm = matches.find(m => m.phenotypeId === 'status-migrainosus');
+    expect(sm?.matchStrength).toBe('probable');
+    expect(sm?.displaySection).toContain('§1.5.1');
+  });
+
+  it('sm-B suppress (DROP): >72h debilitating attack WITHOUT established migraine → absent (secondary-workup scenario)', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'dur-gt-72-hours', 'sev-debilitating',
+      // no migraine-history-established → sm-B fails (silent DROP)
+    ));
+    expect(matches.find(m => m.phenotypeId === 'status-migrainosus')).toBeUndefined();
+  });
+
+  it('sm-C1 suppress (DROP): established migraineur + debilitating but attack NOT >72h → absent', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'migraine-history-established', 'sev-debilitating',
+      // no dur-gt-72-hours → sm-C1 fails (silent DROP)
+    ));
+    expect(matches.find(m => m.phenotypeId === 'status-migrainosus')).toBeUndefined();
+  });
+});

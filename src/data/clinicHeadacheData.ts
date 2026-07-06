@@ -42,6 +42,7 @@ export type ChipId =
   | 'qual-pulsating' | 'qual-pressing-tightening' | 'qual-sharp-stabbing'
   // Pain severity
   | 'sev-mild' | 'sev-moderate' | 'sev-severe' | 'sev-very-severe'
+  | 'sev-debilitating'              // §1.4.1 C.2 functional-disability qualifier
   // Activity
   | 'act-aggravated' | 'act-not-aggravated'
   // Associated symptoms
@@ -100,6 +101,7 @@ export type PhenotypeId =
   | 'migraine-without-aura'
   | 'migraine-with-aura'
   | 'chronic-migraine'              // §1.3 — added 2026-05-25 per medsci audit
+  | 'status-migrainosus'            // §1.4.1 — added 2026-07-06
   | 'probable-migraine'
   | 'episodic-tth'
   | 'chronic-tth'
@@ -291,6 +293,7 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
       { id: 'sev-moderate', label: 'Moderate intensity', teachWhenSelected: '1.1 C feature 3 (migraine) at moderate; 2.2 C feature 3 (TTH).' },
       { id: 'sev-severe', label: 'Severe intensity', teachWhenSelected: '1.1 C feature 3 (migraine) at severe; 3.1 B (cluster).' },
       { id: 'sev-very-severe', label: 'Very severe intensity', teachWhenSelected: '3.1 B Cluster: severe or very severe pain.' },
+      { id: 'sev-debilitating', label: 'Debilitating (pain and/or symptoms leave the patient unable to function)', teachWhenSelected: 'ICHD-3 1.4.1 C.2 (status migrainosus): pain and/or associated symptoms are debilitating. This is a functional-disability qualifier, distinct from the mild/moderate/severe pain-intensity scale.' },
 
       { id: 'act-aggravated', label: 'Aggravated by or causing avoidance of routine activity', teachWhenSelected: '1.1 C feature 4 (migraine). Also satisfies 3.4 Hemicrania continua criterion C.2 (aggravation of pain by movement).' },
       { id: 'act-not-aggravated', label: 'Not aggravated by routine activity', teachWhenSelected: '2.2 C feature 4 (TTH).' },
@@ -350,7 +353,7 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
       { id: 'vest-migrainous-half', label: 'At least half of the vertigo episodes come with a migraine feature (a migraine-type headache with ≥2 typical features, both light and sound sensitivity together, or visual aura)', teachWhenSelected: 'ICHD-3 A1.6.6 criterion D: ≥50% of episodes accompanied by ≥1 of: migraine-type headache (≥2 of unilateral, pulsating, moderate/severe, activity-aggravated); photophobia AND phonophobia together; or visual aura.' },
       // A1.6.6 criterion B — established migraine history (suppress gate for VM;
       // substrate-defining). Added 2026-06-04.
-      { id: 'migraine-history-established', label: 'Established current or past history of migraine (with or without aura)', teachWhenSelected: 'ICHD-3 A1.6.6 criterion B: vestibular migraine requires an established 1.1/1.2 migraine diagnosis; distinguishes it from BPPV, Menière, vestibular paroxysmia.' },
+      { id: 'migraine-history-established', label: 'Established current or past history of migraine (with or without aura)', teachWhenSelected: 'An established 1.1/1.2 migraine diagnosis. Required substrate for A1.6.6 Vestibular migraine (criterion B; distinguishes it from BPPV, Menière, vestibular paroxysmia) and 1.4.1 Status migrainosus (criterion B).' },
     ],
   },
   {
@@ -740,6 +743,31 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
     ],
   },
 
+  // ─── 1.4.1 Status migrainosus ────────────────────────────────────────────
+  // ICHD-3 §1.4.1 (complication of migraine). Flat additive phenotype, encoded
+  // 2026-07-06 from the source-verified evidence packet (ICHD-3 PDF p. 24-25).
+  // A >72h debilitating attack in an ESTABLISHED migraineur. Not a primary
+  // presentation: a first-ever >72h headache without migraine history is a
+  // secondary-workup scenario (sm-B suppress-gate enforces this).
+  {
+    id: 'status-migrainosus',
+    name: 'Status migrainosus',
+    ichd3Section: 'ICHD-3 §1.4.1',
+    teachPearl:
+      'Status migrainosus is a debilitating migraine attack lasting more than 72 hours in a patient with an established 1.1/1.2 migraine diagnosis, typical of previous attacks except for its duration and severity. Remissions of up to 12 hours (from medication or sleep) are allowed. Milder (non-debilitating) cases are coded 1.5.1 Probable migraine without aura. IMPORTANT: if the attack meets 8.2 Medication-overuse headache criteria, code MOH plus the migraine type, not status migrainosus. A first-ever >72 h headache in a patient WITHOUT established migraine is not status migrainosus and warrants a secondary workup.',
+    criteria: [
+      // sm-B: suppress-gate (DROP). Substrate — established 1.1/1.2 migraine history.
+      // A first-ever >72h headache without migraine history is NOT status migrainosus.
+      { id: 'sm-B', label: 'Established current or past history of 1.1/1.2 migraine', description: 'ICHD-3 1.4.1 B: occurring in a patient with 1.1 Migraine without aura and/or 1.2 Migraine with aura, and typical of previous attacks except for its duration and severity.', evaluate: s => has(s, 'migraine-history-established'), contributingChips: ['migraine-history-established'], role: 'suppress-gate' },
+      // sm-C1: suppress-gate (DROP). >72h is definitional; §1.4.1 has no §X.5 Probable
+      // home for a duration miss, so a shortfall hides, not demotes.
+      { id: 'sm-C1', label: 'Unremitting for more than 72 hours', description: 'ICHD-3 1.4.1 C.1: unremitting for >72 hours. Remissions of up to 12 hours (medication or sleep) are accepted.', evaluate: s => has(s, 'dur-gt-72-hours'), contributingChips: ['dur-gt-72-hours'], role: 'suppress-gate' },
+      // sm-C2: demote-gate. Note 2 gives an explicit Probable home: milder cases not
+      // meeting C.2 → §1.5.1 Probable migraine without aura. A C.2 miss demotes.
+      { id: 'sm-C2', label: 'Pain and/or associated symptoms are debilitating', description: 'ICHD-3 1.4.1 C.2: pain and/or associated symptoms are debilitating. Milder cases not meeting this are coded 1.5.1 Probable migraine without aura.', evaluate: s => has(s, 'sev-debilitating'), contributingChips: ['sev-debilitating'], role: 'demote-gate' },
+    ],
+  },
+
   // ─── 4.7 Primary stabbing headache ───────────────────────────────────────
   // ICHD-3 §4.7 (with §4.7.1 Probable). Flat additive phenotype, encoded
   // 2026-07-06 from the source-verified evidence packet (ICHD-3 PDF p. 53-54).
@@ -920,6 +948,8 @@ const PROBABLE_SECTION_FOR: Partial<Record<PhenotypeId, string>> = {
   'hemicrania-continua': 'ICHD-3 §3.5 Probable trigeminal autonomic cephalalgia',
   // §4.7.1 is a real ICHD-3 Probable sub-form (unlike §4.10 NDPH, which has none).
   'primary-stabbing-headache': 'ICHD-3 §4.7.1 Probable primary stabbing headache',
+  // §1.4.1 Note 2: milder (non-debilitating) cases → §1.5.1 Probable migraine without aura.
+  'status-migrainosus': 'ICHD-3 §1.5.1 Probable migraine without aura',
 };
 
 // ─── EMIT set — suppress gates that surface with definitionallyExcluded:true ─
