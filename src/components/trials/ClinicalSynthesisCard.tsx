@@ -167,7 +167,7 @@ export const ClinicalSynthesisCard: React.FC<ClinicalSynthesisCardProps> = ({
                 title={c.title}
               >
                 <span className="font-medium">
-                  {c.section ?? c.title.split(' — ')[0].split(':')[0]}
+                  {c.section ?? c.title.split(' · ')[0].split(':')[0]}
                 </span>
                 <span className="text-slate-400">· {c.year}</span>
               </a>

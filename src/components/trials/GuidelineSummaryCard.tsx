@@ -94,7 +94,7 @@ export const GuidelineSummaryCard: React.FC<GuidelineSummaryCardProps> = ({ clai
                 <span
                   className="text-[10px] font-bold uppercase tracking-widest text-slate-500"
                 >
-                  {c.section ?? c.title.split(' — ')[0]}
+                  {c.section ?? c.title.split(' · ')[0].split(':')[0]}
                 </span>
                 {cor && <LocalCorBadge cor={cor} />}
                 {loe && (

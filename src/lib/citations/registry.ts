@@ -215,7 +215,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2026-4.6.1-antiplatelet': {
     id: 'aha-asa-2026-4.6.1-antiplatelet',
     source: 'guideline',
-    title: '2026 AHA/ASA Guideline — §4.6.1 (Thrombolysis Decision-Making): single/dual antiplatelet and IVT',
+    title: '2026 AHA/ASA Guideline · §4.6.1 (Thrombolysis Decision-Making): single/dual antiplatelet and IVT',
     year: 2026,
     section: '§4.6.1 (Table: Recommendations For Thrombolysis Decision-Making, Rec 9)',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
@@ -230,9 +230,9 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2026-4.6.5-doac-relative': {
     id: 'aha-asa-2026-4.6.5-doac-relative',
     source: 'guideline',
-    title: '2026 AHA/ASA Guideline — §4.6.5 / Table 8 (Relative Contraindications): recent DOAC exposure <48h',
+    title: '2026 AHA/ASA Guideline · §4.6.5 / Table 8 (Relative Contraindications): recent DOAC exposure <48h',
     year: 2026,
-    section: '§4.6.5 (Other Specific Circumstances) + Table 8, Relative Contraindications — DOAC exposure',
+    section: '§4.6.5 (Other Specific Circumstances) + Table 8, Relative Contraindications: DOAC exposure',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
     last_reviewed: '2026-06-10',
     quoted_text: 'In patients with disabling symptoms and recent DOAC exposure (<48 hours) who are within the window for alteplase/tenecteplase, the safety of IV thrombolysis is unknown. Emerging but limited observational data suggest IV thrombolysis may be considered after a thorough benefit vs risk analysis on an individual basis. Benefit vs risk assessments should include considering the timing of the last DOAC administration, renal function, stroke severity, and availability of endovascular thrombectomy as well as availability of DOAC reversal agents and DOAC-specific anti-factor Xa/thrombin time assays acknowledging the potential for delay in thrombolysis and potential increased thrombotic risk.',
@@ -249,9 +249,9 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2026-4.6.5-coagulopathy': {
     id: 'aha-asa-2026-4.6.5-coagulopathy',
     source: 'guideline',
-    title: '2026 AHA/ASA Guideline — §4.6.5 / Table 8 (Absolute Contraindications): severe coagulopathy or thrombocytopenia (INR/aPTT/PT/platelet thresholds)',
+    title: '2026 AHA/ASA Guideline · §4.6.5 / Table 8 (Absolute Contraindications): severe coagulopathy or thrombocytopenia (INR/aPTT/PT/platelet thresholds)',
     year: 2026,
-    section: '§4.6.5 (Other Specific Circumstances) + Table 8, Absolute Contraindications — Severe coagulopathy or thrombocytopenia',
+    section: '§4.6.5 (Other Specific Circumstances) + Table 8, Absolute Contraindications: Severe coagulopathy or thrombocytopenia',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
     last_reviewed: '2026-06-10',
     quoted_text: 'The safety and efficacy of IV thrombolysis for AIS in patients with platelets <100,000/mm3, INR>1.7, aPTT>40s, or PT>15s is unknown though may substantially increase risk of harm and should not be administered. In patients without recent use of warfarin or heparin, treatment with IV thrombolysis can be initiated before availability of coagulation test results but should be discontinued if INR >1.7, PT, or PTT is abnormal by local laboratory standards.',
@@ -265,7 +265,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2026-4.3': {
     id: 'aha-asa-2026-4.3',
     source: 'guideline',
-    title: '2026 AHA/ASA Guideline — §4.3 (Blood pressure management in acute ischemic stroke)',
+    title: '2026 AHA/ASA Guideline · §4.3 (Blood pressure management in acute ischemic stroke)',
     year: 2026,
     section: '§4.3',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
@@ -275,7 +275,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2026-4.5': {
     id: 'aha-asa-2026-4.5',
     source: 'guideline',
-    title: '2026 AHA/ASA Guideline — §4.5 (Glycemic management)',
+    title: '2026 AHA/ASA Guideline · §4.5 (Glycemic management)',
     year: 2026,
     section: '§4.5 Blood Glucose Management',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
@@ -297,7 +297,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2026-4.7.4': {
     id: 'aha-asa-2026-4.7.4',
     source: 'guideline',
-    title: '2026 AHA/ASA Guideline — §4.7.4 (Endovascular Techniques)',
+    title: '2026 AHA/ASA Guideline · §4.7.4 (Endovascular Techniques)',
     year: 2026,
     section: '§4.7.4 Endovascular Techniques',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
@@ -314,7 +314,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2014-hemicraniectomy': {
     id: 'aha-asa-2014-hemicraniectomy',
     source: 'guideline',
-    title: '2014 AHA/ASA Guidelines for Management of AIS — Hemicraniectomy section',
+    title: '2014 AHA/ASA Guidelines for Management of AIS · Hemicraniectomy section',
     year: 2014,
     section: 'Hemicraniectomy for malignant MCA infarction',
     url: 'https://www.ahajournals.org/doi/10.1161/STR.0000000000000158',
@@ -383,7 +383,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2022-ich-surgery': {
     id: 'aha-asa-2022-ich-surgery',
     source: 'guideline',
-    title: '2022 AHA/ASA Spontaneous ICH Guideline — §9 supratentorial surgery + §10 cerebellar surgery',
+    title: '2022 AHA/ASA Spontaneous ICH Guideline · §9 supratentorial surgery + §10 cerebellar surgery',
     year: 2022,
     section: '§9 Supratentorial Surgical Management + §10 Cerebellar Surgical Management',
     url: 'https://www.ahajournals.org/doi/10.1161/STR.0000000000000407',
@@ -441,7 +441,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2021-secondary-prevention-icas': {
     id: 'aha-asa-2021-secondary-prevention-icas',
     source: 'guideline',
-    title: '2021 AHA/ASA Secondary Prevention Guideline — §5.5 Intracranial Atherosclerosis',
+    title: '2021 AHA/ASA Secondary Prevention Guideline · §5.5 Intracranial Atherosclerosis',
     year: 2021,
     section: '§5.5 Intracranial Atherosclerosis',
     url: 'https://www.ahajournals.org/doi/10.1161/STR.0000000000000375',
@@ -502,7 +502,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2026-2.5': {
     id: 'aha-asa-2026-2.5',
     source: 'guideline',
-    title: '2026 AHA/ASA Guideline — §2.5 (Mobile Stroke Units)',
+    title: '2026 AHA/ASA Guideline · §2.5 (Mobile Stroke Units)',
     year: 2026,
     section: '§2.5 Mobile Stroke Units',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
@@ -520,7 +520,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2026-4.7.1': {
     id: 'aha-asa-2026-4.7.1',
     source: 'guideline',
-    title: '2026 AHA/ASA Guideline — §4.7.1 (EVT Concomitant with IVT)',
+    title: '2026 AHA/ASA Guideline · §4.7.1 (EVT Concomitant with IVT)',
     year: 2026,
     section: '§4.7.1 EVT Concomitant with IVT',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
@@ -532,7 +532,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2026-4.6.1': {
     id: 'aha-asa-2026-4.6.1',
     source: 'guideline',
-    title: '2026 AHA/ASA Guideline — §4.6.1 (Thrombolysis Decision-Making)',
+    title: '2026 AHA/ASA Guideline · §4.6.1 (Thrombolysis Decision-Making)',
     year: 2026,
     section: '§4.6.1 Thrombolysis Decision-Making',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
@@ -544,7 +544,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2026-4.6.2': {
     id: 'aha-asa-2026-4.6.2',
     source: 'guideline',
-    title: '2026 AHA/ASA Guideline — §4.6.2 (IV thrombolytic agent selection)',
+    title: '2026 AHA/ASA Guideline · §4.6.2 (IV thrombolytic agent selection)',
     year: 2026,
     section: '§4.6.2',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
@@ -564,7 +564,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2026-4.7.2': {
     id: 'aha-asa-2026-4.7.2',
     source: 'guideline',
-    title: '2026 AHA/ASA Guideline — §4.7.2 (Anterior-circulation EVT eligibility, including large-core)',
+    title: '2026 AHA/ASA Guideline · §4.7.2 (Anterior-circulation EVT eligibility, including large-core)',
     year: 2026,
     section: '§4.7.2',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
@@ -605,7 +605,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2026-4.7.3': {
     id: 'aha-asa-2026-4.7.3',
     source: 'guideline',
-    title: '2026 AHA/ASA Guideline — §4.7.3 (Posterior-circulation / basilar-artery EVT)',
+    title: '2026 AHA/ASA Guideline · §4.7.3 (Posterior-circulation / basilar-artery EVT)',
     year: 2026,
     section: '§4.7.3',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
@@ -640,7 +640,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2026-4.9': {
     id: 'aha-asa-2026-4.9',
     source: 'guideline',
-    title: '2026 AHA/ASA Guideline — §4.9 (Anticoagulants — early oral anticoagulation after AF-related ischemic stroke)',
+    title: '2026 AHA/ASA Guideline · §4.9 (Anticoagulants: early oral anticoagulation after AF-related ischemic stroke)',
     year: 2026,
     section: '§4.9 Anticoagulants',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
@@ -674,7 +674,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2026-4.8': {
     id: 'aha-asa-2026-4.8',
     source: 'guideline',
-    title: '2026 AHA/ASA Guideline — §4.8 (Antiplatelet Treatment — DAPT for minor noncardioembolic AIS or high-risk TIA)',
+    title: '2026 AHA/ASA Guideline · §4.8 (Antiplatelet Treatment: DAPT for minor noncardioembolic AIS or high-risk TIA)',
     year: 2026,
     section: '§4.8 Antiplatelet Treatment',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
@@ -722,7 +722,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2021-secondary-prevention-carotid': {
     id: 'aha-asa-2021-secondary-prevention-carotid',
     source: 'guideline',
-    title: '2021 AHA/ASA Secondary Prevention Guideline — §5.3 Carotid Artery Disease',
+    title: '2021 AHA/ASA Secondary Prevention Guideline · §5.3 Carotid Artery Disease',
     year: 2021,
     section: '§5.3 Carotid Artery Disease',
     url: 'https://www.ahajournals.org/doi/10.1161/STR.0000000000000375',
@@ -752,7 +752,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2022-ich-anticoag-reversal': {
     id: 'aha-asa-2022-ich-anticoag-reversal',
     source: 'guideline',
-    title: '2022 AHA/ASA Spontaneous ICH Guideline — Anticoagulant and antiplatelet reversal',
+    title: '2022 AHA/ASA Spontaneous ICH Guideline · Anticoagulant and antiplatelet reversal',
     year: 2022,
     section: '§5.2 Hemostasis and Coagulopathy (§5.2.1 anticoagulant, §5.2.2 antiplatelet)',
     url: 'https://www.ahajournals.org/doi/10.1161/STR.0000000000000407',
@@ -771,7 +771,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aao-2020-retinal-artery-occlusion': {
     id: 'aao-2020-retinal-artery-occlusion',
     source: 'guideline',
-    title: 'American Academy of Ophthalmology — Retinal and Ophthalmic Artery Occlusions Preferred Practice Pattern (2020)',
+    title: 'American Academy of Ophthalmology · Retinal and Ophthalmic Artery Occlusions Preferred Practice Pattern (2020)',
     year: 2020,
     section: 'Acute CRAO management',
     url: 'https://www.aaojournal.org/article/S0161-6420(19)32226-5/fulltext',
@@ -790,7 +790,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'schumacher-eagle-crao-2010': {
     id: 'schumacher-eagle-crao-2010',
     source: 'trial',
-    title: 'EAGLE: Central Retinal Artery Occlusion — Local Intra-Arterial Fibrinolysis Versus Conservative Treatment',
+    title: 'EAGLE: Central Retinal Artery Occlusion · Local Intra-Arterial Fibrinolysis Versus Conservative Treatment',
     year: 2010,
     url: 'https://www.aaojournal.org/article/S0161-6420(10)00078-9/fulltext',
     pmid: '20609991',
@@ -826,7 +826,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2026-6.3': {
     id: 'aha-asa-2026-6.3',
     source: 'guideline',
-    title: '2026 AHA/ASA Guideline — §6.3 (Supratentorial Infarction — Surgical Management)',
+    title: '2026 AHA/ASA Guideline · §6.3 (Supratentorial Infarction: Surgical Management)',
     year: 2026,
     section: '§6.3 Supratentorial Infarction (Surgical Management)',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
@@ -855,7 +855,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2021-secondary-prevention-pfo': {
     id: 'aha-asa-2021-secondary-prevention-pfo',
     source: 'guideline',
-    title: '2021 AHA/ASA Secondary Prevention Guideline — PFO closure (Section 5.2.2)',
+    title: '2021 AHA/ASA Secondary Prevention Guideline · PFO closure (Section 5.2.2)',
     year: 2021,
     section: '§5.2.2 Patent Foramen Ovale',
     url: 'https://www.ahajournals.org/doi/10.1161/STR.0000000000000375',
@@ -1036,7 +1036,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'carroll-respect-original-2013': {
     id: 'carroll-respect-original-2013',
     source: 'trial',
-    title: 'Closure of Patent Foramen Ovale versus Medical Therapy after Cryptogenic Stroke (RESPECT — original 2013 primary publication)',
+    title: 'Closure of Patent Foramen Ovale versus Medical Therapy after Cryptogenic Stroke (RESPECT · original 2013 primary publication)',
     year: 2013,
     url: 'https://www.nejm.org/doi/10.1056/NEJMoa1301440',
     pmid: '23514286',
@@ -1129,7 +1129,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     source: 'guideline',
     title: 'Management of Central Retinal Artery Occlusion: A Scientific Statement From the American Heart Association',
     year: 2021,
-    section: 'Treatment — Intravenous Thrombolysis',
+    section: 'Treatment: Intravenous Thrombolysis',
     url: 'https://www.ahajournals.org/doi/10.1161/STR.0000000000000366',
     pmid: '33677974',
     last_reviewed: '2026-05-20',
@@ -1211,7 +1211,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'acc-aha-dyslipidemia-2026-4.2.6-vhr': {
     id: 'acc-aha-dyslipidemia-2026-4.2.6-vhr',
     source: 'guideline',
-    title: '2026 ACC/AHA Multisociety Cholesterol Guideline — §4.2.6 Recommendation #5 (Very-High-Risk ASCVD: ezetimibe/PCSK9 escalation to LDL-C <55 mg/dL)',
+    title: '2026 ACC/AHA Multisociety Cholesterol Guideline · §4.2.6 Recommendation #5 (Very-High-Risk ASCVD: ezetimibe/PCSK9 escalation to LDL-C <55 mg/dL)',
     year: 2026,
     section: '§4.2.6 Recommendation #5, p e1208',
     url: 'https://doi.org/10.1161/CIR.0000000000001423',
@@ -1222,7 +1222,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'acc-aha-dyslipidemia-2026-4.2.6-not-vhr': {
     id: 'acc-aha-dyslipidemia-2026-4.2.6-not-vhr',
     source: 'guideline',
-    title: '2026 ACC/AHA Multisociety Cholesterol Guideline — §4.2.6 Recommendation #1 (Non-VHR Clinical ASCVD: high-intensity statin + LDL-C <70 mg/dL)',
+    title: '2026 ACC/AHA Multisociety Cholesterol Guideline · §4.2.6 Recommendation #1 (Non-VHR Clinical ASCVD: high-intensity statin + LDL-C <70 mg/dL)',
     year: 2026,
     section: '§4.2.6 Recommendation #1, p e1208',
     url: 'https://doi.org/10.1161/CIR.0000000000001423',
@@ -1233,7 +1233,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'acc-aha-dyslipidemia-2026-4.2.6-pcsk9-seq': {
     id: 'acc-aha-dyslipidemia-2026-4.2.6-pcsk9-seq',
     source: 'guideline',
-    title: '2026 ACC/AHA Multisociety Cholesterol Guideline — §4.2.6 Synopsis (PCSK9 sequencing change vs 2018: ezetimibe no longer required to precede PCSK9 mAb)',
+    title: '2026 ACC/AHA Multisociety Cholesterol Guideline · §4.2.6 Synopsis (PCSK9 sequencing change vs 2018: ezetimibe no longer required to precede PCSK9 mAb)',
     year: 2026,
     section: '§4.2.6 Synopsis, p e1208',
     url: 'https://doi.org/10.1161/CIR.0000000000001423',
@@ -1244,7 +1244,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'acc-aha-dyslipidemia-2026-fig10': {
     id: 'acc-aha-dyslipidemia-2026-fig10',
     source: 'guideline',
-    title: '2026 ACC/AHA Multisociety Cholesterol Guideline — Figure 10 / §4.2.6 footnote (very-high-risk ASCVD definition; ischemic stroke is a major ASCVD event)',
+    title: '2026 ACC/AHA Multisociety Cholesterol Guideline · Figure 10 / §4.2.6 footnote (very-high-risk ASCVD definition; ischemic stroke is a major ASCVD event)',
     year: 2026,
     section: '§4.2.6 Table footnote, p e1208 (reflecting Figure 10, p e1210)',
     url: 'https://doi.org/10.1161/CIR.0000000000001423',
@@ -1258,7 +1258,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'acc-aha-dyslipidemia-2026-4.2.6-addon-not-vhr': {
     id: 'acc-aha-dyslipidemia-2026-4.2.6-addon-not-vhr',
     source: 'guideline',
-    title: '2026 ACC/AHA Dyslipidemia Guideline — §4.2.6 Recommendation #2 (Non-VHR: ezetimibe/PCSK9 mAb/bempedoic acid add-on to LDL-C <70 mg/dL)',
+    title: '2026 ACC/AHA Dyslipidemia Guideline · §4.2.6 Recommendation #2 (Non-VHR: ezetimibe/PCSK9 mAb/bempedoic acid add-on to LDL-C <70 mg/dL)',
     year: 2026,
     section: '§4.2.6 Recommendation #2, p e1208',
     url: 'https://doi.org/10.1161/CIR.0000000000001423',
@@ -1270,7 +1270,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'acc-aha-dyslipidemia-2026-4.2.6-bempedoic-vhr': {
     id: 'acc-aha-dyslipidemia-2026-4.2.6-bempedoic-vhr',
     source: 'guideline',
-    title: '2026 ACC/AHA Dyslipidemia Guideline — §4.2.6 Recommendation #6 (VHR: bempedoic acid add-on to LDL-C <55 mg/dL, COR 2a)',
+    title: '2026 ACC/AHA Dyslipidemia Guideline · §4.2.6 Recommendation #6 (VHR: bempedoic acid add-on to LDL-C <55 mg/dL, COR 2a)',
     year: 2026,
     section: '§4.2.6 Recommendation #6, p e1208',
     url: 'https://doi.org/10.1161/CIR.0000000000001423',
@@ -1282,7 +1282,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'acc-aha-dyslipidemia-2026-4.2.6-inclisiran': {
     id: 'acc-aha-dyslipidemia-2026-4.2.6-inclisiran',
     source: 'guideline',
-    title: '2026 ACC/AHA Dyslipidemia Guideline — §4.2.6 Recommendation #7 (VHR: inclisiran for PCSK9 mAb-intolerant, COR 2a; no completed CVOT)',
+    title: '2026 ACC/AHA Dyslipidemia Guideline · §4.2.6 Recommendation #7 (VHR: inclisiran for PCSK9 mAb-intolerant, COR 2a; no completed CVOT)',
     year: 2026,
     section: '§4.2.6 Recommendation #7, p e1208',
     url: 'https://doi.org/10.1161/CIR.0000000000001423',
@@ -1294,7 +1294,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-ich-2022-statin': {
     id: 'aha-asa-ich-2022-statin',
     source: 'guideline',
-    title: '2022 AHA/ASA Guideline for Spontaneous Intracerebral Hemorrhage — Statin Therapy (COR 2b, LOE B-NR)',
+    title: '2022 AHA/ASA Guideline for Spontaneous Intracerebral Hemorrhage · Statin Therapy (COR 2b, LOE B-NR)',
     year: 2022,
     section: 'Cardiovascular Prevention',
     url: 'https://doi.org/10.1161/STR.0000000000000407',
@@ -1306,7 +1306,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'teoh-2019-statin-stroke-ich': {
     id: 'teoh-2019-statin-stroke-ich',
     source: 'review',
-    title: 'Statin Therapy and Hemorrhagic Stroke Risk in Stroke Survivors — Meta-Analysis (Teoh et al., Ther Adv Neurol Disord 2019)',
+    title: 'Statin Therapy and Hemorrhagic Stroke Risk in Stroke Survivors · Meta-Analysis (Teoh et al., Ther Adv Neurol Disord 2019)',
     year: 2019,
     section: 'Ther Adv Neurol Disord 2019;12',
     url: 'https://journals.sagepub.com/doi/10.1177/1756286419864830',
@@ -1321,26 +1321,26 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'robblee-ahs-2025': {
     id: 'robblee-ahs-2025',
     source: 'guideline',
-    title: 'AHS Consensus Statement — Acute Treatment of Migraine in Adults (Robblee et al., Headache 2026;66:53–76)',
+    title: 'AHS Consensus Statement · Acute Treatment of Migraine in Adults (Robblee et al., Headache 2026;66:53–76)',
     year: 2026,
     section: 'Full guideline; published online 2025, print Headache 2026;66:53–76',
     url: 'https://doi.org/10.1111/head.70016',
     last_reviewed: '2026-05-25',
     review_window_months: 6,
-    quoted_text: 'Level A: Prochlorperazine (Must Offer), GONB (Must Offer), Lasmiditan (Must Offer — no driving 8 h), Dihydroergotamine (Must Offer), Opioids/Tramadol (Must NOT Offer). Level B: Metoclopramide, Ketorolac, Diphenhydramine, SONB, Dexamethasone (recurrence prevention). Level C: Dexamethasone (acute pain). Level U: Magnesium (IV; insufficient evidence; may benefit aura/photophobia subgroup).',
+    quoted_text: 'Level A: Prochlorperazine (Must Offer), GONB (Must Offer), Lasmiditan (Must Offer: no driving 8 h), Dihydroergotamine (Must Offer), Opioids/Tramadol (Must NOT Offer). Level B: Metoclopramide, Ketorolac, Diphenhydramine, SONB, Dexamethasone (recurrence prevention). Level C: Dexamethasone (acute pain). Level U: Magnesium (IV; insufficient evidence; may benefit aura/photophobia subgroup).',
   },
 
   'ailani-ahs-2021': {
     id: 'ailani-ahs-2021',
     source: 'guideline',
-    title: 'AHS Consensus Statement — CGRP Pathway and Migraine Prevention (Ailani et al., Headache 2021;61:1021–1039)',
+    title: 'AHS Consensus Statement · CGRP Pathway and Migraine Prevention (Ailani et al., Headache 2021;61:1021–1039)',
     year: 2021,
     section: 'Full consensus statement',
     url: 'https://doi.org/10.1111/head.14153',
     pmid: '34128230',
     last_reviewed: '2026-05-25',
     review_window_months: 6,
-    quoted_text: 'Preventive therapy threshold: ≥4 migraine days/month with disability, or ≥6 migraine days/month regardless of disability, or prior failure of ≥2 adequate preventive trials. Gepants (atogepant, rimegepant) do not cause medication-overuse headache (MOH) and are preferred for patients with MOH or at high MOH risk. CGRP mAbs: erenumab, fremanezumab, galcanezumab, eptinezumab — first-line for patients meeting preventive threshold. Escalation to calcitonin gene-related peptide (CGRP) mAb recommended after failure of ≥2 conventional preventive trials.',
+    quoted_text: 'Preventive therapy threshold: ≥4 migraine days/month with disability, or ≥6 migraine days/month regardless of disability, or prior failure of ≥2 adequate preventive trials. Gepants (atogepant, rimegepant) do not cause medication-overuse headache (MOH) and are preferred for patients with MOH or at high MOH risk. CGRP mAbs: erenumab, fremanezumab, galcanezumab, eptinezumab: first-line for patients meeting preventive threshold. Escalation to calcitonin gene-related peptide (CGRP) mAb recommended after failure of ≥2 conventional preventive trials.',
   },
 
   'burch-2024-continuum-acute': {
@@ -1395,7 +1395,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     url: 'https://doi.org/10.1212/WNL.0000000000006697',
     last_reviewed: '2026-05-25',
     review_window_months: 24,
-    quoted_text: 'SNNOOP10 red-flag mnemonic for secondary headaches: S — Systemic symptoms (fever, weight loss); N — Neoplasm in history; N — Neurologic deficit (focal, altered mental status, seizures); O — Onset sudden or abrupt (thunderclap); O — Older age (new headache after age 50); P — Pattern change or recent onset of new headache; P — Positional headache; P — Precipitated by sneezing, coughing, or exercise; P — Papilloedema; P — Progressive headache or atypical presentation; P — Pregnancy or puerperium; P — Painful eye with autonomic features; P — Posttraumatic onset of headache; P — Pathology of the immune system (e.g., HIV); P — Painkiller overuse or new drug at onset of headache. Any flag should prompt evaluation for a secondary cause before assigning a primary-headache phenotype.',
+    quoted_text: 'SNNOOP10 red-flag mnemonic for secondary headaches: S: Systemic symptoms (fever, weight loss); N: Neoplasm in history; N: Neurologic deficit (focal, altered mental status, seizures); O: Onset sudden or abrupt (thunderclap); O: Older age (new headache after age 50); P: Pattern change or recent onset of new headache; P: Positional headache; P: Precipitated by sneezing, coughing, or exercise; P: Papilloedema; P: Progressive headache or atypical presentation; P: Pregnancy or puerperium; P: Painful eye with autonomic features; P: Posttraumatic onset of headache; P: Pathology of the immune system (e.g., HIV); P: Painkiller overuse or new drug at onset of headache. Any flag should prompt evaluation for a secondary cause before assigning a primary-headache phenotype.',
   },
 
   'rizzoli-2024-continuum-moh': {
@@ -1464,7 +1464,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     // dual sign-off in docs/reviews/{medsci,clinical-PR}-headache-ichd3-rebuild-2026-05-25.md.
     last_reviewed: '2026-05-25',
     review_window_months: 24,
-    quoted_text: '1.1 Migraine without aura — At least five attacks fulfilling criteria B-D: B) Headache attacks lasting 4-72 hours (untreated or unsuccessfully treated). C) Headache has at least two of the following four characteristics: 1) unilateral location, 2) pulsating quality, 3) moderate or severe pain intensity, 4) aggravation by or causing avoidance of routine physical activity. D) During headache at least one of the following: 1) nausea and/or vomiting, 2) photophobia and phonophobia. E) Not better accounted for by another ICHD-3 diagnosis. 1.2 Migraine with aura — At least two attacks fulfilling criteria B and C: B) One or more of the following fully reversible aura symptoms: visual, sensory, speech and/or language, motor, brainstem, retinal. C) At least three of the following six characteristics: 1) at least one aura symptom spreads gradually over ≥5 minutes, 2) two or more aura symptoms occur in succession, 3) each individual aura symptom lasts 5-60 minutes, 4) at least one aura symptom is unilateral, 5) at least one aura symptom is positive, 6) the aura is accompanied, or followed within 60 minutes, by headache. 1.3 Chronic migraine — A) Headache (tension-type-like and/or migraine-like) on ≥15 days per month for more than 3 months and fulfilling criteria B and C. B) Occurring in a patient who has had at least five attacks fulfilling criteria B-D for 1.1 Migraine without aura and/or criteria B and C for 1.2 Migraine with aura. C) On ≥8 days per month for >3 months, fulfilling any of the following: C.1 criteria C and D for 1.1 Migraine without aura, C.2 criteria B and C for 1.2 Migraine with aura, C.3 believed by the patient to be migraine at onset and relieved by a triptan or ergot derivative. §1.3 Note: when criteria for both 1.3 Chronic migraine and 2.3 Chronic tension-type headache are met, code only 1.3 Chronic migraine. 2.2 Frequent episodic tension-type headache — At least 10 episodes of headache occurring on 1-14 days per month on average for >3 months (≥12 and <180 days per year) fulfilling criteria B-D: B) Lasting 30 minutes to 7 days. C) At least two of the following four: 1) bilateral location, 2) pressing or tightening (non-pulsating) quality, 3) mild or moderate intensity, 4) not aggravated by routine physical activity. D) Both of the following: 1) no nausea or vomiting, 2) no more than one of photophobia or phonophobia. 2.3 Chronic tension-type headache — A) Headache occurring on ≥15 days per month on average for more than 3 months (≥180 days per year). B-C) Lasting hours to days, or unremitting, fulfilling at least two of the following four: 1) bilateral location, 2) pressing or tightening (non-pulsating) quality, 3) mild or moderate intensity, 4) not aggravated by routine physical activity. D) Both of the following: 1) no more than one of photophobia, phonophobia or mild nausea, 2) neither moderate or severe nausea nor vomiting. 3.1 Cluster headache — At least five attacks fulfilling criteria B-D: B) Severe or very severe unilateral orbital, supraorbital and/or temporal pain lasting 15-180 minutes (when untreated). C) Either or both of: 1) at least one ipsilateral cranial autonomic symptom (conjunctival injection and/or lacrimation, nasal congestion and/or rhinorrhoea, eyelid oedema, forehead and facial sweating, miosis and/or ptosis); 2) a sense of restlessness or agitation. D) Attacks have a frequency from 1 every other day to 8 per day. 3.2 Paroxysmal hemicrania — At least 20 attacks fulfilling criteria B-E: B) Severe unilateral orbital, supraorbital and/or temporal pain lasting 2-30 minutes. C) Either or both of: 1) at least one ipsilateral cranial autonomic symptom; 2) a sense of restlessness or agitation. D) Attacks have a frequency of more than 5 per day for more than half of the time when the disorder is active. E) Prevented absolutely by therapeutic doses of indomethacin. 3.3 Short-lasting unilateral neuralgiform headache attacks (SUNCT/SUNA) — At least 20 attacks fulfilling criteria B-D: B) Moderate or severe unilateral head pain, with orbital, supraorbital, temporal and/or other trigeminal-distribution location, lasting for 1-600 seconds and occurring as single stabs, series of stabs or in a saw-tooth pattern. C) Accompanied by at least one of the following ipsilateral cranial autonomic symptoms: conjunctival injection and/or lacrimation, nasal congestion and/or rhinorrhoea, eyelid oedema, forehead and facial sweating, miosis and/or ptosis. D) Attacks have a frequency of at least one a day for more than half of the time when the disorder is active. 3.4 Hemicrania continua — Unilateral headache fulfilling criteria B-D: B) Present for >3 months, with exacerbations of moderate or greater intensity. C) Either or both of: 1) at least one ipsilateral cranial autonomic symptom, 2) a sense of restlessness or aggravation of the pain by movement. D) Responds absolutely to therapeutic doses of indomethacin. 4.10 New daily persistent headache (NDPH) — Persistent headache fulfilling criteria B and C: B) Distinct and clearly-remembered onset, with pain becoming continuous and unremitting within 24 hours. C) Present for >3 months. A1.6.6 Vestibular migraine — Research criteria in ICHD-3 Appendix. Full diagnostic criteria sourced from Lempert et al. 2012 (J Vestib Res); current evaluator encoding preserves the 2-criterion subset; full criteria expansion pending source retrieval.',
+    quoted_text: '1.1 Migraine without aura: At least five attacks fulfilling criteria B-D: B) Headache attacks lasting 4-72 hours (untreated or unsuccessfully treated). C) Headache has at least two of the following four characteristics: 1) unilateral location, 2) pulsating quality, 3) moderate or severe pain intensity, 4) aggravation by or causing avoidance of routine physical activity. D) During headache at least one of the following: 1) nausea and/or vomiting, 2) photophobia and phonophobia. E) Not better accounted for by another ICHD-3 diagnosis. 1.2 Migraine with aura: At least two attacks fulfilling criteria B and C: B) One or more of the following fully reversible aura symptoms: visual, sensory, speech and/or language, motor, brainstem, retinal. C) At least three of the following six characteristics: 1) at least one aura symptom spreads gradually over ≥5 minutes, 2) two or more aura symptoms occur in succession, 3) each individual aura symptom lasts 5-60 minutes, 4) at least one aura symptom is unilateral, 5) at least one aura symptom is positive, 6) the aura is accompanied, or followed within 60 minutes, by headache. 1.3 Chronic migraine: A) Headache (tension-type-like and/or migraine-like) on ≥15 days per month for more than 3 months and fulfilling criteria B and C. B) Occurring in a patient who has had at least five attacks fulfilling criteria B-D for 1.1 Migraine without aura and/or criteria B and C for 1.2 Migraine with aura. C) On ≥8 days per month for >3 months, fulfilling any of the following: C.1 criteria C and D for 1.1 Migraine without aura, C.2 criteria B and C for 1.2 Migraine with aura, C.3 believed by the patient to be migraine at onset and relieved by a triptan or ergot derivative. §1.3 Note: when criteria for both 1.3 Chronic migraine and 2.3 Chronic tension-type headache are met, code only 1.3 Chronic migraine. 2.2 Frequent episodic tension-type headache: At least 10 episodes of headache occurring on 1-14 days per month on average for >3 months (≥12 and <180 days per year) fulfilling criteria B-D: B) Lasting 30 minutes to 7 days. C) At least two of the following four: 1) bilateral location, 2) pressing or tightening (non-pulsating) quality, 3) mild or moderate intensity, 4) not aggravated by routine physical activity. D) Both of the following: 1) no nausea or vomiting, 2) no more than one of photophobia or phonophobia. 2.3 Chronic tension-type headache: A) Headache occurring on ≥15 days per month on average for more than 3 months (≥180 days per year). B-C) Lasting hours to days, or unremitting, fulfilling at least two of the following four: 1) bilateral location, 2) pressing or tightening (non-pulsating) quality, 3) mild or moderate intensity, 4) not aggravated by routine physical activity. D) Both of the following: 1) no more than one of photophobia, phonophobia or mild nausea, 2) neither moderate or severe nausea nor vomiting. 3.1 Cluster headache: At least five attacks fulfilling criteria B-D: B) Severe or very severe unilateral orbital, supraorbital and/or temporal pain lasting 15-180 minutes (when untreated). C) Either or both of: 1) at least one ipsilateral cranial autonomic symptom (conjunctival injection and/or lacrimation, nasal congestion and/or rhinorrhoea, eyelid oedema, forehead and facial sweating, miosis and/or ptosis); 2) a sense of restlessness or agitation. D) Attacks have a frequency from 1 every other day to 8 per day. 3.2 Paroxysmal hemicrania: At least 20 attacks fulfilling criteria B-E: B) Severe unilateral orbital, supraorbital and/or temporal pain lasting 2-30 minutes. C) Either or both of: 1) at least one ipsilateral cranial autonomic symptom; 2) a sense of restlessness or agitation. D) Attacks have a frequency of more than 5 per day for more than half of the time when the disorder is active. E) Prevented absolutely by therapeutic doses of indomethacin. 3.3 Short-lasting unilateral neuralgiform headache attacks (SUNCT/SUNA): At least 20 attacks fulfilling criteria B-D: B) Moderate or severe unilateral head pain, with orbital, supraorbital, temporal and/or other trigeminal-distribution location, lasting for 1-600 seconds and occurring as single stabs, series of stabs or in a saw-tooth pattern. C) Accompanied by at least one of the following ipsilateral cranial autonomic symptoms: conjunctival injection and/or lacrimation, nasal congestion and/or rhinorrhoea, eyelid oedema, forehead and facial sweating, miosis and/or ptosis. D) Attacks have a frequency of at least one a day for more than half of the time when the disorder is active. 3.4 Hemicrania continua: Unilateral headache fulfilling criteria B-D: B) Present for >3 months, with exacerbations of moderate or greater intensity. C) Either or both of: 1) at least one ipsilateral cranial autonomic symptom, 2) a sense of restlessness or aggravation of the pain by movement. D) Responds absolutely to therapeutic doses of indomethacin. 4.10 New daily persistent headache (NDPH): Persistent headache fulfilling criteria B and C: B) Distinct and clearly-remembered onset, with pain becoming continuous and unremitting within 24 hours. C) Present for >3 months. A1.6.6 Vestibular migraine: Research criteria in ICHD-3 Appendix. Full diagnostic criteria sourced from Lempert et al. 2012 (J Vestib Res); current evaluator encoding preserves the 2-criterion subset; full criteria expansion pending source retrieval.',
   },
 
   // ─── Scher 2024 — Tension-Type Headache (Continuum review) ────────────────
@@ -1476,7 +1476,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'goff-2014-pce-pooled-cohort-equations': {
     id: 'goff-2014-pce-pooled-cohort-equations',
     source: 'guideline',
-    title: '2013 ACC/AHA Guideline on the Assessment of Cardiovascular Risk (Goff et al. — Pooled Cohort Equations)',
+    title: '2013 ACC/AHA Guideline on the Assessment of Cardiovascular Risk (Goff et al. · Pooled Cohort Equations)',
     year: 2014,
     section: 'Appendix 7, Tables A and B (sex- and race-specific coefficients)',
     pmid: '24222018',
@@ -1505,7 +1505,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     url: 'https://journals.lww.com/continuum',
     last_reviewed: '2026-05-25',
     review_window_months: 12,
-    quoted_text: 'Acute treatment of tension-type headache: simple analgesics — ibuprofen 400-600 mg PO or aspirin 500-1000 mg PO are first-line; acetaminophen 1000 mg PO is preferred in pregnancy or when NSAIDs are contraindicated. Opioids and butalbital-containing combinations should be avoided because of MOH and dependence risk. Acute medication days should be limited to ≤10/month (triptans, opioids) or ≤15/month (simple analgesics) to avoid medication-overuse headache. Preventive treatment is indicated for chronic TTH (≥15 days/month) or high-frequency episodic TTH with functional impact. First-line preventive: amitriptyline 10-75 mg at bedtime (AAN evidence Level B). Second-line: venlafaxine 75-150 mg/day, particularly when depression or anxiety is comorbid; mirtazapine 15-30 mg at bedtime for sleep disturbance and anxiety. Third-line: topiramate, with less evidence for TTH than for migraine. Non-pharmacologic combined approach (stress management, biofeedback, physical therapy) has Level A evidence and should be offered alongside pharmacotherapy. Beta-blockers have insufficient evidence specifically for TTH.',
+    quoted_text: 'Acute treatment of tension-type headache: simple analgesics: ibuprofen 400-600 mg PO or aspirin 500-1000 mg PO are first-line; acetaminophen 1000 mg PO is preferred in pregnancy or when NSAIDs are contraindicated. Opioids and butalbital-containing combinations should be avoided because of MOH and dependence risk. Acute medication days should be limited to ≤10/month (triptans, opioids) or ≤15/month (simple analgesics) to avoid medication-overuse headache. Preventive treatment is indicated for chronic TTH (≥15 days/month) or high-frequency episodic TTH with functional impact. First-line preventive: amitriptyline 10-75 mg at bedtime (AAN evidence Level B). Second-line: venlafaxine 75-150 mg/day, particularly when depression or anxiety is comorbid; mirtazapine 15-30 mg at bedtime for sleep disturbance and anxiety. Third-line: topiramate, with less evidence for TTH than for migraine. Non-pharmacologic combined approach (stress management, biofeedback, physical therapy) has Level A evidence and should be offered alongside pharmacotherapy. Beta-blockers have insufficient evidence specifically for TTH.',
   },
 
   // ──────────────────────────────────────────────────────────────────────────
@@ -1520,7 +1520,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'bendtsen-efns-tth-2010': {
     id: 'bendtsen-efns-tth-2010',
     source: 'guideline',
-    title: 'EFNS guideline on the treatment of tension-type headache — report of an EFNS task force',
+    title: 'EFNS guideline on the treatment of tension-type headache · report of an EFNS task force',
     year: 2010,
     section: 'EFNS task-force recommendations',
     pmid: '20482606',
@@ -1708,7 +1708,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'silberstein-aan-ahs-migraine-prevention-2012': {
     id: 'silberstein-aan-ahs-migraine-prevention-2012',
     source: 'guideline',
-    title: 'Evidence-based guideline update: Pharmacologic treatment for episodic migraine prevention in adults — Report of the Quality Standards Subcommittee of the American Academy of Neurology and the American Headache Society',
+    title: 'Evidence-based guideline update: Pharmacologic treatment for episodic migraine prevention in adults · Report of the Quality Standards Subcommittee of the American Academy of Neurology and the American Headache Society',
     year: 2012,
     pmid: '22529202',
     url: 'https://doi.org/10.1212/WNL.0b013e3182535d20',
@@ -1800,7 +1800,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'prisms-trial-2018': {
     id: 'prisms-trial-2018',
     source: 'trial',
-    title: 'Alteplase versus Aspirin in Acute Stroke with Minimal Symptoms — The PRISMS Randomized Clinical Trial',
+    title: 'Alteplase versus Aspirin in Acute Stroke with Minimal Symptoms · The PRISMS Randomized Clinical Trial',
     year: 2018,
     url: 'https://jamanetwork.com/journals/jama/fullarticle/2687304',
     pmid: '29998337',
@@ -1822,7 +1822,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-ivt-bp-threshold': {
     id: 'aha-asa-ivt-bp-threshold',
     source: 'guideline',
-    title: '2019 AHA/ASA Guidelines for Early Management of Acute Ischemic Stroke — Table 5 (IV rtPA Eligibility)',
+    title: '2019 AHA/ASA Guidelines for Early Management of Acute Ischemic Stroke · Table 5 (IV rtPA Eligibility)',
     year: 2019,
     pmid: '31662037',
     url: 'https://doi.org/10.1161/STR.0000000000000211',

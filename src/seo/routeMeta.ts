@@ -138,7 +138,7 @@ function buildTrialMeta(pathname: string, slug: string): MetaData | null {
 
   return {
     ...DEFAULT_META,
-    title: `${trial.name}: ${categoryNames[trial.category]} | NeuroWiki`,
+    title: `${trial.name} · ${categoryNames[trial.category]} | NeuroWiki`,
     description,
     keywords: `${trial.name} trial, ${trial.name} stroke trial, ${trial.name} results, ${categoryNames[trial.category].toLowerCase()}, stroke clinical trial summary`,
   };
