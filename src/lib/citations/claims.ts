@@ -843,6 +843,14 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'ICHD-3 13.1.1 Trigeminal neuralgia: recurrent brief (a fraction of a second to 2 minutes), severe, electric-shock-like / shooting / stabbing / sharp unilateral facial pain in one or more trigeminal divisions, precipitated by innocuous stimuli. Aetiology (13.1.1.1 classical neurovascular compression / 13.1.1.2 secondary / 13.1.1.3 idiopathic) is imaging-determined. Secondary-TN red flags (sensory deficit, bilateral pain, onset before age 40, poor drug response) warrant MRI plus referral. Carbamazepine response is clinically supportive but not an ICHD-3 diagnostic criterion.',
   },
 
+  'clinic-headache-ichd3-occipital-neuralgia-criteria': {
+    id: 'clinic-headache-ichd3-occipital-neuralgia-criteria',
+    citation_ids: ['ichd3-2018'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    // ICHD-3 §13.4 added 2026-07-06 (evidence packet 2026-07-06-ichd3-13-4-occipital-neuralgia.md).
+    description: 'ICHD-3 13.4 Occipital neuralgia: unilateral or bilateral paroxysmal shooting/stabbing pain in the greater, lesser, and/or third occipital nerve distribution (posterior scalp); at least 2 of (seconds-to-minutes paroxysms, severe intensity, shooting/stabbing/sharp quality); associated with both scalp dysaesthesia/allodynia AND nerve tenderness or a C2 trigger point; temporarily relieved by a local anaesthetic nerve block (mandatory criterion D). Must be distinguished from atlantoaxial / upper-cervical zygapophyseal joint referral and cervical myofascial trigger points.',
+  },
+
   'clinic-headache-tension-acute-management': {
     id: 'clinic-headache-tension-acute-management',
     citation_ids: ['bendtsen-efns-tth-2010', 'scher-tth-2024-continuum'],

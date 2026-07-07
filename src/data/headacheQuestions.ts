@@ -135,7 +135,7 @@ export const CORE_QUESTIONS: HeadacheQuestion[] = [
     options: [
       { id: 'qual-throb', label: 'Throbbing or pulsating', chips: ['qual-pulsating'] },
       { id: 'qual-press', label: 'Pressing or tightening', chips: ['qual-pressing-tightening'] },
-      { id: 'qual-sharp', label: 'Sharp or stabbing', chips: ['qual-sharp-stabbing'] },
+      { id: 'qual-sharp', label: 'Sharp, stabbing, or shooting', chips: ['qual-sharp-stabbing'] },
     ],
   },
 
@@ -311,6 +311,25 @@ export const CONDITIONAL_BRANCHES: ConditionalBranch[] = [
         { id: 'vest-migr-half', label: 'At least half of the episodes come with a migraine feature (a migraine-type headache with ≥2 typical features, both light and sound sensitivity together, or visual aura)', chips: ['vest-migrainous-half'] },
         { id: 'vest-motion', label: 'Motion sensitivity between episodes', chips: ['vest-motion-sensitivity'] },
         { id: 'vest-history', label: 'An established current or past migraine diagnosis', chips: ['migraine-history-established'] },
+      ],
+    },
+  },
+  // Occipital / posterior-scalp detail — fires on sharp/stabbing quality; screens for §13.4 occipital neuralgia.
+  {
+    id: 'b-occipital',
+    fires: (s) => has(s, 'qual-sharp-stabbing'),
+    question: {
+      id: 'q-occipital',
+      screen: 8,
+      eyebrow: 'Occipital / posterior scalp detail',
+      prompt: 'If this is shooting or stabbing pain at the BACK of the head, answer these (occipital neuralgia screen):',
+      select: 'multi',
+      options: [
+        { id: 'on-loc', label: 'Pain is at the back of the scalp, in the greater/lesser/third occipital nerve area', chips: ['loc-occipital-nerve'] },
+        { id: 'on-dur', label: 'Paroxysmal attacks lasting a few seconds to minutes', chips: ['dur-seconds-to-minutes'] },
+        { id: 'on-dysaes', label: 'Abnormal or heightened sensation (dysaesthesia/allodynia) when the scalp or hair is lightly touched', chips: ['scalp-dysaesthesia-allodynia'] },
+        { id: 'on-tender', label: 'Tenderness over the occipital nerve, or a trigger point at the nerve emergence / C2 area', chips: ['occipital-nerve-tenderness-or-trigger'] },
+        { id: 'on-block', label: 'Pain is temporarily eased by a local anaesthetic block of the nerve', chips: ['occipital-block-response-positive'] },
       ],
     },
   },

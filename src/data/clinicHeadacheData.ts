@@ -38,6 +38,8 @@ export type ChipId =
   | 'onset-spontaneous-stab' | 'dur-stab-seconds' | 'freq-stab-one-to-many-per-day'
   // §13.1 Trigeminal neuralgia
   | 'loc-trigeminal-distribution' | 'qual-electric-shock-shooting' | 'dur-fraction-sec-to-2min' | 'trigger-innocuous-stimulus'
+  // §13.4 Occipital neuralgia
+  | 'loc-occipital-nerve' | 'dur-seconds-to-minutes' | 'scalp-dysaesthesia-allodynia' | 'occipital-nerve-tenderness-or-trigger' | 'occipital-block-response-positive'
   // Pain location
   | 'loc-unilateral' | 'loc-bilateral' | 'loc-orbital-temporal'
   // Pain quality
@@ -115,6 +117,7 @@ export type PhenotypeId =
   | 'probable-tac'
   | 'primary-stabbing-headache'     // §4.7 — added 2026-07-06
   | 'trigeminal-neuralgia'          // §13.1.1 — added 2026-07-06
+  | 'occipital-neuralgia'           // §13.4 — added 2026-07-06
   | 'ndph'
   | 'vestibular-migraine';
 
@@ -290,7 +293,7 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
 
       { id: 'qual-pulsating', label: 'Throbbing or pulsating quality', teachWhenSelected: '1.1 C feature 2 (migraine).' },
       { id: 'qual-pressing-tightening', label: 'Pressing or tightening (non-pulsating)', teachWhenSelected: '2.2 C feature 2 (TTH).' },
-      { id: 'qual-sharp-stabbing', label: 'Sharp or stabbing' },
+      { id: 'qual-sharp-stabbing', label: 'Sharp, stabbing, or shooting' },
 
       { id: 'sev-mild', label: 'Mild intensity', teachWhenSelected: '2.2 C feature 3 (TTH).' },
       { id: 'sev-moderate', label: 'Moderate intensity', teachWhenSelected: '1.1 C feature 3 (migraine) at moderate; 2.2 C feature 3 (TTH).' },
@@ -302,6 +305,12 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
       { id: 'qual-electric-shock-shooting', label: 'Electric shock-like or shooting pain', teachWhenSelected: 'ICHD-3 13.1.1 B.3: electric shock-like, shooting, stabbing or sharp (any one satisfies the quality criterion).' },
       { id: 'dur-fraction-sec-to-2min', label: 'Each attack lasts from a fraction of a second up to 2 minutes', teachWhenSelected: 'ICHD-3 13.1.1 B.1. A minority of patients report attacks lasting >2 minutes (Note 2).' },
       { id: 'trigger-innocuous-stimulus', label: 'Attacks triggered by light touch, chewing, talking, brushing teeth, or cold air on the face', teachWhenSelected: 'ICHD-3 13.1.1 C / Note 4: precipitated by innocuous stimuli; a trigger history is required even when some attacks appear spontaneous.' },
+      // §13.4 Occipital neuralgia
+      { id: 'loc-occipital-nerve', label: 'Pain at the back of the scalp, in the greater, lesser, and/or third occipital nerve area', teachWhenSelected: 'ICHD-3 13.4 A: unilateral or bilateral pain in the greater, lesser, and/or third occipital nerve distribution.' },
+      { id: 'dur-seconds-to-minutes', label: 'Paroxysmal attacks lasting a few seconds to minutes', teachWhenSelected: 'ICHD-3 13.4 B.1.' },
+      { id: 'scalp-dysaesthesia-allodynia', label: 'Abnormal or heightened sensation (dysaesthesia/allodynia) on light touch of the scalp or hair', teachWhenSelected: 'ICHD-3 13.4 C.1.' },
+      { id: 'occipital-nerve-tenderness-or-trigger', label: 'Tenderness over the occipital nerve, or a trigger point at the nerve emergence or C2 area', teachWhenSelected: 'ICHD-3 13.4 C.2: either tenderness over the affected nerve branches or a trigger point satisfies this.' },
+      { id: 'occipital-block-response-positive', label: 'Pain temporarily eased by a local anaesthetic block of the affected nerve(s)', teachWhenSelected: 'ICHD-3 13.4 D: the mandatory confirmatory test for occipital neuralgia.' },
 
       { id: 'act-aggravated', label: 'Aggravated by or causing avoidance of routine activity', teachWhenSelected: '1.1 C feature 4 (migraine). Also satisfies 3.4 Hemicrania continua criterion C.2 (aggravation of pain by movement).' },
       { id: 'act-not-aggravated', label: 'Not aggravated by routine activity', teachWhenSelected: '2.2 C feature 4 (TTH).' },
@@ -774,6 +783,34 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
       { id: 'tn-B', label: 'Brief (up to 2 min), severe, electric-shock / shooting / stabbing pain', description: 'ICHD-3 13.1.1 B: pain has all of: 1) lasting a fraction of a second to 2 minutes, 2) severe intensity, 3) electric shock-like, shooting, stabbing or sharp in quality.', evaluate: s => has(s, 'dur-fraction-sec-to-2min') && has(s, 'sev-severe') && (has(s, 'qual-electric-shock-shooting') || has(s, 'qual-sharp-stabbing')), contributingChips: ['dur-fraction-sec-to-2min', 'sev-severe', 'qual-electric-shock-shooting', 'qual-sharp-stabbing'], role: 'suppress-gate' },
       // tn-C: suppress-gate (DROP). The pathognomonic trigger (§13.1.1 C / Note 4).
       { id: 'tn-C', label: 'Precipitated by innocuous stimuli in the affected area', description: 'ICHD-3 13.1.1 C: precipitated by innocuous stimuli within the affected trigeminal distribution. Required even when some attacks appear spontaneous (Note 4).', evaluate: s => has(s, 'trigger-innocuous-stimulus'), contributingChips: ['trigger-innocuous-stimulus'], role: 'suppress-gate' },
+    ],
+  },
+
+  // ─── 13.4 Occipital neuralgia ─────────────────────────────────────────────
+  // ICHD-3 §13.4. Flat additive phenotype, encoded 2026-07-06 from the source-
+  // verified evidence packet (ICHD-3 PDF p. 176). No aetiological subtypes and no
+  // §13.4.5 Probable tier → all criteria are suppress-gates (binary full/hidden).
+  // Criterion D (local-anaesthetic nerve-block relief) is the mandatory confirmatory
+  // test, encoded as a hiddenUntilTrial gate (mirrors HC/PH indomethacin).
+  {
+    id: 'occipital-neuralgia',
+    name: 'Occipital neuralgia',
+    ichd3Section: 'ICHD-3 §13.4',
+    hiddenUntilTrial: { gateChip: 'occipital-block-response-positive' },
+    teachPearl:
+      'Occipital neuralgia is paroxysmal shooting or stabbing pain in the posterior scalp, in the greater, lesser, and/or third occipital nerve distribution (unilateral or bilateral), with dysaesthesia or allodynia on scalp stimulation and tenderness or a trigger point over the nerve. Diagnosis requires temporary relief from a local anaesthetic nerve block (criterion D). It must be distinguished from occipital referral of pain arising from the atlantoaxial or upper cervical (zygapophyseal) joints, or from myofascial trigger points in the neck muscles.',
+    criteria: [
+      // on-A: suppress-gate (DROP). Occipital-nerve-distribution substrate (bilateral allowed).
+      { id: 'on-A', label: 'Pain in the greater, lesser, and/or third occipital nerve distribution', description: 'ICHD-3 13.4 A: unilateral or bilateral pain in the distribution(s) of the greater, lesser and/or third occipital nerves.', evaluate: s => has(s, 'loc-occipital-nerve'), contributingChips: ['loc-occipital-nerve'], role: 'suppress-gate' },
+      // on-B: suppress-gate (DROP). >=2 of 3 pain characteristics. No §13.4.5 Probable
+      // home, so a <2-of-3 shortfall hides, not demotes (full-or-nothing).
+      // B.3 quality is "shooting, stabbing OR sharp" — count it as ONE characteristic
+      // satisfied by either qual-sharp-stabbing or qual-electric-shock-shooting (no double-count).
+      { id: 'on-B', label: 'At least 2 of: seconds-to-minutes paroxysms, severe, shooting/stabbing/sharp', description: 'ICHD-3 13.4 B: at least two of: 1) recurring in paroxysmal attacks lasting a few seconds to minutes, 2) severe intensity, 3) shooting, stabbing or sharp in quality.', evaluate: s => (countOf(s, ['dur-seconds-to-minutes', 'sev-severe']) + ((has(s, 'qual-sharp-stabbing') || has(s, 'qual-electric-shock-shooting')) ? 1 : 0)) >= 2, contributingChips: ['dur-seconds-to-minutes', 'sev-severe', 'qual-sharp-stabbing', 'qual-electric-shock-shooting'], role: 'suppress-gate' },
+      // on-C: suppress-gate (DROP). Both associations required: C.1 AND (C.2a OR C.2b).
+      { id: 'on-C', label: 'Scalp dysaesthesia/allodynia AND nerve tenderness or trigger point', description: 'ICHD-3 13.4 C: both of: 1) dysaesthesia and/or allodynia during innocuous scalp/hair stimulation; 2) tenderness over the affected nerve branches, or trigger points at the greater occipital nerve emergence or in the C2 distribution.', evaluate: s => has(s, 'scalp-dysaesthesia-allodynia') && has(s, 'occipital-nerve-tenderness-or-trigger'), contributingChips: ['scalp-dysaesthesia-allodynia', 'occipital-nerve-tenderness-or-trigger'], role: 'suppress-gate' },
+      // on-D: suppress-gate (DROP) + hiddenUntilTrial. Mandatory local-anaesthetic block relief.
+      { id: 'on-D', label: 'Pain eased temporarily by local anaesthetic nerve block', description: 'ICHD-3 13.4 D: pain is eased temporarily by local anaesthetic block of the affected nerve(s). Mandatory confirmatory test.', evaluate: s => has(s, 'occipital-block-response-positive'), contributingChips: ['occipital-block-response-positive'], role: 'suppress-gate' },
     ],
   },
 

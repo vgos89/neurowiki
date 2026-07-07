@@ -1373,3 +1373,45 @@ describe('§13.1.1 Trigeminal neuralgia (Track C — new diagnosis)', () => {
     expect(tn).toBeUndefined();
   });
 });
+
+describe('§13.4 Occipital neuralgia (Track C — new diagnosis)', () => {
+  const onFull: ChipId[] = [
+    'loc-occipital-nerve',
+    'dur-seconds-to-minutes', 'sev-severe',              // 2 of 3 (on-B)
+    'scalp-dysaesthesia-allodynia', 'occipital-nerve-tenderness-or-trigger', // on-C
+    'occipital-block-response-positive',                 // on-D + hiddenUntilTrial
+  ];
+
+  it('full match: occipital distribution + ≥2/3 + both C associations + positive block', () => {
+    const matches = evaluateHeadachePhenotypes(select(...onFull));
+    expect(matches.find(m => m.phenotypeId === 'occipital-neuralgia')?.matchStrength).toBe('full');
+  });
+
+  it('hiddenUntilTrial: absent until the nerve-block chip is selected (criterion D not yet done)', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'loc-occipital-nerve', 'dur-seconds-to-minutes', 'sev-severe',
+      'scalp-dysaesthesia-allodynia', 'occipital-nerve-tenderness-or-trigger',
+      // no occipital-block-response-positive → hidden until trial
+    ));
+    expect(matches.find(m => m.phenotypeId === 'occipital-neuralgia')).toBeUndefined();
+  });
+
+  it('on-B full-or-nothing: only 1 of 3 pain characteristics → absent (no §13.4.5 Probable)', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'loc-occipital-nerve',
+      'sev-severe', // only 1 of 3 → on-B fails
+      'scalp-dysaesthesia-allodynia', 'occipital-nerve-tenderness-or-trigger',
+      'occipital-block-response-positive',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'occipital-neuralgia')).toBeUndefined();
+  });
+
+  it('on-C suppress (DROP): dysaesthesia present but no nerve tenderness/trigger → absent (both required)', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'loc-occipital-nerve', 'dur-seconds-to-minutes', 'sev-severe',
+      'scalp-dysaesthesia-allodynia', // no occipital-nerve-tenderness-or-trigger → on-C fails
+      'occipital-block-response-positive',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'occipital-neuralgia')).toBeUndefined();
+  });
+});
