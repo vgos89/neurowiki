@@ -54,6 +54,12 @@
 | C-tenderness | Pericranial-tenderness subform label for TTH | §2.x.1/.2 | 2 | ⏳ pending |
 | C-more | §4.1 cough / §4.2 exercise / §4.8 nummular / §13.1.2 painful trigeminal neuropathy / §13.11 BMS / §13.12 PIFP / §2.1 infrequent TTH / §3.2 ep-chronic / complete Bárány VM | various | 3 | ⏳ pending |
 
+## Class D build (ADR-2026-07-06 — V-approved 2026-07-06) — staged
+- **Stage 1 — itemized autonomic chip split ✅ done (run 12):** split bundled `sym-autonomic-ipsilateral` into `sym-conjunctival-injection` + `sym-lacrimation` + `sym-other-cranial-autonomic`, gated through a shared `anyAutonomicFeature()` helper (bundled OR itemized) at all 6 autonomic criteria (cluster-C/hc-C/ph-C/sunct-C present; hypnic-E/psh-D absent). Fully backward-compatible — all 232 prior tests unchanged; 4 new parity tests. Clinical-reviewer approved (artifact `docs/reviews/clinical-PR-headache-autonomic-chip-split.md`). This is the ADR condition-#7 prerequisite for the SUNCT/SUNA resolver.
+- **Stage 2 — subtype resolver infrastructure 📋 next:** `SubtypeId` union + optional `PhenotypeMatch.subtype` field + `SUBTYPE_RESOLVERS` map + dev-invariant extension + render in HeadacheResultV4/HeadacheManagement. First subtypes: **SUNCT vs SUNA** (§3.3.1/.2, unblocks A-M2) + **cluster episodic/chronic** (§3.1.1/.2).
+- **Stage 3 — migraine-aura subtypes 📋:** typical/brainstem/hemiplegic/retinal (§1.2.1-.4; hemiplegic→genetic-referral + retinal→exclusion are safety wins) + TN aetiology subtypes (§13.1.1.1/.2/.3, Stage-2 of C-TN).
+- **Stage 4 — MOH overlay 📋:** blocked on Track B-2 (remove `rf-painkiller-overuse` from red-flag short-circuit) + overuse-days chips, THEN `detectOverlays` → MOH.
+
 ## Architecture notes (from the feasibility assessment)
 - **Chip/`Criterion` model = strong/extensible** → neuralgias + §4 others drop in with new chips (additive, Class E).
 - **`Phenotype` array = weak for non-flat** → subtypes (no hierarchy) + MOH (no co-occurrence) both need **structural changes + an ADR each** (Class D-carrying-E). Do NOT bolt boolean flags onto `Phenotype` (spreads special-casing across ~6 switch sites).

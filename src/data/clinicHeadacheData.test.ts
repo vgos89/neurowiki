@@ -1454,3 +1454,39 @@ describe('§4.9 Hypnic headache (Track C — new diagnosis)', () => {
     expect(matches.find(m => m.phenotypeId === 'hypnic-headache')).toBeUndefined();
   });
 });
+
+describe('Itemized autonomic chip split (A-M2 / ADR-2026-07-06 — backward-compatible)', () => {
+  it('cluster-C is satisfied by an itemized autonomic chip (sym-conjunctival-injection), same as the bundled chip', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'attacks-gt-10', 'loc-unilateral', 'loc-orbital-temporal', 'sev-very-severe',
+      'dur-15-to-180-min', 'freq-cluster-bout',
+      'sym-conjunctival-injection', // itemized, not the bundled sym-autonomic-ipsilateral
+    ));
+    expect(matches.find(m => m.phenotypeId === 'cluster-headache')?.matchStrength).toBe('full');
+  });
+
+  it('sunct-C (suppress-gate) is satisfied by an itemized autonomic chip (sym-lacrimation)', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'attacks-ge-20', 'loc-unilateral', 'sev-severe', 'dur-1-to-600-sec', 'freq-ge-1-per-day',
+      'sym-lacrimation', // itemized satisfies the ≥1-autonomic gate
+    ));
+    // sunct-C no longer drops the phenotype; SUNCT/SUNA surfaces (full or probable).
+    expect(matches.find(m => m.phenotypeId === 'sunct-suna')).toBeDefined();
+  });
+
+  it('hypnic-E EMIT: an itemized autonomic chip (sym-lacrimation) present → hypnic set aside', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'onset-only-during-sleep-waking', 'freq-ge-10-per-month', 'pattern-ge-3-months', 'dur-15min-to-4h',
+      'sym-lacrimation', // itemized autonomic → hypnic-E fails → EMIT
+    ));
+    expect(matches.find(m => m.phenotypeId === 'hypnic-headache')?.definitionallyExcluded).toBe(true);
+  });
+
+  it('psh-D: an itemized autonomic chip (sym-conjunctival-injection) present → primary stabbing set aside', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'onset-spontaneous-stab', 'qual-sharp-stabbing', 'dur-stab-seconds', 'freq-stab-one-to-many-per-day',
+      'sym-conjunctival-injection', // itemized autonomic → psh-D fails → EMIT
+    ));
+    expect(matches.find(m => m.phenotypeId === 'primary-stabbing-headache')?.definitionallyExcluded).toBe(true);
+  });
+});

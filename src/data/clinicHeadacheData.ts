@@ -57,6 +57,7 @@ export type ChipId =
   | 'sym-nausea-mild' | 'sym-nausea-moderate-severe' | 'sym-vomiting'
   | 'sym-photophobia' | 'sym-phonophobia'
   | 'sym-restlessness' | 'sym-autonomic-ipsilateral'
+  | 'sym-conjunctival-injection' | 'sym-lacrimation' | 'sym-other-cranial-autonomic'  // §3.3 SUNCT/SUNA itemized autonomic
   // Chronic migraine — ICHD-3 §1.3 criterion C disjunction
   | 'migraine-features-ge-8-per-month' | 'triptan-response-positive'
   // Aura features
@@ -242,6 +243,12 @@ export interface PhenotypeMatch {
 const has = (s: Set<ChipId>, id: ChipId) => s.has(id);
 const hasAny = (s: Set<ChipId>, ids: ChipId[]) => ids.some(id => s.has(id));
 const countOf = (s: Set<ChipId>, ids: ChipId[]) => ids.filter(id => s.has(id)).length;
+// Any ipsilateral cranial autonomic feature — the itemized chips (for §3.3 SUNCT/SUNA
+// subtype resolution) OR the bundled "any autonomic" chip. Used by every phenotype whose
+// criterion is "any cranial autonomic feature" so the itemized split (A-M2 / ADR-2026-07-06)
+// stays backward-compatible: no existing TAC match changes because the bundled chip still
+// satisfies the check and the itemized chips only ADD ways to satisfy it.
+const anyAutonomicFeature = (s: Set<ChipId>) => has(s, 'sym-autonomic-ipsilateral') || has(s, 'sym-conjunctival-injection') || has(s, 'sym-lacrimation') || has(s, 'sym-other-cranial-autonomic');
 
 // ─── Chip groups (ordered as they appear on the page) ─────────────────────
 
@@ -334,7 +341,12 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
       { id: 'sym-photophobia', label: 'Bothered by light during attacks', teachWhenSelected: 'For migraine 1.1 D, photophobia AND phonophobia together satisfy criterion.' },
       { id: 'sym-phonophobia', label: 'Bothered by sound during attacks', teachWhenSelected: 'For migraine 1.1 D, paired with photophobia satisfies criterion.' },
       { id: 'sym-restlessness', label: 'Restlessness or agitation during attacks', teachWhenSelected: '3.1 Cluster criterion C alternative: restlessness OR autonomic features.' },
-      { id: 'sym-autonomic-ipsilateral', label: 'Ipsilateral autonomic features (tearing, conjunctival injection, rhinorrhoea, ptosis, miosis, eyelid oedema, facial sweating)', teachWhenSelected: '3.1 Cluster and 3.4 Hemicrania continua criterion C.' },
+      { id: 'sym-autonomic-ipsilateral', label: 'Ipsilateral autonomic features (tearing, conjunctival injection, rhinorrhoea, ptosis, miosis, eyelid oedema, facial sweating)', teachWhenSelected: '3.1 Cluster and 3.4 Hemicrania continua criterion C. For 3.3 SUNCT vs SUNA, itemize below (conjunctival injection + tearing distinguishes the two).' },
+      // §3.3 SUNCT/SUNA itemized autonomic features. SUNCT = BOTH conjunctival injection
+      // AND lacrimation; SUNA = one or neither (with other autonomic features).
+      { id: 'sym-conjunctival-injection', label: 'Red eye (conjunctival injection) on the painful side', teachWhenSelected: '3.3 SUNCT requires BOTH conjunctival injection AND lacrimation; either alone (with other autonomic features) points to SUNA.' },
+      { id: 'sym-lacrimation', label: 'Tearing (lacrimation) on the painful side', teachWhenSelected: '3.3 SUNCT requires BOTH conjunctival injection AND lacrimation; either alone (with other autonomic features) points to SUNA.' },
+      { id: 'sym-other-cranial-autonomic', label: 'Other ipsilateral autonomic feature (nasal congestion, rhinorrhoea, eyelid oedema, sweating, ptosis, or miosis)', teachWhenSelected: 'A cranial autonomic feature other than conjunctival injection or lacrimation.' },
     ],
   },
   {
@@ -552,7 +564,7 @@ function tthEvidenceFloor(selected: Set<ChipId>): boolean {
 const CLUSTER_C_DEFINING_CHIPS: ChipId[] = ['loc-unilateral', 'loc-orbital-temporal', 'sev-severe', 'sev-very-severe', 'dur-15-to-180-min'];
 const CLUSTER_ALL_CHIPS: ChipId[] = [
   ...CLUSTER_C_DEFINING_CHIPS,
-  'sym-autonomic-ipsilateral', 'sym-restlessness',
+  'sym-autonomic-ipsilateral', 'sym-conjunctival-injection', 'sym-lacrimation', 'sym-other-cranial-autonomic', 'sym-restlessness',
   'attacks-5-to-10', 'attacks-gt-10', 'freq-cluster-bout',
 ];
 function clusterEvidenceFloor(selected: Set<ChipId>): boolean {
@@ -699,7 +711,7 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
       // A between-bouts patient may simply not have reported autonomic features yet.
       // Failure is NOT positive evidence for another phenotype → demote (was definitional:true).
       // Clinical-reviewer §17.2 condition 1 confirms this is demote, not suppress.
-      { id: 'cluster-C', label: 'Ipsilateral autonomic features OR restlessness/agitation', description: 'ICHD-3 3.1 C: either or both of ipsilateral cranial autonomic symptoms; restlessness/agitation.', evaluate: s => has(s, 'sym-autonomic-ipsilateral') || has(s, 'sym-restlessness'), contributingChips: ['sym-autonomic-ipsilateral', 'sym-restlessness'], role: 'demote-gate' },
+      { id: 'cluster-C', label: 'Ipsilateral autonomic features OR restlessness/agitation', description: 'ICHD-3 3.1 C: either or both of ipsilateral cranial autonomic symptoms; restlessness/agitation.', evaluate: s => anyAutonomicFeature(s) || has(s, 'sym-restlessness'), contributingChips: ['sym-autonomic-ipsilateral', 'sym-conjunctival-injection', 'sym-lacrimation', 'sym-other-cranial-autonomic', 'sym-restlessness'], role: 'demote-gate' },
       // cluster-D: scorable. Already intentionally non-gating: between-bouts
       // encounters cannot surface bout-frequency via chips.
       { id: 'cluster-D', label: 'Frequency 1 every other day to 8/day during bouts', description: 'ICHD-3 3.1 D: frequency 1 every other day to 8/day during active periods.', evaluate: s => has(s, 'freq-cluster-bout'), contributingChips: ['freq-cluster-bout'], role: 'scorable' },
@@ -734,7 +746,7 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
       // "Makes it worse, or makes them avoid activity"). Regression-safe: the other HC
       // gates (hc-A unilateral+continuous+>3mo, hc-D indomethacin) prevent any migraine
       // patient who ticked `act-aggravated` from spuriously matching HC.
-      { id: 'hc-C', label: 'Ipsilateral autonomic features OR restlessness/movement aggravation', description: 'ICHD-3 3.4 C: ipsilateral cranial autonomic symptoms and/or restlessness or aggravation by movement.', evaluate: s => has(s, 'sym-autonomic-ipsilateral') || has(s, 'sym-restlessness') || has(s, 'act-aggravated'), contributingChips: ['sym-autonomic-ipsilateral', 'sym-restlessness', 'act-aggravated'], role: 'demote-gate' },
+      { id: 'hc-C', label: 'Ipsilateral autonomic features OR restlessness/movement aggravation', description: 'ICHD-3 3.4 C: ipsilateral cranial autonomic symptoms and/or restlessness or aggravation by movement.', evaluate: s => anyAutonomicFeature(s) || has(s, 'sym-restlessness') || has(s, 'act-aggravated'), contributingChips: ['sym-autonomic-ipsilateral', 'sym-conjunctival-injection', 'sym-lacrimation', 'sym-other-cranial-autonomic', 'sym-restlessness', 'act-aggravated'], role: 'demote-gate' },
       // hc-D: suppress-gate (DROP via the gate). Absent confirmatory test, double-
       // enforced by hiddenUntilTrial gate. Both checks are idempotent (arch §17.1).
       { id: 'hc-D', label: 'Absolute response to therapeutic-dose indomethacin', description: 'ICHD-3 3.4 D: suppress-gate. Complete indomethacin response is required.', evaluate: s => has(s, 'indo-tried-complete'), contributingChips: ['indo-tried-complete'], role: 'suppress-gate' },
@@ -869,7 +881,7 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
       { id: 'hypnic-D', label: 'Lasting 15 minutes up to 4 hours after waking', description: 'ICHD-3 4.9 D: lasting from 15 minutes up to four hours after waking.', evaluate: s => has(s, 'dur-15min-to-4h'), contributingChips: ['dur-15min-to-4h'], role: 'demote-gate' },
       // hypnic-E: suppress-gate (EMIT). Exclusion — cranial autonomic symptoms or
       // restlessness point to §3 TACs (esp. 3.1 Cluster, Note 1); set aside on presence.
-      { id: 'hypnic-E', label: 'No cranial autonomic symptoms or restlessness', description: 'ICHD-3 4.9 E: no cranial autonomic symptoms or restlessness. Their presence steers to 3 Trigeminal autonomic cephalalgias, especially 3.1 Cluster headache.', evaluate: s => !has(s, 'sym-autonomic-ipsilateral') && !has(s, 'sym-restlessness'), contributingChips: ['sym-autonomic-ipsilateral', 'sym-restlessness'], role: 'suppress-gate' },
+      { id: 'hypnic-E', label: 'No cranial autonomic symptoms or restlessness', description: 'ICHD-3 4.9 E: no cranial autonomic symptoms or restlessness. Their presence steers to 3 Trigeminal autonomic cephalalgias, especially 3.1 Cluster headache.', evaluate: s => !anyAutonomicFeature(s) && !has(s, 'sym-restlessness'), contributingChips: ['sym-autonomic-ipsilateral', 'sym-conjunctival-injection', 'sym-lacrimation', 'sym-other-cranial-autonomic', 'sym-restlessness'], role: 'suppress-gate' },
     ],
   },
 
@@ -894,7 +906,7 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
       { id: 'psh-C', label: 'Stabs recur irregularly, one to many per day', description: 'ICHD-3 4.7 C: stabs recur with irregular frequency, from one to many per day.', evaluate: s => has(s, 'freq-stab-one-to-many-per-day'), contributingChips: ['freq-stab-one-to-many-per-day'], role: 'demote-gate' },
       // psh-D: suppress-gate (EMIT). Exclusion — cranial autonomic symptoms present is
       // positive evidence for §3.3 SUNCT/SUNA; surface "considered and set aside."
-      { id: 'psh-D', label: 'No cranial autonomic symptoms', description: 'ICHD-3 4.7 D: no cranial autonomic symptoms. Their presence differentiates 3.3 SUNCT/SUNA from primary stabbing headache.', evaluate: s => !has(s, 'sym-autonomic-ipsilateral'), contributingChips: ['sym-autonomic-ipsilateral'], role: 'suppress-gate' },
+      { id: 'psh-D', label: 'No cranial autonomic symptoms', description: 'ICHD-3 4.7 D: no cranial autonomic symptoms. Their presence differentiates 3.3 SUNCT/SUNA from primary stabbing headache.', evaluate: s => !anyAutonomicFeature(s), contributingChips: ['sym-autonomic-ipsilateral', 'sym-conjunctival-injection', 'sym-lacrimation', 'sym-other-cranial-autonomic'], role: 'suppress-gate' },
     ],
   },
 
@@ -986,7 +998,7 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
       { id: 'ph-B', label: 'Severe unilateral orbital/supraorbital/temporal pain, 2–30 minutes', description: 'ICHD-3 3.2 B: severe unilateral orbital, supraorbital, and/or temporal pain lasting 2–30 minutes.', evaluate: s => has(s, 'loc-unilateral') && has(s, 'loc-orbital-temporal') && (has(s, 'sev-severe') || has(s, 'sev-very-severe')) && has(s, 'dur-2-to-30-min'), contributingChips: ['loc-unilateral', 'loc-orbital-temporal', 'sev-severe', 'sev-very-severe', 'dur-2-to-30-min'], role: 'demote-gate' },
       // ph-C: demote-gate. §3.2 C is one of A–E; §3.5.2 covers single miss.
       // Not positive evidence for another phenotype → demote (was definitional:true).
-      { id: 'ph-C', label: 'Ipsilateral autonomic features OR restlessness', description: 'ICHD-3 3.2 C: either or both of ipsilateral cranial autonomic symptoms; restlessness or agitation.', evaluate: s => has(s, 'sym-autonomic-ipsilateral') || has(s, 'sym-restlessness'), contributingChips: ['sym-autonomic-ipsilateral', 'sym-restlessness'], role: 'demote-gate' },
+      { id: 'ph-C', label: 'Ipsilateral autonomic features OR restlessness', description: 'ICHD-3 3.2 C: either or both of ipsilateral cranial autonomic symptoms; restlessness or agitation.', evaluate: s => anyAutonomicFeature(s) || has(s, 'sym-restlessness'), contributingChips: ['sym-autonomic-ipsilateral', 'sym-conjunctival-injection', 'sym-lacrimation', 'sym-other-cranial-autonomic', 'sym-restlessness'], role: 'demote-gate' },
       // ph-D: scorable. Already intentionally non-gating: between-bouts
       // bout-frequency cannot be surfaced via chips.
       { id: 'ph-D', label: '>5 attacks per day for more than half the time', description: 'ICHD-3 3.2 D: attack frequency >5/day for more than half of the time when the disorder is active.', evaluate: s => has(s, 'freq-gt-5-per-day'), contributingChips: ['freq-gt-5-per-day'], role: 'scorable' },
@@ -1016,7 +1028,7 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
       // SUNCT/SUNA territory. Substrate-absence → suppress.
       // Clinical-reviewer §17.2 condition 8 confirms suppress is correct despite
       // §3.5.3's literal "all but one" — autonomic is the phenotype substrate.
-      { id: 'sunct-C', label: '≥1 ipsilateral cranial autonomic feature', description: 'ICHD-3 3.3 C: accompanied by at least one ipsilateral cranial autonomic symptom (conjunctival injection, lacrimation, nasal congestion, rhinorrhoea, eyelid oedema, forehead/facial sweating, miosis, ptosis).', evaluate: s => has(s, 'sym-autonomic-ipsilateral'), contributingChips: ['sym-autonomic-ipsilateral'], role: 'suppress-gate' },
+      { id: 'sunct-C', label: '≥1 ipsilateral cranial autonomic feature', description: 'ICHD-3 3.3 C: accompanied by at least one ipsilateral cranial autonomic symptom (conjunctival injection, lacrimation, nasal congestion, rhinorrhoea, eyelid oedema, forehead/facial sweating, miosis, ptosis).', evaluate: s => anyAutonomicFeature(s), contributingChips: ['sym-autonomic-ipsilateral', 'sym-conjunctival-injection', 'sym-lacrimation', 'sym-other-cranial-autonomic'], role: 'suppress-gate' },
       // sunct-D: scorable. Frequency criterion; same between-bouts rationale.
       { id: 'sunct-D', label: '≥1 attack per day during the active period', description: 'ICHD-3 3.3 D: attack frequency at least one per day for more than half the time when the disorder is active.', evaluate: s => has(s, 'freq-ge-1-per-day'), contributingChips: ['freq-ge-1-per-day'], role: 'scorable' },
     ],

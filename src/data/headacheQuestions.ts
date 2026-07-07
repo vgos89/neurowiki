@@ -196,7 +196,12 @@ export const CORE_QUESTIONS: HeadacheQuestion[] = [
       { id: 'as-photo', label: 'Light bothers them', chips: ['sym-photophobia'] },
       { id: 'as-phono', label: 'Sound bothers them', chips: ['sym-phonophobia'] },
       { id: 'as-restless', label: 'Restless, cannot stay still', chips: ['sym-restlessness'] },
-      { id: 'as-autonomic', label: 'Watery eye, runny nose, or droopy lid on the painful side', chips: ['sym-autonomic-ipsilateral'] },
+      // §3.3 SUNCT/SUNA itemized autonomic features (conjunctival injection + tearing
+      // distinguish SUNCT from SUNA). The bundled `sym-autonomic-ipsilateral` chip stays
+      // in code for back-compat; anyAutonomicFeature() OR-s all of these.
+      { id: 'as-conjunctival', label: 'Red eye (conjunctival injection) on the painful side', chips: ['sym-conjunctival-injection'] },
+      { id: 'as-lacrimation', label: 'Tearing / watery eye (lacrimation) on the painful side', chips: ['sym-lacrimation'] },
+      { id: 'as-autonomic-other', label: 'Other autonomic feature on the painful side (runny or blocked nose, droopy or swollen lid, forehead sweating)', chips: ['sym-other-cranial-autonomic'] },
       // Vertigo trigger → the vestibular branch fires on this chip.
       { id: 'as-vertigo', label: 'Vertigo or dizziness with the headache', chips: ['vest-vertigo-migrainous'] },
     ],
@@ -206,7 +211,7 @@ export const CORE_QUESTIONS: HeadacheQuestion[] = [
 // ─── Conditional branches (fire only on their substrate trigger) ──────────────
 
 const has = (s: ReadonlySet<ChipId>, c: ChipId) => s.has(c);
-const anyAutonomic = (s: ReadonlySet<ChipId>) => has(s, 'sym-autonomic-ipsilateral') || has(s, 'sym-restlessness');
+const anyAutonomic = (s: ReadonlySet<ChipId>) => has(s, 'sym-autonomic-ipsilateral') || has(s, 'sym-conjunctival-injection') || has(s, 'sym-lacrimation') || has(s, 'sym-other-cranial-autonomic') || has(s, 'sym-restlessness');
 const migraineSuggestive = (s: ReadonlySet<ChipId>) =>
   has(s, 'qual-pulsating') || has(s, 'sym-nausea-mild') || has(s, 'sym-nausea-moderate-severe') ||
   has(s, 'sym-vomiting') || has(s, 'sym-photophobia');
