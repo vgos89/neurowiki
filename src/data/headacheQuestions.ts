@@ -69,6 +69,7 @@ export const CORE_QUESTIONS: HeadacheQuestion[] = [
       { id: 'new-continuous-24h', label: 'New, with a clearly-remembered start that became constant within 24 hours', chips: ['onset-abrupt-continuous-24h', 'onset-new-within-3-months', 'dur-continuous'] },
       { id: 'single-sudden', label: 'One sudden, first-ever episode', chips: ['onset-single-sudden'] },
       { id: 'continuous', label: 'Continuous, never fully goes away', chips: ['dur-continuous'] },
+      { id: 'sleep-only', label: 'Only during sleep, waking the patient ("alarm-clock" headache)', chips: ['onset-only-during-sleep-waking'] },
     ],
   },
 
@@ -311,6 +312,23 @@ export const CONDITIONAL_BRANCHES: ConditionalBranch[] = [
         { id: 'vest-migr-half', label: 'At least half of the episodes come with a migraine feature (a migraine-type headache with ≥2 typical features, both light and sound sensitivity together, or visual aura)', chips: ['vest-migrainous-half'] },
         { id: 'vest-motion', label: 'Motion sensitivity between episodes', chips: ['vest-motion-sensitivity'] },
         { id: 'vest-history', label: 'An established current or past migraine diagnosis', chips: ['migraine-history-established'] },
+      ],
+    },
+  },
+  // Sleep-related (hypnic) detail — fires when the headache occurs only during sleep (§4.9).
+  {
+    id: 'b-hypnic',
+    fires: (s) => has(s, 'onset-only-during-sleep-waking'),
+    question: {
+      id: 'q-hypnic',
+      screen: 8,
+      eyebrow: 'Sleep-related (hypnic) detail',
+      prompt: 'About these sleep-only headaches:',
+      select: 'multi',
+      options: [
+        { id: 'hypnic-freq', label: 'They occur on 10 or more days per month', chips: ['freq-ge-10-per-month'] },
+        { id: 'hypnic-3mo', label: 'This pattern has lasted more than 3 months', chips: ['pattern-ge-3-months'] },
+        { id: 'hypnic-dur', label: 'Each attack lasts from 15 minutes up to 4 hours after waking', chips: ['dur-15min-to-4h'] },
       ],
     },
   },

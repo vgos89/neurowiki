@@ -1415,3 +1415,42 @@ describe('§13.4 Occipital neuralgia (Track C — new diagnosis)', () => {
     expect(matches.find(m => m.phenotypeId === 'occipital-neuralgia')).toBeUndefined();
   });
 });
+
+describe('§4.9 Hypnic headache (Track C — new diagnosis)', () => {
+  it('full match: sleep-only + ≥10 d/mo + >3 mo + 15min-4h + no autonomic/restlessness', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'onset-only-during-sleep-waking',
+      'freq-ge-10-per-month', 'pattern-ge-3-months', // hypnic-C
+      'dur-15min-to-4h',                             // hypnic-D
+    ));
+    expect(matches.find(m => m.phenotypeId === 'hypnic-headache')?.matchStrength).toBe('full');
+  });
+
+  it('probable (§4.9.1): substrate + duration but not the ≥10-d/mo frequency → probable, displaySection §4.9.1', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'onset-only-during-sleep-waking',
+      'dur-15min-to-4h', // hypnic-D ok; hypnic-C (freq+3mo) missing → one demote miss
+    ));
+    const hh = matches.find(m => m.phenotypeId === 'hypnic-headache');
+    expect(hh?.matchStrength).toBe('probable');
+    expect(hh?.displaySection).toContain('§4.9.1');
+  });
+
+  it('hypnic-E EMIT: cranial autonomic symptoms present → set aside, steer to §3 cluster/TACs', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'onset-only-during-sleep-waking',
+      'freq-ge-10-per-month', 'pattern-ge-3-months', 'dur-15min-to-4h',
+      'sym-autonomic-ipsilateral', // hypnic-E fails → EMIT
+    ));
+    const hh = matches.find(m => m.phenotypeId === 'hypnic-headache');
+    expect(hh?.definitionallyExcluded).toBe(true);
+  });
+
+  it('hypnic-B suppress (DROP): ≥10 d/mo + duration but NOT sleep-only → absent (substrate)', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'freq-ge-10-per-month', 'pattern-ge-3-months', 'dur-15min-to-4h',
+      // no onset-only-during-sleep-waking → hypnic-B fails (silent DROP)
+    ));
+    expect(matches.find(m => m.phenotypeId === 'hypnic-headache')).toBeUndefined();
+  });
+});

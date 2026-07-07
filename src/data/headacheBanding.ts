@@ -55,6 +55,7 @@ const CHAPTER_ORDER: readonly string[] = [
   'sunct-suna',              // §3.3
   'hemicrania-continua',     // §3.4
   'primary-stabbing-headache', // §4.7
+  'hypnic-headache',         // §4.9
   'ndph',                    // §4.10
   'trigeminal-neuralgia',    // §13.1.1
   'occipital-neuralgia',     // §13.4

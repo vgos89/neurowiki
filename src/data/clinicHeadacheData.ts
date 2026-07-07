@@ -40,6 +40,8 @@ export type ChipId =
   | 'loc-trigeminal-distribution' | 'qual-electric-shock-shooting' | 'dur-fraction-sec-to-2min' | 'trigger-innocuous-stimulus'
   // §13.4 Occipital neuralgia
   | 'loc-occipital-nerve' | 'dur-seconds-to-minutes' | 'scalp-dysaesthesia-allodynia' | 'occipital-nerve-tenderness-or-trigger' | 'occipital-block-response-positive'
+  // §4.9 Hypnic headache
+  | 'onset-only-during-sleep-waking' | 'freq-ge-10-per-month' | 'dur-15min-to-4h'
   // Pain location
   | 'loc-unilateral' | 'loc-bilateral' | 'loc-orbital-temporal'
   // Pain quality
@@ -116,6 +118,7 @@ export type PhenotypeId =
   | 'hemicrania-continua'
   | 'probable-tac'
   | 'primary-stabbing-headache'     // §4.7 — added 2026-07-06
+  | 'hypnic-headache'               // §4.9 — added 2026-07-06
   | 'trigeminal-neuralgia'          // §13.1.1 — added 2026-07-06
   | 'occipital-neuralgia'           // §13.4 — added 2026-07-06
   | 'ndph'
@@ -311,6 +314,10 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
       { id: 'scalp-dysaesthesia-allodynia', label: 'Abnormal or heightened sensation (dysaesthesia/allodynia) on light touch of the scalp or hair', teachWhenSelected: 'ICHD-3 13.4 C.1.' },
       { id: 'occipital-nerve-tenderness-or-trigger', label: 'Tenderness over the occipital nerve, or a trigger point at the nerve emergence or C2 area', teachWhenSelected: 'ICHD-3 13.4 C.2: either tenderness over the affected nerve branches or a trigger point satisfies this.' },
       { id: 'occipital-block-response-positive', label: 'Pain temporarily eased by a local anaesthetic block of the affected nerve(s)', teachWhenSelected: 'ICHD-3 13.4 D: the mandatory confirmatory test for occipital neuralgia.' },
+      // §4.9 Hypnic headache
+      { id: 'onset-only-during-sleep-waking', label: 'Attacks occur only during sleep and wake the patient ("alarm-clock" headache)', teachWhenSelected: 'ICHD-3 4.9 B: developing only during sleep, and causing wakening.' },
+      { id: 'freq-ge-10-per-month', label: '10 or more headache days per month', teachWhenSelected: 'ICHD-3 4.9 C: on 10 or more days per month for >3 months (note: the criterion threshold is >=10, not >=15).' },
+      { id: 'dur-15min-to-4h', label: 'Attacks last 15 minutes up to 4 hours after waking', teachWhenSelected: 'ICHD-3 4.9 D: lasting from 15 minutes up to four hours after waking.' },
 
       { id: 'act-aggravated', label: 'Aggravated by or causing avoidance of routine activity', teachWhenSelected: '1.1 C feature 4 (migraine). Also satisfies 3.4 Hemicrania continua criterion C.2 (aggravation of pain by movement).' },
       { id: 'act-not-aggravated', label: 'Not aggravated by routine activity', teachWhenSelected: '2.2 C feature 4 (TTH).' },
@@ -839,6 +846,33 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
     ],
   },
 
+  // ─── 4.9 Hypnic headache ──────────────────────────────────────────────────
+  // ICHD-3 §4.9 ("alarm-clock" headache). Flat additive phenotype, encoded
+  // 2026-07-06 from the source-verified evidence packet (ICHD-3 PDF p. 54-55).
+  // Criterion E (no autonomic/restlessness) is a suppress-gate EMIT: autonomic
+  // features or restlessness steer to §3 TACs (esp. 3.1 Cluster, Note 1), so a
+  // present-autonomic picture is set aside rather than surfaced as Probable §4.9.1.
+  // C and D are demote-gates → §4.9.1 Probable (two-of-three C/D/E). No trial gate
+  // (lithium/caffeine/melatonin/indomethacin are treatments, NOT criteria).
+  {
+    id: 'hypnic-headache',
+    name: 'Hypnic headache',
+    ichd3Section: 'ICHD-3 §4.9',
+    teachPearl:
+      'Hypnic ("alarm-clock") headache is recurrent, occurring ONLY during sleep and waking the patient, on 10 or more days/month for >3 months, lasting 15 minutes up to 4 hours after waking, with NO cranial autonomic symptoms or restlessness. It usually begins after age 50 (late onset alone is not a red flag here) and is often bilateral. Distinguish it from 3.1 Cluster headache and the other trigeminal autonomic cephalalgias (autonomic features or restlessness point away from hypnic headache). Rule out sleep apnoea, nocturnal hypertension, hypoglycaemia, medication overuse, and intracranial disorders. Lithium, caffeine, melatonin, and indomethacin are reported treatments but are NOT diagnostic criteria.',
+    criteria: [
+      // hypnic-B: suppress-gate (DROP). Substrate — only during sleep, causing wakening.
+      { id: 'hypnic-B', label: 'Occurs only during sleep and causes wakening', description: 'ICHD-3 4.9 B: developing only during sleep, and causing wakening.', evaluate: s => has(s, 'onset-only-during-sleep-waking'), contributingChips: ['onset-only-during-sleep-waking'], role: 'suppress-gate' },
+      // hypnic-C: demote-gate. >=10 days/month for >3 months. §4.9.1 Probable covers a single miss.
+      { id: 'hypnic-C', label: 'On 10 or more days/month for >3 months', description: 'ICHD-3 4.9 C: occurring on 10 or more days per month for >3 months.', evaluate: s => has(s, 'freq-ge-10-per-month') && has(s, 'pattern-ge-3-months'), contributingChips: ['freq-ge-10-per-month', 'pattern-ge-3-months'], role: 'demote-gate' },
+      // hypnic-D: demote-gate. 15 min to 4 h after waking. §4.9.1 Probable covers a single miss.
+      { id: 'hypnic-D', label: 'Lasting 15 minutes up to 4 hours after waking', description: 'ICHD-3 4.9 D: lasting from 15 minutes up to four hours after waking.', evaluate: s => has(s, 'dur-15min-to-4h'), contributingChips: ['dur-15min-to-4h'], role: 'demote-gate' },
+      // hypnic-E: suppress-gate (EMIT). Exclusion — cranial autonomic symptoms or
+      // restlessness point to §3 TACs (esp. 3.1 Cluster, Note 1); set aside on presence.
+      { id: 'hypnic-E', label: 'No cranial autonomic symptoms or restlessness', description: 'ICHD-3 4.9 E: no cranial autonomic symptoms or restlessness. Their presence steers to 3 Trigeminal autonomic cephalalgias, especially 3.1 Cluster headache.', evaluate: s => !has(s, 'sym-autonomic-ipsilateral') && !has(s, 'sym-restlessness'), contributingChips: ['sym-autonomic-ipsilateral', 'sym-restlessness'], role: 'suppress-gate' },
+    ],
+  },
+
   // ─── 4.7 Primary stabbing headache ───────────────────────────────────────
   // ICHD-3 §4.7 (with §4.7.1 Probable). Flat additive phenotype, encoded
   // 2026-07-06 from the source-verified evidence packet (ICHD-3 PDF p. 53-54).
@@ -1021,6 +1055,8 @@ const PROBABLE_SECTION_FOR: Partial<Record<PhenotypeId, string>> = {
   'primary-stabbing-headache': 'ICHD-3 §4.7.1 Probable primary stabbing headache',
   // §1.4.1 Note 2: milder (non-debilitating) cases → §1.5.1 Probable migraine without aura.
   'status-migrainosus': 'ICHD-3 §1.5.1 Probable migraine without aura',
+  // §4.9.1 Probable hypnic headache (two-of-three C/D/E).
+  'hypnic-headache': 'ICHD-3 §4.9.1 Probable hypnic headache',
 };
 
 // ─── EMIT set — suppress gates that surface with definitionallyExcluded:true ─
@@ -1029,7 +1065,7 @@ const PROBABLE_SECTION_FOR: Partial<Record<PhenotypeId, string>> = {
 // psh-D: cranial autonomic symptoms present → set aside, steer to §3.3 SUNCT/SUNA.
 // All other suppress gates (aura-B, cm-A, ctth-A, sunct-C, hc-A, hc-D, ph-E,
 // ndph-A, ndph-B, vm-A, vm-B, vm-C, vm-D, psh-A) DROP silently (substrate-absence).
-const EMIT_CRITERION_IDS = new Set<string>(['tth-D', 'ctth-D', 'cm-C', 'psh-D']);
+const EMIT_CRITERION_IDS = new Set<string>(['tth-D', 'ctth-D', 'cm-C', 'psh-D', 'hypnic-E']);
 
 // ─── Dev-time invariant: every phenotype must have a suppression path ──────
 // Checked at module-load in dev (import.meta.env.DEV). Fails loudly if a
