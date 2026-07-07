@@ -1490,3 +1490,47 @@ describe('Itemized autonomic chip split (A-M2 / ADR-2026-07-06 — backward-comp
     expect(matches.find(m => m.phenotypeId === 'primary-stabbing-headache')?.definitionallyExcluded).toBe(true);
   });
 });
+
+describe('Subtype resolver (Class D Stage 2 — ADR-2026-07-06)', () => {
+  const sunctBase: ChipId[] = ['attacks-ge-20', 'loc-unilateral', 'sev-severe', 'dur-1-to-600-sec', 'freq-ge-1-per-day'];
+  const clusterBase: ChipId[] = ['attacks-gt-10', 'loc-unilateral', 'loc-orbital-temporal', 'sev-very-severe', 'dur-15-to-180-min', 'sym-restlessness', 'freq-cluster-bout'];
+
+  it('§3.3.1 SUNCT: both conjunctival injection AND lacrimation → subtype sunct', () => {
+    const matches = evaluateHeadachePhenotypes(select(...sunctBase, 'sym-conjunctival-injection', 'sym-lacrimation'));
+    const m = matches.find(x => x.phenotypeId === 'sunct-suna');
+    expect(m?.subtype?.id).toBe('sunct');
+    expect(m?.subtype?.section).toContain('§3.3.1');
+  });
+
+  it('§3.3.2 SUNA: only one of conjunctival injection / lacrimation → subtype suna', () => {
+    const matches = evaluateHeadachePhenotypes(select(...sunctBase, 'sym-lacrimation'));
+    const m = matches.find(x => x.phenotypeId === 'sunct-suna');
+    expect(m?.subtype?.id).toBe('suna');
+    expect(m?.subtype?.section).toContain('§3.3.2');
+  });
+
+  it('§3.3.2 SUNA: other cranial autonomic feature without CI+lacrimation → subtype suna', () => {
+    const matches = evaluateHeadachePhenotypes(select(...sunctBase, 'sym-other-cranial-autonomic'));
+    expect(matches.find(x => x.phenotypeId === 'sunct-suna')?.subtype?.id).toBe('suna');
+  });
+
+  it('§3.1.1 Episodic cluster: remission ≥3 months → subtype cluster-episodic', () => {
+    const matches = evaluateHeadachePhenotypes(select(...clusterBase, 'cluster-remission-ge-3mo'));
+    const m = matches.find(x => x.phenotypeId === 'cluster-headache');
+    expect(m?.matchStrength).toBe('full');
+    expect(m?.subtype?.id).toBe('cluster-episodic');
+    expect(m?.subtype?.section).toContain('§3.1.1');
+  });
+
+  it('§3.1.2 Chronic cluster: no remission / <3 months → subtype cluster-chronic', () => {
+    const matches = evaluateHeadachePhenotypes(select(...clusterBase, 'cluster-no-remission-or-lt-3mo'));
+    expect(matches.find(x => x.phenotypeId === 'cluster-headache')?.subtype?.id).toBe('cluster-chronic');
+  });
+
+  it('parent fallback: cluster full match without a remission chip → no subtype (parent shown)', () => {
+    const matches = evaluateHeadachePhenotypes(select(...clusterBase));
+    const m = matches.find(x => x.phenotypeId === 'cluster-headache');
+    expect(m?.matchStrength).toBe('full');
+    expect(m?.subtype).toBeUndefined();
+  });
+});

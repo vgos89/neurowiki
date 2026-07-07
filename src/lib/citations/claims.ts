@@ -859,6 +859,14 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'ICHD-3 4.9 Hypnic headache ("alarm-clock" headache): recurrent attacks developing ONLY during sleep and causing wakening, on 10 or more days/month for >3 months, lasting 15 minutes up to 4 hours after waking, with NO cranial autonomic symptoms or restlessness (their presence steers to 3 Trigeminal autonomic cephalalgias, especially 3.1 Cluster). Usually begins after age 50 and is often bilateral. §4.9.1 Probable = two only of the three characteristic criteria (>=10 d/mo for >3 mo / 15 min-4 h duration / no autonomic-restlessness). Rule out sleep apnoea, nocturnal hypertension, hypoglycaemia, medication overuse, and intracranial disorders; lithium/caffeine/melatonin/indomethacin are treatments, not criteria.',
   },
 
+  'clinic-headache-ichd3-tac-subtypes': {
+    id: 'clinic-headache-ichd3-tac-subtypes',
+    citation_ids: ['ichd3-2018'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    // ICHD-3 TAC/cluster subtypes (ADR-2026-07-06 subtype pass) added 2026-07-06.
+    description: 'ICHD-3 TAC/cluster subtypes: 3.3.1 SUNCT (SUNCT/SUNA with BOTH conjunctival injection AND lacrimation) vs 3.3.2 SUNA (one or neither of those, with other cranial autonomic features); 3.1.1 Episodic cluster headache (bouts separated by pain-free remissions of 3 months or more) vs 3.1.2 Chronic cluster headache (attacks for 1 year or more without remission, or remissions shorter than 3 months).',
+  },
+
   'clinic-headache-tension-acute-management': {
     id: 'clinic-headache-tension-acute-management',
     citation_ids: ['bendtsen-efns-tth-2010', 'scher-tth-2024-continuum'],

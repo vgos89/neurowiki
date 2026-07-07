@@ -237,6 +237,24 @@ export const CONDITIONAL_BRANCHES: ConditionalBranch[] = [
     },
   },
 
+  // Cluster pattern — fires on the cluster attack picture (15 min-3 h, unilateral);
+  // resolves §3.1.1 episodic vs §3.1.2 chronic (ADR-2026-07-06 subtype pass).
+  {
+    id: 'b-cluster-detail',
+    fires: (s) => has(s, 'dur-15-to-180-min') && has(s, 'loc-unilateral'),
+    question: {
+      id: 'q-cluster-detail',
+      screen: 8,
+      eyebrow: 'Cluster pattern',
+      prompt: 'If these are cluster-type attacks, what is the bout-and-remission pattern?',
+      select: 'single',
+      options: [
+        { id: 'cluster-episodic', label: 'Attacks come in bouts separated by pain-free remissions of 3 months or more', chips: ['cluster-remission-ge-3mo'] },
+        { id: 'cluster-chronic', label: 'Attacks continue for a year or more with no remission, or remissions shorter than 3 months', chips: ['cluster-no-remission-or-lt-3mo'] },
+      ],
+    },
+  },
+
   // Indomethacin response — unlocks hemicrania continua (§3.4) and paroxysmal hemicrania (§3.2),
   // both hidden until a complete indomethacin response is recorded.
   {

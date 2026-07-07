@@ -92,6 +92,7 @@ const HiddenClaimMarkers: React.FC = () => (
     <span data-claim="clinic-headache-ichd3-trigeminal-neuralgia-criteria" />
     <span data-claim="clinic-headache-ichd3-occipital-neuralgia-criteria" />
     <span data-claim="clinic-headache-ichd3-hypnic-criteria" />
+    <span data-claim="clinic-headache-ichd3-tac-subtypes" />
     <span data-claim="clinic-headache-pitfall-mig-vs-tth" />
   </div>
 );
@@ -155,6 +156,11 @@ function CandidateAccordion({
         </div>
         {bm.promoted && (
           <div className="text-[11px] text-slate-400 leading-tight mt-0.5">{m.displaySection}</div>
+        )}
+        {m.subtype && (
+          <div className="text-[11px] font-medium text-indigo-600 leading-tight mt-0.5">
+            Subtype: {m.subtype.label} · {m.subtype.section}
+          </div>
         )}
       </summary>
 

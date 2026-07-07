@@ -25,6 +25,7 @@ export type ChipId =
   | 'attacks-lt-5' | 'attacks-ge-2' | 'attacks-5-to-10' | 'attacks-gt-10' | 'attacks-ge-20'
   // Pattern: frequency
   | 'freq-1-4-per-month' | 'freq-5-14-per-month' | 'freq-ge-15-per-month' | 'freq-cluster-bout'
+  | 'cluster-remission-ge-3mo' | 'cluster-no-remission-or-lt-3mo'  // §3.1.1 / §3.1.2 subtype
   | 'freq-gt-5-per-day' | 'freq-ge-1-per-day'
   // Pattern: pattern duration in time
   | 'pattern-lt-3-months' | 'pattern-ge-3-months'
@@ -124,6 +125,19 @@ export type PhenotypeId =
   | 'occipital-neuralgia'           // §13.4 — added 2026-07-06
   | 'ndph'
   | 'vestibular-migraine';
+
+// ─── ICHD-3 subtypes (ADR-2026-07-06 subtype pass) ────────────────────────
+// A resolved leaf of a matched parent phenotype. Attached to PhenotypeMatch by
+// the post-evaluation subtype resolver; never replaces phenotypeId.
+export type SubtypeId =
+  | 'sunct' | 'suna'                          // §3.3.1 / §3.3.2
+  | 'cluster-episodic' | 'cluster-chronic';   // §3.1.1 / §3.1.2
+
+export interface Subtype {
+  id: SubtypeId;
+  label: string;
+  section: string;
+}
 
 /**
  * Criterion role — three-way classification replacing the old `definitional?: boolean`.
@@ -236,6 +250,12 @@ export interface PhenotypeMatch {
    * The Stage Two copy layer owns any clinician-facing sentence built from this.
    */
   exclusionReason?: string;
+  /**
+   * Resolved ICHD-3 subtype of the matched parent (ADR-2026-07-06 subtype pass).
+   * Undefined when the subtype-discriminating chips are absent — the parent match
+   * is always shown; the subtype only refines it. Never changes phenotypeId.
+   */
+  subtype?: Subtype;
 }
 
 // ─── Helper predicates (composable, pure) ─────────────────────────────────
@@ -271,6 +291,9 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
       { id: 'freq-5-14-per-month', label: '5 to 14 headache days per month' },
       { id: 'freq-ge-15-per-month', label: '15 or more headache days per month', teachWhenSelected: 'Crosses the chronic threshold (Chronic migraine, Chronic TTH, or MOH territory).' },
       { id: 'freq-cluster-bout', label: 'Frequency 1 every other day to 8/day during bouts', teachWhenSelected: '3.1 Cluster criterion D: pattern in active bouts.' },
+      // §3.1.1 / §3.1.2 cluster subtype discriminators (episodic vs chronic).
+      { id: 'cluster-remission-ge-3mo', label: 'Attack bouts are separated by pain-free remissions of 3 months or more', teachWhenSelected: '3.1.1 Episodic cluster headache: bouts separated by remission periods of 3 months or more.' },
+      { id: 'cluster-no-remission-or-lt-3mo', label: 'Attacks continue for a year or more with no remission, or remissions shorter than 3 months', teachWhenSelected: '3.1.2 Chronic cluster headache: attacks for 1 year or more without remission, or with remissions shorter than 3 months.' },
 
       { id: 'pattern-lt-3-months', label: 'Pattern present <3 months' },
       { id: 'pattern-ge-3-months', label: 'Pattern present ≥3 months', teachWhenSelected: 'Required for 2.2/2.3 TTH and 3.4 Hemicrania continua diagnoses.' },
@@ -1071,6 +1094,30 @@ const PROBABLE_SECTION_FOR: Partial<Record<PhenotypeId, string>> = {
   'hypnic-headache': 'ICHD-3 §4.9.1 Probable hypnic headache',
 };
 
+// ─── Subtype resolvers (ADR-2026-07-06 subtype pass) ──────────────────────
+// A pure, post-evaluation pass: for a matched parent that declares subtypes,
+// resolve the ICHD-3 leaf from chips the engine already evaluates. Returns
+// undefined (→ parent shown WITHOUT a subtype) when the discriminating chips are
+// absent — the resolver NEVER suppresses the parent and never changes phenotypeId.
+const SUBTYPE_RESOLVERS: Partial<Record<PhenotypeId, (s: Set<ChipId>) => Subtype | undefined>> = {
+  // §3.3.1 SUNCT (BOTH conjunctival injection AND lacrimation) vs §3.3.2 SUNA (one or
+  // neither of those, with other cranial autonomic features).
+  'sunct-suna': (s) =>
+    has(s, 'sym-conjunctival-injection') && has(s, 'sym-lacrimation')
+      ? { id: 'sunct', label: 'SUNCT (conjunctival injection AND tearing)', section: 'ICHD-3 §3.3.1' }
+      : anyAutonomicFeature(s)
+        ? { id: 'suna', label: 'SUNA (one or neither of conjunctival injection / tearing)', section: 'ICHD-3 §3.3.2' }
+        : undefined,
+  // §3.1.1 Episodic (bouts separated by remissions ≥3 mo) vs §3.1.2 Chronic (≥1 yr
+  // without remission, or remissions <3 mo).
+  'cluster-headache': (s) =>
+    has(s, 'cluster-remission-ge-3mo')
+      ? { id: 'cluster-episodic', label: 'Episodic cluster headache', section: 'ICHD-3 §3.1.1' }
+      : has(s, 'cluster-no-remission-or-lt-3mo')
+        ? { id: 'cluster-chronic', label: 'Chronic cluster headache', section: 'ICHD-3 §3.1.2' }
+        : undefined,
+};
+
 // ─── EMIT set — suppress gates that surface with definitionallyExcluded:true ─
 // tth-D, ctth-D, cm-C: positive-contradicting-evidence suppressions where
 // emitting "considered and set aside" is clinically useful.
@@ -1106,6 +1153,14 @@ if (typeof import.meta !== 'undefined' && import.meta.env?.DEV) {
         `floor. Add one of the three before shipping. This prevents the phenotype from surfacing off ` +
         `a single incidental chip (clinical §17.2 condition 7).`
       );
+    }
+  }
+
+  // Subtype-resolver invariant (ADR-2026-07-06): every SUBTYPE_RESOLVERS key must be a
+  // real phenotype (so the parent match it refines actually exists).
+  for (const pid of Object.keys(SUBTYPE_RESOLVERS)) {
+    if (!HEADACHE_PHENOTYPES.some(p => p.id === pid)) {
+      throw new Error(`[clinicHeadacheData] SUBTYPE_RESOLVERS references unknown phenotype "${pid}".`);
     }
   }
 }
@@ -1250,6 +1305,12 @@ export function evaluateHeadachePhenotypes(selected: Set<ChipId>): PhenotypeMatc
 
     if (strength === 'none') continue;
 
+    // Subtype pass (ADR-2026-07-06): resolve the ICHD-3 leaf for an active parent.
+    // Only for full/probable (the parent is at least likely); undefined → parent-only.
+    const subtype = (strength === 'full' || strength === 'probable')
+      ? SUBTYPE_RESOLVERS[phenotype.id]?.(selected)
+      : undefined;
+
     matches.push({
       phenotypeId: phenotype.id,
       name: phenotype.name,
@@ -1264,6 +1325,7 @@ export function evaluateHeadachePhenotypes(selected: Set<ChipId>): PhenotypeMatc
       missingCriteria: missing,
       isAppendix: phenotype.isAppendix,
       definitionallyExcluded: false,
+      ...(subtype ? { subtype } : {}),
     });
   }
 
