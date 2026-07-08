@@ -867,6 +867,14 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'ICHD-3 migraine-with-aura subtypes: 1.2.1 typical aura (visual/sensory/speech, fully reversible, no motor/brainstem/retinal); 1.2.2 brainstem aura (at least two brainstem symptoms, no motor or retinal); 1.2.3 hemiplegic migraine (fully reversible motor weakness; exclude stroke or structural cause and refer for genetic evaluation, familial hemiplegic migraine); 1.2.4 retinal migraine (repeated monocular visual disturbance; exclude other causes of transient monocular visual loss such as amaurosis fugax or retinal artery occlusion).',
   },
 
+  'clinic-headache-ichd3-tn-subtypes': {
+    id: 'clinic-headache-ichd3-tn-subtypes',
+    citation_ids: ['ichd3-2018'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    // ICHD-3 trigeminal-neuralgia aetiology subtypes (ADR-2026-07-06 Stage 3b) added 2026-07-06.
+    description: 'ICHD-3 trigeminal neuralgia aetiology subtypes (imaging-determined): 13.1.1.1 classical (neurovascular compression WITH morphological change of the nerve root); 13.1.1.2 secondary (an underlying disease demonstrated: MS, cerebellopontine-angle tumour, or AVM; confirm and manage the cause, specialist referral); 13.1.1.3 idiopathic (adequate MRI and electrophysiology with no significant abnormality; a vessel-nerve contact without morphological change is still idiopathic).',
+  },
+
   'clinic-headache-ichd3-tac-subtypes': {
     id: 'clinic-headache-ichd3-tac-subtypes',
     citation_ids: ['ichd3-2018'],

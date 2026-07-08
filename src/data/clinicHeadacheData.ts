@@ -39,6 +39,8 @@ export type ChipId =
   | 'onset-spontaneous-stab' | 'dur-stab-seconds' | 'freq-stab-one-to-many-per-day'
   // §13.1 Trigeminal neuralgia
   | 'loc-trigeminal-distribution' | 'qual-electric-shock-shooting' | 'dur-fraction-sec-to-2min' | 'trigger-innocuous-stimulus'
+  // §13.1.1 aetiology (investigation results → classical / secondary / idiopathic subtype)
+  | 'tn-nvc-morphological-change' | 'tn-underlying-disease-demonstrated' | 'tn-adequate-workup-negative'
   // §13.4 Occipital neuralgia
   | 'loc-occipital-nerve' | 'dur-seconds-to-minutes' | 'scalp-dysaesthesia-allodynia' | 'occipital-nerve-tenderness-or-trigger' | 'occipital-block-response-positive'
   // §4.9 Hypnic headache
@@ -132,7 +134,8 @@ export type PhenotypeId =
 export type SubtypeId =
   | 'sunct' | 'suna'                          // §3.3.1 / §3.3.2
   | 'cluster-episodic' | 'cluster-chronic'    // §3.1.1 / §3.1.2
-  | 'typical-aura' | 'brainstem-aura' | 'hemiplegic-migraine' | 'retinal-migraine';  // §1.2.1–.4
+  | 'typical-aura' | 'brainstem-aura' | 'hemiplegic-migraine' | 'retinal-migraine'  // §1.2.1–.4
+  | 'tn-classical' | 'tn-secondary' | 'tn-idiopathic';  // §13.1.1.1/.2/.3
 
 export interface Subtype {
   id: SubtypeId;
@@ -345,6 +348,10 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
       { id: 'qual-electric-shock-shooting', label: 'Electric shock-like or shooting pain', teachWhenSelected: 'ICHD-3 13.1.1 B.3: electric shock-like, shooting, stabbing or sharp (any one satisfies the quality criterion).' },
       { id: 'dur-fraction-sec-to-2min', label: 'Each attack lasts from a fraction of a second up to 2 minutes', teachWhenSelected: 'ICHD-3 13.1.1 B.1. A minority of patients report attacks lasting >2 minutes (Note 2).' },
       { id: 'trigger-innocuous-stimulus', label: 'Attacks triggered by light touch, chewing, talking, brushing teeth, or cold air on the face', teachWhenSelected: 'ICHD-3 13.1.1 C / Note 4: precipitated by innocuous stimuli; a trigger history is required even when some attacks appear spontaneous.' },
+      // §13.1.1 aetiology (investigation results → classical / secondary / idiopathic).
+      { id: 'tn-nvc-morphological-change', label: 'MRI or surgery shows a blood vessel compressing the nerve WITH nerve changes (atrophy or displacement)', teachWhenSelected: 'ICHD-3 13.1.1.1 Classical TN: neurovascular compression with morphological change (not simple contact).' },
+      { id: 'tn-underlying-disease-demonstrated', label: 'An underlying cause has been demonstrated (multiple sclerosis, a cerebellopontine-angle tumour, or AVM)', teachWhenSelected: 'ICHD-3 13.1.1.2 Secondary TN: an underlying disease known to cause TN is demonstrated. Confirm and manage the cause.' },
+      { id: 'tn-adequate-workup-negative', label: 'MRI AND nerve tests were done and found neither a compression with nerve changes nor an underlying cause', teachWhenSelected: 'ICHD-3 13.1.1.3 Idiopathic TN: adequate MRI and electrophysiology with no significant abnormality (vessel-nerve contact WITHOUT morphological change is still idiopathic).' },
       // §13.4 Occipital neuralgia
       { id: 'loc-occipital-nerve', label: 'Pain at the back of the scalp, in the greater, lesser, and/or third occipital nerve area', teachWhenSelected: 'ICHD-3 13.4 A: unilateral or bilateral pain in the greater, lesser, and/or third occipital nerve distribution.' },
       { id: 'dur-seconds-to-minutes', label: 'Paroxysmal attacks lasting a few seconds to minutes', teachWhenSelected: 'ICHD-3 13.4 B.1.' },
@@ -1123,6 +1130,18 @@ const SUBTYPE_RESOLVERS: Partial<Record<PhenotypeId, (s: Set<ChipId>) => Subtype
       : has(s, 'cluster-no-remission-or-lt-3mo')
         ? { id: 'cluster-chronic', label: 'Chronic cluster headache', section: 'ICHD-3 §3.1.2' }
         : undefined,
+  // §13.1.1.1/.2/.3 trigeminal-neuralgia aetiology (investigation-determined).
+  // Precedence: an underlying disease demonstrated → secondary (regardless of NVC);
+  // else NVC with morphological change → classical; else adequate workup negative →
+  // idiopathic; else undefined (aetiology not yet investigated → parent shown).
+  'trigeminal-neuralgia': (s) =>
+    has(s, 'tn-underlying-disease-demonstrated')
+      ? { id: 'tn-secondary', label: 'Secondary trigeminal neuralgia', section: 'ICHD-3 §13.1.1.2', note: 'An underlying cause is demonstrated (MS, a cerebellopontine-angle tumour, or AVM). Confirm and manage the underlying cause; specialist referral.' }
+      : has(s, 'tn-nvc-morphological-change')
+        ? { id: 'tn-classical', label: 'Classical trigeminal neuralgia', section: 'ICHD-3 §13.1.1.1', note: 'Neurovascular compression WITH morphological change (atrophy or displacement) of the trigeminal nerve root on MRI or at surgery.' }
+        : has(s, 'tn-adequate-workup-negative')
+          ? { id: 'tn-idiopathic', label: 'Idiopathic trigeminal neuralgia', section: 'ICHD-3 §13.1.1.3' }
+          : undefined,
   // §1.2.1–.4 migraine-with-aura subtypes. Precedence: motor weakness → hemiplegic
   // (§1.2.2 brainstem aura explicitly excludes motor); then monocular → retinal;
   // then brainstem; else typical. Hemiplegic + retinal carry safety steers.

@@ -94,6 +94,7 @@ const HiddenClaimMarkers: React.FC = () => (
     <span data-claim="clinic-headache-ichd3-hypnic-criteria" />
     <span data-claim="clinic-headache-ichd3-tac-subtypes" />
     <span data-claim="clinic-headache-ichd3-aura-subtypes" />
+    <span data-claim="clinic-headache-ichd3-tn-subtypes" />
     <span data-claim="clinic-headache-pitfall-mig-vs-tth" />
   </div>
 );

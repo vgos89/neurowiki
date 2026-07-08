@@ -1572,3 +1572,39 @@ describe('Migraine-with-aura subtypes (Class D Stage 3 — §1.2.1–.4)', () =>
     expect(auraOf(matches.find(m => m.phenotypeId === 'migraine-with-aura'))?.id).toBe('hemiplegic-migraine');
   });
 });
+
+describe('Trigeminal neuralgia aetiology subtypes (Class D Stage 3b — §13.1.1.1/.2/.3)', () => {
+  const tnFull: ChipId[] = ['loc-unilateral', 'loc-trigeminal-distribution', 'dur-fraction-sec-to-2min', 'sev-severe', 'qual-electric-shock-shooting', 'trigger-innocuous-stimulus'];
+  const tnOf = (m => m?.subtype);
+
+  it('§13.1.1.1 classical: NVC with morphological change → subtype tn-classical', () => {
+    const matches = evaluateHeadachePhenotypes(select(...tnFull, 'tn-nvc-morphological-change'));
+    const st = tnOf(matches.find(m => m.phenotypeId === 'trigeminal-neuralgia'));
+    expect(st?.id).toBe('tn-classical');
+    expect(st?.section).toContain('§13.1.1.1');
+  });
+
+  it('§13.1.1.2 secondary: underlying disease demonstrated → subtype tn-secondary + refer note', () => {
+    const matches = evaluateHeadachePhenotypes(select(...tnFull, 'tn-underlying-disease-demonstrated'));
+    const st = tnOf(matches.find(m => m.phenotypeId === 'trigeminal-neuralgia'));
+    expect(st?.id).toBe('tn-secondary');
+    expect(st?.note).toMatch(/underlying|referral/i);
+  });
+
+  it('§13.1.1.3 idiopathic: adequate workup negative → subtype tn-idiopathic', () => {
+    const matches = evaluateHeadachePhenotypes(select(...tnFull, 'tn-adequate-workup-negative'));
+    expect(tnOf(matches.find(m => m.phenotypeId === 'trigeminal-neuralgia'))?.id).toBe('tn-idiopathic');
+  });
+
+  it('parent fallback: TN full match without any investigation chip → no subtype (prompts imaging)', () => {
+    const matches = evaluateHeadachePhenotypes(select(...tnFull));
+    const m = matches.find(m2 => m2.phenotypeId === 'trigeminal-neuralgia');
+    expect(m?.matchStrength).toBe('full');
+    expect(m?.subtype).toBeUndefined();
+  });
+
+  it('precedence: underlying disease + NVC → secondary (an underlying cause explains it)', () => {
+    const matches = evaluateHeadachePhenotypes(select(...tnFull, 'tn-underlying-disease-demonstrated', 'tn-nvc-morphological-change'));
+    expect(tnOf(matches.find(m => m.phenotypeId === 'trigeminal-neuralgia'))?.id).toBe('tn-secondary');
+  });
+});

@@ -393,6 +393,10 @@ export const CONDITIONAL_BRANCHES: ConditionalBranch[] = [
         { id: 'tn-shock', label: 'The pain is electric-shock-like or shooting', chips: ['qual-electric-shock-shooting'] },
         { id: 'tn-brief', label: 'Each attack lasts from a fraction of a second up to 2 minutes', chips: ['dur-fraction-sec-to-2min'] },
         { id: 'tn-trigger', label: 'Attacks are triggered by light touch, chewing, talking, brushing teeth, or cold air on the face', chips: ['trigger-innocuous-stimulus'] },
+        // §13.1.1 aetiology (if imaging / nerve tests have been done) → classical / secondary / idiopathic subtype.
+        { id: 'tn-nvc', label: 'Imaging shows a blood vessel compressing the nerve WITH nerve changes (atrophy/displacement)', chips: ['tn-nvc-morphological-change'] },
+        { id: 'tn-secondary-cause', label: 'An underlying cause has been found (MS, a tumour, or AVM)', chips: ['tn-underlying-disease-demonstrated'] },
+        { id: 'tn-workup-neg', label: 'MRI and nerve tests were done and were normal (no compression with changes, no underlying cause)', chips: ['tn-adequate-workup-negative'] },
       ],
     },
   },
