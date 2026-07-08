@@ -18,8 +18,24 @@ const DB_NAME = 'neurowiki';
 const DB_VERSION = 1;
 const STORE_NAME = 'cases';
 
+// Bug-1 fix (2026-07-01 audit): cache the IDBDatabase handle at the
+// module level so repeat calls to openDB() short-circuit after the
+// first success. The uncached path is a 30–200 ms round-trip on a
+// cold Safari tab and is the primary race window for the NIHSS
+// case-load bug where a fast-typing clinician's taps get wholesale-
+// overwritten by the async hydration. Caching shrinks that window to
+// 1–5 ms per call — enough headroom that the interaction guard in
+// NihssCalculator.tsx wins even for the fastest typists.
+//
+// On a genuine open failure (private-browsing quota, corrupted DB,
+// user cleared site data), we reset the cache so a retry can attempt
+// fresh. `onclose` and `onversionchange` also clear the cache since
+// those signal the handle is no longer usable.
+let dbPromise: Promise<IDBDatabase> | null = null;
+
 function openDB(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
+  if (dbPromise) return dbPromise;
+  dbPromise = new Promise<IDBDatabase>((resolve, reject) => {
     const req = indexedDB.open(DB_NAME, DB_VERSION);
     req.onupgradeneeded = () => {
       const db = req.result;
@@ -28,10 +44,22 @@ function openDB(): Promise<IDBDatabase> {
         store.createIndex('createdAt', 'createdAt', { unique: false });
       }
     };
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
-    req.onblocked = () => reject(new Error('IndexedDB upgrade blocked; close other tabs.'));
+    req.onsuccess = () => {
+      const db = req.result;
+      db.onclose = () => { dbPromise = null; };
+      db.onversionchange = () => { dbPromise = null; db.close(); };
+      resolve(db);
+    };
+    req.onerror = () => {
+      dbPromise = null;
+      reject(req.error);
+    };
+    req.onblocked = () => {
+      dbPromise = null;
+      reject(new Error('IndexedDB upgrade blocked; close other tabs.'));
+    };
   });
+  return dbPromise;
 }
 
 /** List all saved cases, newest first. */

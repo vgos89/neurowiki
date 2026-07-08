@@ -59,6 +59,17 @@ export interface SavedCaseData {
     performedAt?: number;
   };
 
+  /** Minor-stroke disabling-features assessment. Bug-1 audit 2026-07-01:
+   *  previously the clinician's per-item disabling checks and the "None
+   *  of the above apply" confirmation were silently dropped on case
+   *  reload, forcing them to re-evaluate a case they had already worked
+   *  through. `disablingChecks` is the array of item indices (0–5) they
+   *  marked as disabling; `confirmedNoDisabling` is true when they
+   *  explicitly answered "no disabling deficits." Both fields are
+   *  optional so pre-2026-07-01 cases load cleanly. */
+  disablingChecks?: number[];
+  confirmedNoDisabling?: boolean;
+
   /** Patient context (shared between NIHSS and Stroke Code per Q2 in 2026-05-19 design discussion). */
   patientContext?: {
     /** Unix ms; null = "Unknown / wake-up". */

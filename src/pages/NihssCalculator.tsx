@@ -173,6 +173,18 @@ const NihssCalculator: React.FC = () => {
 
   const nihssHeaderRef = useRef<HTMLDivElement>(null);
   const wasCompleteRef = useRef(false);
+  // Bug-1 fix (2026-07-01 audit): the case-load useEffect can complete
+  // AFTER the clinician has started scoring on the freshly-mounted
+  // (still-empty) calculator, wholesale-overwriting the tapped values
+  // with the saved snapshot. `userHasInteractedRef` records "the user
+  // has already put a value into this session"; any handler that
+  // mutates clinical state sets it true. The case-load effect refuses
+  // to overwrite when it is true — instead, it asks first.
+  // `hydratedCaseIdRef` records "this case has already been hydrated
+  // into this session" so a re-fire of the effect (e.g., searchParams
+  // identity flip) can't re-hydrate over in-flight work.
+  const userHasInteractedRef = useRef(false);
+  const hydratedCaseIdRef = useRef<string | null>(null);
 
   const { toggleFavorite, isFavorite } = useFavorites();
   const { recordView } = useRecents();
@@ -187,17 +199,38 @@ const NihssCalculator: React.FC = () => {
   useEffect(() => {
     const caseId = searchParams.get('caseId');
     if (!caseId) return;
+    // Bug-1 fix: strip ?caseId from the URL SYNCHRONOUSLY BEFORE the
+    // await, so a re-fire of this effect (searchParams identity flip
+    // for any reason) cannot re-enter the async body. Cleanup that
+    // used to run after the destructive writes now runs first.
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.delete('caseId');
+      return next;
+    }, { replace: true });
+    // Bug-1 fix: idempotency — if we already hydrated this exact case
+    // id into this session (e.g., user navigated away and came back
+    // with the same caseId), do not overwrite in-flight work.
+    if (hydratedCaseIdRef.current === caseId) return;
     let cancelled = false;
     void (async () => {
       try {
         const saved = await getCase(caseId);
-        if (cancelled || !saved) {
-          setSearchParams((prev) => {
-            const next = new URLSearchParams(prev);
-            next.delete('caseId');
-            return next;
-          }, { replace: true });
-          return;
+        if (cancelled || !saved) return;
+        // Bug-1 fix: if the clinician has already put values into this
+        // session BEFORE the async load resolved (fast-typist-on-cold-
+        // browser race), do NOT wholesale-overwrite. Ask first — a
+        // clinician's in-flight scoring is more valuable than a mostly-
+        // stale snapshot they can reload manually.
+        if (userHasInteractedRef.current) {
+          const proceed = window.confirm(
+            `Load saved case for ${saved.initials}?\n\n` +
+              `You have already entered scores in this session. Loading the saved case will replace them.`
+          );
+          if (!proceed) {
+            showToast('Kept your in-progress scores. Saved case not loaded.', 3500);
+            return;
+          }
         }
         // Restore NIHSS scoring
         if (saved.data.nihss) {
@@ -260,15 +293,21 @@ const NihssCalculator: React.FC = () => {
             showToast('Timestamps were saved as relative offsets; re-stamp if you need exact times.', 4000);
           }
         }
+        // Bug-1 fix: also restore the minor-stroke disabling-features
+        // assessment — previously this state was silently dropped on
+        // reload, forcing the clinician to re-evaluate a case they
+        // had already worked through.
+        if (saved.data.disablingChecks) {
+          setDisablingChecks(new Set(saved.data.disablingChecks));
+        }
+        if (typeof saved.data.confirmedNoDisabling === 'boolean') {
+          setConfirmedNoDisabling(saved.data.confirmedNoDisabling);
+        }
         // Capture the id so subsequent saves update in place
         setCurrentCaseId(saved.id);
-        // Clear the query param so a reload of the page doesn't re-trigger
-        // (and so the URL stays clean while the clinician works).
-        setSearchParams((prev) => {
-          const next = new URLSearchParams(prev);
-          next.delete('caseId');
-          return next;
-        }, { replace: true });
+        // Bug-1 fix: mark this session as hydrated so a re-fire cannot
+        // re-enter. The URL was already cleared synchronously above.
+        hydratedCaseIdRef.current = saved.id;
         showToast(`Opened ${saved.initials} from My Cases`, 2500);
       } catch {
         // Silent on lookup failure — clinician just sees a fresh calculator.
@@ -352,6 +391,9 @@ const NihssCalculator: React.FC = () => {
   // ── Handlers ───────────────────────────────────────────────────────────────
 
   const handleNihssChange = (id: string, val: number) => {
+    // Bug-1 fix: mark this session as user-interacted so a pending
+    // case-load can't wholesale-overwrite the values below.
+    userHasInteractedRef.current = true;
     // Capture "Performed" timestamp on first input — clinical convention is
     // that NIHSS time = when the exam started, not when the page opened.
     // 2026-05-23 fix per V: keep performedAt and strokeTimestamps['Neurology
@@ -404,6 +446,7 @@ const NihssCalculator: React.FC = () => {
   };
 
   const setAllMotor = (val: number) => {
+    userHasInteractedRef.current = true; // Bug-1 fix
     setNihssValues((prev) => ({ ...prev, '5a': val, '5b': val, '6a': val, '6b': val }));
   };
 
@@ -597,6 +640,13 @@ const NihssCalculator: React.FC = () => {
   };
 
   const handleReset = () => {
+    // Bug-1 fix: an explicit Reset means "start fresh" — a pending
+    // case-load must not undo it. Mark interacted so the guard blocks
+    // any late-arriving hydration; clear the hydrated-case ref so a
+    // future ?caseId= on this session can load again if the user
+    // navigates back with a new one.
+    userHasInteractedRef.current = true;
+    hydratedCaseIdRef.current = null;
     setNihssValues({});
     setPerformedAt(null);
     setPatientContext({ ...EMPTY_PATIENT_CONTEXT, anticoag: new Set() });
@@ -612,6 +662,7 @@ const NihssCalculator: React.FC = () => {
 
   /** Normal exam shortcut — Phase 7E §3.5: set all 15 items to 0, open drawer */
   const handleNormalExam = () => {
+    userHasInteractedRef.current = true; // Bug-1 fix
     const allZero = Object.fromEntries(NIHSS_ITEMS.map(item => [item.id, 0]));
     // Capture Performed timestamp on shortcut too — the exam was just done.
     if (performedAt === null) {
@@ -732,6 +783,7 @@ const NihssCalculator: React.FC = () => {
                     type="checkbox"
                     checked={disablingChecks.has(idx)}
                     onChange={(e) => {
+                      userHasInteractedRef.current = true; // Bug-1 fix
                       setDisablingChecks((prev) => {
                         const next = new Set(prev);
                         if (e.target.checked) {
@@ -757,7 +809,10 @@ const NihssCalculator: React.FC = () => {
             {!hasAnyDisabling && !confirmedNoDisabling && (
               <button
                 type="button"
-                onClick={() => setConfirmedNoDisabling(true)}
+                onClick={() => {
+                  userHasInteractedRef.current = true; // Bug-1 fix
+                  setConfirmedNoDisabling(true);
+                }}
                 className="mt-2 text-xs text-slate-400 hover:text-slate-600 transition-colors underline-offset-2 hover:underline"
               >
                 None of the above apply
@@ -923,6 +978,13 @@ const NihssCalculator: React.FC = () => {
               strokeTimestampsMode: hasAnyStamp
                 ? (saveAbsoluteTimestamps ? 'absolute' : 'relative')
                 : undefined,
+              // Bug-1 fix: persist the disabling-features assessment
+              // so reload can restore it. Undefined when there's
+              // nothing meaningful to save.
+              disablingChecks: disablingChecks.size > 0
+                ? Array.from(disablingChecks)
+                : undefined,
+              confirmedNoDisabling: confirmedNoDisabling || undefined,
             };
           },
           existingCaseId: currentCaseId ?? undefined,
@@ -963,7 +1025,11 @@ const NihssCalculator: React.FC = () => {
         <div className="mb-4">
           <PatientContextPanel
             values={patientContext}
-            onChange={setPatientContext}
+            onChange={(next) => {
+              // Bug-1 fix: any patient-context edit is a user interaction.
+              userHasInteractedRef.current = true;
+              setPatientContext(next);
+            }}
             showThrombolysisTiming
           />
         </div>
