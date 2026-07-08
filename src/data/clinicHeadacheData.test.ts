@@ -1534,3 +1534,41 @@ describe('Subtype resolver (Class D Stage 2 — ADR-2026-07-06)', () => {
     expect(m?.subtype).toBeUndefined();
   });
 });
+
+describe('Migraine-with-aura subtypes (Class D Stage 3 — §1.2.1–.4)', () => {
+  const auraBase: ChipId[] = ['attacks-ge-2', 'aura-fully-reversible', 'aura-spread-ge-5min', 'aura-each-5-to-60min', 'aura-headache-within-60min'];
+  const auraOf = (m => m?.subtype);
+
+  it('§1.2.1 typical: visual/sensory aura → subtype typical-aura, no safety note', () => {
+    const matches = evaluateHeadachePhenotypes(select(...auraBase, 'aura-visual', 'aura-sensory'));
+    const st = auraOf(matches.find(m => m.phenotypeId === 'migraine-with-aura'));
+    expect(st?.id).toBe('typical-aura');
+    expect(st?.note).toBeUndefined();
+  });
+
+  it('§1.2.3 hemiplegic: motor-weakness aura → subtype hemiplegic-migraine + safety note (refer)', () => {
+    const matches = evaluateHeadachePhenotypes(select(...auraBase, 'aura-motor'));
+    const st = auraOf(matches.find(m => m.phenotypeId === 'migraine-with-aura'));
+    expect(st?.id).toBe('hemiplegic-migraine');
+    expect(st?.section).toContain('§1.2.3');
+    expect(st?.note).toMatch(/refer|genetic/i);
+  });
+
+  it('§1.2.4 retinal: monocular visual aura → subtype retinal-migraine + safety note (exclude vascular)', () => {
+    const matches = evaluateHeadachePhenotypes(select(...auraBase, 'aura-retinal'));
+    const st = auraOf(matches.find(m => m.phenotypeId === 'migraine-with-aura'));
+    expect(st?.id).toBe('retinal-migraine');
+    expect(st?.section).toContain('§1.2.4');
+    expect(st?.note).toMatch(/monocular|exclude/i);
+  });
+
+  it('§1.2.2 brainstem: brainstem aura (no motor/retinal) → subtype brainstem-aura', () => {
+    const matches = evaluateHeadachePhenotypes(select(...auraBase, 'aura-brainstem'));
+    expect(auraOf(matches.find(m => m.phenotypeId === 'migraine-with-aura'))?.id).toBe('brainstem-aura');
+  });
+
+  it('precedence: motor + brainstem → hemiplegic (§1.2.2 brainstem aura excludes motor weakness)', () => {
+    const matches = evaluateHeadachePhenotypes(select(...auraBase, 'aura-motor', 'aura-brainstem'));
+    expect(auraOf(matches.find(m => m.phenotypeId === 'migraine-with-aura'))?.id).toBe('hemiplegic-migraine');
+  });
+});

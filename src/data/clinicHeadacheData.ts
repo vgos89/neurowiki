@@ -131,12 +131,19 @@ export type PhenotypeId =
 // the post-evaluation subtype resolver; never replaces phenotypeId.
 export type SubtypeId =
   | 'sunct' | 'suna'                          // §3.3.1 / §3.3.2
-  | 'cluster-episodic' | 'cluster-chronic';   // §3.1.1 / §3.1.2
+  | 'cluster-episodic' | 'cluster-chronic'    // §3.1.1 / §3.1.2
+  | 'typical-aura' | 'brainstem-aura' | 'hemiplegic-migraine' | 'retinal-migraine';  // §1.2.1–.4
 
 export interface Subtype {
   id: SubtypeId;
   label: string;
   section: string;
+  /**
+   * Optional safety/management steer surfaced with the subtype (e.g. hemiplegic
+   * migraine → stroke exclusion + genetic referral; retinal migraine → exclude
+   * other monocular visual-loss causes). Neutral guidance, not a diagnosis claim.
+   */
+  note?: string;
 }
 
 /**
@@ -382,7 +389,7 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
       { id: 'aura-sensory', label: 'Sensory aura (paraesthesia, numbness)' },
       { id: 'aura-speech', label: 'Speech or language aura (dysphasia)' },
       { id: 'aura-motor', label: 'Motor aura (weakness)', teachWhenSelected: 'Motor aura indicates 1.2.3 Hemiplegic migraine. Refer for genetic evaluation.' },
-      { id: 'aura-brainstem', label: 'Brainstem aura (dysarthria, vertigo, tinnitus, diplopia, ataxia)' },
+      { id: 'aura-brainstem', label: 'Two or more brainstem symptoms (dysarthria, vertigo, tinnitus, diplopia, ataxia)', teachWhenSelected: 'ICHD-3 1.2.2 Migraine with brainstem aura requires at least two brainstem symptoms; a single brainstem symptom does not qualify.' },
       { id: 'aura-retinal', label: 'Retinal aura (monocular visual symptoms)' },
       { id: 'aura-fully-reversible', label: 'Aura is fully reversible' },
       { id: 'aura-spread-ge-5min', label: 'Aura spreads gradually over ≥5 minutes' },
@@ -1116,6 +1123,17 @@ const SUBTYPE_RESOLVERS: Partial<Record<PhenotypeId, (s: Set<ChipId>) => Subtype
       : has(s, 'cluster-no-remission-or-lt-3mo')
         ? { id: 'cluster-chronic', label: 'Chronic cluster headache', section: 'ICHD-3 §3.1.2' }
         : undefined,
+  // §1.2.1–.4 migraine-with-aura subtypes. Precedence: motor weakness → hemiplegic
+  // (§1.2.2 brainstem aura explicitly excludes motor); then monocular → retinal;
+  // then brainstem; else typical. Hemiplegic + retinal carry safety steers.
+  'migraine-with-aura': (s) =>
+    has(s, 'aura-motor')
+      ? { id: 'hemiplegic-migraine', label: 'Hemiplegic migraine', section: 'ICHD-3 §1.2.3', note: 'Motor-weakness aura. Exclude stroke or a structural cause first; refer for genetic evaluation (familial hemiplegic migraine) and specialist review.' }
+      : has(s, 'aura-retinal')
+        ? { id: 'retinal-migraine', label: 'Retinal migraine', section: 'ICHD-3 §1.2.4', note: 'Monocular visual disturbance. Exclude other causes of transient monocular visual loss (amaurosis fugax, retinal artery occlusion, optic neuropathy) before attributing it to migraine.' }
+        : has(s, 'aura-brainstem')
+          ? { id: 'brainstem-aura', label: 'Migraine with brainstem aura', section: 'ICHD-3 §1.2.2' }
+          : { id: 'typical-aura', label: 'Migraine with typical aura', section: 'ICHD-3 §1.2.1' },
 };
 
 // ─── EMIT set — suppress gates that surface with definitionallyExcluded:true ─

@@ -859,6 +859,14 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'ICHD-3 4.9 Hypnic headache ("alarm-clock" headache): recurrent attacks developing ONLY during sleep and causing wakening, on 10 or more days/month for >3 months, lasting 15 minutes up to 4 hours after waking, with NO cranial autonomic symptoms or restlessness (their presence steers to 3 Trigeminal autonomic cephalalgias, especially 3.1 Cluster). Usually begins after age 50 and is often bilateral. §4.9.1 Probable = two only of the three characteristic criteria (>=10 d/mo for >3 mo / 15 min-4 h duration / no autonomic-restlessness). Rule out sleep apnoea, nocturnal hypertension, hypoglycaemia, medication overuse, and intracranial disorders; lithium/caffeine/melatonin/indomethacin are treatments, not criteria.',
   },
 
+  'clinic-headache-ichd3-aura-subtypes': {
+    id: 'clinic-headache-ichd3-aura-subtypes',
+    citation_ids: ['ichd3-2018'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    // ICHD-3 migraine-with-aura subtypes (ADR-2026-07-06 Stage 3) added 2026-07-06.
+    description: 'ICHD-3 migraine-with-aura subtypes: 1.2.1 typical aura (visual/sensory/speech, fully reversible, no motor/brainstem/retinal); 1.2.2 brainstem aura (at least two brainstem symptoms, no motor or retinal); 1.2.3 hemiplegic migraine (fully reversible motor weakness; exclude stroke or structural cause and refer for genetic evaluation, familial hemiplegic migraine); 1.2.4 retinal migraine (repeated monocular visual disturbance; exclude other causes of transient monocular visual loss such as amaurosis fugax or retinal artery occlusion).',
+  },
+
   'clinic-headache-ichd3-tac-subtypes': {
     id: 'clinic-headache-ichd3-tac-subtypes',
     citation_ids: ['ichd3-2018'],

@@ -291,6 +291,10 @@ export const CONDITIONAL_BRANCHES: ConditionalBranch[] = [
         { id: 'aura-visual', label: 'Visual (zig-zags, blind spot, flashes)', chips: ['aura-visual'] },
         { id: 'aura-sensory', label: 'Sensory (tingling, numbness)', chips: ['aura-sensory'] },
         { id: 'aura-speech', label: 'Speech or language difficulty', chips: ['aura-speech'] },
+        // §1.2.2/.3/.4 subtype-discriminating aura symptoms.
+        { id: 'aura-motor', label: 'Motor weakness (one-sided arm, leg, or face weakness)', chips: ['aura-motor'] },
+        { id: 'aura-brainstem', label: 'Two or more brainstem symptoms (slurred speech, vertigo, double vision, unsteadiness, ringing in the ears)', chips: ['aura-brainstem'] },
+        { id: 'aura-retinal', label: 'Loss of vision in ONE eye only (monocular)', chips: ['aura-retinal'] },
         { id: 'aura-onesided', label: 'At least one symptom is one-sided', chips: ['aura-symptom-unilateral'] },
         { id: 'aura-reversible', label: 'Fully reversible', chips: ['aura-fully-reversible'] },
         { id: 'aura-spread', label: 'Spreads gradually over 5 minutes or more', chips: ['aura-spread-ge-5min'] },
