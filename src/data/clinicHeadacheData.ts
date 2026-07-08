@@ -81,7 +81,7 @@ export type ChipId =
   | 'rf-onset-sudden'
   | 'rf-older-age-onset'
   | 'rf-pattern-change'
-  | 'rf-positional'
+  | 'rf-positional-upright' | 'rf-positional-recumbent'  // B-1: split (opposite mechanisms)
   | 'rf-valsalva'
   | 'rf-papilloedema'
   | 'rf-progressive'
@@ -453,7 +453,8 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
       { id: 'rf-onset-sudden', label: 'Sudden or thunderclap onset' },
       { id: 'rf-older-age-onset', label: 'New headache onset after age 50' },
       { id: 'rf-pattern-change', label: 'Recent pattern change or new headache type' },
-      { id: 'rf-positional', label: 'Positional headache (worse standing or supine)' },
+      { id: 'rf-positional-upright', label: 'Headache worse upright, relieved lying flat (orthostatic)' },
+      { id: 'rf-positional-recumbent', label: 'Headache worse lying down, worse on waking, or worse with Valsalva' },
       { id: 'rf-valsalva', label: 'Precipitated by Valsalva (cough, sneeze, exercise)' },
       { id: 'rf-papilloedema', label: 'Papilloedema on exam' },
       { id: 'rf-progressive', label: 'Progressive or atypical course' },
@@ -497,7 +498,7 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
 
 export const RED_FLAG_CHIPS: Set<ChipId> = new Set<ChipId>([
   'rf-systemic', 'rf-neoplasm', 'rf-neuro-deficit', 'rf-onset-sudden',
-  'rf-older-age-onset', 'rf-pattern-change', 'rf-positional', 'rf-valsalva',
+  'rf-older-age-onset', 'rf-pattern-change', 'rf-positional-upright', 'rf-positional-recumbent', 'rf-valsalva',
   'rf-papilloedema', 'rf-progressive', 'rf-pregnancy', 'rf-painful-eye-autonomic',
   'rf-posttraumatic', 'rf-immune-pathology', 'rf-painkiller-overuse',
 ]);

@@ -14,8 +14,8 @@
  * secondary-workup result (clinical gate: SNNOOP10 gate runs before any
  * pattern question).
  *
- * SNNOOP10 content is the reviewed set from the prior pathway (12 flags), held
- * verbatim so the existing clinical review carries; surfaced as Do et al. 2019
+ * SNNOOP10 content is the reviewed set from the prior pathway (13 flags after the
+ * B-1 positional split), held verbatim so the existing clinical review carries; surfaced as Do et al. 2019
  * per the clinical gate (the mockup's "Mitsikostas 2017" display copy was an
  * editorial slip). No data-claim tags: these are elicitation labels, not
  * registered claims, matching the prior page.
@@ -30,19 +30,25 @@ interface SnnoopFlag {
   detail: string;
 }
 
-// 12 SNNOOP10 warning signs, verbatim from the reviewed prior pathway
-// (rf-* ChipIds match the engine's red-flag group; anyRedFlagActive consumes them).
-const SNNOOP10_FLAGS: SnnoopFlag[] = [
+// The full SNNOOP10 warning-sign set — one entry per engine RED_FLAG_CHIP, so every
+// red flag is selectable and can trip anyRedFlagActive (drift-guarded in
+// clinicHeadacheData.test.ts: SNNOOP10_FLAGS ids === RED_FLAG_CHIPS). Positional split
+// into upright/recumbent per B-1. Exported so the drift-guard can assert coverage.
+export const SNNOOP10_FLAGS: SnnoopFlag[] = [
   { chipId: 'rf-onset-sudden', title: 'Thunderclap onset', detail: 'Sudden, peak in seconds' },
   { chipId: 'rf-neuro-deficit', title: 'Focal neurologic deficit or seizure', detail: 'New weakness, aphasia, vision change' },
   { chipId: 'rf-systemic', title: 'Fever, weight loss, or systemic illness', detail: 'Constitutional symptoms' },
-  { chipId: 'rf-older-age-onset', title: 'First-ever headache after age 50', detail: 'New onset late in life' },
+  { chipId: 'rf-neoplasm', title: 'History of cancer (neoplasm)', detail: 'Risk of brain metastasis' },
+  { chipId: 'rf-older-age-onset', title: 'First-ever headache after age 50', detail: 'New onset late in life (giant cell arteritis)' },
+  { chipId: 'rf-pattern-change', title: 'Recent pattern change', detail: 'Different from prior headaches' },
+  { chipId: 'rf-progressive', title: 'Progressive or worsening course', detail: 'Steadily worsening, atypical' },
+  { chipId: 'rf-positional-upright', title: 'Worse upright, relieved lying flat', detail: 'Orthostatic → spontaneous intracranial hypotension (CSF leak)' },
+  { chipId: 'rf-positional-recumbent', title: 'Worse lying down, on waking, or with Valsalva', detail: 'Recumbent-worse → raised intracranial pressure (mass, IIH, CVST)' },
+  { chipId: 'rf-valsalva', title: 'Triggered by cough, sneeze, or exercise', detail: 'Valsalva manoeuvre' },
+  { chipId: 'rf-papilloedema', title: 'Papilloedema on exam', detail: 'Optic disc swelling' },
+  { chipId: 'rf-painful-eye-autonomic', title: 'Painful red eye with autonomic features', detail: 'Consider acute angle-closure glaucoma' },
   { chipId: 'rf-pregnancy', title: 'Pregnancy or postpartum', detail: 'Includes 6 weeks postpartum' },
   { chipId: 'rf-posttraumatic', title: 'Posttraumatic onset', detail: 'Follows head injury' },
-  { chipId: 'rf-papilloedema', title: 'Papilloedema on exam', detail: 'Optic disc swelling' },
-  { chipId: 'rf-valsalva', title: 'Triggered by cough, sneeze, or exercise', detail: 'Valsalva manoeuvre' },
-  { chipId: 'rf-positional', title: 'Worse standing or supine', detail: 'Positional component' },
-  { chipId: 'rf-pattern-change', title: 'Recent pattern change', detail: 'Different from prior headaches' },
   { chipId: 'rf-immune-pathology', title: 'Immunosuppression, HIV, or cancer history', detail: 'Risk for opportunistic causes' },
   { chipId: 'rf-painkiller-overuse', title: 'Painkiller use 10 to 15 days a month or more', detail: 'Medication-overuse headache risk' },
 ];

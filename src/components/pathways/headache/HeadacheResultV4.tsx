@@ -40,32 +40,43 @@ import { HeadacheManagement, hasHeadacheManagement } from './HeadacheManagement'
 
 // Per-flag workup guidance, relocated verbatim from the prior pathway
 // (ClinicHeadachePathway.tsx workupNotesForFlags) so the reviewed content carries.
+// B-4: each red flag names its must-not-miss suspect + first investigation,
+// verified against SNNOOP10 (Do 2019) + the sources in
+// docs/evidence-packets/2026-07-06-headache-redflag-safety-b1-b4.md.
 const WORKUP_NOTES: Record<string, string> = {
-  'rf-onset-sudden': 'Non-contrast CT head urgently; if negative beyond 6 h of onset, lumbar puncture for xanthochromia. CTA brain to evaluate aneurysm.',
-  'rf-neuro-deficit': 'Urgent MRI brain with contrast, or non-contrast CT if MRI not available. EEG if seizure suspected.',
-  'rf-systemic': 'CBC, ESR, CRP, blood cultures if febrile. Lumbar puncture after imaging if meningitis suspected.',
-  'rf-older-age-onset': 'MRI brain with contrast. ESR + CRP to evaluate giant cell arteritis; temporal artery biopsy if clinical suspicion is high.',
-  'rf-pregnancy': 'MRI brain (avoid contrast unless essential). MRV for venous sinus thrombosis. Consider PRES, pre-eclampsia, RCVS.',
-  'rf-posttraumatic': 'CT head non-contrast. MRI with susceptibility-weighted imaging for microbleeds if subacute. Concussion evaluation.',
-  'rf-papilloedema': 'MRI brain with MRV to rule out venous sinus thrombosis, mass, IIH. LP with opening pressure after imaging.',
-  'rf-valsalva': 'MRI brain to evaluate posterior fossa lesions (Chiari malformation, tumour, colloid cyst).',
-  'rf-positional': 'MRI brain with and without contrast to evaluate intracranial hypotension (dural enhancement) or hypertension.',
-  'rf-pattern-change': 'MRI brain with contrast. Re-evaluate ICHD-3 phenotype after imaging; consider secondary cause.',
-  'rf-immune-pathology': 'MRI brain with contrast to rule out opportunistic infection or metastasis. LP with cytology if neoplastic meningitis suspected.',
-  'rf-painkiller-overuse': 'Medication-overuse headache (ICHD-3 §8.2) is a primary-headache complication, not a secondary cause. Imaging is not first-line. Plan medication withdrawal alongside preventive initiation.',
+  'rf-onset-sudden': 'Suspect subarachnoid haemorrhage; also RCVS, cervical-artery dissection, CVST. First: non-contrast CT head (negative within 6 h essentially excludes SAH); if non-diagnostic, LP for xanthochromia and/or CTA brain.',
+  'rf-neuro-deficit': 'Suspect stroke, a mass lesion, or encephalitis. First: neuroimaging (CT then MRI as indicated); LP after imaging if CNS infection is suspected.',
+  'rf-systemic': 'Suspect meningitis or encephalitis (also systemic malignancy, giant cell arteritis). Fever + neck stiffness: LP (CT head first if immunocompromised, focal deficit, new seizure, or reduced GCS). Weight loss: imaging + malignancy work-up; ESR/CRP if GCA is suspected.',
+  'rf-neoplasm': 'Suspect brain metastasis or CNS involvement of a known cancer. First: MRI brain with contrast.',
+  'rf-older-age-onset': 'Suspect giant cell arteritis (also a mass lesion). New headache after age 50 with jaw claudication, scalp tenderness, or visual symptoms: ESR + CRP (plus CBC), then temporal artery biopsy (do not delay steroids if vision is threatened); temporal-artery ultrasound is an option. (The >50 threshold follows GCA epidemiology, where age 50 or over is the diagnostic gate; the SNNOOP10 mnemonic itself lists age over 65.)',
+  'rf-pattern-change': 'Suspect a new secondary cause (mass, vascular, or inflammatory). First: MRI brain; tailor further work-up to the associated features.',
+  'rf-positional-upright': 'Suspect spontaneous intracranial hypotension (CSF leak). First: MRI brain with and without gadolinium (diffuse pachymeningeal enhancement, brain sag); add spine imaging / CT myelography to localise the leak.',
+  'rf-positional-recumbent': 'Suspect raised intracranial pressure (a mass lesion, IIH, or CVST). First: MRI brain; add MRV if venous sinus thrombosis is suspected (papilloedema, pulsatile tinnitus). Image before LP.',
+  'rf-valsalva': 'Suspect a posterior-fossa lesion / Chiari malformation, or raised ICP. First: MRI brain including the craniocervical junction.',
+  'rf-papilloedema': 'Suspect raised intracranial pressure (a mass lesion, IIH, or CVST). First: MRI brain + MRV; LP for opening pressure only after imaging excludes a mass or venous occlusion.',
+  'rf-progressive': 'Suspect a mass lesion or a structural progressive pathology. First: MRI brain with contrast.',
+  'rf-pregnancy': 'Suspect cerebral venous sinus thrombosis; also pre-eclampsia/PRES and pituitary apoplexy. First: MRI brain + MRV (avoid gadolinium where possible); check BP and pre-eclampsia work-up.',
+  'rf-painful-eye-autonomic': 'Suspect acute angle-closure glaucoma; also carotid/cavernous pathology or dissection. First: ophthalmology review with intraocular pressure; vascular imaging (CTA/MRA) if dissection or a cavernous lesion is suspected.',
+  'rf-posttraumatic': 'Suspect intracranial haemorrhage (subdural / epidural) or traumatic arterial dissection. First: non-contrast CT head; vascular imaging if dissection is suspected.',
+  'rf-immune-pathology': 'Suspect opportunistic CNS infection (cryptococcal, toxoplasma) or CNS lymphoma. First: MRI brain with contrast, then LP (imaging before LP is mandatory in the immunocompromised).',
+  'rf-painkiller-overuse': 'Suspect medication-overuse headache (ICHD-3 §8.2) or a new-drug secondary headache. This is a reversible primary-headache complication, not a danger work-up: take a medication history and plan withdrawal plus preventive initiation. Image only if other red flags co-present.',
 };
 
 const FLAG_LABELS: Record<string, string> = {
   'rf-onset-sudden': 'Thunderclap onset',
   'rf-neuro-deficit': 'Focal neurologic deficit or seizure',
   'rf-systemic': 'Fever, weight loss, or systemic illness',
+  'rf-neoplasm': 'History of neoplasm',
   'rf-older-age-onset': 'First-ever headache after age 50',
   'rf-pregnancy': 'Pregnancy or postpartum',
   'rf-posttraumatic': 'Posttraumatic onset',
   'rf-papilloedema': 'Papilloedema on exam',
   'rf-valsalva': 'Triggered by cough, sneeze, or exercise',
-  'rf-positional': 'Worse standing or supine',
+  'rf-positional-upright': 'Worse upright, relieved lying flat',
+  'rf-positional-recumbent': 'Worse lying down, on waking, or with Valsalva',
   'rf-pattern-change': 'Recent pattern change',
+  'rf-progressive': 'Progressive or atypical course',
+  'rf-painful-eye-autonomic': 'Painful eye with autonomic features',
   'rf-immune-pathology': 'Immunosuppression, HIV, or cancer history',
   'rf-painkiller-overuse': 'Painkiller use 10 to 15 days a month or more',
 };
@@ -95,6 +106,7 @@ const HiddenClaimMarkers: React.FC = () => (
     <span data-claim="clinic-headache-ichd3-tac-subtypes" />
     <span data-claim="clinic-headache-ichd3-aura-subtypes" />
     <span data-claim="clinic-headache-ichd3-tn-subtypes" />
+    <span data-claim="clinic-headache-redflag-workup" />
     <span data-claim="clinic-headache-pitfall-mig-vs-tth" />
   </div>
 );

@@ -25,6 +25,7 @@ import {
   type ChipId,
   type PhenotypeId,
 } from './clinicHeadacheData';
+import { SNNOOP10_FLAGS } from '../components/pathways/headache/HeadacheSafetyScreen';
 
 const select = (...ids: ChipId[]): Set<ChipId> => new Set(ids);
 
@@ -343,6 +344,27 @@ describe('data integrity', () => {
     for (const id of RED_FLAG_CHIPS) {
       expect(redGroupIds.has(id), `red flag ${id} not in red-flags group`).toBe(true);
     }
+  });
+
+  it('B-1: rf-positional split — both upright and recumbent are registered red flags that trip anyRedFlagActive', () => {
+    expect(RED_FLAG_CHIPS.has('rf-positional-upright')).toBe(true);
+    expect(RED_FLAG_CHIPS.has('rf-positional-recumbent')).toBe(true);
+    // The bundled rf-positional id is gone; the split preserves the safety short-circuit.
+    expect(anyRedFlagActive(new Set<ChipId>(['rf-positional-upright']))).toBe(true);
+    expect(anyRedFlagActive(new Set<ChipId>(['rf-positional-recumbent']))).toBe(true);
+  });
+
+  it('C1 drift-guard: the safety-screen picker exposes EXACTLY the RED_FLAG_CHIPS set (every red flag is selectable)', () => {
+    const pickerIds = new Set(SNNOOP10_FLAGS.map(f => f.chipId));
+    // every engine red flag must be reachable in the picker, else it can never trip the workup gate
+    for (const id of RED_FLAG_CHIPS) {
+      expect(pickerIds.has(id), `red flag ${id} is in RED_FLAG_CHIPS but not selectable in the safety picker`).toBe(true);
+    }
+    // and the picker must not offer a chip that is not a registered red flag (it would not trip the gate)
+    for (const id of pickerIds) {
+      expect(RED_FLAG_CHIPS.has(id), `picker chip ${id} is not in RED_FLAG_CHIPS`).toBe(true);
+    }
+    expect(pickerIds.size).toBe(RED_FLAG_CHIPS.size);
   });
 
   it('three new ChipIds resolve in HEADACHE_CHIP_GROUPS (aura-symptom-unilateral, attacks-ge-2, migraine-history-established)', () => {

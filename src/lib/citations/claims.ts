@@ -867,6 +867,15 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'ICHD-3 migraine-with-aura subtypes: 1.2.1 typical aura (visual/sensory/speech, fully reversible, no motor/brainstem/retinal); 1.2.2 brainstem aura (at least two brainstem symptoms, no motor or retinal); 1.2.3 hemiplegic migraine (fully reversible motor weakness; exclude stroke or structural cause and refer for genetic evaluation, familial hemiplegic migraine); 1.2.4 retinal migraine (repeated monocular visual disturbance; exclude other causes of transient monocular visual loss such as amaurosis fugax or retinal artery occlusion).',
   },
 
+  'clinic-headache-redflag-workup': {
+    id: 'clinic-headache-redflag-workup',
+    citation_ids: ['do-snnoop10-2019'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    // B-4: red-flag → suspect → first-test mapping (evidence packet
+    // docs/evidence-packets/2026-07-06-headache-redflag-safety-b1-b4.md).
+    description: 'SNNOOP10 red-flag to must-not-miss suspect to first investigation (Do 2019): thunderclap to SAH/RCVS to non-contrast CT (plus CTA/LP if non-diagnostic); new headache after 50 with GCA features to giant cell arteritis to ESR/CRP + temporal artery biopsy (the over-50 threshold follows GCA epidemiology; SNNOOP10 itself lists over 65); papilloedema or recumbent-worse to raised ICP (mass, IIH, CVST) to MRI + MRV; upright-worse (orthostatic) to spontaneous intracranial hypotension to MRI with and without gadolinium (plus CT myelography); fever + neck stiffness or immunocompromise to meningitis / opportunistic infection to LP (imaging first if immunocompromised or focal deficit); posttraumatic to intracranial haemorrhage to non-contrast CT; painful eye with autonomic features to acute angle-closure glaucoma to intraocular pressure / ophthalmology; medication overuse to medication-overuse headache (reversible, not a danger work-up).',
+  },
+
   'clinic-headache-ichd3-tn-subtypes': {
     id: 'clinic-headache-ichd3-tn-subtypes',
     citation_ids: ['ichd3-2018'],
