@@ -18,6 +18,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   anyRedFlagActive,
+  detectOverlays,
   evaluateHeadachePhenotypes,
   HEADACHE_CHIP_GROUPS,
   HEADACHE_PHENOTYPES,
@@ -1628,5 +1629,42 @@ describe('Trigeminal neuralgia aetiology subtypes (Class D Stage 3b — §13.1.1
   it('precedence: underlying disease + NVC → secondary (an underlying cause explains it)', () => {
     const matches = evaluateHeadachePhenotypes(select(...tnFull, 'tn-underlying-disease-demonstrated', 'tn-nvc-morphological-change'));
     expect(tnOf(matches.find(m => m.phenotypeId === 'trigeminal-neuralgia'))?.id).toBe('tn-secondary');
+  });
+});
+
+describe('§8.2 Medication-overuse headache overlay (Class D Stage 4)', () => {
+  it('MOH overlay present: simple-analgesic overuse + ≥15 d/mo + >3 mo → moh overlay', () => {
+    const overlays = detectOverlays(select('moh-overuse-simple-ge-15', 'freq-ge-15-per-month', 'pattern-ge-3-months'));
+    expect(overlays.map(o => o.id)).toContain('moh');
+    expect(overlays[0].section).toContain('§8.2');
+  });
+
+  it('MOH overlay present via specific-drug overuse (≥10 d/mo)', () => {
+    const overlays = detectOverlays(select('moh-overuse-specific-ge-10', 'freq-ge-15-per-month', 'pattern-ge-3-months'));
+    expect(overlays.map(o => o.id)).toContain('moh');
+  });
+
+  it('no MOH without acute-drug overuse (chronic frequency alone does not overlay)', () => {
+    expect(detectOverlays(select('freq-ge-15-per-month', 'pattern-ge-3-months'))).toEqual([]);
+  });
+
+  it('no MOH without ≥15 headache days/month', () => {
+    expect(detectOverlays(select('moh-overuse-simple-ge-15', 'pattern-ge-3-months'))).toEqual([]);
+  });
+
+  it('no MOH without >3 months', () => {
+    expect(detectOverlays(select('moh-overuse-simple-ge-15', 'freq-ge-15-per-month'))).toEqual([]);
+  });
+
+  it('MOH is an OVERLAY, not a phenotype: it never appears in evaluateHeadachePhenotypes output', () => {
+    const chips: ChipId[] = ['moh-overuse-simple-ge-15', 'freq-ge-15-per-month', 'pattern-ge-3-months'];
+    const matches = evaluateHeadachePhenotypes(select(...chips));
+    expect(matches.some(m => (m.phenotypeId as string) === 'moh')).toBe(false);
+    // MOH is coded alongside the primary by detectOverlays, not as a 12th phenotype.
+    expect(detectOverlays(select(...chips)).map(o => o.id)).toContain('moh');
+  });
+
+  it('B-2: rf-painkiller-overuse is removed from the red-flag danger set (MOH is not a workup emergency)', () => {
+    expect(RED_FLAG_CHIPS.has('rf-painkiller-overuse' as ChipId)).toBe(false);
   });
 });

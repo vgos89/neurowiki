@@ -30,7 +30,7 @@
  */
 import React from 'react';
 import { AlertTriangle, RotateCcw, Check, ChevronDown } from 'lucide-react';
-import type { ChipId, PhenotypeMatch } from '../../../data/clinicHeadacheData';
+import type { ChipId, PhenotypeMatch, Overlay } from '../../../data/clinicHeadacheData';
 import type { BandedResult, BandedMatch } from '../../../data/headacheBanding';
 import { bandStrengthLabel } from '../../../data/headacheBanding';
 import { deriveHeadacheConflict } from '../../../data/headacheConflict';
@@ -59,7 +59,7 @@ const WORKUP_NOTES: Record<string, string> = {
   'rf-painful-eye-autonomic': 'Suspect acute angle-closure glaucoma; also carotid/cavernous pathology or dissection. First: ophthalmology review with intraocular pressure; vascular imaging (CTA/MRA) if dissection or a cavernous lesion is suspected.',
   'rf-posttraumatic': 'Suspect intracranial haemorrhage (subdural / epidural) or traumatic arterial dissection. First: non-contrast CT head; vascular imaging if dissection is suspected.',
   'rf-immune-pathology': 'Suspect opportunistic CNS infection (cryptococcal, toxoplasma) or CNS lymphoma. First: MRI brain with contrast, then LP (imaging before LP is mandatory in the immunocompromised).',
-  'rf-painkiller-overuse': 'Suspect medication-overuse headache (ICHD-3 §8.2) or a new-drug secondary headache. This is a reversible primary-headache complication, not a danger work-up: take a medication history and plan withdrawal plus preventive initiation. Image only if other red flags co-present.',
+  // B-2: painkiller overuse moved out of the danger workup — surfaced as the MOH overlay.
 };
 
 const FLAG_LABELS: Record<string, string> = {
@@ -78,7 +78,6 @@ const FLAG_LABELS: Record<string, string> = {
   'rf-progressive': 'Progressive or atypical course',
   'rf-painful-eye-autonomic': 'Painful eye with autonomic features',
   'rf-immune-pathology': 'Immunosuppression, HIV, or cancer history',
-  'rf-painkiller-overuse': 'Painkiller use 10 to 15 days a month or more',
 };
 
 // Hidden claim markers — the 8 ICHD-3 criteria claims (their visible criteria render
@@ -107,6 +106,7 @@ const HiddenClaimMarkers: React.FC = () => (
     <span data-claim="clinic-headache-ichd3-aura-subtypes" />
     <span data-claim="clinic-headache-ichd3-tn-subtypes" />
     <span data-claim="clinic-headache-redflag-workup" />
+    <span data-claim="clinic-headache-ichd3-moh" />
     <span data-claim="clinic-headache-pitfall-mig-vs-tth" />
   </div>
 );
@@ -251,6 +251,8 @@ export interface HeadacheResultV4Props {
   selected: Set<ChipId>;
   redFlagActive: boolean;
   redFlags: Set<ChipId>;
+  /** Co-occurring overlays coded alongside the primary (§8.2 MOH). Stage 4. */
+  overlays?: Overlay[];
   onReconsider: () => void;
 }
 
@@ -259,6 +261,7 @@ export const HeadacheResultV4: React.FC<HeadacheResultV4Props> = ({
   selected,
   redFlagActive,
   redFlags,
+  overlays = [],
   onReconsider,
 }) => {
   // ── SNNOOP10 short-circuit: secondary workup leads, no phenotype banding. ──
@@ -334,6 +337,15 @@ export const HeadacheResultV4: React.FC<HeadacheResultV4Props> = ({
 
         {top2.map((bm, i) => (
           <CandidateAccordion key={bm.match.phenotypeId} bm={bm} selected={selected} open={i === 0} />
+        ))}
+
+        {/* §8.2 Medication-overuse headache overlay — codes ALONGSIDE the primary (Stage 4). */}
+        {overlays.map(ov => (
+          <div key={ov.id} className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-amber-700">Overlay · code alongside the primary</div>
+            <div className="text-[14px] font-semibold text-amber-900 leading-snug mt-1">{ov.label} · {ov.section}</div>
+            <p className="text-[12px] text-amber-800 leading-snug mt-1">{ov.note}</p>
+          </div>
         ))}
 
         {/* Set-aside tray */}

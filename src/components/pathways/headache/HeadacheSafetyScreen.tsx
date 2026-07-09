@@ -50,7 +50,8 @@ export const SNNOOP10_FLAGS: SnnoopFlag[] = [
   { chipId: 'rf-pregnancy', title: 'Pregnancy or postpartum', detail: 'Includes 6 weeks postpartum' },
   { chipId: 'rf-posttraumatic', title: 'Posttraumatic onset', detail: 'Follows head injury' },
   { chipId: 'rf-immune-pathology', title: 'Immunosuppression, HIV, or cancer history', detail: 'Risk for opportunistic causes' },
-  { chipId: 'rf-painkiller-overuse', title: 'Painkiller use 10 to 15 days a month or more', detail: 'Medication-overuse headache risk' },
+  // B-2: painkiller overuse is NOT a danger flag — it is handled as a reversible
+  // medication-overuse-headache overlay (detectOverlays), not a secondary-workup route.
 ];
 
 export interface HeadacheSafetyScreenProps {

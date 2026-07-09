@@ -1,6 +1,6 @@
 # ADR-2026-07-06: Headache ICHD-3 subtype resolution + MOH overlay via post-evaluation passes
 
-**Status:** Proposed (awaiting V approval — Class D)
+**Status:** Accepted (V-approved 2026-07-06; fully implemented Stages 1–4, 2026-07-06→08)
 **Date:** 2026-07-06
 **Deciders:** V (final), system-architect (structural, approve-with-conditions), clinical-reviewer + medical-scientist (clinical gate on the clinical portions)
 **Architect review artifact:** [arch-headache-subtypes-moh-overlay.md](../reviews/arch-headache-subtypes-moh-overlay.md)

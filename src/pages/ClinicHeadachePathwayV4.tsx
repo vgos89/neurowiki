@@ -28,6 +28,7 @@ import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useRecents } from '../hooks/useRecents';
 import {
   evaluateHeadachePhenotypes,
+  detectOverlays,
   anyRedFlagActive,
   type ChipId,
 } from '../data/clinicHeadacheData';
@@ -95,6 +96,7 @@ const ClinicHeadachePathwayV4: React.FC = () => {
 
   const matches = useMemo(() => evaluateHeadachePhenotypes(selected), [selected]);
   const banded = useMemo(() => bandPhenotypes(matches), [matches]);
+  const overlays = useMemo(() => detectOverlays(selected), [selected]);
   const activeQuestions = useMemo(() => getActiveQuestions(selected), [selected]);
   const redFlagActive = useMemo(() => anyRedFlagActive(selected), [selected]);
 
@@ -208,6 +210,7 @@ const ClinicHeadachePathwayV4: React.FC = () => {
             selected={selected}
             redFlagActive={redFlagActive}
             redFlags={redFlags}
+            overlays={overlays}
             onReconsider={() => {
               setQuestionIndex(Math.max(0, activeQuestions.length - 1));
               setPhase('questions');

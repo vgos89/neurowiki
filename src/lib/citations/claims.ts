@@ -867,6 +867,14 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'ICHD-3 migraine-with-aura subtypes: 1.2.1 typical aura (visual/sensory/speech, fully reversible, no motor/brainstem/retinal); 1.2.2 brainstem aura (at least two brainstem symptoms, no motor or retinal); 1.2.3 hemiplegic migraine (fully reversible motor weakness; exclude stroke or structural cause and refer for genetic evaluation, familial hemiplegic migraine); 1.2.4 retinal migraine (repeated monocular visual disturbance; exclude other causes of transient monocular visual loss such as amaurosis fugax or retinal artery occlusion).',
   },
 
+  'clinic-headache-ichd3-moh': {
+    id: 'clinic-headache-ichd3-moh',
+    citation_ids: ['ichd3-2018'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    // ICHD-3 §8.2 Medication-overuse headache overlay (ADR-2026-07-06 Stage 4) added 2026-07-08.
+    description: 'ICHD-3 8.2 Medication-overuse headache: headache on 15 or more days/month in a patient with a pre-existing headache disorder, with regular overuse for over 3 months of an acute headache drug — simple analgesics on 15 or more days/month, or triptans, ergots, opioids, combination analgesics, or multiple drug classes on 10 or more days/month. Coded ALONGSIDE the primary headache type. It is a reversible complication (plan medication withdrawal plus preventive initiation), not a secondary-cause danger workup.',
+  },
+
   'clinic-headache-redflag-workup': {
     id: 'clinic-headache-redflag-workup',
     citation_ids: ['do-snnoop10-2019'],

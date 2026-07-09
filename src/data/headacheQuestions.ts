@@ -255,6 +255,23 @@ export const CONDITIONAL_BRANCHES: ConditionalBranch[] = [
     },
   },
 
+  // Medication-overuse (MOH overlay, §8.2) — fires on chronic frequency (15+ days/month).
+  {
+    id: 'b-moh',
+    fires: (s) => has(s, 'freq-ge-15-per-month'),
+    question: {
+      id: 'q-moh',
+      screen: 8,
+      eyebrow: 'Medication use',
+      prompt: 'With headache on 15 or more days a month, ask about regular acute-medication use (medication-overuse headache):',
+      select: 'multi',
+      options: [
+        { id: 'moh-simple', label: 'Simple painkillers (paracetamol, NSAIDs, aspirin) on 15 or more days a month', chips: ['moh-overuse-simple-ge-15'] },
+        { id: 'moh-specific', label: 'Triptans, ergots, opioids, combination painkillers, or several drug classes on 10 or more days a month', chips: ['moh-overuse-specific-ge-10'] },
+      ],
+    },
+  },
+
   // Indomethacin response — unlocks hemicrania continua (§3.4) and paroxysmal hemicrania (§3.2),
   // both hidden until a complete indomethacin response is recorded.
   {

@@ -89,7 +89,9 @@ export type ChipId =
   | 'rf-painful-eye-autonomic'
   | 'rf-posttraumatic'
   | 'rf-immune-pathology'
-  | 'rf-painkiller-overuse';
+  // §8.2 Medication-overuse headache (overlay) — B-2 removes painkiller overuse from
+  // the red-flag danger short-circuit; MOH is detected here and coded alongside the primary.
+  | 'moh-overuse-simple-ge-15' | 'moh-overuse-specific-ge-10';
 
 export interface Chip {
   id: ChipId;
@@ -147,6 +149,19 @@ export interface Subtype {
    * other monocular visual-loss causes). Neutral guidance, not a diagnosis claim.
    */
   note?: string;
+}
+
+/**
+ * A co-occurring overlay coded ALONGSIDE the primary phenotype (NOT a phenotype
+ * match, never a 12th phenotype). Currently just §8.2 Medication-overuse headache.
+ * Returned by detectOverlays() as a separate structure beside the match list
+ * (ADR-2026-07-06 Stage 4).
+ */
+export interface Overlay {
+  id: 'moh';
+  label: string;
+  section: string;
+  note: string;
 }
 
 /**
@@ -300,6 +315,9 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
       { id: 'freq-1-4-per-month', label: '1 to 4 headache days per month' },
       { id: 'freq-5-14-per-month', label: '5 to 14 headache days per month' },
       { id: 'freq-ge-15-per-month', label: '15 or more headache days per month', teachWhenSelected: 'Crosses the chronic threshold (Chronic migraine, Chronic TTH, or MOH territory).' },
+      // §8.2 Medication-overuse headache (overlay) — overuse-days thresholds.
+      { id: 'moh-overuse-simple-ge-15', label: 'Simple analgesics (paracetamol, NSAIDs, or aspirin) on 15 or more days per month', teachWhenSelected: 'ICHD-3 8.2.3: the simple-analgesic overuse threshold for medication-overuse headache is 15 or more days/month for over 3 months.' },
+      { id: 'moh-overuse-specific-ge-10', label: 'Triptans, ergots, opioids, combination analgesics, or multiple drug classes on 10 or more days per month', teachWhenSelected: 'ICHD-3 8.2.1/.2/.4/.5/.6: the overuse threshold for these agents is 10 or more days/month for over 3 months.' },
       { id: 'freq-cluster-bout', label: 'Frequency 1 every other day to 8/day during bouts', teachWhenSelected: '3.1 Cluster criterion D: pattern in active bouts.' },
       // §3.1.1 / §3.1.2 cluster subtype discriminators (episodic vs chronic).
       { id: 'cluster-remission-ge-3mo', label: 'Attack bouts are separated by pain-free remissions of 3 months or more', teachWhenSelected: '3.1.1 Episodic cluster headache: bouts separated by remission periods of 3 months or more.' },
@@ -462,7 +480,6 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
       { id: 'rf-painful-eye-autonomic', label: 'Painful eye with autonomic features' },
       { id: 'rf-posttraumatic', label: 'Posttraumatic onset' },
       { id: 'rf-immune-pathology', label: 'Immune-system pathology (HIV, immunosuppression)' },
-      { id: 'rf-painkiller-overuse', label: 'Painkiller overuse or new drug at onset' },
     ],
   },
   {
@@ -500,7 +517,9 @@ export const RED_FLAG_CHIPS: Set<ChipId> = new Set<ChipId>([
   'rf-systemic', 'rf-neoplasm', 'rf-neuro-deficit', 'rf-onset-sudden',
   'rf-older-age-onset', 'rf-pattern-change', 'rf-positional-upright', 'rf-positional-recumbent', 'rf-valsalva',
   'rf-papilloedema', 'rf-progressive', 'rf-pregnancy', 'rf-painful-eye-autonomic',
-  'rf-posttraumatic', 'rf-immune-pathology', 'rf-painkiller-overuse',
+  'rf-posttraumatic', 'rf-immune-pathology',
+  // B-2: rf-painkiller-overuse removed from the red-flag danger set — MOH is a reversible
+  // complication detected by detectOverlays(), not a secondary-workup short-circuit.
 ]);
 
 export function anyRedFlagActive(selected: Set<ChipId>): boolean {
@@ -1390,6 +1409,28 @@ export function evaluateHeadachePhenotypes(selected: Set<ChipId>): PhenotypeMatc
   });
 
   return matches;
+}
+
+// ─── Overlay detector (ADR-2026-07-06 Stage 4) ────────────────────────────
+// A pure pass BESIDE evaluateHeadachePhenotypes. Overlays code ALONGSIDE the
+// primary phenotype (§8.2 Medication-overuse headache codes with the primary,
+// e.g. "chronic migraine + MOH"), never as a phenotype match. §8.2: headache on
+// ≥15 days/month for >3 months, with regular overuse of an acute drug — simple
+// analgesics ≥15 days/month, or triptans/ergots/opioids/combination/multiple
+// classes ≥10 days/month. B-2 moved this off the red-flag danger short-circuit:
+// MOH is a reversible complication (withdraw + prevent), not a workup emergency.
+export function detectOverlays(selected: Set<ChipId>): Overlay[] {
+  const overlays: Overlay[] = [];
+  const overuse = has(selected, 'moh-overuse-simple-ge-15') || has(selected, 'moh-overuse-specific-ge-10');
+  if (overuse && has(selected, 'freq-ge-15-per-month') && has(selected, 'pattern-ge-3-months')) {
+    overlays.push({
+      id: 'moh',
+      label: 'Medication-overuse headache',
+      section: 'ICHD-3 §8.2',
+      note: 'Code this ALONGSIDE the primary headache. Medication-overuse headache is a reversible complication: plan a medication-withdrawal strategy with preventive initiation. It is not a secondary-cause danger workup.',
+    });
+  }
+  return overlays;
 }
 
 // ─── Lookup helpers ───────────────────────────────────────────────────────
