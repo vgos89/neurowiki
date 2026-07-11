@@ -18,6 +18,185 @@
 import type { CitationRegistry } from './schema';
 
 export const CITATION_REGISTRY: CitationRegistry = {
+  // ═══ Read-the-Scan · Non-contrast CT head teaching module ════════════════
+  // Evidence packet: docs/evidence-packets/imaging-read-ct-head.md (2026-07-09).
+  // Verification ceiling MEDIUM: direct full-text/DOI/PMID resolution was
+  // egress-blocked on 2026-07-09, so flagged PMIDs and search-derived
+  // quoted_text strings must be confirmed verbatim at the next citation audit
+  // (VERIFY notes below). Windows per §13.7: primary studies 36 mo (default
+  // for source 'trial'); textbook references 36 mo (default); the herniation
+  // review overrides the 6-mo review default to 36 mo (stable neuroimaging
+  // anatomy reference). last_reviewed set to authoring date; §13.6 verbatim
+  // confirmation is the flagged follow-up routed to clinical-reviewer.
+
+  // Primary education-intervention study (labelled 'trial'). PMID inferred.
+  // VERIFY: PMID 9795316 and quoted_text search-derived, full-text
+  // egress-blocked 2026-07-09; confirm at next citation audit.
+  'perron-bcbvb-ct-1998': {
+    id: 'perron-bcbvb-ct-1998',
+    source: 'trial',
+    title: 'A multicenter study to improve emergency medicine residents\' recognition of intracranial emergencies on computed tomography',
+    year: 1998,
+    url: 'https://doi.org/10.1016/S0196-0644(98)70032-0',
+    pmid: '9795316',
+    last_reviewed: '2026-07-09',
+    quoted_text: 'The mean percentage correct before the course was 60%. At retesting 3 months after the course, the accuracy rate increased to 78% (P<.001). The taught approach used a systematic search: Blood, Can (cisterns), Be (brain), Very (ventricles), Bad (bone).',
+  },
+
+  // Single-center reader study (n=50). VERIFY: PMID 24967315 / PMC4045559 and
+  // quoted_text search-derived, full-text egress-blocked 2026-07-09; confirm
+  // at next citation audit.
+  'mainali-stroke-windows-2014': {
+    id: 'mainali-stroke-windows-2014',
+    source: 'trial',
+    title: 'Detection of Early Ischemic Changes in Noncontrast CT Head Improved with "Stroke Windows"',
+    year: 2014,
+    url: 'https://doi.org/10.1155/2014/654980',
+    pmid: '24967315',
+    last_reviewed: '2026-07-09',
+    quoted_text: 'Early ischemic changes were detected in 9 patients with standard windows, while EIC was detected using Stroke Windows in 35 patients (18% versus 70%).',
+  },
+
+  // ASPECTS region definitions. VERIFY: PMID 10905241 and quoted_text
+  // search-derived, full-text egress-blocked 2026-07-09; confirm at next audit.
+  'barber-aspects-2000': {
+    id: 'barber-aspects-2000',
+    source: 'trial',
+    title: 'Validity and reliability of a quantitative computed tomography score in predicting outcome of hyperacute stroke before thrombolytic therapy (ASPECTS)',
+    year: 2000,
+    url: 'https://doi.org/10.1016/S0140-6736(00)02237-6',
+    pmid: '10905241',
+    last_reviewed: '2026-07-09',
+    quoted_text: 'ASPECTS is a 10-point quantitative topographic CT scan score used in patients with middle cerebral artery stroke. Segmental assessment of the MCA vascular territory is made and 1 point is deducted from the initial score of 10 for every region involved.',
+  },
+
+  // Early-infarct insular ribbon sign. VERIFY: PMID 2389039 and quoted_text
+  // search-derived, full-text egress-blocked 2026-07-09; confirm at next audit.
+  'truwit-insular-ribbon-1990': {
+    id: 'truwit-insular-ribbon-1990',
+    source: 'trial',
+    title: 'Loss of the insular ribbon: another early CT sign of acute middle cerebral artery infarction',
+    year: 1990,
+    url: 'https://doi.org/10.1148/radiology.176.3.2389039',
+    pmid: '2389039',
+    last_reviewed: '2026-07-09',
+    quoted_text: 'Loss of the insular ribbon, or obscuration of the insular cortex due to loss of the normal gray-white interface, is one of the earliest and most reliable CT signs of middle cerebral artery infarction.',
+  },
+
+  // Herniation-pattern imaging review. review_window_months override to 36:
+  // stable neuroimaging anatomy reference, not a fast-moving therapeutic topic.
+  // VERIFY: quoted_text search-derived, full-text egress-blocked 2026-07-09;
+  // confirm at next citation audit.
+  'riascos-herniation-radiographics-2019': {
+    id: 'riascos-herniation-radiographics-2019',
+    source: 'review',
+    title: 'Types of Cerebral Herniation and Their Imaging Features',
+    year: 2019,
+    url: 'https://doi.org/10.1148/rg.2019190018',
+    last_reviewed: '2026-07-09',
+    review_window_months: 36,
+    quoted_text: 'Subfalcine herniation is the most common type of cerebral herniation. Descending transtentorial (uncal) herniation causes medial displacement of the uncus into the suprasellar cistern with potential compression of the oculomotor nerve and posterior cerebral artery. Central and tonsillar herniation are additional recognized patterns.',
+  },
+
+  // Textbook: hemorrhage density and Hounsfield range. VERIFY: quoted_text
+  // search-derived, full-text egress-blocked 2026-07-09; confirm at next audit.
+  'statpearls-ich-imaging': {
+    id: 'statpearls-ich-imaging',
+    source: 'textbook',
+    title: 'StatPearls: Intracranial Hemorrhage Imaging (NBK553103)',
+    year: 2024,
+    url: 'https://www.ncbi.nlm.nih.gov/books/NBK553103/',
+    last_reviewed: '2026-07-09',
+    quoted_text: 'Acute intraparenchymal hemorrhage is hyperdense on noncontrast CT. Reported attenuation values vary by source and are influenced by hematocrit and clot retraction, with acute clot commonly cited in the range of approximately 50–70 Hounsfield units; hyperacute unclotted blood may be less dense.',
+  },
+
+  // Textbook: epidural hematoma morphology. VERIFY: quoted_text search-derived,
+  // full-text egress-blocked 2026-07-09; confirm at next citation audit.
+  'statpearls-epidural-hematoma': {
+    id: 'statpearls-epidural-hematoma',
+    source: 'textbook',
+    title: 'StatPearls: Epidural Hematoma (NBK518982)',
+    year: 2024,
+    url: 'https://www.ncbi.nlm.nih.gov/books/NBK518982/',
+    last_reviewed: '2026-07-09',
+    quoted_text: 'Most epidural hematomas appear on CT as a biconvex or lens-shaped (lentiform) hyperdense mass. Epidural hematomas rarely cross suture lines but may cross dural reflections such as the falx or tentorium.',
+  },
+
+  // Textbook: subdural hematoma morphology. VERIFY: quoted_text search-derived,
+  // full-text egress-blocked 2026-07-09; confirm at next citation audit.
+  'radiopaedia-subdural-haemorrhage': {
+    id: 'radiopaedia-subdural-haemorrhage',
+    source: 'textbook',
+    title: 'Radiopaedia: Subdural haemorrhage',
+    year: 2024,
+    url: 'https://radiopaedia.org/articles/subdural-haemorrhage',
+    last_reviewed: '2026-07-09',
+    quoted_text: 'Subdural hematomas are typically crescent-shaped collections that readily cross suture lines but do not cross the midline.',
+  },
+
+  // Textbook: basal cisterns anatomy and effacement. VERIFY: quoted_text
+  // search-derived, full-text egress-blocked 2026-07-09; confirm at next audit.
+  'radiopaedia-basal-cisterns': {
+    id: 'radiopaedia-basal-cisterns',
+    source: 'textbook',
+    title: 'Radiopaedia: Basal cisterns',
+    year: 2024,
+    url: 'https://radiopaedia.org/articles/basal-cisterns',
+    last_reviewed: '2026-07-09',
+    quoted_text: 'The basal cisterns are subarachnoid CSF spaces at the base of the brain, including the suprasellar, interpeduncular, ambient, quadrigeminal, and prepontine cisterns. Effacement of the basal cisterns is an important sign of raised intracranial pressure and herniation.',
+  },
+
+  // Textbook: hydrocephalus, Evans index, transependymal flow. VERIFY:
+  // quoted_text search-derived, full-text egress-blocked 2026-07-09; confirm
+  // at next citation audit.
+  'radiopaedia-hydrocephalus': {
+    id: 'radiopaedia-hydrocephalus',
+    source: 'textbook',
+    title: 'Radiopaedia: Hydrocephalus',
+    year: 2024,
+    url: 'https://radiopaedia.org/articles/hydrocephalus',
+    last_reviewed: '2026-07-09',
+    quoted_text: 'Hydrocephalus refers to enlargement of the ventricular system. An Evans index, the ratio of the maximal width of the frontal horns to the maximal internal skull diameter, greater than 0.30 indicates ventricular enlargement. Periventricular low attenuation reflects transependymal CSF flow in acute or decompensated hydrocephalus, and temporal horn dilatation is an early sign of obstruction.',
+  },
+
+  // Textbook: skull fracture vs suture, pneumocephalus, sinus signs. VERIFY:
+  // quoted_text search-derived, full-text egress-blocked 2026-07-09; confirm
+  // at next citation audit.
+  'statpearls-skull-fracture': {
+    id: 'statpearls-skull-fracture',
+    source: 'textbook',
+    title: 'StatPearls: Skull Fracture (NBK470349)',
+    year: 2024,
+    url: 'https://www.ncbi.nlm.nih.gov/books/NBK470349/',
+    last_reviewed: '2026-07-09',
+    quoted_text: 'Skull fractures appear as sharp, lucent lines that may cross sutures and do not follow normal anatomic suture pathways. Depressed fractures show inward displacement of a bone fragment. Associated findings include pneumocephalus and air-fluid levels within the paranasal sinuses or mastoid air cells, and overlying scalp soft tissue swelling can indicate the site of impact.',
+  },
+
+  // Textbook: CT windowing (width/level). VERIFY: quoted_text search-derived,
+  // full-text egress-blocked 2026-07-09; confirm at next citation audit.
+  'radiopaedia-windowing-ct': {
+    id: 'radiopaedia-windowing-ct',
+    source: 'textbook',
+    title: 'Radiopaedia: Windowing (CT)',
+    year: 2024,
+    url: 'https://radiopaedia.org/articles/windowing-ct',
+    last_reviewed: '2026-07-09',
+    quoted_text: 'Window width is the range of Hounsfield units displayed as shades of gray, and window level is the center of that range. Narrowing the window width increases contrast between tissues of similar attenuation, while a wide window such as a bone window displays a large range of densities.',
+  },
+
+  // Textbook: intracranial hemorrhage density evolution and calcification
+  // mimics. VERIFY: quoted_text search-derived, full-text egress-blocked
+  // 2026-07-09; confirm at next citation audit.
+  'radiopaedia-intracranial-haemorrhage': {
+    id: 'radiopaedia-intracranial-haemorrhage',
+    source: 'textbook',
+    title: 'Radiopaedia: Intracranial haemorrhage',
+    year: 2024,
+    url: 'https://radiopaedia.org/articles/intracranial-haemorrhage',
+    last_reviewed: '2026-07-09',
+    quoted_text: 'Intracranial hemorrhage is hyperdense in the acute phase and becomes less dense over time, appearing roughly isodense to cortex at approximately 1–3 weeks and hypodense in the chronic phase. Subarachnoid hemorrhage fills the sulci and basal cisterns rather than forming a focal mass, and acute intravascular thrombus (for example a hyperdense middle cerebral artery) is also hyperdense. Physiologic calcification of the choroid plexus, pineal gland, and falx is hyperdense and should not be mistaken for acute blood.',
+  },
+
   // ─── 2022 trial: index large-core EVT signal (Japan) ─────────────────────
   // First positive RCT showing EVT benefit in ASPECTS 3–5; opened the large-
   // core EVT question that SELECT2/ANGEL-ASPECT (2023), TENSION (2023), and

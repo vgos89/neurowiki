@@ -43,6 +43,248 @@ const BEDSIDE_PEARL_SURFACE = { type: 'bedsidePearl' as const, field: 'bedsidePe
 // ─────────────────────────────────────────────────────────────────────────
 
 export const CLAIM_REGISTRY: ClaimRegistry = {
+  // ═══ Read-the-Scan · Non-contrast CT head teaching module ════════════════
+  // Surface: DATA_SURFACE (adjacent field on ClinicalNote / WindowCard.purpose
+  // objects in src/data/imaging/ctHead.ts). Citations registered in registry.ts
+  // under the matching CT-head block. The ASPECTS -> EVT statement in the Brain
+  // step reuses the existing aspects-evt-eligibility-2026 entry below and is
+  // NOT duplicated here. All 13 CT-head citations carry MEDIUM-confidence
+  // VERIFY flags in registry.ts (full-text egress-blocked 2026-07-09).
+
+  // Step 1 — Blood
+  'ct-blood-normal-absent': {
+    id: 'ct-blood-normal-absent',
+    citation_ids: ['radiopaedia-intracranial-haemorrhage'],
+    surfaces: [DATA_SURFACE],
+    description: 'Normal: no hyperdense collection in extra-axial spaces, sulci, cisterns, ventricles, or parenchyma; vessels and dural sinuses are only mildly dense.',
+  },
+  'ct-blood-acute-hyperdense-range': {
+    id: 'ct-blood-acute-hyperdense-range',
+    citation_ids: ['statpearls-ich-imaging', 'radiopaedia-intracranial-haemorrhage'],
+    surfaces: [DATA_SURFACE],
+    description: 'Acute clot is hyperdense, roughly 50–70 HU, taught as a range with mechanism (hyperacute unclotted blood may be lower; values vary by source and by hematocrit and clot retraction). Never a single hard number.',
+  },
+  'ct-blood-temporal-evolution': {
+    id: 'ct-blood-temporal-evolution',
+    citation_ids: ['radiopaedia-intracranial-haemorrhage'],
+    surfaces: [DATA_SURFACE],
+    description: 'Density evolution: hyperdense acutely, roughly isodense to cortex at about 1–3 weeks, hypodense in the chronic phase.',
+  },
+  'ct-blood-epidural-biconvex': {
+    id: 'ct-blood-epidural-biconvex',
+    citation_ids: ['statpearls-epidural-hematoma'],
+    surfaces: [DATA_SURFACE],
+    description: 'Epidural hematoma is biconvex (lentiform), does not cross suture lines but can cross the falx or tentorium; usually arterial.',
+  },
+  'ct-blood-subdural-crescent': {
+    id: 'ct-blood-subdural-crescent',
+    citation_ids: ['radiopaedia-subdural-haemorrhage'],
+    surfaces: [DATA_SURFACE],
+    description: 'Subdural hematoma is crescentic, crosses suture lines but not the midline, tracking over the convexity.',
+  },
+  'ct-blood-sah-cisterns-sulci': {
+    id: 'ct-blood-sah-cisterns-sulci',
+    citation_ids: ['radiopaedia-intracranial-haemorrhage'],
+    surfaces: [DATA_SURFACE],
+    description: 'Subarachnoid hemorrhage fills sulci and basal cisterns rather than forming a focal mass.',
+  },
+  'ct-blood-hyperdense-mca-sign': {
+    id: 'ct-blood-hyperdense-mca-sign',
+    citation_ids: ['radiopaedia-intracranial-haemorrhage'],
+    surfaces: [DATA_SURFACE],
+    description: 'Hyperdense MCA reflects acute intravascular thrombus; taught as a specific but relatively insensitive early sign of large-vessel occlusion. VERIFY: the specificity/sensitivity qualifier is standard teaching but is not carried in the cited quoted_text (blood/clot density only); attach a dedicated dense-artery-sign source at the next citation audit.',
+  },
+  'ct-search-pattern-accuracy': {
+    id: 'ct-search-pattern-accuracy',
+    citation_ids: ['perron-bcbvb-ct-1998'],
+    surfaces: [DATA_SURFACE],
+    description: 'A structured search pattern (Blood Can Be Very Bad) improved resident CT interpretation accuracy in a controlled educational study (60% to 78%, P<0.001). Framed as educational accuracy, NOT patient-outcome evidence.',
+  },
+  'ct-blood-calcification-mimic': {
+    id: 'ct-blood-calcification-mimic',
+    citation_ids: ['radiopaedia-intracranial-haemorrhage'],
+    surfaces: [DATA_SURFACE],
+    description: 'Physiologic calcification (choroid plexus, pineal gland, falx) is hyperdense and should not be mistaken for acute blood.',
+  },
+
+  // Step 2 — Cisterns
+  'ct-cisterns-normal-patent': {
+    id: 'ct-cisterns-normal-patent',
+    citation_ids: ['radiopaedia-basal-cisterns'],
+    surfaces: [DATA_SURFACE],
+    description: 'Normal: basal cisterns open and symmetric with low-density CSF around the midbrain and brainstem.',
+  },
+  'ct-cisterns-effacement-raised-icp': {
+    id: 'ct-cisterns-effacement-raised-icp',
+    citation_ids: ['radiopaedia-basal-cisterns'],
+    surfaces: [DATA_SURFACE],
+    description: 'Basal cistern effacement signals raised intracranial pressure or mass effect.',
+  },
+  'ct-cisterns-sah-basal': {
+    id: 'ct-cisterns-sah-basal',
+    citation_ids: ['radiopaedia-basal-cisterns', 'radiopaedia-intracranial-haemorrhage'],
+    surfaces: [DATA_SURFACE],
+    description: 'Hyperdensity filling the basal cisterns indicates subarachnoid hemorrhage, classically star-shaped suprasellar.',
+  },
+  'ct-cisterns-uncal-herniation': {
+    id: 'ct-cisterns-uncal-herniation',
+    citation_ids: ['riascos-herniation-radiographics-2019'],
+    surfaces: [DATA_SURFACE],
+    description: 'Uncal (descending transtentorial) herniation displaces the uncus into the suprasellar cistern; may compress CN III and the PCA.',
+  },
+  'ct-cisterns-tonsillar-herniation': {
+    id: 'ct-cisterns-tonsillar-herniation',
+    citation_ids: ['riascos-herniation-radiographics-2019'],
+    surfaces: [DATA_SURFACE],
+    description: 'Tonsillar herniation displaces the cerebellar tonsils more than 5 mm through the foramen magnum, effacing cisterns around the medulla.',
+  },
+
+  // Step 3 — Brain (ASPECTS -> EVT statement reuses aspects-evt-eligibility-2026)
+  'ct-brain-normal-graywhite': {
+    id: 'ct-brain-normal-graywhite',
+    citation_ids: ['truwit-insular-ribbon-1990'],
+    surfaces: [DATA_SURFACE],
+    description: 'Normal: gray matter slightly denser than white matter; crisp symmetric gray-white junction with visible symmetric sulci.',
+  },
+  'ct-brain-loss-graywhite-early-infarct': {
+    id: 'ct-brain-loss-graywhite-early-infarct',
+    citation_ids: ['truwit-insular-ribbon-1990'],
+    surfaces: [DATA_SURFACE],
+    description: 'Loss of gray-white differentiation is an early sign of ischemic infarction, appearing within hours before frank hypodensity.',
+  },
+  'ct-brain-insular-ribbon': {
+    id: 'ct-brain-insular-ribbon',
+    citation_ids: ['truwit-insular-ribbon-1990'],
+    surfaces: [DATA_SURFACE],
+    description: 'Loss of the insular ribbon (blurred gray-white margin at the insular cortex) is one of the earliest CT signs of MCA infarction.',
+  },
+  'ct-brain-aspects-regions': {
+    id: 'ct-brain-aspects-regions',
+    citation_ids: ['barber-aspects-2000'],
+    surfaces: [DATA_SURFACE],
+    description: 'ASPECTS divides the MCA territory into 10 regions (caudate, lentiform, internal capsule, insular ribbon, M1 to M6); one point subtracted per region with early ischemic change.',
+  },
+  'ct-brain-subfalcine-herniation': {
+    id: 'ct-brain-subfalcine-herniation',
+    citation_ids: ['riascos-herniation-radiographics-2019'],
+    surfaces: [DATA_SURFACE],
+    description: 'Subfalcine herniation (most common) displaces the cingulate gyrus under the falx; may compress the ACA.',
+  },
+  'ct-brain-central-herniation': {
+    id: 'ct-brain-central-herniation',
+    citation_ids: ['riascos-herniation-radiographics-2019'],
+    surfaces: [DATA_SURFACE],
+    description: 'Central (transtentorial) herniation displaces the diencephalon downward through the tentorial notch.',
+  },
+  'ct-brain-stroke-window-benefit': {
+    id: 'ct-brain-stroke-window-benefit',
+    citation_ids: ['mainali-stroke-windows-2014'],
+    surfaces: [DATA_SURFACE],
+    description: 'Early ischemic change is subtle on the standard brain window; a narrow stroke window improves detection sensitivity (18% vs 70% in a single-center reader study). Detection sensitivity only, not outcomes.',
+  },
+
+  // Step 4 — Ventricles
+  'ct-ventricles-normal-symmetric': {
+    id: 'ct-ventricles-normal-symmetric',
+    citation_ids: ['radiopaedia-hydrocephalus'],
+    surfaces: [DATA_SURFACE],
+    description: 'Normal: ventricles symmetric and age-appropriate, CSF density, no periventricular low attenuation.',
+  },
+  'ct-ventricles-ivh': {
+    id: 'ct-ventricles-ivh',
+    citation_ids: ['radiopaedia-intracranial-haemorrhage'],
+    surfaces: [DATA_SURFACE],
+    description: 'Hyperdense material layering in the dependent ventricles (often occipital horns) indicates intraventricular hemorrhage.',
+  },
+  'ct-ventricles-hydrocephalus-evans': {
+    id: 'ct-ventricles-hydrocephalus-evans',
+    citation_ids: ['radiopaedia-hydrocephalus'],
+    surfaces: [DATA_SURFACE],
+    description: 'Ventricular enlargement with Evans index greater than 0.30, temporal-horn dilation, and periventricular transependymal flow indicates hydrocephalus.',
+  },
+  'ct-ventricles-temporal-horn-early-sign': {
+    id: 'ct-ventricles-temporal-horn-early-sign',
+    citation_ids: ['radiopaedia-hydrocephalus'],
+    surfaces: [DATA_SURFACE],
+    description: 'Temporal-horn dilation is a sensitive early sign of obstructive hydrocephalus and may precede frontal-horn enlargement.',
+  },
+  'ct-ventricles-exvacuo-vs-obstructive': {
+    id: 'ct-ventricles-exvacuo-vs-obstructive',
+    citation_ids: ['radiopaedia-hydrocephalus'],
+    surfaces: [DATA_SURFACE],
+    description: 'Enlarged ventricles are not always obstructive hydrocephalus; age/atrophy (ex-vacuo) enlargement lacks transependymal flow and temporal-horn rounding.',
+  },
+
+  // Step 5 — Bone
+  'ct-bone-normal': {
+    id: 'ct-bone-normal',
+    citation_ids: ['statpearls-skull-fracture'],
+    surfaces: [DATA_SURFACE],
+    description: 'Normal: on bone window the calvarium is continuous and sutures are corticated and in expected anatomic locations.',
+  },
+  'ct-bone-fracture-vs-suture': {
+    id: 'ct-bone-fracture-vs-suture',
+    citation_ids: ['statpearls-skull-fracture'],
+    surfaces: [DATA_SURFACE],
+    description: 'A fracture is a sharp, lucent, nonanatomic line that may cross sutures; a suture is corticated, zigzag, and in a known anatomic location.',
+  },
+  'ct-bone-depressed-fracture': {
+    id: 'ct-bone-depressed-fracture',
+    citation_ids: ['statpearls-skull-fracture'],
+    surfaces: [DATA_SURFACE],
+    description: 'A depressed fracture shows an inwardly displaced fragment and warrants neurosurgical evaluation.',
+  },
+  'ct-bone-pneumocephalus': {
+    id: 'ct-bone-pneumocephalus',
+    citation_ids: ['statpearls-skull-fracture'],
+    surfaces: [DATA_SURFACE],
+    description: 'Intracranial air (pneumocephalus) indicates a breach of the skull, sinuses, or dura.',
+  },
+  'ct-bone-sinus-air-fluid': {
+    id: 'ct-bone-sinus-air-fluid',
+    citation_ids: ['statpearls-skull-fracture'],
+    surfaces: [DATA_SURFACE],
+    description: 'A paranasal-sinus or mastoid air-fluid level can be an indirect sign of a basilar skull fracture.',
+  },
+  'ct-bone-window-required': {
+    id: 'ct-bone-window-required',
+    citation_ids: ['radiopaedia-windowing-ct', 'statpearls-skull-fracture'],
+    surfaces: [DATA_SURFACE],
+    description: 'Fractures and intracranial air are best seen on a wide bone window and can be missed on the brain window.',
+  },
+  'ct-bone-scalp-localizes-impact': {
+    id: 'ct-bone-scalp-localizes-impact',
+    citation_ids: ['statpearls-skull-fracture'],
+    surfaces: [DATA_SURFACE],
+    description: 'Scalp soft-tissue swelling localizes the side of impact and can direct the search for an underlying fracture or contrecoup injury.',
+  },
+
+  // Cross-cutting — window cards
+  'ct-window-brain': {
+    id: 'ct-window-brain',
+    citation_ids: ['radiopaedia-windowing-ct'],
+    surfaces: [DATA_SURFACE],
+    description: 'Brain (soft-tissue) window, roughly WW 80 / WL 40 HU, the default for parenchyma, blood, and CSF.',
+  },
+  'ct-window-stroke-detection': {
+    id: 'ct-window-stroke-detection',
+    citation_ids: ['mainali-stroke-windows-2014'],
+    surfaces: [DATA_SURFACE],
+    description: 'Narrow stroke window (about WW 40 / WL 40) improves detection sensitivity for early ischemic change: 18% vs 70% in a single-center reader study (Mainali 2014). Framed with the misnomer hedge: the gain is from narrow-width windowing, not a stroke-specific magic setting. Detection sensitivity only, not outcomes.',
+  },
+  'ct-window-subdural': {
+    id: 'ct-window-subdural',
+    citation_ids: ['radiopaedia-windowing-ct', 'radiopaedia-subdural-haemorrhage'],
+    surfaces: [DATA_SURFACE],
+    description: 'A wider intermediate window unmasks a thin subdural hematoma that blends with the dense calvarium on the standard brain window.',
+  },
+  'ct-window-bone': {
+    id: 'ct-window-bone',
+    citation_ids: ['radiopaedia-windowing-ct'],
+    surfaces: [DATA_SURFACE],
+    description: 'Very wide bone window (about WW 2000–4000) for fractures, sutures, and intracranial air; too wide for brain parenchyma.',
+  },
+
   // ─── 2022 index large-core EVT trial (Japan) ─────────────────────────────
   'rescue-japan-limit-evt-large-core-2022': {
     id: 'rescue-japan-limit-evt-large-core-2022',
