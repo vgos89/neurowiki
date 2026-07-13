@@ -28,24 +28,37 @@ export const CITATION_REGISTRY: CitationRegistry = {
   // review overrides the 6-mo review default to 36 mo (stable neuroimaging
   // anatomy reference). last_reviewed set to authoring date; §13.6 verbatim
   // confirmation is the flagged follow-up routed to clinical-reviewer.
+  //
+  // 2026-07-13 citation audit (§13.6): the four primary studies were confirmed
+  // verbatim via PubMed (flags cleared, last_reviewed 2026-07-13):
+  //   perron-bcbvb-ct-1998 (PMID corrected 9795316 -> 9795317),
+  //   mainali-stroke-windows-2014 (journal is ISRN Neuroscience),
+  //   barber-aspects-2000, truwit-insular-ribbon-1990.
+  // riascos-herniation-radiographics-2019: PMID confirmed (31589570) but the
+  // verbatim quoted_text and the tonsillar >5 mm figure remain unconfirmed
+  // (RSNA/full text egress-blocked 2026-07-13) -> stays VERIFY, last_reviewed
+  // not refreshed. The StatPearls/Radiopaedia references could not be read
+  // verbatim (NCBI Bookshelf and Radiopaedia egress-blocked 2026-07-13) and
+  // stay VERIFY; NBK470349 was found to be a WRONG accession (see below).
 
-  // Primary education-intervention study (labelled 'trial'). PMID inferred.
-  // VERIFY: PMID 9795316 and quoted_text search-derived, full-text
-  // egress-blocked 2026-07-09; confirm at next citation audit.
+  // Primary education-intervention study (labelled 'trial'). CONFIRMED via
+  // PubMed 2026-07-13: PMID corrected from 9795316 (an unrelated cardiac-arrest
+  // paper) to 9795317; Ann Emerg Med 1998;32(5):554-62; quoted_text verbatim
+  // from the abstract.
   'perron-bcbvb-ct-1998': {
     id: 'perron-bcbvb-ct-1998',
     source: 'trial',
     title: 'A multicenter study to improve emergency medicine residents\' recognition of intracranial emergencies on computed tomography',
     year: 1998,
     url: 'https://doi.org/10.1016/S0196-0644(98)70032-0',
-    pmid: '9795316',
-    last_reviewed: '2026-07-09',
-    quoted_text: 'The mean percentage correct before the course was 60%. At retesting 3 months after the course, the accuracy rate increased to 78% (P<.001). The taught approach used a systematic search: Blood, Can (cisterns), Be (brain), Very (ventricles), Bad (bone).',
+    pmid: '9795317',
+    last_reviewed: '2026-07-13',
+    quoted_text: 'A 2-hour course based on the mnemonic "Blood Can Be Very Bad" was then administered... The mean percentage correct before the course was 60% (95% confidence interval [CI] 58%-64%)... At retesting 3 months after the course, the accuracy rate increased to 78% (n=61, 95% CI 75%-81%, P<.001 paired t test).',
   },
 
-  // Single-center reader study (n=50). VERIFY: PMID 24967315 / PMC4045559 and
-  // quoted_text search-derived, full-text egress-blocked 2026-07-09; confirm
-  // at next citation audit.
+  // Single-center reader study. CONFIRMED via PubMed 2026-07-13: PMID 24967315,
+  // PMC4045559; journal is ISRN Neuroscience (2014), article 654980; quoted_text
+  // verbatim from the abstract.
   'mainali-stroke-windows-2014': {
     id: 'mainali-stroke-windows-2014',
     source: 'trial',
@@ -53,12 +66,15 @@ export const CITATION_REGISTRY: CitationRegistry = {
     year: 2014,
     url: 'https://doi.org/10.1155/2014/654980',
     pmid: '24967315',
-    last_reviewed: '2026-07-09',
-    quoted_text: 'Early ischemic changes were detected in 9 patients with standard windows, while EIC was detected using Stroke Windows in 35 patients (18% versus 70%).',
+    last_reviewed: '2026-07-13',
+    quoted_text: 'EIC was detected in 9 patients with standard windows, while EIC was detected using Stroke Windows in 35 patients (18% versus 70%; P < 0.0001).',
   },
 
-  // ASPECTS region definitions. VERIFY: PMID 10905241 and quoted_text
-  // search-derived, full-text egress-blocked 2026-07-09; confirm at next audit.
+  // ASPECTS region definitions. CONFIRMED via PubMed 2026-07-13: PMID 10905241;
+  // Lancet 2000;355(9216):1670-4; quoted_text verbatim from the abstract. The
+  // named regions in the downstream ct-brain-aspects-regions claim (caudate,
+  // lentiform, internal capsule, insular ribbon, M1-M6) are universally
+  // established ASPECTS content and are retained.
   'barber-aspects-2000': {
     id: 'barber-aspects-2000',
     source: 'trial',
@@ -66,12 +82,14 @@ export const CITATION_REGISTRY: CitationRegistry = {
     year: 2000,
     url: 'https://doi.org/10.1016/S0140-6736(00)02237-6',
     pmid: '10905241',
-    last_reviewed: '2026-07-09',
-    quoted_text: 'ASPECTS is a 10-point quantitative topographic CT scan score used in patients with middle cerebral artery stroke. Segmental assessment of the MCA vascular territory is made and 1 point is deducted from the initial score of 10 for every region involved.',
+    last_reviewed: '2026-07-13',
+    quoted_text: 'The score divides the middle-cerebral-artery territory into ten regions of interest.',
   },
 
-  // Early-infarct insular ribbon sign. VERIFY: PMID 2389039 and quoted_text
-  // search-derived, full-text egress-blocked 2026-07-09; confirm at next audit.
+  // Early-infarct insular ribbon sign. CONFIRMED via PubMed 2026-07-13: PMID
+  // 2389039; Radiology 1990;176(3):801-6; quoted_text verbatim from the
+  // abstract. Resolves the flagged "gray-white loss within hours" timing: the
+  // sign was observed in MCA strokes less than 6 hours old.
   'truwit-insular-ribbon-1990': {
     id: 'truwit-insular-ribbon-1990',
     source: 'trial',
@@ -79,39 +97,55 @@ export const CITATION_REGISTRY: CitationRegistry = {
     year: 1990,
     url: 'https://doi.org/10.1148/radiology.176.3.2389039',
     pmid: '2389039',
-    last_reviewed: '2026-07-09',
-    quoted_text: 'Loss of the insular ribbon, or obscuration of the insular cortex due to loss of the normal gray-white interface, is one of the earliest and most reliable CT signs of middle cerebral artery infarction.',
+    last_reviewed: '2026-07-13',
+    quoted_text: 'In middle cerebral artery (MCA) strokes less than 6 hours old, loss of definition of the gray-white interface in the lateral margins of the insula ("insular ribbon") was observed.',
   },
 
   // Herniation-pattern imaging review. review_window_months override to 36:
   // stable neuroimaging anatomy reference, not a fast-moving therapeutic topic.
-  // VERIFY: quoted_text search-derived, full-text egress-blocked 2026-07-09;
-  // confirm at next citation audit.
+  // PARTIAL 2026-07-13: PMID confirmed via literature search (31589570; first
+  // author Riveros Gilardi, senior author Riascos; RadioGraphics 2019;39(6):
+  // 1598-1610; DOI 10.1148/rg.2019190018). VERIFY still open: verbatim
+  // quoted_text and the tonsillar >5 mm threshold could not be confirmed
+  // (RSNA/full text egress-blocked 2026-07-13); last_reviewed NOT refreshed.
+  // The downstream tonsillar claim was narrowed to drop the unconfirmed number.
   'riascos-herniation-radiographics-2019': {
     id: 'riascos-herniation-radiographics-2019',
     source: 'review',
     title: 'Types of Cerebral Herniation and Their Imaging Features',
     year: 2019,
     url: 'https://doi.org/10.1148/rg.2019190018',
+    pmid: '31589570',
     last_reviewed: '2026-07-09',
     review_window_months: 36,
     quoted_text: 'Subfalcine herniation is the most common type of cerebral herniation. Descending transtentorial (uncal) herniation causes medial displacement of the uncus into the suprasellar cistern with potential compression of the oculomotor nerve and posterior cerebral artery. Central and tonsillar herniation are additional recognized patterns.',
   },
 
-  // Textbook: hemorrhage density and Hounsfield range. VERIFY: quoted_text
-  // search-derived, full-text egress-blocked 2026-07-09; confirm at next audit.
+  // Textbook: hemorrhage density and Hounsfield range. VERIFY (2026-07-13):
+  // accession NBK553103 resolves but its actual StatPearls chapter is
+  // "Intracerebral Hemorrhage" (title corrected below), NOT a dedicated
+  // "Intracranial Hemorrhage Imaging" chapter. DISCREPANCY: NBK553103 reports
+  // acute ICH attenuation as ~65-95 HU, not the 50-70 HU in the quoted_text/
+  // downstream claim; the 50-70 figure is a different-source teaching range.
+  // Full text egress-blocked 2026-07-13 (search snippet only), so quoted_text
+  // is not verbatim-confirmed. Either re-source the 50-70 figure or align to
+  // 65-95 at clinical review; last_reviewed NOT refreshed.
   'statpearls-ich-imaging': {
     id: 'statpearls-ich-imaging',
     source: 'textbook',
-    title: 'StatPearls: Intracranial Hemorrhage Imaging (NBK553103)',
+    title: 'StatPearls: Intracerebral Hemorrhage (NBK553103)',
     year: 2024,
     url: 'https://www.ncbi.nlm.nih.gov/books/NBK553103/',
     last_reviewed: '2026-07-09',
     quoted_text: 'Acute intraparenchymal hemorrhage is hyperdense on noncontrast CT. Reported attenuation values vary by source and are influenced by hematocrit and clot retraction, with acute clot commonly cited in the range of approximately 50–70 Hounsfield units; hyperacute unclotted blood may be less dense.',
   },
 
-  // Textbook: epidural hematoma morphology. VERIFY: quoted_text search-derived,
-  // full-text egress-blocked 2026-07-09; confirm at next citation audit.
+  // Textbook: epidural hematoma morphology. PARTIAL 2026-07-13: accession
+  // NBK518982 confirmed = "Epidural Hematoma" (Khairat/Margetis/Waseem), and
+  // the core biconvex + suture-restriction content is confirmed via literature
+  // search. VERIFY still open: full verbatim quoted_text (incl. crossing the
+  // falx/tentorium) not confirmed from a snippet (full text egress-blocked
+  // 2026-07-13); last_reviewed NOT refreshed.
   'statpearls-epidural-hematoma': {
     id: 'statpearls-epidural-hematoma',
     source: 'textbook',
@@ -159,9 +193,15 @@ export const CITATION_REGISTRY: CitationRegistry = {
     quoted_text: 'Hydrocephalus refers to enlargement of the ventricular system. An Evans index, the ratio of the maximal width of the frontal horns to the maximal internal skull diameter, greater than 0.30 indicates ventricular enlargement. Periventricular low attenuation reflects transependymal CSF flow in acute or decompensated hydrocephalus, and temporal horn dilatation is an early sign of obstruction.',
   },
 
-  // Textbook: skull fracture vs suture, pneumocephalus, sinus signs. VERIFY:
-  // quoted_text search-derived, full-text egress-blocked 2026-07-09; confirm
-  // at next citation audit.
+  // Textbook: skull fracture vs suture, pneumocephalus, sinus signs.
+  // BLOCK 2026-07-13: accession NBK470349 is WRONG. It resolves to the
+  // unrelated StatPearls chapter "EMS Disordered Sleep And Work Schedule",
+  // not a skull-fracture chapter (a Perron-style wrong-ID error). The correct
+  // general StatPearls "Skull Fracture" NBK number could not be pinned down
+  // from here (candidates NBK470175 Basilar / NBK482218 Pediatric are subtopic
+  // chapters, not the general chapter), so the accession is left unchanged
+  // rather than guessed. Correct accession must be sourced before this citation
+  // is used; quoted_text unverified; last_reviewed NOT refreshed.
   'statpearls-skull-fracture': {
     id: 'statpearls-skull-fracture',
     source: 'textbook',

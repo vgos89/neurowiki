@@ -240,7 +240,7 @@ export const CT_HEAD_MODULE: ImagingModule = {
             claimId: 'ct-blood-sah-cisterns-sulci',
           },
           {
-            text: 'A hyperdense middle cerebral artery reflects acute thrombus within the vessel and is a specific but relatively insensitive early sign of large-vessel occlusion.',
+            text: 'A hyperdense middle cerebral artery reflects acute thrombus within the vessel and can be an early sign of large-vessel occlusion.',
             claimId: 'ct-blood-hyperdense-mca-sign',
           },
         ],
@@ -296,7 +296,7 @@ export const CT_HEAD_MODULE: ImagingModule = {
             claimId: 'ct-cisterns-uncal-herniation',
           },
           {
-            text: 'Tonsillar herniation displaces the cerebellar tonsils more than 5 mm through the foramen magnum and effaces the cisterns around the medulla.',
+            text: 'Tonsillar herniation displaces the cerebellar tonsils inferiorly through the foramen magnum and effaces the cisterns around the medulla.',
             claimId: 'ct-cisterns-tonsillar-herniation',
           },
         ],

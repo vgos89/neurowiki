@@ -92,7 +92,7 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     id: 'ct-blood-hyperdense-mca-sign',
     citation_ids: ['radiopaedia-intracranial-haemorrhage'],
     surfaces: [DATA_SURFACE],
-    description: 'Hyperdense MCA reflects acute intravascular thrombus; taught as a specific but relatively insensitive early sign of large-vessel occlusion. VERIFY: the specificity/sensitivity qualifier is standard teaching but is not carried in the cited quoted_text (blood/clot density only); attach a dedicated dense-artery-sign source at the next citation audit.',
+    description: 'Hyperdense MCA reflects acute intravascular thrombus and can be an early sign of large-vessel occlusion. The unsupported specific/insensitive qualifier was removed from the surface 2026-07-13 (not carried in any confirmed source); reinstate only with a dedicated dense-artery-sign citation.',
   },
   'ct-search-pattern-accuracy': {
     id: 'ct-search-pattern-accuracy',
@@ -136,7 +136,7 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     id: 'ct-cisterns-tonsillar-herniation',
     citation_ids: ['riascos-herniation-radiographics-2019'],
     surfaces: [DATA_SURFACE],
-    description: 'Tonsillar herniation displaces the cerebellar tonsils more than 5 mm through the foramen magnum, effacing cisterns around the medulla.',
+    description: 'Tonsillar herniation displaces the cerebellar tonsils inferiorly through the foramen magnum, effacing cisterns around the medulla. The specific >5 mm figure was removed from the surface 2026-07-13 (not confirmed from the cited Riascos article; full text egress-blocked).',
   },
 
   // Step 3 — Brain (ASPECTS -> EVT statement reuses aspects-evt-eligibility-2026)
