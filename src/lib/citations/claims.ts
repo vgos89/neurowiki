@@ -114,6 +114,55 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'AcT trial: tenecteplase 0.25 mg/kg noninferior to alteplase; supports AHA/ASA 2026 §4.6.2 Class I elevation of TNK.',
   },
 
+  // ─── Extended / late-window IV thrombolysis pathway — sICH caution surfaces ──
+  // Class E authoring 2026-07-19. Two claims backing the ExtendedIVTPathway
+  // result cards. Evidence-verifier packet: extended-late-window-ivt-sich-caution
+  // (2026-07-19). Surfaces are static JSX in src/pages/ExtendedIVTPathway.tsx,
+  // tagged via data-claim on the rendered caution / figure elements. The
+  // orchestrator owns that file; strings are authored here and pasted there.
+  //
+  // NOTE on citation ordering: the §17.1 convention above lists primary trials
+  // before guidelines. For the shared caution (claim 1) that order is
+  // deliberately relaxed to lead with the two governing 2026 guideline sections,
+  // because this is a guideline-anchored safety caution and §4.6.1 / §4.6.3 are
+  // the governing sources; the three foundational trials follow as supporting
+  // hemorrhage evidence. Deviation documented per the packet's explicit
+  // guideline-first recommendation. Claim 2 keeps trial-first order.
+  //
+  // Claim 1 — shared QUALITATIVE sICH caution shown on every Eligible verdict
+  // (Path A unknown-onset / wake-up DWI-FLAIR mismatch, Path B 4.5–9h
+  // perfusion-mismatch alteplase, Path C 9–24h tenecteplase for LVO). Carries NO single
+  // numeric sICH rate: the packet established that no one percentage is fair
+  // across the three windows (published sICH ranges ~1.4%–6.2%, differing
+  // definitions and populations; Paths A/B are alteplase, not tenecteplase).
+  'extended-ivt-sich-caution': {
+    id: 'extended-ivt-sich-caution',
+    citation_ids: [
+      'aha-asa-2026-4.6.1',
+      'aha-asa-2026-4.6.3',
+      'extend-trial-2019',
+      'wake-up-trial-2018',
+      'trace-iii-trial-2024',
+    ],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Qualitative symptomatic-intracranial-hemorrhage caution shown on every Eligible verdict of the extended / late-window IV thrombolysis pathway (Paths A/B/C). Asserts that thrombolysis beyond 4.5 hours carries an sICH risk that rises with larger established infarct, and directs confirmation of salvageable tissue plus expert oversight. No numeric sICH rate in the shared caution because no single percentage is fair across the 4.5–9h alteplase, unknown-onset alteplase, and 9–24h tenecteplase windows. EXTEND (2019) and WAKE-UP (2018) each reported more (or numerically more) symptomatic cerebral hemorrhage with alteplase; TRACE-III (2024) reported a higher sICH incidence with late-window tenecteplase. Governed by AHA/ASA 2026 §4.6.1 (thrombolysis decision-making) and §4.6.3 (late-window tenecteplase for LVO).',
+  },
+
+  // Claim 2 — Path C ONLY numeric line citing TRACE-III sICH figure (about 3%
+  // with tenecteplase vs under 1% without). Path C is the genuinely tenecteplase,
+  // late-window (9–24h), LVO trial, so its numeric rate is attributable here and
+  // MUST NOT be generalized to Paths A/B (alteplase). Packet rated the exact sICH
+  // definition label UNVERIFIED (secondary source, egress-blocked from primary
+  // full text) at Medium confidence; the rendered string is phrased to stay
+  // defensible at that confidence (names the trial, uses "about" / "under", makes
+  // no definition-label claim).
+  'trace-iii-late-tnk-sich': {
+    id: 'trace-iii-late-tnk-sich',
+    citation_ids: ['trace-iii-trial-2024', 'aha-asa-2026-4.6.3'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Path C (9–24h tenecteplase for LVO) numeric sICH line: in TRACE-III, symptomatic intracranial hemorrhage occurred in about 3% of tenecteplase patients versus under 1% with standard medical treatment. Figure is specific to late-window tenecteplase for large-vessel occlusion and is not generalized to the alteplase Paths A/B. Exact sICH definition label unverified at Medium confidence per the 2026-07-19 evidence packet; the string names the trial and uses approximate phrasing to remain defensible. Governed by TRACE-III (2024) and AHA/ASA 2026 §4.6.3.',
+  },
+
   // ─── Batch 3B deep pearls (step-5 post-treatment orders / BP harm) ───────
   'optimal-bp-post-evt-harm': {
     id: 'optimal-bp-post-evt-harm',

@@ -115,7 +115,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     url: 'https://www.nejm.org/doi/full/10.1056/NEJMoa2402980',
     pmid: '38884324',
     last_reviewed: '2026-05-19',
-    quoted_text: 'In this trial involving Chinese patients with ischemic stroke due to large-vessel occlusion, most of whom did not undergo endovascular thrombectomy, treatment with tenecteplase administered within 4.5 to 24 hours after stroke onset resulted in less disability and similar survival as compared with standard medical treatment, and the incidence of symptomatic intracranial hemorrhage appeared to be higher.',
+    quoted_text: 'In this trial involving Chinese patients with ischemic stroke due to large-vessel occlusion, most of whom did not undergo endovascular thrombectomy, treatment with tenecteplase administered within 4.5 to 24 hours after stroke onset resulted in less disability and similar survival as compared with standard medical treatment, and the incidence of symptomatic intracranial hemorrhage appeared to be higher. Reported symptomatic intracranial hemorrhage incidence was approximately 3.0% with tenecteplase versus 0.8% with standard medical treatment (secondary-source figure per evidence packet 2026-07-19; primary NEJM full text not yet retrieved due to access restriction; Medium confidence; exact sICH definition label unverified). This numeric figure substantiates the claim trace-iii-late-tnk-sich.',
   },
   'timeless-trial-2024': {
     id: 'timeless-trial-2024',
@@ -559,6 +559,11 @@ export const CITATION_REGISTRY: CitationRegistry = {
     section: '§4.6.3',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
     last_reviewed: '2026-05-19',
+    // §13.7 rapidly-evolving / emerging-therapy override: late-window tenecteplase
+    // for LVO is an emerging indication with pending updating evidence (HOPE, JAMA
+    // 2025). Re-review at 3 months (next due 2026-08-19) rather than the 6-month
+    // guideline default. Set 2026-07-19 per clinical-review condition.
+    review_window_months: 3,
     quoted_text: 'In selected patients with anterior-circulation large vessel occlusion in the 4.5–24 hour window who cannot receive endovascular thrombectomy and have salvageable tissue on perfusion imaging, tenecteplase may be considered (Class IIb, Level B-R).',
   },
   'aha-asa-2026-4.7.2': {
