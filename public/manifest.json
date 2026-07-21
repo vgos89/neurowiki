@@ -1,8 +1,12 @@
 {
+  "id": "/",
   "name": "NeuroWiki",
   "short_name": "NeuroWiki",
   "description": "Bedside neurology decision support for clinicians",
+  "lang": "en",
+  "dir": "ltr",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#1746A2",
