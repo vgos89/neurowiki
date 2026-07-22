@@ -25,3 +25,17 @@ service-account*.json
 token.json
 .oauth-token.json
 .gsc_*
+
+# Android TWA local signing material and build outputs
+.android-secrets/
+*.jks
+*.keystore
+*.p12
+android/*.apk
+android/*.aab
+android/*.idsig
+android/.gradle/
+android/**/build/
+android/local.properties
+android/.idea/
+android/*.iml

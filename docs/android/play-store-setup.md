@@ -1,51 +1,86 @@
-# NeuroWiki — Android (Play Store) setup via Trusted Web Activity
+# NeuroWiki - Android (Play Store) setup via Trusted Web Activity
 
-> Approach: wrap the existing PWA (neurowiki.ai) as a **Trusted Web Activity (TWA)** using **PWABuilder**. The app runs the live site full-screen; content updates ship automatically with the website, no re-submission for content changes.
+> Approach: wrap the existing PWA (`neurowiki.ai`) as a **Trusted Web Activity (TWA)** using **Bubblewrap**. The app runs the live site full-screen; ordinary web-content updates ship with the website without a new Android release.
 
-This doc is the operator checklist. Site-side prep (manifest + Digital Asset Links) is already done in the repo; the Play Console steps are yours (account-bound).
+This is the operator and handoff checklist. The generated Android project lives in `android/`. Play Console submission remains account-bound and must be completed by a human.
 
 ---
 
-## 0. Prerequisites (already true)
+## 0. Fixed app identity
 
-- HTTPS on neurowiki.ai ✔
-- Web manifest with `standalone` display, `scope: "/"`, 192/512 + maskable icons ✔ (`public/manifest.json`)
-- Service worker ✔ (vite-plugin-pwa)
-- Domain-verification file scaffolded ✔ (`public/.well-known/assetlinks.json`) — needs the signing fingerprint (Step 3)
-- Google Play Console developer account ✔ (you have this)
+- App name and launcher name: **NeuroWiki**
+- Package/application ID: **`ai.neurowiki.app`**
+- Web origin: **`https://neurowiki.ai/`**
+- Display mode: **standalone**
+- Android version: name `1`, code `1`
+- SDK: `compileSdkVersion 36`, `targetSdkVersion 36`, `minSdkVersion 21`
 
-## 1. Confirm the package name (PERMANENT once published)
+The package ID is permanent after the first Play release. It must continue to match `android/twa-manifest.json`, `android/app/build.gradle`, and `public/.well-known/assetlinks.json`.
 
-Proposed: **`ai.neurowiki.app`** (reverse-domain of neurowiki.ai). This can never change after the first release, so confirm it before building. It must also match the `package_name` in `assetlinks.json`.
+## 1. Local tools and generated project
 
-## 2. Build the Android package with PWABuilder
+The project was generated with Bubblewrap CLI `1.24.1`. Bubblewrap's managed JDK 17 and Android SDK are under `~/.bubblewrap/`; the CLI is installed under `~/.local/bin/bubblewrap`.
 
-1. Go to https://www.pwabuilder.com and enter `https://neurowiki.ai`.
-2. It scores the PWA and offers **"Package for stores" → Android**.
-3. Options to set:
-   - **Package ID:** `ai.neurowiki.app` (must match Step 1)
-   - **App name:** NeuroWiki
-   - **Launcher name:** NeuroWiki
-   - **Display mode:** standalone (fullscreen)
-   - **Signing key:** let PWABuilder **create a new signing key** (download and store the `.keystore` + passwords somewhere safe, or use Play App Signing in Step 4). PWABuilder shows you the **SHA-256 fingerprint** of this key — copy it, you need it in Step 3.
-4. Download the generated `.zip`. It contains the **`.aab`** (upload to Play), the signing key, and a copy of the `assetlinks.json` it expects.
+To regenerate from the live web manifest:
 
-## 3. Fill in the domain-verification fingerprint, then deploy
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+bubblewrap init --manifest=https://neurowiki.ai/manifest.json --directory=android
+```
 
-1. Take the **SHA-256 fingerprint** from PWABuilder (Step 2) — or, better, from Play Console → **App → Setup → App signing** after you upload (Play App Signing re-signs, and the fingerprint that matters for verification is the **App signing key** one shown there).
-2. Paste it into `public/.well-known/assetlinks.json`, replacing `REPLACE_WITH_PLAY_APP_SIGNING_SHA256_FINGERPRINT`. Multiple fingerprints are allowed (add both the upload key and the Play App Signing key to be safe).
-3. Redeploy the site. Verify it serves as raw JSON:
-   `https://neurowiki.ai/.well-known/assetlinks.json` must return the JSON (not the SPA HTML) with `content-type: application/json`.
-   (Repo is already configured so Vercel serves this static file before the SPA rewrite.)
-4. If the fingerprint and package name match, the app installs with **no URL bar**. A mismatch just shows a Chrome address bar; it does not break the app.
+Do not regenerate casually after manual Android changes. Bubblewrap `1.24.1` generated `targetSdkVersion 35`; this project intentionally sets it to `36` for the Google Play requirement effective August 31, 2026.
 
-## 4. Play Console: create + upload
+## 2. Upload signing key (local secret)
 
-1. Create app → NeuroWiki, Free, default language English.
-2. **App integrity / signing:** enroll in **Play App Signing** (recommended). Upload the `.aab`.
-3. Fill the store listing (Section A below), Data Safety (Section B), Content rating (Section C), Target audience, and the **Health apps declaration** (Section D).
-4. Add screenshots (in `docs/android/screenshots/` — 9:16 phone frames) and an icon (use `public/icon-512.png`). A 1024×500 **feature graphic** is required; generate from the logo/brand.
-5. Submit for review. First review for a health app can take several days.
+The upload key is intentionally excluded from git:
+
+- Keystore: `.android-secrets/neurowiki-upload.jks`
+- Password file: `.android-secrets/neurowiki-upload.password`
+- Alias: `neurowiki-upload`
+- Upload certificate SHA-256:
+  `EF:93:24:B2:A4:94:54:F6:F5:BF:EB:7B:2A:EA:54:72:21:08:52:90:3F:E6:90:41:E8:B8:BF:C5:A3:D0:C9:5A`
+
+Back up the keystore and password in the team's password manager or encrypted vault before the first upload. Losing the upload key complicates future releases. Never commit either file.
+
+## 3. Build the signed APK and App Bundle
+
+Run from the repository root:
+
+```bash
+cd android
+export BUBBLEWRAP_KEYSTORE_PASSWORD="$(tr -d '\n' < ../.android-secrets/neurowiki-upload.password)"
+export BUBBLEWRAP_KEY_PASSWORD="$BUBBLEWRAP_KEYSTORE_PASSWORD"
+$HOME/.local/bin/bubblewrap build
+unset BUBBLEWRAP_KEYSTORE_PASSWORD BUBBLEWRAP_KEY_PASSWORD
+```
+
+Expected ignored outputs:
+
+- `android/app-release-signed.apk` for device testing
+- `android/app-release-bundle.aab` for Google Play upload
+
+The committed Gradle project can also be opened in Android Studio. PWABuilder remains a GUI fallback: package `https://neurowiki.ai` for Android, use package ID `ai.neurowiki.app`, and supply the same upload key. Do not create a second production upload identity unless the original key has been formally reset.
+
+## 4. Digital Asset Links and deployment
+
+`public/.well-known/assetlinks.json` currently contains the upload-key fingerprint plus a clearly labeled placeholder for the Play App Signing fingerprint.
+
+1. Upload the `.aab` and enroll in **Play App Signing**.
+2. In Play Console, open **App integrity -> App signing** and copy the **SHA-256 certificate fingerprint** under **App signing key certificate**. This is not the upload-key certificate shown above.
+3. Replace `REPLACE_WITH_PLAY_APP_SIGNING_SHA256_FINGERPRINT_AFTER_FIRST_UPLOAD` in `public/.well-known/assetlinks.json` with that fingerprint. Keep both fingerprints.
+4. Redeploy the website.
+5. Verify `https://neurowiki.ai/.well-known/assetlinks.json` returns raw JSON with an `application/json` content type, not the SPA HTML shell.
+
+Until the Play App Signing fingerprint is deployed, a Play-installed build can fall back to a Custom Tab with a visible browser bar. The app remains usable, but TWA verification is incomplete.
+
+## 5. Play Console: create and upload
+
+1. Create app -> NeuroWiki, Free, default language English.
+2. Enroll in Play App Signing and upload `android/app-release-bundle.aab` to an internal-testing release first.
+3. Complete the store listing (Section A), Data Safety (Section B), Content rating (Section C), Target audience, and Health apps declaration (Section D).
+4. Add the six phone screenshots from `docs/android/screenshots/`, use `public/icon-512.png` for the icon, and provide a required 1024x500 feature graphic.
+5. Install the internal-test build on an Android device and confirm the app opens `neurowiki.ai` without browser chrome after the Play signing fingerprint is deployed.
+6. Obtain compliance/legal sign-off on device classification and store claims before public submission.
 
 ---
 
@@ -103,9 +138,9 @@ Complete the IARC questionnaire honestly. Expected outcome: **Everyone**. Note t
 
 ## What is still needed from you
 
-1. Confirm the package name `ai.neurowiki.app` (permanent).
-2. Run PWABuilder to produce the `.aab` and get the signing SHA-256 fingerprint.
-3. Send me the fingerprint so I can drop it into `assetlinks.json` and deploy (or you paste + redeploy).
-4. Decide on the compliance/regulatory sign-off (Section D) before publishing.
+1. Back up `.android-secrets/neurowiki-upload.jks` and its password in an encrypted team vault.
+2. Create the Play Console app with permanent package ID `ai.neurowiki.app` and upload `android/app-release-bundle.aab` to internal testing.
+3. Paste the Play App Signing SHA-256 fingerprint into `public/.well-known/assetlinks.json`, redeploy, and verify TWA full-screen behavior.
+4. Complete the listing, declarations, feature graphic, and compliance/regulatory sign-off before publishing.
 
-Everything else (manifest, verification-file serving, listing copy, Data Safety draft, screenshots) is prepared in the repo.
+The Android project, upload-key fingerprint, web manifest, verification-file serving, listing copy, Data Safety draft, and phone screenshots are prepared in the repo.

@@ -5,7 +5,8 @@
       "namespace": "android_app",
       "package_name": "ai.neurowiki.app",
       "sha256_cert_fingerprints": [
-        "REPLACE_WITH_PLAY_APP_SIGNING_SHA256_FINGERPRINT"
+        "EF:93:24:B2:A4:94:54:F6:F5:BF:EB:7B:2A:EA:54:72:21:08:52:90:3F:E6:90:41:E8:B8:BF:C5:A3:D0:C9:5A",
+        "REPLACE_WITH_PLAY_APP_SIGNING_SHA256_FINGERPRINT_AFTER_FIRST_UPLOAD"
       ]
     }
   }
