@@ -209,13 +209,15 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     id: 'icas-stenting',
     text: 'Does symptomatic intracranial atherosclerosis benefit from stenting?',
     icon: 'target',
-    meta: 'Wingspan stent: RCT harm, post-market on-label safety signal',
-    trialCount: 2,
+    meta: 'From SAMMPRIS stenting harm through WEAVE on-label safety to CASSISS no-benefit and BASIS positive balloon angioplasty',
+    trialCount: 4,
     trialIds: [
       'sammpris-trial',  // SAMMPRIS 2011 — PTAS vs aggressive medical (stopped for harm + futility)
       'weave-trial',     // WEAVE 2019 — FDA post-market on-label registry (Archetype G, 2.6% 72h)
-      // TODO (V review): add VISSIT (Zaidat 2015 JAMA — Vitesse balloon-expandable, confirmed harm direction)
-      // and CASSISS (Gao 2022 JAMA — Chinese RCT, no significant benefit at 1y) when those entries land.
+      'cassiss-trial',   // CASSISS 2022 — Chinese RCT, stenting no benefit at 1y (HR 1.10)
+      'basis-trial',     // BASIS 2024 — Chinese RCT, submaximal balloon angioplasty superior (HR 0.32)
+      // VISSIT (Zaidat 2015 JAMA, Vitesse balloon-expandable, confirmed harm direction)
+      // remains pending; add when the entry lands.
     ],
     relatedQuestions: ['asymptomatic-carotid', 'lvo-evt'],
   },

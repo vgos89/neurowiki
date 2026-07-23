@@ -482,16 +482,70 @@ export const CITATION_REGISTRY: CitationRegistry = {
     review_window_months: 36,
     quoted_text: 'In 152 patients meeting on-label criteria for the Wingspan Stent System (recurrent stroke despite medical therapy, 70% to 99% intracranial stenosis, age 22 to 80, NIHSS ≤7, ≥7 days from qualifying stroke, no perforator stroke at index lesion), the 72-hour periprocedural stroke, bleed, or death rate was 2.6% (4 of 152). Single-arm postmarket surveillance registry; no concurrent control arm. Cannot establish efficacy.',
   },
+  // PMID corrected 2026-07-22 (evidence packet 2026-07-22-icad-refresh §1): the
+  // prior 35943471 pointed to a DIFFERENT article (RESCUE BT, Qiu Z et al., JAMA
+  // 2022;328(6):543–553, IV tirofiban). CASSISS is PMID 35943472. URL repointed to
+  // the DOI. quoted_text corrected: N is 358 eligible (176 stenting, 182 medical)
+  // of 380 randomized, and the primary composite includes territory stroke beyond
+  // 30 days through 1 year. HR/rates were already correct and are unchanged.
   'gao-cassiss-2022': {
     id: 'gao-cassiss-2022',
     source: 'trial',
     title: 'CASSISS: Effect of Stenting Plus Medical Therapy vs Medical Therapy Alone on Risk of Stroke and Death in Patients With Symptomatic Intracranial Stenosis',
     year: 2022,
-    url: 'https://jamanetwork.com/journals/jama/fullarticle/2794780',
-    pmid: '35943471',
-    last_reviewed: '2026-05-23',
+    url: 'https://doi.org/10.1001/jama.2022.12000',
+    pmid: '35943472',
+    last_reviewed: '2026-07-22',
     review_window_months: 36,
-    quoted_text: 'In 380 Chinese patients with symptomatic 70% to 99% intracranial atherosclerotic stenosis randomized at least 3 weeks after the qualifying event to stenting plus medical management vs medical management alone, the 30-day stroke or death rate in the stenting arm was 5.1% (lower than SAMMPRIS-era 14.7%). The 1-year primary composite of stroke or death was 8.0% vs 7.2% (HR 1.10, 95% CI 0.52 to 2.35); stenting did not demonstrate superiority over medical management alone.',
+    quoted_text: 'In 358 eligible Chinese patients (176 stenting, 182 medical; 380 randomized) with symptomatic 70% to 99% intracranial atherosclerotic stenosis randomized at least 3 weeks after the qualifying event to stenting plus aggressive medical management vs medical management alone, the 30-day stroke or death rate in the stenting arm was 5.1% (lower than SAMMPRIS-era 14.7%). The 1-year primary composite of stroke or death within 30 days or stroke in the qualifying-artery territory beyond 30 days through 1 year was 8.0% (14/176) vs 7.2% (13/181) (HR 1.10, 95% CI 0.52 to 2.35; P = .82); stenting did not demonstrate superiority over medical management alone.',
+  },
+  // Added 2026-07-22 (evidence packet 2026-07-22-icad-refresh §2). First positive
+  // endovascular ICAS RCT: submaximal balloon angioplasty (NOT stenting) plus AMM
+  // vs AMM alone. 36-month review window per §13.7 (foundational ICAS trial,
+  // matching the SAMMPRIS/CASSISS block). Not yet in AHA/ASA or ESO guidance.
+  'sun-basis-2024': {
+    id: 'sun-basis-2024',
+    source: 'trial',
+    title: 'BASIS: Balloon Angioplasty Plus Aggressive Medical Management vs Aggressive Medical Management Alone for Symptomatic Intracranial Atherosclerotic Stenosis',
+    year: 2024,
+    url: 'https://doi.org/10.1001/jama.2024.12829',
+    pmid: '39235816',
+    last_reviewed: '2026-07-22',
+    review_window_months: 36,
+    quoted_text: 'In 501 eligible Chinese patients (249 submaximal balloon angioplasty plus aggressive medical management, 252 medical management alone; 512 randomized) with symptomatic 70% to 99% intracranial atherosclerotic stenosis (TIA within 90 days or ischemic stroke 14 to 90 days), the incidence of the primary outcome was lower in the balloon angioplasty group than the medical management group (4.4% vs 13.5%; hazard ratio, 0.32 [95% CI, 0.16 to 0.63]; P < .001). The primary composite was any stroke or death within 30 days, or territory ischemic stroke or revascularization of the qualifying artery from 30 days through 12 months; the benefit persisted in the territory ischemic stroke component (0.4% vs 7.5%). 30-day stroke or death was 3.2% vs 1.6%; symptomatic ICH 1.2% vs 0.4%; procedural complications 17.4% with arterial dissection 14.5%. First positive endovascular ICAS RCT; balloon angioplasty, not stenting; single-country, open-label (PROBE), experienced high-volume operators; not yet incorporated into AHA/ASA or ESO guidance.',
+  },
+  // Added 2026-07-22 (evidence packet 2026-07-22-icad-refresh §3). Single-arm
+  // 1-year follow-up of the WEAVE on-label Wingspan cohort. Descriptive safety
+  // only; no control arm, no pre-specified 1-year threshold; cannot establish
+  // efficacy. 36-month review window per §13.7 (established ICAS safety cohort,
+  // matching the WEAVE/SAMMPRIS block).
+  'alexander-woven-2021': {
+    id: 'alexander-woven-2021',
+    source: 'trial',
+    title: 'WOVEN: Wingspan One-year Vascular Events and Neurologic Outcomes (1-year follow-up of the WEAVE on-label cohort)',
+    year: 2021,
+    url: 'https://doi.org/10.1136/neurintsurg-2020-016208',
+    pmid: '32561658',
+    last_reviewed: '2026-07-22',
+    review_window_months: 36,
+    quoted_text: 'In a single-arm 1-year follow-up of the WEAVE on-label Wingspan cohort (129 of 152 patients followed at 12 of 24 original sites; no control arm), there were 7 strokes during follow-up (6 minor, 1 major) and no deaths beyond the periprocedural period. Including the 4 WEAVE periprocedural events, there were 11 strokes or deaths of the 129 patients (8.5%) at the 1-year follow-up. Descriptive single-arm safety data only; no pre-specified 1-year threshold; cannot establish efficacy versus medical therapy.',
+  },
+  // Added 2026-07-22 (evidence packet 2026-07-22-icad-refresh §4). Narrative
+  // review; supporting epidemiology and recurrent-risk framing for the ICAS
+  // synthesis. review_window_months: 36 override (default for a review is 6 per
+  // §13.7) with rationale: the cited statistic is a stable epidemiologic fact
+  // (recurrent stroke >20% at 1 year in 70–99% ICAS), and this override follows
+  // the precedent set for the vahedi-pooled review in this registry.
+  'gutierrez-icas-review-2022': {
+    id: 'gutierrez-icas-review-2022',
+    source: 'review',
+    title: 'Gutierrez et al.: Intracranial Atherosclerotic Stenosis (risk factors, diagnosis, and treatment)',
+    year: 2022,
+    url: 'https://doi.org/10.1016/S1474-4422(21)00376-8',
+    pmid: '35143758',
+    last_reviewed: '2026-07-22',
+    review_window_months: 36,
+    quoted_text: 'Intracranial atherosclerotic stenosis is one of the most frequent causes of stroke worldwide and confers one of the greatest risks of recurrent stroke. Secondary prevention rests on intensive risk-factor modification plus dual antiplatelet therapy reduced to aspirin; despite this, recurrent stroke exceeds 20% at 1 year in patients with 70% to 99% intracranial atherosclerotic stenosis. Angioplasty, submaximal balloon angioplasty, bypass, and ischemic conditioning remain under investigation.',
   },
 
   // ─── AHA/ASA 2026 §2.5 — Mobile Stroke Units ──────────────────────────────

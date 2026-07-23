@@ -196,6 +196,21 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "bottomLineSummary": "BASICS randomized 300 patients with basilar artery occlusion at international centers within 6 hours. Primary (mRS 0-3 at 90 days): 44.2% EVT vs 37.7% medical (RR 1.18, CI 0.92–1.50, P=0.19). Not significant but with wide CI not ruling out meaningful benefit. Mortality favored EVT numerically (38.0% vs 43.2%). sICH higher in EVT (4.5% vs 0.7%). ATTENTION (2022) subsequently demonstrated definitive benefit for basilar EVT.",
     "doi": "10.1056/NEJMoa2030297"
   },
+  "basis-trial": {
+    "title": "BASIS Trial",
+    "legend": {
+      "finding": "Submaximal balloon angioplasty beat medical therapy on the 12-month composite in symptomatic 70–99% ICAS.",
+      "bottomLineTag": "Benefit",
+      "keyStat": "HR 0.32 (0.16–0.63)"
+    },
+    "subtitle": "Balloon Angioplasty vs Medical (ICAS)",
+    "source": "Sun et al. (JAMA 2024;332(13):1059–1069)",
+    "timeline": "Enrolled 2018 to 2022; final follow-up 2023",
+    "listCategory": "carotid",
+    "listDescription": "First positive endovascular ICAS RCT: submaximal balloon angioplasty beat medical therapy on the 12-month composite at expert Chinese centers.",
+    "bottomLineSummary": "BASIS randomized 501 analyzed patients (512 randomized) with symptomatic 70–99% intracranial atherosclerotic stenosis to submaximal balloon angioplasty plus aggressive medical management vs medical management alone. The 12-month composite of stroke, death, territory ischemic stroke, or revascularization was 4.4% vs 13.5% (HR 0.32, 95% CI 0.16 to 0.63; P<.001), the first positive endovascular ICAS RCT. Benefit held in the territory-stroke component (0.4% vs 7.5%), but upfront procedural risk was real (30-day stroke or death 3.2% vs 1.6%; arterial dissection 14.5%). Single-country, open-label, expert-center; not yet AHA/ASA or ESO guideline-endorsed.",
+    "doi": "10.1001/jama.2024.12829"
+  },
   "best-ii-trial": {
     "title": "BEST-II Trial",
     "legend": {
@@ -255,6 +270,21 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "listDescription": "First RCT of post-EVT BP: intensive SBP 100-129 mm Hg did not reduce radiographic hemorrhage vs standard 130-185 mm Hg. Lancet Neurol 2021.",
     "bottomLineSummary": "First RCT of post-EVT BP management: 324 patients randomized to intensive (SBP 100-129 mm Hg) vs standard (130-185 mm Hg) at four French centers. Primary endpoint of any radiographic iPH at 24-36 hours was identical (42% vs 43%, aOR 0.96, P=0.84). Functional outcomes numerically favored standard management. No benefit from intensive BP lowering was demonstrated.",
     "doi": "10.1016/S1474-4422(20)30483-X"
+  },
+  "cassiss-trial": {
+    "title": "CASSISS Trial",
+    "legend": {
+      "finding": "Adding stenting to medical management gave no benefit at 1 year in symptomatic 70–99% ICAS.",
+      "bottomLineTag": "No benefit",
+      "keyStat": "HR 1.10 (0.52–2.35)"
+    },
+    "subtitle": "ICAS Stenting vs Medical (China)",
+    "source": "Gao et al. (JAMA 2022;328(6):534–542)",
+    "timeline": "Enrolled 2014 to 2016; 3-year follow-up",
+    "listCategory": "carotid",
+    "listDescription": "Chinese RCT of intracranial stenting plus medical therapy vs medical therapy alone; no benefit at 1 year.",
+    "bottomLineSummary": "CASSISS randomized 358 analyzed patients (380 randomized) with symptomatic 70–99% intracranial atherosclerotic stenosis to stenting plus aggressive medical management vs medical management alone, at least 3 weeks after the qualifying event. The 1-year composite of stroke or death plus territory stroke was 8.0% vs 7.2% (HR 1.10, 95% CI 0.52 to 2.35; P=.82), so stenting showed no benefit. Periprocedural events were lower than SAMMPRIS (30-day stroke or death 5.1% vs 2.2%; symptomatic ICH 2.3% vs 0%), but the medical arm did well and the trial was underpowered. Aggressive medical management remains first-line (AHA/ASA 2021 Class 1).",
+    "doi": "10.1001/jama.2022.12000"
   },
   "cast-trial": {
     "title": "CAST",

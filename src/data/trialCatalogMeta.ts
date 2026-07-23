@@ -119,6 +119,20 @@ export const LEGACY_TRIAL_CATALOG_META: Record<string, LegacyTrialCatalogMeta> =
     description: 'Registry-based Wingspan safety study in highly selected intracranial stenosis patients after SAMMPRIS.',
     clinicalContext: 'Registry-based Wingspan safety study in highly selected intracranial stenosis patients after SAMMPRIS.',
   },
+  'cassiss-trial': {
+    name: 'CASSISS',
+    year: 2022,
+    doi: '10.1001/jama.2022.12000',
+    description: 'Chinese randomized trial in which adding intracranial stenting to aggressive medical therapy gave no benefit at one year.',
+    clinicalContext: 'Chinese randomized trial in which adding intracranial stenting to aggressive medical therapy gave no benefit at one year.',
+  },
+  'basis-trial': {
+    name: 'BASIS',
+    year: 2024,
+    doi: '10.1001/jama.2024.12829',
+    description: 'First positive endovascular ICAS trial: submaximal balloon angioplasty lowered the 12-month composite versus medical therapy at expert Chinese centers.',
+    clinicalContext: 'First positive endovascular ICAS trial: submaximal balloon angioplasty lowered the 12-month composite versus medical therapy at expert Chinese centers.',
+  },
   'socrates-trial': {
     name: 'SOCRATES',
     year: 2016,

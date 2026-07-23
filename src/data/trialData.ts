@@ -9224,6 +9224,387 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       keyStat: '2.6% (target <4%)',
     },
   },
+  'cassiss-trial': {
+    id: 'cassiss-trial',
+    title: 'CASSISS Trial',
+    subtitle: 'ICAS Stenting vs Medical (China)',
+    category: 'Neuro Trials',
+    archetypeId: 'A',
+    trialResult: 'NEUTRAL',
+    doi: '10.1001/jama.2022.12000',
+    pmid: '35943472',
+    inclusionCriteria: [
+      'TIA or nondisabling nonperforator ischemic stroke',
+      '70–99% angiographically verified stenosis of a major intracranial artery',
+      'At least 3 weeks from the qualifying event',
+      'Symptomatic ICAS in the target territory',
+    ],
+    exclusionCriteria: [
+      'Perforator (penetrating-artery) territory qualifying stroke',
+      'Qualifying event within 3 weeks of enrollment',
+      'Nonatherosclerotic stenosis (dissection, vasculitis, moyamoya)',
+      'Additional criteria per the published study protocol',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: 'Eligible patients',
+          items: [
+            'Transient ischemic attack or nondisabling ischemic stroke attributed to the target lesion',
+            'Stroke or TIA attributed to 70% to 99% stenosis of a major intracranial artery, confirmed on angiography',
+            'Randomization at least 3 weeks after the qualifying ischemic event',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Lesion and mechanism',
+          items: [
+            'Qualifying stroke in the territory of a penetrating (perforator) artery arising from the stenotic segment',
+            'Nonatherosclerotic cause of stenosis (arterial dissection, vasculitis, moyamoya)',
+          ],
+        },
+        {
+          label: 'Other (per published study protocol)',
+          items: [
+            'Additional criteria are described in the study protocol available with the full text in JAMA',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Gao P et al., JAMA 2022;328(6):534–542',
+      sourceUrl: 'https://doi.org/10.1001/jama.2022.12000',
+      retrieved: '2026-07-22',
+    },
+    armDetails: [
+      {
+        arm: 'Intracranial stenting plus aggressive medical management',
+        role: 'intervention',
+        agent: 'Percutaneous transluminal angioplasty and stenting of the symptomatic intracranial lesion',
+        route: 'Endovascular (intracranial), plus aggressive medical management',
+        frequency: 'Single procedure',
+        duration: 'One-time procedure; aggressive medical management continued as in the control arm',
+        coInterventions: 'Aggressive medical management in both arms: dual antiplatelet therapy for 90 days then single antiplatelet, high-intensity statin, systolic blood pressure target below 140 mmHg, plus risk-factor and lifestyle control',
+        note: '30-day stroke or death 5.1%, well below the 14.7% SAMMPRIS stenting rate. Symptomatic ICH 2.3% vs 0% in the medical arm. Enrollment was at least 3 weeks after the qualifying event. Source: Gao JAMA 2022.',
+      },
+      {
+        arm: 'Aggressive medical management alone',
+        role: 'control',
+        agent: 'Aggressive medical management',
+        route: 'Oral antiplatelet and statin plus risk-factor and lifestyle management',
+        frequency: 'Daily',
+        duration: 'Ongoing',
+        coInterventions: 'Dual antiplatelet therapy for 90 days then single antiplatelet, high-intensity statin, systolic blood pressure target below 140 mmHg, plus risk-factor and lifestyle control',
+        note: 'Control-arm 1-year composite 7.2%; 30-day stroke or death 2.2%. The medical arm performed well, leaving little room for stenting to improve outcomes. First-line strategy for symptomatic intracranial atherosclerotic stenosis.',
+      },
+    ],
+    safetyProfile: {
+      sICH: {
+        evt: 2.3,
+        control: 0,
+        label: 'Symptomatic ICH',
+        tooltip: 'Stenting vs medical management. Procedural hemorrhage risk persisted despite refined selection.',
+        color: 'danger',
+      },
+      mortality: {
+        evt: 4.4,
+        control: 1.3,
+        label: '3-year mortality',
+        tooltip: '7/160 stenting vs 2/159 medical; HR 3.75 (95% CI 0.77 to 18.13), P=.08. Underpowered, not statistically significant.',
+        color: 'warning',
+      },
+    },
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'Two arms of 100 dots. A filled dot is a patient who had a stroke or death within 30 days, or a stroke in the qualifying-artery territory through 1 year. Stenting plus medical management had 8.0 filled dots; medical management alone had 7.2. The two arms are almost identical.',
+      },
+      {
+        question: 'Why do the arms look so close?',
+        answer: 'CASSISS was a neutral trial. The between-arm difference is 0.4 percentage points (95% CI -5.0 to 5.9), and the hazard-ratio confidence interval is wide (0.52 to 2.35). The trial cannot exclude a modest benefit or a modest harm from stenting.',
+      },
+      {
+        question: 'What does it mean for my patient?',
+        answer: 'For symptomatic intracranial atherosclerotic stenosis of 70–99% at least 3 weeks out, aggressive medical management is first-line (AHA/ASA 2021 Class 1). CASSISS reinforces that adding stenting did not help, even with refined selection and experienced operators. It does not address acute intervention.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In symptomatic 70–99% intracranial atherosclerotic stenosis at experienced Chinese centers, adding stenting to aggressive medical management gave no benefit over aggressive medical management alone at 1 year (8.0% vs 7.2%, HR 1.10). The neutral result held even with refined patient selection and high-volume operators.',
+      doesNotProve: 'It does not show that stenting is harmful in this refined-selection population, unlike SAMMPRIS, where initial stenting caused net harm. The wide confidence interval (HR 0.52 to 2.35) also cannot exclude a modest benefit or a modest harm from stenting.',
+      cautions: 'Enrollment was at least 3 weeks after the qualifying event, so CASSISS does not address acute intervention. The medical arm did well (7.2% at 1 year), which left little room for stenting to improve outcomes. The sample was small (358 analyzed) with a low event rate, leaving the trial underpowered. Results come from credentialed high-volume Chinese centers and may not generalize. Outcome assessment was blinded, but treatment was open-label.',
+    },
+    bedsidePearl: 'CASSISS randomized symptomatic 70–99% intracranial stenosis to stenting plus medical management vs medical management alone, at least 3 weeks out, at experienced Chinese centers. Adding stenting gave no benefit at 1 year (8.0% vs 7.2%, HR 1.10). Periprocedural risk was lower than SAMMPRIS (30-day stroke or death 5.1% vs 2.2%) but did not translate into better outcomes. Aggressive medical management stays first-line (AHA/ASA 2021 Class 1); CASSISS does not support routine stenting.',
+    bedsidePearlClaimId: 'cassiss-primary-result',
+    bottomLineSummary: 'CASSISS randomized 358 analyzed patients (380 randomized) with symptomatic 70–99% intracranial atherosclerotic stenosis to stenting plus aggressive medical management vs medical management alone, at least 3 weeks after the qualifying event. The 1-year composite of stroke or death plus territory stroke was 8.0% vs 7.2% (HR 1.10, 95% CI 0.52 to 2.35; P=.82), so stenting showed no benefit. Periprocedural events were lower than SAMMPRIS (30-day stroke or death 5.1% vs 2.2%; symptomatic ICH 2.3% vs 0%), but the medical arm did well and the trial was underpowered. Aggressive medical management remains first-line (AHA/ASA 2021 Class 1).',
+    stats: {
+      sampleSize: {
+        value: '358',
+        label: 'Analyzed (380 randomized)',
+      },
+      primaryEndpoint: {
+        value: 'Stroke/death + territory stroke',
+        label: 'through 1 Year',
+      },
+      pValue: {
+        value: '0.82',
+        label: 'No difference',
+      },
+      effectSize: {
+        value: 'HR 1.10',
+        label: '8.0% vs 7.2%',
+      },
+    },
+    trialDesign: {
+      type: [
+        'Randomized open-label trial, blinded outcome assessment',
+        '8 centers, China',
+        '1:1 allocation (stenting + AMM vs AMM alone)',
+      ],
+      timeline: 'Enrolled 2014 to 2016; 3-year follow-up',
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 8.0,
+        label: '1-year stroke or death + territory stroke',
+        name: 'Stenting + AMM',
+      },
+      control: {
+        percentage: 7.2,
+        label: '1-year stroke or death + territory stroke',
+        name: 'Aggressive Medical Management (AMM)',
+      },
+    },
+    intervention: {
+      treatment: 'Intracranial angioplasty and stenting plus aggressive medical management',
+      control: 'Aggressive medical management alone (dual antiplatelet therapy for 90 days then single antiplatelet, high-intensity statin, systolic BP target below 140 mmHg, plus risk-factor and lifestyle control)',
+    },
+    clinicalContext: 'CASSISS asked whether adding intracranial stenting to aggressive medical management reduces stroke in symptomatic 70–99% intracranial atherosclerotic stenosis, using refined patient selection (nonperforator qualifying stroke, enrollment at least 3 weeks out) and experienced high-volume Chinese centers. It followed SAMMPRIS, which had shown net harm from initial stenting.',
+    calculations: {
+      // Neutral superiority trial (HR, not-met). No NNT.
+    },
+    pearls: [
+      'Neutral primary result: the 1-year composite of stroke or death within 30 days plus territory stroke through 1 year was 8.0% (14/176) with stenting vs 7.2% (13/181) with medical management (difference 0.4%, 95% CI -5.0 to 5.9; HR 1.10, 95% CI 0.52 to 2.35; P=.82).',
+      'Lower periprocedural risk than SAMMPRIS: 30-day stroke or death was 5.1% with stenting vs 2.2% with medical management, well below the 14.7% SAMMPRIS stenting rate, reflecting refined selection and experienced operators.',
+      'Durable neutrality: 2-year territory stroke 9.9% vs 9.0% (HR 1.10) and 3-year 11.3% vs 11.2% (HR 1.00). The arms tracked together across follow-up.',
+      'Mortality signal without significance: 3-year mortality was 4.4% (7/160) with stenting vs 1.3% (2/159) with medical management (HR 3.75, 95% CI 0.77 to 18.13; P=.08). The trial was underpowered for mortality.',
+      'Symptomatic ICH 2.3% with stenting vs 0% with medical management: the procedural hemorrhage risk did not disappear even with better selection.',
+      'Underpowered by design and event rate: 358 analyzed with a low medical-arm event rate (7.2% at 1 year) left little room to show benefit and a wide confidence interval that cannot exclude a modest effect either way.',
+      'Standard of care unchanged: aggressive medical management is first-line for symptomatic ICAS (AHA/ASA 2021 Class 1). CASSISS reinforces that stenting as add-on therapy did not improve outcomes; it does not license routine stenting.',
+    ],
+    conclusion: '',
+    source: 'Gao et al. (JAMA 2022;328(6):534–542)',
+    clinicalTrialsId: 'NCT01763320',
+    listCategory: 'carotid',
+    listDescription: 'Chinese RCT of intracranial stenting plus medical therapy vs medical therapy alone; no benefit at 1 year.',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'not-met',
+    applicability: {
+      populationExclusions: [
+        'Symptomatic 70–99% intracranial atherosclerotic stenosis with a nonperforator qualifying event only',
+        'Enrollment at least 3 weeks after the qualifying event; does NOT address acute or hyperacute intervention',
+        'Perforator-territory qualifying stroke was excluded',
+        'Credentialed high-volume Chinese centers; periprocedural rates may be higher elsewhere',
+        'Aggressive medical management remains first-line (AHA/ASA 2021 Class 1); stenting as add-on therapy did not improve outcomes',
+      ],
+    },
+    legend: {
+      finding: 'Adding stenting to medical management gave no benefit at 1 year in symptomatic 70–99% ICAS.',
+      bottomLineTag: 'No benefit',
+      keyStat: 'HR 1.10 (0.52–2.35)',
+    },
+  },
+  'basis-trial': {
+    id: 'basis-trial',
+    title: 'BASIS Trial',
+    subtitle: 'Balloon Angioplasty vs Medical (ICAS)',
+    category: 'Neuro Trials',
+    archetypeId: 'A',
+    trialResult: 'POSITIVE',
+    doi: '10.1001/jama.2024.12829',
+    pmid: '39235816',
+    inclusionCriteria: [
+      'TIA within 90 days or ischemic stroke 14 to 90 days before enrollment',
+      '70–99% atherosclerotic stenosis of a major intracranial artery',
+      'Age 35 to 80 years',
+      'Symptomatic ICAS in the target territory',
+    ],
+    exclusionCriteria: [
+      'Nonatherosclerotic stenosis (dissection, vasculitis, moyamoya)',
+      'Qualifying ischemic stroke within 14 days of enrollment',
+      'Additional criteria per the published study protocol',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: 'Eligible patients',
+          items: [
+            'Age 35 to 80 years',
+            'Transient ischemic attack within 90 days OR ischemic stroke 14 to 90 days before enrollment',
+            'Symptoms attributed to 70% to 99% atherosclerotic stenosis of a major intracranial artery',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Lesion and mechanism',
+          items: [
+            'Nonatherosclerotic cause of stenosis (dissection, vasculitis, moyamoya)',
+            'Qualifying ischemic stroke within 14 days of enrollment',
+          ],
+        },
+        {
+          label: 'Other (per published study protocol)',
+          items: [
+            'Additional criteria are described in the study protocol available with the full text in JAMA',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Sun X et al., JAMA 2024;332(13):1059–1069',
+      sourceUrl: 'https://doi.org/10.1001/jama.2024.12829',
+      retrieved: '2026-07-22',
+    },
+    armDetails: [
+      {
+        arm: 'Submaximal balloon angioplasty plus aggressive medical management',
+        role: 'intervention',
+        agent: 'Submaximal balloon angioplasty (balloon undersized to the normal vessel diameter)',
+        dose: 'Balloon sized below the normal luminal diameter; slow, low-pressure inflation to limit dissection',
+        route: 'Endovascular (intracranial angioplasty), no stent placement',
+        frequency: 'Single procedure',
+        duration: 'One-time procedure; aggressive medical management continued as in the control arm',
+        coInterventions: 'Aggressive medical management in both arms: dual antiplatelet therapy, high-intensity statin, plus blood-pressure and risk-factor control',
+        note: 'Submaximal angioplasty is deliberately gentler than stenting. Procedural complications occurred in 17.4%, with arterial dissection in 14.5%. 30-day stroke or death 3.2%; symptomatic ICH 1.2%. Source: Sun JAMA 2024.',
+      },
+      {
+        arm: 'Aggressive medical management alone',
+        role: 'control',
+        agent: 'Aggressive medical management',
+        route: 'Oral antiplatelet and statin plus risk-factor and lifestyle management',
+        frequency: 'Daily',
+        duration: 'Ongoing',
+        coInterventions: 'Dual antiplatelet therapy, high-intensity statin, plus blood-pressure and risk-factor control',
+        note: 'Control-arm 12-month composite 13.5%; 30-day stroke or death 1.6%; symptomatic ICH 0.4%. First-line strategy for symptomatic intracranial atherosclerotic stenosis.',
+      },
+    ],
+    safetyProfile: {
+      sICH: {
+        evt: 1.2,
+        control: 0.4,
+        label: 'Symptomatic ICH',
+        tooltip: 'Balloon angioplasty vs medical management. Procedural hemorrhage risk is front-loaded.',
+        color: 'danger',
+      },
+      adverseEvents: {
+        evt: 17.4,
+        control: 0,
+        label: 'Procedural complications (angioplasty arm)',
+        tooltip: 'Arterial dissection 14.5%. The medical arm had no procedure.',
+        color: 'warning',
+      },
+    },
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'Two arms of 100 dots. A filled dot is a patient who reached the 12-month composite: any stroke or death within 30 days, or a territory ischemic stroke or revascularization of the qualifying artery from 30 days to 1 year. Balloon angioplasty plus medical management had 4.4 filled dots; medical management alone had 13.5. The angioplasty arm had fewer bad outcomes.',
+      },
+      {
+        question: 'What is the composite made of?',
+        answer: 'The 12-month benefit came from fewer territory ischemic strokes (0.4% vs 7.5%) and fewer revascularizations (1.2% vs 8.3%). Because revascularization is influenced by the treating operator, the territory-stroke component matters most; it favored angioplasty on its own.',
+      },
+      {
+        question: 'What does it mean for my patient?',
+        answer: 'BASIS is the first randomized endovascular therapy to beat medical management in symptomatic ICAS, but it tested balloon angioplasty (not stenting) at experienced Chinese centers with real upfront procedural risk (30-day stroke or death 3.2% vs 1.6%). It is not yet in AHA/ASA or ESO guidance. Aggressive medical management stays first-line; submaximal balloon angioplasty is an emerging option at expert centers.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In symptomatic 70–99% intracranial atherosclerotic stenosis at experienced Chinese centers, adding submaximal balloon angioplasty to aggressive medical management lowered the 12-month composite of any stroke or death, territory ischemic stroke, or revascularization versus aggressive medical management alone (4.4% vs 13.5%, HR 0.32, 95% CI 0.16 to 0.63). BASIS is the first randomized endovascular therapy for ICAS to show superiority over medical management on its primary endpoint. The territory ischemic stroke component alone favored angioplasty (0.4% vs 7.5%), so the result does not rest on the operator-influenced revascularization endpoint.',
+      doesNotProve: 'BASIS does not validate stenting: it tested submaximal balloon angioplasty without stent placement, and arterial dissection occurred in 14.5%. It does not remove the upfront procedural risk (30-day stroke or death 3.2% vs 1.6%, symptomatic ICH 1.2% vs 0.4%). It does not generalize outside China or to lower-volume operators. It does not overturn SAMMPRIS or CASSISS, which tested a different strategy of initial stent placement.',
+      cautions: 'BASIS was a single-country, open-label trial with only the endpoint adjudication blinded (PROBE design), run by experienced high-volume operators. The primary composite includes revascularization of the qualifying artery, an endpoint influenced by the treating operator. The procedural harm is front-loaded against a delayed benefit, so early risk precedes the later gain. The result is not yet incorporated into AHA/ASA or ESO guidance and awaits replication in US and multinational populations.',
+    },
+    bedsidePearl: 'BASIS is the first randomized endovascular therapy to beat aggressive medical management in symptomatic 70–99% intracranial stenosis: the 12-month composite was 4.4% vs 13.5% (HR 0.32). It tested submaximal balloon angioplasty, not stenting, at experienced Chinese centers, with real upfront risk (30-day stroke or death 3.2% vs 1.6%, symptomatic ICH 1.2% vs 0.4%). It is not yet guideline-endorsed. Keep aggressive medical management first-line; consider balloon angioplasty only at expert centers pending replication.',
+    bedsidePearlClaimId: 'basis-primary-result',
+    bottomLineSummary: 'BASIS randomized 501 analyzed patients (512 randomized) with symptomatic 70–99% intracranial atherosclerotic stenosis to submaximal balloon angioplasty plus aggressive medical management vs medical management alone. The 12-month composite of stroke, death, territory ischemic stroke, or revascularization was 4.4% vs 13.5% (HR 0.32, 95% CI 0.16 to 0.63; P<.001), the first positive endovascular ICAS RCT. Benefit held in the territory-stroke component (0.4% vs 7.5%), but upfront procedural risk was real (30-day stroke or death 3.2% vs 1.6%; arterial dissection 14.5%). Single-country, open-label, expert-center; not yet AHA/ASA or ESO guideline-endorsed.',
+    stats: {
+      sampleSize: {
+        value: '501',
+        label: 'Analyzed (512 randomized)',
+      },
+      primaryEndpoint: {
+        value: 'Composite stroke/death/revasc',
+        label: 'through 12 Months',
+      },
+      pValue: {
+        value: '<0.001',
+        label: 'Angioplasty better',
+      },
+      effectSize: {
+        value: 'HR 0.32',
+        label: '4.4% vs 13.5%',
+      },
+    },
+    trialDesign: {
+      type: [
+        'Randomized open-label trial, blinded endpoint (PROBE)',
+        '31 centers, China',
+        '1:1 allocation (submaximal balloon angioplasty + AMM vs AMM alone)',
+      ],
+      timeline: 'Enrolled 2018 to 2022; final follow-up 2023',
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 4.4,
+        label: '12-month composite (stroke/death/territory stroke/revasc)',
+        name: 'Balloon angioplasty + AMM',
+      },
+      control: {
+        percentage: 13.5,
+        label: '12-month composite (stroke/death/territory stroke/revasc)',
+        name: 'Aggressive Medical Management (AMM)',
+      },
+    },
+    intervention: {
+      treatment: 'Submaximal balloon angioplasty (balloon undersized to the normal vessel diameter, slow low-pressure inflation) plus aggressive medical management',
+      control: 'Aggressive medical management alone (dual antiplatelet therapy, high-intensity statin, plus blood-pressure and risk-factor control)',
+    },
+    clinicalContext: 'BASIS tested whether adding submaximal balloon angioplasty (without stent placement) to aggressive medical management reduces stroke in symptomatic 70–99% intracranial atherosclerotic stenosis. It enrolled patients with a TIA within 90 days or an ischemic stroke 14 to 90 days earlier at 31 experienced Chinese centers, using a strategy deliberately gentler than the initial stenting that failed in SAMMPRIS and CASSISS.',
+    calculations: {
+      // Positive superiority trial, but NNT deliberately suppressed: the primary
+      // is a composite that includes the operator-influenced revascularization
+      // endpoint (packet §6 guardrail). Lead with HR + CI, not NNT.
+    },
+    harmSignal: 'Upfront procedural harm: 30-day stroke/death 3.2% vs 1.6%, arterial dissection 14.5%.',
+    pearls: [
+      'First positive endovascular ICAS RCT: the 12-month composite of any stroke or death, territory ischemic stroke, or revascularization was 4.4% with balloon angioplasty plus medical management vs 13.5% with medical management alone (HR 0.32, 95% CI 0.16 to 0.63; P<.001).',
+      'Balloon, not stent: BASIS tested submaximal balloon angioplasty without stent placement, a deliberately gentler strategy than the initial Wingspan stenting that failed in SAMMPRIS and CASSISS.',
+      'Benefit held in the hard endpoint: territory ischemic stroke from 30 days to 1 year was 0.4% with angioplasty vs 7.5% with medical management, so the result does not rest on the operator-influenced revascularization component (1.2% vs 8.3%).',
+      'Upfront procedural risk is real: 30-day stroke or death was 3.2% with angioplasty vs 1.6% with medical management, and symptomatic ICH was 1.2% vs 0.4%. The harm is front-loaded against a later benefit.',
+      'Procedural complications 17.4%, with arterial dissection in 14.5%: submaximal technique reduces but does not eliminate vessel injury.',
+      'Population: TIA within 90 days or ischemic stroke 14 to 90 days, 70–99% intracranial atherosclerotic stenosis, age 35 to 80; enrolled at 31 experienced Chinese centers.',
+      'Not yet guideline-endorsed: BASIS is single-country, open-label, and operator-experienced. It does not license stenting, and it awaits US and multinational replication before it changes AHA/ASA or ESO practice. Aggressive medical management remains first-line.',
+    ],
+    conclusion: '',
+    source: 'Sun et al. (JAMA 2024;332(13):1059–1069)',
+    clinicalTrialsId: 'NCT03703635',
+    listCategory: 'carotid',
+    listDescription: 'First positive endovascular ICAS RCT: submaximal balloon angioplasty beat medical therapy on the 12-month composite at expert Chinese centers.',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    applicability: {
+      populationExclusions: [
+        'Symptomatic 70–99% intracranial atherosclerotic stenosis, TIA within 90 days or ischemic stroke 14 to 90 days, age 35 to 80',
+        'Submaximal BALLOON ANGIOPLASTY without stent placement; does NOT license Wingspan or primary stenting',
+        'Single-country (China), open-label, experienced high-volume operators; periprocedural rates may be higher elsewhere',
+        'Composite primary includes operator-influenced revascularization; the hard territory-stroke component independently favored angioplasty',
+        'Not yet incorporated into AHA/ASA or ESO guidance; awaits US and multinational replication',
+      ],
+    },
+    legend: {
+      finding: 'Submaximal balloon angioplasty beat medical therapy on the 12-month composite in symptomatic 70–99% ICAS.',
+      bottomLineTag: 'Benefit',
+      keyStat: 'HR 0.32 (0.16–0.63)',
+    },
+  },
   'socrates-trial': {
     id: 'socrates-trial',
     title: 'SOCRATES Trial',

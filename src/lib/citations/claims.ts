@@ -506,10 +506,32 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
       'chimowitz-sammpris-2011',
       'derdeyn-sammpris-longterm-2014',
       'alexander-weave-2019',
+      'alexander-woven-2021',
       'gao-cassiss-2022',
+      'sun-basis-2024',
+      'gutierrez-icas-review-2022',
     ],
     surfaces: [DATA_SURFACE],
-    description: 'ClinicalSynthesisCard on /trials/q/icas-stenting. Synthesizes the symptomatic-ICAS evidence chain: SAMMPRIS 2011 + long-term 2014 (Wingspan stenting causes net harm; aggressive medical management is the standard); WEAVE 2019 postmarket registry (lower periprocedural rates under restricted FDA labeling, but single-arm and cannot prove efficacy); CASSISS 2022 (contemporary periprocedural safety improvements but no superiority over modern medical management). Governing source = 2021 AHA/ASA SP §5.5 Intracranial Atherosclerosis.',
+    description: 'ClinicalSynthesisCard on /trials/q/icas-stenting. Synthesizes the symptomatic-ICAS evidence chain: SAMMPRIS 2011 + long-term 2014 (Wingspan stenting as initial therapy causes net harm; aggressive medical management is the standard); WEAVE 2019 and WOVEN 2021 (single-arm on-label safety at 72 hours and 1 year, no efficacy); CASSISS 2022 (refined-selection stenting, no superiority over medical management); BASIS 2024 (first positive endovascular ICAS RCT, but submaximal balloon angioplasty not stenting, single-country/open-label/expert-center, real upfront risk, composite includes revascularization, not yet guideline-endorsed). Epidemiology and recurrent-risk framing from Gutierrez et al. Lancet Neurology 2022 (recurrent stroke >20% at 1 year in 70–99% ICAS). Governing source = 2021 AHA/ASA SP §5.5 Intracranial Atherosclerosis; BASIS not yet incorporated.',
+  },
+
+  // ─── ICAS trial-card primary-result claims (bedside pearl surface) ──────────
+  // 2026-07-22 ICAD refresh (evidence packet 2026-07-22-icad-refresh). Each binds
+  // the new trial card's bedsidePearl (scannable bedsidePearlClaimId surface) to
+  // its verified trial citation. Chosen over WEAVE's inline /* claimId */ comment
+  // in howToInterpret.proves, which the scanner cannot match (comment form, no
+  // quotes) and which is not itself registered in CLAIM_REGISTRY.
+  'cassiss-primary-result': {
+    id: 'cassiss-primary-result',
+    citation_ids: ['gao-cassiss-2022'],
+    surfaces: [BEDSIDE_PEARL_SURFACE],
+    description: 'CASSISS 2022 bedside pearl: adding intracranial stenting to aggressive medical management gave no benefit at 1 year in symptomatic 70–99% ICAS (8.0% vs 7.2%, HR 1.10, 95% CI 0.52 to 2.35; P=.82). Periprocedural 30-day stroke/death 5.1% vs 2.2%; symptomatic ICH 2.3% vs 0%. Refined selection, experienced Chinese centers, at least 3 weeks from qualifying event; underpowered. AMM remains first-line (AHA/ASA 2021 Class 1).',
+  },
+  'basis-primary-result': {
+    id: 'basis-primary-result',
+    citation_ids: ['sun-basis-2024'],
+    surfaces: [BEDSIDE_PEARL_SURFACE],
+    description: 'BASIS 2024 bedside pearl: first positive endovascular ICAS RCT. Submaximal balloon angioplasty (not stenting) plus AMM vs AMM alone lowered the 12-month composite of stroke/death, territory ischemic stroke, or revascularization (4.4% vs 13.5%, HR 0.32, 95% CI 0.16 to 0.63; P<.001); territory-stroke component 0.4% vs 7.5%. Upfront risk: 30-day stroke/death 3.2% vs 1.6%, symptomatic ICH 1.2% vs 0.4%, dissection 14.5%. Single-country, open-label, expert-center; not yet AHA/ASA or ESO guideline-endorsed. NNT deliberately suppressed (composite includes operator-influenced revascularization).',
   },
 
   // ─── CRAO management clinical synthesis ─────────────────────────────────────
