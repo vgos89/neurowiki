@@ -855,6 +855,20 @@
   </url>
 
   <url>
+    <loc>https://www.neurowiki.ai/trials/cassiss-trial</loc>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://www.neurowiki.ai/trials/basis-trial</loc>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
     <loc>https://www.neurowiki.ai/trials/socrates-trial</loc>
     <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
@@ -1029,7 +1043,7 @@
   </url>
   <url>
     <loc>https://www.neurowiki.ai/trials/q/icas-stenting</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-07-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
