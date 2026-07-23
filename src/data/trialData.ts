@@ -4350,7 +4350,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     inclusionCriteria: [
       'Age 18 to 80',
       'Acute ischemic stroke with anterior-circulation intracranial LVO (ICA, M1, or M2)',
-      'NIHSS 4 or greater',
+      'NIHSS ≤30',
       'Treatment within 24 hours of last known well',
       'Pre-stroke mRS 0 to 2',
     ],
@@ -7101,6 +7101,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     inclusionCriteria: [
       'Anterior LVO (ICA or M1)',
       'Age ≤85',
+      'NIHSS ≥6',
       'Pre-stroke mRS 0–1',
       'Large ischemic core: ASPECTS 3–5 OR perfusion core ≥50 mL',
       'Within 24 hours of last known well',

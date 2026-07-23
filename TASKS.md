@@ -1,5 +1,46 @@
 # TASKS.md — NeuroWiki Task Ledger
 
+## RUBRIC — 2026-07-22 pending-work reconciliation
+
+> Built this session after auditing the ledger against the actual code + git history. Several PENDING/ACTIVE items were marked open but had already shipped (the ledger drifted out of sync with the audit-remediation waves of June and the July headache V4 rebuild). This rubric is the reconciled, verified view. Priority bands: **P0** = do first (safety / security / at-risk work), **P1** = genuine open correction, **P2/P3** = optional or low-severity, **BLOCKED** = needs V action or an external source.
+>
+> Verification note: each "resolved" call below was confirmed against the working tree or git log this session, not assumed from the old status marker.
+
+### RESOLVED since last ledger update (were marked open, actually shipped)
+- `evt-curated-circulation-fix` (was L4/P1) — **shipped commit 3d59474 (2026-06-09)**. MR CLEAN-NO IV + RESCUE BT curated criteria now correctly read anterior-circulation-only; RESCUE BT cautions explicitly states posterior was excluded. Verified in trialData.ts lines 3161 / 4352 / 4345. No further action.
+- `headache-clinic-stage-one-screen-build` (was L4/P1, in_progress) — **superseded by W-HEADACHE-V4**. The file it targeted (`ClinicHeadachePathway.tsx`) is deleted; the live route is `ClinicHeadachePathwayV4`, which already ships the Stage-Two result copy (band words Leading/Possible/Less likely, SNNOOP10 gate, "considered and set aside" tray). No further action.
+- ACTIVE-section cleanup — ~10 entries still marked `ready_for_merge (committed this session)` (NIHSS anticoagulant redesign, accordion feedback, headache V4, late-window IVT) are already live on main per git log. They belong in CONFIRMED CLEAN, not ACTIVE. (Housekeeping, non-urgent.)
+
+### P0 — do first
+- **SSH private key in git history** (`## AUDIT REMEDIATION ROADMAP` → P0 SECURITY, line ~928) — status `blocked:V-must-revoke-key-first`. A private key is in history; the scrub cannot start until V revokes the key. **Needs a V decision to unblock.** Highest-consequence open item.
+- **At-risk uncommitted work (git hygiene):**
+  - Headache Swarm Audit worktree (`.claude/worktrees/vibrant-dewdney-4f0ed7`) has **uncommitted edits** to `LKWSection.tsx` + `ExtendedIVTPathway.tsx` (plus a stray `claude-agent-audit-input.zip`). Branch is 0 commits ahead of main, so these edits exist only in that worktree. Keep-or-discard decision needed before the worktree is cleaned.
+  - Orphaned branch `worktree-agent-ab9d815fae22ee79d` has **1 unmerged commit**: "feat(home): rebuild Home page per HOME_SPEC v1.4." Not tied to any live session. Decide: land, PR, or drop.
+
+### P1 — genuine open corrections (in our control)
+- **`evt-curated-summary-cluster`** (Class C-clinical) — SELECT2 + RESCUE-BT curated chips still don't match source: SELECT2 pre-stroke mRS shown as 0–1 (review says publication is 0–2) and an NIHSS floor may be omitted; RESCUE-BT shows "NIHSS 4 or greater" (source may be a 0–42 range). **Source-verification in progress this session (evidence-verifier).** Fix then routes medical-scientist → clinical-reviewer. This is the current work item.
+- **`scanner-paragraph-surface-support`** (Class C, partial) — component enablement done (commit e72e62a; `Paragraph.tsx` accepts `data-claim`). REMAINING: retro-tag the two prose surfaces, clinical-reviewer gated. Closes a claim-coverage gap.
+
+### P2 / P3 — optional or low-severity (park unless V wants them)
+- `ecass3-cor-class-recheck` (C-clinical, P2) — freshness re-verify of ECASS III COR 2a class vs the in-repo 2026 AHA/ASA guideline. Verification-only unless drift found.
+- `trial-control-arm-appendix-granularity` (C-clinical, P2) — deepen control-arm detail on ESCAPE/DAWN/DEFUSE-3; needs the trial supplementary appendices (owner supply).
+- `trial-eligibility-arms-expand-remaining-74-trials` (P2) — forward-planning: backfill fullEligibility/armDetails to the remaining ~74 trials in reviewed waves.
+- `compass-registry-vs-conduct` (C, P3) — optional annotation clarifying registered-protocol vs as-conducted thresholds. Not an error.
+- `escape-primary-or-reconcile` (C-clinical, P3) — OR 2.6 already verified correct; only an optional "unadjusted primary" label remains, pending owner sign-off.
+
+### BLOCKED — needs V or an external source
+- `vestibular-migraine-a1-6-6-full-criteria-expansion` (E-clinical) — blocked awaiting Lempert 2012 (J Vestib Res) full text.
+- `W5.2` / Phase 3 citation registry (E) — blocked awaiting the Teasdale & Jennett 1974 GCS source (V has library access) + V decisions on 5 claim-source questions.
+- `WAVE 6.5`, `WAVE 8` — planned, awaiting V priority confirmation.
+- Phase 6 (performance/architecture refactor) — blocked awaiting Phase 6A (lazy-loading) to stabilize chunk boundaries.
+- Phase 8 (docs/repo cleanup) — blocked awaiting canonical-source confirmation for the AHA-guideline duplicate.
+
+### Open PRs to resolve
+- **PR #10** (Android TWA, this branch `codex/android-twa`) — code done; waiting on V's Google Play internal-testing upload + store declarations.
+- **PR #7** (Read-the-Scan CT-head teaching module) — DRAFT, older session; decide finish vs close.
+
+---
+
 ## ACTIVE
 
 (none)
@@ -222,7 +263,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Blocker:** Lempert et al. J Vestib Res 2012 full-text retrieval (PubMed MCP `lookup_article_by_citation` + `get_full_text_article`).
 
 ### evt-curated-circulation-fix — Class E-clinical [from EVT enrichment wave batch 3 clinical review]
-- **Status:** [ ] open — L4, P1 (medium-high severity, separate gate from other cluster items)
+- **Status:** [x] done — shipped commit 3d59474 (2026-06-09); ledger reconciled 2026-07-22 (both curated cards verified anterior-only in trialData.ts 3161/4352, RESCUE-BT cautions 4345 states posterior excluded). Superseded the original open flag.
 - **User-visible goal:** Fix factual error in curated `inclusionCriteria` on **MR CLEAN-NO IV** and **RESCUE BT** trials. Both cards currently state "anterior or posterior circulation occlusion" but source-verified eligibility (via commit 8bf31e8 `fullEligibility`) shows each trial enrolled **anterior-circulation only** (ICA/M1/M2 occlusion). The new `fullEligibility` is source-correct and live on the page; the curated summary contradicts it. A clinician triaging a posterior/basilar LVO could be misled. Must update both trials' curated `inclusionCriteria` fields to match the full-eligibility source truth, then gate through clinical-reviewer.
 - **Non-goals:** Not changing control arm or other trial fields; not changing the statistical outcome or recommendation. Curated summary sync-to-source only.
 - **Files likely touched:** `src/data/trialData.ts` (MR-CLEAN-NO-IV + RESCUE-BT entries `inclusionCriteria` field; verify `fullEligibility` is intact).
@@ -232,7 +273,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Source review:** Wave 3 batch clinical review (docs/reviews/clinical-evt-batch3.md, finding F2); commit 8bf31e8 evidence packet full-eligibility source details.
 
 ### evt-curated-summary-cluster — Class C-clinical (low-severity; reconcile multiple curated fields) [from EVT enrichment wave batch 3 clinical review]
-- **Status:** [ ] open — L5, P2 (optional cleanup; no clinical safety impact)
+- **Status:** [x] done — 2026-07-22. Source-verified (evidence-verifier) + fixed + clinical-reviewer approve (docs/reviews/clinical-select2-rescuebt-nihss-chips.md). Two chip corrections shipped: SELECT2 gained the omitted `NIHSS ≥6` floor; RESCUE-BT `NIHSS 4 or greater` (unsupported curation artifact) corrected to `NIHSS ≤30`. NOTE: the flagged SELECT2 "mRS 0–1 vs 0–2" was a FALSE ALARM — source is 0–1, chip left unchanged. fullEligibility blocks were already correct; drift was isolated to the curated chips as suspected.
 - **User-visible goal:** Reconcile curated `inclusionCriteria` + other summary fields across 3 trials where the curated text does not match the published source:
   - **SELECT2:** curated field says "mRS 0 or 1 at baseline" but the publication allows mRS 0–2 (non-disabling deficit at screening). Update field to reflect the broader eligibility.
   - **RESCUE BT:** curated field says "NIHSS 4+" but the publication specifies NIHSS 0–42 range. Clarify the effective floor (check if 0–3 excluded elsewhere, if registration says "4+", or if this is manuscript vs. protocol drift).
@@ -335,7 +376,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Rollback plan:** git revert single commit (if change ships).
 
 ### headache-clinic-stage-one-screen-build — Class D [unblocked post 6585a71 engine fix]
-- **Status:** [~] in_progress — L4, P1. TWO increments LANDED. (1) Result-presentation (c885da2): ranked phenotype accordion list (`HeadacheResultList` + shared `CriteriaList`) replacing the stacked headline/differential/banner; trials density; top match open; verbatim relocation; a11y fixes. (2) Treatment on-row expander (e8805ef): per-phenotype dosing moved into a collapsed opt-in "Show management" `<details>` on every match row (new `HeadacheManagement`, keyed; 43 Row strings byte-identical); clinical gate ruled show-management-for-ALL-matches (incl. partial), collapsed-by-default, no floor; partial-match confirm-diagnosis caveat (new claim `clinic-headache-partial-match-caveat`); 8 criteria cards deleted (render once in row) with 7 hidden literal claim markers + ndph tagged in management. Architect + pre/post clinical gates all approve; a11y + mobile sign-offs applied; Gate 6 client-side PASS (caveat verified on Cluster 25% partial, Migraine 100% no caveat). REMAINING: Stage Two result-copy only — band words (Leading/Possible/Less likely), non-collapsible SNNOOP10 disclaimer, "considered and set aside" tray consuming `definitionallyExcluded`/`exclusionReason`, citation footer (Class E-clinical).
+- **Status:** [x] superseded 2026-07-22 by W-HEADACHE-V4. The target file `ClinicHeadachePathway.tsx` is deleted; the live `/pathways/headache-clinic` route is `ClinicHeadachePathwayV4`, which already ships the Stage-Two result copy (band words, SNNOOP10 gate, considered-and-set-aside tray). Historical progress detail retained below. FORMER STATUS: [~] in_progress — L4, P1. TWO increments LANDED. (1) Result-presentation (c885da2): ranked phenotype accordion list (`HeadacheResultList` + shared `CriteriaList`) replacing the stacked headline/differential/banner; trials density; top match open; verbatim relocation; a11y fixes. (2) Treatment on-row expander (e8805ef): per-phenotype dosing moved into a collapsed opt-in "Show management" `<details>` on every match row (new `HeadacheManagement`, keyed; 43 Row strings byte-identical); clinical gate ruled show-management-for-ALL-matches (incl. partial), collapsed-by-default, no floor; partial-match confirm-diagnosis caveat (new claim `clinic-headache-partial-match-caveat`); 8 criteria cards deleted (render once in row) with 7 hidden literal claim markers + ndph tagged in management. Architect + pre/post clinical gates all approve; a11y + mobile sign-offs applied; Gate 6 client-side PASS (caveat verified on Cluster 25% partial, Migraine 100% no caveat). REMAINING: Stage Two result-copy only — band words (Leading/Possible/Less likely), non-collapsible SNNOOP10 disclaimer, "considered and set aside" tray consuming `definitionallyExcluded`/`exclusionReason`, citation footer (Class E-clinical).
 - **User-visible goal:** Wire the headache clinic pathway UI: render the rank-and-flag phenotype matches, compose Pathway primitives (header, rail, cascade, summary), integrate the near-miss affordances and the "considered and set aside" explanation tray. Engine untouched in this task; all result-screen logic and copy belongs here.
 - **Non-goals:** Band-word result labels, SNNOOP10 render, indomethacin-pending affordance (those are Phase 2 follow-ups).
 - **Files likely touched:** src/pages/ClinicHeadachePathway.tsx (major rewrite or new implementation), src/components/pathways/ClinicHeadacheResult.tsx (new result-screen component), possibly new affordance components for near-miss explain + exclusion reason display.
