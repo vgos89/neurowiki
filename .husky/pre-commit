@@ -4,4 +4,5 @@ npm run check:claims
 npm run check:chains
 npm run check:routes
 npm run check:card-meta
+npm run check:trials
 npm run check:humanizer

@@ -739,6 +739,18 @@ CLAUDE.md                       # This file
 
 **Note on `src/pages/`:** despite the name, this is a Vite + React Router 7 SPA. `src/pages/` contains *page-level React components*, not Next.js pages. There is no file-based routing. If this naming causes confusion with agents that pattern-match on "pages" → Next.js, a future Class D refactor could rename to `src/routes/` or `src/views/`. Not urgent, but tracked as a `TASKS.md` item under "Future Refactors."
 
+### 21.1 Adding a trial — required surfaces (hook-enforced)
+
+A trial is not "added" when its data record exists. Adding a **full-design, question-featured** trial means touching all of these, or the page renders a stripped-down layout / is uncrawlable / is missing from its question:
+
+1. **Data record** — `src/data/trialData.ts` (`TRIAL_DATA`), mirroring the closest archetype exemplar (SAMMPRIS = archetype A superiority; WEAVE = archetype G single-arm). Populate the full field set, including `fullEligibility`, `howToReadChart`, `howToInterpret`.
+2. **Dedicated render block** — `src/pages/trials/TrialPageNew.tsx`: add an `if (trialId === '<id>' && trialMetadata) { return (…) }` block mirroring the SAMMPRIS/SOCRATES block (uses `renderPopulationSection`, `renderStudyArms`, `renderSafetySection`, `renderTrialDesign`, plus the `TeachingWell` "How to read this chart" / "How to interpret this trial" lines). **Without a block the trial falls through to the generic fallback renderer, which drops the population/inclusion-exclusion, how-to-read, how-to-interpret, safety, and trial-design sections** even though the data has them.
+3. **Catalog wiring** — `trialCatalogMeta.ts` (`LEGACY_TRIAL_CATALOG_META`) + `trialListData.ts` (`legacyTrialCategories`), then regenerate `trialListData.cardmeta.generated.ts` (`npm run generate:card-meta`).
+4. **Sitemap** — `public/sitemap.xml`: add a `<url><loc>https://www.neurowiki.ai/trials/<id></loc>…` block (mirror sammpris-trial), or the detail page never prerenders and is not crawlable.
+5. **Question wiring** — `trial-questions.ts`: add the id to the relevant question's `trialIds` (chronological) and bump `trialCount`. Clinical claims/citations per §13.
+
+**Enforcement:** `npm run check:trials` (`.husky/pre-commit`) fails the commit if any trial referenced by a question lacks a render block (#2) or a sitemap entry (#4), or if a question's `trialCount` ≠ `trialIds.length`. This is the mechanical backstop for the CASSISS/BASIS 2026-07-22 defect. It does not police per-section completeness inside a block — that stays an authoring responsibility.
+
 ---
 
 ## 22. Slash commands — reference and failure behavior

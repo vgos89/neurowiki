@@ -15,6 +15,7 @@
     "check:claims": "tsx scripts/check-claims.ts",
     "check:chains": "tsx scripts/check-trial-chains.ts",
     "check:card-meta": "tsx scripts/check-card-meta.ts",
+    "check:trials": "tsx scripts/check-trial-coverage.ts",
     "generate:card-meta": "tsx scripts/gen-trial-card-meta.ts",
     "check:humanizer": "node scripts/check-humanizer.mjs",
     "fix:em-dashes": "node scripts/fix-em-dashes.mjs --write",
