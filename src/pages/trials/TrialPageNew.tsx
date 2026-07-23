@@ -1467,6 +1467,150 @@ const TrialPageNew: React.FC = () => {
     );
   }
 
+  // ── CASSISS: Archetype A (neutral superiority — ICAS stenting vs medical) ──
+  if (trialId === 'cassiss-trial' && trialMetadata) {
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <TrialHeaderBar abbreviation="CASSISS" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="neutral" />
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with symptomatic 70–99% intracranial atherosclerotic stenosis, does adding percutaneous transluminal angioplasty and stenting to aggressive medical management reduce 1-year stroke or death compared with aggressive medical management alone? (Enrolled at least 3 weeks after the qualifying event, at experienced Chinese centers.)
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+            </div>
+            <div className="p-4">
+              <div className="mb-3 rounded-lg bg-slate-50 border border-slate-200 px-3 py-2">
+                <p className="text-xs text-slate-700 leading-relaxed">
+                  <strong>NO BENEFIT:</strong> Adding stenting to aggressive medical management did not reduce the 1-year composite of stroke or death (8.0% vs 7.2%; HR 1.10, 95% CI 0.52–2.35; P=0.82). Periprocedural 30-day stroke/death fell to 5.1% (vs 14.7% in SAMMPRIS) through the at-least-3-week timing and credentialed operators, but modern medical therapy left no gap for stenting to close. No difference persisted at 2 and 3 years.
+                </p>
+              </div>
+              {/* Complement rates: 100 - event rate. More filled = event-free = better. */}
+              <DeltaBandChart
+                treatmentPct={92.0}
+                controlPct={92.8}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Event-free at 1 Year"
+                riskRatio="1.10"
+                ciLow="0.52"
+                ciHigh="2.35"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm="none"
+              />
+            </div>
+          </div>
+          {renderStudyArms(trialMetadata)}
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '380 randomized, 358 analyzed (176 stenting, 182 medical) at 8 centers in China. Enrolled Mar 2014 to Nov 2016 with 3-year follow-up. Stenting performed at least 3 weeks after the qualifying event by credentialed operators. Open-label, outcome-assessor-blinded. Published JAMA 2022.')}
+          {trialMetadata.bedsidePearl && (
+            <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>
+              <p className="text-sm text-neuro-700 leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/sammpris-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">SAMMPRIS (initial stenting)</Link>
+              <Link to="/trials/basis-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">BASIS (balloon angioplasty)</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="CASSISS" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'SAMMPRIS', href: '/trials/sammpris-trial' }, { label: 'BASIS', href: '/trials/basis-trial' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── BASIS: Archetype A (positive superiority — submaximal balloon angioplasty) ──
+  if (trialId === 'basis-trial' && trialMetadata) {
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <TrialHeaderBar abbreviation="BASIS" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with symptomatic 70–99% intracranial atherosclerotic stenosis, does adding submaximal balloon angioplasty to aggressive medical management reduce the 12-month composite of stroke, death, territory ischemic stroke, or revascularization compared with aggressive medical management alone? (First positive endovascular ICAS trial; experienced Chinese centers.)
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+            </div>
+            <div className="p-4">
+              <div className="mb-3 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
+                <p className="text-xs text-amber-800 leading-relaxed">
+                  <strong>POSITIVE, WITH CAVEATS:</strong> First endovascular ICAS trial to beat medical therapy on its primary endpoint (4.4% vs 13.5%; HR 0.32, 95% CI 0.16–0.63; P below 0.001), but it tested submaximal BALLOON ANGIOPLASTY (not stenting), at experienced Chinese centers, and the composite includes revascularization. Procedural risk is front-loaded: 30-day stroke/death 3.2% vs 1.6%, symptomatic ICH 1.2% vs 0.4%, arterial dissection 14.5%. Not yet endorsed by AHA/ASA or ESO; awaits US or multinational replication.
+                </p>
+              </div>
+              {/* Complement rates: 100 - event rate. More filled = event-free = better. */}
+              <DeltaBandChart
+                treatmentPct={95.6}
+                controlPct={86.5}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Event-free at 12 Months"
+                riskRatio="0.32"
+                ciLow="0.16"
+                ciHigh="0.63"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm="treatment"
+              />
+            </div>
+          </div>
+          {renderStudyArms(trialMetadata)}
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '512 randomized, 501 analyzed (249 balloon angioplasty, 252 medical) at 31 centers in China. Enrolled Nov 2018 to Apr 2022 with 12-month follow-up. Submaximal balloon angioplasty with primary stenting avoided by design; arterial dissection occurred in 14.5%. Open-label with blinded endpoint. Published JAMA 2024.')}
+          {trialMetadata.bedsidePearl && (
+            <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>
+              <p className="text-sm text-neuro-700 leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/sammpris-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">SAMMPRIS (initial stenting)</Link>
+              <Link to="/trials/cassiss-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">CASSISS (stenting, no benefit)</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="BASIS" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'SAMMPRIS', href: '/trials/sammpris-trial' }, { label: 'CASSISS', href: '/trials/cassiss-trial' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
   // ── ORIGINAL: W8.2-followup Archetype A rebuild (Non-inferiority) ───────
   if (trialId === 'original-trial' && trialMetadata) {
     const categoryBadgeLabel = trialMetadata.listCategory
