@@ -366,12 +366,17 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     id: 'pfo-closure-cryptogenic',
     text: 'PFO closure for cryptogenic stroke?',
     icon: 'brain',
-    meta: 'three NEJM 2017 trials resolved a decade of ambiguity; AF excess is the trade-off',
-    trialCount: 3,
+    meta: 'From the early trials that missed their primary endpoint (CLOSURE-I, PC, RESPECT 2013) to the positive 2017 cluster and DEFENSE-PFO; AF excess is the trade-off',
+    trialCount: 7,
     trialIds: [
-      'close-trial',    // CLOSE 2017 — required atrial septal aneurysm or large shunt; NNT 20 over 5y
-      'respect-trial',  // RESPECT long-term 2017 — broader PFO inclusion; HR 0.55, NNT 42
-      'reduce-trial',   // REDUCE 2017 — clean antiplatelet comparator; HR 0.23, NNT 28; largest AF signal
+      // Chronological arc: three early negatives (2012 to 2013), the positive 2017 cluster, then DEFENSE-PFO.
+      'closure-i-trial',        // CLOSURE I 2012: first RCT, STARFlex device, negative on ITT
+      'pc-trial',               // PC Trial 2013: Amplatzer, negative on ITT
+      'respect-original-trial', // RESPECT (Original) 2013: missed primary at 2.1y (HR 0.49, P=0.08)
+      'close-trial',            // CLOSE 2017: required ASA or large shunt; strongest effect (HR 0.03, NNT 20/5y)
+      'reduce-trial',           // REDUCE 2017: clean antiplatelet comparator; HR 0.23, NNT 28; largest AF signal
+      'respect-trial',          // RESPECT (long-term) 2017: 5.9y follow-up converted the 2013 cohort (HR 0.55, NNT 42)
+      'defense-pfo-trial',      // DEFENSE-PFO 2018: high-risk anatomy, stopped early for efficacy
     ],
     relatedQuestions: ['anticoagulation', 'asymptomatic-carotid'],
   },
