@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 470" role="img" aria-labelledby="vt vdd" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <title id="vt">The ventricular system (lateral schematic)</title>
+  <desc id="vdd">A side-view schematic of the cerebrospinal-fluid ventricular system: the lateral ventricle with its frontal horn, body, atrium and occipital and temporal horns, connected through the foramen of Monro to the third ventricle, then the cerebral aqueduct to the fourth ventricle. Anterior is to the left.</desc>
+
+  <rect x="1" y="1" width="638" height="468" rx="16" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="320" y="38" text-anchor="middle" fill="#0f172a" font-size="19" font-weight="700">Ventricular system (side view)</text>
+  <text x="320" y="59" text-anchor="middle" fill="#64748b" font-size="12.5">anterior to the left</text>
+
+  <!-- brain silhouette -->
+  <ellipse cx="320" cy="255" rx="285" ry="175" fill="#eef2f6" stroke="#cbd5e1" stroke-width="2"/>
+
+  <!-- lateral ventricle: frontal horn + body + atrium + occipital horn -->
+  <path d="M150 232
+           C158 206 196 196 240 197
+           L392 197
+           C424 197 440 214 442 238
+           L505 250
+           L446 262
+           C442 286 420 296 392 300
+           C360 300 300 296 250 288
+           C210 282 176 268 168 250
+           C160 244 152 240 150 232 Z"
+        fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/>
+
+  <!-- temporal horn -->
+  <path d="M300 300 C320 336 340 360 300 372 C264 382 236 366 232 338 C258 348 286 336 300 300 Z"
+        fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/>
+
+  <!-- third ventricle (central slit) -->
+  <path d="M300 252 L340 252 L332 300 L308 300 Z" fill="#2563eb" stroke="#1d4ed8" stroke-width="1.5"/>
+  <!-- foramen of Monro (connector dot) -->
+  <circle cx="312" cy="250" r="5" fill="#1e3a8a"/>
+
+  <!-- cerebral aqueduct -->
+  <path d="M330 300 L360 350" stroke="#2563eb" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+  <!-- fourth ventricle (diamond) -->
+  <path d="M362 352 L386 372 L364 396 L342 374 Z" fill="#2563eb" stroke="#1d4ed8" stroke-width="1.5"/>
+
+  <!-- labels + leaders -->
+  <g stroke="#64748b" stroke-width="1.3" fill="none">
+    <path d="M170 214 L120 175"/>
+    <path d="M320 197 L320 150"/>
+    <path d="M470 250 L520 224"/>
+    <path d="M270 366 L250 418"/>
+    <path d="M320 252 L470 300"/>
+    <path d="M312 250 L150 300"/>
+    <path d="M350 330 L470 350"/>
+    <path d="M372 386 L470 404"/>
+  </g>
+  <g fill="#0f172a" font-size="12.5">
+    <text x="116" y="172" text-anchor="end">Frontal horn</text>
+    <text x="320" y="144" text-anchor="middle">Body</text>
+    <text x="524" y="224">Atrium and occipital horn</text>
+    <text x="246" y="432" text-anchor="middle">Temporal horn</text>
+    <text x="474" y="304">Third ventricle</text>
+    <text x="146" y="304" text-anchor="end">Foramen of Monro</text>
+    <text x="474" y="354">Cerebral aqueduct</text>
+    <text x="474" y="408">Fourth ventricle</text>
+  </g>
+</svg>

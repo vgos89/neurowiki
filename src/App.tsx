@@ -81,6 +81,8 @@ const AlteredMentalStatus = lazy(() => import('./pages/guide/AlteredMentalStatus
 const HeadacheWorkup = lazy(() => import('./pages/guide/HeadacheWorkup'));
 const Vertigo = lazy(() => import('./pages/guide/Vertigo'));
 const WeaknessWorkup = lazy(() => import('./pages/guide/WeaknessWorkup'));
+const ReadTheScanHub = lazy(() => import('./pages/guide/ReadTheScanHub'));
+const ReadCtHead = lazy(() => import('./pages/guide/ReadCtHead'));
 
 const ROUTE_COMPONENTS: Record<StaticRouteKey, React.ReactNode> = {
   home: <Home />,
@@ -124,6 +126,8 @@ const ROUTE_COMPONENTS: Record<StaticRouteKey, React.ReactNode> = {
   vertigo: <Vertigo />,
   'weakness-workup': <WeaknessWorkup />,
   'post-stroke-lipid': <PostStrokeLipidManagement />,
+  'imaging-hub': <ReadTheScanHub />,
+  'imaging-ct-head': <ReadCtHead />,
   'trials-hub': <TrialsPage />,
   // Legal / compliance pages — Phase 4D
   privacy: <PrivacyPage />,
