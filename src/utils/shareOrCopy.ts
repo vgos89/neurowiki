@@ -18,6 +18,8 @@
  * @param options.title  Optional title for the share sheet (e.g. "NIHSS").
  * @returns 'shared' | 'copied' | 'cancelled'
  */
+import { copyToClipboard } from './clipboard';
+
 export type ShareOrCopyResult = 'shared' | 'copied' | 'cancelled' | 'failed';
 
 export interface ShareOrCopyOptions {
@@ -50,11 +52,14 @@ export async function shareOrCopy(
     }
   }
 
-  // Clipboard fallback.
-  try {
-    await navigator.clipboard.writeText(text);
-    return 'copied';
-  } catch {
-    return 'failed';
-  }
+  // Clipboard fallback — routed through copyToClipboard so the legacy
+  // execCommand path also covers the in-app WebViews where
+  // navigator.clipboard is absent. Without this, Send inherited exactly the
+  // bug that broke NIHSS copy (field report 2026-07-27, iPhone), which
+  // matters because the Copy failure toast tells the clinician to use Send.
+  //
+  // Gesture note: when navigator.share is unsupported we reach here with the
+  // user activation still live (nothing above has awaited), so
+  // copyToClipboard's synchronous legacy branch is still permitted by WebKit.
+  return (await copyToClipboard(text)) ? 'copied' : 'failed';
 }

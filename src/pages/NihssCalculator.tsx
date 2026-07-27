@@ -45,6 +45,7 @@ import {
   type Anticoag,
 } from '../components/shared/PatientContextPanel';
 import { formatClinicalDateTime } from '../utils/clinicalDateTime';
+import { copyToClipboard } from '../utils/clipboard';
 import type { SavedCaseData } from '../lib/cases/types';
 import {
   TimestampBubble,
@@ -627,9 +628,17 @@ const NihssCalculator: React.FC = () => {
     return blocks.join('\n\n');
   };
 
+  // The success toast is gated on the copy actually landing. Previously it
+  // fired unconditionally, so a WebKit rejection showed "Copied to clipboard"
+  // while the clipboard still held the previous patient's note (field report
+  // 2026-07-27, iPhone). On failure we point at Send, which uses the native
+  // share sheet and still works in the in-app browsers that block clipboard.
   const copyNihss = () => {
-    navigator.clipboard.writeText(buildText());
-    showToast('Copied to clipboard', 2000);
+    copyToClipboard(
+      buildText(),
+      () => showToast('Copied to clipboard', 2000),
+      () => showToast('Copy failed. Use Send instead.', 3500),
+    );
   };
 
   const handleFavToggle = (e: React.MouseEvent) => {
@@ -1002,6 +1011,12 @@ const NihssCalculator: React.FC = () => {
         onShareResult={(r) => {
           if (r === 'shared') showToast('Sent');
           else if (r === 'copied') showToast('Copied to clipboard');
+          // 'failed' previously showed nothing, so a failed Send was
+          // indistinguishable from a dead tap. That is the dead end the Copy
+          // failure toast could send a clinician into, so it gets an honest
+          // message and the one recovery that actually works: in-app browsers
+          // block both clipboard and share, and opening in Safari/Chrome does not.
+          else if (r === 'failed') showToast('Send failed. Open this page in your browser.', 4000);
         }}
         onBack={handleBack}
         onReset={handleReset}
