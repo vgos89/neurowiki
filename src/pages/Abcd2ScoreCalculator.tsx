@@ -31,7 +31,7 @@ import { useFavorites } from '../hooks/useFavorites';
 import { useCaseReload } from '../hooks/useCaseReload';
 import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
-import { copyToClipboard } from '../utils/clipboard';
+import { copyToClipboard, COPY_FAILED_USE_SEND } from '../utils/clipboard';
 import type { SeverityTokens } from '../lib/calculators/severityTokens';
 import {
   ABCD2_CITATION,
@@ -199,9 +199,11 @@ const Abcd2ScoreCalculator: React.FC = () => {
 
   const handleCopy = useCallback(() => {
     if (isComplete && result) trackResult(result.score);
-    copyToClipboard(buildEmrText(), () => {
-      showToast('Copied to clipboard');
-    });
+    copyToClipboard(
+      buildEmrText(),
+      () => showToast('Copied to clipboard'),
+      () => showToast(COPY_FAILED_USE_SEND, 4000),
+    );
   }, [buildEmrText, isComplete, result, trackResult, showToast]);
 
   // Reload from saved case (?caseId) — restores inputs + wires update-in-place.

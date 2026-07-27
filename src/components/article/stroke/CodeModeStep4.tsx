@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Droplets, Pill, FlaskConical, HeartPulse, ChevronDown, ChevronUp, Copy, Check } from 'lucide-react';
+import { Droplets, Pill, FlaskConical, HeartPulse, ChevronDown, ChevronUp, Copy, Check, AlertTriangle } from 'lucide-react';
+import { copyToClipboard, type CopyState } from '../../../utils/clipboard';
 import { ShareButton } from '../../calculators/ShareButton';
 // Treatment Orders - AHA-based categories with evidence/rationale (v2)
 // BUG-01 fixed: renamed duplicate 'hba1c' id in stroke-workup to 'hba1c_workup'
@@ -404,7 +405,7 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
     displayOrders.filter(o => o.defaultSelected).map(o => o.id)
   );
   const [expandedRationale, setExpandedRationale] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState<CopyState>('idle');
 
   // Embedded mode: surface the default-selected orders to the parent
   // on mount so step4Orders reflects current state without the
@@ -491,16 +492,13 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
     return emrNote;
   };
 
-  const handleCopyToEMR = async () => {
-    const emrNote = generateEMRNote();
-    try {
-      await navigator.clipboard.writeText(emrNote);
-      setCopied(true);
-      onCopySuccess?.();
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      if (import.meta.env.DEV) console.error('Failed to copy:', err);
-    }
+  const handleCopyToEMR = () => {
+    copyToClipboard(
+      generateEMRNote(),
+      () => { setCopied('copied'); onCopySuccess?.(); setTimeout(() => setCopied('idle'), 2000); },
+      // Previously this only logged in DEV, so a clinician saw nothing at all.
+      () => { setCopied('failed'); setTimeout(() => setCopied('idle'), 3500); },
+    );
   };
 
   // Expose note generator so parent can build a unified copy (MED-05)
@@ -619,8 +617,16 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
                 : 'bg-neuro-500 text-white hover:bg-neuro-600'
           }`}
         >
-          {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-          <span>{copied ? 'Copied!' : 'Copy to EMR'}</span>
+          {copied === 'copied' ? (
+            <Check className="w-4 h-4" />
+          ) : copied === 'failed' ? (
+            <AlertTriangle className="w-4 h-4" />
+          ) : (
+            <Copy className="w-4 h-4" />
+          )}
+          <span>
+            {copied === 'copied' ? 'Copied!' : copied === 'failed' ? 'Copy failed' : 'Copy to EMR'}
+          </span>
         </button>
         <ShareButton
           text={generateEMRNote}

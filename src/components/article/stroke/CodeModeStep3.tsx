@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Copy, Check, Printer } from 'lucide-react';
+import { Copy, Check, Printer, AlertTriangle } from 'lucide-react';
+import { copyToClipboard, type CopyState } from '../../../utils/clipboard';
 import type { Step1Data } from './CodeModeStep1';
 import type { Step2Data } from './CodeModeStep2';
 import { ShareButton } from '../../calculators/ShareButton';
@@ -59,7 +60,7 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
   extendedIvtRecommendation,
   onCopySuccess
 }) => {
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState<CopyState>('idle');
 
   const hasStep1 = step1Data && (step1Data.nihssScore != null || step1Data.systolicBP != null);
   const hasStep2 = step2Data && step2Data.ctResult;
@@ -201,15 +202,13 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
     return note;
   };
 
-  const handleCopyToEMR = async () => {
-    try {
-      await navigator.clipboard.writeText(generateEMRNote());
-      setCopied(true);
-      onCopySuccess?.();
-      setTimeout(() => setCopied(false), 2500);
-    } catch (err) {
-      if (import.meta.env.DEV) console.error('Failed to copy:', err);
-    }
+  const handleCopyToEMR = () => {
+    copyToClipboard(
+      generateEMRNote(),
+      () => { setCopied('copied'); onCopySuccess?.(); setTimeout(() => setCopied('idle'), 2500); },
+      // Previously this only logged in DEV, so a clinician saw nothing at all.
+      () => { setCopied('failed'); setTimeout(() => setCopied('idle'), 3500); },
+    );
   };
 
   const handlePrint = () => {
@@ -410,10 +409,15 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
             onClick={handleCopyToEMR}
             className="flex-1 min-h-[44px] inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-neuro-500 hover:bg-neuro-600 text-white font-semibold rounded-xl transition-colors text-sm"
           >
-            {copied ? (
+            {copied === 'copied' ? (
               <>
                 <Check className="w-4 h-4" />
                 Copied
+              </>
+            ) : copied === 'failed' ? (
+              <>
+                <AlertTriangle className="w-4 h-4" />
+                Copy failed
               </>
             ) : (
               <>

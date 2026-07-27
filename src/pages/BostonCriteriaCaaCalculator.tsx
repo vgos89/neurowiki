@@ -30,7 +30,7 @@ import { useFavorites } from '../hooks/useFavorites';
 import { useCaseReload } from '../hooks/useCaseReload';
 import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
-import { copyToClipboard } from '../utils/clipboard';
+import { copyToClipboard, COPY_FAILED_USE_SEND } from '../utils/clipboard';
 import type { SeverityTokens } from '../lib/calculators/severityTokens';
 import {
   BOSTON_CAA_CITATION,
@@ -166,9 +166,11 @@ export default function BostonCriteriaCaaCalculator() {
 
   const handleCopy = () => {
     trackResult(result.diagnosis);
-    copyToClipboard(buildEmrText(), () => {
-      showToast('Copied to clipboard');
-    });
+    copyToClipboard(
+      buildEmrText(),
+      () => showToast('Copied to clipboard'),
+      () => showToast(COPY_FAILED_USE_SEND, 4000),
+    );
   };
 
   useCaseReload({

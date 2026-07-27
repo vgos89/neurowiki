@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { X, Copy, Check, ChevronDown, Zap, Info } from 'lucide-react';
-import { copyToClipboard } from '../../../utils/clipboard';
+import { X, Copy, Check, ChevronDown, Zap, Info, AlertTriangle } from 'lucide-react';
+import { copyToClipboard, type CopyState } from '../../../utils/clipboard';
 import { ShareButton } from '../../calculators/ShareButton';
 import { useModalFocusTrap } from '../../../hooks/useModalFocusTrap';
 
@@ -130,7 +130,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
   /** HIGH-04: extended window chips — stored as absolute contraindications when active */
   const [extendedContraindications, setExtendedContraindications] = useState<Record<string, boolean>>({});
   const [notes, setNotes] = useState(initialData?.notes ?? '');
-  const [copiedToClipboard, setCopiedToClipboard] = useState(false);
+  const [copiedToClipboard, setCopiedToClipboard] = useState<CopyState>('idle');
   const [expandedChip, setExpandedChip] = useState<string | null>(null);
 
   /** BUG-05 / HIGH-04: hours since LKW — drives visibility of 3–4.5h chip section */
@@ -217,10 +217,11 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
   };
 
   const handleCopyToEMR = () => {
-    copyToClipboard(buildEmrText(), () => {
-      setCopiedToClipboard(true);
-      setTimeout(() => setCopiedToClipboard(false), 2000);
-    });
+    copyToClipboard(
+      buildEmrText(),
+      () => { setCopiedToClipboard('copied'); setTimeout(() => setCopiedToClipboard('idle'), 2000); },
+      () => { setCopiedToClipboard('failed'); setTimeout(() => setCopiedToClipboard('idle'), 3500); },
+    );
   };
 
   if (!isOpen) return null;
@@ -464,13 +465,26 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
               onClick={handleCopyToEMR}
               className="min-h-[44px] flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 border border-slate-200 hover:bg-slate-50 rounded-xl transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
             >
-              {copiedToClipboard ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-              {copiedToClipboard ? 'Copied!' : 'Copy to EMR'}
+              {copiedToClipboard === 'copied' ? (
+                <Check className="w-4 h-4" />
+              ) : copiedToClipboard === 'failed' ? (
+                <AlertTriangle className="w-4 h-4" />
+              ) : (
+                <Copy className="w-4 h-4" />
+              )}
+              {copiedToClipboard === 'copied'
+                ? 'Copied!'
+                : copiedToClipboard === 'failed'
+                ? 'Copy failed'
+                : 'Copy to EMR'}
             </button>
             <ShareButton
               text={buildEmrText}
               title="Thrombolysis Eligibility"
-              onResult={(r) => { if (r === 'shared' || r === 'copied') { setCopiedToClipboard(true); setTimeout(() => setCopiedToClipboard(false), 2000); } }}
+              onResult={(r) => {
+                if (r === 'shared' || r === 'copied') { setCopiedToClipboard('copied'); setTimeout(() => setCopiedToClipboard('idle'), 2000); }
+                else if (r === 'failed') { setCopiedToClipboard('failed'); setTimeout(() => setCopiedToClipboard('idle'), 3500); }
+              }}
               variant="pill"
               label="Send"
             />

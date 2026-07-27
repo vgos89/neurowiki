@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { X, Copy, ExternalLink, Trash2, FileText, Calendar, Activity, Shield } from 'lucide-react';
+import { copyToClipboard, COPY_FAILED_USE_BROWSER } from '../../utils/clipboard';
 import { useModalFocusTrap } from '../../hooks/useModalFocusTrap';
 import { ShareButton } from '../calculators/ShareButton';
 import type { SavedCase } from '../../lib/cases/types';
@@ -58,8 +59,11 @@ export const CaseDetailModal: React.FC<CaseDetailModalProps> = ({
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(emrText);
-      flashToast('Copied to clipboard');
+      await copyToClipboard(
+        emrText,
+        () => flashToast('Copied to clipboard'),
+        () => flashToast(COPY_FAILED_USE_BROWSER),
+      );
     } catch {
       flashToast('Copy failed');
     }

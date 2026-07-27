@@ -14,7 +14,7 @@ import { PathwayHeader } from '../components/pathways/PathwayHeader';
 import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
 import { useFavorites } from '../hooks/useFavorites';
 import { LKWTimePicker } from '../components/article/stroke/LKWTimePicker';
-import { copyToClipboard } from '../utils/clipboard';
+import { copyToClipboard, type CopyState } from '../utils/clipboard';
 import { useRecents } from '../hooks/useRecents';
 import type { SeverityTokens } from '../lib/calculators/severityTokens';
 import DiscreteFAQ from '../components/seo/DiscreteFAQ';
@@ -227,7 +227,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
   const { handleBack } = useNavigationSource();
   const { isFavorite, toggleFavorite } = useFavorites();
   const [showFavToast, setShowFavToast] = useState(false);
-  const [showCopyToast, setShowCopyToast] = useState(false);
+  const [copyState, setCopyState] = useState<CopyState>('idle');
   const [drawerExpanded, setDrawerExpanded] = useState(false);
   // Auto-expand drawer on first transition to a final verdict so clinicians
   // discover the recommendation surface. Subsequent toggles are user-driven.
@@ -591,10 +591,11 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
 
   const copySummary = () => {
     if (!result) return;
-    copyToClipboard(buildEmrText(), () => {
-      setShowCopyToast(true);
-      setTimeout(() => setShowCopyToast(false), 2000);
-    });
+    copyToClipboard(
+      buildEmrText(),
+      () => { setCopyState('copied'); setTimeout(() => setCopyState('idle'), 2000); },
+      () => { setCopyState('failed'); setTimeout(() => setCopyState('idle'), 3500); },
+    );
   };
 
   const handleFavToggle = () => {
@@ -683,12 +684,13 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
         onFavToggle={handleFavToggle}
         onReset={handleReset}
         onCopy={copySummary}
-        copyConfirm={showCopyToast}
+        copyConfirm={copyState}
         hideHeader={hideHeader}
         shareText={buildEmrText}
         shareTitle="Extended IVT Pathway"
         onShareResult={(r) => {
-          if (r === 'shared' || r === 'copied') { setShowCopyToast(true); setTimeout(() => setShowCopyToast(false), 2000); }
+          if (r === 'shared' || r === 'copied') { setCopyState('copied'); setTimeout(() => setCopyState('idle'), 2000); }
+          else if (r === 'failed') { setCopyState('failed'); setTimeout(() => setCopyState('idle'), 3500); }
         }}
       />
 

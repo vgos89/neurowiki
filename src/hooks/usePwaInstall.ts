@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { copyToClipboard } from '../utils/clipboard';
 
 /**
  * usePwaInstall — manages the "Add NeuroWiki app to your phone" install flow
@@ -137,12 +138,9 @@ export function usePwaInstall() {
   /** Copy the current URL to the clipboard. Returns false if blocked. */
   const copyAppLink = useCallback(async (): Promise<boolean> => {
     if (typeof window === 'undefined') return false;
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      return true;
-    } catch {
-      return false;
-    }
+    // Routed through copyToClipboard so the legacy fallback covers the in-app
+    // browsers where this link-copy is most likely to be used.
+    return copyToClipboard(window.location.href);
   }, []);
 
   const status: InstallStatus = isInstalled
