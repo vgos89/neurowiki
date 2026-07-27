@@ -233,7 +233,7 @@ const MrsCalculator: React.FC = () => {
   // ── Derived ────────────────────────────────────────────────────────────────
   const isComplete = grade !== null;
 
-  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, showToast } =
+  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, toastTone, showToast } =
     useDrawerState({ mode: 'partial-complete', selectedCount: isComplete ? 1 : 0, totalRequired: 1 });
 
   const isFav = isFavorite('mrs');
@@ -294,7 +294,7 @@ const MrsCalculator: React.FC = () => {
     copyToClipboard(
       buildEmrText(),
       () => showToast('Copied to clipboard'),
-      () => showToast(COPY_FAILED_USE_SEND, 4000),
+      () => showToast(COPY_FAILED_USE_SEND, 4000, 'assertive'),
     );
   }, [buildEmrText, grade, trackResult, showToast]);
 
@@ -801,7 +801,7 @@ const MrsCalculator: React.FC = () => {
         <DrawerContent />
       </CalculatorDrawer>
 
-      <CalculatorToast message={toast} />
+      <CalculatorToast message={toast} tone={toastTone} />
     </>
   );
 };

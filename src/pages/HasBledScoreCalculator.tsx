@@ -121,7 +121,7 @@ export default function HasBledScoreCalculator() {
   const result = calculateHASBLEDScore(inputs);
 
   // ── Drawer derived values ──────────────────────────────────────────────────
-  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, showToast } =
+  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, toastTone, showToast } =
     useDrawerState({ mode: 'binary', hasInteracted });
   const tokens = HASBLED_SEVERITY_TOKENS[result.risk];
 
@@ -157,7 +157,7 @@ export default function HasBledScoreCalculator() {
     copyToClipboard(
       buildEmrText(),
       () => showToast('Copied to clipboard'),
-      () => showToast(COPY_FAILED_USE_SEND, 4000),
+      () => showToast(COPY_FAILED_USE_SEND, 4000, 'assertive'),
     );
   };
 
@@ -420,7 +420,7 @@ export default function HasBledScoreCalculator() {
       </CalculatorDrawer>
 
       {/* ── Toast notification — z-[60] above drawer ─────────────────────── */}
-      <CalculatorToast message={toast} />
+      <CalculatorToast message={toast} tone={toastTone} />
     </>
   );
 }

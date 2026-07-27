@@ -130,7 +130,7 @@ const Abcd2ScoreCalculator: React.FC = () => {
     ? calculateABCD2(inputs as ABCD2Inputs)
     : null;
 
-  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, showToast } =
+  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, toastTone, showToast } =
     useDrawerState({ mode: 'partial-complete', selectedCount, totalRequired: 5 });
 
   const isFav = isFavorite('abcd2');
@@ -202,7 +202,7 @@ const Abcd2ScoreCalculator: React.FC = () => {
     copyToClipboard(
       buildEmrText(),
       () => showToast('Copied to clipboard'),
-      () => showToast(COPY_FAILED_USE_SEND, 4000),
+      () => showToast(COPY_FAILED_USE_SEND, 4000, 'assertive'),
     );
   }, [buildEmrText, isComplete, result, trackResult, showToast]);
 
@@ -629,7 +629,7 @@ const Abcd2ScoreCalculator: React.FC = () => {
       </CalculatorDrawer>
 
       {/* ── Toast notification — z-[60] above drawer ─────────────────────── */}
-      <CalculatorToast message={toast} />
+      <CalculatorToast message={toast} tone={toastTone} />
     </>
   );
 };

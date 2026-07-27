@@ -131,7 +131,7 @@ export default function BostonCriteriaCaaCalculator() {
   const result = assessBostonCriteria(inputs);
 
   // ── Drawer derived values ──────────────────────────────────────────────────
-  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, showToast } =
+  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, toastTone, showToast } =
     useDrawerState({ mode: 'binary', hasInteracted });
   const tokens = BOSTON_SEVERITY_TOKENS[result.anticoagulationRisk as BostonRisk];
 
@@ -169,7 +169,7 @@ export default function BostonCriteriaCaaCalculator() {
     copyToClipboard(
       buildEmrText(),
       () => showToast('Copied to clipboard'),
-      () => showToast(COPY_FAILED_USE_SEND, 4000),
+      () => showToast(COPY_FAILED_USE_SEND, 4000, 'assertive'),
     );
   };
 
@@ -604,7 +604,7 @@ export default function BostonCriteriaCaaCalculator() {
       </CalculatorDrawer>
 
       {/* ── Toast notification — z-[60] above drawer ─────────────────────── */}
-      <CalculatorToast message={toast} />
+      <CalculatorToast message={toast} tone={toastTone} />
     </>
   );
 }

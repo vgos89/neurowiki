@@ -19,6 +19,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { copyToClipboard, type CopyState } from '../../utils/clipboard';
+import { LiveAnnouncer } from '../a11y/LiveAnnouncer';
 
 export interface CocktailPill {
   pillId: string;   // e.g., 'antiemetic', 'nsaid', 'steroid', 'antihistamine'
@@ -49,12 +50,21 @@ export const PathwayCocktailSummary: React.FC<PathwayCocktailSummaryProps> = ({
     );
   }, [drugs]);
 
+  const announcement =
+    copyState === 'copied' ? 'Order set copied to clipboard'
+    : copyState === 'failed' ? 'Copy failed'
+    : null;
+
   const eyebrow = drugs.length > 0
     ? `COCKTAIL · ${drugs.length} DRUG${drugs.length === 1 ? '' : 'S'}`
     : 'COCKTAIL';
 
   return (
     <div className="flex flex-col gap-2 px-4 py-3 bg-white border border-slate-200 rounded-xl">
+      <LiveAnnouncer
+        message={announcement}
+        tone={copyState === 'failed' ? 'assertive' : 'polite'}
+      />
       {/* Eyebrow */}
       <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
         {eyebrow}
@@ -99,7 +109,7 @@ export const PathwayCocktailSummary: React.FC<PathwayCocktailSummaryProps> = ({
               {copyState === 'copied' ? (
                 <span className="text-emerald-300 font-semibold">Copied</span>
               ) : copyState === 'failed' ? (
-                <span role="status" aria-live="polite" className="font-semibold">Copy failed</span>
+                <span aria-hidden="true" className="font-semibold">Copy failed</span>
               ) : (
                 'Copy all'
               )}

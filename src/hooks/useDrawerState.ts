@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import type { AnnounceTone } from '../components/a11y/LiveAnnouncer';
 
 /**
  * Drawer state hook for calculator pages. Extracted in L5.6 Phase 2.
@@ -32,8 +33,14 @@ export interface UseDrawerStateReturn {
   reset: () => void;
   /** Current toast message, or null. */
   toast: string | null;
-  /** Show a toast message. Auto-dismisses after durationMs (default 2000). */
-  showToast: (message: string, durationMs?: number) => void;
+  /** Screen-reader urgency for the current toast. Pass to CalculatorToast. */
+  toastTone: AnnounceTone;
+  /**
+   * Show a toast message. Auto-dismisses after durationMs (default 2000).
+   * Pass tone 'assertive' for failures the clinician has to act on, so the
+   * screen reader interrupts rather than waiting for a pause.
+   */
+  showToast: (message: string, durationMs?: number, tone?: AnnounceTone) => void;
   /** Dismiss the current toast immediately. */
   dismissToast: () => void;
 }
@@ -41,6 +48,7 @@ export interface UseDrawerStateReturn {
 export function useDrawerState(input: DrawerStateInput): UseDrawerStateReturn {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [toastTone, setToastTone] = useState<AnnounceTone>('polite');
 
   let state: DrawerStateValue;
   if (input.mode === 'binary') {
@@ -55,12 +63,16 @@ export function useDrawerState(input: DrawerStateInput): UseDrawerStateReturn {
     setDrawerOpen(false);
   }, []);
 
-  const showToast = useCallback((message: string, durationMs = 2000) => {
-    setToast(message);
-    setTimeout(() => setToast((current) => (current === message ? null : current)), durationMs);
-  }, []);
+  const showToast = useCallback(
+    (message: string, durationMs = 2000, tone: AnnounceTone = 'polite') => {
+      setToast(message);
+      setToastTone(tone);
+      setTimeout(() => setToast((current) => (current === message ? null : current)), durationMs);
+    },
+    [],
+  );
 
   const dismissToast = useCallback(() => setToast(null), []);
 
-  return { state, drawerOpen, setDrawerOpen, reset, toast, showToast, dismissToast };
+  return { state, drawerOpen, setDrawerOpen, reset, toast, toastTone, showToast, dismissToast };
 }

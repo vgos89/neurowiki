@@ -19,6 +19,7 @@ import type { SeverityTokens } from '../lib/calculators/severityTokens';
 import { PathwayCascadeNotice } from '../components/pathways/PathwayCascadeNotice';
 import DiscreteFAQ from '../components/seo/DiscreteFAQ';
 import { getFAQsForPath } from '../seo/schema';
+import { LiveAnnouncer } from '../components/a11y/LiveAnnouncer';
 import { copyToClipboard, COPY_FAILED_USE_SEND } from '../utils/clipboard';
 
 /**
@@ -1785,10 +1786,13 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
           {isFav ? 'Saved to Favorites' : 'Removed from Favorites'}
         </div>
       )}
+      <LiveAnnouncer
+        message={copyToast?.text ?? null}
+        tone={copyToast && !copyToast.ok ? 'assertive' : 'polite'}
+      />
       {copyToast && (
         <div
-          role="status"
-          aria-live="polite"
+          aria-hidden="true"
           className={`fixed top-24 left-1/2 -translate-x-1/2 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60] flex items-center space-x-2 ${
             copyToast.ok ? 'bg-slate-800/90' : 'bg-red-600/95'
           }`}

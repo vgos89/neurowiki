@@ -1,6 +1,7 @@
 import React, { useState, useRef, useMemo } from 'react';
 import { Info, Copy, RefreshCw, Check, X, AlertTriangle } from 'lucide-react';
 import { copyToClipboard, type CopyState } from '../../../utils/clipboard';
+import { LiveAnnouncer } from '../../a11y/LiveAnnouncer';
 import { NIHSS_ITEMS, calculateTotal, getItemWarning, calculateLvoProbability } from '../../../utils/nihssShortcuts';
 import NihssItemCard from '../../NihssItemCard';
 
@@ -204,10 +205,14 @@ export const NihssCalculatorEmbed: React.FC<NihssCalculatorEmbedProps> = ({
           {/* Icon alone cannot explain a blocked clipboard, so the failure
               state also gets a text line the screen reader will announce. */}
           {copied === 'failed' && (
-            <span role="status" aria-live="polite" className="text-[11px] font-medium text-red-600">
+            <span aria-hidden="true" className="text-[11px] font-medium text-red-600">
               Copy failed
             </span>
           )}
+          <LiveAnnouncer
+            message={copied === 'copied' ? 'Copied to clipboard' : copied === 'failed' ? 'Copy failed' : null}
+            tone={copied === 'failed' ? 'assertive' : 'polite'}
+          />
 
           {/* Reset */}
           <button

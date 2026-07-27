@@ -358,7 +358,7 @@ const AscvdRiskCalculator: React.FC = () => {
     (state.bpTreated ? 1 : 0) +
     (state.diabetes ? 1 : 0) +
     (state.smoker ? 1 : 0);
-  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, showToast } =
+  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, toastTone, showToast } =
     useDrawerState({ mode: 'partial-complete', selectedCount, totalRequired });
 
   const handleReset = () => {
@@ -379,7 +379,7 @@ const AscvdRiskCalculator: React.FC = () => {
       summary,
       () => showToast('Copied to clipboard'),
       // This calculator has no Send button, so the browser is the escape hatch.
-      () => showToast(COPY_FAILED_USE_BROWSER, 4000),
+      () => showToast(COPY_FAILED_USE_BROWSER, 4000, 'assertive'),
     );
   };
 
@@ -607,7 +607,7 @@ const AscvdRiskCalculator: React.FC = () => {
       </CalculatorDrawer>
 
       {/* Toast — z-[60] above drawer. Matches the other calculators. */}
-      <CalculatorToast message={toast} />
+      <CalculatorToast message={toast} tone={toastTone} />
     </div>
   );
 };

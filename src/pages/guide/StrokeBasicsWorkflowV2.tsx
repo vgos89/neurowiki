@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { copyToClipboard, COPY_FAILED_USE_BROWSER } from '../../utils/clipboard';
+import { LiveAnnouncer, type AnnounceTone } from '../../components/a11y/LiveAnnouncer';
 import { Link } from 'react-router-dom';
 import DiscreteFAQ from '../../components/seo/DiscreteFAQ';
 import { getFAQsForPath } from '../../seo/schema';
@@ -244,8 +245,10 @@ const MainContent: React.FC = () => {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   /** Show a toast for `ms`, then clear it. Extracted 2026-07-27 so the copy
    *  handlers on this page can report failure as easily as success. */
-  const flashToast = useCallback((message: string, ms = 2500) => {
+  const [toastTone, setToastTone] = useState<AnnounceTone>('polite');
+  const flashToast = useCallback((message: string, ms = 2500, tone: AnnounceTone = 'polite') => {
     setToastMessage(message);
+    setToastTone(tone);
     setTimeout(() => setToastMessage(null), ms);
   }, []);
   const [tpaReversalModalOpen, setTpaReversalModalOpen] = useState(false);
@@ -840,7 +843,7 @@ const MainContent: React.FC = () => {
                       copyToClipboard(
                         `THROMBECTOMY ASSESSMENT:\n${thrombectomyRecommendation}\n\nAssessed at: ${new Date().toLocaleString()}`,
                         () => flashToast('Thrombectomy recommendation copied to clipboard', 2500),
-                        () => flashToast(COPY_FAILED_USE_BROWSER, 4000),
+                        () => flashToast(COPY_FAILED_USE_BROWSER, 4000, 'assertive'),
                       );
                     }}
                     className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-neuro-50 text-neuro-700 text-sm font-medium rounded-lg transition-colors border border-neuro-200 shadow-sm"
@@ -883,7 +886,7 @@ const MainContent: React.FC = () => {
                       copyToClipboard(
                         `EXTENDED IVT ASSESSMENT:\n${extendedIvtRecommendation}\n\nAssessed at: ${new Date().toLocaleString()}`,
                         () => flashToast('Extended IVT recommendation copied to clipboard', 2500),
-                        () => flashToast(COPY_FAILED_USE_BROWSER, 4000),
+                        () => flashToast(COPY_FAILED_USE_BROWSER, 4000, 'assertive'),
                       );
                     }}
                     className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-amber-50 text-amber-700 text-sm font-medium rounded-lg transition-colors border border-amber-200 shadow-sm"
@@ -1003,19 +1006,19 @@ const MainContent: React.FC = () => {
 
         {tpaReversalModalOpen && (
           <Suspense fallback={null}>
-            <TpaReversalProtocolModal isOpen={tpaReversalModalOpen} onClose={() => setTpaReversalModalOpen(false)} onCopySuccess={() => flashToast('Copied to EMR')} onCopyFailure={() => flashToast(COPY_FAILED_USE_BROWSER, 4000)} />
+            <TpaReversalProtocolModal isOpen={tpaReversalModalOpen} onClose={() => setTpaReversalModalOpen(false)} onCopySuccess={() => flashToast('Copied to EMR')} onCopyFailure={() => flashToast(COPY_FAILED_USE_BROWSER, 4000, 'assertive')} />
           </Suspense>
         )}
 
         {orolingualEdemaModalOpen && (
           <Suspense fallback={null}>
-            <OrolingualEdemaProtocolModal isOpen={orolingualEdemaModalOpen} onClose={() => setOrolingualEdemaModalOpen(false)} onCopySuccess={() => flashToast('Copied to EMR')} onCopyFailure={() => flashToast(COPY_FAILED_USE_BROWSER, 4000)} />
+            <OrolingualEdemaProtocolModal isOpen={orolingualEdemaModalOpen} onClose={() => setOrolingualEdemaModalOpen(false)} onCopySuccess={() => flashToast('Copied to EMR')} onCopyFailure={() => flashToast(COPY_FAILED_USE_BROWSER, 4000, 'assertive')} />
           </Suspense>
         )}
 
         {hemorrhageProtocolModalOpen && (
           <Suspense fallback={null}>
-            <HemorrhageProtocolModal isOpen={hemorrhageProtocolModalOpen} onClose={() => setHemorrhageProtocolModalOpen(false)} onCopySuccess={() => flashToast('Copied to EMR')} onCopyFailure={() => flashToast(COPY_FAILED_USE_BROWSER, 4000)} />
+            <HemorrhageProtocolModal isOpen={hemorrhageProtocolModalOpen} onClose={() => setHemorrhageProtocolModalOpen(false)} onCopySuccess={() => flashToast('Copied to EMR')} onCopyFailure={() => flashToast(COPY_FAILED_USE_BROWSER, 4000, 'assertive')} />
           </Suspense>
         )}
 
@@ -1050,8 +1053,9 @@ const MainContent: React.FC = () => {
 
         <div className="h-24 pb-[env(safe-area-inset-bottom,0px)]" />
 
+        <LiveAnnouncer message={toastMessage} tone={toastTone} />
         {toastMessage && (
-          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] px-4 py-3 rounded-lg bg-slate-800 text-white text-sm font-medium shadow-lg animate-in fade-in duration-200" role="status" aria-live="polite">
+          <div aria-hidden="true" className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] px-4 py-3 rounded-lg bg-slate-800 text-white text-sm font-medium shadow-lg animate-in fade-in duration-200 pointer-events-none">
             {toastMessage}
           </div>
         )}

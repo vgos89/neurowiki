@@ -118,7 +118,7 @@ const IchScoreCalculator: React.FC = () => {
   const isComplete = selectedCount === 5;
   const result: ICHCalculatorResult | null = isComplete ? calculateICHScore(inputs) : null;
 
-  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, showToast } =
+  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, toastTone, showToast } =
     useDrawerState({ mode: 'partial-complete', selectedCount, totalRequired: 5 });
 
   const isFav = isFavorite('ich');
@@ -210,7 +210,7 @@ const IchScoreCalculator: React.FC = () => {
     copyToClipboard(
       buildEmrText(),
       () => showToast('Copied to clipboard'),
-      () => showToast(COPY_FAILED_USE_SEND, 4000),
+      () => showToast(COPY_FAILED_USE_SEND, 4000, 'assertive'),
     );
   }, [buildEmrText, isComplete, result, trackResult, showToast]);
 
@@ -660,7 +660,7 @@ const IchScoreCalculator: React.FC = () => {
       </CalculatorDrawer>
 
       {/* ── Toast notification — z-[60] above drawer ─────────────────────── */}
-      <CalculatorToast message={toast} />
+      <CalculatorToast message={toast} tone={toastTone} />
     </>
   );
 };

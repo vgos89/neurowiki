@@ -135,7 +135,7 @@ const HeidelbergBleedingCalculator: React.FC = () => {
   /** Drawer state machine — simplified for single-required-slot calculator.
    *  A = no class selected · C = class selected. No State B (partial) because
    *  there is only one required slot; SICH never blocks completion. */
-  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, showToast } =
+  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, toastTone, showToast } =
     useDrawerState({ mode: 'binary', hasInteracted: isComplete });
 
   const isFav = isFavorite('heidelberg-bleeding');
@@ -201,7 +201,7 @@ const HeidelbergBleedingCalculator: React.FC = () => {
     copyToClipboard(
       buildEmrText(),
       () => showToast('Copied to clipboard'),
-      () => showToast(COPY_FAILED_USE_SEND, 4000),
+      () => showToast(COPY_FAILED_USE_SEND, 4000, 'assertive'),
     );
   }, [buildEmrText, isComplete, result, trackResult, showToast]);
 
@@ -527,7 +527,7 @@ const HeidelbergBleedingCalculator: React.FC = () => {
       </CalculatorDrawer>
 
       {/* ── Toast notification — z-[60] above drawer ─────────────────────── */}
-      <CalculatorToast message={toast} />
+      <CalculatorToast message={toast} tone={toastTone} />
     </>
   );
 };

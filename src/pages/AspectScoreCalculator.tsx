@@ -168,7 +168,7 @@ const AspectScoreCalculator: React.FC = () => {
   const { recordView } = useRecents();
   const { trackResult, resetTracking } = useCalculatorAnalytics('aspects_score');
 
-  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, showToast } =
+  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, toastTone, showToast } =
     useDrawerState({ mode: 'binary', hasInteracted });
 
   useEffect(() => {
@@ -225,7 +225,7 @@ const AspectScoreCalculator: React.FC = () => {
     copyToClipboard(
       buildEmrText(),
       () => showToast('Copied to clipboard'),
-      () => showToast(COPY_FAILED_USE_SEND, 4000),
+      () => showToast(COPY_FAILED_USE_SEND, 4000, 'assertive'),
     );
   };
 
@@ -541,7 +541,7 @@ const AspectScoreCalculator: React.FC = () => {
       </CalculatorDrawer>
 
       {/* ── Toast notification - z-[60] above drawer ─────────────────────── */}
-      <CalculatorToast message={toast} />
+      <CalculatorToast message={toast} tone={toastTone} />
     </>
   );
 };

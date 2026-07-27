@@ -357,7 +357,7 @@ const NihssCalculator: React.FC = () => {
   const disablingVerdict: 'yes' | 'no' | 'unanswered' =
     hasAnyDisabling ? 'yes' : confirmedNoDisabling ? 'no' : 'unanswered';
 
-  const { state: drawerState, drawerOpen, setDrawerOpen, reset, toast, showToast } = useDrawerState({
+  const { state: drawerState, drawerOpen, setDrawerOpen, reset, toast, toastTone, showToast } = useDrawerState({
     mode: 'partial-complete',
     selectedCount: answeredCount,
     totalRequired: totalItems,
@@ -637,7 +637,7 @@ const NihssCalculator: React.FC = () => {
     copyToClipboard(
       buildText(),
       () => showToast('Copied to clipboard', 2000),
-      () => showToast('Copy failed. Use Send instead.', 3500),
+      () => showToast('Copy failed. Use Send instead.', 3500, 'assertive'),
     );
   };
 
@@ -1016,7 +1016,7 @@ const NihssCalculator: React.FC = () => {
           // failure toast could send a clinician into, so it gets an honest
           // message and the one recovery that actually works: in-app browsers
           // block both clipboard and share, and opening in Safari/Chrome does not.
-          else if (r === 'failed') showToast('Send failed. Open this page in your browser.', 4000);
+          else if (r === 'failed') showToast('Send failed. Open this page in your browser.', 4000, 'assertive');
         }}
         onBack={handleBack}
         onReset={handleReset}
@@ -1173,7 +1173,7 @@ const NihssCalculator: React.FC = () => {
       />
 
       {/* ── Toast ─────────────────────────────────────────────────────────── */}
-      <CalculatorToast message={toast} />
+      <CalculatorToast message={toast} tone={toastTone} />
     </>
   );
 };
