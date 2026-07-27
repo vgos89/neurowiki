@@ -21,6 +21,8 @@ import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import type { SeverityTokens } from '../lib/calculators/severityTokens';
+import { CalculatorToast } from '../components/calculators/CalculatorToast';
+import { copyToClipboard, COPY_FAILED_USE_BROWSER } from '../utils/clipboard';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -304,7 +306,8 @@ const AscvdRiskCalculator: React.FC = () => {
   const { handleBack } = useNavigationSource();
   const { isFavorite, toggleFavorite } = useFavorites();
   const isFav = isFavorite('ascvd-risk');
-  const [copyConfirm, setCopyConfirm] = useState(false);
+  // `copyConfirm` used to live here but was never rendered, so this calculator
+  // gave no copy feedback at all. Replaced by the shared toast (2026-07-27).
   const { trackResult, resetTracking } = useCalculatorAnalytics('ascvd-risk');
 
   const [state, setState] = useState<InputState>({
@@ -355,7 +358,7 @@ const AscvdRiskCalculator: React.FC = () => {
     (state.bpTreated ? 1 : 0) +
     (state.diabetes ? 1 : 0) +
     (state.smoker ? 1 : 0);
-  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer } =
+  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, showToast } =
     useDrawerState({ mode: 'partial-complete', selectedCount, totalRequired });
 
   const handleReset = () => {
@@ -372,9 +375,12 @@ const AscvdRiskCalculator: React.FC = () => {
   const handleCopy = () => {
     if (result === null || !tierMeta) return;
     const summary = `ASCVD 10-year risk: ${result.toFixed(1)}% (${tierMeta.label}) | NeuroWiki`;
-    navigator.clipboard?.writeText(summary).catch(() => {});
-    setCopyConfirm(true);
-    setTimeout(() => setCopyConfirm(false), 2000);
+    copyToClipboard(
+      summary,
+      () => showToast('Copied to clipboard'),
+      // This calculator has no Send button, so the browser is the escape hatch.
+      () => showToast(COPY_FAILED_USE_BROWSER, 4000),
+    );
   };
 
   const setField = <K extends keyof InputState>(k: K, v: InputState[K]) =>
@@ -599,6 +605,9 @@ const AscvdRiskCalculator: React.FC = () => {
           </div>
         )}
       </CalculatorDrawer>
+
+      {/* Toast — z-[60] above drawer. Matches the other calculators. */}
+      <CalculatorToast message={toast} />
     </div>
   );
 };

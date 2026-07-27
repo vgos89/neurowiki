@@ -14,6 +14,7 @@ import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
 import { PathwayCocktailSummary, type CocktailPill } from '../components/pathways/PathwayCocktailSummary';
 import { Chevron } from '../components/calculators/Chevron';
 import type { SeverityTokens } from '../lib/calculators/severityTokens';
+import { copyToClipboard, COPY_FAILED_USE_SEND } from '../utils/clipboard';
 
 // --- Types ---
 interface RedFlags {
@@ -296,7 +297,7 @@ const MigrainePathway: React.FC = () => {
       acuteMedOveruse: false
   });
 
-  const [copyToast, setCopyToast] = useState(false);
+  const [copyToast, setCopyToast] = useState<{ text: string; ok: boolean } | null>(null);
   const [drawerExpanded, setDrawerExpanded] = useState(false);
 
   // ─── Cascade notice state ─────────────────────────────────────────────────
@@ -510,9 +511,15 @@ const MigrainePathway: React.FC = () => {
   };
 
   const copySummary = () => {
-    navigator.clipboard.writeText(generateSummary());
-    setCopyToast(true);
-    setTimeout(() => setCopyToast(false), 2000);
+    const flash = (text: string, ok: boolean, ms: number) => {
+      setCopyToast({ text, ok });
+      setTimeout(() => setCopyToast(null), ms);
+    };
+    copyToClipboard(
+      generateSummary(),
+      () => flash('Plan copied to clipboard', true, 2000),
+      () => flash(COPY_FAILED_USE_SEND, false, 4000),
+    );
   };
 
   // SafetyToggle red selected-state retained per clinical-pattern-a-fix-tier-5
@@ -630,7 +637,12 @@ const MigrainePathway: React.FC = () => {
         shareText={generateSummary}
         shareTitle="Migraine Pathway"
         onShareResult={(r) => {
-          if (r === 'shared' || r === 'copied') { setCopyToast(true); setTimeout(() => setCopyToast(false), 2000); }
+          const flash = (text: string, ok: boolean, ms: number) => {
+            setCopyToast({ text, ok });
+            setTimeout(() => setCopyToast(null), ms);
+          };
+          if (r === 'shared' || r === 'copied') flash('Plan copied to clipboard', true, 2000);
+          else if (r === 'failed') flash('Send failed. Open this page in your browser.', false, 4000);
         }}
       />
 
@@ -1586,8 +1598,15 @@ const MigrainePathway: React.FC = () => {
         </div>
       )}
       {copyToast && (
-        <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60]">
-          Plan copied to clipboard
+        <div
+          role="status"
+          aria-live="polite"
+          className={`fixed top-24 left-1/2 -translate-x-1/2 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60] flex items-center space-x-2 ${
+            copyToast.ok ? 'bg-slate-800/90' : 'bg-red-600/95'
+          }`}
+        >
+          {copyToast.ok ? <Check size={12} /> : <AlertTriangle size={12} />}
+          <span>{copyToast.text}</span>
         </div>
       )}
     </div>

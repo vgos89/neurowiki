@@ -23,6 +23,7 @@ interface HemorrhageProtocolModalProps {
   isOpen: boolean;
   onClose: () => void;
   onCopySuccess?: () => void;
+  onCopyFailure?: () => void;
 }
 
 export function HemorrhageProtocolModal(props: HemorrhageProtocolModalProps) {

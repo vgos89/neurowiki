@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
+import { copyToClipboard, COPY_FAILED_USE_BROWSER } from '../../utils/clipboard';
 import { Link } from 'react-router-dom';
 import DiscreteFAQ from '../../components/seo/DiscreteFAQ';
 import { getFAQsForPath } from '../../seo/schema';
@@ -241,6 +242,12 @@ const MainContent: React.FC = () => {
   const [extendedIvtRecommendation, setExtendedIvtRecommendation] = useState<string | null>(null);
   const [thrombectomyRecommendation, setThrombectomyRecommendation] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  /** Show a toast for `ms`, then clear it. Extracted 2026-07-27 so the copy
+   *  handlers on this page can report failure as easily as success. */
+  const flashToast = useCallback((message: string, ms = 2500) => {
+    setToastMessage(message);
+    setTimeout(() => setToastMessage(null), ms);
+  }, []);
   const [tpaReversalModalOpen, setTpaReversalModalOpen] = useState(false);
   const [orolingualEdemaModalOpen, setOrolingualEdemaModalOpen] = useState(false);
   const [hemorrhageProtocolModalOpen, setHemorrhageProtocolModalOpen] = useState(false);
@@ -830,10 +837,11 @@ const MainContent: React.FC = () => {
                   </button>
                   <button
                     onClick={() => {
-                      navigator.clipboard.writeText(`THROMBECTOMY ASSESSMENT:\n${thrombectomyRecommendation}\n\nAssessed at: ${new Date().toLocaleString()}`).then(() => {
-                        setToastMessage('Thrombectomy recommendation copied to clipboard');
-                        setTimeout(() => setToastMessage(null), 2500);
-                      });
+                      copyToClipboard(
+                        `THROMBECTOMY ASSESSMENT:\n${thrombectomyRecommendation}\n\nAssessed at: ${new Date().toLocaleString()}`,
+                        () => flashToast('Thrombectomy recommendation copied to clipboard', 2500),
+                        () => flashToast(COPY_FAILED_USE_BROWSER, 4000),
+                      );
                     }}
                     className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-neuro-50 text-neuro-700 text-sm font-medium rounded-lg transition-colors border border-neuro-200 shadow-sm"
                   >
@@ -872,10 +880,11 @@ const MainContent: React.FC = () => {
                   </button>
                   <button
                     onClick={() => {
-                      navigator.clipboard.writeText(`EXTENDED IVT ASSESSMENT:\n${extendedIvtRecommendation}\n\nAssessed at: ${new Date().toLocaleString()}`).then(() => {
-                        setToastMessage('Extended IVT recommendation copied to clipboard');
-                        setTimeout(() => setToastMessage(null), 2500);
-                      });
+                      copyToClipboard(
+                        `EXTENDED IVT ASSESSMENT:\n${extendedIvtRecommendation}\n\nAssessed at: ${new Date().toLocaleString()}`,
+                        () => flashToast('Extended IVT recommendation copied to clipboard', 2500),
+                        () => flashToast(COPY_FAILED_USE_BROWSER, 4000),
+                      );
                     }}
                     className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-amber-50 text-amber-700 text-sm font-medium rounded-lg transition-colors border border-amber-200 shadow-sm"
                   >
@@ -994,19 +1003,19 @@ const MainContent: React.FC = () => {
 
         {tpaReversalModalOpen && (
           <Suspense fallback={null}>
-            <TpaReversalProtocolModal isOpen={tpaReversalModalOpen} onClose={() => setTpaReversalModalOpen(false)} onCopySuccess={() => { setToastMessage('Copied to EMR'); setTimeout(() => setToastMessage(null), 2500); }} />
+            <TpaReversalProtocolModal isOpen={tpaReversalModalOpen} onClose={() => setTpaReversalModalOpen(false)} onCopySuccess={() => flashToast('Copied to EMR')} onCopyFailure={() => flashToast(COPY_FAILED_USE_BROWSER, 4000)} />
           </Suspense>
         )}
 
         {orolingualEdemaModalOpen && (
           <Suspense fallback={null}>
-            <OrolingualEdemaProtocolModal isOpen={orolingualEdemaModalOpen} onClose={() => setOrolingualEdemaModalOpen(false)} onCopySuccess={() => { setToastMessage('Copied to EMR'); setTimeout(() => setToastMessage(null), 2500); }} />
+            <OrolingualEdemaProtocolModal isOpen={orolingualEdemaModalOpen} onClose={() => setOrolingualEdemaModalOpen(false)} onCopySuccess={() => flashToast('Copied to EMR')} onCopyFailure={() => flashToast(COPY_FAILED_USE_BROWSER, 4000)} />
           </Suspense>
         )}
 
         {hemorrhageProtocolModalOpen && (
           <Suspense fallback={null}>
-            <HemorrhageProtocolModal isOpen={hemorrhageProtocolModalOpen} onClose={() => setHemorrhageProtocolModalOpen(false)} onCopySuccess={() => { setToastMessage('Copied to EMR'); setTimeout(() => setToastMessage(null), 2500); }} />
+            <HemorrhageProtocolModal isOpen={hemorrhageProtocolModalOpen} onClose={() => setHemorrhageProtocolModalOpen(false)} onCopySuccess={() => flashToast('Copied to EMR')} onCopyFailure={() => flashToast(COPY_FAILED_USE_BROWSER, 4000)} />
           </Suspense>
         )}
 

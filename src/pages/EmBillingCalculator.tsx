@@ -29,6 +29,7 @@ import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import DiscreteFAQ from '../components/seo/DiscreteFAQ';
 import { getFAQsForPath } from '../seo/schema';
+import { copyToClipboard, COPY_FAILED_USE_BROWSER } from '../utils/clipboard';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -1253,9 +1254,16 @@ const EmBillingCalculator: React.FC = () => {
   const combinedOutput = generateCombinedOutput(state, activeCpt, roleModifiers, timeMins, providerDisplayName);
 
   const copyCombined = () => {
-    navigator.clipboard.writeText(combinedOutput);
-    set({ toast: attestationText ? 'Billing + attestation copied' : 'Billing codes copied' });
-    setTimeout(() => set({ toast: null }), 2000);
+    const flash = (toast: string, ms: number) => {
+      set({ toast });
+      setTimeout(() => set({ toast: null }), ms);
+    };
+    copyToClipboard(
+      combinedOutput,
+      () => flash(attestationText ? 'Billing + attestation copied' : 'Billing codes copied', 2000),
+      // No Send button on this calculator.
+      () => flash(COPY_FAILED_USE_BROWSER, 4000),
+    );
   };
 
   const resetAll = () => {

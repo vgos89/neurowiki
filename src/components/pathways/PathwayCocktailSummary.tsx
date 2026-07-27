@@ -18,6 +18,7 @@
  */
 
 import React, { useState, useCallback } from 'react';
+import { copyToClipboard, type CopyState } from '../../utils/clipboard';
 
 export interface CocktailPill {
   pillId: string;   // e.g., 'antiemetic', 'nsaid', 'steroid', 'antihistamine'
@@ -37,14 +38,15 @@ export const PathwayCocktailSummary: React.FC<PathwayCocktailSummaryProps> = ({
   onEditDrug,
   emptyStateText = 'Tap a drug to start the cocktail',
 }) => {
-  const [copyState, setCopyState] = useState<'idle' | 'copied'>('idle');
+  const [copyState, setCopyState] = useState<CopyState>('idle');
 
   const handleCopyAll = useCallback(() => {
     // Primitive owns clipboard call — §4.9 line 717 anti-pattern (no alert(), inline state-swap only)
-    navigator.clipboard.writeText(drugs.map(d => d.label).join('\n')).then(() => {
-      setCopyState('copied');
-      setTimeout(() => setCopyState('idle'), 1200);
-    });
+    copyToClipboard(
+      drugs.map(d => d.label).join('\n'),
+      () => { setCopyState('copied'); setTimeout(() => setCopyState('idle'), 1200); },
+      () => { setCopyState('failed'); setTimeout(() => setCopyState('idle'), 3000); },
+    );
   }, [drugs]);
 
   const eyebrow = drugs.length > 0
@@ -96,6 +98,8 @@ export const PathwayCocktailSummary: React.FC<PathwayCocktailSummaryProps> = ({
             >
               {copyState === 'copied' ? (
                 <span className="text-emerald-300 font-semibold">Copied</span>
+              ) : copyState === 'failed' ? (
+                <span role="status" aria-live="polite" className="font-semibold">Copy failed</span>
               ) : (
                 'Copy all'
               )}

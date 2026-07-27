@@ -14,6 +14,7 @@ import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useRecents } from '../hooks/useRecents';
 import DiscreteFAQ from '../components/seo/DiscreteFAQ';
 import { getFAQsForPath } from '../seo/schema';
+import { copyToClipboard, type CopyState } from '../utils/clipboard';
 
 // --- Types & Logic ---
 type Agent = "levetiracetam" | "fosphenytoin" | "valproate" | "lacosamide" | "phenobarbital";
@@ -107,7 +108,7 @@ const StatusEpilepticusPathway: React.FC = () => {
   // Favorites
   const { isFavorite, toggleFavorite } = useFavorites();
   const [showFavToast, setShowFavToast] = useState(false);
-  const [copyConfirm, setCopyConfirm] = useState(false);
+  const [copyConfirm, setCopyConfirm] = useState<CopyState>('idle');
   const isFav = isFavorite('se-pathway');
 
   const handleFavToggle = () => {
@@ -202,9 +203,11 @@ const StatusEpilepticusPathway: React.FC = () => {
   };
 
   const copySummary = useCallback(() => {
-    navigator.clipboard.writeText(generateEMRText());
-    setCopyConfirm(true);
-    setTimeout(() => setCopyConfirm(false), 2000);
+    copyToClipboard(
+      generateEMRText(),
+      () => { setCopyConfirm('copied'); setTimeout(() => setCopyConfirm('idle'), 2000); },
+      () => { setCopyConfirm('failed'); setTimeout(() => setCopyConfirm('idle'), 3500); },
+    );
   }, [generateEMRText]);
 
   const STEPS = [{id:1, title:"Patient"}, {id:2, title:"BZD"}, {id:3, title:"Urgent"}, {id:4, title:"Refractory"}];
@@ -266,8 +269,8 @@ const StatusEpilepticusPathway: React.FC = () => {
         shareText={generateEMRText}
         shareTitle="Status Epilepticus Pathway"
         onShareResult={(r) => {
-          if (r === 'shared') { setCopyConfirm(true); setTimeout(() => setCopyConfirm(false), 2000); }
-          else if (r === 'copied') { setCopyConfirm(true); setTimeout(() => setCopyConfirm(false), 2000); }
+          if (r === 'shared' || r === 'copied') { setCopyConfirm('copied'); setTimeout(() => setCopyConfirm('idle'), 2000); }
+          else if (r === 'failed') { setCopyConfirm('failed'); setTimeout(() => setCopyConfirm('idle'), 3500); }
         }}
       />
 

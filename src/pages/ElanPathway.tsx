@@ -14,6 +14,7 @@ import DiscreteFAQ from '../components/seo/DiscreteFAQ';
 import { getFAQsForPath } from '../seo/schema';
 import NextStepsCard from '../components/seo/NextStepsCard';
 import type { SeverityTokens } from '../lib/calculators/severityTokens';
+import { copyToClipboard, COPY_FAILED_USE_BROWSER } from '../utils/clipboard';
 
 /* ─── TIER_TOKENS — inlined (5th copy — extraction deferred until PathwayBottomDrawer retires) ─── */
 
@@ -187,7 +188,7 @@ const ElanPathway: React.FC = () => {
   // Favorites
   const { isFavorite, toggleFavorite } = useFavorites();
   const [showFavToast, setShowFavToast] = useState(false);
-  const [showCopyToast, setShowCopyToast] = useState(false);
+  const [copyToast, setCopyToast] = useState<{ text: string; ok: boolean } | null>(null);
   const [showEvidence, setShowEvidence] = useState(false);
   const [drawerExpanded, setDrawerExpanded] = useState(false);
   const isFav = isFavorite('elan-pathway');
@@ -243,9 +244,16 @@ const ElanPathway: React.FC = () => {
 
   const copySummary = () => {
     if (!result) return;
-    navigator.clipboard.writeText(buildEmrText());
-    setShowCopyToast(true);
-    setTimeout(() => setShowCopyToast(false), 2500);
+    const flash = (text: string, ok: boolean, ms: number) => {
+      setCopyToast({ text, ok });
+      setTimeout(() => setCopyToast(null), ms);
+    };
+    copyToClipboard(
+      buildEmrText(),
+      () => flash('Summary copied to clipboard', true, 2500),
+      // No Send button on this pathway, so the escape hatch is the real browser.
+      () => flash(COPY_FAILED_USE_BROWSER, false, 4000),
+    );
   };
   const isStep1Invalid = inputs.isIschemicAfib === 'no' || inputs.hasBleed === 'yes' || inputs.hasMechanicalValve === 'yes';
 
@@ -691,7 +699,12 @@ const ElanPathway: React.FC = () => {
               variant="pill"
               label="Send"
               onResult={(r) => {
-                if (r === 'shared' || r === 'copied') { setShowCopyToast(true); setTimeout(() => setShowCopyToast(false), 2500); }
+                const flash = (text: string, ok: boolean, ms: number) => {
+                  setCopyToast({ text, ok });
+                  setTimeout(() => setCopyToast(null), ms);
+                };
+                if (r === 'shared' || r === 'copied') flash('Summary copied to clipboard', true, 2500);
+                else if (r === 'failed') flash(COPY_FAILED_USE_BROWSER, false, 4000);
               }}
               disabled={!result}
             />
@@ -735,10 +748,16 @@ const ElanPathway: React.FC = () => {
           {isFav ? 'Saved to Favorites' : 'Removed from Favorites'}
         </div>
       )}
-      {showCopyToast && (
-        <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60] flex items-center space-x-2">
-          <Check size={12} />
-          <span>Summary copied to clipboard</span>
+      {copyToast && (
+        <div
+          role="status"
+          aria-live="polite"
+          className={`fixed top-24 left-1/2 -translate-x-1/2 text-white text-xs font-bold px-4 py-2 rounded-full pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60] flex items-center space-x-2 ${
+            copyToast.ok ? 'bg-slate-800/90' : 'bg-red-600/95'
+          }`}
+        >
+          {copyToast.ok ? <Check size={12} /> : <AlertTriangle size={12} />}
+          <span>{copyToast.text}</span>
         </div>
       )}
     </div>

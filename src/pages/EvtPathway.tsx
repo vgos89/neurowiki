@@ -19,6 +19,7 @@ import type { SeverityTokens } from '../lib/calculators/severityTokens';
 import { PathwayCascadeNotice } from '../components/pathways/PathwayCascadeNotice';
 import DiscreteFAQ from '../components/seo/DiscreteFAQ';
 import { getFAQsForPath } from '../seo/schema';
+import { copyToClipboard, COPY_FAILED_USE_SEND } from '../utils/clipboard';
 
 /**
  * Cascade-clear infrastructure (PATHWAY_SPEC §3.6, Pattern A integration).
@@ -785,7 +786,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
   // Favorites
   const { isFavorite, toggleFavorite } = useFavorites();
   const [showFavToast, setShowFavToast] = useState(false);
-  const [showCopyToast, setShowCopyToast] = useState(false);
+  const [copyToast, setCopyToast] = useState<{ text: string; ok: boolean } | null>(null);
   const [drawerExpanded, setDrawerExpanded] = useState(false);
   const isFav = isFavorite('evt-pathway');
 
@@ -967,9 +968,15 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
 
   const copySummary = () => {
       if (!result) return;
-      navigator.clipboard.writeText(buildEmrText());
-      setShowCopyToast(true);
-      setTimeout(() => setShowCopyToast(false), 2000);
+      const flash = (text: string, ok: boolean, ms: number) => {
+        setCopyToast({ text, ok });
+        setTimeout(() => setCopyToast(null), ms);
+      };
+      copyToClipboard(
+        buildEmrText(),
+        () => flash('Assessment copied to clipboard', true, 2000),
+        () => flash(COPY_FAILED_USE_SEND, false, 4000),
+      );
   };
 
   const isLvo = inputs.occlusionType === 'lvo';
@@ -1102,7 +1109,12 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
         shareText={buildEmrText}
         shareTitle="EVT Pathway"
         onShareResult={(r) => {
-          if (r === 'shared' || r === 'copied') { setShowCopyToast(true); setTimeout(() => setShowCopyToast(false), 2000); }
+          const flash = (text: string, ok: boolean, ms: number) => {
+            setCopyToast({ text, ok });
+            setTimeout(() => setCopyToast(null), ms);
+          };
+          if (r === 'shared' || r === 'copied') flash('Assessment copied to clipboard', true, 2000);
+          else if (r === 'failed') flash('Send failed. Open this page in your browser.', false, 4000);
         }}
       />
 
@@ -1773,9 +1785,16 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
           {isFav ? 'Saved to Favorites' : 'Removed from Favorites'}
         </div>
       )}
-      {showCopyToast && (
-        <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60]">
-          ✓ Assessment copied to clipboard
+      {copyToast && (
+        <div
+          role="status"
+          aria-live="polite"
+          className={`fixed top-24 left-1/2 -translate-x-1/2 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60] flex items-center space-x-2 ${
+            copyToast.ok ? 'bg-slate-800/90' : 'bg-red-600/95'
+          }`}
+        >
+          {copyToast.ok ? <Check size={12} /> : <AlertCircle size={12} />}
+          <span>{copyToast.text}</span>
         </div>
       )}
 

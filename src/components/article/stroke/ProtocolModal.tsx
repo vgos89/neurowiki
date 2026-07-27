@@ -26,6 +26,7 @@ import React, { useRef } from 'react';
 import { X, Copy } from 'lucide-react';
 import { useModalFocusTrap } from '../../../hooks/useModalFocusTrap';
 import { ShareButton } from '../../calculators/ShareButton';
+import { copyToClipboard } from '../../../utils/clipboard';
 
 export interface ProtocolStep {
   title: string;
@@ -66,6 +67,10 @@ export interface ProtocolModalProps {
   isOpen: boolean;
   onClose: () => void;
   onCopySuccess?: () => void;
+  /** Called when the copy could not be completed (clipboard blocked, as in an
+   *  iOS in-app browser). Without this the modal reported nothing at all on
+   *  failure, which read as a dead tap. Added 2026-07-27. */
+  onCopyFailure?: () => void;
   /** Stable id used for aria-labelledby / aria-describedby. */
   id: string;
   /** Short header title (e.g., "tPA/TNK Reversal"). */
@@ -83,6 +88,7 @@ export function ProtocolModal({
   isOpen,
   onClose,
   onCopySuccess,
+  onCopyFailure,
   id,
   shortTitle,
   shortSubtitle,
@@ -114,9 +120,7 @@ export function ProtocolModal({
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(buildEmrText()).then(() => {
-      onCopySuccess?.();
-    });
+    copyToClipboard(buildEmrText(), () => onCopySuccess?.(), () => onCopyFailure?.());
   };
 
   // useModalFocusTrap restores focus on close — handler is now just onClose.
@@ -233,7 +237,10 @@ export function ProtocolModal({
           <ShareButton
             text={buildEmrText}
             title={shortTitle}
-            onResult={(r) => { if (r === 'shared') onCopySuccess?.(); }}
+            onResult={(r) => {
+              if (r === 'shared' || r === 'copied') onCopySuccess?.();
+              else if (r === 'failed') onCopyFailure?.();
+            }}
             variant="pill"
             label="Send"
           />

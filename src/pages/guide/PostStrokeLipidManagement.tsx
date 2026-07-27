@@ -8,6 +8,7 @@ import { LoeBadge } from '../../components/ui/LoeBadge';
 import { useFavorites } from '../../hooks/useFavorites';
 import { useNavigationSource } from '../../hooks/useNavigationSource';
 import { useRecents } from '../../hooks/useRecents';
+import { copyToClipboard, type CopyState } from '../../utils/clipboard';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -131,15 +132,17 @@ const PostStrokeLipidManagement: React.FC = () => {
   const topRef = useRef<HTMLDivElement>(null);
   const { isFavorite, toggleFavorite } = useFavorites();
   const isFav = isFavorite('post-stroke-lipid');
-  const [copyConfirm, setCopyConfirm] = useState(false);
+  const [copyConfirm, setCopyConfirm] = useState<CopyState>('idle');
 
   const handleFavToggle = () => { toggleFavorite('post-stroke-lipid'); };
 
   const handleCopy = () => {
     const summary = `Post-Stroke Lipid Management | NeuroWiki\nTarget: ${riskTier === 'vhr' ? '<55' : '<70'} mg/dL (${riskTier === 'vhr' ? 'VHR' : 'standard ASCVD'})`;
-    navigator.clipboard?.writeText(summary).catch(() => {});
-    setCopyConfirm(true);
-    setTimeout(() => setCopyConfirm(false), 2000);
+    copyToClipboard(
+      summary,
+      () => { setCopyConfirm('copied'); setTimeout(() => setCopyConfirm('idle'), 2000); },
+      () => { setCopyConfirm('failed'); setTimeout(() => setCopyConfirm('idle'), 3500); },
+    );
   };
 
   // ── Clinical state ────────────────────────────────────────────────────────

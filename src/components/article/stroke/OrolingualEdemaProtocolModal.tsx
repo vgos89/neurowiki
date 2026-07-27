@@ -21,6 +21,7 @@ interface OrolingualEdemaProtocolModalProps {
   isOpen: boolean;
   onClose: () => void;
   onCopySuccess?: () => void;
+  onCopyFailure?: () => void;
 }
 
 export function OrolingualEdemaProtocolModal(props: OrolingualEdemaProtocolModalProps) {

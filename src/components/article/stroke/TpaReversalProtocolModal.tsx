@@ -23,6 +23,7 @@ interface TpaReversalProtocolModalProps {
   isOpen: boolean;
   onClose: () => void;
   onCopySuccess?: () => void;
+  onCopyFailure?: () => void;
 }
 
 export function TpaReversalProtocolModal(props: TpaReversalProtocolModalProps) {

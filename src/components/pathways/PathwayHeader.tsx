@@ -18,6 +18,7 @@
 import React from 'react';
 import { Star, RotateCcw } from 'lucide-react';
 import { ShareButton } from '../calculators/ShareButton';
+import type { CopyState } from '../../utils/clipboard';
 
 export interface PathwayHeaderProps {
   /** Display label rendered after the PATHWAY eyebrow. */
@@ -35,10 +36,16 @@ export interface PathwayHeaderProps {
   /** Copy handler. */
   onCopy: () => void;
   /**
-   * When true, Copy button label renders "Copied ✓" instead of "Copy".
-   * Consumer controls the transient state; primitive is a pure renderer.
+   * Copy button label state. Consumer controls the transient value; primitive
+   * is a pure renderer. `true` / 'copied' renders "Copied ✓", 'failed' renders
+   * "Copy failed", anything else renders "Copy".
+   *
+   * The 'failed' state was added 2026-07-27: these buttons previously showed
+   * "Copied ✓" unconditionally, so a clipboard write blocked by an iOS in-app
+   * browser still looked like a success. Boolean is still accepted so consumers
+   * can migrate independently.
    */
-  copyConfirm?: boolean;
+  copyConfirm?: boolean | CopyState;
   /** Optional Send-to text (string or lazy builder) for the share pill.
    *  When provided, a Send button appears next to Copy. On mobile opens
    *  the native share sheet; on desktop falls back to clipboard.
@@ -121,8 +128,16 @@ export const PathwayHeader: React.FC<PathwayHeaderProps> = ({
           <button onClick={onReset} className="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-400 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Reset">
             <RotateCcw size={16} />
           </button>
-          <button onClick={handleCopy} className="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px]" aria-label="Copy summary">
-            {copyConfirm ? 'Copied ✓' : 'Copy'}
+          <button
+            onClick={handleCopy}
+            className={`ml-1.5 px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px] text-white ${
+              copyConfirm === 'failed'
+                ? 'bg-red-600 hover:bg-red-700'
+                : 'bg-neuro-500 hover:bg-neuro-600'
+            }`}
+            aria-label="Copy summary"
+          >
+            {copyConfirm === 'failed' ? 'Copy failed' : copyConfirm ? 'Copied ✓' : 'Copy'}
           </button>
           {shareText && (
             <ShareButton

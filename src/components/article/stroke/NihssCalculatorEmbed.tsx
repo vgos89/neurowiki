@@ -1,5 +1,6 @@
 import React, { useState, useRef, useMemo } from 'react';
-import { Info, Copy, RefreshCw, Check, X } from 'lucide-react';
+import { Info, Copy, RefreshCw, Check, X, AlertTriangle } from 'lucide-react';
+import { copyToClipboard, type CopyState } from '../../../utils/clipboard';
 import { NIHSS_ITEMS, calculateTotal, getItemWarning, calculateLvoProbability } from '../../../utils/nihssShortcuts';
 import NihssItemCard from '../../NihssItemCard';
 
@@ -30,7 +31,7 @@ export const NihssCalculatorEmbed: React.FC<NihssCalculatorEmbedProps> = ({
   const [nihssMode, setNihssMode] = useState<'rapid' | 'detailed'>('rapid');
   const [activePearl, setActivePearl] = useState<string | null>(null);
   const [showLvoTooltip, setShowLvoTooltip] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState<CopyState>('idle');
 
   const lvoTooltipRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -65,9 +66,11 @@ export const NihssCalculatorEmbed: React.FC<NihssCalculatorEmbedProps> = ({
 
   const copyNihss = () => {
     const breakdown = NIHSS_ITEMS.map((i) => `${i.shortName}: ${nihssValues[i.id] ?? 0}`).join('\n');
-    navigator.clipboard.writeText(`NIHSS Total: ${total}\n\n${breakdown}`);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    copyToClipboard(
+      `NIHSS Total: ${total}\n\n${breakdown}`,
+      () => { setCopied('copied'); setTimeout(() => setCopied('idle'), 2000); },
+      () => { setCopied('failed'); setTimeout(() => setCopied('idle'), 3500); },
+    );
   };
 
   const lvoColorClass =
@@ -190,8 +193,21 @@ export const NihssCalculatorEmbed: React.FC<NihssCalculatorEmbedProps> = ({
             aria-label="Copy NIHSS to clipboard"
             className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors text-slate-500 hover:text-slate-800"
           >
-            {copied ? <Check className="w-4 h-4 text-emerald-500" aria-hidden="true" /> : <Copy className="w-4 h-4" aria-hidden="true" />}
+            {copied === 'copied' ? (
+              <Check className="w-4 h-4 text-emerald-500" aria-hidden="true" />
+            ) : copied === 'failed' ? (
+              <AlertTriangle className="w-4 h-4 text-red-500" aria-hidden="true" />
+            ) : (
+              <Copy className="w-4 h-4" aria-hidden="true" />
+            )}
           </button>
+          {/* Icon alone cannot explain a blocked clipboard, so the failure
+              state also gets a text line the screen reader will announce. */}
+          {copied === 'failed' && (
+            <span role="status" aria-live="polite" className="text-[11px] font-medium text-red-600">
+              Copy failed
+            </span>
+          )}
 
           {/* Reset */}
           <button

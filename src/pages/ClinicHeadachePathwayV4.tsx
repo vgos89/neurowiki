@@ -44,6 +44,7 @@ import { HeadacheSafetyScreen } from '../components/pathways/headache/HeadacheSa
 import { HeadacheDifferentialPanel } from '../components/pathways/headache/HeadacheDifferentialPanel';
 import { HeadacheQuestion } from '../components/pathways/headache/HeadacheQuestion';
 import { HeadacheResultV4 } from '../components/pathways/headache/HeadacheResultV4';
+import { copyToClipboard, type CopyState } from '../utils/clipboard';
 
 // Question lookup across the core spine + every branch.
 const QUESTION_BY_ID: Map<string, HeadacheQuestionConfig> = new Map();
@@ -65,7 +66,7 @@ const ClinicHeadachePathwayV4: React.FC = () => {
   const [redFlags, setRedFlags] = useState<Set<ChipId>>(new Set());
   const [questionIndex, setQuestionIndex] = useState(0);
   const [setAsideOpen, setSetAsideOpen] = useState(false);
-  const [copyConfirm, setCopyConfirm] = useState(false);
+  const [copyConfirm, setCopyConfirm] = useState<CopyState>('idle');
 
   useEffect(() => {
     recordView({
@@ -141,9 +142,11 @@ const ClinicHeadachePathwayV4: React.FC = () => {
       : lead
         ? `Clinic Headache | NeuroWiki\n${lead.name} (${lead.displaySection}). Not a diagnosis.`
         : 'Clinic Headache | NeuroWiki\nDifferential in progress.';
-    navigator.clipboard?.writeText(summary).catch(() => {});
-    setCopyConfirm(true);
-    setTimeout(() => setCopyConfirm(false), 2000);
+    copyToClipboard(
+      summary,
+      () => { setCopyConfirm('copied'); setTimeout(() => setCopyConfirm('idle'), 2000); },
+      () => { setCopyConfirm('failed'); setTimeout(() => setCopyConfirm('idle'), 3500); },
+    );
   };
 
   // ── Render ──────────────────────────────────────────────────────────────

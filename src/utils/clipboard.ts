@@ -25,6 +25,18 @@
  *                   pre-existing callers keep working unchanged.
  * @returns Promise resolving true on success, false on failure. Never rejects.
  */
+/**
+ * Feedback state for surfaces whose copy indicator is an inline label or icon
+ * rather than a toast. 'failed' exists so a blocked copy is visible instead of
+ * looking identical to a dead tap.
+ */
+export type CopyState = 'idle' | 'copied' | 'failed';
+
+/** Failure copy for surfaces that sit next to a Send button. */
+export const COPY_FAILED_USE_SEND = 'Copy failed. Use Send instead.';
+/** Failure copy where there is no Send button to fall back to. */
+export const COPY_FAILED_USE_BROWSER = 'Copy failed. Open this page in your browser.';
+
 export function copyToClipboard(
   text: string,
   onSuccess?: () => void,
