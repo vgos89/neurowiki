@@ -242,8 +242,14 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 
 ## PENDING
 
+### trial-library-blocker-remediation — Class E-clinical [x] done 3b885b4, live-verified
+- 15 patient-facing defects across 11 trials corrected. 13/13 units re-verified against the primary papers first; zero audit false positives. Gates: tsc / build (173 routes, 0 failed) / claims / humanizer / card-meta / chains / coverage / routes green.
+- **Gate 6 PASS** on production: `/trials/direct-mt-trial` shows 36.4/36.8 with the corrected chart caption and the ordinal-shift disclosure (62.0/58.5 gone); `/trials/q/ich-surgery` bottom line excludes anterior basal-ganglia ICH and states the futility stop; `/trials/defuse-3-trial` shows pre-stroke mRS 0–2 inclusion and ≥3 exclusion (the DAWN 0–1 ceiling gone).
+- **Deploy timing note:** this repo prerenders 173 routes, so a Vercel deploy takes >4 minutes. The pre-push hook's live-verify checks the CURRENTLY-live build and will pass against the OLD deploy; a first Gate 6 probe at ~3 min showed stale values. Wait 5+ minutes before concluding a Gate 6 failure.
+- Artifacts: `docs/evidence-packets/2026-07-23-trial-library-blocker-remediation.md`, `docs/reviews/clinical-PR-trial-library-blocker-remediation.md`.
+
 ### trial-library-audit-remaining — Class C/E-clinical [from docs/reviews/audit-trial-library-semantic-2026-07-23.md]
-- **Status:** [ ] open. The 15 BLOCKER findings were remediated (see `trial-library-blocker-remediation` in CONFIRMED CLEAN). 160 findings remain: 52 HIGH, 84 MEDIUM, 24 LOW. Full evidence and per-finding contradicting sources are in the audit artifact.
+- **Status:** [ ] open. The 15 BLOCKER findings were remediated (3b885b4, live-verified). 160 findings remain: 52 HIGH, 84 MEDIUM, 24 LOW. Full evidence and per-finding contradicting sources are in the audit artifact.
 - **User-visible goal:** Finish correcting wrong or unsupported statistics, eligibility criteria, and cross-surface contradictions across the trial library so a clinician can trust every rendered number.
 - **Non-goals:** Not a rewrite of trial prose; value-level corrections and their dependent interpretive sentences only.
 - **Method note:** the audit is a HYPOTHESIS LIST per §5 rule 6. Each finding must be re-verified against the PRIMARY paper by evidence-verifier before any edit; in the BLOCKER pass 13/13 re-verified true, but the lower-severity tail is expected to contain false positives. Batch by trial, not by severity, so all fields of one record are corrected together.
