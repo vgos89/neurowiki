@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { X, Copy, Check, ChevronDown, Zap, Info, AlertTriangle } from 'lucide-react';
 import { copyToClipboard, type CopyState } from '../../../utils/clipboard';
+import { LiveAnnouncer } from '../../a11y/LiveAnnouncer';
 import { ShareButton } from '../../calculators/ShareButton';
 import { useModalFocusTrap } from '../../../hooks/useModalFocusTrap';
 
@@ -216,6 +217,11 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
     ].filter(Boolean).join('\n');
   };
 
+  const copyAnnouncement =
+    copiedToClipboard === 'copied' ? 'Copied to EMR'
+    : copiedToClipboard === 'failed' ? 'Copy failed'
+    : null;
+
   const handleCopyToEMR = () => {
     copyToClipboard(
       buildEmrText(),
@@ -246,6 +252,10 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
         aria-modal="true"
         aria-labelledby="eligibility-modal-title"
       >
+        <LiveAnnouncer
+          message={copyAnnouncement}
+          tone={copiedToClipboard === 'failed' ? 'assertive' : 'polite'}
+        />
         {/* Header — chassis-aligned 2026-05-24: slate-50 tint for
             cross-surface coherence with the pathway's chassis cards. */}
         <div className="flex items-center justify-between h-14 px-4 border-b border-slate-100 flex-shrink-0 bg-slate-50">

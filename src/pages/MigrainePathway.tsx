@@ -1599,7 +1599,7 @@ const MigrainePathway: React.FC = () => {
         </div>
       )}
       <LiveAnnouncer
-        message={copyToast?.text ?? null}
+        message={copyToast?.text ?? (showFavToast ? (isFav ? 'Saved to Favorites' : 'Removed from Favorites') : null)}
         tone={copyToast && !copyToast.ok ? 'assertive' : 'polite'}
       />
       {copyToast && (

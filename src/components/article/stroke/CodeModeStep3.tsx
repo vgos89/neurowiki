@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Copy, Check, Printer, AlertTriangle } from 'lucide-react';
 import { copyToClipboard, type CopyState } from '../../../utils/clipboard';
+import { LiveAnnouncer } from '../../a11y/LiveAnnouncer';
 import type { Step1Data } from './CodeModeStep1';
 import type { Step2Data } from './CodeModeStep2';
 import { ShareButton } from '../../calculators/ShareButton';
@@ -202,6 +203,11 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
     return note;
   };
 
+  const copyAnnouncement =
+    copied === 'copied' ? 'Code summary copied to clipboard'
+    : copied === 'failed' ? 'Copy failed'
+    : null;
+
   const handleCopyToEMR = () => {
     copyToClipboard(
       generateEMRNote(),
@@ -224,6 +230,10 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
 
   return (
     <div className="space-y-3 px-1">
+      <LiveAnnouncer
+        message={copyAnnouncement}
+        tone={copied === 'failed' ? 'assertive' : 'polite'}
+      />
 
       {/* Header status — chassis-aligned 2026-05-24 */}
       <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">

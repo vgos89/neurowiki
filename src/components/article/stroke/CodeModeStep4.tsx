@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Droplets, Pill, FlaskConical, HeartPulse, ChevronDown, ChevronUp, Copy, Check, AlertTriangle } from 'lucide-react';
 import { copyToClipboard, type CopyState } from '../../../utils/clipboard';
+import { LiveAnnouncer } from '../../a11y/LiveAnnouncer';
 import { ShareButton } from '../../calculators/ShareButton';
 // Treatment Orders - AHA-based categories with evidence/rationale (v2)
 // BUG-01 fixed: renamed duplicate 'hba1c' id in stroke-workup to 'hba1c_workup'
@@ -492,6 +493,11 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
     return emrNote;
   };
 
+  const copyAnnouncement =
+    copied === 'copied' ? 'Orders copied to clipboard'
+    : copied === 'failed' ? 'Copy failed'
+    : null;
+
   const handleCopyToEMR = () => {
     copyToClipboard(
       generateEMRNote(),
@@ -507,6 +513,10 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
 
   return (
     <div className="space-y-3">
+      <LiveAnnouncer
+        message={copyAnnouncement}
+        tone={copied === 'failed' ? 'assertive' : 'polite'}
+      />
 
       {/* Selection status — chassis chrome 2026-05-24 */}
       <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
