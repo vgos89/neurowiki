@@ -285,22 +285,61 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   // existing <GuidelineSummaryCard> pattern, which renders verbatim 2026 AIS
   // recommendations, does not apply here.
   //
-  // Citations (4): three 2017 NEJM trials (CLOSE, REDUCE, RESPECT long-term)
-  // plus the 2021 AHA/ASA Secondary Prevention guideline (Class IIa, Level
-  // B-R for non-lacunar stroke <60 with PFO and no other apparent etiology).
+  // Citations (15): the 2021 AHA/ASA Secondary Prevention guideline (Class IIa,
+  // Level B-R for non-lacunar stroke <60 with PFO and no other apparent
+  // etiology), the SCOPE pooled IPD meta-analysis and its PASCAL net-benefit
+  // re-analysis, the three pre-2017 precursor trials (CLOSURE-I, PC, original
+  // RESPECT), the three 2017 NEJM trials (CLOSE, REDUCE, RESPECT long-term),
+  // DEFENSE-PFO 2018, the REDUCE MRI substudy, two post-closure observational
+  // cohorts, the biodegradable-device noninferiority RCT, and an anchor review.
   // Surface = data field (claimId) on the clinicalSynthesesByQuestion record;
   // ClinicalSynthesisCard reads the claim ID dynamically. Pattern mirrors
   // anticoagulation-guideline-summary above.
+  //
+  // ORDERING NOTE: the §17.1 convention lists primary trials before guidelines.
+  // It is deliberately relaxed here (as it was for extended-ivt-sich-caution):
+  // the 2021 AHA/ASA Secondary Prevention recommendation is the single
+  // governing anchor for this question and the SCOPE / PASCAL pair is now the
+  // decisive selection evidence, so both lead. The 2017 randomized cluster and
+  // the supporting cohorts follow; the anchor review sits last as secondary
+  // context.
+  //
+  // Expanded 2026-07-23 (Phase 2 PFO refresh) from evidence packet
+  // docs/evidence-packets/2026-07-23-pfo-closure-refresh.md. NNT is not
+  // displayed for any of the 7 added sources: none of the designs supports it.
+  //
+  // Post-review corrections 2026-07-23 (clinical-reviewer BLOCK, resolved):
+  // (1) the four pre-2017/DEFENSE-PFO citations below were absent while the
+  //     prose made specific quantitative claims about those trials; added.
+  // (2) synthesis prose: removed an unsupported "halted early for efficacy"
+  //     assertion about DEFENSE-PFO (no registered quoted_text supports it and
+  //     the trialData.ts record does not record early termination).
+  // (3) synthesis prose: replaced a fabricated cross-trial AF range ("59 to 83
+  //     percent detected within 45 days") that fused two distinct REDUCE
+  //     figures; REDUCE reports 83% DETECTED within 45 days and 59% RESOLVED
+  //     within 2 weeks. Both defects pre-dated this refresh and were live.
   'pfo-closure-cryptogenic-synthesis': {
     id: 'pfo-closure-cryptogenic-synthesis',
     citation_ids: [
+      'aha-asa-2021-secondary-prevention-pfo',
+      'kent-scope-2021',
+      'saver-pascal-2026',
+      // Pre-2017 landscape, discussed with specific numerics in bodyParagraphs[3].
+      'furlan-closure-i-2012',
+      'meier-pc-trial-2013',
+      'carroll-respect-original-2013',
       'mas-close-2017',
       'sondergaard-reduce-2017',
       'saver-respect-2017',
-      'aha-asa-2021-secondary-prevention-pfo',
+      'lee-defense-pfo-2018',
+      'messe-reduce-mri-2021',
+      'vidal-cales-pfo-20yr-2026',
+      'bonnesen-pfo-danish-2024',
+      'zhang-biodegradable-pfo-2026',
+      'kent-pfo-review-2025',
     ],
     surfaces: [DATA_SURFACE],
-    description: 'ClinicalSynthesisCard on /trials/q/pfo-closure-cryptogenic. Synthesises the 2017 NEJM PFO closure cluster (CLOSE, REDUCE, RESPECT long-term) against the 2021 AHA/ASA Secondary Prevention Guideline Class IIa Level B-R framing for non-lacunar stroke <60 with PFO and no other apparent etiology. Acknowledges the broader pre-2017 landscape (CLOSURE-I 2012, PC trial 2013, original RESPECT 2013, DEFENSE-PFO 2018) and the AF-excess trade-off central to shared decision-making.',
+    description: 'ClinicalSynthesisCard on /trials/q/pfo-closure-cryptogenic. Anchored on the 2021 AHA/ASA Secondary Prevention Guideline Class IIa Level B-R framing for non-lacunar cryptogenic stroke <60 with PFO and no other apparent etiology (the only guideline anchor asserted; no ESO PASCAL-guided-selection claim is made because it was found only in secondary coverage and is unconfirmed against the primary guideline). Centerpiece is causal-likelihood patient selection: SCOPE (Kent, JAMA 2021) pooled 6 RCTs, N=3,740, median follow-up 57 months, annualized recurrent stroke 0.47% with closure vs 1.09% medical, adjusted HR 0.41 (95% CI 0.28-0.60), and derived the PASCAL classification with per-category HRs (unlikely 1.14, possible 0.38, probable 0.10); because PASCAL was derived in that same pooled dataset and the 2026 re-analysis uses the same patients, the per-category estimates are heterogeneity-of-treatment-effect results awaiting prospective validation, not independently powered comparisons, and the synthesis prose states that limit. The 2026 JAMA Neurology re-analysis (Saver/Kent) contributes the ABSOLUTE net-benefit reframing (stroke reduction outweighs the late-AF increase in the probable and possible categories; no stroke reduction plus a magnified AF excess, i.e. net harm, in the unlikely category) and the category distribution (probable 37.0%, possible 48.4%, unlikely 14.6%), i.e. about 4 of 5 randomized patients in net-benefit categories and about 1 of 5 in net harm. Retains the 2017 NEJM cluster (CLOSE, REDUCE, RESPECT long-term), the pre-2017 landscape (CLOSURE-I 2012, PC trial 2013, original RESPECT 2013) and DEFENSE-PFO 2018, and the AF-excess trade-off. Adds mechanism (REDUCE MRI substudy: composite 4.7% vs 10.7%, RR 0.44, 95% CI 0.24-0.81, but no reduction in silent infarcts 3.4% vs 4.0% and no change in lesion size), durability (20-year single-center cohort, N=130, 1 recurrent ischemic stroke, 0.04 per 100 patient-years, observational), real-world residual risk (Danish nationwide cohort: 4-year post-closure ischemic stroke risk 2.5%, 95% CI 1.5-4.0, comparable to trials but adjusted HR 6.3, 95% CI 3.1-12.6 vs the general population), and a bounded device-technique note (biodegradable occluder noninferior on echocardiographic closure success 90.6% vs 91.5%, NI margin -10%, lower CI bound -8.98%, a technical surrogate not powered for stroke prevention). No NNT is displayed for any of the 2021-2026 additions: IPD meta-analysis, net-benefit re-analysis, observational cohorts, MRI-substudy composite, and a noninferiority device trial do not support one. The 2026 category-level ABSOLUTE percentages are withheld from every surface (prose, quoted_text, this description) pending the full-text confirmation the evidence packet requires before they may be displayed as numbers; see the saver-pascal-2026 registry comment for the restore path. No claim is made about closure versus anticoagulation alone: none of the registered citations examines that comparison.',
   },
 
   // ─── Phase 2 GuidelineSummaryCard rollout — 7 question-page claims ──────────
@@ -613,7 +652,7 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   //     Four trials framing the 2017 PFO cluster: CLOSURE-I (2012, STARFlex,
   //     negative), PC (2013, Amplatzer, negative), original RESPECT (2013,
   //     Amplatzer, ITT not met at 2.1y), DEFENSE-PFO (2018, high-risk
-  //     anatomy, halted early for efficacy).
+  //     anatomy, positive on the 2-year composite).
   'closure-i-pfo-2012': {
     id: 'closure-i-pfo-2012',
     citation_ids: ['furlan-closure-i-2012'],

@@ -376,7 +376,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'close-trial',            // CLOSE 2017: required ASA or large shunt; strongest effect (HR 0.03, NNT 20/5y)
       'reduce-trial',           // REDUCE 2017: clean antiplatelet comparator; HR 0.23, NNT 28; largest AF signal
       'respect-trial',          // RESPECT (long-term) 2017: 5.9y follow-up converted the 2013 cohort (HR 0.55, NNT 42)
-      'defense-pfo-trial',      // DEFENSE-PFO 2018: high-risk anatomy, stopped early for efficacy
+      'defense-pfo-trial',      // DEFENSE-PFO 2018: high-risk anatomy, positive on the 2-year composite
     ],
     relatedQuestions: ['anticoagulation', 'asymptomatic-carotid'],
   },

@@ -1115,6 +1115,160 @@ export const CITATION_REGISTRY: CitationRegistry = {
     quoted_text: 'PFO closure in patients with high-risk PFO characteristics resulted in a lower rate of the primary endpoint as well as stroke recurrence.',
   },
 
+  // ─── PFO closure 2026 refresh — 7 citations added 2026-07-23 ──────────────
+  //     Source: docs/evidence-packets/2026-07-23-pfo-closure-refresh.md
+  //     (evidence-verifier, 2026-07-23; skills clinical-trial-audit +
+  //     trial-statistics). Every figure below traces to that packet.
+  //
+  //     ATTRIBUTION (packet's primary correction — do not mix these up):
+  //       - The PASCAL classification AND the per-category hazard ratios are
+  //         from the 2021 SCOPE IPD meta-analysis (kent-scope-2021).
+  //       - The 2026 JAMA Neurology paper (saver-pascal-2026) contributes the
+  //         ABSOLUTE net-benefit vs net-harm reframing, NOT hazard ratios.
+  //       - The RoPE score itself predates both (Kent, Neurology 2013).
+  //
+  //     STATISTICS GUARD: none of these 7 sources supports an NNT display
+  //     (IPD meta-analysis, net-benefit re-analysis, two observational
+  //     cohorts, an MRI-substudy composite, and a noninferiority device
+  //     trial). Flag `nnt-not-appropriate` if one is ever proposed.
+  //
+  //     UNVERIFIED FIGURE (do not use): the "0.47 per 100 person-years"
+  //     post-closure rate attributed to the Danish cohort is NOT confirmed by
+  //     the source; only the 4-year 2.5% risk and adjusted HR 6.3 below may be
+  //     stated. (0.47%/year is a SCOPE closure-arm figure, a different number.)
+  //
+  //     PMIDs: not captured for the three JAMA-network papers (retrievable,
+  //     non-blocking per the packet); the field is omitted rather than guessed.
+
+  // SCOPE pooled individual-patient meta-analysis of the 6 randomized trials.
+  // review_window_months: 36 override (review default is 6 per §13.7) with
+  // rationale: the pooled dataset is fixed — all 6 contributing trials are
+  // complete and published — so this behaves as landmark evidence rather than
+  // as a narrative review. Same precedent as gutierrez-icas-review-2022.
+  'kent-scope-2021': {
+    id: 'kent-scope-2021',
+    source: 'review',
+    title: 'Heterogeneity of Treatment Effects in an Analysis of Pooled Individual Patient Data From Randomized Trials of Device Closure of Patent Foramen Ovale After Stroke',
+    year: 2021,
+    url: 'https://doi.org/10.1001/jama.2021.20956',
+    last_reviewed: '2026-07-23',
+    review_window_months: 36,
+    quoted_text: 'In pooled individual patient data from 6 randomized trials of device closure of patent foramen ovale after stroke (3,740 patients; median follow-up 57 months), the annualized rate of recurrent ischemic stroke was 0.47% with closure versus 1.09% with medical therapy (adjusted HR 0.41, 95% CI 0.28 to 0.60; P<.001). Under the PASCAL classification derived here, which combines the RoPE score with high-risk PFO features, the hazard ratio for recurrent stroke with closure was 1.14 (95% CI 0.53 to 2.46) in the unlikely category, 0.38 (95% CI 0.22 to 0.65) in the possible category, and 0.10 (95% CI 0.03 to 0.35) in the probable category.',
+  },
+
+  // Risk-stratified net-benefit re-analysis. Contributes ABSOLUTE differences
+  // (stroke prevented vs late atrial fibrillation added) per PASCAL category
+  // plus the category distribution. Does NOT contribute hazard ratios.
+  // CONFIDENCE (packet, Source 2): HIGH for the category distribution, the
+  // structure, and the "about 4 of 5 net benefit / about 1 of 5 net harm"
+  // framing; MEDIUM for the exact category-level absolute percentages, which
+  // reached the packet through a single journal-page fetch.
+  //
+  // DISPLAY GATE (binding, packet Source 2 + handoff note b): the packet gates
+  // DISPLAY of those absolute percentages on prior full-text confirmation. That
+  // confirmation is not yet recorded in the evidence packet, so per the gate
+  // the percentages are NOT stated on any surface: not in quoted_text below,
+  // not in the claim description, not in the rendered synthesis prose. Only the
+  // HIGH-confidence content is carried: direction of net benefit by category,
+  // the 37.0 / 48.4 / 14.6 distribution, and the 4-of-5 / 1-of-5 framing.
+  //
+  // TO RESTORE the percentages: evidence-verifier reads JAMA Neurology
+  // 2026;83(3):242-249 in full, records a dated confirmation line (with the
+  // published confidence intervals, which the packet does not carry) in
+  // docs/evidence-packets/2026-07-23-pfo-closure-refresh.md, and only then may
+  // medical-scientist display them. Per the trial-statistics skill, each
+  // absolute risk difference must ship with its CI; percentages without
+  // intervals must not be rendered.
+  'saver-pascal-2026': {
+    id: 'saver-pascal-2026',
+    source: 'review',
+    title: 'Patent Foramen Ovale Closure in Stroke and the PASCAL Classification System',
+    year: 2026,
+    url: 'https://doi.org/10.1001/jamaneurol.2025.5446',
+    last_reviewed: '2026-07-23',
+    quoted_text: 'Among 3,740 randomized patients classified by the PASCAL system, 1,382 (37.0%) were probable, 1,811 (48.4%) possible, and 547 (14.6%) unlikely. Expressed in absolute terms rather than as hazard ratios, closure in the probable and possible categories reduced recurrent stroke by more than it increased late atrial fibrillation, whereas in the unlikely category there was no reduction in stroke and the excess of late atrial fibrillation was magnified, yielding net harm.',
+  },
+
+  // Single-center observational cohort. Durability signal only; no concurrent
+  // control arm, so no efficacy or NNT display. 36-month window per §13.7.
+  'vidal-cales-pfo-20yr-2026': {
+    id: 'vidal-cales-pfo-20yr-2026',
+    source: 'trial',
+    title: 'Twenty-Year Follow-Up After Patent Foramen Ovale Closure in Patients With Paradoxical Embolism',
+    year: 2026,
+    url: 'https://doi.org/10.1001/jamacardio.2026.0020',
+    last_reviewed: '2026-07-23',
+    review_window_months: 36,
+    quoted_text: 'In a single-center cohort of 130 patients followed for approximately 20 years after patent foramen ovale closure for paradoxical embolism (attrition 3.8%), 1 recurrent ischemic stroke occurred: an incidence of 0.04 per 100 patient-years and a cumulative recurrence rate under 1%. Observational registry data without a concurrent control group.',
+  },
+
+  // Danish nationwide registry cohort. Carries the residual-risk headline the
+  // trial literature cannot supply: post-closure stroke risk is comparable to
+  // the trials but stays well above the background population. 36-month window
+  // per §13.7 (stable national-registry cohort).
+  'bonnesen-pfo-danish-2024': {
+    id: 'bonnesen-pfo-danish-2024',
+    source: 'trial',
+    title: 'Risk of Ischemic Stroke After Patent Foramen Ovale Closure',
+    year: 2024,
+    url: 'https://doi.org/10.1016/j.jacc.2024.07.015',
+    pmid: '39357939',
+    last_reviewed: '2026-07-23',
+    review_window_months: 36,
+    quoted_text: 'Among 1,162 patients who underwent patent foramen ovale closure in Denmark from 2008 to 2021 and 11,620 matched general-population comparators, the 4-year absolute risk of ischemic stroke after closure was 2.5% (95% CI 1.5 to 4.0) versus 0.4% in the general population, and the 1-year risk was 1.4% versus 0.1% (adjusted hazard ratio 6.3, 95% CI 3.1 to 12.6). The 4-year risk was comparable to that observed in clinical trials but remained higher than in the general population.',
+  },
+
+  // REDUCE MRI substudy. Superiority substudy composite (bar-binary). NNT is
+  // computable but NOT displayed: this is a substudy composite, not the parent
+  // trial primary. 36-month window per §13.7 (trial substudy of a landmark).
+  'messe-reduce-mri-2021': {
+    id: 'messe-reduce-mri-2021',
+    source: 'trial',
+    title: 'Patent Foramen Ovale Closure Decreases the Incidence but Not the Size of New Brain Infarction on Magnetic Resonance Imaging: An Analysis of the REDUCE Trial',
+    year: 2021,
+    url: 'https://doi.org/10.1161/STROKEAHA.121.034451',
+    pmid: '34455822',
+    last_reviewed: '2026-07-23',
+    review_window_months: 36,
+    quoted_text: 'Among 560 REDUCE participants with follow-up imaging (383 closure, 177 medical therapy), the composite of recurrent clinical stroke or new brain infarct on MRI occurred in 4.7% with closure versus 10.7% with medical therapy (RR 0.44, 95% CI 0.24 to 0.81; P=0.02). Clinical strokes occurred in 1.3% versus 6.8% (P=0.001), whereas silent (covert) MRI infarcts did not differ (3.4% versus 4.0%; P=0.81), and there was no difference in the number, volume, or distribution of new infarcts.',
+  },
+
+  // Biodegradable-occluder noninferiority RCT. PRIMARY ENDPOINT IS A TECHNICAL
+  // SURROGATE (echocardiographic closure success), NOT stroke prevention; the
+  // trial is not powered for clinical outcomes. Archetype ni-margin-chart
+  // (margin -10%, observed difference about -0.86%, lower 95% CI bound -8.98%).
+  // NNT is invalid for a noninferiority design. review_window_months: 12
+  // override (trial default 36 per §13.7) with rationale: this is an emerging
+  // device technology with larger long-term studies pending and no NCT number
+  // captured yet, so it should be re-checked well before the landmark-trial
+  // cadence. Capture the NCT and the Circulation editorial before any
+  // dedicated trial page is built.
+  'zhang-biodegradable-pfo-2026': {
+    id: 'zhang-biodegradable-pfo-2026',
+    source: 'trial',
+    title: 'Transcatheter Closure of Patent Foramen Ovale With a Novel Biodegradable Device: A Prospective, Multicenter, Randomized Controlled Clinical Trial',
+    year: 2026,
+    url: 'https://doi.org/10.1161/CIRCULATIONAHA.125.074609',
+    pmid: '41078120',
+    last_reviewed: '2026-07-23',
+    review_window_months: 12,
+    quoted_text: 'In 190 patients randomized at 7 Chinese hospitals to a novel biodegradable occluder (96 patients) or a conventional nitinol device (94 patients), effective closure on echocardiography at 6 months was 90.63% versus 91.49% (difference about -0.86%; lower bound of the 95% CI -8.98%), meeting the prespecified noninferiority margin of -10%. No deaths, embolism, device thrombus, or device erosion occurred in either group. The primary endpoint is echocardiographic closure success, a technical surrogate; the trial was not powered for clinical stroke prevention.',
+  },
+
+  // Anchor review. Corroborates the SCOPE pooled figures, RoPE, and PASCAL.
+  // Secondary reference only: never cite as primary efficacy evidence.
+  // 6-month review window (review default per §13.7).
+  'kent-pfo-review-2025': {
+    id: 'kent-pfo-review-2025',
+    source: 'review',
+    title: 'Patent Foramen Ovale and Stroke: A Review',
+    year: 2025,
+    url: 'https://doi.org/10.1001/jama.2025.10946',
+    pmid: '40720119',
+    last_reviewed: '2026-07-23',
+    quoted_text: 'Pooled data from 6 randomized trials (3,740 patients, median follow-up 57 months) show recurrent stroke rates of 0.47% per year after closure versus 1.09% per year with medical therapy. The RoPE score and the PASCAL classification identify patients whose stroke is likely attributable to the patent foramen ovale; among patients classified as probable, device closure was associated with approximately a 90% relative reduction in recurrent stroke at 2 years, consistent with the pooled hazard ratio of 0.10 for that category.',
+  },
+
   // ─── IST (International Stroke Trial, 1997) — foundational aspirin RCT ───
   // Lancet 1997;349(9065):1569-1581. UK CTSU-led international factorial 2x2
   // trial of subcutaneous heparin (5000 IU or 12500 IU bd) and/or aspirin
