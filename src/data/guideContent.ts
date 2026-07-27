@@ -1239,21 +1239,21 @@ ENRICH tested a fundamentally different approach: **minimally invasive parafasci
 *   **Intervention:** MIPS using BrainPath® + Myriad® vs guideline-based medical management.
 *   **Primary Outcome:** Utility-weighted mRS (UW-mRS) at 180 days.
 *   **Results:**
-    *   **UW-mRS:** 0.458 (surgery) vs 0.374 (medical); difference 0.084, **p=0.04**
-    *   **30-day mortality:** **9.3% (surgery) vs 18.0% (medical)**; **NNT≈12**
-    *   Bayesian posterior probability of superiority **>97%**
+    *   **UW-mRS:** 0.458 (surgery) vs 0.374 (medical); difference 0.084 (**95% Bayesian credible interval 0.005–0.163, posterior probability of superiority 0.981**). ENRICH used a Bayesian adaptive design and reported no frequentist p-value.
+    *   **30-day mortality:** **9.3% (surgery) vs 18.0% (medical)**; **NNT≈12** (approximate, from the primary SAFETY endpoint, not primary efficacy; Bayesian primaries do not yield a valid NNT)
+    *   Bayesian posterior probability of superiority **0.981**, against a pre-specified threshold of 0.975
 
 ## Why ENRICH Succeeded When Prior Trials Failed
 | Factor | STICH I/II | MISTIE III | ENRICH |
 |--------|-----------|-----------|--------|
 | Surgical approach | Open craniotomy | Stereotactic catheter | **Trans-sulcal MIPS** |
 | Cortical transgression | Yes | Partial | **No. Sulcal corridor** |
-| Patient selection | Broad (all ICH) | Broad | **Lobar/ant.BG, 30–80 mL** |
+| Patient selection | Broad (all ICH) | Broad | **Lobar 30–80 mL** (ant. BG stratum stopped for futility) |
 | Result | Negative | Negative | **Positive** |
 
 ## Eligibility Criteria
 **Include:**
-*   Lobar ICH **OR** anterior basal ganglia ICH
+*   Lobar ICH (the anterior basal ganglia stratum was enrolled but **stopped for futility** at the second interim analysis, so the benefit does not extend to it)
 *   Hematoma volume **30–80 mL** on CT
 *   Within **24 hours** of last known well
 
@@ -1269,15 +1269,15 @@ ENRICH used utility-weighted mRS (UW-mRS), which assigns quality-of-life weights
 *   A UW-mRS of 0.458 vs 0.374 means the surgical group had on average 8.4% higher quality-adjusted functional survival at 180 days
 
 ## Clinical PEARLS
-*   **30-day mortality benefit is the most striking:** 9.3% vs 18.0%; NNT≈12 to prevent one death
-*   **Primary benefit in LOBAR ICH**; anterior basal ganglia subgroup less robust (underpowered subgroup)
+*   **30-day mortality:** 9.3% vs 18.0%; NNT≈12 to prevent one death (approximate, from the primary SAFETY endpoint, not primary efficacy; Bayesian primaries do not yield a valid NNT)
+*   **Benefit is confined to LOBAR ICH**; the anterior basal ganglia stratum was stopped for futility at the second interim analysis (stratum estimate -0.013 utility-weighted mRS points, 95% Bayesian credible interval -0.147 to 0.116), so it is not an underpowered signal of benefit but a stratum in which surgery was found futile
 *   **Requires BrainPath + Myriad (NICO Corporation)**: specialty equipment, needs institutional setup and training
 *   MIPS trans-sulcal approach = no cortical transgression = less surgical brain injury vs open craniotomy
 *   Bayesian adaptive design: statistically valid but n=300 smaller than traditional RCTs; subgroup analyses underpowered
 *   **NOT for deep ICH** (thalamic/putaminal): those patients excluded, different surgical risk profile
 *   Complements MISTIE III (stereotactic) and STICH (open): different technique, different results
 
-*Source: [Hanley DF, et al. N Engl J Med. 2024;390(14):1277–1289](https://www.nejm.org/doi/abs/10.1056/NEJMoa2308440). DOI: 10.1056/NEJMoa2308440*
+*Source: [Pradilla G, et al. N Engl J Med. 2024;390(14):1277–1289](https://www.nejm.org/doi/abs/10.1056/NEJMoa2308440). DOI: 10.1056/NEJMoa2308440*
 `
   },
 

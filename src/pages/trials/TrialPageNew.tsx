@@ -2910,8 +2910,8 @@ const TrialPageNew: React.FC = () => {
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="mRS 0-1 at 90-120 Days"
                 riskRatio="RD +2.1 pp"
-                ciLow="−1.4"
-                ciHigh="+5.6"
+                ciLow="−2.6"
+                ciHigh="+6.9"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="none"
               />
@@ -2976,9 +2976,9 @@ const TrialPageNew: React.FC = () => {
                 treatmentLabel={trialMetadata.efficacyResults.treatment.name}
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="mRS 0-1 at 90 Days"
-                riskRatio="RD +2.4 pp"
-                ciLow="−0.2"
-                ciHigh="+4.8"
+                riskRatio="RD +2.3 pp"
+                ciLow="−1.5"
+                ciHigh="+6.2"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="none"
               />
@@ -2988,7 +2988,7 @@ const TrialPageNew: React.FC = () => {
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
-          {renderTrialDesign(trialMetadata, '760 patients at 28 centers in China. Open-label blinded-endpoint NI RCT. October 2018 to April 2022. Published JAMA 2023.')}
+          {renderTrialDesign(trialMetadata, '760 patients at 38 hospitals in China. Open-label blinded-endpoint NI RCT. October 2018 to April 2022. Published JAMA 2023.')}
           {trialMetadata.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>
@@ -5394,9 +5394,13 @@ const TrialPageNew: React.FC = () => {
               </p>
             </div>
             <div className="p-4">
+              {/* Bars are the 90-day functional-independence rates (36.4% vs 36.8%, Yang NEJM 2020),
+                  NOT tm.efficacyResults, which holds overall successful reperfusion (79.4/84.5) and
+                  would render a ~43-point overstatement under an mRS label. Corrected 2026-07-23
+                  during the trial-library semantic audit remediation. */}
               <DeltaBandChart
-                treatmentPct={tm.efficacyResults.treatment.percentage}
-                controlPct={tm.efficacyResults.control.percentage}
+                treatmentPct={36.4}
+                controlPct={36.8}
                 treatmentLabel={tm.efficacyResults.treatment.name}
                 controlLabel={tm.efficacyResults.control.name}
                 endpoint="mRS 0-2 at 90 Days"
@@ -5775,7 +5779,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div style={{ background: '#fffbeb', borderLeft: '3px solid #f59e0b', borderRadius: '0 10px 10px 0', padding: '14px 18px' }}>
             <p className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: '#92400e' }}>Non-inferiority design: margin not met</p>
-            <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>SKIP tested whether direct EVT was acceptably close to low-dose alteplase (0.6 mg/kg) plus EVT (NI margin: OR lower CI greater than 0.75). Non-inferiority was not demonstrated: the lower CI bound (0.72) fell below the margin. Similar point estimates (59.4% vs 57.3%) do not establish equivalence.</p>
+            <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>SKIP tested whether direct EVT was acceptably close to low-dose alteplase (0.6 mg/kg) plus EVT (NI margin: odds ratio 0.74, fixed-margin approach). Non-inferiority was not demonstrated: the one-sided 97.5% CI lower bound (0.63) fell below the margin. Similar point estimates (59.4% vs 57.3%) do not establish equivalence.</p>
           </div>
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
@@ -5790,8 +5794,8 @@ const TrialPageNew: React.FC = () => {
                 controlLabel={tm.efficacyResults.control.name}
                 endpoint="mRS 0-2 at 90 Days"
                 riskRatio="OR 1.09"
-                ciLow="0.72"
-                ciHigh="1.64"
+                ciLow="0.63"
+                ciHigh="∞"
                 pValue="0.18 (NI)"
                 winnerArm="none"
               />
@@ -5950,7 +5954,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div style={{ background: '#fffbeb', borderLeft: '3px solid #f59e0b', borderRadius: '0 10px 10px 0', padding: '14px 18px' }}>
             <p className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: '#92400e' }}>Non-inferiority design: margin not met</p>
-            <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>DIRECT-SAFE tested whether direct EVT was acceptably close to bridging thrombolysis (NI margin: -12 pp). Non-inferiority was not demonstrated: the lower CI bound (-15.4 pp) crossed the margin. The adjusted risk difference (-5.1%, CI -15.4% to 5.3%) does not establish equivalence.</p>
+            <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>DIRECT-SAFE tested whether direct EVT was acceptably close to bridging thrombolysis (NI margin: -10 pp). Non-inferiority was not demonstrated: the lower CI bound (-16.0 pp) crossed the margin. The intention-to-treat risk difference (-5.1%, two-sided 95% CI -16.0% to 5.9%) does not establish equivalence.</p>
           </div>
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
@@ -5965,8 +5969,8 @@ const TrialPageNew: React.FC = () => {
                 controlLabel={tm.efficacyResults.control.name}
                 endpoint="mRS 0-2 or Pre-stroke Baseline at 90 Days"
                 riskRatio="RD -5.1 pp"
-                ciLow="-15.4 pp"
-                ciHigh="5.3 pp"
+                ciLow="-16.0 pp"
+                ciHigh="5.9 pp"
                 pValue="NI not met"
                 winnerArm="none"
               />
@@ -6026,7 +6030,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div style={{ background: '#fffbeb', borderLeft: '3px solid #f59e0b', borderRadius: '0 10px 10px 0', padding: '14px 18px' }}>
             <p className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: '#92400e' }}>Non-inferiority design: margin not met</p>
-            <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>SWIFT DIRECT tested whether thrombectomy alone was acceptably close to alteplase plus thrombectomy (NI margin: -10 pp). Non-inferiority was not demonstrated: the adjusted RD was -7.3% (95% CI -14.0% to -0.6%). The entire confidence interval is negative; even the most optimistic estimate favors bridging therapy.</p>
+            <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>SWIFT DIRECT tested whether thrombectomy alone was acceptably close to alteplase plus thrombectomy (NI margin: -12 pp, judged on the one-sided 95% lower confidence limit). Non-inferiority was not demonstrated: the adjusted RD was -7.3% (95% CI -16.6% to 2.1%), and the one-sided 95% lower limit of -15.1% crossed the margin. The two-sided interval crosses zero, so the trial did not establish that thrombectomy alone is worse.</p>
           </div>
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
@@ -6041,8 +6045,8 @@ const TrialPageNew: React.FC = () => {
                 controlLabel={tm.efficacyResults.control.name}
                 endpoint="mRS 0-2 at 90 Days"
                 riskRatio="RD -7.3 pp"
-                ciLow="-14.0 pp"
-                ciHigh="-0.6 pp"
+                ciLow="-16.6 pp"
+                ciHigh="+2.1 pp"
                 pValue="NI not met"
                 winnerArm="none"
               />
@@ -6051,7 +6055,7 @@ const TrialPageNew: React.FC = () => {
           {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
-          {renderTrialDesign(tm, '423 patients across European and Canadian comprehensive stroke centers. Open-label randomized non-inferiority trial. Enrolled 2018 to 2021. Stent-retriever technique per protocol. Published Lancet 2022.')}
+          {renderTrialDesign(tm, '423 patients across European and Canadian comprehensive stroke centers. Open-label, blinded-outcome randomized non-inferiority trial. Enrolled 2017 to 2021. Solitaire stent-retriever technique per protocol. Published Lancet 2022.')}
           {tm.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>

@@ -2765,15 +2765,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the bar show?',
-        answer: 'Adjusted common odds ratio for the ordinal mRS shift at 90 days, comparing direct EVT to IV alteplase plus EVT. The point estimate is 1.07 with 95% CI 0.81 to 1.40. Values near 1.0 indicate similar distributions of disability across both arms.',
+        answer: 'The bars show the proportion reaching functional independence (mRS 0-2) at 90 days, 36.4% with direct EVT vs 36.8% with bridging. The statistic beside them is the trial primary: an adjusted common odds ratio for the ordinal mRS shift at 90 days, 1.07 (95% CI 0.81 to 1.40). The non-inferiority test (P = 0.04) applies to that ordinal shift, not to the mRS 0-2 dichotomy. Values near 1.0 indicate similar distributions of disability across both arms.',
       },
       {
         question: 'How is non-inferiority judged here?',
-        answer: 'The pre-specified non-inferiority margin was a lower 95% CI bound above 0.80 for the common OR. The observed lower bound was 0.81, just clearing the margin (P for NI = 0.04). Functional independence (mRS 0-2) at 90 days was 62.0% with direct EVT vs 58.5% with bridging.',
+        answer: 'The pre-specified non-inferiority margin was a lower 95% CI bound above 0.80 for the common OR. The observed lower bound was 0.81, just clearing the margin (P for NI = 0.04). Functional independence (mRS 0-2) at 90 days was near-identical: 36.4% with direct EVT vs 36.8% with bridging.',
       },
       {
         question: 'What about pre-EVT reperfusion?',
-        answer: 'Pre-EVT reperfusion was lower without alteplase: 2.4% (direct EVT) vs 7.0% (bridging). sICH (4.3% in both arms) and 90-day mortality (17.7% vs 18.8%) were similar.',
+        answer: 'Pre-EVT reperfusion was lower without alteplase: 2.4% (direct EVT) vs 7.0% (bridging). sICH (4.3% vs 6.1%) and 90-day mortality (17.7% vs 18.8%) were similar.',
       },
     ],
     /* claimId: direct-mt-noninferiority | source: Yang NEJM 2020 */
@@ -3009,22 +3009,22 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'How is non-inferiority judged here?',
-        answer: 'The pre-specified non-inferiority margin was a one-sided lower 97.5% CI bound of common OR greater than 0.75. The observed OR was 1.09 (95% CI 0.72-1.64) with P for non-inferiority = 0.18. Because the lower CI bound (0.72) fell below the 0.75 threshold, non-inferiority was not met despite numerically similar mRS 0-2 rates (59.4% vs 57.3%).',
+        answer: 'The primary outcome was binary (mRS 0-2 at 90 days), so the effect measure is a plain odds ratio, not a common OR from an ordinal shift analysis. The pre-specified non-inferiority margin was an odds ratio of 0.74, set by the fixed-margin approach with a one-sided significance threshold of 0.025. The observed OR was 1.09 (one-sided 97.5% CI 0.63 to infinity) with P for non-inferiority = 0.18. Because the lower bound (0.63) fell below the 0.74 margin, non-inferiority was not met despite numerically similar mRS 0-2 rates (59.4% vs 57.3%).',
       },
       {
         question: 'What about safety and secondary outcomes?',
-        answer: 'Any intracranial hemorrhage was significantly lower with thrombectomy alone (19.6% vs 28.4%, P = 0.04). Symptomatic ICH was numerically lower (4.9% vs 7.8%, not significant). 90-day mortality was similar (11.8% vs 13.7%).',
+        answer: 'Any intracerebral hemorrhage was significantly lower with thrombectomy alone (33.7% vs 50.5%, OR 0.50, 95% CI 0.28-0.88, P = 0.02). Symptomatic ICH was numerically lower (5.9% vs 7.7%, OR 0.75, 95% CI 0.25-2.24, P = 0.78). 90-day mortality was similar (7.9% vs 8.7%, P greater than 0.99).',
       },
     ],
     /* claimId: skip-noninferiority | source: Suzuki JAMA 2021 */
     howToInterpret: {
-      proves: 'In a Japanese population using low-dose alteplase 0.6 mg/kg, mRS 0-2 rates at 90 days were numerically similar between thrombectomy alone and bridging alteplase plus thrombectomy (59.4% vs 57.3%, OR 1.09). However, the pre-specified non-inferiority threshold was not met: the lower 95% CI bound (0.72) fell below the margin of 0.75. Any ICH was significantly lower with thrombectomy alone (19.6% vs 28.4%, P = 0.04).',
+      proves: 'In a Japanese population using low-dose alteplase 0.6 mg/kg, mRS 0-2 rates at 90 days were numerically similar between thrombectomy alone and bridging alteplase plus thrombectomy (59.4% vs 57.3%, OR 1.09). However, the pre-specified non-inferiority threshold was not met: the one-sided 97.5% CI lower bound (0.63) fell below the margin of 0.74. Any ICH was significantly lower with thrombectomy alone (33.7% vs 50.5%, P = 0.02).',
       doesNotProve: 'Similar point estimates do not establish non-inferiority; the confidence interval was too wide to exclude clinically meaningful inferiority. SKIP does not support omitting alteplase before thrombectomy. Findings do not generalize to standard-dose alteplase (0.9 mg/kg) or to non-Japanese populations, and cannot be extrapolated to settings outside the 4.5-hour window.',
       cautions: 'The bridging comparator used Japan-approved 0.6 mg/kg alteplase, which is lower-intensity than the 0.9 mg/kg dose used in MR CLEAN-NO IV and SWIFT DIRECT. Even against this weaker comparator, non-inferiority failed. The trial was open-label and modestly sized (N=204), limiting precision. Numerical direction favored thrombectomy alone, but statistical inconclusiveness must be respected at the bedside.',
     },
     /* claimId: skip-bedside | source: Suzuki JAMA 2021 */
     bedsidePearl: 'Do not skip alteplase before thrombectomy on the basis of SKIP. Even with low-dose Japanese alteplase as comparator, non-inferiority failed. Give standard-dose IV thrombolysis in eligible LVO patients while activating the EVT pathway in parallel.',
-    bottomLineSummary: 'Japanese non-inferiority trial of thrombectomy alone vs low-dose alteplase plus thrombectomy in LVO stroke within 4.5 hours. mRS 0-2 was numerically similar (59.4% vs 57.3%) but non-inferiority was not met (OR 1.09, 95% CI 0.72-1.64, lower bound below 0.75 margin). Lower any-ICH with direct EVT.',
+    bottomLineSummary: 'Japanese non-inferiority trial of thrombectomy alone vs low-dose alteplase plus thrombectomy in LVO stroke within 4.5 hours. mRS 0-2 was numerically similar (59.4% vs 57.3%) but non-inferiority was not met (OR 1.09, one-sided 97.5% CI lower bound 0.63, below the 0.74 margin). Lower any-ICH with direct EVT.',
     inclusionCriteria: [
       'Age 18 or older',
       'Acute ischemic stroke with LVO of intracranial ICA, M1, M2, or basilar artery',
@@ -3047,7 +3047,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     legend: {
       finding: 'Direct EVT vs low-dose alteplase + EVT: noninferiority not met; inconclusive.',
       bottomLineTag: 'NI not met',
-      keyStat: 'OR 1.09 (0.72–1.64)',
+      keyStat: 'OR 1.09 (1-sided 97.5% CI 0.63)',
     },
   },
   'mr-clean-no-iv-trial': {
@@ -3268,7 +3268,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'How is non-inferiority judged here?',
-        answer: 'The pre-specified non-inferiority margin was -12 percentage points on adjusted risk difference. The observed primary outcome was 55.0% (direct EVT) vs 61.4% (bridging), with adjusted RD -5.1% (95% CI -15.4% to 5.3%). Because the lower CI bound (-15.4%) crossed the -12 pp margin, non-inferiority was not met.',
+        answer: 'The pre-specified non-inferiority margin was -10 percentage points (-0.1) on the risk difference. The observed primary outcome was 55.0% (direct EVT) vs 61.4% (bridging), with intention-to-treat RD -5.1% (two-sided 95% CI -16.0% to 5.9%). Because the lower CI bound (-16.0%) crossed the -10 pp margin, non-inferiority was not met.',
       },
       {
         question: 'What about safety and secondary outcomes?',
@@ -3277,13 +3277,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     /* claimId: direct-safe-noninferiority | source: Mitchell Lancet 2022 */
     howToInterpret: {
-      proves: 'In a geographically diverse cohort across Australia, New Zealand, China, and Vietnam, direct EVT did not meet non-inferiority versus IV thrombolysis plus EVT for the composite of mRS 0-2 or return to pre-stroke baseline at 90 days (55.0% vs 61.4%; adjusted RD -5.1%, 95% CI -15.4% to 5.3%). The lower CI bound (-15.4%) crossed the pre-specified non-inferiority margin of -12 percentage points. sICH was identical at 1.0% in both arms.',
-      doesNotProve: 'Similar point estimates do not establish non-inferiority; the confidence interval was too wide to exclude clinically meaningful inferiority, and the lower bound crossed the margin by more than 3 percentage points. The trial does not support omitting thrombolysis before thrombectomy.',
+      proves: 'In a geographically diverse cohort across Australia, New Zealand, China, and Vietnam, direct EVT did not meet non-inferiority versus IV thrombolysis plus EVT for the composite of mRS 0-2 or return to pre-stroke baseline at 90 days (55.0% vs 61.4%; intention-to-treat RD -5.1%, two-sided 95% CI -16.0% to 5.9%). The lower CI bound (-16.0%) crossed the pre-specified non-inferiority margin of -10 percentage points (-0.1). sICH was identical at 1.0% in both arms.',
+      doesNotProve: 'Similar point estimates do not establish non-inferiority; the confidence interval was too wide to exclude clinically meaningful inferiority, and the lower bound crossed the margin by 6 percentage points. The trial does not support omitting thrombolysis before thrombectomy.',
       cautions: 'Tenecteplase was allowed alongside alteplase in the bridging arm, introducing heterogeneity that cannot be resolved at this sample size (N=295). The cohort included posterior circulation and M2 occlusions, broadening generalizability but reducing precision within subgroups. The very low sICH rate (1%) in both arms differs from other direct-EVT trials and may reflect population or technique differences.',
     },
     /* claimId: direct-safe-bedside | source: Mitchell Lancet 2022 */
-    bedsidePearl: 'Give IV thrombolysis (alteplase or tenecteplase) in eligible LVO patients within 4.5 hours and do not delay for thrombectomy. DIRECT-SAFE failed non-inferiority by more than 3 percentage points beyond the margin, across diverse geography and vascular anatomy.',
-    bottomLineSummary: 'International non-inferiority trial of direct EVT vs IV thrombolysis (alteplase or tenecteplase) plus EVT in LVO stroke within 4.5 hours. mRS 0-2 or pre-stroke baseline: 55.0% vs 61.4%; adjusted RD -5.1% (95% CI -15.4% to 5.3%). Non-inferiority not met (lower CI crossed -12 pp margin). sICH 1.0% in both arms.',
+    bedsidePearl: 'Give IV thrombolysis (alteplase or tenecteplase) in eligible LVO patients within 4.5 hours and do not delay for thrombectomy. DIRECT-SAFE failed non-inferiority by 6 percentage points beyond the margin, across diverse geography and vascular anatomy.',
+    bottomLineSummary: 'International non-inferiority trial of direct EVT vs IV thrombolysis (alteplase or tenecteplase) plus EVT in LVO stroke within 4.5 hours. mRS 0-2 or pre-stroke baseline: 55.0% vs 61.4%; intention-to-treat RD -5.1% (95% CI -16.0% to 5.9%). Non-inferiority not met (lower CI crossed -10 pp margin). sICH 1.0% in both arms.',
     inclusionCriteria: [
       'Age 18 or older',
       'Acute ischemic stroke with LVO of ICA, M1, M2, or basilar artery',
@@ -3305,7 +3305,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     legend: {
       finding: 'Direct EVT did not meet NI vs bridging therapy across AU/NZ/China/Vietnam.',
       bottomLineTag: 'NI not met',
-      keyStat: '−5.1% (−15.4 to 5.3)',
+      keyStat: '−5.1% (−16.0 to 5.9)',
     },
   },
   'swift-direct-trial': {
@@ -3396,27 +3396,27 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'How is non-inferiority judged here?',
-        answer: 'The pre-specified non-inferiority margin was -10 percentage points on adjusted risk difference. The observed mRS 0-2 was 57.0% (thrombectomy alone) vs 65.0% (bridging), with adjusted RD -7.3% (95% CI -14.0% to -0.6%). The lower CI bound (-14.0%) crossed the -10 pp margin AND the upper bound (-0.6%) is also negative: the entire plausible range favors bridging.',
+        answer: 'The pre-specified non-inferiority margin was -12 percentage points, judged against the lower limit of the one-sided 95% confidence interval for the stratified Mantel-Haenszel risk difference. The observed mRS 0-2 was 57% (114 of 201, thrombectomy alone) vs 65% (135 of 207, bridging), with adjusted RD -7.3% (two-sided 95% CI -16.6% to 2.1%; one-sided 95% lower limit -15.1%). The one-sided lower limit of -15.1% crossed the -12 pp margin, so non-inferiority was not shown. Note the two-sided interval also crosses zero, so the trial did not establish that thrombectomy alone is worse.',
       },
       {
         question: 'What about safety and secondary outcomes?',
-        answer: 'Final TICI 2b-3 reperfusion was significantly lower without alteplase (91% vs 96%). Pre-EVT vessel reopening on first angiogram was also significantly lower (1.4% vs 5.7%). sICH was similar (4.4% vs 3.3%) and 90-day mortality was approximately 15% in both arms.',
+        answer: 'Final expanded TICI 2b50-3 reperfusion was lower without alteplase (91% vs 96%; risk difference -5.1%, 95% CI -10.2% to 0.0%, p=0.047). Pre-thrombectomy reperfusion was uncommon in both arms and not significantly different (1% vs 4%; risk difference -2.9%, 95% CI -6.0% to 0.3%, p=0.077). sICH was similar (2% vs 3%; risk difference -1.0%, 95% CI -4.8% to 2.7%) and 90-day mortality was 11% vs 9% (risk difference 2.3%, 95% CI -3.2% to 7.8%).',
       },
     ],
     /* claimId: swift-direct-noninferiority | source: Fischer Lancet 2022 */
     howToInterpret: {
-      proves: 'In a European and Canadian cohort presenting directly to comprehensive stroke centers within 4.5 hours, stent-retriever thrombectomy alone did not meet non-inferiority versus alteplase 0.9 mg/kg plus thrombectomy (mRS 0-2: 57.0% vs 65.0%; adjusted RD -7.3%, 95% CI -14.0% to -0.6%). The lower CI bound crossed the -10 pp non-inferiority margin, and the entire CI is negative: even the most optimistic plausible estimate favors bridging therapy. Reperfusion was also lower without alteplase (TICI 2b-3: 91% vs 96%).',
-      doesNotProve: 'Similar point estimates do not establish non-inferiority. SWIFT DIRECT goes further than other direct-EVT trials: the upper CI bound (-0.6%) is below zero, so the data do not support equivalence either. The trial does not prove harm at the individual patient level, but it does rule out that thrombectomy alone is at least as good as bridging.',
-      cautions: 'Restricted to anterior circulation proximal LVO (ICA or M1), age 18-80, and stent-retriever technique; does not address aspiration-first or distal occlusions. The mechanistic finding of lower reperfusion without alteplase (91% vs 96%) is biologically plausible: alteplase appears to assist catheter-based revascularization, not just precede it. Together with MR CLEAN-NO IV and DIRECT-SAFE, SWIFT DIRECT is the Western counterpart to the Asian direct-EVT trials and most strongly argues against omitting alteplase.',
+      proves: 'In a European and Canadian cohort presenting directly to comprehensive stroke centers within 4.5 hours, stent-retriever thrombectomy alone did not meet non-inferiority versus alteplase 0.9 mg/kg plus thrombectomy (mRS 0-2: 57% vs 65%; adjusted RD -7.3%, 95% CI -16.6% to 2.1%). The lower limit of the one-sided 95% CI, -15.1%, crossed the pre-specified -12 pp non-inferiority margin, so a clinically meaningful loss of benefit could not be excluded. Reperfusion was also lower without alteplase (final expanded TICI 2b50-3: 91% vs 96%, p=0.047).',
+      doesNotProve: 'Similar point estimates do not establish non-inferiority, and the reverse also holds: failing non-inferiority is not proof of inferiority. The two-sided 95% CI for the adjusted risk difference (-16.6% to 2.1%) crosses zero, and the mRS shift analysis was not significant (common OR 0.75, 95% CI 0.53 to 1.06, p=0.10). SWIFT DIRECT therefore does not demonstrate that thrombectomy alone is worse; what it shows is that the data cannot exclude a loss of up to about 15 percentage points, which is why omitting alteplase is not supported.',
+      cautions: 'Restricted to anterior circulation proximal LVO (intracranial ICA or M1), NIHSS 5 to 30, ASPECTS 4 or more, and Solitaire stent-retriever technique; there was no upper age limit (median age 73), and the trial does not address aspiration-first or distal occlusions. The mechanistic finding of lower reperfusion without alteplase (91% vs 96%) is biologically plausible: alteplase appears to assist catheter-based revascularization, not just precede it. Together with MR CLEAN-NO IV and DIRECT-SAFE, SWIFT DIRECT is the Western counterpart to the Asian direct-EVT trials and most strongly argues against omitting alteplase.',
     },
     /* claimId: swift-direct-bedside | source: Fischer Lancet 2022 */
-    bedsidePearl: 'Give IV alteplase 0.9 mg/kg before thrombectomy in eligible anterior-circulation LVO. SWIFT DIRECT showed an 8-point absolute reduction in mRS 0-2 and 5-point lower TICI 2b-3 without alteplase, with the entire confidence interval favoring bridging therapy.',
-    bottomLineSummary: 'European and Canadian non-inferiority trial of stent-retriever thrombectomy alone vs alteplase 0.9 mg/kg plus thrombectomy in anterior-circulation LVO within 4.5 hours. mRS 0-2: 57.0% vs 65.0%; adjusted RD -7.3% (95% CI -14.0% to -0.6%). Non-inferiority not met; the entire CI favors bridging. TICI 2b-3 reperfusion was significantly lower without alteplase.',
+    bedsidePearl: 'Give IV alteplase 0.9 mg/kg before thrombectomy in eligible anterior-circulation LVO. SWIFT DIRECT failed to show non-inferiority of thrombectomy alone: the one-sided 95% lower limit of the adjusted risk difference, -15.1%, crossed the pre-specified -12 pp margin, and final reperfusion was 5 points lower without alteplase (91% vs 96%).',
+    bottomLineSummary: 'European and Canadian non-inferiority trial of stent-retriever thrombectomy alone vs alteplase 0.9 mg/kg plus thrombectomy in anterior-circulation LVO within 4.5 hours. mRS 0-2: 57% vs 65%; adjusted RD -7.3% (95% CI -16.6% to 2.1%; one-sided 95% lower limit -15.1%). Non-inferiority not met against the pre-specified -12 pp margin, although the two-sided interval crosses zero. Final expanded TICI 2b50-3 reperfusion was lower without alteplase (91% vs 96%, p=0.047).',
     inclusionCriteria: [
-      'Age 18 to 80',
+      'Age 18 or older, with no upper age limit',
       'Direct presentation at a comprehensive stroke center',
-      'Anterior circulation proximal LVO (ICA or M1)',
-      'NIHSS 2 or greater',
+      'Anterior circulation proximal LVO (intracranial ICA or M1)',
+      'NIHSS 5 to 30, with deficits judged clearly disabling',
       'Eligible for IV alteplase within 4.5 hours of symptom onset',
       'Pre-stroke mRS 0 to 2',
     ],
@@ -3424,7 +3424,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Contraindication to IV alteplase',
       'Posterior circulation occlusion',
       'M2 or more distal occlusion',
-      'Age greater than 80',
+      'NIHSS less than 5 or more than 30',
       'Transferred from non-EVT center',
       'Pre-stroke mRS greater than 2',
     ],
@@ -3434,9 +3434,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       exclusion: [ { items: ['Acute intracranial hemorrhage','Any contraindication for IV t-PA','Pre-treatment with IV t-PA','In-hospital stroke','Pregnancy or lactating women. A negative pregnancy test before randomization is required for all women with child-bearing potential.','Known (serious) sensitivity to radiographic contrast agents, nickel, titanium metals, or their alloys','Known current participation in a clinical trial (investigational drug or medical device)','Renal insufficiency as defined by a serum creatinine > 2.0 mg/dl (or 176.8 µmol/l) or glomerular filtration rate (GFR) < 30 mL/min or requirement for hemodialysis or peritoneal dialysis','Severe comorbid condition with life expectancy less than 90 days at baseline','Known advanced dementia or significant pre-stroke disability (mRS score of ≥2)','Foreseeable difficulties in follow-up due to geographic reasons (e.g. patients living abroad)','Comorbid disease or condition that would confound the neurological and functional evaluations or compromise survival or ability to complete follow-up assessments.','Subject currently uses or has a recent history of illicit drug(s) or abuses alcohol (defined as regular or daily consumption of more than four alcoholic drinks per day).','Known history of arterial tortuosity, pre-existing stent, other arterial disease and/or known disease at the femoral access site that would prevent the device from reaching the target vessel and/or preclude safe recovery after MT','Radiological confirmed evidence of mass effect or intracranial tumor (except small meningioma)','Radiological confirmed evidence of cerebral vasculitis','CTA or MRA evidence of carotid artery dissection','Evidence of additional distal intracranial vessel occlusion in another territory (i.e. A2 segment of anterior cerebral artery or M3, M4 segment of MCA) on initial NCCT/MRI or CTA/MRA'] } ],
     },
     legend: {
-      finding: 'EVT alone failed NI vs bridging; entire CI favored alteplase + EVT.',
+      finding: 'EVT alone failed NI vs bridging; one-sided 95% limit crossed the -12 pp margin.',
       bottomLineTag: 'NI not met',
-      keyStat: '−7.3% (−14.0 to −0.6)',
+      keyStat: '−7.3% (−16.6 to 2.1)',
     },
   },
   'laste-trial': {
@@ -3832,7 +3832,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'How is non-inferiority judged here?',
-        answer: 'The pre-specified non-inferiority margin was -7 percentage points. The primary Bayesian analysis met NI (P for NI = 0.0014), though the frequentist CI lower bound (-8 pp) marginally crossed the margin. Despite lower aspiration first-pass reperfusion (68.9% vs 76.3% with stent retriever), clinical outcomes were equivalent.',
+        answer: 'The pre-specified non-inferiority margin was 0.15, that is 15 percentage points on the stent-retriever-minus-aspiration difference in mRS 0-2. Non-inferiority was met with room to spare (P for NI = 0.0014): the lower bound of the reported difference interval (about -8 pp) sits well inside the 15-point margin.',
       },
       {
         question: 'What about reperfusion rates and procedure time?',
@@ -3843,7 +3843,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToInterpret: {
       proves: 'In North American comprehensive stroke centers, contact-aspiration as first-line technique was non-inferior to stent-retriever first-line for 90-day mRS 0-2 in anterior circulation LVO treated within 6 hours. Operator and device flexibility is supported.',
       doesNotProve: 'The trial does not establish superiority of either technique. It does not address combined techniques (BADDASS), distal-medium-vessel occlusion, or basilar occlusion. It does not address newer-generation aspiration catheters or stent retrievers introduced after 2019.',
-      cautions: 'Aspiration first-pass produced lower first-pass reperfusion rates (68.9% vs 76.3%); rescue with stent retriever was common and partially closed the gap. The frequentist CI lower bound (-8 pp) marginally crossed the -7 pp NI threshold. Results assume operator proficiency in both techniques and ready availability of rescue devices.',
+      cautions: 'Aspiration first-pass produced lower first-pass reperfusion rates (68.9% vs 76.3%); rescue with stent retriever was common and partially closed the gap. Non-inferiority was judged against a wide pre-specified margin of 0.15 (15 percentage points), so a 270-patient trial could declare non-inferiority even if aspiration were meaningfully worse; the observed difference was +2 percentage points favoring aspiration. Results assume operator proficiency in both techniques and ready availability of rescue devices.',
     },
     /* claimId: compass-bedside | source: Turk Lancet 2019 */
     bedsidePearl: 'COMPASS supports operator choice between aspiration-first and stent-retriever-first as initial EVT technique. Lower first-pass reperfusion with aspiration (68.9% vs 76.3%) did not translate to worse 90-day outcomes when rescue devices were available. Choose based on clot characteristics, operator experience, and access anatomy.',
@@ -4220,7 +4220,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What do the numbers mean clinically?',
-        answer: 'Excellent outcome was 59.0% with adjunct intra-arterial alteplase versus 40.4% with placebo (adjusted risk difference 18.4%, 95% CI 0.3% to 36.4%, P=0.047). Functional independence (mRS 0 to 2) was 83.6% versus 63.5%. Symptomatic intracranial hemorrhage at 24 hours was 0% versus 3.8%.',
+        answer: 'Excellent outcome was 59.0% with adjunct intra-arterial alteplase versus 40.4% with placebo (adjusted risk difference 18.4%, 95% CI 0.3% to 36.4%, P=0.047). Functional independence (mRS 0 to 2) was 67.2% versus 63.5%, a much smaller gap than at the mRS 0 to 1 threshold. Symptomatic intracranial hemorrhage at 24 hours was 0% versus 3.8%.',
       },
       {
         question: 'What is the key limitation to keep in mind?',
@@ -6642,13 +6642,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     inclusionCriteria: [
       'Anterior LVO (ICA or M1)',
       '6–16 hours from last known well',
-      'Pre-stroke mRS 0–1',
+      'Pre-stroke mRS 0–2',
       'RAPID perfusion mismatch: core <70 mL, mismatch ratio ≥1.8, mismatch volume ≥15 mL',
     ],
     exclusionCriteria: [
       'Onset <6 hours (use early-window evidence)',
       'Onset >16 hours (use DAWN window)',
-      'Pre-stroke mRS ≥2',
+      'Pre-stroke mRS ≥3',
       'Posterior circulation occlusion (see ATTENTION/BAOCHE)',
       'Core ≥70 mL or mismatch ratio <1.8',
     ],
@@ -6749,14 +6749,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
     ],
     howToInterpret: {
-      proves: 'In anterior LVO (ICA or M1) 6–16 hours from last-known-well, with RAPID perfusion mismatch (core <70 mL, ratio ≥1.8, volume ≥15 mL) and pre-stroke mRS 0–1, endovascular thrombectomy improves the ordinal mRS distribution at 90 days vs standard medical therapy.',
+      proves: 'In anterior LVO (ICA or M1) 6–16 hours from last-known-well, with RAPID perfusion mismatch (core <70 mL, ratio ≥1.8, volume ≥15 mL) and pre-stroke mRS 0–2, endovascular thrombectomy improves the ordinal mRS distribution at 90 days vs standard medical therapy.',
       doesNotProve: 'It does not prove benefit outside 6–16 hours (DAWN covers 6–24h; early-window evidence is separate). It does not apply to core ≥70 mL or mismatch <1.8 (those criteria are exclusionary; large-core EVT is addressed by SELECT2 and ANGEL-ASPECT). It does not establish benefit without RAPID-equivalent automated perfusion software.',
       cautions: 'Stopped early at pre-specified interim (n=182 of planned 476); truncation bias may inflate effect size. Posterior circulation excluded; only one M2 occlusion enrolled. US-only, single imaging vendor (RAPID/iSchemaView); generalizability to centers without similar imaging is uncertain. NNT 3.6 is from the SECONDARY mRS 0–2 outcome; primary ordinal-shift does not yield a valid NNT.',
     },
     bedsidePearl: 'In anterior LVO 6–16 hours from LKW with RAPID-defined penumbra (core <70 mL, mismatch ≥1.8 and ≥15 mL), EVT triples functional independence (45% vs 17%). Primary endpoint is the ordinal mRS shift (common OR 2.77, CI 1.63–4.70); NNT 3.6 derived from the mRS 0–2 secondary.',
     bottomLineSummary: 'DEFUSE-3 extends EVT to 6–16h with RAPID perfusion selection. Primary ordinal mRS shift: common OR 2.77 (95% CI 1.63–4.70, P<0.001). Secondary mRS 0–2: 45% vs 17% (NNT 3.6). Stopped early at pre-specified interim. AHA/ASA 2026 §4.7.2 COR 1.',
     applicability: {
-      imagingSelection: 'CT or MR perfusion mismatch required (RAPID: core <70 mL, mismatch ratio ≥1.8, mismatch volume ≥15 mL); pre-stroke mRS 0–1; anterior LVO (ICA or M1)',
+      imagingSelection: 'CT or MR perfusion mismatch required (RAPID: core <70 mL, mismatch ratio ≥1.8, mismatch volume ≥15 mL); pre-stroke mRS 0–2; anterior LVO (ICA or M1)',
       populationExclusions: [
         '6–16h time window only. Does not apply to early window (0-6h) or ultra-late window (>16h)',
         'Stopped early for efficacy at pre-specified interim (n=182 of planned 476). Truncation bias may inflate effect size',
@@ -6842,7 +6842,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     pearls: [
       'Primary endpoint is the ordinal mRS distribution (common OR 2.77, 95% CI 1.63–4.70). NNT 3.6 is derived from the SECONDARY mRS 0–2 outcome (45% vs 17%); ordinal-shift primaries do not yield valid NNT per clinical-trial-audit',
       'Late window: Along with DAWN, DEFUSE-3 shifted selection from time-based to tissue-based; perfusion mismatch over clock',
-      'Selection Criteria: Infarct Core < 70 ml, Mismatch Ratio ≥ 1.8, Mismatch Volume ≥ 15 ml; pre-stroke mRS 0–1; ICA or M1 occlusion',
+      'Selection Criteria: Infarct Core < 70 ml, Mismatch Ratio ≥ 1.8, Mismatch Volume ≥ 15 ml; pre-stroke mRS 0–2; ICA or M1 occlusion',
       'Mortality Reduction: 14% in EVT group vs 26% in Control group (P=0.05). Secondary outcome, borderline significant',
       'Safety: sICH 7% vs 4% (P=0.75). No significant difference',
       'Implementation: Requires automated perfusion software (e.g., RAPID) for standardized core/penumbra calculation',
@@ -10258,7 +10258,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Acute ischemic stroke with confirmed atrial fibrillation (permanent, persistent, or paroxysmal)',
       'Imaging-based stroke severity classification: minor (small infarct, NIHSS 0-5), moderate (NIHSS 6-15, non-cortical dominant or non-large infarct), or major (NIHSS 16 or higher, or large cortical/hemispheric infarct)',
       'Planned DOAC anticoagulation for secondary prevention',
-      'Randomization within 48 hours for minor or moderate stroke; within 6 to 24 hours for major stroke',
+      'Randomization within 48 hours for minor or moderate stroke; on day 6 or 7 for major stroke',
     ],
     exclusionCriteria: [
       'Hemorrhagic transformation on baseline imaging (symptomatic)',
@@ -10275,7 +10275,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
             'Acute ischemic stroke, defined as evidence of acute cerebral infarction on magnetic resonance imaging (MRI) or computed tomography (CT), or a clinical diagnosis of ischemic stroke with symptoms lasting more than 24 hours, confirmed by an investigator on the basis of a CT or MRI scan that excluded other causes',
             'Permanent, persistent, or paroxysmal nonvalvular atrial fibrillation, or atrial fibrillation diagnosed during hospitalization for the stroke',
             'Infarct size classified by the site investigators using a standardized visual rating scheme: minor (an infarct 1.5 cm or smaller), moderate (an infarct in the distribution of a cortical superficial branch of the middle, anterior, or posterior cerebral artery), or major (larger infarcts in those arterial distributions, or a brain-stem or cerebellar infarct larger than 1.5 cm)',
-            'Able to be randomly assigned within 48 hours after a minor or moderate stroke, or within 6 to 24 hours after a major stroke',
+            'Able to be randomly assigned within 48 hours after a minor or moderate stroke, or on day 6 or 7 after a major stroke',
             'Eligible for treatment with a direct oral anticoagulant (DOAC) for secondary prevention',
             'Written informed consent provided by the participant, next of kin, another legal representative, or an independent physician according to country-specific requirements',
           ],
@@ -10336,7 +10336,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     howToInterpret: {
       /* claimId: elan.interpret | source: Fischer U et al. NEJM 2023;388:2411-2421 */
-      proves: 'In patients with AF-related acute ischemic stroke, early DOAC initiation (within 48 hours for minor/moderate, within 6-24 hours for major stroke) was not significantly worse than delayed initiation, with a primary composite event rate of 2.9% vs 4.1% and a risk difference of -1.18 percentage points (95% CI -2.84 to +0.47).',
+      proves: 'In patients with AF-related acute ischemic stroke, early DOAC initiation (within 48 hours for minor/moderate, on day 6 or 7 for major stroke) was not significantly worse than delayed initiation, with a primary composite event rate of 2.9% vs 4.1% and a risk difference of -1.18 percentage points (95% CI -2.84 to +0.47).',
       doesNotProve: 'ELAN was not designed to show that early anticoagulation is superior to delayed. It does not establish the optimal DOAC or dose, and it does not apply to patients with prosthetic heart valves or those requiring warfarin. It does not prove that early initiation is safe in all large infarcts.',
       cautions: 'This is an estimation trial with an open-label design (blinded endpoint assessment). The 95% CI upper bound of +0.47 percentage points means early treatment could be slightly worse than delayed in some scenarios. The trial used imaging-based severity classification rather than NIHSS alone, which requires familiarity with the ELAN definitions. The primary composite included heterogeneous outcomes (ischemic stroke, ICH, systemic embolism, major extracranial bleeding, vascular death), making interpretation of individual component trends exploratory.',
     },
@@ -11832,15 +11832,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What does it mean for my patient?',
-        answer: 'For LOBAR or selected anterior basal ganglia ICH 30–80 mL within 24 hours, MIPS (BrainPath + Myriad trans-sulcal evacuation) reduces 30-day mortality and improves 180-day UW-mRS. Approx NNT ~12 (from primary safety endpoint; Bayesian primaries do not yield valid NNT). Anterior basal ganglia subgroup was HALTED for futility. Benefit is concentrated in LOBAR ICH.',
+        answer: 'For LOBAR ICH 30–80 mL within 24 hours, MIPS (BrainPath + Myriad trans-sulcal evacuation) reduces 30-day mortality and improves 180-day UW-mRS. Approx NNT ~12 (from primary safety endpoint; Bayesian primaries do not yield valid NNT). Anterior basal ganglia subgroup was HALTED for futility. Benefit is concentrated in LOBAR ICH.',
       },
     ],
     howToInterpret: {
-      proves: 'In LOBAR or anterior basal ganglia intracerebral hemorrhage 30–80 mL within 24 hours, minimally invasive parafascicular surgery (trans-sulcal corridor, BrainPath + Myriad) improves utility-weighted mRS at 180 days (Bayesian P(sup)=0.981) and reduces 30-day mortality (9.3% vs 18.0%).',
+      proves: 'In LOBAR intracerebral hemorrhage 30–80 mL within 24 hours, minimally invasive parafascicular surgery (trans-sulcal corridor, BrainPath + Myriad) improves utility-weighted mRS at 180 days (lobar stratum difference +0.127, 95% CrI 0.035–0.219; overall Bayesian P(sup)=0.981) and reduces 30-day mortality (9.3% vs 18.0%).',
       doesNotProve: 'It does not prove benefit in anterior basal ganglia ICH. That subgroup was halted for futility at interim 2 (point estimate −0.013, CrI crossing zero). It does not apply to deep (thalamic/putaminal) ICH, posterior fossa, brainstem, or volumes <30 mL or >80 mL.',
       cautions: 'Industry-funded by NICO Corporation (device manufacturer). Bayesian adaptive randomization: effect size may be inflated. Open-label (impossible to blind surgery), mitigated by central blinded mRS adjudication via redacted audio recordings. 59 trained neurosurgeons across 37 US centers; generalizability outside trained centers is unestablished. NNT 12 is approximate, from PRIMARY SAFETY endpoint (30-day mortality), not primary efficacy.',
     },
-    bedsidePearl: 'For LOBAR (or selected anterior basal ganglia) ICH 30–80 mL within 24 hours, minimally invasive parafascicular surgery (BrainPath + Myriad) reduces 30-day mortality (9.3% vs 18.0%) and improves 180-day UW-mRS (Bayesian posterior P>0.98). Anterior basal ganglia subgroup was halted for futility; benefit is in LOBAR ICH.',
+    bedsidePearl: 'For LOBAR ICH 30–80 mL within 24 hours, minimally invasive parafascicular surgery (BrainPath + Myriad) reduces 30-day mortality (9.3% vs 18.0%) and improves 180-day UW-mRS (Bayesian posterior P>0.98). Anterior basal ganglia subgroup was halted for futility; benefit is in LOBAR ICH.',
     bottomLineSummary: 'ENRICH is the first randomized supratentorial ICH evacuation trial to meet its prespecified primary endpoint. UW-mRS at 180d: difference +0.084 (95% CrI 0.005–0.163, posterior P(sup)=0.981). 30-day mortality 9.3% vs 18.0% (ARD -8.7 pp, posterior P=0.987). Bayesian RAR design (no frequentist p-value). AHA/ASA 2022 ICH Class IIb (pre-ENRICH); may prompt focused update.',
     stats: {
       sampleSize: {
@@ -11953,7 +11953,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     doi: '10.1056/NEJMoa2308440',
     pmid: '38598795',
     clinicalTrialsId: 'NCT02880878',
-    keyMessage: 'Lobar (or selected anterior basal ganglia) ICH 30–80 mL within 24h: MIPS reduces 30-day mortality (9.3% vs 18.0%) and improves 180-day UW-mRS (Bayesian P>0.98). Requires BrainPath+Myriad and trained neurosurgical team. Anterior basal ganglia subgroup was halted for futility. Benefit is in lobar ICH.',
+    keyMessage: 'Lobar ICH 30–80 mL within 24h: MIPS reduces 30-day mortality (9.3% vs 18.0%) and improves 180-day UW-mRS (Bayesian P>0.98). Requires BrainPath+Myriad and trained neurosurgical team. Anterior basal ganglia subgroup was halted for futility. Benefit is in lobar ICH.',
     limitations: [
       'Small n=300 (adaptive). Subgroup analyses underpowered',
       'Anterior basal ganglia subgroup halted for futility at interim 2. No benefit in that location; benefit concentrated in LOBAR ICH',
@@ -13200,24 +13200,24 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the chart show?',
-        answer: 'mRS 0-1 (excellent functional outcome) at 90-120 days in routine Canadian practice. Tenecteplase reached 36.9 per 100 patients; alteplase reached 34.8. The 2.1 percentage point numerical advantage for tenecteplase is within the prespecified NI margin of −5 pp, confirming non-inferiority.',
+        answer: 'mRS 0-1 (excellent functional outcome) at 90-120 days in routine Canadian practice. Tenecteplase reached 36.9 per 100 patients; alteplase reached 34.8. Non-inferiority rests on the interval, not the point estimate: the lower bound of the 95% CI around the 2.1 percentage point difference was −2.6 pp, which stays above the prespecified NI margin of −5 pp.',
       },
       {
         question: 'Why is there no delta band?',
-        answer: 'AcT was designed to prove non-inferiority, not superiority. The superiority p-value was 0.21. Not significant. A delta band would misrepresent the result as an efficacy advantage. The two arms meet the prespecified non-inferiority margin for this endpoint.',
+        answer: 'AcT was designed to prove non-inferiority, not superiority. The superiority p-value was 0.19. Not significant. A delta band would misrepresent the result as an efficacy advantage. The two arms meet the prespecified non-inferiority margin for this endpoint.',
       },
       {
-        question: 'What does NI P<0.001 mean?',
-        answer: 'The lower 95% CI bound for the risk difference was −1.4 pp, comfortably above the NI margin of −5 pp. AcT provides strong evidence that tenecteplase does not clinically sacrifice efficacy versus alteplase in routine stroke care.',
+        question: 'How was non-inferiority declared?',
+        answer: 'AcT used a confidence-interval rule, not a p-value. The lower bound of the two-sided 95% CI for the risk difference was −2.6 pp, above the prespecified NI margin of −5 pp, so non-inferiority was met. AcT provides strong evidence that tenecteplase does not clinically sacrifice efficacy versus alteplase in routine stroke care.',
       },
     ],
     howToInterpret: {
-      proves: 'In patients with disabling acute ischemic stroke treated within 4.5 hours in routine Canadian practice, tenecteplase 0.25 mg/kg showed non-inferiority to alteplase 0.9 mg/kg for excellent functional outcome at 90-120 days within the prespecified margin of −5 percentage points (RD +2.1 pp, 95% CI −1.4 to +5.6, NI P<0.001).',
+      proves: 'In patients with disabling acute ischemic stroke treated within 4.5 hours in routine Canadian practice, tenecteplase 0.25 mg/kg showed non-inferiority to alteplase 0.9 mg/kg for excellent functional outcome at 90-120 days within the prespecified margin of −5 percentage points (RD +2.1 pp, 95% CI −2.6 to +6.9).',
       doesNotProve: 'AcT does not prove superiority of tenecteplase over alteplase for functional outcomes. It does not establish equivalent benefit in bridging EVT patients, who were not the primary population. Registry-linked outcome ascertainment differs from blinded endpoint adjudication in traditional RCTs.',
-      cautions: 'Open-label design with registry-based outcomes may introduce assessment bias. The NI margin of −5 pp, while prespecified, means a difference up to 5% would still be declared non-inferior. Superiority was not met (P=0.21), so the trial supports replacement of alteplase but does not establish tenecteplase as the superior agent.',
+      cautions: 'Open-label design with registry-based outcomes may introduce assessment bias. The NI margin of −5 pp, while prespecified, means a difference up to 5% would still be declared non-inferior. Superiority was not met (P=0.19), so the trial supports replacement of alteplase but does not establish tenecteplase as the superior agent.',
     },
     bedsidePearl: 'AcT confirmed tenecteplase 0.25 mg/kg as a practical replacement for alteplase in routine IVT (NI met, RD +2.1 pp). The workflow advantage is the single-bolus administration versus a bolus-plus-infusion for alteplase. Symptomatic ICH rates were similar (3.4% vs 3.2%). Together with TRACE-2 and ATTEST-2, AcT supports the 2026 guideline endorsement of tenecteplase.',
-    bottomLineSummary: 'AcT showed non-inferiority of tenecteplase 0.25 mg/kg to alteplase 0.9 mg/kg for excellent 90-day outcome in routine Canadian stroke practice (36.9% vs 34.8%, RD +2.1 pp, 95% CI −1.4 to +5.6). The single-bolus advantage is validated without sacrificing efficacy or safety.',
+    bottomLineSummary: 'AcT showed non-inferiority of tenecteplase 0.25 mg/kg to alteplase 0.9 mg/kg for excellent 90-day outcome in routine Canadian stroke practice (36.9% vs 34.8%, RD +2.1 pp, 95% CI −2.6 to +6.9). The single-bolus advantage is validated without sacrificing efficacy or safety.',
     legend: {
       finding: 'Tenecteplase 0.25 mg/kg non-inferior to alteplase in routine IVT within 4.5 h.',
       bottomLineTag: 'NI met',
@@ -13296,7 +13296,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       sICH: {
         evt: 0.3,
         control: 0.9,
-        label: 'Symptomatic intracranial hemorrhage at 24 hours',
+        label: 'Symptomatic intracranial hemorrhage at 90 days',
         color: 'success',
         tooltip: 'sICH was numerically lower with DAPT (0.3% vs 0.9%), consistent with an antithrombotic approach without plasminogen activation.',
       },
@@ -13370,7 +13370,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the chart show?',
-        answer: 'mRS 0-1 (excellent outcome) at 90 days in patients with minor nondisabling acute ischemic stroke. DAPT reached 93.8 per 100 patients; alteplase reached 91.4. The 2.4 pp difference favors DAPT numerically, and non-inferiority was confirmed (NI P<0.001).',
+        answer: 'mRS 0-1 (excellent outcome) at 90 days in patients with minor nondisabling acute ischemic stroke. DAPT reached 93.8 per 100 patients; alteplase reached 91.4. The 2.3 pp difference favors DAPT numerically, and non-inferiority was confirmed (95% CI −1.5% to +6.2%, NI P<0.001).',
       },
       {
         question: 'Why are both rates so high?',
@@ -13382,12 +13382,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
     ],
     howToInterpret: {
-      proves: 'In patients with minor nondisabling acute ischemic stroke treated within 4.5 hours, dual antiplatelet therapy showed non-inferiority to IV alteplase for excellent functional outcome at 90 days within the prespecified margin of −3 percentage points (DAPT 93.8% vs alteplase 91.4%, RD +2.4 pp, NI P<0.001), with lower sICH (0.3% vs 0.9%).',
+      proves: 'In patients with minor nondisabling acute ischemic stroke treated within 4.5 hours, dual antiplatelet therapy showed non-inferiority to IV alteplase for excellent functional outcome at 90 days within the prespecified margin of −4.5 percentage points (DAPT 93.8% vs alteplase 91.4%, RD +2.3 pp, 95% CI −1.5% to +6.2%, NI P<0.001), with lower sICH (0.3% vs 0.9%).',
       doesNotProve: 'ARAMIS does not prove DAPT is superior to alteplase. It does not apply to patients with disabling neurological deficits, where alteplase retains standard-of-care status. The benefit may be partly driven by avoiding alteplase-associated sICH in a population with otherwise-favorable prognosis.',
       cautions: 'Open-label design. The enrolled population had NIHSS ≤5 with nondisabling deficits (not the typical thrombolysis candidate). ARAMIS complements but does not replace alteplase for patients with disabling stroke. Results require careful patient selection to apply correctly in practice.',
     },
     bedsidePearl: 'ARAMIS showed DAPT is non-inferior to alteplase for minor nondisabling stroke (NNT context: both arms excellent, 93.8% vs 91.4%). The key bedside application: for clearly minor, nondisabling deficits within 4.5 hours, DAPT is a reasonable alternative that avoids the 0.9% sICH risk of alteplase. Do not apply to disabling stroke.',
-    bottomLineSummary: 'In patients with minor nondisabling acute ischemic stroke, DAPT was non-inferior to IV alteplase for excellent 90-day outcome (93.8% vs 91.4%, RD +2.4 pp, NI P<0.001), with lower sICH (0.3% vs 0.9%). ARAMIS supports DAPT as an alternative to thrombolysis for clearly nondisabling deficits but does not displace alteplase for disabling stroke.',
+    bottomLineSummary: 'In patients with minor nondisabling acute ischemic stroke, DAPT was non-inferior to IV alteplase for excellent 90-day outcome (93.8% vs 91.4%, RD +2.3 pp, NI P<0.001), with lower sICH (0.3% vs 0.9%). ARAMIS supports DAPT as an alternative to thrombolysis for clearly nondisabling deficits but does not displace alteplase for disabling stroke.',
     legend: {
       finding: 'DAPT non-inferior to alteplase for minor nondisabling stroke at 90 d (93.8% vs 91.4%).',
       bottomLineTag: 'NI met',

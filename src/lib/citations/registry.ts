@@ -350,10 +350,22 @@ export const CITATION_REGISTRY: CitationRegistry = {
     title: 'HAMLET: Surgical decompression for space-occupying cerebral infarction (Hemicraniectomy After Middle Cerebral Artery infarction with Life-threatening Edema Trial)',
     year: 2009,
     url: 'https://www.thelancet.com/journals/laneur/article/PIIS1474-4422(09)70047-X/abstract',
-    pmid: '19233729',
+    pmid: '19269254',
+    // NOT refreshed. quoted_text was corrected on 2026-07-23 (the primary poor-outcome ARR and
+    // the case-fatality ARR had been swapped, inverting the trial's conclusion) and the pmid was
+    // corrected from a Feigin review to Hofmeijer 2009. Both are strict improvements and need no
+    // date flip. The date deliberately stays at 2026-05-23 because §13.6 is NOT complete:
+    //   step 4 (no wording drift): case-fatality P=0.002, rendered on four trialData.ts surfaces,
+    //     could not be confirmed (abstract carries ARR + CI only; full text 403).
+    //   step 5 (newer evidence): HAMLET 3-year follow-up (PMID 23868265, Stroke 2014) not reviewed,
+    //     AND the post-publication correspondence "Reassessment of the HAMLET study" (Mitchell P,
+    //     Gregson BA, et al., Lancet Neurol 2009;8(7), PMID 19539229) plus the authors' reply,
+    //     identified but unread (paywalled). The §8a accompanying editorial is also unretrieved
+    //     and would need to close for any future FULL Class E re-review.
+    // Tracked in TASKS.md as blocked:awaiting-clinical-review. Refresh only after all three close.
     last_reviewed: '2026-05-23',
     review_window_months: 36,
-    quoted_text: 'In 64 patients aged 18 to 60 with space-occupying MCA infarction randomized to surgical decompression vs best medical treatment within 96 hours of onset, surgery reduced poor outcome (mRS >3) but did not reduce mortality at 1 year (absolute risk reduction 0%, 95% CI -21 to +21). The pre-specified subgroup randomized within 48 hours showed signal consistent with DECIMAL and DESTINY; the >48h subgroup showed no benefit.',
+    quoted_text: 'In 64 patients aged 18 to 60 with space-occupying MCA infarction randomized to surgical decompression vs best medical treatment within 96 hours of onset, surgery did not reduce the primary outcome of poor outcome (mRS 4-6) at 1 year (absolute risk reduction 0%, 95% CI -21 to 21) but did reduce case fatality (ARR 38%, 95% CI 15 to 60). The pre-specified pooled analysis of DECIMAL, DESTINY, and HAMLET patients randomized within 48 hours reported a reduction in poor outcome whose confidence interval touched zero; HAMLET patients randomized after 48 hours showed no functional benefit. The 2007 Vahedi pooled figures (n=93) are held in vahedi-pooled-decimal-destiny-hamlet-2007; the HAMLET 2009 pooled figures are not duplicated here.',
   },
   'vahedi-pooled-decimal-destiny-hamlet-2007': {
     id: 'vahedi-pooled-decimal-destiny-hamlet-2007',
@@ -430,10 +442,20 @@ export const CITATION_REGISTRY: CitationRegistry = {
     title: 'ENRICH: Trial of Early Minimally Invasive Removal of Intracerebral Hemorrhage',
     year: 2024,
     url: 'https://www.nejm.org/doi/full/10.1056/NEJMoa2308440',
-    pmid: '38598229',
-    last_reviewed: '2026-05-23',
+    pmid: '38598795',
+    // Refreshed 2026-07-23 per §13.6. quoted_text was materially rewritten during the
+    // trial-library semantic remediation (it had called ENRICH positive for anterior basal
+    // ganglia ICH, the stratum stopped for futility). Steps completed: source re-resolved via a
+    // corrected pmid (was 38598229, a JAMA Dermatology trial; now 38598795), guideline currency
+    // checked, dependent claim ich-surgery-synthesis re-checked, claim text re-derived from the
+    // packet's verified values, dual sign-off recorded in the review artifact.
+    // Step 5, newer evidence, CONSIDERED AND NOT INCORPORATED: ESO 2025 guidance referencing
+    // minimally invasive surgery on ENRICH criteria was identified but its text could not be
+    // retrieved. It does not supersede the trial result and does not alter any claim mapped here;
+    // a follow-up retrieval task is tracked in TASKS.md.
+    last_reviewed: '2026-07-23',
     review_window_months: 36,
-    quoted_text: 'In 300 patients with spontaneous supratentorial intracerebral hemorrhage of 30 to 80 mL (anterior basal-ganglia or lobar) randomized within 24 hours to minimally invasive parafascicular surgery plus medical management vs medical management alone, the Bayesian adaptive primary analysis showed a between-group difference in utility-weighted modified Rankin Scale at 180 days favoring surgery (mean 0.458 vs 0.374; posterior probability of superiority 0.981, exceeding the pre-specified 0.975 threshold). The lobar subgroup contributed the larger effect; anterior basal-ganglia ICH was included but the trial was not designed to test these subgroups independently.',
+    quoted_text: 'In 300 patients with spontaneous supratentorial intracerebral hemorrhage of 30 to 80 mL (anterior basal-ganglia or lobar) randomized within 24 hours to minimally invasive parafascicular surgery plus medical management vs medical management alone, the Bayesian adaptive primary analysis showed a between-group difference in utility-weighted modified Rankin Scale at 180 days favoring surgery (mean 0.458 vs 0.374; posterior probability of superiority 0.981, exceeding the pre-specified 0.975 threshold). Benefit was confined to the lobar stratum (difference 0.127, 95% Bayesian credible interval 0.035 to 0.219); enrollment of anterior basal-ganglia hemorrhage was stopped for futility at the second interim analysis and that stratum showed no benefit (difference -0.013, 95% Bayesian credible interval -0.147 to 0.116).',
   },
 
   // ─── ICAS STENTING chain (3 trials + 1 supporting + 1 guideline section) ──

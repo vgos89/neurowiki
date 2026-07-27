@@ -32,7 +32,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Canada; December 2019 to January 2022",
     "listCategory": "thrombolysis",
     "listDescription": "Tenecteplase vs alteplase in routine Canadian stroke practice; non-inferiority confirmed.",
-    "bottomLineSummary": "AcT showed non-inferiority of tenecteplase 0.25 mg/kg to alteplase 0.9 mg/kg for excellent 90-day outcome in routine Canadian stroke practice (36.9% vs 34.8%, RD +2.1 pp, 95% CI −1.4 to +5.6). The single-bolus advantage is validated without sacrificing efficacy or safety.",
+    "bottomLineSummary": "AcT showed non-inferiority of tenecteplase 0.25 mg/kg to alteplase 0.9 mg/kg for excellent 90-day outcome in routine Canadian stroke practice (36.9% vs 34.8%, RD +2.1 pp, 95% CI −2.6 to +6.9). The single-bolus advantage is validated without sacrificing efficacy or safety.",
     "doi": "10.1016/S0140-6736(22)01054-6"
   },
   "angel-aspect-trial": {
@@ -92,7 +92,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "China; October 2018 to April 2022",
     "listCategory": "thrombolysis",
     "listDescription": "Dual antiplatelet therapy vs alteplase for minor nondisabling stroke; non-inferiority confirmed.",
-    "bottomLineSummary": "In patients with minor nondisabling acute ischemic stroke, DAPT was non-inferior to IV alteplase for excellent 90-day outcome (93.8% vs 91.4%, RD +2.4 pp, NI P<0.001), with lower sICH (0.3% vs 0.9%). ARAMIS supports DAPT as an alternative to thrombolysis for clearly nondisabling deficits but does not displace alteplase for disabling stroke.",
+    "bottomLineSummary": "In patients with minor nondisabling acute ischemic stroke, DAPT was non-inferior to IV alteplase for excellent 90-day outcome (93.8% vs 91.4%, RD +2.3 pp, NI P<0.001), with lower sICH (0.3% vs 0.9%). ARAMIS supports DAPT as an alternative to thrombolysis for clearly nondisabling deficits but does not displace alteplase for disabling stroke.",
     "doi": "10.1001/jama.2023.7827"
   },
   "aster-trial": {
@@ -570,14 +570,14 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "legend": {
       "finding": "Direct EVT did not meet NI vs bridging therapy across AU/NZ/China/Vietnam.",
       "bottomLineTag": "NI not met",
-      "keyStat": "−5.1% (−15.4 to 5.3)"
+      "keyStat": "−5.1% (−16.0 to 5.9)"
     },
     "subtitle": "Direct EVT vs Bridging Therapy Within 4.5 Hours",
     "source": "Mitchell et al. (Lancet 2022)",
     "timeline": "Enrolled 2018-2021 across Australia, New Zealand, China, and Vietnam",
     "listCategory": "thrombectomy",
     "listDescription": "International direct-EVT trial that did not support skipping thrombolysis.",
-    "bottomLineSummary": "International non-inferiority trial of direct EVT vs IV thrombolysis (alteplase or tenecteplase) plus EVT in LVO stroke within 4.5 hours. mRS 0-2 or pre-stroke baseline: 55.0% vs 61.4%; adjusted RD -5.1% (95% CI -15.4% to 5.3%). Non-inferiority not met (lower CI crossed -12 pp margin). sICH 1.0% in both arms.",
+    "bottomLineSummary": "International non-inferiority trial of direct EVT vs IV thrombolysis (alteplase or tenecteplase) plus EVT in LVO stroke within 4.5 hours. mRS 0-2 or pre-stroke baseline: 55.0% vs 61.4%; intention-to-treat RD -5.1% (95% CI -16.0% to 5.9%). Non-inferiority not met (lower CI crossed -10 pp margin). sICH 1.0% in both arms.",
     "doi": "10.1016/S0140-6736(22)00564-5"
   },
   "distal-trial": {
@@ -1305,14 +1305,14 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "legend": {
       "finding": "Direct EVT vs low-dose alteplase + EVT: noninferiority not met; inconclusive.",
       "bottomLineTag": "NI not met",
-      "keyStat": "OR 1.09 (0.72–1.64)"
+      "keyStat": "OR 1.09 (1-sided 97.5% CI 0.63)"
     },
     "subtitle": "Mechanical Thrombectomy Without vs With IV Thrombolysis",
     "source": "Suzuki et al. (JAMA 2021)",
     "timeline": "Enrolled 2017-2019 across 23 networks",
     "listCategory": "thrombectomy",
     "listDescription": "Japanese direct-EVT study that was inconclusive for noninferiority.",
-    "bottomLineSummary": "Japanese non-inferiority trial of thrombectomy alone vs low-dose alteplase plus thrombectomy in LVO stroke within 4.5 hours. mRS 0-2 was numerically similar (59.4% vs 57.3%) but non-inferiority was not met (OR 1.09, 95% CI 0.72-1.64, lower bound below 0.75 margin). Lower any-ICH with direct EVT.",
+    "bottomLineSummary": "Japanese non-inferiority trial of thrombectomy alone vs low-dose alteplase plus thrombectomy in LVO stroke within 4.5 hours. mRS 0-2 was numerically similar (59.4% vs 57.3%) but non-inferiority was not met (OR 1.09, one-sided 97.5% CI lower bound 0.63, below the 0.74 margin). Lower any-ICH with direct EVT.",
     "doi": "10.1001/jama.2020.23522"
   },
   "socrates-trial": {
@@ -1388,16 +1388,16 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
   "swift-direct-trial": {
     "title": "SWIFT DIRECT Trial",
     "legend": {
-      "finding": "EVT alone failed NI vs bridging; entire CI favored alteplase + EVT.",
+      "finding": "EVT alone failed NI vs bridging; one-sided 95% limit crossed the -12 pp margin.",
       "bottomLineTag": "NI not met",
-      "keyStat": "−7.3% (−14.0 to −0.6)"
+      "keyStat": "−7.3% (−16.6 to 2.1)"
     },
     "subtitle": "Thrombectomy Alone vs Alteplase Plus Thrombectomy",
     "source": "Fischer et al. (Lancet 2022)",
     "timeline": "Enrolled 2017-2021",
     "listCategory": "thrombectomy",
     "listDescription": "Western direct-EVT trial that missed noninferiority and had lower reperfusion without alteplase.",
-    "bottomLineSummary": "European and Canadian non-inferiority trial of stent-retriever thrombectomy alone vs alteplase 0.9 mg/kg plus thrombectomy in anterior-circulation LVO within 4.5 hours. mRS 0-2: 57.0% vs 65.0%; adjusted RD -7.3% (95% CI -14.0% to -0.6%). Non-inferiority not met; the entire CI favors bridging. TICI 2b-3 reperfusion was significantly lower without alteplase.",
+    "bottomLineSummary": "European and Canadian non-inferiority trial of stent-retriever thrombectomy alone vs alteplase 0.9 mg/kg plus thrombectomy in anterior-circulation LVO within 4.5 hours. mRS 0-2: 57% vs 65%; adjusted RD -7.3% (95% CI -16.6% to 2.1%; one-sided 95% lower limit -15.1%). Non-inferiority not met against the pre-specified -12 pp margin, although the two-sided interval crosses zero. Final expanded TICI 2b50-3 reperfusion was lower without alteplase (91% vs 96%, p=0.047).",
     "doi": "10.1016/S0140-6736(22)00537-2"
   },
   "swift-prime-trial": {

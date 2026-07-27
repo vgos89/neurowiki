@@ -242,6 +242,31 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 
 ## PENDING
 
+### trial-library-audit-remaining — Class C/E-clinical [from docs/reviews/audit-trial-library-semantic-2026-07-23.md]
+- **Status:** [ ] open. The 15 BLOCKER findings were remediated (see `trial-library-blocker-remediation` in CONFIRMED CLEAN). 160 findings remain: 52 HIGH, 84 MEDIUM, 24 LOW. Full evidence and per-finding contradicting sources are in the audit artifact.
+- **User-visible goal:** Finish correcting wrong or unsupported statistics, eligibility criteria, and cross-surface contradictions across the trial library so a clinician can trust every rendered number.
+- **Non-goals:** Not a rewrite of trial prose; value-level corrections and their dependent interpretive sentences only.
+- **Method note:** the audit is a HYPOTHESIS LIST per §5 rule 6. Each finding must be re-verified against the PRIMARY paper by evidence-verifier before any edit; in the BLOCKER pass 13/13 re-verified true, but the lower-severity tail is expected to contain false positives. Batch by trial, not by severity, so all fields of one record are corrected together.
+- **Acceptance checks:** each batch carries an evidence packet + §17.2 clinical review; regression sweep confirms zero surviving old values across rendered AND derived surfaces (trialCatalogMeta, cardmeta.generated, seo/schema, guideContent); gates + Gate 6.
+- **Clinical impact:** medium to high (the BLOCKER pass found wrong eligibility criteria and a recommendation pointing at a futility-stopped stratum).
+- **Rollback plan:** revert the batch commit; all changes are value-level and additive-free.
+
+### hamlet-citation-13.6-completion — Class E-clinical [from clinical review 2026-07-23]
+- **Status:** `blocked:awaiting-clinical-review`. `hofmeijer-hamlet-2009.last_reviewed` was deliberately LEFT at 2026-05-23 (not refreshed) because §13.6 is incomplete, even though its `quoted_text` and `pmid` were corrected.
+- **What must close before the date may be refreshed:** (a) §13.6 step 4 — HAMLET case-fatality `P=0.002` is rendered on four `trialData.ts` surfaces but could not be confirmed (abstract carries ARR + CI only; full text 403). Retrieve full text to confirm or remove it. (b) §13.6 step 5 — review the HAMLET 3-year follow-up (PMID 23868265, Stroke 2014). (c) §13.6 step 5 — read the post-publication correspondence "Reassessment of the HAMLET study" (Mitchell P, Gregson BA, et al., Lancet Neurol 2009;8(7), PMID 19539229) and the authors' reply, identified but paywalled. The §8a accompanying editorial is also unretrieved and must close for any future FULL Class E re-review.
+- **Clinical impact:** low (the P value is supporting detail; the ARR and CI are correct and confirmed).
+
+### aha-2026-4.7.4-strength-unconfirmed — Class E-clinical [from clinical review 2026-07-23, re-review round 2]
+- **Status:** [ ] open. PRE-EXISTING, outside the BLOCKER-remediation diff; flagged during it.
+- **Issue:** `registry.ts` citation `aha-asa-2026-4.7.4` asserts "COR 2b, LOE B-R per CHOICE" for intra-arterial thrombolytics and `claims.ts` describes it, but `src/data/aha2026StrokeGuideline.ts` contains NO intra-arterial thrombolytic section, so the recommendation strength and level could not be confirmed against the in-repo guideline extract. Recommendation strength is the highest-consequence never-drift category.
+- **Acceptance checks:** confirm COR/LOE against the published 2026 AHA/ASA guideline §4.7.4; either add the section to the in-repo extract or correct the citation; refresh `last_reviewed` via §13.6 only after confirmation; §17.2 clinical review.
+- **Clinical impact:** medium (a strength/level assertion a clinician could act on).
+
+### compass-directsafe-unsourced-values — Class C-clinical [from clinical review 2026-07-23]
+- **Status:** [ ] open. Needs journal access, so parked rather than guessed.
+- **Items:** (a) COMPASS first-pass reperfusion "68.9% vs 76.3%" may be DIRECTION-INVERTED (sponsor summary reports 57% vs 51% favouring aspiration; and 22 vs 33 min not 24 vs 35). Three `trialData.ts` fields plus a causal bedside framing rest on it. (b) COMPASS "95% CI -8 to 11" may be a mislabelled 90% CI. (c) DIRECT-SAFE control arm "61.4%" does not reconcile with 89/147 (60.5%) and could not be sourced. (d) ENRICH: retrieve ESO 2025 guidance (considered and not incorporated at the 2026-07-23 refresh).
+- **Clinical impact:** (a) is material if inverted; the rest are precision issues.
+
 ### nihss-copy-ios-device-qa — on-device confirmation of the clipboard fallback [P1]
 - **Status:** `[ ]` open, `blocked:awaiting-hardware`. Fix is live (468e864); this closes the verification gap it shipped with.
 - **User-visible goal:** Confirm a clinician on an iPhone can actually copy the NIHSS EMR block, in both Safari and an in-app browser.

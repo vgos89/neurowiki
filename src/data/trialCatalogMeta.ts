@@ -186,7 +186,7 @@ export const LEGACY_TRIAL_CATALOG_META: Record<string, LegacyTrialCatalogMeta> =
     name: 'ENRICH',
     year: 2024,
     doi: '10.1056/NEJMoa2308440',
-    description: 'Positive minimally invasive surgery trial for selected lobar and anterior basal ganglia ICH.',
-    clinicalContext: 'Positive minimally invasive surgery trial for selected lobar and anterior basal ganglia ICH.',
+    description: 'Positive minimally invasive surgery trial for selected lobar ICH; the anterior basal ganglia stratum was stopped for futility.',
+    clinicalContext: 'Positive minimally invasive surgery trial for selected lobar ICH; the anterior basal ganglia stratum was stopped for futility.',
   },
 };
