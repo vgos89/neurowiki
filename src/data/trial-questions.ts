@@ -181,7 +181,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     id: 'ich-surgery',
     text: 'Should this intracerebral hemorrhage be surgically evacuated?',
     icon: 'brain',
-    meta: 'four decades of surgical ICH trials: STICH I/II, MISTIE III, ENRICH',
+    meta: 'two decades of surgical ICH trials: STICH I/II, MISTIE III, ENRICH',
     trialCount: 4,
     trialIds: [
       'stich-i-trial',    // STICH I 2005 — early surgery vs medical for supratentorial ICH (neutral)
@@ -406,7 +406,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     meta: 'FXa, dabigatran, warfarin, and antiplatelet ICH. Each requires a different reversal strategy',
     trialCount: 4,
     trialIds: [
-      'sarode-2013-trial',  // Sarode 2013 — 4F-PCC vs FFP NI RCT in VKA major bleeding; underwrites AHA/ASA Class I, Level A for VKA-ICH reversal
+      'sarode-2013-trial',  // Sarode 2013 — 4F-PCC vs FFP NI RCT in VKA major bleeding; underwrites AHA/ASA Class 1, Level B-R for VKA-ICH reversal
       'patch-trial',        // PATCH 2016 — platelet transfusion HARM in antiplatelet-ICH; defines AHA/ASA Class III boundary
       'annexa-4-trial',     // ANNEXA-4 2019 — single-arm cohort behind FDA andexanet approval (FXa broad, 64% intracranial)
       'annexa-i-trial',     // ANNEXA-I 2024 — andexanet RCT specifically in ICH; primary met, ischemic-stroke trade-off quantified

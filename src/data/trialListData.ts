@@ -546,7 +546,7 @@ const manualTrials: (Omit<TrialItem, 'year'> & { year?: number })[] = [
   }),
   buildTrial('sarode-2013-trial', 'Sarode 2013', 'acute-management', '10.1161/CIRCULATIONAHA.113.002283', {
     isPlaceholder: false,
-    description: 'Phase IIIb open-label NI RCT in 202 VKA-treated adults with acute major bleeding. 4F-PCC noninferior to FFP for hemostatic efficacy (+7.1 pp, 95% CI -5.8 to +19.9) and superior for rapid INR reduction (62.2% vs 9.6% at 30 min). Underwrote FDA approval of Kcentra (April 2013) and AHA/ASA 2022 Class I, Level A.',
+    description: 'Phase IIIb open-label NI RCT in 202 VKA-treated adults with acute major bleeding. 4F-PCC noninferior to FFP for hemostatic efficacy (+7.1 pp, 95% CI -5.8 to +19.9) and superior for rapid INR reduction (62.2% vs 9.6% at 30 min). Underwrote FDA approval of Kcentra (April 2013) and AHA/ASA 2022 Class 1, Level B-R.',
     year: 2013,
   }),
 ];

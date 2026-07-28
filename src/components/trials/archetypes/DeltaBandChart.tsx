@@ -34,6 +34,13 @@ export interface DeltaBandChartProps {
   ciLow: string;
   /** Upper bound of the 95% confidence interval, e.g. "2.06". */
   ciHigh: string;
+  /** Names the interval figure. Defaults to '95% CI', or 'NI bound' when ciHigh is
+   *  empty. Bayesian designs should pass e.g. 'Bayesian' so a posterior probability
+   *  is not misread as a frequentist confidence interval. */
+  intervalLabel?: string;
+  /** Names the effect figure. Defaults to 'Risk ratio'. Bayesian designs should pass
+   *  e.g. 'Posterior P(superiority)' so a probability is not labelled a risk ratio. */
+  effectLabel?: string;
   /** P-value string, e.g. "0.04". Values < 0.05 render green. */
   pValue: string;
   /**
@@ -71,6 +78,8 @@ export const DeltaBandChart: React.FC<DeltaBandChartProps> = ({
   riskRatio,
   ciLow,
   ciHigh,
+  intervalLabel,
+  effectLabel,
   pValue,
   winnerArm = 'none',
 }) => {
@@ -132,6 +141,12 @@ export const DeltaBandChart: React.FC<DeltaBandChartProps> = ({
     };
   }, [startIdx, endIdx, showBand]);
 
+  // Treat placeholder strings as absent so a degenerate call site cannot render
+  // "95% CI N/A-N/A" or "p = N/A" on a clinical surface.
+  const PLACEHOLDERS = ['N/A', 'n/a', '\u2014', '\u2013', '-', ''];
+  const isBlank = (v: string) => PLACEHOLDERS.includes((v ?? '').trim());
+  const showP = !isBlank(pValue);
+  const showInterval = !isBlank(ciLow);
   const pSig = parseFloat(pValue) < 0.05;
   const treatmentIsWinner = winnerArm === 'treatment';
   const controlIsWinner = winnerArm === 'control';
@@ -282,28 +297,51 @@ export const DeltaBandChart: React.FC<DeltaBandChartProps> = ({
       {/* Stat row: Risk ratio | 95% CI [tooltip] | p-value */}
       <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm mt-4 pt-4 border-t border-slate-100">
         <span className="text-slate-700">
-          Risk ratio{' '}
+          {effectLabel ?? 'Risk ratio'}{' '}
           <span className="font-semibold tabular-nums">{riskRatio}</span>
         </span>
+        {/* One-sided noninferiority trials publish only a lower bound. Passing an empty
+            ciHigh renders the bound alone instead of a dangling en-dash, and relabels the
+            row so it is not misread as a two-sided 95% interval. */}
+        {showInterval ? (
         <span className="flex items-center text-slate-600">
-          95%&nbsp;CI{' '}
+          {intervalLabel ?? (ciHigh ? '95% CI' : 'NI bound')}{' '}
           <span className="font-semibold tabular-nums ml-1">
-            {ciLow}&ndash;{ciHigh}
+            {ciHigh ? <>{ciLow}&ndash;{ciHigh}</> : ciLow}
           </span>
-          <MedicalTooltip
-            term="Confidence Interval"
-            definition={
-              MEDICAL_GLOSSARY['confidence-interval'] ||
-              'Range of values consistent with the study data. A 95% CI that excludes 1.0 (for a ratio) indicates statistical significance.'
-            }
-          />
+          {/* Only attach the frequentist-CI definition to an actual confidence interval.
+              A Bayesian posterior or credible interval gets its own wording. */}
+          {(!intervalLabel || intervalLabel === '95% CI') ? (
+            <MedicalTooltip
+              term="Confidence Interval"
+              definition={
+                MEDICAL_GLOSSARY['confidence-interval'] ||
+                'Range of values consistent with the study data. A 95% CI that excludes 1.0 (for a ratio) indicates statistical significance.'
+              }
+            />
+          ) : intervalLabel.includes('sided') ? (
+            <MedicalTooltip
+              term="One-sided confidence bound"
+              definition="A one-sided confidence bound. In a noninferiority trial this bound is compared with the pre-specified noninferiority margin, not with 1.0 or 0."
+            />
+          ) : (
+            <MedicalTooltip
+              term="Bayesian posterior"
+              definition="Probability, given the trial data and the pre-specified prior, that the treatment is superior. It is not a p-value and not a frequentist confidence interval."
+            />
+          )}
         </span>
-        <span
-          className="font-bold tabular-nums"
-          style={{ color: pSig ? '#16a34a' : '#94a3b8' }}
-        >
-          p&nbsp;=&nbsp;{pValue}
-        </span>
+        ) : null}
+        {/* Bayesian designs report a posterior probability, not a frequentist p-value.
+            Passing an empty pValue omits the row instead of rendering a misleading "p = ". */}
+        {showP ? (
+          <span
+            className="font-bold tabular-nums"
+            style={{ color: pSig ? '#16a34a' : '#94a3b8' }}
+          >
+            p&nbsp;=&nbsp;{pValue}
+          </span>
+        ) : null}
       </div>
     </div>
   );

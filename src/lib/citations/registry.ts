@@ -331,7 +331,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     pmid: '17761921',
     last_reviewed: '2026-05-23',
     review_window_months: 36,
-    quoted_text: 'Decompressive craniectomy in malignant MCA infarction reduced mortality from 78% to 25% at 6 months. Patients aged 18 to 55 randomized within 30 hours; trial stopped early after the pre-specified joint pooled analysis with DESTINY and HAMLET was triggered.',
+    quoted_text: 'Decompressive craniectomy in malignant MCA infarction reduced mortality from 78% to 25% at 6 months. Patients aged 18 to 55 randomized within 24 hours, with craniectomy within 30 hours of onset; enrollment stopped early on DSMB recommendation for slow recruitment and the decision to pool with DESTINY and HAMLET; no stopping boundary was crossed for the primary endpoint.',
   },
   'juttler-destiny-2007': {
     id: 'juttler-destiny-2007',
@@ -882,22 +882,37 @@ export const CITATION_REGISTRY: CitationRegistry = {
 
   // ─── CHARM 2024 — IV glibenclamide for large hemispheric infarct ──────────
   // Sheth KN et al. IV Glibenclamide for Cerebral Edema After Large Hemispheric
-  // Stroke (CHARM). Lancet Neurology 2024. Phase 3 RCT in 535 patients with
-  // large hemispheric infarction (ASPECTS 1-5 or DWI core 80-300 mL, age
-  // 18-70). Primary mRS ordinal shift not met (cOR 1.17, 95% CI 0.80-1.71,
-  // P=0.42). Stopped early for COVID-19 operational disruptions at ~71% of
+  // Stroke (CHARM). Lancet Neurology 2024. Phase 3 RCT: 535 patients aged
+  // 18-85 randomized with large hemispheric infarction (ASPECTS 1-5 or DWI
+  // core 80-300 mL); primary analysis population was the 431 patients aged
+  // 18-70 (217 glibenclamide, 214 placebo). Primary mRS ordinal shift not met
+  // (cOR 1.17, 95% CI 0.80-1.71, P=0.42). Stopped early for COVID-19 at ~71% of
   // planned enrollment; substantially underpowered. Hypoglycemia 6% vs 2%.
   // Registered 2026-05-24 to support the hemicraniectomy clinical-synthesis
   // card. 36-month review window per §13.7 (landmark negative trial).
+  //
+  // 2026-07-27 population correction (trial-library semantic remediation):
+  // quoted_text previously read "535 patients ... age 18-70", welding the
+  // randomized cohort to the primary-analysis age restriction. Eligibility was
+  // 18-85 (ClinicalTrials.gov NCT02864953, min 18 / max 85 years, enrollment
+  // 535 actual); the mITT primary-analysis population was the 431 patients aged
+  // 18-70 (217 glibenclamide, 214 placebo), stated in the published Findings
+  // (Lancet Neurol 2024;23:1205-13). URL repointed the same day from
+  // PIIS1474-4422(24)00407-3, which is not the CHARM publication, to
+  // PIIS1474-4422(24)00425-3, the trial paper (matches the DOI already used by
+  // trialData.ts). last_reviewed NOT flipped: this is a strict correction, not
+  // a completed §13.6 six-point re-review (the Lancet and PubMed records return
+  // 403/CAPTCHA to automated fetch, so step 1 full-text re-resolution and step 5
+  // newer-evidence are not closed). Refresh the date only after those close.
   'sheth-charm-2024': {
     id: 'sheth-charm-2024',
     source: 'trial',
     title: 'CHARM: IV Glibenclamide for Cerebral Edema After Large Hemispheric Stroke',
     year: 2024,
-    url: 'https://www.thelancet.com/journals/laneur/article/PIIS1474-4422(24)00407-3/abstract',
+    url: 'https://www.thelancet.com/journals/laneur/article/PIIS1474-4422(24)00425-3/abstract',
     last_reviewed: '2026-05-24',
     review_window_months: 36,
-    quoted_text: 'In 535 patients with large hemispheric infarction (ASPECTS 1-5 or DWI core 80-300 mL, age 18-70), IV glibenclamide 8.6 mg over 72 hours did not improve 90-day mRS ordinal shift compared with placebo (cOR 1.17, 95% CI 0.80-1.71, P=0.42). Mortality was numerically higher with glibenclamide; hypoglycemia 6% vs 2%. Trial stopped early at ~71% of planned enrollment due to COVID-19 operational disruptions.',
+    quoted_text: 'Among 535 patients randomized with large hemispheric infarction (ASPECTS 1-5 or DWI core 80-300 mL, aged 18-85), the primary analysis population comprised the 431 patients aged 18-70 (217 glibenclamide, 214 placebo); IV glibenclamide 8.6 mg over 72 hours did not improve 90-day mRS ordinal shift compared with placebo (cOR 1.17, 95% CI 0.80-1.71, P=0.42). Mortality was numerically higher with glibenclamide; hypoglycemia 6% vs 2%. Trial stopped early at ~71% of planned enrollment due to COVID-19 operational disruptions.',
   },
 
   // ─── 2026 AHA/ASA §6.3 — Supratentorial Infarction Surgical Management ────

@@ -644,7 +644,7 @@ Following the poor outcomes of intracranial stenting in SAMMPRIS (14.7% event ra
 *   **Primary Outcome:** Stroke or death within 72 hours.
 *   **Results:**
     *   **Periprocedural Stroke/Death:** **2.6%** (4/152 patients).
-    *   **Benchmark:** Significantly lower than the 4% safety benchmark set by the FDA.
+    *   **Benchmark:** Met. The observed 2.6% (95% CI 0.7% to 6.6%) fell below the FDA pre-specified 4% threshold, though the upper confidence bound crosses it.
 
 ## Clinical PEARLS
 *   **Patient Selection:** This trial demonstrated that intracranial stenting *can* be performed safely (2.6% risk vs 14.7% in SAMMPRIS) if strict selection criteria are followed, particularly waiting >8 days after stroke and requiring demonstrated failure of medical therapy (2 recurrent strokes).

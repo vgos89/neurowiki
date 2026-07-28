@@ -2036,7 +2036,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What is the key limitation to keep in mind?',
-        answer: 'REVASCAT enrolled within an 8-hour window in 4 Catalan centers and required either alteplase contraindication or alteplase failure to enter. The 206-patient sample is relatively small, and some patients in the medical arm crossed over after the 8-hour window. Late-window selection now uses perfusion or clinical-core mismatch (DAWN, DEFUSE-3).',
+        answer: 'REVASCAT enrolled within an 8-hour window in 4 Catalan centers and required either alteplase contraindication or alteplase failure to enter. The 206-patient sample is relatively small, and enrollment stopped early once the other 2015 thrombectomy trials reported. Late-window selection now uses perfusion or clinical-core mismatch (DAWN, DEFUSE-3).',
       },
     ],
     howToInterpret: {
@@ -2895,11 +2895,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the bar show?',
-        answer: 'Proportion achieving functional independence (mRS 0-2) at 90 days. Direct EVT 54.3% vs IV alteplase plus EVT 46.6%. Risk difference +7.7 percentage points (two-sided 95% CI -2.9 to 18.2). The non-inferiority decision instead used the one-sided 97.5% CI (lower bound -5.1 pp).',
+        answer: 'Proportion achieving functional independence (mRS 0-2) at 90 days. Direct EVT 54.3% vs IV alteplase plus EVT 46.6%. Risk difference +7.7 percentage points. DEVT reported this difference only as a one-sided 97.5% CI, lower bound -5.1 percentage points with no upper bound, which is the interval the non-inferiority decision used.',
       },
       {
         question: 'How is non-inferiority judged here?',
-        answer: 'The pre-specified non-inferiority margin was -10 percentage points. The non-inferiority decision used the one-sided 97.5% CI, whose lower bound (-5.1 pp) cleared this margin (P for NI = 0.003), meeting the NI threshold. The two-sided 95% CI (-2.9 to 18.2) is a separate descriptive estimate. The trial was stopped early at interim analysis.',
+        answer: 'The pre-specified non-inferiority margin was -10 percentage points. The non-inferiority decision used the one-sided 97.5% CI, whose lower bound (-5.1 pp) cleared this margin (P for NI = 0.003), meeting the NI threshold. No two-sided interval for this difference was published, so the +7.7 pp advantage cannot be read as a precise or statistically significant benefit. The trial was stopped early at interim analysis.',
       },
       {
         question: 'Why is the wide NI margin a concern?',
@@ -3531,7 +3531,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     inclusionCriteria: [
       'Age 18 years or older (no upper age limit)',
       'Acute ischemic stroke from anterior circulation large vessel occlusion (intracranial ICA or M1)',
-      'Large established infarct on imaging defined as ASPECTS 5 or lower on non-contrast CT, or DWI ASPECTS 5 or lower on MRI, with no lower limit on ASPECTS or infarct volume',
+      'Large established infarct on imaging defined as ASPECTS 5 or lower on non-contrast CT, or DWI ASPECTS 5 or lower on MRI, with no lower ASPECTS bound for patients aged 80 or younger; patients older than 80 required an ASPECTS of 4 or 5 (the published Methods state 4 or 5 above age 80, while the ClinicalTrials.gov registry entry shown below lists ASPECTS 3 to 5 for patients 80 and older)',
       'Treatment feasible within 6.5 hours of last-known-well',
       'Pre-stroke mRS 0 or 1',
     ],
@@ -3557,7 +3557,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What do the numbers mean clinically?',
-        answer: 'The median 90-day mRS was 4 with thrombectomy versus 6 with medical care alone. The generalized odds ratio for a one-step better mRS was 1.63 (95% CI 1.29 to 2.06, P less than 0.001), and 90-day mortality fell from 55.5% to 36.1% (adjusted RR 0.65, 95% CI 0.50 to 0.84). The number needed to treat for one patient to have a lower mRS at 90 days was 4.',
+        answer: 'The median 90-day mRS was 4 with thrombectomy versus 6 with medical care alone. The generalized odds ratio for a one-step better mRS was 1.63 (95% CI 1.29 to 2.06, P less than 0.001), and 90-day mortality fell from 55.5% to 36.1% (adjusted RR 0.65, 95% CI 0.50 to 0.84). The trial-reported number needed to treat for one patient to have a lower mRS at 90 days was 4; this is a shift-based figure, not a binary NNT.',
       },
       {
         question: 'What is the key limitation to keep in mind?',
@@ -3566,13 +3566,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     howToInterpret: {
       /* claimId: laste-primary-result | source: Costalat NEJM 2024 */
-      proves: 'In patients with anterior circulation LVO and a large established infarct (ASPECTS 5 or lower, with no lower limit on ASPECTS or infarct volume) treated within 6.5 hours, thrombectomy plus medical care shifted the full mRS distribution toward better outcomes at 90 days (generalized OR 1.63, 95% CI 1.29 to 2.06, P less than 0.001) and lowered all-cause mortality from 55.5% to 36.1% (adjusted RR 0.65, 95% CI 0.50 to 0.84). The median 90-day mRS improved from 6 to 4.',
+      proves: 'In patients with anterior circulation LVO and a large established infarct (ASPECTS 5 or lower, with no lower ASPECTS bound below age 80; patients older than 80 required ASPECTS 4 or 5) treated within 6.5 hours, thrombectomy plus medical care shifted the full mRS distribution toward better outcomes at 90 days (generalized OR 1.63, 95% CI 1.29 to 2.06, P less than 0.001) and lowered all-cause mortality from 55.5% to 36.1% (adjusted RR 0.65, 95% CI 0.50 to 0.84). The median 90-day mRS improved from 6 to 4.',
       doesNotProve: 'It does not establish benefit beyond 6.5 hours from last-known-well, and it does not test thrombectomy in posterior circulation large infarcts. It does not show that most LASTE patients return to functional independence; the shift is from death and severe disability toward moderate or moderately-severe disability.',
       cautions: 'Symptomatic intracerebral hemorrhage was higher with thrombectomy (9.6% versus 5.7%), and 11 procedure-related complications occurred in the EVT arm. Most surviving patients remained dependent. The trial was stopped early on the basis of external large-core data, which can amplify estimated effect size. Selection of which large-core patients gain the most still requires individualized judgment about pre-stroke function, comorbidity, and goals of care.',
     },
     /* claimId: laste-bedside-pearl | source: Costalat NEJM 2024 */
-    bedsidePearl: 'A very low ASPECTS is no longer an automatic disqualifier. For an anterior circulation LVO patient inside 6.5 hours with ASPECTS 5 or lower, even with no measured floor on infarct volume, LASTE supports offering thrombectomy. Frame the conversation around mortality reduction (55.5% to 36.1%) and median mRS shift from 6 to 4, not around full functional recovery.',
-    bottomLineSummary: 'LASTE showed that thrombectomy benefits patients with large established infarcts (ASPECTS 5 or lower, with no lower bound) treated within 6.5 hours, shifting median 90-day mRS from 6 to 4 and lowering mortality from 55.5% to 36.1%, at the cost of more symptomatic hemorrhage.',
+    bedsidePearl: 'A very low ASPECTS is no longer an automatic disqualifier. For an anterior circulation LVO patient inside 6.5 hours with ASPECTS 5 or lower and no cap on infarct size, LASTE supports offering thrombectomy; patients older than 80 entered LASTE only with an ASPECTS of 4 or 5, so the very-low-ASPECTS evidence does not extend to them. Frame the conversation around mortality reduction (55.5% to 36.1%) and median mRS shift from 6 to 4, not around full functional recovery.',
+    bottomLineSummary: 'LASTE showed that thrombectomy benefits patients with large established infarcts (ASPECTS 5 or lower, with no lower ASPECTS bound below age 80; ASPECTS 4 or 5 required above age 80) treated within 6.5 hours, shifting median 90-day mRS from 6 to 4 and lowering mortality from 55.5% to 36.1%, at the cost of more symptomatic hemorrhage.',
     ordinalStats: {
       commonOR: 1.63,
       ciLow: 1.29,
@@ -3669,15 +3669,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     archetypeId: 'B',
     trialResult: 'POSITIVE',
     inclusionCriteria: [
-      'Age 18 years or older, with a pre-specified upper bound of 80 years per protocol',
+      'Age 18 years or older, with no protocol upper age limit',
       'Acute ischemic stroke from anterior circulation large vessel occlusion (intracranial ICA or M1)',
       'Large established infarct defined as ASPECTS 3 to 5 on non-contrast CT or DWI; perfusion imaging not required',
       'Treatment feasible within 12 hours of stroke onset or last-known-well',
       'NIHSS less than 26',
-      'Pre-stroke mRS 0 or 1',
+      'Pre-stroke mRS 0 to 2',
     ],
     exclusionCriteria: [
-      'Pre-stroke mRS greater than 1',
+      'Pre-stroke mRS greater than 2',
       'High-grade extracranial stenosis requiring stent placement during EVT',
       'Vascular access or anatomy precluding endovascular thrombectomy',
       'Acute intracranial hemorrhage or significant mass effect',
@@ -3695,7 +3695,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What do the numbers mean clinically?',
-        answer: 'The median 90-day mRS was 4 with thrombectomy versus 5 with medical treatment alone. The adjusted common odds ratio for a one-step better mRS was 2.58 (95% CI 1.60 to 4.15, P=0.0001), and 90-day mortality fell from 51% to 40% (P=0.038). Symptomatic intracranial hemorrhage was similar in both arms (5%).',
+        answer: 'The median 90-day mRS was 4 with thrombectomy versus 5 with medical treatment alone. The adjusted common odds ratio for a one-step better mRS was 2.58 (95% CI 1.60 to 4.15, P=0.0001), and 90-day mortality fell from 51% to 40% (P=0.038). Symptomatic intracranial hemorrhage was similar in both arms (6% with thrombectomy versus 5% with medical treatment alone).',
       },
       {
         question: 'What is the key limitation to keep in mind?',
@@ -3810,9 +3810,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Age 18 years or older',
       'Acute ischemic stroke with anterior circulation large vessel occlusion (ICA terminus, M1, or M2)',
       'Groin puncture initiable within 6 hours of last known well',
-      'NIHSS 6 or greater',
+      'NIHSS 8 or greater',
       'Pre-stroke mRS 0 or 1',
-      'ASPECTS 6 or greater',
+      'ASPECTS 7 or greater (core infarct volume 50 cc or less)',
     ],
     exclusionCriteria: [
       'Posterior circulation occlusion',
@@ -3836,18 +3836,18 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What about reperfusion rates and procedure time?',
-        answer: 'First-pass reperfusion was lower with aspiration first (68.9% vs 76.3% with stent retriever). Aspiration was faster (24 min vs 35 min to first reperfusion attempt). Mortality was identical at 22% in both arms. Overall mTICI 2b-3 at end of procedure was approximately 83% in both arms, with rescue device crossover closing the first-pass gap.',
+        answer: 'First-pass reperfusion rates by arm are not yet confirmed against the primary publication and are omitted here. Mortality was identical at 22% in both arms. Overall mTICI 2b-3 at end of procedure was approximately 83% in both arms; crossover to rescue devices was permitted in both arms.',
       },
     ],
     /* claimId: compass-noninferiority | source: Turk Lancet 2019 */
     howToInterpret: {
       proves: 'In North American comprehensive stroke centers, contact-aspiration as first-line technique was non-inferior to stent-retriever first-line for 90-day mRS 0-2 in anterior circulation LVO treated within 6 hours. Operator and device flexibility is supported.',
       doesNotProve: 'The trial does not establish superiority of either technique. It does not address combined techniques (BADDASS), distal-medium-vessel occlusion, or basilar occlusion. It does not address newer-generation aspiration catheters or stent retrievers introduced after 2019.',
-      cautions: 'Aspiration first-pass produced lower first-pass reperfusion rates (68.9% vs 76.3%); rescue with stent retriever was common and partially closed the gap. Non-inferiority was judged against a wide pre-specified margin of 0.15 (15 percentage points), so a 270-patient trial could declare non-inferiority even if aspiration were meaningfully worse; the observed difference was +2 percentage points favoring aspiration. Results assume operator proficiency in both techniques and ready availability of rescue devices.',
+      cautions: 'First-pass reperfusion rates by arm are not yet confirmed against the primary publication and are omitted here; crossover to rescue devices was permitted in both arms. Non-inferiority was judged against a wide pre-specified margin of 0.15 (15 percentage points), so a 270-patient trial could declare non-inferiority even if aspiration were meaningfully worse; the observed difference was +2 percentage points favoring aspiration. Results assume operator proficiency in both techniques and ready availability of rescue devices.',
     },
     /* claimId: compass-bedside | source: Turk Lancet 2019 */
-    bedsidePearl: 'COMPASS supports operator choice between aspiration-first and stent-retriever-first as initial EVT technique. Lower first-pass reperfusion with aspiration (68.9% vs 76.3%) did not translate to worse 90-day outcomes when rescue devices were available. Choose based on clot characteristics, operator experience, and access anatomy.',
-    bottomLineSummary: 'Contact-aspiration as first-line technique was non-inferior to stent-retriever first-line for 90-day functional outcome in anterior circulation LVO. Aspiration produced lower first-pass reperfusion but equivalent clinical outcomes. Supports flexibility in initial technique choice.',
+    bedsidePearl: 'COMPASS supports operator choice between aspiration-first and stent-retriever-first as initial EVT technique. First-pass reperfusion rates by arm are not yet confirmed against the primary publication and are omitted here; the technique choice did not translate to worse 90-day outcomes when rescue devices were available. Choose based on clot characteristics, operator experience, and access anatomy.',
+    bottomLineSummary: 'Contact-aspiration as first-line technique was non-inferior to stent-retriever first-line for 90-day functional outcome in anterior circulation LVO. First-pass reperfusion rates by arm are not yet confirmed against the primary publication and are omitted here.',
     legend: {
       finding: 'Aspiration-first was noninferior to stent-retriever-first for 90-day mRS 0–2.',
       bottomLineTag: 'Non-inferior',
@@ -5038,7 +5038,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     /* claimId: charm-interpret | source: Sheth et al. Lancet Neurol 2024 */
     howToInterpret: {
-      proves: 'In 535 patients with large hemispheric infarction (ASPECTS 1-5 or DWI core 80-300 mL, age 18-70), IV glibenclamide 8.6 mg over 72 hours did not improve 90-day mRS ordinal shift compared with placebo: cOR 1.17, 95% CI 0.80-1.71, P=0.42. Mortality was not improved and was numerically higher with glibenclamide. Hypoglycemia occurred in 6% of glibenclamide patients vs 2% of placebo patients. The trial was stopped early due to COVID-19 operational disruptions before reaching planned enrollment.',
+      proves: 'Among 535 patients randomized with large hemispheric infarction (ASPECTS 1-5 or DWI core 80-300 mL, aged 18-85), the primary analysis population was the 431 patients aged 18-70 (217 glibenclamide, 214 placebo). In that population, IV glibenclamide 8.6 mg over 72 hours did not improve 90-day mRS ordinal shift compared with placebo: cOR 1.17, 95% CI 0.80-1.71, P=0.42. Mortality was not improved and was numerically higher with glibenclamide. Hypoglycemia occurred in 6% of glibenclamide patients vs 2% of placebo patients. The trial was stopped early due to COVID-19 operational disruptions before reaching planned enrollment.',
       doesNotProve: 'CHARM does not establish that glibenclamide is effective in large hemispheric stroke, nor does it definitively establish inefficacy; the trial was substantially underpowered after early stopping. An exploratory analysis in patients with core volume less than 125 mL showed a numerically larger effect, but this is hypothesis-generating only and cannot serve as a clinical recommendation.',
       cautions: 'Stopped early for COVID-19 operational reasons (not for safety or futility) at approximately 71% of planned enrollment; findings are inconclusive. The confidence interval (0.80-1.71) is too wide to exclude clinically meaningful benefit or harm. Hypoglycemia monitoring is required with glibenclamide. The core volume less than 125 mL exploratory subgroup should not change clinical practice.',
     },
@@ -5354,7 +5354,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     inclusionCriteria: [
       'Age 18-55 years',
       'Clinical and imaging signs of malignant MCA infarction (diffusion-restricted volume greater than 145 mL or greater than 50% of MCA territory)',
-      'Randomization within 24 hours of symptom onset (extended to 30 hours in some patients)',
+      'Randomization within 24 hours of symptom onset (surgery within 30 hours of onset)',
       'NIHSS greater than 15',
     ],
     exclusionCriteria: [
@@ -5426,13 +5426,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     /* claimId: decimal-interpret | source: Vahedi et al. Stroke 2007 */
     howToInterpret: {
-      proves: 'In 38 patients (20 surgery, 18 medical therapy), early decompressive hemicraniectomy reduced 6-month mortality from 78% to 25%, an absolute reduction of 52.8 percentage points (P=0.001). This mortality benefit is the primary established finding from DECIMAL. The trial was stopped early at 38 of a planned 70 patients because pooled European analysis data became available.',
+      proves: 'In 38 patients (20 surgery, 18 medical therapy), early decompressive hemicraniectomy reduced 6-month mortality from 78% to 25%, an absolute reduction of 52.8 percentage points (P=0.001). This mortality benefit is the primary established finding from DECIMAL. The trial was stopped after 38 patients had been randomized, against an anticipated median sample size of 30 per group (60 total), on the recommendation of the data safety monitoring committee: slow recruitment plus the decision to organize a pooled analysis with DESTINY and HAMLET. No stopping boundary was crossed for the primary endpoint.',
       doesNotProve: 'The primary endpoint (mRS less than or equal to 3 at 6 months) was not statistically significant in this sample (25% surgery vs 5.6% medical, P=0.18). DECIMAL does not prove that surgery restores functional independence. Survivors in the surgical arm were predominantly mRS 4 or mRS 5. The trial cannot establish quality of life or long-term functional benefit.',
-      cautions: 'DECIMAL enrolled only 38 of a planned 70 patients; small sample inflates observed effect sizes. All patients were aged 18-55 years, limiting generalizability to older patients. Surgery was performed within approximately 30-35 hours of symptom onset; results may not apply to delayed intervention. Pooled analysis of DECIMAL, DESTINY, and HAMLET within 48 hours of stroke onset (HAMLET 2009, Figure 3) showed mortality ARR 49.9 percentage points (95% CI 33.9-65.9) and mRS greater than 4 ARR 41.9 percentage points (95% CI 25.2-58.6) favoring surgery.',
+      cautions: 'DECIMAL enrolled only 38 patients against an anticipated median sample size of 60 (30 per group), and enrollment stopped before completion rather than at a primary-endpoint stopping boundary; the small sample inflates observed effect sizes. All patients were aged 18-55 years, limiting generalizability to older patients. Surgery was performed within 30 hours of symptom onset per protocol (observed mean 20.5 h, range 7 to 43 h); results may not apply to delayed intervention. Pooled analysis of DECIMAL, DESTINY, and HAMLET within 48 hours of stroke onset (HAMLET 2009, Figure 3) showed mortality ARR 49.9 percentage points (95% CI 33.9-65.9) and mRS greater than 4 ARR 41.9 percentage points (95% CI 25.2-58.6) favoring surgery.',
     },
     /* claimId: decimal-pearl | source: Vahedi et al. Stroke 2007 */
     bedsidePearl: 'DECIMAL shows hemicraniectomy prevents death in malignant MCA infarction for patients under 56 years. Before consent, tell the family explicitly: most survivors will have severe disability (mRS 4-5) and will not return to independent function. Surgery saves life, not function. The pooled analysis (DECIMAL, DESTINY, HAMLET within 48 hours) provides the most reliable estimate of benefit and risk. Use it for family counseling.',
-    bottomLineSummary: 'Early hemicraniectomy (within 30-35 hours) reduces mortality by 52.8 percentage points in malignant MCA infarction in patients aged 18-55. The primary functional endpoint was not met due to small sample size. Most survivors remain severely disabled.',
+    bottomLineSummary: 'Early hemicraniectomy (surgery within 30 hours of onset) reduces mortality by 52.8 percentage points in malignant MCA infarction in patients aged 18-55. The primary functional endpoint was not met due to small sample size. Most survivors remain severely disabled.',
     conclusion: '',
     source: 'Vahedi et al. (Stroke 2007)',
     keyMessage: 'Early hemicraniectomy reduces mortality in malignant MCA infarction. Most survivors remain severely disabled.',
@@ -5484,12 +5484,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     efficacyResults: {
       treatment: {
         percentage: 88,
-        label: '30-day and 6-month survival (mortality 12%)',
+        label: '30-day survival (mortality 12%)',
         name: 'Hemicraniectomy'
       },
       control: {
         percentage: 47,
-        label: '30-day and 6-month survival (mortality 53%)',
+        label: '30-day survival (mortality 53%)',
         name: 'Conservative Therapy'
       }
     },
@@ -5567,7 +5567,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the bar chart show here?',
-        answer: '30-day and 6-month survival rates. Treatment arm: 88% survived (12% mortality). Control arm: 47% survived (53% mortality). Absolute risk reduction in mortality: 41 percentage points (P=0.02).',
+        answer: '30-day survival rates. Treatment arm: 88% survived (12% mortality). Control arm: 47% survived (53% mortality). Absolute risk reduction in mortality: 41 percentage points (P=0.02).',
       },
       {
         question: 'Why is survival shown instead of the primary endpoint?',
@@ -5580,13 +5580,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     /* claimId: destiny-interpret | source: Juttler et al. Stroke 2007 */
     howToInterpret: {
-      proves: 'In 32 patients (17 surgery, 15 conservative therapy), early hemicraniectomy reduced 30-day mortality from 53% to 12%, an absolute reduction of 41 percentage points (P=0.02). Six-month survival rates were consistent: 88% vs 47%. This survival benefit is the primary established finding from DESTINY.',
+      proves: 'In 32 patients (17 surgery, 15 conservative therapy), early hemicraniectomy reduced 30-day mortality from 53% to 12%, an absolute reduction of 41 percentage points (P=0.02): 15 of 17 (88%) surgical patients versus 7 of 15 (47%) conservative patients survived to 30 days. This survival benefit is the primary established finding from DESTINY.',
       doesNotProve: 'The primary endpoint (mRS 0-3 at 6 months) was not statistically significant in this 32-patient sample (47% surgery vs 27% conservative, P=0.23). DESTINY does not prove that surgery restores functional independence. The mRS distribution shift observed was numerical only. The trial cannot establish quality of life benefit.',
       cautions: 'DESTINY enrolled only 32 patients; effect sizes should be interpreted with caution due to wide confidence intervals expected from small samples. All patients were aged 18-60 years, limiting generalizability to patients over 60. The trial was stopped early when pooled European analysis data became available. Pooled analysis of DECIMAL, DESTINY, and HAMLET within 48 hours of stroke onset (HAMLET 2009, Figure 3) showed mortality ARR 49.9 percentage points (95% CI 33.9-65.9) and mRS greater than 4 ARR 41.9 percentage points (95% CI 25.2-58.6) favoring surgery.',
     },
     /* claimId: destiny-pearl | source: Juttler et al. Stroke 2007 */
     bedsidePearl: 'DESTINY confirms the pattern from DECIMAL: hemicraniectomy prevents death in malignant MCA infarction in patients under 61 years, but does not reliably restore functional independence. For family counseling, lead with the survival benefit, then explicitly state that most survivors will have severe to moderate disability and will not return to independent living. Use the pooled analysis (DECIMAL, DESTINY, HAMLET within 48 hours) for the most precise risk-benefit estimate.',
-    bottomLineSummary: 'Early hemicraniectomy reduces 30-day and 6-month mortality by approximately 41 percentage points in malignant MCA infarction in patients aged 18-60. The primary functional endpoint (mRS 0-3 at 6 months) was not met in this 32-patient trial. The pooled European analysis is the more reliable efficacy estimate.',
+    bottomLineSummary: 'Early hemicraniectomy reduces 30-day mortality by approximately 41 percentage points in malignant MCA infarction in patients aged 18-60. The primary functional endpoint (mRS 0-3 at 6 months) was not met in this 32-patient trial. The pooled European analysis is the more reliable efficacy estimate.',
     conclusion: '',
     source: 'Juttler et al. (Stroke 2007)',
     keyMessage: 'DESTINY reinforced that early hemicraniectomy improves survival in malignant MCA infarction. Most survivors have severe disability.',
@@ -5770,7 +5770,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
           year: 2007,
           journal: 'Stroke (Vahedi et al.)',
           n: 38,
-          designNotes: 'Early decompressive hemicraniectomy plus medical therapy vs medical therapy alone in patients aged 18-55; stopped early at 38 of 70 planned for pooled analysis.',
+          designNotes: 'Early decompressive hemicraniectomy plus medical therapy vs medical therapy alone in patients aged 18-55; stopped early after 38 patients (anticipated median sample size 60) because of slow recruitment and the decision to pool with DESTINY and HAMLET.',
           keyResult: '6-month mortality reduced from 78% to 25% (absolute reduction 52.8 points, P=0.001); the primary endpoint mRS 3 or lower at 6 months was not significant (25% vs 5.6%, P=0.18).',
           whatWasMissing: 'Enrolled only patients up to age 55 and was too small to establish a functional benefit, so the over-60 question stayed open.',
         },
@@ -6405,7 +6405,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Symptomatic ICH doubled with EVT (5.9% vs 2.6%) without mortality benefit',
       'Median age 77 years, NIHSS 6 (relatively mild strokes)',
       'Occlusion locations: 44% M2, 27% M3, 13% P2, 6% P1',
-      '65% received IV thrombolysis before/during EVT',
+      'IV thrombolysis was given to about 65% overall (62.0% in the EVT arm, 68.8% in the medical arm)',
       'Imaging-to-puncture time: 70 min (exceeded 60-min target)',
       'No subgroup showed benefit; not younger patients, not higher NIHSS, not specific occlusion locations',
       'Clinical implication: EVT is not recommended for medium/distal vessel occlusions',
@@ -6982,8 +6982,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       doesNotProve: 'It does not prove benefit outside 6–24 hours or for patients not meeting clinical-imaging mismatch criteria. It does not generalize to non-Trevo retrieval devices (Trevo-only by protocol). It does not isolate which DAWN group benefits most (A vs B vs C).',
       cautions: 'Stopped early at 31 months (n=206 of planned 500) for predictive probability of success ≥95%. Truncation bias likely. Trevo device only; generalizability to other stent retrievers requires trust in mechanism-class effect. The mRS 0–2 coprimary was upgraded mid-trial at FDA request without multiplicity adjustment. Disclose this when quoting NNT 2.8. Population is enriched: small infarct cores with severe clinical deficits ("paradoxical mismatch"), median core volume 7–9 mL.',
     },
-    bedsidePearl: 'For anterior LVO 6–24 hours after LKW with clinical-core mismatch (small core, severe deficit), EVT delivers one of the largest effects in stroke history (mRS 0–2 49% vs 13%; derived NNT 2.8 from secondary). Primary endpoint is utility-weighted mRS, analyzed by Bayesian posterior probability of superiority (>0.999).',
-    bottomLineSummary: 'DAWN extends EVT to 24h after LKW for clinical-imaging mismatch patients (Trevo device). Primary uw-mRS Bayesian posterior P(superiority) >0.999. Coprimary mRS 0–2 binary: 49% vs 13% (derived NNT 2.8 from secondary, displayed with Bayesian annotation). Stopped early at 31 months. AHA/ASA 2026 §4.7.2 COR 1.',
+    bedsidePearl: 'For anterior LVO 6–24 hours after LKW with clinical-core mismatch (small core, severe deficit), EVT delivers one of the largest effects in stroke history (mRS 0–2 49% vs 13%; derived NNT 2.8 from the binary coprimary). Primary endpoint is utility-weighted mRS, analyzed by Bayesian posterior probability of superiority (>0.999).',
+    bottomLineSummary: 'DAWN extends EVT to 24h after LKW for clinical-imaging mismatch patients (Trevo device). Primary uw-mRS Bayesian posterior P(superiority) >0.999. Coprimary mRS 0–2 binary: 49% vs 13% (derived NNT 2.8 from the binary coprimary, displayed with Bayesian annotation). Stopped early at 31 months. AHA/ASA 2026 §4.7.2 COR 1.',
     applicability: {
       imagingSelection: 'Clinical-imaging mismatch required by age strata (≥80y: NIHSS≥10 + core<21mL; <80y: NIHSS≥10 + core<31mL, or NIHSS≥20 + core 31–<51mL)',
       populationExclusions: [
@@ -7014,7 +7014,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       absoluteReduction: {
         value: '36 pp (95% CI 24–47)',
         label: 'Coprimary mRS 0–2: 49% vs 13%',
-        info: 'Unadjusted absolute difference in functional independence (mRS 0–2) at 90 days: 36 pp (95% CI 24–47). Adjusted difference 33 pp (95% CI 24–44). This is the mRS 0–2 binary coprimary; the trial primary is utility-weighted mRS analyzed by Bayesian methods (posterior P(superiority) >0.999), reported separately. Per trial-statistics skill, NNT for the Bayesian primary is not valid; the displayed NNT 2.8 derives from this mRS 0–2 secondary and is shown with explicit Bayesian-design annotation.',
+        info: 'Unadjusted absolute difference in functional independence (mRS 0–2) at 90 days: 36 pp (95% CI 24–47). Adjusted difference 33 pp (95% CI 24–44). This is the mRS 0–2 binary coprimary; the trial primary is utility-weighted mRS analyzed by Bayesian methods (posterior P(superiority) >0.999), reported separately. Per trial-statistics skill, NNT for the Bayesian primary is not valid; the displayed NNT 2.8 derives from this mRS 0–2 binary coprimary and is shown with explicit Bayesian-design annotation.',
         highlight: true,
       },
     },
@@ -7438,7 +7438,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       imagingSelection: 'MRI DWI-FLAIR mismatch required',
       populationExclusions: ['Does not disprove WAKE-UP. Underpowered and stopped early after WAKE-UP results'],
     },
-    trialResult: 'NEGATIVE',
+    trialResult: 'INCONCLUSIVE',
     stats: {
       sampleSize: {
         value: '131',
@@ -7484,7 +7484,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     clinicalContext: 'THAWS tested whether MRI-selected wake-up or unclear-onset ischemic stroke could benefit from low-dose alteplase (0.6 mg/kg), the dose used in Japan, using a DWI-positive and FLAIR-negative selection strategy.',
     pearls: [
-      'Neutral Trial: No difference in mRS 0-1 at 90 days (47.1% vs 48.3%; P=0.89)',
+      'Inconclusive Trial: No detected difference in mRS 0-1 at 90 days (47.1% vs 48.3%; P=0.89), but the trial was underpowered at 131 of a planned 300 patients',
       'Early Termination: The study stopped after WAKE-UP was published, leaving it underpowered for definitive conclusions',
       'Dose Distinction: THAWS evaluated alteplase 0.6 mg/kg rather than the standard 0.9 mg/kg used in WAKE-UP',
       'Safety: Symptomatic ICH was uncommon (1/71 vs 0/60), and 90-day mortality was 2/71 vs 2/60',
@@ -8974,7 +8974,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       }
     },
     intervention: {
-      treatment: 'Percutaneous Transluminal Angioplasty and Stenting (PTAS) with Gateway PTA balloon + Wingspan self-expanding stent (Stryker Neurovascular) + Aggressive Medical Management',
+      treatment: 'Percutaneous Transluminal Angioplasty and Stenting (PTAS) with Gateway PTA balloon + Wingspan self-expanding stent (Boston Scientific at the time of the trial; now Stryker Neurovascular) + Aggressive Medical Management',
       control: 'Aggressive Medical Management alone (Aspirin 325mg/d + Clopidogrel 75mg/d for 90 days, Rosuvastatin to LDL <70 mg/dL, SBP <140 mmHg [<130 if diabetes], lifestyle program)'
     },
     clinicalContext: 'Intracranial Atherosclerotic Disease (ICAD) carries a high risk of recurrent stroke. SAMMPRIS investigated whether percutaneous transluminal angioplasty and stenting (PTAS) was superior to aggressive medical management alone in patients with symptomatic 70–99% intracranial stenosis within 30 days of qualifying TIA or stroke.',
@@ -10080,7 +10080,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     inclusionCriteria: [
       'Age 18 years or older',
-      'Ischemic stroke or TIA within 1 to 6 months of randomization',
+      'Ischemic stroke, TIA, or hemorrhagic stroke 1 to 6 months before randomization; patients with hemorrhagic stroke were included only if the investigator judged them to be at risk for ischemic stroke or coronary heart disease',
       'LDL cholesterol 100 to 190 mg/dL (2.6 to 4.9 mmol/L)',
       'No known coronary heart disease at entry',
     ],
@@ -10243,7 +10243,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Imaging-based classification (not NIHSS-based) used to determine timing',
       'Stroke severity: 37% minor, 40% moderate, 23% major',
       'Used any approved DOAC at appropriate dose (not drug-specific)',
-      '98% probability that early treatment increases risk by no more than 0.5 percentage points',
+      'Upper 95% CI bound for the risk difference is +0.47 percentage points: early treatment is unlikely to be materially worse than delayed',
       'Primary outcome at 90 days (exploratory): 3.7% (early) vs 5.6% (later)',
       'Most patients were from European centers - generalizability to other populations unclear'
     ],
@@ -10256,7 +10256,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     inclusionCriteria: [
       'Age 18 years or older',
       'Acute ischemic stroke with confirmed atrial fibrillation (permanent, persistent, or paroxysmal)',
-      'Imaging-based stroke severity classification: minor (small infarct, NIHSS 0-5), moderate (NIHSS 6-15, non-cortical dominant or non-large infarct), or major (NIHSS 16 or higher, or large cortical/hemispheric infarct)',
+      'Imaging-based stroke severity classification: minor (an infarct 1.5 cm or smaller), moderate (an infarct in the distribution of a cortical superficial branch of the middle, anterior, or posterior cerebral artery), or major (larger infarcts in those arterial distributions, or a brain-stem or cerebellar infarct larger than 1.5 cm)',
       'Planned DOAC anticoagulation for secondary prevention',
       'Randomization within 48 hours for minor or moderate stroke; on day 6 or 7 for major stroke',
     ],
@@ -11520,7 +11520,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         ]
       }
     },
-    clinicalContext: 'CREST sits in the carotid revascularization lineage between SAPPHIRE (Yadav 2004, high-surgical-risk only, CAS noninferior at 30 days), the CAS-skeptical European symptomatic trials EVA-3S (Mas 2006, halted for CAS harm), SPACE (Ringleb 2006, NI not established), and ICSS (Ederle 2010, higher periprocedural stroke with CAS), and the later asymptomatic trial ACT-1 (Rosenfield 2016, CAS noninferior to CEA in asymptomatic patients at 1 year). The contemporary open question. Whether CAS or CEA confers any long-term benefit over modern intensive medical management in asymptomatic patients. Is the subject of CREST-2 (NCT02089217), results awaited as of 2026-05-20.',
+    clinicalContext: 'CREST sits in the carotid revascularization lineage between SAPPHIRE (Yadav 2004, high-surgical-risk only, CAS noninferior at 30 days), the CAS-skeptical European symptomatic trials EVA-3S (Mas 2006, halted for CAS harm), SPACE (Ringleb 2006, NI not established), and ICSS (Ederle 2010, higher periprocedural stroke with CAS), and the later asymptomatic trial ACT-1 (Rosenfield 2016, CAS noninferior to CEA in asymptomatic patients at 1 year). The contemporary question, whether CAS or CEA confers any benefit over modern intensive medical management in asymptomatic patients, was tested by CREST-2 (NCT02089217; Brott TG et al., NEJM 2026;394:219-231): stenting met the 4-year primary composite (2.8% vs 6.0%, P=0.02) and endarterectomy did not (3.7% vs 5.3%, P=0.24).',
     // No `calculations` block. Failed-superiority composite with no NI claim → NNT
     // cannot be defended (Option Y rule, trial-statistics skill, and the pre-commit
     // NNT guard for this design type).
@@ -11548,7 +11548,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     keyMessage: 'CAS and CEA produced no significant difference on the 4-year primary composite (7.2% vs 6.8%, HR 1.11, P=0.51), but the periprocedural components diverge: CAS roughly doubles stroke; CEA roughly doubles MI; cranial nerve palsy is almost exclusively CEA. Age modifies the choice at a crossover near 70 years.',
     safetyData: 'Within the periprocedural window (30 days, or 36 days if procedure delayed): any stroke 4.1% (CAS) vs 2.3% (CEA), HR 1.79 (95% CI 1.14–2.82), P=0.01. Major ipsilateral stroke 0.9% vs 0.3%, HR 2.67 (0.85–8.40), P=0.09. Minor ipsilateral stroke 2.9% vs 1.4%, HR 2.16 (1.22–3.83), P=0.009. Myocardial infarction 1.1% (CAS) vs 2.3% (CEA), HR 0.50 (0.26–0.94), P=0.03. Death 0.7% vs 0.3%, HR 2.25 (0.69–7.30), P=0.18. Cranial nerve palsy 0.3% (CAS) vs 4.7% (CEA), HR 0.07 (0.02–0.18), P<0.001. Periprocedural composite of stroke + MI + death: 5.2% vs 4.5%, HR 1.18 (0.82–1.68), P=0.38. The periprocedural component split is the clinically actionable signal from CREST.',
     educationalContext: 'CREST is the largest North American head-to-head comparison of CAS and CEA in average-risk symptomatic and asymptomatic carotid stenosis. The trial was designed and powered for superiority. Failure to reject the null hypothesis on a wide CI (HR 0.81–1.51) is not proof of equivalence; it is simply absence of a demonstrated winner on the chosen composite. The clinically meaningful information lies one layer down, in the component breakdown: CAS exchanges a higher periprocedural stroke risk for a lower periprocedural MI risk and near-elimination of cranial nerve injury, while CEA exchanges a higher periprocedural MI risk and a sizeable cranial nerve palsy rate for a lower periprocedural stroke risk. The age interaction at approximately 70 years adds a second axis to the decision. The European symptomatic trials EVA-3S, SPACE, and ICSS consistently showed higher periprocedural stroke with CAS in symptomatic patients; CREST is internally consistent with that signal even when the trial-level composite is not.',
-    clinicalApplication: 'When advising a patient with average-surgical-risk carotid stenosis on revascularization, CREST supports a tradeoff conversation rather than a single answer. Periprocedural stroke is approximately twice as common with CAS; periprocedural MI is approximately twice as common with CEA; cranial nerve palsy is almost exclusively a CEA harm; long-term durability appears similar. Factors that may move the decision toward CEA include older age (approximate crossover at 70 years), favorable surgical anatomy, and patient prioritization of stroke avoidance. Factors that may move the decision toward CAS include younger age, hostile neck anatomy (prior radiation, prior CEA, high lesion), cardiac frailty making cranial nerve injury or surgical MI less acceptable, and patient prioritization of MI avoidance. The CREST result reflects rigorously credentialed operators; CAS results in non-credentialed environments may be substantially worse and the recommendation should be tempered accordingly. CREST does not compare either revascularization strategy to modern intensive medical management. That question is being addressed by CREST-2 and remains open as of 2026-05-20.',
+    clinicalApplication: 'When advising a patient with average-surgical-risk carotid stenosis on revascularization, CREST supports a tradeoff conversation rather than a single answer. Periprocedural stroke is approximately twice as common with CAS; periprocedural MI is approximately twice as common with CEA; cranial nerve palsy is almost exclusively a CEA harm; long-term durability appears similar. Factors that may move the decision toward CEA include older age (approximate crossover at 70 years), favorable surgical anatomy, and patient prioritization of stroke avoidance. Factors that may move the decision toward CAS include younger age, hostile neck anatomy (prior radiation, prior CEA, high lesion), cardiac frailty making cranial nerve injury or surgical MI less acceptable, and patient prioritization of MI avoidance. The CREST result reflects rigorously credentialed operators; CAS results in non-credentialed environments may be substantially worse and the recommendation should be tempered accordingly. CREST does not compare either revascularization strategy to modern intensive medical management. CREST-2 (NEJM 2026) addressed that question in asymptomatic stenosis of at least 70%: stenting separated from intensive medical management alone at 4 years (2.8% vs 6.0%, P=0.02) and endarterectomy did not (3.7% vs 5.3%, P=0.24). The comparison in symptomatic stenosis remains untested against contemporary medical therapy.',
     limitations: [
       'Superiority design with a wide CI (HR 0.81–1.51). Failure to reject the null is not proof of equivalence; no noninferiority margin was prespecified',
       'Composite primary endpoint combined disparate harms (stroke, MI, death, ipsilateral stroke). The clinically actionable information requires unpacking the components',
@@ -11558,7 +11558,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Patients with previous disabling stroke or chronic atrial fibrillation were excluded',
       'Age interaction analysis was planned before unblinding but not specified in the original protocol. Interpret as a robust internal observation, not a fully prespecified hypothesis test',
       'Per-stratum age hazard ratios are displayed graphically in the published Figure 2B; discrete per-stratum HR/CI values were not extracted into this entry',
-      'No direct comparison to intensive medical management. The question being addressed by CREST-2 (NCT02089217)',
+      'No direct comparison to intensive medical management. CREST-2 (NCT02089217, NEJM 2026) later made that comparison, in asymptomatic stenosis only',
       'Long-term outcomes are reported separately (Brott NEJM 2016;374:1021); this entry covers the 4-year primary analysis only'
     ],
     safetyProfile: {
@@ -11674,11 +11674,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     howToInterpret: {
       proves: 'On the primary 4-year composite of any periprocedural stroke, MI, or death plus 4-year ipsilateral stroke, CAS and CEA showed no significant difference (7.2% vs 6.8%, HR 1.11, 95% CI 0.81–1.51, P=0.51). The trial failed to demonstrate superiority of either approach. The clinically meaningful within-trial findings are in the periprocedural components: CAS doubles periprocedural stroke (4.1% vs 2.3%, HR 1.79, P=0.01), CEA doubles periprocedural MI (2.3% vs 1.1%, HR 0.50 favoring CAS, P=0.03), and cranial nerve palsy is essentially a CEA-only harm (4.7% vs 0.3%, HR 0.07, P<0.001). A treatment × age interaction was observed (P=0.02) with a crossover near 70 years.',
-      doesNotProve: 'It does not prove that CAS and CEA are equivalent or interchangeable. It does not address how either approach compares to modern intensive medical management. That question is the subject of CREST-2 and is unresolved as of 2026-05-20. It does not extend to high-surgical-risk patients (the SAPPHIRE population), patients with previous disabling stroke, or patients with chronic atrial fibrillation. It does not establish CAS outcomes outside the rigorously credentialed operator environment of the trial. Long-term outcomes are reported separately in the 10-year follow-up (Brott NEJM 2016) and should not be merged with the 2010 primary analysis.',
+      doesNotProve: 'It does not prove that CAS and CEA are equivalent or interchangeable. It does not address how either approach compares to modern intensive medical management. CREST-2 (Brott TG et al., NEJM 2026;394:219-231) answered that question for asymptomatic stenosis of at least 70%: stenting plus intensive medical management beat intensive medical management alone on the 4-year primary composite (2.8% vs 6.0%, P=0.02), while endarterectomy did not (3.7% vs 5.3%, P=0.24). The comparison in symptomatic stenosis remains untested against contemporary medical therapy. It does not extend to high-surgical-risk patients (the SAPPHIRE population), patients with previous disabling stroke, or patients with chronic atrial fibrillation. It does not establish CAS outcomes outside the rigorously credentialed operator environment of the trial. Long-term outcomes are reported separately in the 10-year follow-up (Brott NEJM 2016) and should not be merged with the 2010 primary analysis.',
       cautions: 'CREST was a superiority trial that failed to reject the null hypothesis; the wide CI (HR 0.81–1.51) does not establish equivalence. The age-interaction analysis was planned before unblinding but not specified in the original protocol. Treat as a robust internal observation rather than a fully prespecified test. Industry sponsorship from Abbott Vascular included device donation worth ~15% of total study cost, a nonvoting Executive Committee seat, and manuscript review prior to submission, in addition to the primary NINDS R01 NS 38384 funding. Operator credentialing was rigorous in this trial; CAS performed in less experienced hands has historically had worse periprocedural outcomes, and the CREST results may not generalize outside credentialed centers.',
     },
     bedsidePearl: 'CREST compared carotid stenting with endarterectomy in average-surgical-risk patients. The 4-year primary composite was 7.2% (CAS) vs 6.8% (CEA), HR 1.11 (95% CI 0.81–1.51, P=0.51). No significant difference; superiority not demonstrated. The actionable signal is the component split: CAS roughly doubles periprocedural stroke (4.1% vs 2.3%, HR 1.79), CEA roughly doubles periprocedural MI (2.3% vs 1.1%, HR 0.50 favoring CAS), and cranial nerve palsy is essentially a CEA-only harm (4.7% vs 0.3%, HR 0.07). Treatment-by-age interaction (P=0.02) crosses over near 70 years; CAS tends to do better in younger patients, CEA in older.',
-    bottomLineSummary: 'CREST is the largest North American head-to-head trial of carotid stenting and endarterectomy in average-surgical-risk symptomatic and asymptomatic patients. The 4-year primary composite of periprocedural stroke, MI, or death plus 4-year ipsilateral stroke showed no significant difference (7.2% CAS vs 6.8% CEA, HR 1.11, 95% CI 0.81–1.51, P=0.51), superiority was not demonstrated for either approach. The clinical decision rests on the periprocedural component split: CAS roughly doubles stroke, CEA roughly doubles MI, and CEA accounts for nearly all cranial nerve palsy. Treatment effect varies by age (interaction P=0.02) with a crossover near 70 years. CREST does not address either approach versus intensive medical management, that question is the subject of CREST-2.',
+    bottomLineSummary: 'CREST is the largest North American head-to-head trial of carotid stenting and endarterectomy in average-surgical-risk symptomatic and asymptomatic patients. The 4-year primary composite of periprocedural stroke, MI, or death plus 4-year ipsilateral stroke showed no significant difference (7.2% CAS vs 6.8% CEA, HR 1.11, 95% CI 0.81–1.51, P=0.51), superiority was not demonstrated for either approach. The clinical decision rests on the periprocedural component split: CAS roughly doubles stroke, CEA roughly doubles MI, and CEA accounts for nearly all cranial nerve palsy. Treatment effect varies by age (interaction P=0.02) with a crossover near 70 years. CREST does not address either approach versus intensive medical management; CREST-2 (NEJM 2026) made that comparison in asymptomatic stenosis, where stenting met its primary composite and endarterectomy did not.',
     listCategory: 'carotid',
     listDescription: 'CAS vs CEA in average-risk carotid stenosis. No primary 4-yr difference; CAS↑stroke, CEA↑MI/cranial nerve palsy; age-dependent.',
     legend: {
@@ -12645,7 +12645,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     ordinalStats: { commonOR: 0.97, ciLow: 0.65, ciHigh: 1.47, direction: 'neutral' as const },
     bedsidePearl: 'MR ASAP and RIGHT-2 together make the strongest case against prehospital GTN for undifferentiated stroke: no functional benefit in either trial, and an early harm signal in ICH patients treated before imaging. Early 7-day mortality was numerically higher with GTN in the ICH subgroup. Do not administer prehospital nitrates for presumed stroke before CT excludes hemorrhage.',
-    bottomLineSummary: 'In ambulance-treated patients with presumed stroke within 3 hours of onset, prehospital transdermal glyceryl trinitrate did not improve 90-day mRS distribution (cOR 0.97, 95% CI 0.65-1.47 in target population). The trial was stopped after 380 randomizations due to a safety signal in ICH patients: early 7-day mortality was numerically higher with GTN in this subgroup. mRS 0-2 at 90 days was 51% vs 49% in the target population.',
+    bottomLineSummary: 'In ambulance-treated patients with presumed stroke within 3 hours of onset, prehospital transdermal glyceryl trinitrate did not improve the 90-day mRS distribution (adjusted common OR 0.92, 95% CI 0.59-1.43 in the target population; 0.97, 95% CI 0.65-1.47 in the total population). The trial was stopped after 380 randomizations due to a safety signal in ICH patients: early 7-day mortality was numerically higher with GTN in this subgroup. mRS 0-2 at 90 days was 51% vs 49% in the target population.',
     legend: {
       finding: 'Prehospital transdermal GTN for undifferentiated stroke shows no functional benefit.',
       bottomLineTag: 'No benefit',
@@ -14382,7 +14382,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'Why was the NI margin set at RR 0.93?',
-        answer: 'A risk ratio NI margin of 0.93 means prourokinase must achieve at least 93% of alteplase\'s efficacy. With alteplase achieving 68.7%, this requires prourokinase to reach at least 63.9%. And it reached 72.0%, far exceeding the margin. PROST-2 provides strong NI evidence with a rigorous margin.',
+        answer: 'A risk ratio NI margin of 0.93 means prourokinase must achieve at least 93% of alteplase\'s efficacy. Non-inferiority is decided by the confidence interval, not by the point estimate: the risk ratio was 1.04 with a 95% CI of 0.98 to 1.10, and because the lower bound of 0.98 sits above the 0.93 margin, non-inferiority is established. Prourokinase reached 72.0% versus 68.7% for alteplase, but that numerical gap is not what settles the question, and superiority was not separately tested.',
       },
       {
         question: 'How does PROST-2 build on PROST?',
@@ -15030,7 +15030,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'Does TRACE-2 show superiority?',
-        answer: 'No. The RR of 1.07 and the CI of 0.98-1.16 are consistent with NI. The CI crosses 1.0 for superiority would require the lower bound to exceed 1.0. TRACE-2 confirms equivalence, not superiority. Combined with AcT and ATTEST-2, it firmly establishes tenecteplase as a non-inferior alternative.',
+        answer: 'No. The RR of 1.07 has a 95% CI of 0.98 to 1.16 that includes 1.0, so superiority was not shown; superiority would have required the lower bound to exceed 1.0. TRACE-2 establishes non-inferiority within the prespecified RR margin of 0.937, which is not the same as proving the two agents equivalent. Combined with AcT and ATTEST-2, it firmly establishes tenecteplase as a non-inferior alternative.',
       },
     ],
     howToInterpret: {
@@ -15117,7 +15117,6 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     inclusionCriteria: [
       'Wake-up stroke or stroke with unwitnessed onset',
       'Treatable within 4.5 hours of awakening or recognition',
-      'ASPECTS 4 or higher on non-contrast CT',
       'Age 18 to 80',
     ],
     exclusionCriteria: [
@@ -15177,7 +15176,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     ordinalStats: { commonOR: 1.18, ciLow: 0.88, ciHigh: 1.58, direction: 'positive' as const, pValue: 0.27 },
     bedsidePearl: 'TWIST is a negative trial for non-contrast CT-only selection of wake-up stroke for tenecteplase. Numerically more patients achieved mRS 0-1 with tenecteplase (45% vs 38%) but the ordinal shift was not significant. The take-home is imaging-specific: NCCT alone cannot reliably select patients likely to benefit. MRI DWI-FLAIR mismatch (WAKE-UP trial) or CTP penumbra remain the evidence-based selection strategies where available.',
-    bottomLineSummary: 'In wake-up stroke patients selected by non-contrast CT (ASPECTS 4 or higher), tenecteplase 0.25 mg/kg within 4.5 hours of awakening did not significantly improve 90-day mRS distribution compared with no thrombolysis (adjusted OR 1.18, 95% CI 0.88-1.58, p=0.27). mRS 0-1 was achieved in 45% vs 38% (exploratory). Symptomatic ICH was 2% vs 1%. TWIST does not support non-contrast CT as the sole imaging modality for wake-up stroke thrombolytic selection.',
+    bottomLineSummary: 'In wake-up stroke patients selected by non-contrast CT (no early ischemic change beyond one-third of the MCA territory), tenecteplase 0.25 mg/kg within 4.5 hours of awakening did not significantly improve 90-day mRS distribution compared with no thrombolysis (adjusted OR 1.18, 95% CI 0.88-1.58, p=0.27). mRS 0-1 was achieved in 45% vs 38% (exploratory). Symptomatic ICH was 2% vs 1%. TWIST does not support non-contrast CT as the sole imaging modality for wake-up stroke thrombolytic selection.',
     legend: {
       finding: 'Non-contrast CT-only selection of wake-up stroke for tenecteplase failed to show benefit.',
       bottomLineTag: 'Neutral',
@@ -15371,7 +15370,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     primaryOutcomeProse: 'In 362 patients with ischemic stroke, endovascular therapy alone was not superior to IV alteplase in achieving disability-free survival (mRS 0-1) at 90 days. The primary endpoint was achieved in 30.4% of the endovascular group versus 34.8% of the alteplase group (adjusted OR 0.71, 95% CI 0.44 to 1.14, p=0.16). Results numerically favored IV alteplase, though this difference did not reach statistical significance. Notably, the endovascular arm received no pre-procedure IV alteplase, and the endovascular treatment window extended to 6 hours versus 4.5 hours for the alteplase arm.',
     /* claimId: synthesis-expansion-design | source: Ciccone et al., NEJM 2013 */
     trialDesignNarrative: 'SYNTHESIS Expansion randomized patients with ischemic stroke to endovascular therapy alone (without IV alteplase) or IV alteplase (0.9 mg/kg standard dose within 4.5 hours). The endovascular group had a longer treatment window, up to 6 hours from onset. Endovascular therapy used intra-arterial recombinant tPA and first-generation mechanical devices. Enrollment did not require CTA or MRA confirmation of large-vessel occlusion, meaning a substantial proportion of enrolled patients may have had occlusions not amenable to endovascular retrieval. This design difference from IMS-III (which used bridging therapy) makes direct comparison difficult.',
-    safetyBrief: 'Symptomatic intracranial hemorrhage was similar between groups (6% endovascular vs 6% alteplase). Mortality at 3 months was 10% versus 8%, a non-significant difference (p=0.53). No significant safety signal in either direction.',
+    safetyBrief: 'Symptomatic intracranial hemorrhage was similar between groups (6% endovascular vs 6% alteplase). Mortality at 90 days was 14.4% endovascular versus 9.9% alteplase, a non-significant difference (p=0.22). No significant safety signal in either direction.',
     successorTrialId: 'escape-trial',
     successorTrialDisplay: 'ESCAPE (2015)',
     successorTrialClause: 'for the modern successor trial that established EVT as standard of care',
@@ -15486,23 +15485,23 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalContext: 'MR RESCUE tested whether penumbral mismatch imaging, showing a large at-risk zone relative to the infarct core, could identify patients most likely to benefit from embolectomy. The finding that mean mRS was identical (3.9 vs 3.9) in both arms, regardless of penumbral imaging pattern, challenged this hypothesis. The trial used first-generation devices with a reperfusion rate of only 27%.',
     pearls: [
       'Mean mRS at 90 days identical in both arms: 3.9 embolectomy vs 3.9 standard care',
-      'Penumbral imaging did not identify a benefiting subgroup (imaging-by-treatment interaction p=0.56)',
+      'Penumbral imaging did not identify a benefiting subgroup (imaging-by-treatment interaction p=0.14)',
       'Only 27% of embolectomy-arm patients achieved successful reperfusion, far below modern stent-retriever rates',
       'The trial was underpowered to detect small effects; N=118 limits conclusions',
     ],
     conclusion: '',
     questionLede: 'In patients with proximal large-vessel occlusion stroke within 8 hours, does penumbral mismatch imaging identify patients who benefit from mechanical embolectomy, and does embolectomy improve functional outcome compared with standard care?',
     /* claimId: mr-rescue-outcomes | source: Kidwell et al., NEJM 2013, doi: 10.1056/NEJMoa1212793 */
-    primaryOutcomeProse: 'In 118 patients with proximal anterior circulation LVO stroke randomized within 8 hours, mechanical embolectomy did not improve functional outcome compared with standard care. Mean mRS at 90 days was 3.9 in both the embolectomy group and the standard-care group. Penumbral imaging pattern (favorable mismatch vs unfavorable) did not predict benefit from embolectomy; the imaging-by-treatment interaction was not significant (p=0.56). The trial was underpowered to detect small treatment effects, and the embolectomy arm achieved successful reperfusion in only 27% of patients.',
+    primaryOutcomeProse: 'In 118 patients with proximal anterior circulation LVO stroke randomized within 8 hours, mechanical embolectomy did not improve functional outcome compared with standard care. Mean mRS at 90 days was 3.9 in both the embolectomy group and the standard-care group. Penumbral imaging pattern (favorable mismatch vs unfavorable) did not predict benefit from embolectomy; the imaging-by-treatment interaction was not significant (p=0.14). The trial was underpowered to detect small treatment effects, and the embolectomy arm achieved successful reperfusion in only 27% of patients.',
     /* claimId: mr-rescue-design | source: Kidwell et al., NEJM 2013 */
     trialDesignNarrative: 'MR RESCUE enrolled patients with proximal anterior circulation LVO (ICA or M1 MCA, confirmed on CTA or MRA) within 8 hours of symptom onset and performed penumbral imaging (MRI or CT perfusion) to classify patients as having favorable mismatch (large penumbra, small core) or unfavorable pattern (large established infarct). Patients were randomized within each stratum to mechanical embolectomy or standard care. Embolectomy used the MERCI retriever or Penumbra aspiration system, first-generation devices with substantially lower reperfusion efficacy than modern stent retrievers. Only 27% of the embolectomy arm achieved TIMI 2-3 reperfusion.',
-    safetyBrief: 'Symptomatic intracranial hemorrhage occurred in 9% of the embolectomy group versus 4% of the standard-care group (not statistically significant in this small trial). Mortality at 90 days was 21% versus 17% (NS). No significant safety difference was demonstrated.',
+    safetyBrief: 'Symptomatic intracranial hemorrhage occurred in 4% of patients overall and 90-day mortality was 21% overall; neither rate differed across the study groups. The primary publication reports these as whole-cohort rates rather than arm-level splits, so no per-arm safety comparison is available.',
     successorTrialId: 'escape-trial',
     successorTrialDisplay: 'ESCAPE (2015)',
     successorTrialClause: 'for the modern successor trial that established EVT as standard of care',
     chainContext: 'modern stent-retriever technology and CTA-based patient selection',
     /* claimId: mr-rescue-bottom-line | source: Kidwell et al., NEJM 2013 */
-    bottomLineSummary: 'MR RESCUE randomized 118 patients with proximal LVO stroke to mechanical embolectomy (MERCI or Penumbra) or standard care within 8 hours, stratified by penumbral imaging pattern. Mean mRS at 90 days was 3.9 in both arms. Penumbral imaging did not identify a benefiting subgroup (interaction p=0.56). Successful reperfusion was achieved in only 27% of the embolectomy arm, reflecting low first-generation device efficacy. The trial does not establish benefit or harm; its teaching value is illustrating why device generation and imaging selection were insufficient in the first-generation EVT era.',
+    bottomLineSummary: 'MR RESCUE randomized 118 patients with proximal LVO stroke to mechanical embolectomy (MERCI or Penumbra) or standard care within 8 hours, stratified by penumbral imaging pattern. Mean mRS at 90 days was 3.9 in both arms. Penumbral imaging did not identify a benefiting subgroup (interaction p=0.14). Successful reperfusion was achieved in only 27% of the embolectomy arm, reflecting low first-generation device efficacy. The trial does not establish benefit or harm; its teaching value is illustrating why device generation and imaging selection were insufficient in the first-generation EVT era.',
     inclusionCriteria: [
       'Age 18 to 85 years',
       'Proximal anterior circulation LVO (ICA or M1 MCA) on CTA or MRA',
@@ -15834,7 +15833,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     doi: '10.1056/NEJMoa060989',
     source: 'Bhatt et al. (NEJM 2006)',
     listCategory: 'antiplatelets',
-    listDescription: 'Aspirin + clopidogrel vs aspirin alone for median 28 months in broad CV risk population: no overall benefit (6.8% vs 7.3%, RR 0.93, CI 0.83–1.05, P=0.22) and harm in asymptomatic subgroup. Preceded POINT (2018).',
+    listDescription: 'Aspirin + clopidogrel vs aspirin alone for median 28 months in broad CV risk population: no overall benefit (6.8% vs 7.3%, RR 0.93, CI 0.83–1.05, P=0.22) and a non-significant harm signal in the asymptomatic subgroup. Preceded POINT (2018).',
     stats: {
       sampleSize: { value: '15,603', label: 'Randomized Patients' },
       primaryEndpoint: { value: 'MI/Stroke/CV Death', label: 'Median 28 Months Follow-up' },
@@ -15858,18 +15857,18 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Aspirin (75–162 mg/day per local standard) plus clopidogrel 75 mg/day',
       control: 'Aspirin (75–162 mg/day) plus clopidogrel-matched placebo',
     },
-    clinicalContext: 'CHARISMA used a broader population than MATCH, comparing aspirin plus clopidogrel versus aspirin alone across a large heterogeneous cardiovascular risk cohort. The overall trial was negative. A pre-specified subgroup showed modest benefit in symptomatic patients (prior MI, stroke, or ACS) but excess harm in asymptomatic primary-prevention patients. This reinforced that long-duration DAPT is not appropriate as a general cardiovascular prevention strategy and contributed to the design of POINT (2018), which focused on short-duration DAPT in high-risk symptomatic stroke and TIA patients.',
+    clinicalContext: 'CHARISMA used a broader population than MATCH, comparing aspirin plus clopidogrel versus aspirin alone across a large heterogeneous cardiovascular risk cohort. The overall trial was negative. A pre-specified subgroup analysis showed modest benefit in symptomatic patients (prior MI, stroke, or ACS) but a harm signal that was not statistically significant in asymptomatic primary-prevention patients (RR 1.20, 95% CI 0.91 to 1.59, P=0.20). This reinforced that long-duration DAPT is not appropriate as a general cardiovascular prevention strategy and contributed to the design of POINT (2018), which focused on short-duration DAPT in high-risk symptomatic stroke and TIA patients.',
     pearls: [
       'Overall primary: 6.8% combination vs 7.3% aspirin alone (RR 0.93, CI 0.83–1.05, P=0.22); not significant',
       'Pre-specified symptomatic subgroup: RR 0.88 (CI 0.77–0.99); modest benefit signal, not practice-changing alone',
-      'Pre-specified asymptomatic subgroup: RR 1.20 (CI 0.91–1.59); excess harm with combination',
+      'Pre-specified asymptomatic subgroup: RR 1.20 (CI 0.91–1.59, P=0.20); harm signal, not statistically significant',
       'Moderate bleeding significantly higher with combination: 2.1% vs 1.3%',
       'Reinforced that DAPT harm scales with duration and is especially pronounced in low-risk primary prevention',
     ],
     conclusion: '',
     questionLede: 'In patients with established cardiovascular disease or multiple cardiovascular risk factors, does adding clopidogrel to aspirin reduce MI, stroke, or cardiovascular death over a median 28-month follow-up?',
     /* claimId: charisma-outcomes | source: Bhatt et al., NEJM 2006, doi: 10.1056/NEJMoa060989 */
-    primaryOutcomeProse: 'In 15,603 patients with established cardiovascular disease or multiple cardiovascular risk factors, aspirin plus clopidogrel did not significantly reduce the composite of myocardial infarction, stroke, or cardiovascular death over a median 28 months. The primary endpoint occurred in 6.8% of the combination group versus 7.3% of the aspirin-alone group (relative risk 0.93, 95% CI 0.83 to 1.05, P=0.22). A pre-specified symptomatic subgroup analysis showed a nominally favorable signal in patients with prior symptomatic atherothrombotic disease (RR 0.88, 95% CI 0.77 to 0.99), interpreted as hypothesis-generating, while the asymptomatic primary-prevention subgroup showed excess harm (RR 1.20, 95% CI 0.91 to 1.59). Overall there was no significant benefit and a clear bleeding excess with combination therapy.',
+    primaryOutcomeProse: 'In 15,603 patients with established cardiovascular disease or multiple cardiovascular risk factors, aspirin plus clopidogrel did not significantly reduce the composite of myocardial infarction, stroke, or cardiovascular death over a median 28 months. The primary endpoint occurred in 6.8% of the combination group versus 7.3% of the aspirin-alone group (relative risk 0.93, 95% CI 0.83 to 1.05, P=0.22). A pre-specified symptomatic subgroup analysis showed a nominally favorable signal in patients with prior symptomatic atherothrombotic disease (RR 0.88, 95% CI 0.77 to 0.99), interpreted as hypothesis-generating, while the asymptomatic primary-prevention subgroup showed a harm signal that did not reach statistical significance (RR 1.20, 95% CI 0.91 to 1.59, P=0.20). Overall there was no significant benefit and a clear bleeding excess with combination therapy.',
     /* claimId: charisma-design | source: Bhatt et al., NEJM 2006 */
     trialDesignNarrative: 'CHARISMA enrolled patients from two populations: established symptomatic atherothrombotic disease (prior MI, ischemic stroke, or symptomatic peripheral arterial disease) and asymptomatic patients with multiple cardiovascular risk factors. All received aspirin at country-standard dose (75–162 mg/day) and were randomized to clopidogrel 75 mg/day or matching placebo. The trial was conducted across 768 centers in 45 countries with a median 28-month follow-up, far longer than the short-duration DAPT studied in CHANCE (2013) and POINT (2018). The duration difference is central to understanding why CHARISMA was negative while short-term trials were positive.',
     safetyBrief: 'Moderate bleeding occurred in 2.1% of the combination group versus 1.3% of the aspirin-alone group (P<0.001). Severe bleeding was similar between groups. There was no significant difference in fatal bleeding. The bleeding excess persisted across the 28-month treatment period, with absolute risk increasing over time.',
@@ -15878,7 +15877,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     successorTrialClause: 'for the modern successor trial that defined the appropriate short-duration window for DAPT in the cerebrovascular subset of patients CHARISMA studied',
     chainContext: 'short-duration dual antiplatelet therapy after minor stroke or high-risk TIA',
     /* claimId: charisma-bottom-line | source: Bhatt et al., NEJM 2006 */
-    bottomLineSummary: 'CHARISMA enrolled 15,603 patients with established CV disease or multiple risk factors and compared aspirin+clopidogrel vs aspirin alone over median 28 months. Primary (MI/stroke/CV death): 6.8% vs 7.3% (RR 0.93, CI 0.83–1.05, P=0.22), not significant overall. Symptomatic subgroup: nominally favorable signal (RR 0.88, hypothesis-generating). Asymptomatic subgroup: excess harm (RR 1.20). Moderate bleeding doubled. POINT (2018) showed short-duration DAPT after minor stroke/TIA is beneficial.',
+    bottomLineSummary: 'CHARISMA enrolled 15,603 patients with established CV disease or multiple risk factors and compared aspirin+clopidogrel vs aspirin alone over median 28 months. Primary (MI/stroke/CV death): 6.8% vs 7.3% (RR 0.93, CI 0.83–1.05, P=0.22), not significant overall. Symptomatic subgroup: nominally favorable signal (RR 0.88, hypothesis-generating). Asymptomatic subgroup: non-significant harm signal (RR 1.20, CI 0.91–1.59, P=0.20). Moderate bleeding was significantly higher with the combination (2.1% vs 1.3%, P<0.001). POINT (2018) showed short-duration DAPT after minor stroke/TIA is beneficial.',
     inclusionCriteria: [
       'Age 45 years or older',
       'Established cardiovascular disease (prior MI, ischemic stroke, or symptomatic PAD) OR multiple cardiovascular risk factors without established disease',
@@ -16143,6 +16142,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Primary negative: mRS 0-3 at 1 year 45% vs 41% (OR 1.20, CI 0.81–1.81, P=0.33)',
       'Pre-specified end-of-treatment hematoma ≤15 mL subgroup: OR approximately 1.79 (CI 1.03–3.12); significant',
       'Procedural sICH 5.8% MISTIE vs 1.9% control during treatment period',
+      'Mortality favored MISTIE: 15.3% vs 22.7% at 180 days (P=0.033) and severity-adjusted Cox HR 0.67 (95% CI 0.45 to 0.98, P=0.037) at 365 days; secondary outcome, 1 of 54 pre-planned analyses, no multiplicity control',
       'Established that greater hematoma reduction (≤15 mL residual) correlates with better outcomes',
       'ENRICH (2024) achieved more complete evacuation with trans-sulcal surgery; positive result',
     ],
@@ -16152,7 +16152,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     primaryOutcomeProse: 'In 506 patients with supratentorial ICH 30 mL or larger randomized to image-guided catheter plus alteplase or standard medical management, MISTIE did not significantly improve functional independence (mRS 0-3) at 1 year. mRS 0-3 was achieved in 45% (110 of 245) in the MISTIE group versus 41% (103 of 250) in the standard care group (adjusted OR 1.20, 95% CI 0.81 to 1.81, P=0.33). A pre-specified subgroup analysis showed a significant benefit in patients achieving end-of-treatment hematoma volume 15 mL or less (OR approximately 1.79, 95% CI 1.03 to 3.12), suggesting that the degree of hematoma reduction, not just the technique, is the critical determinant of outcome.',
     /* claimId: mistie-iii-design | source: Hanley et al., Lancet 2019 */
     trialDesignNarrative: 'MISTIE III was an international phase 3 RCT enrolling patients with supratentorial ICH 30 mL or larger who were at least 12 hours from ictus and clinically stable. A CT-guided stereotactic catheter was placed into the hematoma and alteplase (1 mg every 8 hours, up to 9 doses over approximately 72 hours) was instilled to lyse the clot; fluid was drained passively. The target was residual hematoma 15 mL or less before catheter removal. The 1-year follow-up was longer than most surgical ICH trials. MISTIE differed fundamentally from ENRICH in technique: catheter-based lysis versus trans-sulcal surgical aspiration, with the latter achieving faster and more complete evacuation.',
-    safetyBrief: 'Procedural symptomatic intracranial hemorrhage occurred in 5.8% of MISTIE patients during the treatment period versus 1.9% in the standard care group. Bacterial meningitis or ventriculitis occurred in 5.7% of MISTIE patients from prolonged catheter indwelling. There was no significant difference in overall 1-year mortality between groups.',
+    safetyBrief: 'Procedural symptomatic intracranial hemorrhage occurred in 5.8% of MISTIE patients during the treatment period versus 1.9% in the standard care group. Bacterial meningitis or ventriculitis occurred in 5.7% of MISTIE patients from prolonged catheter indwelling. All-cause mortality was lower with MISTIE at 180 days (15.3% vs 22.7%, P=0.033), and at 365 days the severity-adjusted Cox hazard ratio was 0.67 (95% CI 0.45 to 0.98, P=0.037); the unadjusted log-rank comparison across 365 days was not significant (P=0.084). Mortality was a secondary outcome among 54 pre-planned analyses with no study-wide multiplicity control, so read it as supportive rather than confirmatory. The primary functional endpoint was not met.',
     successorTrialId: 'enrich-trial',
     successorTrialDisplay: 'ENRICH (2024)',
     successorTrialClause: 'for the modern successor trial that established minimally invasive evacuation for selected lobar intracerebral hemorrhage',
@@ -16171,7 +16171,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'ICH secondary to anticoagulation, AVM, aneurysm, or tumor',
       'Planned early craniotomy within 24 hours',
       'Intraventricular hemorrhage causing obstructive hydrocephalus requiring immediate intervention',
-      'INR above 1.5 or platelets below 100,000 at enrollment',
+      'Platelet count below 100,000 or INR above 1.4, or any coagulopathy or clotting disorder (per registration); the publication additionally required an INR of 1.3 or less and a normal activated partial thromboplastin time before treatment',
     ],
     fullEligibility: {
       inclusion: [
@@ -16863,7 +16863,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Cost is a documented concern in editorial follow-up (Smith and Hemphill, NEJM 2024;390:1815). Andexanet cost (~US$23,000/dose) substantially exceeds 4F-PCC (~US$3,000-5,000). Observational comparative-effectiveness studies in 2024-2025 suggest similar hematoma outcomes with 4F-PCC at lower cost; formal comparative trial pending.',
       'Funded by Alexion AstraZeneca Rare Disease (previously Portola Pharmaceuticals). Trial sponsor provided andexanet free of charge.',
     ],
-    bedsidePearl: 'For acute intracerebral hemorrhage on an FXa inhibitor (apixaban, rivaroxaban, edoxaban) within 15 hours of last dose, andexanet improved a composite hemostatic surrogate (hematoma expansion, NIHSS, rescue therapy) at 12 h from 53.1% to 67.0% (NNT 8). Anti-FXa activity dropped 94.5% vs 26.9%. The cost: ischemic stroke 6.5% vs 1.5% (NNH 20) and any thrombotic event 10.3% vs 5.6% (NNH 22). No functional benefit or mortality benefit at 30 days. Quote both NNT and NNH when consenting; if patient has high cardioembolic baseline (atrial fibrillation, recent thrombotic event) the trade-off shifts. 4F-PCC remains the comparator that 85.5% of usual-care patients actually received.',
+    bedsidePearl: 'For acute intracerebral hemorrhage on an FXa inhibitor (apixaban, rivaroxaban, edoxaban) within 15 hours of last dose, andexanet improved a composite hemostatic surrogate (hematoma expansion, NIHSS, rescue therapy) at 12 h from 53.1% to 67.0% (NNT 8). Anti-FXa activity dropped 94.5% vs 26.9%. The cost: ischemic stroke 6.5% vs 1.5% (NNH 20) and any thrombotic event 10.3% vs 5.6% (NNH 22). No functional benefit or mortality benefit at 30 days. Quote both NNT and NNH when consenting; if patient has high cardioembolic baseline (atrial fibrillation, recent thrombotic event) the trade-off shifts. 4F-PCC remains the comparator that 85.5% of usual-care patients actually received. Andexanet alfa is no longer commercially available in the United States: US sales ended December 22, 2025 after the FDA concluded its thromboembolic risks outweighed its benefits, and 4F-PCC is now the default FXa-inhibitor reversal agent in the US. Availability elsewhere varies by formulary.',
     bottomLineSummary: 'ANNEXA-I was the first randomized trial of an FXa-inhibitor antidote in acute intracerebral hemorrhage. Among 452 patients with ICH on apixaban, rivaroxaban, or edoxaban within 15 hours of last dose, andexanet improved a composite hemostatic-efficacy surrogate at 12 h compared with usual care (67.0% vs 53.1%; +13.4 pp, 95% CI 4.6-22.2, P=0.003; NNT 8). The DSMB halted the trial at the pre-specified interim analysis for efficacy. Anti-FXa activity fell 94.5% vs 26.9% with usual care. The hemostatic benefit was offset by a near-four-fold increase in ischemic stroke (6.5% vs 1.5%; NNH 20) and a significant increase in any thrombotic event (10.3% vs 5.6%, P=0.048). There was no functional benefit at 30 days (exploratory mRS 0-3 28.0% vs 31.0%) and no mortality benefit (27.8% vs 25.5%, P=0.51). The trial confirms hemostatic activity and clarifies the ischemic-stroke trade-off but does not resolve whether andexanet should be preferred over 4F-PCC, which 85.5% of usual-care patients received. Supports AHA/ASA 2022 ICH guideline Class IIa, Level B for FXa-inhibitor reversal; a focused guideline update incorporating ANNEXA-I is pending. Andexanet alfa was subsequently withdrawn from the US market: the FDA concluded its thromboembolic risks outweighed its benefits, AstraZeneca submitted a voluntary withdrawal, and US commercial sales ended December 22, 2025. As of late 2025, 4F-PCC 50 U/kg is the default FXa-inhibitor reversal in the United States; andexanet availability outside the US varies by formulary.',
     howToReadChart: [
       {
@@ -16876,7 +16876,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What does it mean for my patient?',
-        answer: 'For acute ICH on apixaban, rivaroxaban, or edoxaban within 15 hours of last dose, andexanet improves hematoma-expansion control but increases ischemic stroke from 1.5% to 6.5% (NNH 20) and any thrombotic event from 5.6% to 10.3% (NNH 22). No functional or mortality benefit at 30 days. Quote NNT and NNH together when consenting. In patients with high baseline cardioembolic risk (atrial fibrillation, recent thrombotic event), the trade-off shifts further. 4F-PCC remains the comparator that 85.5% of usual-care patients actually received.',
+        answer: 'For acute ICH on apixaban, rivaroxaban, or edoxaban within 15 hours of last dose, andexanet improves hematoma-expansion control but increases ischemic stroke from 1.5% to 6.5% (NNH 20) and any thrombotic event from 5.6% to 10.3% (NNH 22). No functional or mortality benefit at 30 days. Quote NNT and NNH together when consenting. In patients with high baseline cardioembolic risk (atrial fibrillation, recent thrombotic event), the trade-off shifts further. 4F-PCC remains the comparator that 85.5% of usual-care patients actually received. Andexanet alfa is no longer commercially available in the United States (US sales ended December 22, 2025); 4F-PCC is the default FXa-inhibitor reversal agent in the US, and availability elsewhere varies by formulary.',
       },
       {
         question: 'How was the cohort selected?',
@@ -17358,7 +17358,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         'Two one-sided superiority hypotheses with Bonferroni adjustment (alpha 0.035 per hypothesis)',
         'Enrollment stopped early administratively (December 2014) due to sponsor budget; follow-up continued',
       ],
-      timeline: 'Enrolled December 2007 to December 2016; mean follow-up 5.3 years',
+      timeline: 'Conducted December 2007 to December 2016; enrollment stopped early in December 2014 for sponsor budget, with follow-up continuing to December 2016; mean follow-up 5.3 years',
     },
     efficacyResults: {
       treatment: { percentage: 0, label: 'Recurrent stroke at mean 5.3y', name: 'PFO Closure + Antiplatelet' },
@@ -17530,14 +17530,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     calculations: {
       nnt: 42,
-      nntExplanation: 'Authors reported NNT 42 to prevent one recurrent ischemic stroke over 5 years of follow-up among patients 18–60 with cryptogenic ischemic stroke and PFO who received PFO closure with the Amplatzer Occluder vs medical therapy alone. Per Saver et al., NEJM 2017;377:1022, Discussion p.1030. Computed from the absolute event-rate difference of approximately 0.49 events per 100 patient-years (0.58 vs 1.07 per 100 patient-years) integrated over 5 years.',
+      nntExplanation: 'Authors reported NNT 42 to prevent one recurrent ischemic stroke over 5 years of follow-up among patients 18–60 with cryptogenic ischemic stroke and PFO who received PFO closure with the Amplatzer Occluder vs medical therapy alone. Per Saver et al., NEJM 2017;377:1022, Discussion p.1030. Computed from the absolute event-rate difference of approximately 0.49 events per 100 patient-years (0.58 vs 1.07 per 100 patient-years) integrated over 5 years. The authors designated the extended follow-up analysis exploratory, so this NNT derives from the exploratory 5.9-year analysis, not from the 2013 confirmatory intention-to-treat primary, which was not met (HR 0.49, 95% CI 0.22–1.11, P=0.08).',
     },
     safetyProfile: {
       adverseEvents: { evt: 1.4, control: 0, label: 'Procedure-related atrial fibrillation/flutter', tooltip: 'Procedure-related atrial fibrillation/flutter: 7 events in 499 PFO closure patients (1.4%), all resolved before discharge from the hospital. Source: Saver et al., NEJM 2017, Table 3.', color: 'warning' },
     },
     harmSignal: 'Venous thromboembolism higher with closure: PE 0.41 vs 0.11 / 100 pt-yr (HR 3.48, P=0.04).',
     safetyData: 'Serious adverse events over the extended 5.9-year follow-up: 40.3% PFO closure vs 36.0% medical therapy (P=0.17). Most serious adverse events were non-procedural over the long horizon. Among 499 PFO closure patients, 25 serious adverse events (4.2%) were adjudicated as device-related or procedure-related: atrial fibrillation/flutter (7 events, all resolved before hospital discharge), cardiac perforation/thrombus/tamponade, device-related ischemic stroke (2/499), residual shunt requiring closure (2/499), pulmonary embolism, sepsis. Venous thromboembolism (pulmonary embolism + deep-vein thrombosis) was significantly higher in the PFO closure group: PE 0.41 vs 0.11 per 100 patient-years (HR 3.48, 95% CI 0.98–12.34, P=0.04); DVT 0.16 vs 0.04 per 100 patient-years (HR 4.44, 95% CI 0.52–38.05, P=0.14). The differential VTE rate likely reflects the much greater anticoagulation use in the medical-therapy arm (21.6% vs 3.3% of patient-years on anticoagulant); patients in the medical arm received pharmacologic VTE protection that closure patients on antiplatelet therapy alone did not. No procedure-related deaths. Seven deaths in PFO closure vs 11 in medical therapy occurred after the postrandomization safety window and were adjudicated as unrelated to the trial.',
-    clinicalContext: 'RESPECT was the first major trial of the Amplatzer PFO Occluder for cryptogenic stroke. The original 2013 publication (Carroll JD et al., NEJM 2013;368:1092–1100), at median 2.1-year follow-up, narrowly missed its intention-to-treat primary endpoint (HR 0.49, 95% CI 0.22–1.11, P=0.08). Patients were retained in extended follow-up, and the 2017 long-term analysis reported here covers a median 5.9 years, the longest follow-up of any PFO closure trial. In this analysis, recurrent ischemic stroke occurred in 18/499 (3.6%) closure patients vs 28/481 (5.8%) medical-therapy patients (HR 0.55, 95% CI 0.31–0.999, P=0.046 by log-rank), and the signal was strongest in strokes adjudicated as undetermined cause (HR 0.38, P=0.007) and as cryptogenic-only by TOAST criteria (HR 0.08, P=0.01). Authors-reported NNT 42 over 5 years. The trial used the Amplatzer PFO Occluder exclusively and enrolled a broader population than CLOSE, atrial septal aneurysm and shunt size were not entry requirements. Subgroup analyses (exploratory) suggested greater benefit when atrial septal aneurysm was present (HR 0.20 vs 0.86, P interaction = 0.04) and when substantial shunt was present (HR 0.26 vs 0.96, P interaction = 0.04), aligning with the CLOSE inclusion strategy. The medical-therapy arm received substantial anticoagulation (21.6% of patient-years vs 3.3% closure), a key design difference from CLOSE and REDUCE, both of which used cleaner antiplatelet comparators. Limitations: borderline P=0.046 against a group-sequential threshold of 0.043; differential dropout (33.3% medical vs 20.8% closure) raising concern about informative censoring (multiple imputation sensitivity analyses confirmed direction, HR 0.50, P=0.02); venous thromboembolism higher in the closure arm, likely reflecting the differential anticoagulation exposure. The 2017 long-term result supported FDA approval (October 2016) of the Amplatzer PFO Occluder for recurrent ischemic stroke prevention in cryptogenic stroke patients 18–60 with PFO, the first device approved for this indication.',
+    clinicalContext: 'RESPECT was the pivotal trial of the Amplatzer PFO Occluder for cryptogenic stroke and the trial that underwrote its FDA approval; the smaller PC trial (Meier, NEJM 2013) tested the same device and appeared in the same NEJM issue as the original RESPECT report. The original 2013 publication (Carroll JD et al., NEJM 2013;368:1092–1100), at median 2.1-year follow-up, narrowly missed its intention-to-treat primary endpoint (HR 0.49, 95% CI 0.22–1.11, P=0.08). Patients were retained in extended follow-up, and the 2017 long-term analysis reported here covers a median 5.9 years, the longest follow-up of any PFO closure trial. In this analysis, recurrent ischemic stroke occurred in 18/499 (3.6%) closure patients vs 28/481 (5.8%) medical-therapy patients (HR 0.55, 95% CI 0.31–0.999, P=0.046 by log-rank), and the signal was strongest in strokes adjudicated as undetermined cause (HR 0.38, P=0.007) and as cryptogenic-only by TOAST criteria (HR 0.08, P=0.01). Authors-reported NNT 42 over 5 years. The trial used the Amplatzer PFO Occluder exclusively and enrolled a broader population than CLOSE, atrial septal aneurysm and shunt size were not entry requirements. Subgroup analyses (exploratory) suggested greater benefit when atrial septal aneurysm was present (HR 0.20 vs 0.86, P interaction = 0.04) and when substantial shunt was present (HR 0.26 vs 0.96, P interaction = 0.04), aligning with the CLOSE inclusion strategy. The medical-therapy arm received substantial anticoagulation (21.6% of patient-years vs 3.3% closure), a key design difference from CLOSE and REDUCE, both of which used cleaner antiplatelet comparators. Limitations: borderline P=0.046 against a group-sequential threshold of 0.043; differential dropout (33.3% medical vs 20.8% closure) raising concern about informative censoring (multiple imputation sensitivity analyses confirmed direction, HR 0.50, P=0.02); venous thromboembolism higher in the closure arm, likely reflecting the differential anticoagulation exposure. The 2017 long-term result supported FDA approval (October 2016) of the Amplatzer PFO Occluder for recurrent ischemic stroke prevention in cryptogenic stroke patients 18–60 with PFO, the first device approved for this indication.',
     keyMessage: 'In patients 18–60 with cryptogenic ischemic stroke and PFO, transcatheter closure with the Amplatzer Occluder vs medical therapy reduced recurrent ischemic stroke over a median 5.9-year follow-up: 3.6% vs 5.8% (HR 0.55, P=0.046, NNT 42). The signal was strongest in undetermined-cause and cryptogenic-only recurrent strokes and in patients with atrial septal aneurysm or substantial shunt. Venous thromboembolism was higher in the closure arm (PE HR 3.48), likely reflecting the medical-therapy arm receiving more anticoagulation. Borderline P at the group-sequential threshold. Interpret with appropriate caution.',
     pearls: [
       'The original 2013 RESPECT primary analysis at median 2.1y missed ITT significance (P=0.08). The 2017 extended follow-up at median 5.9y converted the result (HR 0.55, P=0.046). The long-term effect emerges over time. Slow Kaplan–Meier divergence.',
@@ -17581,12 +17581,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     legend: {
       finding: 'In cryptogenic stroke 18–60 with PFO, Amplatzer Occluder beat medical therapy on recurrent stroke over a median 5.9-year follow-up.',
-      bottomLineTag: 'NNT 42',
+      bottomLineTag: 'NNT 42 (exploratory)',
       keyStat: 'HR 0.55 (0.31–0.999)',
     },
     bedsidePearl: 'RESPECT (long-term): in patients 18–60 with cryptogenic ischemic stroke and PFO, Amplatzer Occluder vs medical therapy reduced recurrent ischemic stroke over median 5.9y (3.6% vs 5.8%, HR 0.55, P=0.046, NNT 42). The original 2013 primary at 2.1y was negative; benefit emerges with time. Read with CLOSE and REDUCE (same NEJM 2017 issue).',
     bottomLineSummary: 'In 980 patients 18–60 with cryptogenic stroke and PFO, transcatheter closure with the Amplatzer PFO Occluder vs medical therapy reduced recurrent ischemic stroke over a median 5.9-year follow-up: 3.6% vs 5.8% (event rates 0.58 vs 1.07 per 100 patient-years, HR 0.55, 95% CI 0.31–0.999, P=0.046; NNT 42). Effect strongest in undetermined-cause (HR 0.38) and cryptogenic-only (HR 0.08) recurrent strokes. Venous thromboembolism higher in closure arm (PE HR 3.48, P=0.04), likely reflecting differential anticoagulation exposure.',
-    conclusion: 'RESPECT was the first major randomized trial of the Amplatzer PFO Occluder for cryptogenic stroke. The original 2013 publication at median 2.1-year follow-up narrowly missed its intention-to-treat primary endpoint (HR 0.49, P=0.08). The 2017 long-term extension at median 5.9-year follow-up, covering 980 patients (499 closure, 481 medical therapy) at 69 US and Canadian sites, converted the result: recurrent ischemic stroke occurred in 18/499 (3.6%, 0.58 events per 100 patient-years) closure patients vs 28/481 (5.8%, 1.07 per 100 patient-years) medical-therapy patients (HR 0.55, 95% CI 0.31–0.999, P=0.046 by log-rank). Authors reported NNT 42 over 5 years. The signal was strongest in recurrent strokes adjudicated as undetermined cause by ASCOD (HR 0.38, 95% CI 0.18–0.79, P=0.007) and as cryptogenic-only by TOAST (HR 0.08, 95% CI 0.01–0.58, P=0.01), the most direct mechanistic evidence for paradoxical embolism through PFO. Exploratory subgroup analyses (P interaction <0.05) suggested greater benefit when atrial septal aneurysm was present (HR 0.20 vs 0.86) or substantial shunt was present (HR 0.26 vs 0.96), aligning with the CLOSE inclusion criteria and the PASCAL classification framework (Kent DM et al., JAMA 2021;326:2277–2286). Venous thromboembolism was higher in the closure arm (PE 0.41 vs 0.11 per 100 patient-years, HR 3.48, 95% CI 0.98–12.34, P=0.04; DVT 0.16 vs 0.04 per 100 patient-years), likely reflecting the medical-therapy arm receiving substantially more anticoagulation (21.6% vs 3.3% patient-years). The borderline P=0.046 sits at the pre-specified group-sequential Lan–DeMets threshold of 0.043; multiple imputation sensitivity analyses (HR 0.50, P=0.02 after covariate adjustment) confirmed the direction of effect. Differential dropout (33.3% medical vs 20.8% closure) raised concerns about informative censoring, partially addressed by sensitivity analyses. The 2017 RESPECT long-term result supported FDA approval (October 28, 2016) of the Amplatzer PFO Occluder for recurrent ischemic stroke prevention in cryptogenic stroke patients 18–60, the first device approved for this indication. Together with the companion trials CLOSE (Mas JL et al., NEJM 2017;377:1011) and REDUCE (Søndergaard L et al., NEJM 2017;377:1033), published in the same NEJM 2017 issue, RESPECT supports AHA/ASA 2021 Secondary Prevention Guideline Class IIa, Level B-R for PFO closure in non-lacunar stroke <60 with PFO and no other apparent etiology (Kleindorfer DO et al., Stroke 2021;52:e364–e467). Limitations: open-label design with blinded adjudication, exploratory long-term analysis without alpha-spending adjustment, differential dropout, Amplatzer-only device experience, medical-therapy arm received substantial anticoagulation limiting the cleanliness of the antiplatelet comparison, no required prolonged ECG monitoring to exclude occult atrial fibrillation.',
+    conclusion: 'RESPECT was the pivotal randomized trial of the Amplatzer PFO Occluder for cryptogenic stroke; the smaller PC trial (Meier, NEJM 2013;368:1083–1091) tested the same device and appeared in the same NEJM issue as the original RESPECT report. The original 2013 publication at median 2.1-year follow-up narrowly missed its intention-to-treat primary endpoint (HR 0.49, P=0.08). The 2017 long-term extension at median 5.9-year follow-up, covering 980 patients (499 closure, 481 medical therapy) at 69 US and Canadian sites, converted the result: recurrent ischemic stroke occurred in 18/499 (3.6%, 0.58 events per 100 patient-years) closure patients vs 28/481 (5.8%, 1.07 per 100 patient-years) medical-therapy patients (HR 0.55, 95% CI 0.31–0.999, P=0.046 by log-rank). Authors reported NNT 42 over 5 years. The signal was strongest in recurrent strokes adjudicated as undetermined cause by ASCOD (HR 0.38, 95% CI 0.18–0.79, P=0.007) and as cryptogenic-only by TOAST (HR 0.08, 95% CI 0.01–0.58, P=0.01), the most direct mechanistic evidence for paradoxical embolism through PFO. Exploratory subgroup analyses (P interaction <0.05) suggested greater benefit when atrial septal aneurysm was present (HR 0.20 vs 0.86) or substantial shunt was present (HR 0.26 vs 0.96), aligning with the CLOSE inclusion criteria and the PASCAL classification framework (Kent DM et al., JAMA 2021;326:2277–2286). Venous thromboembolism was higher in the closure arm (PE 0.41 vs 0.11 per 100 patient-years, HR 3.48, 95% CI 0.98–12.34, P=0.04; DVT 0.16 vs 0.04 per 100 patient-years), likely reflecting the medical-therapy arm receiving substantially more anticoagulation (21.6% vs 3.3% patient-years). The borderline P=0.046 sits at the pre-specified group-sequential Lan–DeMets threshold of 0.043; multiple imputation sensitivity analyses (HR 0.50, P=0.02 after covariate adjustment) confirmed the direction of effect. Differential dropout (33.3% medical vs 20.8% closure) raised concerns about informative censoring, partially addressed by sensitivity analyses. The 2017 RESPECT long-term result supported FDA approval (October 28, 2016) of the Amplatzer PFO Occluder for recurrent ischemic stroke prevention in cryptogenic stroke patients 18–60, the first device approved for this indication. Together with the companion trials CLOSE (Mas JL et al., NEJM 2017;377:1011) and REDUCE (Søndergaard L et al., NEJM 2017;377:1033), published in the same NEJM 2017 issue, RESPECT supports AHA/ASA 2021 Secondary Prevention Guideline Class IIa, Level B-R for PFO closure in non-lacunar stroke <60 with PFO and no other apparent etiology (Kleindorfer DO et al., Stroke 2021;52:e364–e467). Limitations: open-label design with blinded adjudication, exploratory long-term analysis without alpha-spending adjustment, differential dropout, Amplatzer-only device experience, medical-therapy arm received substantial anticoagulation limiting the cleanliness of the antiplatelet comparison, no required prolonged ECG monitoring to exclude occult atrial fibrillation.',
   },
 
   'reduce-trial': {
@@ -17872,7 +17872,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       doesNotProve: 'CLOSURE-I does NOT prove that PFO closure is ineffective for cryptogenic stroke in general. The trial used the STARFlex device (subsequently withdrawn) and enrolled a broad population without high-risk PFO morphology enrichment. The 2017 NEJM cluster (CLOSE with morphology enrichment + Amplatzer/other devices; REDUCE with Gore HELEX/Cardioform and a clean antiplatelet comparator; RESPECT long-term with extended Amplatzer follow-up) subsequently demonstrated superiority of PFO closure in selected younger patients. CLOSURE-I results do NOT generalize to modern closure devices or to morphology-enriched populations.',
       cautions: 'Do not cite CLOSURE-I as evidence against PFO closure in current practice. The device is obsolete and the inclusion criteria are no longer the relevant population. Cite CLOSURE-I only as historical context for the pre-2017 ambiguity and as the original demonstration of the closure-related atrial fibrillation signal. Modern AHA/ASA 2021 Class IIa, Level B-R recommendation for PFO closure in non-lacunar stroke <60 with no other apparent etiology is based on the 2017 cluster, not on CLOSURE-I.',
     },
-    educationalContext: 'CLOSURE-I was the first of four major PFO closure trials published before the 2017 NEJM cluster that ultimately changed practice. Together with the PC trial (Meier B et al., NEJM 2013;368:1083–1091; Amplatzer PFO Occluder, also negative primary HR 0.63, P=0.34) and the original RESPECT publication (Carroll JD et al., NEJM 2013;368:1092–1100; Amplatzer, ITT primary not met at median 2.1y, HR 0.49, P=0.08), CLOSURE-I established the pre-2017 evidence base in which all three sequential RCTs of PFO closure had failed to meet their primary intention-to-treat endpoints. This ambiguity persisted through 2017 despite meta-analyses suggesting possible benefit in subgroups (high-risk morphology, as-treated analyses). The 2017 NEJM cluster (CLOSE, REDUCE, RESPECT long-term, all published September 14, 2017 in NEJM 377(11)) resolved the ambiguity through three design changes: (1) better closure devices with lower residual shunt and device-thrombus rates (Amplatzer in CLOSE/RESPECT; Gore HELEX and Cardioform in REDUCE); (2) morphology enrichment in CLOSE (atrial septal aneurysm OR large shunt required); (3) cleaner antiplatelet comparator in REDUCE (anticoagulation prohibited). DEFENSE-PFO (Lee PH et al., JACC 2018;71:2335–2342) subsequently confirmed the morphology-enrichment hypothesis in a small Korean RCT (N=120, high-risk anatomy only, primary met). CLOSURE-I now serves primarily as a historical reference point and as the original demonstration of the PFO-closure–related atrial fibrillation signal (5.7% vs 0.7%, P<0.001) that recurs across all subsequent trials in the chain.',
+    educationalContext: 'CLOSURE-I was the first of three major PFO closure trials published before the 2017 NEJM cluster that ultimately changed practice. Together with the PC trial (Meier B et al., NEJM 2013;368:1083–1091; Amplatzer PFO Occluder, also negative primary HR 0.63, P=0.34) and the original RESPECT publication (Carroll JD et al., NEJM 2013;368:1092–1100; Amplatzer, ITT primary not met at median 2.1y, HR 0.49, P=0.08), CLOSURE-I established the pre-2017 evidence base in which all three sequential RCTs of PFO closure had failed to meet their primary intention-to-treat endpoints. This ambiguity persisted through 2017 despite meta-analyses suggesting possible benefit in subgroups (high-risk morphology, as-treated analyses). The 2017 NEJM cluster (CLOSE, REDUCE, RESPECT long-term, all published September 14, 2017 in NEJM 377(11)) resolved the ambiguity through three design changes: (1) better closure devices with lower residual shunt and device-thrombus rates (Amplatzer in CLOSE/RESPECT; Gore HELEX and Cardioform in REDUCE); (2) morphology enrichment in CLOSE (atrial septal aneurysm OR large shunt required); (3) cleaner antiplatelet comparator in REDUCE (anticoagulation prohibited). DEFENSE-PFO (Lee PH et al., JACC 2018;71:2335–2342) subsequently confirmed the morphology-enrichment hypothesis in a small Korean RCT (N=120, high-risk anatomy only, primary met). CLOSURE-I now serves primarily as a historical reference point and as the original demonstration of the PFO-closure–related atrial fibrillation signal (5.7% vs 0.7%, P<0.001) that recurs across all subsequent trials in the chain.',
     clinicalApplication: 'CLOSURE-I should NOT inform current bedside decisions on PFO closure. The STARFlex device is obsolete and modern AHA/ASA 2021 Class IIa, Level B-R recommendations for PFO closure in non-lacunar stroke <60 with PFO and no other apparent etiology rest on the 2017 NEJM cluster (CLOSE, REDUCE, RESPECT long-term) and DEFENSE-PFO. Use CLOSURE-I in educational context: (1) to explain why the field was uncertain about PFO closure before 2017; (2) to underscore that device choice and morphology selection matter; (3) to motivate the AF-monitoring discussion required for any patient undergoing PFO closure today.',
     applicability: {
       populationExclusions: [
@@ -18160,7 +18160,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     calculations: {
       nnt: 8,
-      nntExplanation: 'NNT to prevent one primary endpoint event (stroke, vascular death, or TIMI major bleeding) over 2 years among patients with cryptogenic stroke and HIGH-RISK PFO anatomy. Computed from the Kaplan–Meier 2-year absolute risk difference of 12.9 percentage points (closure 0% vs medication 12.9%). Round NNT ≈ 8. Author-reported event counts: 0/60 closure vs 6/60 medication-only at 2-year follow-up. Source: Lee PH et al., JACC 2018;71:2335-2342.',
+      nntExplanation: 'NNT to prevent one primary endpoint event (stroke, vascular death, or TIMI major bleeding) over 2 years among patients with cryptogenic stroke and HIGH-RISK PFO anatomy. Computed from the Kaplan–Meier 2-year absolute risk difference of 12.9 percentage points (closure 0% vs medication 12.9%). Round NNT ≈ 8. Author-reported event counts: 0/60 closure vs 6/60 medication-only at 2-year follow-up. The trial reported no confidence interval for the absolute difference, so this NNT carries no published interval and rests on only 6 events. Source: Lee PH et al., JACC 2018;71:2335-2342.',
     },
     safetyProfile: {
       adverseEvents: { evt: 3.3, control: 0, label: 'Atrial fibrillation (procedure-related)', tooltip: 'Procedure-related nonfatal atrial fibrillation occurred in 2 of 60 closure patients (3.3%); pericardial effusion in 1 (1.7%); pseudoaneurysm in 1 (1.7%). No comparable procedural complications in the medication-only arm. Source: Lee PH et al., JACC 2018;71:2335-2342.', color: 'warning' },
@@ -18206,7 +18206,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     legend: {
       finding: 'In cryptogenic stroke with HIGH-RISK PFO anatomy (ASA, hypermobility ≥10 mm, or PFO size ≥2 mm), closure markedly reduced 2-year stroke / vascular death / major bleeding vs medical therapy.',
-      bottomLineTag: 'NNT 8 over 2y',
+      bottomLineTag: 'NNT 8 over 2y (6 events)',
       keyStat: '0% vs 12.9% at 2y (P=0.013)',
     },
     bedsidePearl: 'DEFENSE-PFO (JACC 2018): in 120 Korean patients with cryptogenic stroke and HIGH-RISK PFO anatomy (atrial septal aneurysm, hypermobility ≥10 mm, or PFO size ≥2 mm), closure beat medical therapy on the 2-year composite of stroke / vascular death / TIMI major bleeding (0/60 vs 6/60, KM 2-year rate 12.9%, log-rank P=0.013). 2-year ischemic stroke 0% vs 10.5% (P=0.023). Confirms the morphology-enrichment hypothesis from CLOSE and RESPECT long-term subgroup.',
@@ -18885,13 +18885,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     efficacyResults: {
       treatment: {
-        percentage: 76,
-        label: 'mRS 3-6 at 3 months (proxy for death or dependence)',
+        percentage: 72,
+        label: 'mRS 4-6 at 3 months (dichotomy pending source verification; primary was the full mRS ordinal shift)',
         name: 'Platelet Transfusion',
       },
       control: {
         percentage: 56,
-        label: 'mRS 3-6 at 3 months (proxy for death or dependence)',
+        label: 'mRS 4-6 at 3 months (dichotomy pending source verification; primary was the full mRS ordinal shift)',
         name: 'Standard Care',
       },
     },
@@ -18923,7 +18923,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Excluded patients with planned neurosurgical evacuation. PATCH does NOT apply to platelet transfusion before craniotomy, which remains an off-trial case-by-case decision.',
       'AHA/ASA 2022 ICH Guideline §5.2.4: Class III: Harm, Level B-R. Platelet transfusions should not be administered in antiplatelet-associated ICH.',
       'ESO 2022 ICH Guidelines: strong recommendation against routine platelet transfusion.',
-      'No subsequent RCT has been mounted to challenge the harm signal. PATCH is the definitive trial.',
+      'No subsequent RCT has been mounted to challenge the harm signal, so PATCH remains the only randomized evidence on this question; the estimate rests on 190 patients with a wide confidence interval (aOR 1.18-3.56).',
       'Open-label PROBE design; outcome adjudication was masked. The harm direction is unlikely to be a treatment-arm assessment bias because mortality (a hard outcome) moved in the same direction.',
     ],
     bedsidePearl: 'Do NOT transfuse platelets routinely for spontaneous antiplatelet-associated ICH. PATCH 2016 showed platelet transfusion DOUBLES the odds of death or dependence at 3 months (adjusted common OR 2.05, P=0.0114). AHA/ASA 2022 Class III: Harm. Exception: bridging to emergent craniotomy, off-trial case-by-case.',
@@ -18957,7 +18957,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       bottomLineTag: 'Harm',
       keyStat: 'aOR 2.05 (1.18-3.56)',
     },
-    conclusion: 'PATCH was the first randomized trial to test routine platelet transfusion in spontaneous antiplatelet-associated ICH and produced a clear HARM signal: adjusted common odds of death or dependence at 3 months doubled in the transfusion arm (aOR 2.05, 95% CI 1.18-3.56, P=0.0114). Mortality 24% vs 17% and serious adverse events 42% vs 30% moved in the same direction. The trial established AHA/ASA 2022 Class III: Harm, Level B-R against routine platelet transfusion in this population (Greenberg SM et al., Stroke 2022 §5.2.4). ESO 2022 strongly recommends against routine use. The mechanism of harm is uncertain (hematoma expansion did not differ; thromboembolic and inflammatory hypotheses remain). PATCH excluded patients with planned neurosurgical evacuation, so bridging transfusion before emergent craniotomy remains an off-trial case-by-case decision. No subsequent RCT has been mounted to challenge the result; PATCH is the definitive evidence.',
+    conclusion: 'PATCH was the first randomized trial to test routine platelet transfusion in spontaneous antiplatelet-associated ICH and produced a clear HARM signal: adjusted common odds of death or dependence at 3 months doubled in the transfusion arm (aOR 2.05, 95% CI 1.18-3.56, P=0.0114). Mortality 24% vs 17% and serious adverse events 42% vs 30% moved in the same direction. The trial established AHA/ASA 2022 Class III: Harm, Level B-R against routine platelet transfusion in this population (Greenberg SM et al., Stroke 2022 §5.2.4). ESO 2022 strongly recommends against routine use. The mechanism of harm is uncertain (hematoma expansion did not differ; thromboembolic and inflammatory hypotheses remain). PATCH excluded patients with planned neurosurgical evacuation, so bridging transfusion before emergent craniotomy remains an off-trial case-by-case decision. No subsequent RCT has been mounted to challenge the result, so PATCH remains the only randomized evidence on this question.',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -19104,7 +19104,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
     },
     safetyData: 'In the single-arm cohort, 30-day mortality was 49/352 (14%) and any thrombotic event occurred in 34/352 (10%). Because there is no comparator arm, neither rate can be attributed causally to andexanet. The subsequent randomized ANNEXA-I trial (Connolly et al., NEJM 2024;390:1745-1755) confirmed a thrombotic-event excess vs usual care (10.3% vs 5.6%, P=0.048), driven primarily by ischemic stroke (6.5% vs 1.5%; NNH approximately 20), establishing the safety-trade-off signal that ANNEXA-4 could only describe.',
-    clinicalContext: 'ANNEXA-4 was the prospective cohort study designed to support FDA accelerated approval of andexanet alfa (granted May 2018). It is observational by design, no comparator, no randomization, and cannot establish efficacy in the strict sense. Its contributions were (1) confirming substantial and reproducible anti-FXa reduction (~92% from baseline) with the FDA-label dosing algorithm, (2) describing 82% excellent/good hemostatic efficacy at 12 h, and (3) characterizing the safety profile in 352 patients with predominantly intracranial bleeding (64%). The AHA/ASA 2022 ICH Guideline (Greenberg SM et al., Stroke 2022 §5.2.2) cited ANNEXA-4 as the evidence base for Class IIa, Level B-NR andexanet alfa in FXa-inhibitor-associated ICH. The subsequent ANNEXA-I randomized trial (Connolly SJ et al., NEJM 2024;390:1745-1755; PMID 38804514) provided the confirmatory randomized framework specifically in ICH and quantified the ischemic-stroke trade-off that ANNEXA-4 could only describe.',
+    clinicalContext: 'ANNEXA-4 was the prospective cohort study designed to support FDA accelerated approval of andexanet alfa (granted May 2018). It is observational by design, no comparator, no randomization, and cannot establish efficacy in the strict sense. Its contributions were (1) confirming substantial and reproducible anti-FXa reduction (~92% from baseline) with the FDA-label dosing algorithm, (2) describing 82% excellent/good hemostatic efficacy at 12 h, and (3) characterizing the safety profile in 352 patients with predominantly intracranial bleeding (64%). The AHA/ASA 2022 ICH Guideline (Greenberg SM et al., Stroke 2022 §5.2.1) cited ANNEXA-4 as the evidence base for Class IIa, Level B-NR andexanet alfa in FXa-inhibitor-associated ICH. The subsequent ANNEXA-I randomized trial (Connolly SJ et al., NEJM 2024;390:1745-1755; PMID 38804514) provided the confirmatory randomized framework specifically in ICH and quantified the ischemic-stroke trade-off that ANNEXA-4 could only describe.',
     keyMessage: 'ANNEXA-4 is a single-arm observational cohort, not an RCT. It established hemostatic activity (anti-FXa drop ~92%, hemostatic efficacy 82% at 12 h) and supported FDA approval but cannot establish efficacy or attribute thrombotic events causally. The subsequent randomized ANNEXA-I (NEJM 2024) is the trial that quantified the efficacy-vs-thrombotic-stroke trade-off in ICH specifically.',
     pearls: [
       'ANNEXA-4 is a single-arm prospective cohort study, not an RCT. There is no comparator and no inferential efficacy claim is possible.',
@@ -19113,13 +19113,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Excellent or good hemostatic efficacy at 12 h after infusion end: 204/249 (82%) of evaluable patients.',
       '30-day mortality: 49/352 (14%). Thrombotic events: 34/352 (10%). Causality not attributable from single-arm design.',
       'Supported FDA accelerated approval of andexanet alfa (Andexxa) in May 2018.',
-      'AHA/ASA 2022 ICH Guideline §5.2.2: andexanet alfa Class IIa, Level B-NR for FXa-inhibitor-associated ICH, citing ANNEXA-4. 4F-PCC also acceptable (Class IIb, Level C-LD).',
+      'AHA/ASA 2022 ICH Guideline §5.2.1: andexanet alfa Class IIa, Level B-NR for FXa-inhibitor-associated ICH, citing ANNEXA-4. 4F-PCC or aPCC may be considered (Class IIb, Level B-NR).',
       'Subsequent RCT specifically in ICH: ANNEXA-I (Connolly SJ et al., NEJM 2024;390:1745-1755; PMID 38804514). ANNEXA-I confirmed hemostatic efficacy AND quantified an ischemic-stroke excess (6.5% vs 1.5%, NNH ~20) absent from the single-arm ANNEXA-4 dataset.',
       'Cost ~US$23,000-$50,000 per high-dose course. 4F-PCC ~US$3,000-5,000. Comparative cost-effectiveness unresolved.',
       'Sponsored by Portola Pharmaceuticals (now part of Alexion AstraZeneca Rare Disease). Sponsor provided andexanet free of charge.',
     ],
     bedsidePearl: 'For acute major bleeding on apixaban, rivaroxaban, edoxaban, or enoxaparin within 18 h of last dose, andexanet alfa achieved 92% anti-FXa reduction and 82% excellent/good hemostasis at 12 h in 352 patients (ANNEXA-4). AHA/ASA 2022 Class IIa, Level B-NR for FXa-inhibitor-associated ICH. Single-arm cohort; efficacy was randomized-confirmed in ICH only by the later ANNEXA-I (NEJM 2024), which also quantified the ischemic-stroke trade-off.',
-    bottomLineSummary: 'ANNEXA-4 was the single-arm prospective cohort study of 352 patients with acute major bleeding within 18 h of an FXa-inhibitor dose that supported FDA accelerated approval of andexanet alfa in May 2018. Bleeding was 64% intracranial and 26% gastrointestinal. Anti-FXa activity fell a median of 92% with andexanet (95% CI 91-93% apixaban, 88-94% rivaroxaban). Excellent or good hemostatic efficacy at 12 h in 204/249 (82%). 30-day mortality 14%, thrombotic events 10%; causality not inferable from single-arm design. AHA/ASA 2022 ICH §5.2.2 graded andexanet Class IIa, Level B-NR on this evidence. The subsequent randomized ANNEXA-I (NEJM 2024) in ICH specifically confirmed hemostatic efficacy AND quantified an ischemic-stroke excess (6.5% vs 1.5%, NNH ~20).',
+    bottomLineSummary: 'ANNEXA-4 was the single-arm prospective cohort study of 352 patients with acute major bleeding within 18 h of an FXa-inhibitor dose that supported FDA accelerated approval of andexanet alfa in May 2018. Bleeding was 64% intracranial and 26% gastrointestinal. Anti-FXa activity fell a median of 92% with andexanet (95% CI 91-93% apixaban, 88-94% rivaroxaban). Excellent or good hemostatic efficacy at 12 h in 204/249 (82%). 30-day mortality 14%, thrombotic events 10%; causality not inferable from single-arm design. AHA/ASA 2022 ICH §5.2.1 graded andexanet Class IIa, Level B-NR on this evidence. The subsequent randomized ANNEXA-I (NEJM 2024) in ICH specifically confirmed hemostatic efficacy AND quantified an ischemic-stroke excess (6.5% vs 1.5%, NNH ~20).',
     howToInterpret: {
       proves: 'In adults with acute major bleeding within 18 h of an FXa-inhibitor dose, andexanet alfa achieves substantial and reproducible reduction in anti-FXa activity (~92%) and is associated with excellent or good hemostatic efficacy at 12 h in approximately 82% of evaluable patients.',
       doesNotProve: 'It does not prove efficacy vs any comparator (no control arm). It does not attribute the 14% 30-day mortality or 10% thrombotic-event rate causally to andexanet. It does not address whether andexanet is preferable to 4F-PCC. It does not establish functional or survival benefit. It does not apply to bleeding more than 18 h after last FXa-inhibitor dose.',
@@ -19150,7 +19150,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       bottomLineTag: 'FDA approval cohort',
       keyStat: '82% hemostasis at 12 h',
     },
-    conclusion: 'ANNEXA-4 was the single-arm prospective cohort study of 352 patients with acute major bleeding within 18 h of an FXa-inhibitor dose that underwrote FDA accelerated approval of andexanet alfa in May 2018. It established substantial and reproducible anti-FXa reduction (~92%) and described excellent or good hemostatic efficacy at 12 h in 82% of evaluable patients. The 14% 30-day mortality and 10% thrombotic-event rate were observed but cannot be attributed causally because there is no comparator. AHA/ASA 2022 ICH Guideline §5.2.2 cited ANNEXA-4 as the evidence base for Class IIa, Level B-NR andexanet alfa in FXa-inhibitor-associated ICH. The randomized confirmatory trial specifically in ICH is ANNEXA-I (Connolly SJ et al., NEJM 2024;390:1745-1755), which confirmed hemostatic efficacy vs usual care AND quantified the ischemic-stroke trade-off (6.5% vs 1.5%, NNH ~20). Comparative cost-effectiveness vs 4F-PCC remains unresolved as of mid-2026.',
+    conclusion: 'ANNEXA-4 was the single-arm prospective cohort study of 352 patients with acute major bleeding within 18 h of an FXa-inhibitor dose that underwrote FDA accelerated approval of andexanet alfa in May 2018. It established substantial and reproducible anti-FXa reduction (~92%) and described excellent or good hemostatic efficacy at 12 h in 82% of evaluable patients. The 14% 30-day mortality and 10% thrombotic-event rate were observed but cannot be attributed causally because there is no comparator. AHA/ASA 2022 ICH Guideline §5.2.1 cited ANNEXA-4 as the evidence base for Class IIa, Level B-NR andexanet alfa in FXa-inhibitor-associated ICH. The randomized confirmatory trial specifically in ICH is ANNEXA-I (Connolly SJ et al., NEJM 2024;390:1745-1755), which confirmed hemostatic efficacy vs usual care AND quantified the ischemic-stroke trade-off (6.5% vs 1.5%, NNH ~20). Comparative cost-effectiveness vs 4F-PCC remains unresolved as of mid-2026.',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -19158,7 +19158,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
   // major bleeding. Circulation 2013;128(11):1234-1243. Phase IIIb
   // open-label NI RCT. Hemostatic efficacy NI established; INR target
   // superior. Underwrote FDA approval of Kcentra (April 2013) and AHA/ASA
-  // 2022 Class I, Level A for 4F-PCC > FFP in VKA-associated ICH. ICH-
+  // 2022 Class 1, Level B-R for 4F-PCC > FFP in VKA-associated ICH. ICH-
   // specific RCT confirmation = INCH (Steiner Lancet Neurol 2016; PDF
   // pending V supply). Evidence packet:
   // docs/evidence-packets/sarode-2013-2026-05-21.md
@@ -19268,7 +19268,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         frequency: 'Intravenous infusion at a study-protocol-recommended rate of 1 unit per 30-minute interval',
         duration: 'Until target dose delivered',
         coInterventions: 'Vitamin K by slow intravenous infusion, dosed per 2008 ACCP guidelines (5-10 mg) or local practice.',
-        note: 'Dosing verbatim from Sarode R et al., Circulation 2013 (Table 2). Open-label phase IIIb noninferiority RCT with blinded endpoint adjudication. Median infusion volume 813.5 mL (an order-of-magnitude greater than 4F-PCC); fluid overload 11.9% vs 2.9% with 4F-PCC. Mortality (4.8% vs 5.1%) and thromboembolic events (6.4% vs 6.8%) comparable between arms.',
+        note: 'Dosing verbatim from Sarode R et al., Circulation 2013 (Table 2). Open-label phase IIIb noninferiority RCT with blinded endpoint adjudication. Median infusion volume 813.5 mL (an order-of-magnitude greater than 4F-PCC); fluid overload 11.9% vs 2.9% with 4F-PCC. Mortality (4.8% vs 5.1%) and thromboembolic events (6.4% vs 7.8%) comparable between arms.',
       },
     ],
     intervention: {
@@ -19329,10 +19329,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         tooltip: 'Mortality through day 45: 5 of 98 (5.1%) 4F-PCC vs 5 of 104 (4.8%) FFP. Comparable; trial not powered to detect mortality differences.',
       },
       adverseEvents: {
-        evt: 6.8,
+        evt: 7.8,
         control: 6.4,
         label: 'Thromboembolic events through day 45',
-        tooltip: 'Any thromboembolic event: 7 of 103 (6.8%) 4F-PCC vs 7 of 109 (6.4%) FFP in the safety population. No signal of excess thrombosis with 4F-PCC.',
+        tooltip: 'Any thromboembolic event: 8 of 103 (7.8%) 4F-PCC vs 7 of 109 (6.4%) FFP in the safety population. The publication reports a similar safety profile between groups.',
       },
       majorBleeding: {
         evt: 2.9,
@@ -19342,25 +19342,25 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         color: 'success',
       },
     },
-    safetyData: 'Mortality (5.1% vs 4.8%) and thromboembolic events (6.8% vs 6.4%) were comparable between arms. A key safety finding because the concern with 4F-PCC has historically been thrombosis. Fluid overload was substantially less common with 4F-PCC (2.9% vs 11.9%). Clinically meaningful because the median infusion volume was 99.4 mL with 4F-PCC vs 813.5 mL with FFP, an order-of-magnitude difference that drives volume-related complications in elderly patients with cardiac disease. The trial population was elderly (mean age 70) with frequent comorbidities; the volume advantage is one of the main reasons 4F-PCC is preferred in modern AHA/ASA Class I guidance.',
-    clinicalContext: 'Before Sarode 2013, FFP was the standard reversal for VKA-associated major bleeding despite long infusion times, large volumes, and slow INR correction. Sarode 2013 was the phase IIIb pivotal trial that established 4F-PCC (Kcentra in the US, Beriplex P/N in Europe) as noninferior to FFP for hemostatic efficacy AND superior for rapid INR reduction (62.2% vs 9.6% achieving INR ≤1.3 at 30 minutes). It supported FDA approval of Kcentra in April 2013. The AHA/ASA 2022 ICH Guideline (Greenberg SM et al., Stroke 2022 §5.2.1) graded 4F-PCC over FFP as Class I, Level A for VKA-associated ICH, citing Sarode 2013 and INCH 2016. The population in Sarode 2013 was GENERAL major bleeding (GI 38%, intracranial ~14%, visible ~13%); not ICH-specific. The ICH-specific RCT confirmation is INCH (Steiner T et al., Lancet Neurol 2016;15:566-573), which was halted early at interim analysis for INR reversal benefit favoring 4F-PCC. Together, Sarode 2013 and INCH form the evidence base for current AHA/ASA Class I, Level A 4F-PCC preference in VKA-associated ICH.',
-    keyMessage: '4F-PCC 25-50 IU/kg IV plus vitamin K 10 mg IV is preferred over FFP for VKA-associated major bleeding (and ICH specifically). Sarode 2013 established noninferiority on hemostatic efficacy (+7.1 pp, 95% CI -5.8 to +19.9; margin -10 pp) and superiority on rapid INR reduction (+52.6 pp, 95% CI 39.4-65.9). Underwrites AHA/ASA 2022 Class I, Level A for VKA-associated ICH.',
+    safetyData: 'Mortality (5.1% vs 4.8%) and thromboembolic events (7.8% vs 6.4%) were comparable between arms. A key safety finding because the concern with 4F-PCC has historically been thrombosis. Fluid overload was substantially less common with 4F-PCC (2.9% vs 11.9%). Clinically meaningful because the median infusion volume was 99.4 mL with 4F-PCC vs 813.5 mL with FFP, an order-of-magnitude difference that drives volume-related complications in elderly patients with cardiac disease. The trial population was elderly (mean age 70) with frequent comorbidities; the volume advantage is one of the main reasons 4F-PCC is preferred in modern AHA/ASA Class I guidance.',
+    clinicalContext: 'Before Sarode 2013, FFP was the standard reversal for VKA-associated major bleeding despite long infusion times, large volumes, and slow INR correction. Sarode 2013 was the phase IIIb pivotal trial that established 4F-PCC (Kcentra in the US, Beriplex P/N in Europe) as noninferior to FFP for hemostatic efficacy AND superior for rapid INR reduction (62.2% vs 9.6% achieving INR ≤1.3 at 30 minutes). It supported FDA approval of Kcentra in April 2013. The AHA/ASA 2022 ICH Guideline (Greenberg SM et al., Stroke 2022 §5.2.1) graded 4F-PCC over FFP as Class 1, Level B-R for VKA-associated ICH, citing Sarode 2013 and INCH 2016. The population in Sarode 2013 was GENERAL major bleeding (GI 38%, intracranial ~14%, visible ~13%); not ICH-specific. The ICH-specific RCT confirmation is INCH (Steiner T et al., Lancet Neurol 2016;15:566-573), which was halted early at interim analysis for INR reversal benefit favoring 4F-PCC. Together, Sarode 2013 and INCH form the evidence base for current AHA/ASA Class 1, Level B-R 4F-PCC preference in VKA-associated ICH.',
+    keyMessage: '4F-PCC 25-50 IU/kg IV plus vitamin K 10 mg IV is preferred over FFP for VKA-associated major bleeding (and ICH specifically). Sarode 2013 established noninferiority on hemostatic efficacy (+7.1 pp, 95% CI -5.8 to +19.9; margin -10 pp) and superiority on rapid INR reduction (+52.6 pp, 95% CI 39.4-65.9). Underwrites AHA/ASA 2022 Class 1, Level B-R for VKA-associated ICH.',
     pearls: [
       'Sarode 2013 is a NONINFERIORITY trial. The primary hemostatic-efficacy comparison is interpreted against the prespecified -10 percentage-point margin, not against a p-value. NNT is not appropriate.',
       'Hemostatic efficacy at 24 h: 72.4% (4F-PCC) vs 65.4% (FFP). Difference +7.1 pp (95% CI -5.8 to +19.9). Lower bound -5.8 is above the -10 pp NI margin. NI established.',
       'INR ≤1.3 at 0.5 h post-infusion: 62.2% (4F-PCC) vs 9.6% (FFP). Difference +52.6 pp (95% CI 39.4-65.9). Superiority established for rapid INR reduction.',
       'Both arms received vitamin K 5-10 mg IV. 4F-PCC alone without vitamin K leads to INR rebound at 12-24 h. Never give one without the other.',
       'Median infusion volume: 99.4 mL (4F-PCC) vs 813.5 mL (FFP). Fluid overload 2.9% vs 11.9%. The volume difference is the operational reason 4F-PCC is preferred in elderly cardiac patients.',
-      'Mortality (5.1% vs 4.8%) and thromboembolic events (6.8% vs 6.4%) comparable. The historical concern with 4F-PCC was thrombosis; the trial does not show a thrombotic excess.',
+      'Mortality (5.1% vs 4.8%) and thromboembolic events (7.8% vs 6.4%) comparable. The historical concern with 4F-PCC was thrombosis; the publication reports a similar safety profile between arms.',
       'Population was GENERAL major bleeding (GI 38%, intracranial ~14%, visible ~13%). Not ICH-specific. The ICH-specific RCT is INCH (Steiner Lancet Neurol 2016), which was halted early for INR reversal benefit favoring 4F-PCC.',
-      'AHA/ASA 2022 ICH Guideline §5.2.1: 4F-PCC > FFP for VKA-associated ICH. Class I, Level A. Cites Sarode 2013 and INCH 2016.',
+      'AHA/ASA 2022 ICH Guideline §5.2.1: 4F-PCC > FFP for VKA-associated ICH. Class 1, Level B-R. Cites Sarode 2013 and INCH 2016.',
       'ESO 2022 ICH Guidelines: strong recommendation for 4F-PCC over FFP in VKA-associated ICH.',
       'Underwrote FDA approval of Kcentra (April 2013), the first 4F-PCC approved in the US.',
       'Dosing is INR-stratified: 25 IU/kg if INR 2-<4; 35 IU/kg if INR 4-6; 50 IU/kg if INR >6 (per Kcentra label and the Sarode protocol).',
       'Re-check INR at 30 minutes post-infusion. Re-dose 4F-PCC if INR remains >1.4 and bleeding ongoing. Always co-administer vitamin K 10 mg IV.',
     ],
-    bedsidePearl: 'For VKA-associated major bleeding (including ICH), give 4F-PCC 25-50 IU/kg IV (INR-stratified) plus vitamin K 10 mg IV. Goal INR <1.4 within 30 minutes. Sarode 2013 established NI on hemostasis (+7.1 pp, 95% CI -5.8 to +19.9) and superiority on INR target (62.2% vs 9.6% at 30 min). AHA/ASA 2022 Class I, Level A. FFP only if 4F-PCC unavailable.',
-    bottomLineSummary: 'Sarode 2013 was the phase IIIb open-label noninferiority RCT that established 4-factor PCC (Kcentra/Beriplex P/N) as noninferior to fresh frozen plasma for hemostatic efficacy at 24 h AND superior for rapid INR reduction in 202 VKA-treated adults with acute major bleeding. Hemostatic efficacy 72.4% vs 65.4% (+7.1 pp, 95% CI -5.8 to +19.9; NI margin -10 pp). INR ≤1.3 at 30 min: 62.2% vs 9.6% (+52.6 pp, 95% CI 39.4-65.9). Mortality and thromboembolic events comparable; fluid overload less with 4F-PCC (2.9% vs 11.9%); median infusion volume 99 mL vs 814 mL. Population was general major bleeding (GI, intracranial, visible). Underwrote FDA approval of Kcentra (April 2013) and AHA/ASA 2022 Class I, Level A for 4F-PCC > FFP in VKA-associated ICH. ICH-specific confirmation: INCH 2016 (Steiner Lancet Neurol).',
+    bedsidePearl: 'For VKA-associated major bleeding (including ICH), give 4F-PCC 25-50 IU/kg IV (INR-stratified) plus vitamin K 10 mg IV. Goal INR <1.4 within 30 minutes. Sarode 2013 established NI on hemostasis (+7.1 pp, 95% CI -5.8 to +19.9) and superiority on INR target (62.2% vs 9.6% at 30 min). AHA/ASA 2022 Class 1, Level B-R. FFP only if 4F-PCC unavailable.',
+    bottomLineSummary: 'Sarode 2013 was the phase IIIb open-label noninferiority RCT that established 4-factor PCC (Kcentra/Beriplex P/N) as noninferior to fresh frozen plasma for hemostatic efficacy at 24 h AND superior for rapid INR reduction in 202 VKA-treated adults with acute major bleeding. Hemostatic efficacy 72.4% vs 65.4% (+7.1 pp, 95% CI -5.8 to +19.9; NI margin -10 pp). INR ≤1.3 at 30 min: 62.2% vs 9.6% (+52.6 pp, 95% CI 39.4-65.9). Mortality and thromboembolic events comparable; fluid overload less with 4F-PCC (2.9% vs 11.9%); median infusion volume 99 mL vs 814 mL. Population was general major bleeding (GI, intracranial, visible). Underwrote FDA approval of Kcentra (April 2013) and AHA/ASA 2022 Class 1, Level B-R for 4F-PCC > FFP in VKA-associated ICH. ICH-specific confirmation: INCH 2016 (Steiner Lancet Neurol).',
     howToInterpret: {
       proves: 'In adults on VKA with acute major bleeding and INR ≥2.0, 4-factor PCC (with vitamin K) is noninferior to fresh frozen plasma (with vitamin K) for 24-h hemostatic efficacy and superior for achieving INR ≤1.3 within 30 minutes of infusion end. Fluid burden is approximately 8-fold lower with 4F-PCC. Mortality and thromboembolic events are comparable.',
       doesNotProve: 'It does not isolate ICH-specific efficacy, the population was general major bleeding (GI 38%, intracranial ~14%, visible ~13%). The ICH-specific RCT is INCH 2016. It does not prove superiority on hemostatic efficacy, only NI. It does not address DOAC reversal (FXa inhibitors require andexanet or 4F-PCC at separate doses; dabigatran requires idarucizumab). It does not address patients with baseline INR below 2.0 or unrelated coagulopathies.',
@@ -19393,6 +19393,6 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       bottomLineTag: 'Non-inferior',
       keyStat: '+7.1 pp (-5.8 to +19.9)',
     },
-    conclusion: 'Sarode 2013 was the phase IIIb open-label noninferiority RCT that established 4-factor PCC (Kcentra/Beriplex P/N) as the preferred reversal agent over fresh frozen plasma for vitamin K antagonist-associated major bleeding. Among 202 adults randomized to 4F-PCC vs FFP (both with vitamin K 5-10 mg IV), 24-h hemostatic efficacy was 72.4% vs 65.4% (+7.1 pp, 95% CI -5.8 to +19.9; lower bound above -10 pp NI margin, NI established), and INR ≤1.3 at 30 minutes post-infusion was 62.2% vs 9.6% (+52.6 pp, 95% CI 39.4-65.9, superiority). Mortality and thromboembolic events were comparable; fluid overload was substantially less common with 4F-PCC (2.9% vs 11.9%); median infusion volume 99 mL vs 814 mL. The trial supported FDA approval of Kcentra in April 2013 and is one of the foundational trials underwriting the AHA/ASA 2022 ICH Guideline §5.2.1 Class I, Level A recommendation for 4F-PCC over FFP in VKA-associated ICH. The population was general major bleeding rather than ICH-specific, ICH confirmation comes from INCH (Steiner T et al., Lancet Neurol 2016;15:566-573), halted early at interim for INR reversal benefit favoring 4F-PCC. Together, Sarode 2013 and INCH 2016 form the evidence base for the current standard of care in warfarin-associated ICH.',
+    conclusion: 'Sarode 2013 was the phase IIIb open-label noninferiority RCT that established 4-factor PCC (Kcentra/Beriplex P/N) as the preferred reversal agent over fresh frozen plasma for vitamin K antagonist-associated major bleeding. Among 202 adults randomized to 4F-PCC vs FFP (both with vitamin K 5-10 mg IV), 24-h hemostatic efficacy was 72.4% vs 65.4% (+7.1 pp, 95% CI -5.8 to +19.9; lower bound above -10 pp NI margin, NI established), and INR ≤1.3 at 30 minutes post-infusion was 62.2% vs 9.6% (+52.6 pp, 95% CI 39.4-65.9, superiority). Mortality and thromboembolic events were comparable; fluid overload was substantially less common with 4F-PCC (2.9% vs 11.9%); median infusion volume 99 mL vs 814 mL. The trial supported FDA approval of Kcentra in April 2013 and is one of the foundational trials underwriting the AHA/ASA 2022 ICH Guideline §5.2.1 Class 1, Level B-R recommendation for 4F-PCC over FFP in VKA-associated ICH. The population was general major bleeding rather than ICH-specific, ICH confirmation comes from INCH (Steiner T et al., Lancet Neurol 2016;15:566-573), halted early at interim for INR reversal benefit favoring 4F-PCC. Together, Sarode 2013 and INCH 2016 form the evidence base for the current standard of care in warfarin-associated ICH.',
   },
 };

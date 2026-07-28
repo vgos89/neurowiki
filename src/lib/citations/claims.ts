@@ -716,7 +716,7 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   //     Three trials added to the ich-anticoagulation-reversal question:
   //     PATCH (2016) — HARM signal for platelet transfusion in antiplatelet-ICH
   //     ANNEXA-4 (2019) — single-arm cohort behind FDA andexanet approval
-  //     Sarode 2013 — 4F-PCC vs FFP NI trial underwriting AHA/ASA Class I, Level A
+  //     Sarode 2013 — 4F-PCC vs FFP NI trial underwriting AHA/ASA Class 1, Level B-R
   //     See docs/evidence-packets/{patch-2016,annexa-4-2019,sarode-2013}-2026-05-21.md
   'patch-platelet-transfusion-harm-2016': {
     id: 'patch-platelet-transfusion-harm-2016',
@@ -734,7 +734,7 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     id: 'sarode-4fpcc-vka-reversal-2013',
     citation_ids: ['sarode-4fpcc-2013', 'aha-asa-2022-ich-anticoag-reversal'],
     surfaces: [DATA_SURFACE],
-    description: 'Sarode 2013: multicenter open-label noninferiority RCT (phase IIIb) of 4-factor PCC (Kcentra/Beriplex) vs fresh frozen plasma in 202 VKA-treated adults with acute major bleeding (GI 38%, intracranial ~14%, visible ~13%). Both arms received vitamin K 5-10 mg IV. Coprimary endpoints: 24-h hemostatic efficacy and INR <=1.3 at 0.5 h post-infusion. Hemostatic efficacy 72.4% (4F-PCC) vs 65.4% (FFP); difference +7.1 pp (95% CI -5.8 to +19.9) — noninferiority established (margin -10 pp). INR <=1.3 at 0.5 h: 62.2% vs 9.6%; difference +52.6 pp (95% CI 39.4-65.9) — superiority established. Mortality (5.1% vs 4.8%) and thromboembolic events (6.8% vs 6.4%) comparable; fluid overload less common with 4F-PCC (2.9% vs 11.9%); median infusion volume 99 mL vs 814 mL. Population was general VKA major bleeding, not ICH-specific. Underwrote FDA approval of Kcentra (April 2013) and AHA/ASA 2022 Class 1, Level B-R (§5.2.1) for 4F-PCC > FFP in VKA-associated ICH. ICH-specific confirmation comes from INCH (Steiner Lancet Neurol 2016) — halted early at interim for INR reversal favoring 4F-PCC.',
+    description: 'Sarode 2013: multicenter open-label noninferiority RCT (phase IIIb) of 4-factor PCC (Kcentra/Beriplex) vs fresh frozen plasma in 202 VKA-treated adults with acute major bleeding (GI 38%, intracranial ~14%, visible ~13%). Both arms received vitamin K 5-10 mg IV. Coprimary endpoints: 24-h hemostatic efficacy and INR <=1.3 at 0.5 h post-infusion. Hemostatic efficacy 72.4% (4F-PCC) vs 65.4% (FFP); difference +7.1 pp (95% CI -5.8 to +19.9) — noninferiority established (margin -10 pp). INR <=1.3 at 0.5 h: 62.2% vs 9.6%; difference +52.6 pp (95% CI 39.4-65.9) — superiority established. Mortality (5.1% vs 4.8%) and thromboembolic events (7.8% vs 6.4%) comparable; fluid overload less common with 4F-PCC (2.9% vs 11.9%); median infusion volume 99 mL vs 814 mL. Population was general VKA major bleeding, not ICH-specific. Underwrote FDA approval of Kcentra (April 2013) and AHA/ASA 2022 Class 1, Level B-R (§5.2.1) for 4F-PCC > FFP in VKA-associated ICH. ICH-specific confirmation comes from INCH (Steiner Lancet Neurol 2016) — halted early at interim for INR reversal favoring 4F-PCC.',
   },
 
   // ─── NIHSS portal drawer — severity-band clinical interpretation ──────────

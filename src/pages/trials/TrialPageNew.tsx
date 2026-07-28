@@ -292,7 +292,7 @@ const TrialPageNew: React.FC = () => {
           // NNT is derived from observed proportions, NOT from the posterior probability.
           if (isBayesianSuperiorityTrial) {
             nntExplanation = (nntExplanation ? nntExplanation + ' ' : '') +
-              '(Bayesian adaptive trial: superiority established by posterior probability >0.999; NNT calculated from observed proportions.)';
+              '(Bayesian adaptive trial: superiority was established by the posterior probability of superiority against a pre-specified threshold, not a frequentist p-value; this NNT is derived from the observed proportions and is not the trial primary result.)';
           }
         }
       }
@@ -1443,7 +1443,7 @@ const TrialPageNew: React.FC = () => {
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
-          {renderTrialDesign(trialMetadata, '451 patients at 50 US sites. Enrolled Nov 2008 – Apr 2011 (halted by DSMB). Gateway PTA balloon + Wingspan self-expanding stent (Stryker Neurovascular). Published NEJM 2011. Erratum 2012 (procedural bookkeeping only; no statistical change).')}
+          {renderTrialDesign(trialMetadata, '451 patients at 50 US sites. Enrolled Nov 2008 – Apr 2011 (halted by DSMB). Gateway PTA balloon + Wingspan self-expanding stent (Boston Scientific at the time of the trial; now Stryker Neurovascular). Published NEJM 2011. Erratum 2012 (procedural bookkeeping only; no statistical change).')}
           {trialMetadata.bedsidePearl && (
             <div className="bg-red-50 border-l-2 border-red-700 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-red-700 mb-2">Bedside Pearl</p>
@@ -1797,10 +1797,12 @@ const TrialPageNew: React.FC = () => {
                 treatmentLabel={trialMetadata.efficacyResults.treatment.name}
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="mRS 0–2 at 90 Days (coprimary)"
-                riskRatio="P(sup)"
-                ciLow=">99.9%"
+                riskRatio=">0.999"
+                effectLabel="Posterior P(superiority)"
+                ciLow=""
                 ciHigh=""
-                pValue={trialMetadata.stats.pValue.value}
+                intervalLabel="Bayesian"
+                pValue=""
                 winnerArm={isPositive ? 'treatment' : 'none'}
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
@@ -2034,10 +2036,12 @@ const TrialPageNew: React.FC = () => {
                 treatmentLabel={trialMetadata.efficacyResults.treatment.name}
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="30-day mortality (primary safety)"
-                riskRatio="P(sup)"
-                ciLow="0.987"
+                riskRatio="0.987"
+                effectLabel="Posterior P(superiority)"
+                ciLow=""
                 ciHigh=""
-                pValue="P(sup)=0.981"
+                intervalLabel="Bayesian"
+                pValue=""
                 winnerArm="treatment"
               />
               <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
@@ -4218,7 +4222,7 @@ const TrialPageNew: React.FC = () => {
             </div>
           )}
           {renderStudyArms(tm)}
-          {renderTrialDesign(tm, 'Randomized June 2017 to September 2021 across 10 countries. Investigator-initiated, multicenter, open-label trial. Wake-up stroke or unwitnessed onset; selected by NCCT alone (ASPECTS 4 or higher).')}
+          {renderTrialDesign(tm, 'Randomized June 2017 to September 2021 across 10 countries. Investigator-initiated, multicenter, open-label trial. Wake-up stroke or unwitnessed onset; selected by NCCT alone (no early ischemic change beyond one-third of the MCA territory).')}
           {tm.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>
@@ -4758,8 +4762,8 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Distribution at 90 Days</p>
-              <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, within 8 hours)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Functional Independence (mRS 0–2) at 90 Days</p>
+              <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, within 8 hours). The protocol-defined primary outcome was the mRS ordinal shift: adjusted common OR 1.7 (95% CI 1.05 to 2.8).</p>
             </div>
             <div className="p-4">
               {tm.mrsDistribution && tm.ordinalStats ? (
@@ -4775,10 +4779,10 @@ const TrialPageNew: React.FC = () => {
                   treatmentLabel={tm.efficacyResults.treatment.name}
                   controlLabel={tm.efficacyResults.control.name}
                   endpoint="mRS 0-2 at 90 Days"
-                  riskRatio="1.70"
-                  ciLow="1.05"
-                  ciHigh="2.80"
-                  pValue="0.009"
+                  riskRatio="OR 2.1"
+                  ciLow="1.1"
+                  ciHigh="4.0"
+                  pValue="not reported"
                   winnerArm={isPositive ? 'treatment' : 'none'}
                 />
               )}
@@ -5067,7 +5071,7 @@ const TrialPageNew: React.FC = () => {
           <div>
             <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
-              In patients with anterior circulation LVO and a large established infarct (ASPECTS 5 or lower, no lower limit on infarct volume) treatable within 6.5 hours, does thrombectomy plus medical care shift the mRS distribution toward better outcomes and reduce mortality compared with medical care alone?
+              In patients with anterior circulation LVO and a large established infarct (ASPECTS 5 or lower, with no cap on infarct size; patients older than 80 required ASPECTS 4 or 5) treatable within 6.5 hours, does thrombectomy plus medical care shift the mRS distribution toward better outcomes and reduce mortality compared with medical care alone?
             </p>
             <p className="text-sm text-slate-500 mt-1">
               {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
@@ -5139,7 +5143,7 @@ const TrialPageNew: React.FC = () => {
           {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
-          {renderTrialDesign(tm, 'French multicenter RCT enrolling 333 patients across multiple centers (Costalat NEJM 2024). Stopped early after external positive large-core data emerged from ANGEL-ASPECT, SELECT2, and TESLA.')}
+          {renderTrialDesign(tm, 'French multicenter RCT enrolling 333 patients across multiple centers (Costalat NEJM 2024). Stopped early in February 2023 after external positive large-core data emerged from SELECT2 and ANGEL-ASPECT.')}
           {tm.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>
@@ -5477,6 +5481,9 @@ const TrialPageNew: React.FC = () => {
               </p>
             </div>
             <div className="p-4">
+              {/* DEVT published no two-sided interval for this difference; the NI decision
+                  used the one-sided 97.5% CI lower bound. Empty ciHigh renders the bound alone.
+                  The previous -2.9/18.2 pair appeared in no source. */}
               <DeltaBandChart
                 treatmentPct={tm.efficacyResults.treatment.percentage}
                 controlPct={tm.efficacyResults.control.percentage}
@@ -5484,8 +5491,9 @@ const TrialPageNew: React.FC = () => {
                 controlLabel={tm.efficacyResults.control.name}
                 endpoint="mRS 0-2 at 90 Days"
                 riskRatio="RD +7.7 pp"
-                ciLow="-2.9 pp"
-                ciHigh="18.2 pp"
+                ciLow="-5.1 pp"
+                ciHigh=""
+                intervalLabel="1-sided 97.5% CI"
                 pValue="0.003 (NI)"
                 winnerArm="none"
               />
@@ -5551,8 +5559,7 @@ const TrialPageNew: React.FC = () => {
             <div style={{ background: '#FFFBEB', borderLeft: '3px solid #D97706', margin: '12px 16px 0', borderRadius: '0 6px 6px 0', padding: '10px 14px' }} role="note">
               <p style={{ fontSize: 10, fontWeight: 700, color: '#92400e', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>Non-inferiority design: technique equivalence</p>
               <p style={{ fontSize: 12, color: '#78350f', lineHeight: 1.5 }}>
-                This trial shows aspiration-first is <strong>no worse than</strong> stent-retriever-first for functional outcome, not that either technique is superior. Aspiration achieved lower first-pass reperfusion (68.9% vs 76.3%) but equivalent clinical outcomes.
-              </p>
+                This trial shows aspiration-first is <strong>no worse than</strong> stent-retriever-first for functional outcome, not that either technique is superior. First-pass reperfusion rates by arm are not yet confirmed against the primary publication and are omitted; overall reperfusion and 90-day outcomes were similar between arms.</p>
             </div>
             <div className="p-4">
               <DeltaBandChart
@@ -5719,8 +5726,8 @@ const TrialPageNew: React.FC = () => {
                 controlLabel={tm.efficacyResults.control.name}
                 endpoint="eTICI 2c-3 Reperfusion"
                 riskRatio="RD +6.6 pp"
-                ciLow=""
-                ciHigh=""
+                ciLow="−3.0"
+                ciHigh="+16.2"
                 pValue="0.17"
                 winnerArm="none"
               />
@@ -5796,6 +5803,7 @@ const TrialPageNew: React.FC = () => {
                 riskRatio="OR 1.09"
                 ciLow="0.63"
                 ciHigh="∞"
+                intervalLabel="1-sided 97.5% CI"
                 pValue="0.18 (NI)"
                 winnerArm="none"
               />
@@ -6286,8 +6294,8 @@ const TrialPageNew: React.FC = () => {
                 controlLabel={tm.efficacyResults.control.name}
                 endpoint="Utility-Weighted mRS at 90 days (x100)"
                 riskRatio="Delta -0.07"
-                ciLow="N/A"
-                ciHigh="N/A"
+                ciLow=""
+                ciHigh=""
                 pValue="Futility P=0.93"
                 winnerArm="none"
               />
@@ -6583,7 +6591,7 @@ const TrialPageNew: React.FC = () => {
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Ordinal Shift at 90 Days (age 18-70)</p>
-              <p className="text-xs text-slate-500 mt-0.5">535 patients; IV glibenclamide vs placebo within 10 hours of onset</p>
+              <p className="text-xs text-slate-500 mt-0.5">431 patients aged 18-70 in the primary analysis population (535 randomized); IV glibenclamide vs placebo within 10 hours of onset</p>
             </div>
             <div className="p-4">
               {tm.ordinalStats && (
@@ -6670,8 +6678,8 @@ const TrialPageNew: React.FC = () => {
                 controlLabel={tm.efficacyResults.control.name}
                 endpoint="6-Month Survival"
                 riskRatio="ARR 52.8 pp"
-                ciLow="N/A"
-                ciHigh="N/A"
+                ciLow=""
+                ciHigh=""
                 pValue="0.001"
                 winnerArm="treatment"
               />
@@ -6683,7 +6691,7 @@ const TrialPageNew: React.FC = () => {
           {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
-          {renderTrialDesign(tm, '38 patients at multiple French centers (planned 70; stopped early for pooled analysis). Sequential design with blinded primary endpoint assessment. Patients aged 18-55 with malignant MCA infarction. Randomization within 24-30 hours of onset. Published Stroke 2007.')}
+          {renderTrialDesign(tm, '38 patients at multiple French centers (anticipated median sample size 60; stopped early for slow recruitment and the decision to pool with DESTINY and HAMLET; no stopping boundary was crossed for the primary endpoint). Sequential design with blinded primary endpoint assessment. Patients aged 18-55 with malignant MCA infarction. Randomization within 24 hours of onset; surgery within 6 hours of randomization and within 30 hours of onset. Published Stroke 2007.')}
           {tm.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>
@@ -6735,7 +6743,7 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Mortality Outcome: 30-Day and 6-Month Survival</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Mortality Outcome: 30-Day Survival</p>
               <p className="text-xs text-slate-500 mt-0.5">32 patients; early hemicraniectomy vs conservative therapy</p>
             </div>
             <div className="p-4 space-y-3">
@@ -6744,10 +6752,10 @@ const TrialPageNew: React.FC = () => {
                 controlPct={tm.efficacyResults.control.percentage}
                 treatmentLabel={tm.efficacyResults.treatment.name}
                 controlLabel={tm.efficacyResults.control.name}
-                endpoint="30-Day and 6-Month Survival"
+                endpoint="30-Day Survival"
                 riskRatio="ARR 41 pp"
-                ciLow="N/A"
-                ciHigh="N/A"
+                ciLow=""
+                ciHigh=""
                 pValue="0.02"
                 winnerArm="treatment"
               />
@@ -6759,7 +6767,7 @@ const TrialPageNew: React.FC = () => {
           {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
-          {renderTrialDesign(tm, '32 patients at multiple German centers (planned 60; stopped early for pooled analysis). Prospective sequential design. Patients aged 18-60 with malignant MCA infarction. Randomization within 36 hours of onset. Published Stroke 2007.')}
+          {renderTrialDesign(tm, '32 patients at multiple German centers. After 32 patients the projected sample size for the 6-month functional primary was recalculated to 188, and the steering committee terminated the trial in light of the joint analysis of the three European hemicraniectomy trials (DECIMAL, DESTINY, HAMLET). Prospective sequential design. Patients aged 18-60 with malignant MCA infarction. Randomization within 36 hours of onset. Published Stroke 2007.')}
           {tm.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>
@@ -6822,8 +6830,8 @@ const TrialPageNew: React.FC = () => {
                 controlLabel={tm.efficacyResults.control.name}
                 endpoint="1-Year Survival"
                 riskRatio="ARR 38 pp"
-                ciLow="N/A"
-                ciHigh="N/A"
+                ciLow=""
+                ciHigh=""
                 pValue="0.002"
                 winnerArm="treatment"
               />
@@ -6984,8 +6992,8 @@ const TrialPageNew: React.FC = () => {
                 controlLabel={tm.efficacyResults.control.name}
                 endpoint="Composite: Recurrent Stroke, sICH, or Death at 90 Days"
                 riskRatio="RD -1.79 pp"
-                ciLow="N/A"
-                ciHigh="N/A"
+                ciLow=""
+                ciHigh=""
                 pValue="0.004 (NI)"
                 winnerArm="none"
               />
@@ -7061,8 +7069,8 @@ const TrialPageNew: React.FC = () => {
                 controlLabel={tm.efficacyResults.control.name}
                 endpoint="Composite: Recurrent Stroke, sICH, or Systemic Embolism at 90 Days"
                 riskRatio="RD 0.000"
-                ciLow="N/A"
-                ciHigh="N/A"
+                ciLow=""
+                ciHigh=""
                 pValue="0.0003 (NI)"
                 winnerArm="none"
               />
@@ -7468,7 +7476,7 @@ const TrialPageNew: React.FC = () => {
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
-          {renderTrialDesign(trialMetadata, '663 patients (groups 1+2: N=473 for the PFO closure vs antiplatelet comparison) at 32 French + 2 German sites. Enrolled December 2007 to December 2016. Mean follow-up 5.3 years. Published NEJM 2017.')}
+          {renderTrialDesign(trialMetadata, '663 patients (groups 1+2: N=473 for the PFO closure vs antiplatelet comparison) at 32 French + 2 German sites. Conducted December 2007 to December 2016; enrollment stopped early in December 2014 for sponsor budget, with follow-up continuing to December 2016. Mean follow-up 5.3 years. Published NEJM 2017.')}
           {trialMetadata.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>
@@ -7911,8 +7919,8 @@ const TrialPageNew: React.FC = () => {
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="Primary composite at 2 years (KM)"
                 riskRatio="0/60 vs 6/60"
-                ciLow="—"
-                ciHigh="—"
+                ciLow=""
+                ciHigh=""
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm={isPositive ? 'treatment' : 'none'}
               />
@@ -7920,7 +7928,7 @@ const TrialPageNew: React.FC = () => {
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">{Math.round(trialMetadata.calculations.nnt as number)}</span>
-                  <span className="text-xs text-slate-500">to prevent one primary endpoint event over 2 years</span>
+                  <span className="text-xs text-slate-500">to prevent one primary endpoint event over 2 years (6 events total; the trial reported no confidence interval)</span>
                 </div>
               )}
             </div>
@@ -8070,8 +8078,8 @@ const TrialPageNew: React.FC = () => {
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="14-day death or non-fatal recurrent stroke"
                 riskRatio="−11/1000"
-                ciLow="—"
-                ciHigh="—"
+                ciLow=""
+                ciHigh=""
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm={isPositive ? 'treatment' : 'none'}
               />
@@ -8146,8 +8154,8 @@ const TrialPageNew: React.FC = () => {
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="4-week in-hospital mortality"
                 riskRatio="−5.4/1000"
-                ciLow="—"
-                ciHigh="—"
+                ciLow=""
+                ciHigh=""
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm={isPositive ? 'treatment' : 'none'}
               />
@@ -8385,9 +8393,9 @@ const TrialPageNew: React.FC = () => {
                 controlLabel="No comparator (single-arm cohort)"
                 endpoint="Excellent or good hemostasis at 12 h"
                 riskRatio="92% anti-FXa drop"
-                ciLow="—"
-                ciHigh="—"
-                pValue="N/A"
+                ciLow=""
+                ciHigh=""
+                pValue=""
                 winnerArm="none"
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
@@ -8471,7 +8479,7 @@ const TrialPageNew: React.FC = () => {
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Noninferiority established: lower bound of CI (−5.8 pp) is above the prespecified −10 pp NI margin. Sequential superiority on rapid INR reduction MET: INR ≤1.3 at 30 minutes 62.2% vs 9.6% (+52.6 pp, 95% CI 39.4–65.9, P&lt;0.001). Median infusion volume 99 mL (4F-PCC) vs 814 mL (FFP); fluid overload 2.9% vs 11.9%. Mortality (5.1% vs 4.8%) and thromboembolic events (6.8% vs 6.4%) comparable. Both arms received vitamin K 5–10 mg IV; never give one without the other.
+                  Noninferiority established: lower bound of CI (−5.8 pp) is above the prespecified −10 pp NI margin. Sequential superiority on rapid INR reduction MET: INR ≤1.3 at 30 minutes 62.2% vs 9.6% (+52.6 pp, 95% CI 39.4–65.9, P&lt;0.001). Median infusion volume 99 mL (4F-PCC) vs 814 mL (FFP); fluid overload 2.9% vs 11.9%. Mortality (5.1% vs 4.8%) and thromboembolic events (7.8% vs 6.4%) comparable. Both arms received vitamin K 5–10 mg IV; never give one without the other.
                 </p>
               </div>
             </div>
@@ -8536,11 +8544,11 @@ const TrialPageNew: React.FC = () => {
             </div>
             <div className="p-4">
               <DeltaBandChart
-                treatmentPct={76}
+                treatmentPct={72}
                 controlPct={56}
                 treatmentLabel={trialMetadata.efficacyResults.treatment.name}
                 controlLabel={trialMetadata.efficacyResults.control.name}
-                endpoint="mRS 3–6 at 3 months (proxy for ordinal shift; primary was full mRS distribution)"
+                endpoint="mRS 4–6 at 3 months (dichotomy pending source verification; primary was full mRS distribution)"
                 riskRatio="aOR 2.05"
                 ciLow="1.18"
                 ciHigh="3.56"
@@ -9242,11 +9250,11 @@ const TrialPageNew: React.FC = () => {
             </div>
             <div className="p-4">
               <DeltaBandChart
-                treatmentPct={76}
+                treatmentPct={72}
                 controlPct={56}
                 treatmentLabel={trialMetadata.efficacyResults.treatment.name}
                 controlLabel={trialMetadata.efficacyResults.control.name}
-                endpoint="mRS 3–6 at 3 months (proxy for death/dependence)"
+                endpoint="mRS 4–6 at 3 months (dichotomy pending source verification; primary was full mRS distribution)"
                 riskRatio="aOR 2.05"
                 ciLow="1.18"
                 ciHigh="3.56"

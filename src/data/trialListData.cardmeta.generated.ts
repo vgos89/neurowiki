@@ -62,7 +62,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Enrolled April 2015 to May 2018; 30-day follow-up",
     "listCategory": "acute",
     "listDescription": "Single-arm cohort of 352 patients with acute major bleeding on FXa inhibitors (64% intracranial). Andexanet reduced anti-FXa activity by 92%; 82% achieved excellent or good hemostasis at 12 h. Supported FDA accelerated approval.",
-    "bottomLineSummary": "ANNEXA-4 was the single-arm prospective cohort study of 352 patients with acute major bleeding within 18 h of an FXa-inhibitor dose that supported FDA accelerated approval of andexanet alfa in May 2018. Bleeding was 64% intracranial and 26% gastrointestinal. Anti-FXa activity fell a median of 92% with andexanet (95% CI 91-93% apixaban, 88-94% rivaroxaban). Excellent or good hemostatic efficacy at 12 h in 204/249 (82%). 30-day mortality 14%, thrombotic events 10%; causality not inferable from single-arm design. AHA/ASA 2022 ICH §5.2.2 graded andexanet Class IIa, Level B-NR on this evidence. The subsequent randomized ANNEXA-I (NEJM 2024) in ICH specifically confirmed hemostatic efficacy AND quantified an ischemic-stroke excess (6.5% vs 1.5%, NNH ~20).",
+    "bottomLineSummary": "ANNEXA-4 was the single-arm prospective cohort study of 352 patients with acute major bleeding within 18 h of an FXa-inhibitor dose that supported FDA accelerated approval of andexanet alfa in May 2018. Bleeding was 64% intracranial and 26% gastrointestinal. Anti-FXa activity fell a median of 92% with andexanet (95% CI 91-93% apixaban, 88-94% rivaroxaban). Excellent or good hemostatic efficacy at 12 h in 204/249 (82%). 30-day mortality 14%, thrombotic events 10%; causality not inferable from single-arm design. AHA/ASA 2022 ICH §5.2.1 graded andexanet Class IIa, Level B-NR on this evidence. The subsequent randomized ANNEXA-I (NEJM 2024) in ICH specifically confirmed hemostatic efficacy AND quantified an ischemic-stroke excess (6.5% vs 1.5%, NNH ~20).",
     "doi": "10.1056/NEJMoa1814051"
   },
   "annexa-i-trial": {
@@ -342,8 +342,8 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "source": "Bhatt et al. (NEJM 2006)",
     "timeline": "15,603 patients; median 28-month follow-up",
     "listCategory": "antiplatelets",
-    "listDescription": "Aspirin + clopidogrel vs aspirin alone for median 28 months in broad CV risk population: no overall benefit (6.8% vs 7.3%, RR 0.93, CI 0.83–1.05, P=0.22) and harm in asymptomatic subgroup. Preceded POINT (2018).",
-    "bottomLineSummary": "CHARISMA enrolled 15,603 patients with established CV disease or multiple risk factors and compared aspirin+clopidogrel vs aspirin alone over median 28 months. Primary (MI/stroke/CV death): 6.8% vs 7.3% (RR 0.93, CI 0.83–1.05, P=0.22), not significant overall. Symptomatic subgroup: nominally favorable signal (RR 0.88, hypothesis-generating). Asymptomatic subgroup: excess harm (RR 1.20). Moderate bleeding doubled. POINT (2018) showed short-duration DAPT after minor stroke/TIA is beneficial.",
+    "listDescription": "Aspirin + clopidogrel vs aspirin alone for median 28 months in broad CV risk population: no overall benefit (6.8% vs 7.3%, RR 0.93, CI 0.83–1.05, P=0.22) and a non-significant harm signal in the asymptomatic subgroup. Preceded POINT (2018).",
+    "bottomLineSummary": "CHARISMA enrolled 15,603 patients with established CV disease or multiple risk factors and compared aspirin+clopidogrel vs aspirin alone over median 28 months. Primary (MI/stroke/CV death): 6.8% vs 7.3% (RR 0.93, CI 0.83–1.05, P=0.22), not significant overall. Symptomatic subgroup: nominally favorable signal (RR 0.88, hypothesis-generating). Asymptomatic subgroup: non-significant harm signal (RR 1.20, CI 0.91–1.59, P=0.20). Moderate bleeding was significantly higher with the combination (2.1% vs 1.3%, P<0.001). POINT (2018) showed short-duration DAPT after minor stroke/TIA is beneficial.",
     "doi": "10.1056/NEJMoa060989"
   },
   "charm-trial": {
@@ -383,7 +383,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     },
     "subtitle": "PFO Closure or Anticoagulation vs Antiplatelets for Cryptogenic Stroke (Mas et al., 2017)",
     "source": "Mas JL et al. (NEJM 2017;377:1011-1021)",
-    "timeline": "Enrolled December 2007 to December 2016; mean follow-up 5.3 years",
+    "timeline": "Conducted December 2007 to December 2016; enrollment stopped early in December 2014 for sponsor budget, with follow-up continuing to December 2016; mean follow-up 5.3 years",
     "listCategory": "antiplatelets",
     "listDescription": "Cryptogenic stroke <60y with PFO + ASA or large shunt: closure abolished recurrent stroke (0% vs 6.0%, HR 0.03, NNT 20 over 5y). AF excess.",
     "bottomLineSummary": "In 663 patients 16–60 with cryptogenic stroke and PFO with atrial septal aneurysm OR large interatrial shunt, transcatheter PFO closure + long-term antiplatelet reduced recurrent stroke from 6.0% to 0% over mean 5.3-year follow-up (HR 0.03, 95% CI 0.00–0.26, P<0.001; 5-year ARD 4.9 percentage points; NNT 20). Atrial fibrillation/flutter excess 4.6% vs 0.9% (P=0.02), largely transient periprocedural.",
@@ -416,7 +416,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Conducted at 15 North American sites",
     "listCategory": "thrombectomy",
     "listDescription": "Device-strategy trial showing aspiration-first thrombectomy was noninferior to stent retrievers.",
-    "bottomLineSummary": "Contact-aspiration as first-line technique was non-inferior to stent-retriever first-line for 90-day functional outcome in anterior circulation LVO. Aspiration produced lower first-pass reperfusion but equivalent clinical outcomes. Supports flexibility in initial technique choice.",
+    "bottomLineSummary": "Contact-aspiration as first-line technique was non-inferior to stent-retriever first-line for 90-day functional outcome in anterior circulation LVO. First-pass reperfusion rates by arm are not yet confirmed against the primary publication and are omitted here.",
     "doi": "10.1016/S0140-6736(19)30297-1"
   },
   "crest-2-trial": {
@@ -446,7 +446,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Enrolled December 2000 – July 2008; median follow-up 2.5 years (planned to 4 years); primary results published NEJM July 2010",
     "listCategory": "carotid",
     "listDescription": "CAS vs CEA in average-risk carotid stenosis. No primary 4-yr difference; CAS↑stroke, CEA↑MI/cranial nerve palsy; age-dependent.",
-    "bottomLineSummary": "CREST is the largest North American head-to-head trial of carotid stenting and endarterectomy in average-surgical-risk symptomatic and asymptomatic patients. The 4-year primary composite of periprocedural stroke, MI, or death plus 4-year ipsilateral stroke showed no significant difference (7.2% CAS vs 6.8% CEA, HR 1.11, 95% CI 0.81–1.51, P=0.51), superiority was not demonstrated for either approach. The clinical decision rests on the periprocedural component split: CAS roughly doubles stroke, CEA roughly doubles MI, and CEA accounts for nearly all cranial nerve palsy. Treatment effect varies by age (interaction P=0.02) with a crossover near 70 years. CREST does not address either approach versus intensive medical management, that question is the subject of CREST-2.",
+    "bottomLineSummary": "CREST is the largest North American head-to-head trial of carotid stenting and endarterectomy in average-surgical-risk symptomatic and asymptomatic patients. The 4-year primary composite of periprocedural stroke, MI, or death plus 4-year ipsilateral stroke showed no significant difference (7.2% CAS vs 6.8% CEA, HR 1.11, 95% CI 0.81–1.51, P=0.51), superiority was not demonstrated for either approach. The clinical decision rests on the periprocedural component split: CAS roughly doubles stroke, CEA roughly doubles MI, and CEA accounts for nearly all cranial nerve palsy. Treatment effect varies by age (interaction P=0.02) with a crossover near 70 years. CREST does not address either approach versus intensive medical management; CREST-2 (NEJM 2026) made that comparison in asymptomatic stenosis, where stenting met its primary composite and endarterectomy did not.",
     "doi": "10.1056/NEJMoa0912321"
   },
   "dawn-trial": {
@@ -461,7 +461,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Enrolled 2014-2017",
     "listCategory": "thrombectomy",
     "listDescription": "Thrombectomy 6–24 hours with clinical–imaging mismatch.",
-    "bottomLineSummary": "DAWN extends EVT to 24h after LKW for clinical-imaging mismatch patients (Trevo device). Primary uw-mRS Bayesian posterior P(superiority) >0.999. Coprimary mRS 0–2 binary: 49% vs 13% (derived NNT 2.8 from secondary, displayed with Bayesian annotation). Stopped early at 31 months. AHA/ASA 2026 §4.7.2 COR 1.",
+    "bottomLineSummary": "DAWN extends EVT to 24h after LKW for clinical-imaging mismatch patients (Trevo device). Primary uw-mRS Bayesian posterior P(superiority) >0.999. Coprimary mRS 0–2 binary: 49% vs 13% (derived NNT 2.8 from the binary coprimary, displayed with Bayesian annotation). Stopped early at 31 months. AHA/ASA 2026 §4.7.2 COR 1.",
     "doi": "10.1056/NEJMoa1706442"
   },
   "decimal-trial": {
@@ -475,14 +475,14 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "source": "Vahedi et al. (Stroke 2007)",
     "timeline": "France, 2001-2005; stopped early for pooled analysis",
     "listCategory": "acute",
-    "bottomLineSummary": "Early hemicraniectomy (within 30-35 hours) reduces mortality by 52.8 percentage points in malignant MCA infarction in patients aged 18-55. The primary functional endpoint was not met due to small sample size. Most survivors remain severely disabled.",
+    "bottomLineSummary": "Early hemicraniectomy (surgery within 30 hours of onset) reduces mortality by 52.8 percentage points in malignant MCA infarction in patients aged 18-55. The primary functional endpoint was not met due to small sample size. Most survivors remain severely disabled.",
     "doi": "10.1161/STROKEAHA.107.485235"
   },
   "defense-pfo-trial": {
     "title": "DEFENSE-PFO Trial",
     "legend": {
       "finding": "In cryptogenic stroke with HIGH-RISK PFO anatomy (ASA, hypermobility ≥10 mm, or PFO size ≥2 mm), closure markedly reduced 2-year stroke / vascular death / major bleeding vs medical therapy.",
-      "bottomLineTag": "NNT 8 over 2y",
+      "bottomLineTag": "NNT 8 over 2y (6 events)",
       "keyStat": "0% vs 12.9% at 2y (P=0.013)"
     },
     "subtitle": "Device Closure vs Medication for Cryptogenic Stroke Patients With High-Risk PFO Anatomy (Lee et al., 2018)",
@@ -533,7 +533,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "source": "Juttler et al. (Stroke 2007)",
     "timeline": "Germany; stopped after pooled European data emerged",
     "listCategory": "acute",
-    "bottomLineSummary": "Early hemicraniectomy reduces 30-day and 6-month mortality by approximately 41 percentage points in malignant MCA infarction in patients aged 18-60. The primary functional endpoint (mRS 0-3 at 6 months) was not met in this 32-patient trial. The pooled European analysis is the more reliable efficacy estimate."
+    "bottomLineSummary": "Early hemicraniectomy reduces 30-day mortality by approximately 41 percentage points in malignant MCA infarction in patients aged 18-60. The primary functional endpoint (mRS 0-3 at 6 months) was not met in this 32-patient trial. The pooled European analysis is the more reliable efficacy estimate."
   },
   "devt-trial": {
     "title": "DEVT Trial",
@@ -842,7 +842,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Stopped early after external positive large-core data",
     "listCategory": "thrombectomy",
     "listDescription": "Large-core thrombectomy trial showing better outcomes and lower mortality despite more bleeding.",
-    "bottomLineSummary": "LASTE showed that thrombectomy benefits patients with large established infarcts (ASPECTS 5 or lower, with no lower bound) treated within 6.5 hours, shifting median 90-day mRS from 6 to 4 and lowering mortality from 55.5% to 36.1%, at the cost of more symptomatic hemorrhage."
+    "bottomLineSummary": "LASTE showed that thrombectomy benefits patients with large established infarcts (ASPECTS 5 or lower, with no lower ASPECTS bound below age 80; ASPECTS 4 or 5 required above age 80) treated within 6.5 hours, shifting median 90-day mRS from 6 to 4 and lowering mortality from 55.5% to 36.1%, at the cost of more symptomatic hemorrhage."
   },
   "match-trial": {
     "title": "MATCH Trial",
@@ -883,7 +883,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "subtitle": "Prehospital Glyceryl Trinitrate Within 3 Hours of Presumed Stroke",
     "source": "van den Berg SA, et al. (Lancet Neurol 2022)",
     "timeline": "Netherlands; April 2018 to February 2021",
-    "bottomLineSummary": "In ambulance-treated patients with presumed stroke within 3 hours of onset, prehospital transdermal glyceryl trinitrate did not improve 90-day mRS distribution (cOR 0.97, 95% CI 0.65-1.47 in target population). The trial was stopped after 380 randomizations due to a safety signal in ICH patients: early 7-day mortality was numerically higher with GTN in this subgroup. mRS 0-2 at 90 days was 51% vs 49% in the target population.",
+    "bottomLineSummary": "In ambulance-treated patients with presumed stroke within 3 hours of onset, prehospital transdermal glyceryl trinitrate did not improve the 90-day mRS distribution (adjusted common OR 0.92, 95% CI 0.59-1.43 in the target population; 0.97, 95% CI 0.65-1.47 in the total population). The trial was stopped after 380 randomizations due to a safety signal in ICH patients: early 7-day mortality was numerically higher with GTN in this subgroup. mRS 0-2 at 90 days was 51% vs 49% in the target population.",
     "doi": "10.1016/S1474-4422(22)00333-7"
   },
   "mr-clean-no-iv-trial": {
@@ -928,7 +928,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "118 patients; planned sample size achieved",
     "listCategory": "thrombectomy",
     "listDescription": "Penumbral imaging-guided mechanical embolectomy: mean mRS 3.9 vs 3.9 in embolectomy vs standard care (NS). Penumbral imaging did not identify benefiting patients. Historical predecessor. ESCAPE (2015) established modern EVT.",
-    "bottomLineSummary": "MR RESCUE randomized 118 patients with proximal LVO stroke to mechanical embolectomy (MERCI or Penumbra) or standard care within 8 hours, stratified by penumbral imaging pattern. Mean mRS at 90 days was 3.9 in both arms. Penumbral imaging did not identify a benefiting subgroup (interaction p=0.56). Successful reperfusion was achieved in only 27% of the embolectomy arm, reflecting low first-generation device efficacy. The trial does not establish benefit or harm; its teaching value is illustrating why device generation and imaging selection were insufficient in the first-generation EVT era.",
+    "bottomLineSummary": "MR RESCUE randomized 118 patients with proximal LVO stroke to mechanical embolectomy (MERCI or Penumbra) or standard care within 8 hours, stratified by penumbral imaging pattern. Mean mRS at 90 days was 3.9 in both arms. Penumbral imaging did not identify a benefiting subgroup (interaction p=0.14). Successful reperfusion was achieved in only 27% of the embolectomy arm, reflecting low first-generation device efficacy. The trial does not establish benefit or harm; its teaching value is illustrating why device generation and imaging selection were insufficient in the first-generation EVT era.",
     "doi": "10.1056/NEJMoa1212793"
   },
   "ninds-trial": {
@@ -1216,7 +1216,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "title": "RESPECT (Long-Term)",
     "legend": {
       "finding": "In cryptogenic stroke 18–60 with PFO, Amplatzer Occluder beat medical therapy on recurrent stroke over a median 5.9-year follow-up.",
-      "bottomLineTag": "NNT 42",
+      "bottomLineTag": "NNT 42 (exploratory)",
       "keyStat": "HR 0.55 (0.31–0.999)"
     },
     "subtitle": "Extended Follow-up of PFO Closure with the Amplatzer Occluder for Cryptogenic Stroke (Saver et al., 2017)",
@@ -1282,7 +1282,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Enrolled 2008 to 2012; assessment at 24 hours and through day 45",
     "listCategory": "acute",
     "listDescription": "Phase IIIb open-label RCT in 202 VKA-treated adults with major bleeding. 4F-PCC noninferior to FFP for hemostatic efficacy (+7.1 pp, 95% CI -5.8 to +19.9) and superior for INR target time (+52.6 pp, 95% CI 39.4-65.9). FDA approval of Kcentra.",
-    "bottomLineSummary": "Sarode 2013 was the phase IIIb open-label noninferiority RCT that established 4-factor PCC (Kcentra/Beriplex P/N) as noninferior to fresh frozen plasma for hemostatic efficacy at 24 h AND superior for rapid INR reduction in 202 VKA-treated adults with acute major bleeding. Hemostatic efficacy 72.4% vs 65.4% (+7.1 pp, 95% CI -5.8 to +19.9; NI margin -10 pp). INR ≤1.3 at 30 min: 62.2% vs 9.6% (+52.6 pp, 95% CI 39.4-65.9). Mortality and thromboembolic events comparable; fluid overload less with 4F-PCC (2.9% vs 11.9%); median infusion volume 99 mL vs 814 mL. Population was general major bleeding (GI, intracranial, visible). Underwrote FDA approval of Kcentra (April 2013) and AHA/ASA 2022 Class I, Level A for 4F-PCC > FFP in VKA-associated ICH. ICH-specific confirmation: INCH 2016 (Steiner Lancet Neurol).",
+    "bottomLineSummary": "Sarode 2013 was the phase IIIb open-label noninferiority RCT that established 4-factor PCC (Kcentra/Beriplex P/N) as noninferior to fresh frozen plasma for hemostatic efficacy at 24 h AND superior for rapid INR reduction in 202 VKA-treated adults with acute major bleeding. Hemostatic efficacy 72.4% vs 65.4% (+7.1 pp, 95% CI -5.8 to +19.9; NI margin -10 pp). INR ≤1.3 at 30 min: 62.2% vs 9.6% (+52.6 pp, 95% CI 39.4-65.9). Mortality and thromboembolic events comparable; fluid overload less with 4F-PCC (2.9% vs 11.9%); median infusion volume 99 mL vs 814 mL. Population was general major bleeding (GI, intracranial, visible). Underwrote FDA approval of Kcentra (April 2013) and AHA/ASA 2022 Class 1, Level B-R for 4F-PCC > FFP in VKA-associated ICH. ICH-specific confirmation: INCH 2016 (Steiner Lancet Neurol).",
     "doi": "10.1161/CIRCULATIONAHA.113.002283"
   },
   "select2-trial": {
@@ -1598,7 +1598,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "subtitle": "Wake-Up Stroke Treated with Tenecteplase Selected by Non-Contrast CT",
     "source": "Roaldsen MB, et al. (Lancet Neurol 2023)",
     "timeline": "Ten countries; June 2017 to September 2021",
-    "bottomLineSummary": "In wake-up stroke patients selected by non-contrast CT (ASPECTS 4 or higher), tenecteplase 0.25 mg/kg within 4.5 hours of awakening did not significantly improve 90-day mRS distribution compared with no thrombolysis (adjusted OR 1.18, 95% CI 0.88-1.58, p=0.27). mRS 0-1 was achieved in 45% vs 38% (exploratory). Symptomatic ICH was 2% vs 1%. TWIST does not support non-contrast CT as the sole imaging modality for wake-up stroke thrombolytic selection.",
+    "bottomLineSummary": "In wake-up stroke patients selected by non-contrast CT (no early ischemic change beyond one-third of the MCA territory), tenecteplase 0.25 mg/kg within 4.5 hours of awakening did not significantly improve 90-day mRS distribution compared with no thrombolysis (adjusted OR 1.18, 95% CI 0.88-1.58, p=0.27). mRS 0-1 was achieved in 45% vs 38% (exploratory). Symptomatic ICH was 2% vs 1%. TWIST does not support non-contrast CT as the sole imaging modality for wake-up stroke thrombolytic selection.",
     "doi": "10.1016/S1474-4422(22)00484-7"
   },
   "wake-up-trial": {
