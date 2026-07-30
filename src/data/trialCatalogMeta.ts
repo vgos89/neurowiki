@@ -119,6 +119,13 @@ export const LEGACY_TRIAL_CATALOG_META: Record<string, LegacyTrialCatalogMeta> =
     description: 'Registry-based Wingspan safety study in highly selected intracranial stenosis patients after SAMMPRIS.',
     clinicalContext: 'Registry-based Wingspan safety study in highly selected intracranial stenosis patients after SAMMPRIS.',
   },
+  'woven-trial': {
+    name: 'WOVEN',
+    year: 2021,
+    doi: '10.1136/neurintsurg-2020-016208',
+    description: 'One-year follow-up of the WEAVE on-label Wingspan cohort: single-arm stroke or death rate 8.5% at 1 year, no efficacy comparison.',
+    clinicalContext: 'One-year follow-up of the WEAVE on-label Wingspan cohort: single-arm stroke or death rate 8.5% at 1 year, no efficacy comparison.',
+  },
   'cassiss-trial': {
     name: 'CASSISS',
     year: 2022,

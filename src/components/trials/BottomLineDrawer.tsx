@@ -45,6 +45,14 @@ export interface BottomLineDrawerProps {
   trialResult?: 'POSITIVE' | 'NEGATIVE' | 'NEUTRAL' | 'HARM' | 'SAFETY_MET' | 'SAFETY_FAILED' | 'INCONCLUSIVE';
   /** When trialResult='NEUTRAL' and resultSubtype='non-inferiority', badge reads "Non-inferiority met" with cobalt styling. */
   resultSubtype?: 'non-inferiority' | 'superiority' | 'safety';
+  /**
+   * Optional override for the handle result badge. When set, replaces the
+   * trialResult-derived label with this text and neutral (no pass/fail)
+   * styling. Use for single-arm / descriptive trials that must not assert a
+   * pass/fail result (e.g. WOVEN "Single-arm, no control"), so the enum does
+   * not leak a "benchmark met" claim into the always-visible handle.
+   */
+  resultBadgeOverride?: string;
   /** When true, renders state A (skeleton). Switches to B on false. */
   isLoading?: boolean;
 }
@@ -94,6 +102,7 @@ export const BottomLineDrawer: React.FC<BottomLineDrawerProps> = ({
   doi,
   trialResult,
   resultSubtype,
+  resultBadgeOverride,
   isLoading = false,
 }) => {
   const [drawerState, setDrawerState] = useState<DrawerState>(isLoading ? 'A' : 'B');
@@ -160,7 +169,7 @@ export const BottomLineDrawer: React.FC<BottomLineDrawerProps> = ({
   }
 
   const isNonInferiority = trialResult === 'NEUTRAL' && resultSubtype === 'non-inferiority';
-  const resultLabel = trialResult ? (
+  const derivedResultLabel = trialResult ? (
     isNonInferiority ? 'Non-inferiority met' : {
       POSITIVE: 'Positive',
       NEGATIVE: 'Negative',
@@ -171,7 +180,11 @@ export const BottomLineDrawer: React.FC<BottomLineDrawerProps> = ({
       INCONCLUSIVE: 'Inconclusive',
     }[trialResult]
   ) : null;
-  const badgeKey = isNonInferiority ? 'NEUTRAL_NI' : (trialResult ?? '');
+  // An override (single-arm / descriptive trials) wins and always renders neutral.
+  const resultLabel = resultBadgeOverride ?? derivedResultLabel;
+  const badgeKey = resultBadgeOverride
+    ? 'NEUTRAL'
+    : (isNonInferiority ? 'NEUTRAL_NI' : (trialResult ?? ''));
 
   const drawerEl = (
     <div

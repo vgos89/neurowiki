@@ -379,7 +379,7 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
 
   'basilar-evt-guideline-summary': {
     id: 'basilar-evt-guideline-summary',
-    citation_ids: ['aha-asa-2026-4.7.3'],
+    citation_ids: ['aha-asa-2026-4.7.3', 'aha-asa-2026-4.7.3-nihss-6-9'],
     surfaces: [DATA_SURFACE],
     description: 'GuidelineSummaryCard on /trials/q/basilar-evt. Surfaces AHA/ASA 2026 §4.7.3 (Posterior Circulation Stroke): EVT for basilar artery occlusion recommended within 24h in selected patients with baseline mRS 0–1, NIHSS ≥10, and PC-ASPECTS ≥6 (COR 1, LOE A).',
   },
@@ -571,6 +571,12 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     citation_ids: ['sun-basis-2024'],
     surfaces: [BEDSIDE_PEARL_SURFACE],
     description: 'BASIS 2024 bedside pearl: first positive endovascular ICAS RCT. Submaximal balloon angioplasty (not stenting) plus AMM vs AMM alone lowered the 12-month composite of stroke/death, territory ischemic stroke, or revascularization (4.4% vs 13.5%, HR 0.32, 95% CI 0.16 to 0.63; P<.001); territory-stroke component 0.4% vs 7.5%. Upfront risk: 30-day stroke/death 3.2% vs 1.6%, symptomatic ICH 1.2% vs 0.4%, dissection 14.5%. Single-country, open-label, expert-center; not yet AHA/ASA or ESO guideline-endorsed. NNT deliberately suppressed (composite includes operator-influenced revascularization).',
+  },
+  'woven-primary-result': {
+    id: 'woven-primary-result',
+    citation_ids: ['alexander-woven-2021'],
+    surfaces: [BEDSIDE_PEARL_SURFACE],
+    description: 'WOVEN 2021 bedside pearl: 1-year follow-up of the WEAVE on-label Wingspan cohort (single-arm, no control arm). Of 129 patients followed (of 152, about 85% retention at 12 of 24 sites), the cumulative stroke or death rate at 1 year was 8.5% (11 events; 95% CI 4.3% to 14.8% Clopper-Pearson exact, computed), including the 4 WEAVE periprocedural events (7 new strokes during follow-up: 6 minor, 1 major; no deaths beyond the periprocedural period). Descriptive safety data with no pre-specified 1-year threshold; cannot establish efficacy versus medical therapy. SAMMPRIS medical-arm 12.2% 1-year rate shown as a historical reference from a different population (initial-presentation ICAS), not a randomized comparison. Aggressive medical therapy remains first-line (AHA/ASA 2021 Class 1); on-label Wingspan stenting is a salvage option for highly selected refractory failures. NNT not applicable (single-arm registry follow-up).',
   },
 
   // ─── CRAO management clinical synthesis ─────────────────────────────────────

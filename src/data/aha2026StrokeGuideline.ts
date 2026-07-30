@@ -503,16 +503,23 @@ export const evtRecommendations = {
     },
   ],
 
+  // Corrected 2026-07-23. The previous pair split §4.7.3 by TIME WINDOW (COR 1/B-R within 6 h,
+  // COR 2a/B-R for 6-24 h) and omitted PC-ASPECTS entirely. The guideline splits by NIHSS
+  // SEVERITY across a single 24-hour window, and grades the NIHSS >=10 stratum Level A, not B-R.
+  // Verbatim text below from docs/evidence-packets/2026-05-15-evt-pathway-aha-2026-PDF-VERIFIED.md
+  // (read page-by-page off the guideline PDF, pages e53-e61); agrees with the registry citation
+  // aha-asa-2026-4.7.3. The wrong pair was generating false positives against correct content,
+  // because this file's own header designates it a validation reference.
   posteriorCirculation: [
     {
       cor: "1",
-      loe: "B-R",
-      text: "For AIS, with basilar artery occlusion, a baseline mRS score of 0–1, NIHSS ≥10 at presentation, and within 6 hours from symptom onset, EVT should be used because it improves functional outcomes and reduce mortality.",
+      loe: "A",
+      text: "In patients with AIS, with basilar artery occlusion, a baseline mRS score of 0 to 1, NIHSS score ≥10 at presentation, and PC-ASPECTS ≥6 (mild ischemic damage), EVT within 24 hours from onset of symptoms is recommended to achieve better functional outcome and reduce mortality.",
     },
     {
-      cor: "2a",
+      cor: "2b",
       loe: "B-R",
-      text: "In patients with AIS and basilar artery occlusion, a baseline mRS score of 0–1, NIHSS ≥10, and presenting 6–24 hours from symptom onset, EVT can reasonably be considered with potential salvageable brain tissue.",
+      text: "In patients with AIS, with basilar artery occlusion, a baseline mRS score of 0 to 1, NIHSS score 6 to 9 at presentation, and PC-ASPECTS ≥6 (mild ischemic damage), the effectiveness of EVT within 24 hours to improve functional outcomes and reduce mortality is not well established.",
     },
   ],
 
@@ -1083,7 +1090,7 @@ export const topTakeHomeMessages = [
 
   "EVT is now recommended for anterior circulation LVO with ASPECTS 3–5 (large core infarcts) within 24 hours, expanding eligibility compared to prior guidelines.",
 
-  "EVT for basilar artery occlusion should be used for eligible patients within 6 hours (NIHSS ≥10), and it can be considered from 6–24 hours when salvageable tissue is still present.",
+  "EVT for basilar artery occlusion should be used within 24 hours from symptom onset in patients with baseline mRS 0 to 1, NIHSS ≥10, and PC-ASPECTS ≥6; for NIHSS 6 to 9 with the same baseline mRS and PC-ASPECTS, the effectiveness of EVT within 24 hours is not well established.",
 
   "After successful EVT recanalization (mTICI 2b/2c/3), intensive SBP reduction to <140 mm Hg is harmful and should be avoided. Target ≤180/105 mm Hg.",
 

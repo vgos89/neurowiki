@@ -9224,6 +9224,214 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       keyStat: '2.6% (target <4%)',
     },
   },
+  'woven-trial': {
+    id: 'woven-trial',
+    title: 'WOVEN Trial',
+    subtitle: 'Wingspan One-year Vascular Events',
+    category: 'Neuro Trials',
+    // ── Archetype G (single-arm registry): BenchmarkThresholdChart, reference mode ──
+    // WOVEN has NO pre-specified 1-year threshold. The single-arm-registry design +
+    // safety-threshold-met result are the only legal enum pairing for a single-arm
+    // follow-up (see TrialMetadata primaryDesign/primaryResult docs); the actual
+    // framing is carried by the benchmark field in REFERENCE mode (SAMMPRIS medical
+    // arm as a historical comparator, no pass/fail pill) plus the interpretation
+    // prose, which state the no-threshold ceiling explicitly.
+    archetypeId: 'G',
+    trialResult: 'SAFETY_MET',
+    primaryDesign: 'single-arm-registry',
+    primaryResult: 'safety-threshold-met',
+    doi: '10.1136/neurintsurg-2020-016208',
+    pmid: '32561658',
+    clinicalTrialsId: 'NCT02034058',
+    source: 'Alexander et al. (J Neurointerv Surg 2021;13(4):307–310)',
+    listCategory: 'carotid',
+    listDescription: 'One-year follow-up of the WEAVE on-label Wingspan cohort: single-arm stroke or death rate 8.5% at 1 year, no efficacy comparison.',
+    // ── Legacy required fields (not used by Archetype G rendering) ──
+    stats: {
+      sampleSize: {
+        value: '129',
+        label: 'Patients followed (of 152)',
+      },
+      primaryEndpoint: {
+        value: 'Stroke or death',
+        label: 'at 1 Year',
+      },
+      pValue: {
+        value: 'N/A',
+        label: 'Single-Arm Study',
+      },
+      effectSize: {
+        value: '8.5%',
+        label: '1-year rate',
+      },
+    },
+    trialDesign: {
+      type: [
+        'Single-arm 1-year follow-up of the WEAVE on-label Wingspan cohort',
+        'No control arm; descriptive safety follow-up',
+        '129 of 152 WEAVE on-label patients followed at 12 of 24 original sites',
+      ],
+      timeline: 'One-year follow-up of the WEAVE cohort (enrolled 2014 to 2017)',
+    },
+    efficacyResults: {
+      // Single-arm: these fields hold the SAMMPRIS 1-year rates for legacy
+      // compatibility only. Archetype G rendering uses observedEventRate +
+      // benchmark (reference mode), not these fields. WOVEN has no control arm.
+      treatment: {
+        percentage: 8.5,
+        label: 'Stroke or death at 1 year (includes 4 periprocedural events)',
+        name: 'Wingspan Stent (on-label), 1-year follow-up',
+      },
+      control: {
+        percentage: 12.2,
+        label: 'Historical reference (SAMMPRIS medical arm, 1-year)',
+        name: 'SAMMPRIS Medical Arm',
+      },
+    },
+    intervention: {
+      treatment: 'Angioplasty and stenting with the Wingspan Stent System (strict on-label criteria, experienced operators), followed to 1 year',
+      control: 'No randomized control arm. Single-arm follow-up with no pre-specified 1-year threshold.',
+    },
+    clinicalContext: 'WEAVE showed a 2.6% periprocedural stroke or death rate for on-label Wingspan stenting at 72 hours. WOVEN followed that same on-label cohort to 1 year to describe whether the early safety signal held over time. 129 of the 152 WEAVE on-label patients (about 85%) were followed at 12 of the 24 original sites. WOVEN carried no pre-specified 1-year threshold and no control arm, so it describes 1-year event rates rather than testing a benchmark or comparing against medical therapy.',
+    calculations: {},
+    pearls: [
+      'One-year event rate: 7 strokes occurred during follow-up (6 minor, 1 major) with no deaths beyond the periprocedural period; adding the 4 WEAVE periprocedural events gives 11 strokes or deaths of 129 (8.5%) at 1 year.',
+      'Single-arm follow-up: WOVEN has no control arm and no pre-specified 1-year threshold, so it describes durability of the WEAVE safety signal but cannot establish efficacy versus medical therapy.',
+      'Retention: 129 of 152 on-label patients (about 85%) were followed at 12 of the 24 original WEAVE sites.',
+      'Historical comparator: the SAMMPRIS medical arm had a 12.2% 1-year stroke or death rate in an initial-presentation ICAS population, which differs from the refractory on-label failures in WOVEN; it is an illustrative reference, not a randomized comparison.',
+    ],
+    conclusion: '',
+    // ── Archetype G specific fields ──
+    // benchmark here is a HISTORICAL REFERENCE, not a pre-specified threshold. The
+    // trial page renders it in the chart reference mode (neutral, no pass/fail pill).
+    benchmark: {
+      rate: 12.2,
+      label: 'SAMMPRIS medical arm, 1-year (historical reference)',
+      direction: 'below-is-good',
+      scaleMax: 20,
+    },
+    observedEventRate: {
+      rate: 8.5,
+      ciLow: 4.3,
+      ciHigh: 14.8,
+      ciMethod: 'Clopper-Pearson exact (computed)',
+      numEvents: 11,
+      total: 129,
+      description: 'Stroke or death at 1 year (includes 4 periprocedural events)',
+    },
+    historicalContext: {
+      rows: [
+        {
+          label: 'SAMMPRIS stent arm',
+          year: 2011,
+          n: 224,
+          design: 'Randomized vs medical therapy, off-label use; 1-year rate',
+          rate: 20.0,
+        },
+        {
+          label: 'SAMMPRIS medical arm',
+          year: 2011,
+          n: 227,
+          design: 'Randomized aggressive medical management; 1-year rate',
+          rate: 12.2,
+        },
+        {
+          label: 'WOVEN Trial',
+          year: 2021,
+          n: 129,
+          design: 'Single-arm 1-year follow-up of the WEAVE on-label cohort',
+          rate: 8.5,
+          isCurrentTrial: true,
+        },
+      ],
+    },
+    inclusionCriteria: [
+      'Enrolled in the WEAVE on-label Wingspan cohort and available for 1-year follow-up (129 of 152 patients, 12 of 24 sites)',
+      'Symptomatic intracranial atherosclerotic stenosis 70 to 99%',
+      'At least 2 strokes or TIAs in the territory of the stenotic vessel despite optimal medical therapy',
+      'Age 22 to 80 years',
+      'Modified Rankin Score 3 or less at enrollment',
+      'More than 8 days since most recent qualifying ischemic event',
+      'Target vessel diameter 2.0 to 4.5 mm; lesion length 9 mm or less',
+    ],
+    exclusionCriteria: [
+      'Off-label use of the Wingspan stent system',
+      'Acute stroke or TIA within 8 days of enrollment',
+      'Allergy to aspirin, clopidogrel, or contrast media',
+      'Untreated coagulopathy or platelet count below 100,000',
+      'Pregnancy or breastfeeding',
+      'Concurrent participation in another investigational device trial',
+    ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1136/neurintsurg-2020-016208',
+      sourceLabel: 'Alexander MJ et al., J Neurointerv Surg 2021;13(4):307–310 (1-year follow-up of the WEAVE on-label cohort)',
+      retrieved: '2026-07-22',
+      inclusion: [
+        {
+          label: 'FDA on-label Wingspan criteria (WEAVE cohort followed to 1 year; 129 of 152 patients, 12 of 24 sites)',
+          items: [
+            'Age 22 to 80 years',
+            'Symptomatic intracranial atherosclerotic stenosis of 70% to 99%',
+            'At least 2 strokes in the vascular territory of the stenotic lesion while on medical therapy',
+            'Baseline modified Rankin Scale score of 3 or less',
+            'Stenting of the lesion 8 days or more after the most recent stroke',
+            'Available for 1-year clinical follow-up in the WOVEN subset',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Off-label use (not part of the on-label WEAVE cohort or the WOVEN follow-up)',
+          items: [
+            'Any use of the Wingspan stent outside the on-label Instructions for Use criteria above',
+            'Stenting earlier than 8 days after the qualifying stroke',
+            'Stenting after a single qualifying stroke or for transient ischemic attack symptoms only',
+            'Intracranial arterial stenosis of less than 70%',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      {
+        arm: 'Wingspan stenting (on-label), 1-year follow-up',
+        role: 'intervention',
+        agent: 'Gateway PTA balloon catheter for angioplasty followed by the Wingspan self-expanding nitinol stent (Stryker Neurovascular)',
+        route: 'Endovascular (intracranial angioplasty and stenting)',
+        frequency: 'Single index procedure in WEAVE; WOVEN adds clinical follow-up to 1 year',
+        duration: 'One-time procedure with follow-up to 1 year',
+        coInterventions: 'Dual antiplatelet therapy and intensive medical management as in WEAVE: aspirin plus clopidogrel around the procedure, continued antiplatelet therapy, statin, and blood-pressure control afterward.',
+        note: 'Single-arm follow-up of the WEAVE on-label cohort; no randomized control and no pre-specified 1-year threshold. 129 of the 152 WEAVE on-label patients (about 85%) were followed at 12 of the 24 original sites. During follow-up there were 7 strokes (6 minor, 1 major) and no deaths beyond the periprocedural period; adding the 4 WEAVE periprocedural events gives 11 strokes or deaths of 129 (8.5%) at 1 year. Source: Alexander J Neurointerv Surg 2021;13(4):307–310.',
+      },
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the horizontal bar show?',
+        answer: 'The bar represents the observed 1-year stroke or death rate: 11 events in 129 patients (8.5%). The bar length is proportional to this rate on the 0 to 20% scale. This includes the 4 periprocedural events carried over from WEAVE plus the 7 strokes during follow-up.',
+      },
+      {
+        question: 'What is the shaded CI band?',
+        answer: 'The shaded region spans the 95% confidence interval from 4.3% to 14.8% (Clopper-Pearson exact method, computed for NeuroWiki from 11 of 129). The interval is wide because the number of events is small.',
+      },
+      {
+        question: 'What does the dashed vertical line represent?',
+        answer: 'The dashed line marks a historical reference: the SAMMPRIS medical-arm 1-year stroke or death rate of 12.2%. It is shown for context only. WOVEN had no pre-specified 1-year threshold and no control arm, so the line is not a benchmark that WOVEN passed or failed, and the two populations differ (initial-presentation ICAS in SAMMPRIS versus refractory on-label failures in WOVEN).',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In the WEAVE on-label Wingspan cohort followed to 1 year, the cumulative stroke or death rate was 8.5% (11 of 129, including the 4 periprocedural events). This is descriptive durability data for the early WEAVE safety signal in a highly selected, refractory, on-label population.',
+      doesNotProve: 'WOVEN has no control arm and cannot establish efficacy versus medical therapy. The SAMMPRIS medical-arm line is an illustrative historical comparator from a different population (initial-presentation ICAS, not refractory on-label failures) and is not a randomized comparison. WOVEN also does not generalize to off-label use, lower-volume centers, or broader patient populations.',
+      cautions: 'Retention was about 85% (129 of 152), and the number of patients and events is small, so the estimate is imprecise (95% CI 4.3% to 14.8%). The 8.5% rate includes the 4 WEAVE periprocedural events, not just the follow-up strokes. There was no pre-specified 1-year threshold, unlike the WEAVE 72-hour benchmark of below 4%, so WOVEN reports a rate rather than a pass or fail.',
+    },
+    bedsidePearl: 'WOVEN followed the WEAVE on-label Wingspan cohort to 1 year. Of 129 patients followed (of the original 152), there were 11 strokes or deaths (8.5%) at 1 year, including the 4 WEAVE periprocedural events: 7 new strokes during follow-up (6 minor, 1 major) and no deaths beyond the periprocedural period. WOVEN has no control arm and no pre-specified 1-year threshold, so it describes durability of the WEAVE safety signal but does not establish efficacy versus medical therapy. The SAMMPRIS medical-arm 12.2% 1-year rate is a historical reference from a different population, not a randomized comparison. Aggressive medical therapy remains first-line for symptomatic intracranial atherosclerotic disease; on-label Wingspan stenting stays a salvage option for highly selected refractory patients.',
+    bedsidePearlClaimId: 'woven-primary-result',
+    bottomLineSummary: 'WOVEN is the 1-year follow-up of the WEAVE on-label Wingspan cohort. Of 129 patients followed (of 152, about 85% retention) at 12 of 24 original sites, the cumulative stroke or death rate at 1 year was 8.5% (11 events; 95% CI 4.3% to 14.8% by Clopper-Pearson exact, computed), including the 4 WEAVE periprocedural events (7 new strokes during follow-up: 6 minor, 1 major; no deaths beyond the periprocedural period). WOVEN is descriptive single-arm safety data with no control arm and no pre-specified 1-year threshold; it cannot establish efficacy versus medical therapy. The SAMMPRIS medical-arm 1-year rate (12.2%) is shown as a historical reference from a different population, not a randomized comparison.',
+    legend: {
+      finding: 'One-year stroke or death was 8.5% in the on-label Wingspan cohort (single-arm follow-up of WEAVE).',
+      bottomLineTag: 'Safety',
+      keyStat: '8.5% 1-yr (single-arm)',
+    },
+  },
   'cassiss-trial': {
     id: 'cassiss-trial',
     title: 'CASSISS Trial',

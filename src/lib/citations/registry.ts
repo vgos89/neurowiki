@@ -683,15 +683,51 @@ export const CITATION_REGISTRY: CitationRegistry = {
     quoted_text: 'The primary outcome was first recurrence of stroke of any type.',
   },
 
+  // Refreshed 2026-07-23 per §13.6. The prior quoted_text was a PARAPHRASE that (a) dropped the
+  // baseline mRS 0-1 gate, (b) omitted the NIHSS 6-9 stratum entirely, and (c) terminated with
+  // '(Class I, Level A)', which GuidelineSummaryCard's $-anchored /\(COR …\)$/ regex does not
+  // match, so the public card rendered no COR badge and left the parenthetical dangling inline.
+  // Same defect class as the §4.7.2 refresh of 2026-05-22. Verbatim text below from
+  // docs/evidence-packets/2026-05-15-evt-pathway-aha-2026-PDF-VERIFIED.md §4.7.3 (read page-by-page
+  // off the guideline PDF, pages e53-e61; Figure 3 page e61 cross-checked).
+  // §13.6 steps. 1 source re-resolved via the packet. 2 guideline version current (2026).
+  // 3 dependent claims: FOUR map to this citation. basilar-evt-guideline-summary was re-checked
+  //   and re-pointed at both strata, so step 3 PASSES for that claim only. baoche-posterior-evt,
+  //   attention-posterior-evt and posterior-circulation-evt-quick-claim render Study Mode pearls
+  //   that assert Class 1 / LOE A for basilar AO WITHOUT the baseline mRS 0-1 gate that this
+  //   refreshed quoted_text now carries verbatim. That divergence is PRE-EXISTING, was exposed
+  //   rather than created by this refresh, and is tracked as the highest-priority follow-up in
+  //   TASKS.md (basilar-mrs-gate-followup). Step 3 is therefore PARTIAL, not complete.
+  // 4 claim text re-derived from the packet (same partial scope as step 3).
+  // 5 no newer guidance supersedes the 2026 edition.
+  // 6 dual sign-off: medical-scientist authored, clinical-reviewer gated
+  //   (docs/reviews/clinical-PR-basilar-evt-4-7-3-guideline-mirror.md).
+  // review_window_months 3 per §13.7 (thrombectomy indications are a rapidly evolving area);
+  // same rationale as aha-asa-2026-4.6.3.
   'aha-asa-2026-4.7.3': {
     id: 'aha-asa-2026-4.7.3',
     source: 'guideline',
-    title: '2026 AHA/ASA Guideline · §4.7.3 (Posterior-circulation / basilar-artery EVT)',
+    title: '2026 AHA/ASA Guideline · §4.7.3 (Posterior-circulation / basilar-artery EVT, NIHSS ≥10)',
     year: 2026,
     section: '§4.7.3',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
-    last_reviewed: '2026-05-19',
-    quoted_text: 'Endovascular thrombectomy is recommended for patients with basilar-artery occlusion presenting within 24 hours, with NIHSS ≥10 and PC-ASPECTS ≥6 (Class I, Level A).',
+    last_reviewed: '2026-07-23',
+    review_window_months: 3,
+    quoted_text: 'In patients with AIS, with basilar artery occlusion, a baseline mRS score of 0 to 1, NIHSS score ≥10 at presentation, and PC-ASPECTS ≥6 (mild ischemic damage), EVT within 24 hours from onset of symptoms is recommended to achieve better functional outcome and reduce mortality. (COR 1, LOE A.)',
+  },
+  // Second stratum of the same section, registered separately rather than concatenated: the
+  // GuidelineSummaryCard regex reads only the LAST trailing parenthetical, so a concatenation
+  // would badge the whole card COR 2b and bury the Class I stratum.
+  'aha-asa-2026-4.7.3-nihss-6-9': {
+    id: 'aha-asa-2026-4.7.3-nihss-6-9',
+    source: 'guideline',
+    title: '2026 AHA/ASA Guideline · §4.7.3 (Posterior-circulation / basilar-artery EVT, NIHSS 6 to 9)',
+    year: 2026,
+    section: '§4.7.3',
+    url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
+    last_reviewed: '2026-07-23',
+    review_window_months: 3,
+    quoted_text: 'In patients with AIS, with basilar artery occlusion, a baseline mRS score of 0 to 1, NIHSS score 6 to 9 at presentation, and PC-ASPECTS ≥6 (mild ischemic damage), the effectiveness of EVT within 24 hours to improve functional outcomes and reduce mortality is not well established. (COR 2b, LOE B-R.)',
   },
 
   // ─── AHA/ASA 2026 §4.9 — early oral anticoagulation after AF-related stroke ───

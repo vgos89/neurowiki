@@ -568,6 +568,7 @@ const legacyTrialCategories: Record<string, TrialCategoryKey> = {
   'point-trial': 'secondary-prevention',
   'sammpris-trial': 'secondary-prevention',
   'weave-trial': 'secondary-prevention',
+  'woven-trial': 'secondary-prevention',
   'cassiss-trial': 'secondary-prevention',
   'basis-trial': 'secondary-prevention',
   'socrates-trial': 'secondary-prevention',

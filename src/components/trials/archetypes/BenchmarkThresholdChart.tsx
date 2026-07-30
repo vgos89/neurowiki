@@ -4,12 +4,23 @@
  * Single-arm benchmark-threshold track. Renders:
  *   - Horizontal filled track (observed event rate)
  *   - CI band at 20% opacity spanning [ciLow, ciHigh]
- *   - Dashed vertical threshold line at the pre-specified benchmark
- *   - Threshold label centered above the line
+ *   - Dashed vertical line at the benchmark / reference rate
+ *   - Line label centered above the line
  *   - Scale ticks: 3 mobile (0%, midpoint, max), 5 desktop
  *   - Stat row: events/n + CI + result pill
  *
- * Color rules (ADR-006 Decision 2, locked):
+ * Two modes (via `mode`):
+ *   'threshold' (default) — a pre-specified pass/fail benchmark (e.g. the FDA
+ *     WEAVE 4% safety benchmark). Green when met, red when failed; the pill
+ *     reads "Benchmark met" / "Benchmark failed".
+ *   'reference' — a single-arm descriptive rate with NO pre-specified threshold
+ *     (e.g. WOVEN, whose 1-year rate has no regulatory benchmark). The dashed
+ *     line is a neutral, illustrative historical comparator, the fill is a
+ *     neutral slate (no pass/fail valence), and the pill reads
+ *     "Single-arm, no control". Prevents a descriptive rate from being read as
+ *     a threshold result.
+ *
+ * Color rules (ADR-006 Decision 2, locked, threshold mode):
  *   Benchmark met (observed < benchmark): fill #10b981
  *   Benchmark failed (observed >= benchmark): fill #ef4444
  *   CI band: fill color at 20% opacity
@@ -32,16 +43,16 @@ export interface BenchmarkThresholdChartProps {
   ciLow: number;
   /** Upper bound of the confidence interval, e.g. 6.6. */
   ciHigh: number;
-  /** Pre-specified safety/efficacy benchmark rate, e.g. 4.0. */
+  /** Pre-specified benchmark, or (reference mode) the historical comparator rate. */
   benchmarkRate: number;
-  /** Short label for the benchmark, e.g. "FDA pre-specified benchmark". */
+  /** Short label for the line, e.g. "FDA pre-specified benchmark". */
   benchmarkLabel: string;
   /**
    * Scale maximum in percentage points.
    * Defaults to max(benchmarkRate * 2, ciHigh * 1.6) rounded to nearest 5.
    */
   scaleMax?: number;
-  /** True when observedRate < benchmarkRate. Controls fill color. */
+  /** True when observedRate < benchmarkRate. Controls fill color in threshold mode. */
   benchmarkMet: boolean;
   /** Primary endpoint description, e.g. "Stroke or death within 72 hours". */
   endpoint: string;
@@ -51,6 +62,12 @@ export interface BenchmarkThresholdChartProps {
   numEvents: number;
   /** Total patients, e.g. 152. */
   total: number;
+  /**
+   * 'threshold' (default) = pre-specified pass/fail benchmark.
+   * 'reference' = single-arm descriptive rate with a neutral historical
+   * reference line and no pass/fail pill.
+   */
+  mode?: 'threshold' | 'reference';
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -85,8 +102,10 @@ export const BenchmarkThresholdChart: React.FC<BenchmarkThresholdChartProps> = (
   ciMethod,
   numEvents,
   total,
+  mode = 'threshold',
 }) => {
   const scaleMax = computeScaleMax(benchmarkRate, ciHigh, scaleMaxProp);
+  const isReference = mode === 'reference';
 
   // Pixel percentages on the scale axis
   const fillPct        = Math.min((observedRate / scaleMax) * 100, 100);
@@ -94,14 +113,17 @@ export const BenchmarkThresholdChart: React.FC<BenchmarkThresholdChartProps> = (
   const ciHighPct      = Math.min((ciHigh / scaleMax) * 100, 100);
   const thresholdPct   = Math.min((benchmarkRate / scaleMax) * 100, 100);
 
-  // Colors
-  const fillColor = benchmarkMet ? '#10b981' : '#ef4444';
-  const ciColor   = benchmarkMet ? 'rgba(16,185,129,0.20)' : 'rgba(239,68,68,0.20)';
+  // Colors — reference mode is neutral (no pass/fail valence)
+  const fillColor = isReference ? '#64748b' : (benchmarkMet ? '#10b981' : '#ef4444');
+  const ciColor   = isReference
+    ? 'rgba(100,116,139,0.20)'
+    : (benchmarkMet ? 'rgba(16,185,129,0.20)' : 'rgba(239,68,68,0.20)');
+  const lineColor = isReference ? '#94a3b8' : '#92400e';
 
   // Result pill
-  const pillText  = benchmarkMet ? 'Benchmark met' : 'Benchmark failed';
-  const pillColor = benchmarkMet ? '#047857' : '#dc2626';
-  const pillBg    = benchmarkMet ? '#ecfdf5'  : '#fef2f2';
+  const pillText  = isReference ? 'Single-arm, no control' : (benchmarkMet ? 'Benchmark met' : 'Benchmark failed');
+  const pillColor = isReference ? '#475569' : (benchmarkMet ? '#047857' : '#dc2626');
+  const pillBg    = isReference ? '#f1f5f9' : (benchmarkMet ? '#ecfdf5'  : '#fef2f2');
 
   // Scale tick values (5 values evenly spaced)
   const tick0   = 0;
@@ -110,6 +132,10 @@ export const BenchmarkThresholdChart: React.FC<BenchmarkThresholdChartProps> = (
   const tick75  = Math.round(scaleMax * 0.75);
   const tick100 = scaleMax;
 
+  const trackAriaLabel = isReference
+    ? `${numEvents} of ${total} patients had the primary outcome (${observedRate}%); the dashed line marks the ${benchmarkRate}% historical comparator shown for context, not a pre-specified benchmark`
+    : `${numEvents} of ${total} patients had the primary outcome (${observedRate}%), below the ${benchmarkRate}% benchmark`;
+
   return (
     <div>
       <style>{INLINE_STYLES}</style>
@@ -117,7 +143,7 @@ export const BenchmarkThresholdChart: React.FC<BenchmarkThresholdChartProps> = (
       {/* Track area — padding accommodates threshold label above and scale below */}
       <div style={{ position: 'relative', paddingTop: 30, paddingBottom: 32 }}>
 
-        {/* Threshold label — centered over dashed line */}
+        {/* Line label — centered over dashed line */}
         <span
           style={{
             position: 'absolute',
@@ -126,7 +152,7 @@ export const BenchmarkThresholdChart: React.FC<BenchmarkThresholdChartProps> = (
             transform: 'translateX(-50%)',
             fontSize: 9,
             fontWeight: 700,
-            color: '#92400e',
+            color: lineColor,
             whiteSpace: 'nowrap',
             letterSpacing: '0.02em',
             textTransform: 'uppercase',
@@ -147,7 +173,7 @@ export const BenchmarkThresholdChart: React.FC<BenchmarkThresholdChartProps> = (
             overflow: 'visible',
           }}
           role="img"
-          aria-label={`${numEvents} of ${total} patients had the primary outcome (${observedRate}%), below the ${benchmarkRate}% benchmark`}
+          aria-label={trackAriaLabel}
         >
           {/* Fill — observed rate */}
           <div
@@ -177,7 +203,7 @@ export const BenchmarkThresholdChart: React.FC<BenchmarkThresholdChartProps> = (
             aria-hidden="true"
           />
 
-          {/* Threshold dashed line — extends above (-6px) and below (-20px) per spec */}
+          {/* Threshold/reference dashed line — extends above (-6px) and below (-20px) per spec */}
           <div
             style={{
               position: 'absolute',
@@ -185,7 +211,7 @@ export const BenchmarkThresholdChart: React.FC<BenchmarkThresholdChartProps> = (
               top: -6,
               bottom: -20,
               width: 0,
-              borderLeft: '2px dashed #92400e',
+              borderLeft: `2px dashed ${lineColor}`,
               pointerEvents: 'none',
             }}
             aria-hidden="true"

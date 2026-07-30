@@ -1630,5 +1630,20 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "listDescription": "FDA-mandated post-market surveillance: on-label Wingspan stenting met the 4% periprocedural safety benchmark.",
     "bottomLineSummary": "In 152 consecutive patients with symptomatic intracranial atherosclerotic stenosis undergoing Wingspan stenting under strict on-label criteria at experienced centers, the 72-hour periprocedural stroke or death rate was 2.6% (4 events; 95% CI 0.7 to 6.6%), meeting the FDA pre-specified safety benchmark of below 4%. WEAVE does not assess efficacy versus medical therapy; it provides regulatory safety evidence for stenting in a highly selected, refractory population only.",
     "doi": "10.1161/STROKEAHA.118.023996"
+  },
+  "woven-trial": {
+    "title": "WOVEN Trial",
+    "legend": {
+      "finding": "One-year stroke or death was 8.5% in the on-label Wingspan cohort (single-arm follow-up of WEAVE).",
+      "bottomLineTag": "Safety",
+      "keyStat": "8.5% 1-yr (single-arm)"
+    },
+    "subtitle": "Wingspan One-year Vascular Events",
+    "source": "Alexander et al. (J Neurointerv Surg 2021;13(4):307–310)",
+    "timeline": "One-year follow-up of the WEAVE cohort (enrolled 2014 to 2017)",
+    "listCategory": "carotid",
+    "listDescription": "One-year follow-up of the WEAVE on-label Wingspan cohort: single-arm stroke or death rate 8.5% at 1 year, no efficacy comparison.",
+    "bottomLineSummary": "WOVEN is the 1-year follow-up of the WEAVE on-label Wingspan cohort. Of 129 patients followed (of 152, about 85% retention) at 12 of 24 original sites, the cumulative stroke or death rate at 1 year was 8.5% (11 events; 95% CI 4.3% to 14.8% by Clopper-Pearson exact, computed), including the 4 WEAVE periprocedural events (7 new strokes during follow-up: 6 minor, 1 major; no deaths beyond the periprocedural period). WOVEN is descriptive single-arm safety data with no control arm and no pre-specified 1-year threshold; it cannot establish efficacy versus medical therapy. The SAMMPRIS medical-arm 1-year rate (12.2%) is shown as a historical reference from a different population, not a randomized comparison.",
+    "doi": "10.1136/neurintsurg-2020-016208"
   }
 };

@@ -277,7 +277,7 @@ export const mindmapRoot: MindmapNode = {
               id: 'evt-posterior',
               label: 'Basilar Artery\nOcclusion',
               color: 'emerald',
-              description: 'EVT for basilar artery occlusion within 6 hours (COR 1) and 6–24 hours (COR 2a).',
+              description: 'EVT for basilar artery occlusion within 24 hours, stratified by severity rather than by time window: COR 1 for NIHSS ≥10, COR 2b for NIHSS 6–9. Both require baseline mRS 0–1 and PC-ASPECTS ≥6.',
               recommendations: evtRecommendations.posteriorCirculation.map(toRec),
             },
             {

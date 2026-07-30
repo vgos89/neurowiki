@@ -209,11 +209,12 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     id: 'icas-stenting',
     text: 'Does symptomatic intracranial atherosclerosis benefit from stenting?',
     icon: 'target',
-    meta: 'From SAMMPRIS stenting harm through WEAVE on-label safety to CASSISS no-benefit and BASIS positive balloon angioplasty',
-    trialCount: 4,
+    meta: 'From SAMMPRIS stenting harm through WEAVE and WOVEN on-label safety to CASSISS no-benefit and BASIS positive balloon angioplasty',
+    trialCount: 5,
     trialIds: [
       'sammpris-trial',  // SAMMPRIS 2011 — PTAS vs aggressive medical (stopped for harm + futility)
       'weave-trial',     // WEAVE 2019 — FDA post-market on-label registry (Archetype G, 2.6% 72h)
+      'woven-trial',     // WOVEN 2021: 1-year single-arm follow-up of the WEAVE cohort (8.5%)
       'cassiss-trial',   // CASSISS 2022 — Chinese RCT, stenting no benefit at 1y (HR 1.10)
       'basis-trial',     // BASIS 2024 — Chinese RCT, submaximal balloon angioplasty superior (HR 0.32)
       // VISSIT (Zaidat 2015 JAMA, Vitesse balloon-expandable, confirmed harm direction)
