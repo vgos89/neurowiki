@@ -8061,7 +8061,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       cautions: 'Chinese cohort, with ~44% of strokes large-artery atherosclerotic (higher than Western populations where embolic mechanisms predominate). Adjunctive intracranial angioplasty/stenting was used in 40%, higher than typical Western practice. Stopped early for efficacy, so effect size may be inflated. sICH 5% vs 0% is real procedural harm but the mortality benefit (RR 0.66) outweighs it.',
     },
     bedsidePearl: 'In acute basilar artery occlusion with NIHSS ≥10, PC-ASPECTS ≥6, and pre-stroke mRS ≤2, EVT within 12 hours roughly halves mortality (37% vs 55%) and doubles the chance of mRS 0–3 at 90 days. mRS 0–3 (not 0–2) is used because BAO carries up to 80% untreated mortality.',
-    bottomLineSummary: 'ATTENTION establishes EVT for basilar artery occlusion within 12 hours. mRS 0–3 at 90 days: 46% vs 23% (adjusted RR 2.06, 95% CI 1.46–2.91, P<0.001; NNT 4.3). 90-day mortality 37% vs 55%. Chinese cohort with ~44% intracranial atherosclerosis. AHA/ASA 2026 §4.7.3 COR 1.',
+    bottomLineSummary: 'ATTENTION establishes EVT for basilar artery occlusion within 12 hours. mRS 0–3 at 90 days: 46% vs 23% (adjusted RR 2.06, 95% CI 1.46–2.91, P<0.001; NNT 4.3). 90-day mortality 37% vs 55%. Chinese cohort with ~44% intracranial atherosclerosis. The 12 h figure is the ATTENTION enrolment window; AHA/ASA 2026 §4.7.3 gives one 24 h window measured from symptom onset, COR 1 / LOE A for baseline mRS 0–1, NIHSS ≥10, PC-ASPECTS ≥6.',
     applicability: {
       geography: 'China',
       populationExclusions: [
@@ -8217,8 +8217,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       doesNotProve: 'It does not prove a mortality benefit (CI 0.54–1.04 crosses 1). It does not prove an mRS 0–4 benefit (the original primary, which was negative). It does not apply outside the 6–24h window or to patients with PC-ASPECTS <6 or Pons-Midbrain Index >2.',
       cautions: 'Primary outcome amended mid-trial (mRS 0–4 → mRS 0–3); disclose this in every display. Stopped early at planned interim for efficacy, so truncation bias likely inflates effect size. Han Chinese population, predominantly atherothrombotic disease; limited generalizability to embolic-predominant Western populations. sICH trend higher (6% vs 1%, NS but wide CI).',
     },
-    bedsidePearl: 'For basilar artery occlusion 6–24 hours after last-known-well with NIHSS ≥6, PC-ASPECTS ≥6, and Pons-Midbrain Index ≤2, EVT is reasonable. Note: primary outcome was amended mid-trial (mRS 0–4 → mRS 0–3); the original mRS 0–4 result was NEGATIVE. Trial stopped early, so effect size is likely overestimated.',
-    bottomLineSummary: 'BAOCHE extends basilar EVT to 6–24 hours after last-known-well. mRS 0–3 at 90 days: 46% vs 24% (adjusted RR 1.81, 95% CI 1.26–2.60, P<0.001; NNT 4.5). Primary outcome amended mid-trial from mRS 0–4 (negative) to mRS 0–3 (positive). Stopped early at interim. AHA/ASA 2026 §4.7.3 COR 1.',
+    bedsidePearlClaimId: 'baoche-posterior-evt',
+    bedsidePearl: 'BAOCHE enrolled basilar artery occlusion 6–24 hours after last-known-well with NIHSS ≥6 (post-amendment), PC-ASPECTS ≥6, and Pons-Midbrain Index ≤2. The governing recommendation is narrower: EVT within 24 h from symptom onset is recommended (COR 1, LOE A) for baseline mRS 0–1, NIHSS ≥10 and PC-ASPECTS ≥6, while NIHSS 6–9 is COR 2b, LOE B-R (not well established). Note: primary outcome was amended mid-trial (mRS 0–4 → mRS 0–3); the original mRS 0–4 result was NEGATIVE. Trial stopped early, so effect size is likely overestimated.',
+    bottomLineSummary: 'BAOCHE extends basilar EVT to 6–24 hours after last-known-well. mRS 0–3 at 90 days: 46% vs 24% (adjusted RR 1.81, 95% CI 1.26–2.60, P<0.001; NNT 4.5). Primary outcome amended mid-trial from mRS 0–4 (negative) to mRS 0–3 (positive). Stopped early at interim. The 6–24 h figure is the BAOCHE enrolment window; AHA/ASA 2026 §4.7.3 gives one 24 h window measured from symptom onset, COR 1 / LOE A for baseline mRS 0–1, NIHSS ≥10, PC-ASPECTS ≥6.',
     applicability: {
       geography: 'China',
       populationExclusions: [
@@ -8295,7 +8296,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Protocol amendment caveat: Primary outcome was changed from mRS 0–4 to mRS 0–3 mid-trial (Feb 2021, before unblinding). The original mRS 0–4 primary was NEGATIVE (RR 1.21, 95% CI 0.95–1.54). Display NNT with this disclosure',
       'Mortality: 31% in EVT vs 42% in Control (adjusted RR 0.75, 95% CI 0.54–1.04). Direction favorable but NOT statistically significant; do not claim mortality benefit for BAOCHE alone',
       'Imaging selection: PC-ASPECTS ≥6 (range 0–10) + Pons-Midbrain Index ≤2; perfusion mismatch not strictly required',
-      'Recommendation: EVT is reasonable for BAO 6–24h in eligible patients (AHA/ASA 2026 §4.7.3 COR 1: BAO, NIHSS ≥10, pre-stroke mRS 0–1, PC-ASPECTS ≥6, within 24h)'
+      'Recommendation: EVT within 24h of onset is recommended for basilar occlusion with baseline mRS 0–1, NIHSS ≥10 and PC-ASPECTS ≥6 (AHA/ASA 2026 §4.7.3, COR 1 / LOE A); for NIHSS 6–9 with the same criteria the effectiveness is not well established (COR 2b / LOE B-R)'
     ],
     conclusion: '',
     source: 'Jovin et al. (NEJM 2022)',

@@ -83,15 +83,18 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   },
   'baoche-posterior-evt': {
     id: 'baoche-posterior-evt',
-    citation_ids: ['baoche-trial-2022', 'aha-asa-2026-4.7.3'],
-    surfaces: [DATA_SURFACE],
-    description: 'BAOCHE trial: basilar artery EVT in 6–24h window; Class I per AHA/ASA 2026 §4.7.3.',
+    citation_ids: ['baoche-trial-2022', 'aha-asa-2026-4.7.3', 'aha-asa-2026-4.7.3-nihss-6-9'],
+    // BEDSIDE_PEARL_SURFACE added 2026-07-30: the BAOCHE bedsidePearl asserts COR 1 / LOE A,
+    // the mRS 0-1 gate and the COR 2b stratum but carried no claimId, so the hook could not
+    // see it. That invisibility is why this one string needed six rounds of hand review.
+    surfaces: [DATA_SURFACE, BEDSIDE_PEARL_SURFACE],
+    description: 'BAOCHE trial: basilar artery EVT in the 6–24h enrolment window. The governing recommendation is AHA/ASA 2026 §4.7.3 Rec 1, Class I / LOE A, for baseline mRS 0–1, NIHSS ≥10 and PC-ASPECTS ≥6 within a single 24h window; NIHSS 6–9 is Class 2b / LOE B-R.',
   },
   'attention-posterior-evt': {
     id: 'attention-posterior-evt',
-    citation_ids: ['attention-trial-2022', 'aha-asa-2026-4.7.3'],
+    citation_ids: ['attention-trial-2022', 'aha-asa-2026-4.7.3', 'aha-asa-2026-4.7.3-nihss-6-9'],
     surfaces: [DATA_SURFACE],
-    description: 'ATTENTION trial: basilar artery EVT within 12h; Class I per AHA/ASA 2026 §4.7.3.',
+    description: 'ATTENTION trial: basilar artery EVT within the 12h enrolment window. The governing recommendation is AHA/ASA 2026 §4.7.3 Rec 1, Class I / LOE A, for baseline mRS 0–1, NIHSS ≥10 and PC-ASPECTS ≥6 within a single 24h window; NIHSS 6–9 is Class 2b / LOE B-R.',
   },
 
   // ─── Batch 3B deep pearls (step-1 extended-window IVT + agent selection) ──
@@ -199,9 +202,9 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   },
   'posterior-circulation-evt-quick-claim': {
     id: 'posterior-circulation-evt-quick-claim',
-    citation_ids: ['baoche-trial-2022', 'attention-trial-2022', 'aha-asa-2026-4.7.3'],
+    citation_ids: ['baoche-trial-2022', 'attention-trial-2022', 'aha-asa-2026-4.7.3', 'aha-asa-2026-4.7.3-nihss-6-9'],
     surfaces: [DATA_SURFACE],
-    description: 'Quick-pearl mirror combining BAOCHE + ATTENTION: basilar AO EVT Class I within respective time windows.',
+    description: 'Quick-pearl mirror combining BAOCHE + ATTENTION. The guideline gives ONE 24h window stratified by severity, not separate windows: Class I / LOE A for baseline mRS 0–1, NIHSS ≥10, PC-ASPECTS ≥6; Class 2b / LOE B-R for NIHSS 6–9. The 12h and 6–24h figures are trial enrolment windows.',
   },
   'post-evt-bp-avoid-intensive-quick-claim': {
     id: 'post-evt-bp-avoid-intensive-quick-claim',
@@ -381,7 +384,7 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     id: 'basilar-evt-guideline-summary',
     citation_ids: ['aha-asa-2026-4.7.3', 'aha-asa-2026-4.7.3-nihss-6-9'],
     surfaces: [DATA_SURFACE],
-    description: 'GuidelineSummaryCard on /trials/q/basilar-evt. Surfaces AHA/ASA 2026 §4.7.3 (Posterior Circulation Stroke): EVT for basilar artery occlusion recommended within 24h in selected patients with baseline mRS 0–1, NIHSS ≥10, and PC-ASPECTS ≥6 (COR 1, LOE A).',
+    description: 'GuidelineSummaryCard on /trials/q/basilar-evt. Surfaces AHA/ASA 2026 §4.7.3 (Posterior Circulation Stroke): EVT for basilar artery occlusion recommended within 24h from symptom onset in selected patients with baseline mRS 0–1, NIHSS ≥10, and PC-ASPECTS ≥6 (COR 1, LOE A). Both strata are surfaced: COR 1 / LOE A for NIHSS ≥10 and COR 2b / LOE B-R for NIHSS 6–9, each requiring baseline mRS 0–1 and PC-ASPECTS ≥6.',
   },
 
   'dapt-guideline-summary': {

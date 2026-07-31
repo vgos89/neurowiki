@@ -137,7 +137,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Enrolled 2020-2021",
     "listCategory": "thrombectomy",
     "listDescription": "Basilar artery thrombectomy within 12 hours; China trial.",
-    "bottomLineSummary": "ATTENTION establishes EVT for basilar artery occlusion within 12 hours. mRS 0–3 at 90 days: 46% vs 23% (adjusted RR 2.06, 95% CI 1.46–2.91, P<0.001; NNT 4.3). 90-day mortality 37% vs 55%. Chinese cohort with ~44% intracranial atherosclerosis. AHA/ASA 2026 §4.7.3 COR 1.",
+    "bottomLineSummary": "ATTENTION establishes EVT for basilar artery occlusion within 12 hours. mRS 0–3 at 90 days: 46% vs 23% (adjusted RR 2.06, 95% CI 1.46–2.91, P<0.001; NNT 4.3). 90-day mortality 37% vs 55%. Chinese cohort with ~44% intracranial atherosclerosis. The 12 h figure is the ATTENTION enrolment window; AHA/ASA 2026 §4.7.3 gives one 24 h window measured from symptom onset, COR 1 / LOE A for baseline mRS 0–1, NIHSS ≥10, PC-ASPECTS ≥6.",
     "doi": "10.1056/NEJMoa2206317"
   },
   "attest-2-trial": {
@@ -178,7 +178,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Enrolled Aug 2016 – Jun 2021 (stopped early Apr 2022 for efficacy)",
     "listCategory": "thrombectomy",
     "listDescription": "Basilar EVT 6–24 hours with imaging selection.",
-    "bottomLineSummary": "BAOCHE extends basilar EVT to 6–24 hours after last-known-well. mRS 0–3 at 90 days: 46% vs 24% (adjusted RR 1.81, 95% CI 1.26–2.60, P<0.001; NNT 4.5). Primary outcome amended mid-trial from mRS 0–4 (negative) to mRS 0–3 (positive). Stopped early at interim. AHA/ASA 2026 §4.7.3 COR 1.",
+    "bottomLineSummary": "BAOCHE extends basilar EVT to 6–24 hours after last-known-well. mRS 0–3 at 90 days: 46% vs 24% (adjusted RR 1.81, 95% CI 1.26–2.60, P<0.001; NNT 4.5). Primary outcome amended mid-trial from mRS 0–4 (negative) to mRS 0–3 (positive). Stopped early at interim. The 6–24 h figure is the BAOCHE enrolment window; AHA/ASA 2026 §4.7.3 gives one 24 h window measured from symptom onset, COR 1 / LOE A for baseline mRS 0–1, NIHSS ≥10, PC-ASPECTS ≥6.",
     "doi": "10.1056/NEJMoa2207576"
   },
   "basics-trial": {

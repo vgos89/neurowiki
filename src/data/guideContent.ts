@@ -289,7 +289,7 @@ Following the success of extended window thrombectomy in the anterior circulatio
 ## Clinical PEARLS
 *   **Late Window Basilar:** Confirms that the basilar artery also has a "late window" benefit, likely due to collateral flow from the posterior communicating arteries.
 *   **High Efficacy:** The effect size was remarkably similar to the early window ATTENTION trial (46% good outcome in both).
-*   **Recommendation:** EVT is now recommended for BAO up to 24 hours in eligible patients.
+*   **Recommendation:** EVT within 24 hours of onset is recommended (COR 1, LOE A) for baseline mRS 0–1, NIHSS ≥10, and PC-ASPECTS ≥6. For NIHSS 6–9 with the same criteria, effectiveness is not well established (COR 2b, LOE B-R).
 
 *Source: [Jovin et al. (NEJM 2022)](https://www.nejm.org/doi/full/10.1056/NEJMoa2206317)*
 `
@@ -874,7 +874,7 @@ Use the **[Thrombectomy Calculator](/pathways/evt)** to stratify patients by tri
     *   Requires CTP or MRI to demonstrate **Clinical-Core Mismatch** (small core, large clinical deficit/penumbra).
 
 ## Posterior Circulation & Distal Occlusions
-*   **Basilar Artery Occlusion:** Strong evidence for EVT up to 24 hours (ATTENTION, BAOCHE trials).
+*   **Basilar Artery Occlusion:** EVT within 24 hours of onset is recommended (COR 1, LOE A) for baseline mRS 0–1, NIHSS ≥10, and PC-ASPECTS ≥6 (ATTENTION, BAOCHE trials). For NIHSS 6–9 with the same criteria, effectiveness is not well established (COR 2b, LOE B-R).
 *   **Distal/Medium Vessel:** M2/M3 MCA branches, ACA, and PCA occlusions are increasingly treated based on technical feasibility and deficit severity.
 
 ## Procedural Management

@@ -2,7 +2,7 @@
 
 **Decision:** approve-with-conditions (all conditions cleared before commit)
 **Reviewer:** clinical-reviewer, two fresh-context rounds
-**Date:** 2026-07-23
+**Date:** 2026-07-30
 
 ## Scope
 - **Claims touched:** `basilar-evt-guideline-summary` (re-pointed to two citations).
@@ -44,7 +44,7 @@ All 21 files in `src/` mentioning basilar were checked. No surface still states 
 **Nothing downstream had been downgraded** on the strength of the wrong mirror. The trial pages, claim records and Study Mode pearls all asserted Class I / Level A throughout; only the yardstick was wrong.
 
 ## Freshness
-Both citations `last_reviewed: 2026-07-23` with `review_window_months: 3` per §13.7 (thrombectomy indications are a rapidly evolving area), the stricter choice over the 6-month guideline default.
+Both citations `last_reviewed: 2026-07-30` with `review_window_months: 3` per §13.7 (thrombectomy indications are a rapidly evolving area), the stricter choice over the 6-month guideline default.
 
 Refreshing was appropriate: this was not a date flip but a material replacement of the quoted text with PDF-verbatim source, plus registration of a second stratum. **Step 3 of the §13.6 checklist is recorded as PARTIAL, not complete** — four claims map to this citation and only `basilar-evt-guideline-summary` was re-pointed. The three Study Mode pearl claims assert Class 1 / LOE A without the baseline mRS 0-1 gate that the refreshed quoted_text now carries verbatim. That divergence is pre-existing, was exposed rather than created here, and is tracked as the highest-priority follow-up. The inline registry comment states this explicitly rather than implying all dependents passed.
 

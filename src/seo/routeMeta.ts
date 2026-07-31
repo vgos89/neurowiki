@@ -66,7 +66,7 @@ const QUESTION_ROUTE_META: Record<string, Pick<MetaData, 'title' | 'description'
   },
   'basilar-evt': {
     title: 'EVT for Basilar Artery Occlusion · NeuroWiki',
-    description: 'Basilar artery occlusion thrombectomy evidence: BEST and BASICS neutral, ATTENTION and BAOCHE positive. EVT now recommended up to 24 hours.',
+    description: 'Basilar artery occlusion thrombectomy: BEST and BASICS neutral, ATTENTION and BAOCHE positive. EVT within 24 h from onset for NIHSS ≥10, mRS 0–1, PC-ASPECTS ≥6.',
     keywords: 'basilar artery occlusion EVT, posterior circulation thrombectomy, BEST trial, BASICS trial, ATTENTION trial, BAOCHE trial, basilar thrombectomy',
   },
   'anticoagulation': {

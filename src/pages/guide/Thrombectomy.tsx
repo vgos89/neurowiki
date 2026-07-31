@@ -77,7 +77,7 @@ export default function Thrombectomy() {
             viewMode={viewMode}
             detail="Basilar: ATTENTION and BAOCHE. M2/M3, ACA, PCA: consider by technical feasibility and deficit; DISTAL/ESCAPE-MeVO did not show benefit for routine MeVO."
           >
-            <strong>Basilar:</strong> EVT up to 24 h (<Trial name="ATTENTION" path="/trials/attention-trial" />, <Trial name="BAOCHE" path="/trials/baoche-trial" />). <strong>Distal/MeVO:</strong> For proximal nondominant/codominant M2, distal MCA, ACA, or PCA occlusion, EVT should not be used routinely (COR 3: No Benefit, LOE A).
+            <strong>Basilar:</strong> EVT within 24 h from symptom onset for baseline mRS 0–1, NIHSS ≥10, PC-ASPECTS ≥6 (COR 1, LOE A; NIHSS 6–9 is COR 2b, LOE B-R) (<Trial name="ATTENTION" path="/trials/attention-trial" />, <Trial name="BAOCHE" path="/trials/baoche-trial" />). <strong>Distal/MeVO:</strong> For proximal nondominant/codominant M2, distal MCA, ACA, or PCA occlusion, EVT should not be used routinely (COR 3: No Benefit, LOE A).
           </Paragraph>
 
           <Section number={4} title="Procedural Management" />

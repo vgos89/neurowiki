@@ -503,7 +503,7 @@ export const evtRecommendations = {
     },
   ],
 
-  // Corrected 2026-07-23. The previous pair split §4.7.3 by TIME WINDOW (COR 1/B-R within 6 h,
+  // Corrected 2026-07-30. The previous pair split §4.7.3 by TIME WINDOW (COR 1/B-R within 6 h,
   // COR 2a/B-R for 6-24 h) and omitted PC-ASPECTS entirely. The guideline splits by NIHSS
   // SEVERITY across a single 24-hour window, and grades the NIHSS >=10 stratum Level A, not B-R.
   // Verbatim text below from docs/evidence-packets/2026-05-15-evt-pathway-aha-2026-PDF-VERIFIED.md

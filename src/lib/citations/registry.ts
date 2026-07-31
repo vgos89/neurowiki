@@ -351,7 +351,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     year: 2009,
     url: 'https://www.thelancet.com/journals/laneur/article/PIIS1474-4422(09)70047-X/abstract',
     pmid: '19269254',
-    // NOT refreshed. quoted_text was corrected on 2026-07-23 (the primary poor-outcome ARR and
+    // NOT refreshed. quoted_text was corrected on 2026-07-27 (the primary poor-outcome ARR and
     // the case-fatality ARR had been swapped, inverting the trial's conclusion) and the pmid was
     // corrected from a Feigin review to Hofmeijer 2009. Both are strict improvements and need no
     // date flip. The date deliberately stays at 2026-05-23 because §13.6 is NOT complete:
@@ -443,7 +443,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     year: 2024,
     url: 'https://www.nejm.org/doi/full/10.1056/NEJMoa2308440',
     pmid: '38598795',
-    // Refreshed 2026-07-23 per §13.6. quoted_text was materially rewritten during the
+    // Refreshed 2026-07-27 per §13.6. quoted_text was materially rewritten during the
     // trial-library semantic remediation (it had called ENRICH positive for anterior basal
     // ganglia ICH, the stratum stopped for futility). Steps completed: source re-resolved via a
     // corrected pmid (was 38598229, a JAMA Dermatology trial; now 38598795), guideline currency
@@ -453,7 +453,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     // minimally invasive surgery on ENRICH criteria was identified but its text could not be
     // retrieved. It does not supersede the trial result and does not alter any claim mapped here;
     // a follow-up retrieval task is tracked in TASKS.md.
-    last_reviewed: '2026-07-23',
+    last_reviewed: '2026-07-27',
     review_window_months: 36,
     quoted_text: 'In 300 patients with spontaneous supratentorial intracerebral hemorrhage of 30 to 80 mL (anterior basal-ganglia or lobar) randomized within 24 hours to minimally invasive parafascicular surgery plus medical management vs medical management alone, the Bayesian adaptive primary analysis showed a between-group difference in utility-weighted modified Rankin Scale at 180 days favoring surgery (mean 0.458 vs 0.374; posterior probability of superiority 0.981, exceeding the pre-specified 0.975 threshold). Benefit was confined to the lobar stratum (difference 0.127, 95% Bayesian credible interval 0.035 to 0.219); enrollment of anterior basal-ganglia hemorrhage was stopped for futility at the second interim analysis and that stratum showed no benefit (difference -0.013, 95% Bayesian credible interval -0.147 to 0.116).',
   },
@@ -683,7 +683,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     quoted_text: 'The primary outcome was first recurrence of stroke of any type.',
   },
 
-  // Refreshed 2026-07-23 per §13.6. The prior quoted_text was a PARAPHRASE that (a) dropped the
+  // Refreshed 2026-07-30 per §13.6. The prior quoted_text was a PARAPHRASE that (a) dropped the
   // baseline mRS 0-1 gate, (b) omitted the NIHSS 6-9 stratum entirely, and (c) terminated with
   // '(Class I, Level A)', which GuidelineSummaryCard's $-anchored /\(COR …\)$/ regex does not
   // match, so the public card rendered no COR badge and left the parenthetical dangling inline.
@@ -691,14 +691,17 @@ export const CITATION_REGISTRY: CitationRegistry = {
   // docs/evidence-packets/2026-05-15-evt-pathway-aha-2026-PDF-VERIFIED.md §4.7.3 (read page-by-page
   // off the guideline PDF, pages e53-e61; Figure 3 page e61 cross-checked).
   // §13.6 steps. 1 source re-resolved via the packet. 2 guideline version current (2026).
-  // 3 dependent claims: FOUR map to this citation. basilar-evt-guideline-summary was re-checked
-  //   and re-pointed at both strata, so step 3 PASSES for that claim only. baoche-posterior-evt,
-  //   attention-posterior-evt and posterior-circulation-evt-quick-claim render Study Mode pearls
-  //   that assert Class 1 / LOE A for basilar AO WITHOUT the baseline mRS 0-1 gate that this
-  //   refreshed quoted_text now carries verbatim. That divergence is PRE-EXISTING, was exposed
-  //   rather than created by this refresh, and is tracked as the highest-priority follow-up in
-  //   TASKS.md (basilar-mrs-gate-followup). Step 3 is therefore PARTIAL, not complete.
-  // 4 claim text re-derived from the packet (same partial scope as step 3).
+  // 3 dependent claims: FOUR map to this citation, and all four were re-checked.
+  //   basilar-evt-guideline-summary was re-pointed at both strata. baoche-posterior-evt,
+  //   attention-posterior-evt and posterior-circulation-evt-quick-claim rendered Class 1 / LOE A
+  //   for basilar AO WITHOUT the baseline mRS 0-1 gate. At the time of the guideline-mirror
+  //   correction that divergence was still OPEN and step 3 was recorded PARTIAL. It was closed
+  //   in the follow-on change of 2026-07-30, which gated the pearls and wired the NIHSS 6-9
+  //   citation to the claims whose text asserts COR 2b. Step 3 is COMPLETE as of 2026-07-30 for
+  //   the four MAPPED dependents, which is the only scope this record can verify: untagged
+  //   surfaces carry no claimId and are invisible to both this enumeration and the pre-commit
+  //   hook, so no claim is made about their coverage. See TASKS.md hook-coverage-gaps.
+  // 4 claim text re-derived from the packet across all four dependents.
   // 5 no newer guidance supersedes the 2026 edition.
   // 6 dual sign-off: medical-scientist authored, clinical-reviewer gated
   //   (docs/reviews/clinical-PR-basilar-evt-4-7-3-guideline-mirror.md).
@@ -711,7 +714,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     year: 2026,
     section: '§4.7.3',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
-    last_reviewed: '2026-07-23',
+    last_reviewed: '2026-07-30',
     review_window_months: 3,
     quoted_text: 'In patients with AIS, with basilar artery occlusion, a baseline mRS score of 0 to 1, NIHSS score ≥10 at presentation, and PC-ASPECTS ≥6 (mild ischemic damage), EVT within 24 hours from onset of symptoms is recommended to achieve better functional outcome and reduce mortality. (COR 1, LOE A.)',
   },
@@ -725,7 +728,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     year: 2026,
     section: '§4.7.3',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
-    last_reviewed: '2026-07-23',
+    last_reviewed: '2026-07-30',
     review_window_months: 3,
     quoted_text: 'In patients with AIS, with basilar artery occlusion, a baseline mRS score of 0 to 1, NIHSS score 6 to 9 at presentation, and PC-ASPECTS ≥6 (mild ischemic damage), the effectiveness of EVT within 24 hours to improve functional outcomes and reduce mortality is not well established. (COR 2b, LOE B-R.)',
   },
@@ -1188,7 +1191,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     quoted_text: 'PFO closure in patients with high-risk PFO characteristics resulted in a lower rate of the primary endpoint as well as stroke recurrence.',
   },
 
-  // ─── PFO closure 2026 refresh — 7 citations added 2026-07-23 ──────────────
+  // ─── PFO closure 2026 refresh — 7 citations added 2026-07-27 ──────────────
   //     Source: docs/evidence-packets/2026-07-23-pfo-closure-refresh.md
   //     (evidence-verifier, 2026-07-23; skills clinical-trial-audit +
   //     trial-statistics). Every figure below traces to that packet.
@@ -1224,7 +1227,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     title: 'Heterogeneity of Treatment Effects in an Analysis of Pooled Individual Patient Data From Randomized Trials of Device Closure of Patent Foramen Ovale After Stroke',
     year: 2021,
     url: 'https://doi.org/10.1001/jama.2021.20956',
-    last_reviewed: '2026-07-23',
+    last_reviewed: '2026-07-27',
     review_window_months: 36,
     quoted_text: 'In pooled individual patient data from 6 randomized trials of device closure of patent foramen ovale after stroke (3,740 patients; median follow-up 57 months), the annualized rate of recurrent ischemic stroke was 0.47% with closure versus 1.09% with medical therapy (adjusted HR 0.41, 95% CI 0.28 to 0.60; P<.001). Under the PASCAL classification derived here, which combines the RoPE score with high-risk PFO features, the hazard ratio for recurrent stroke with closure was 1.14 (95% CI 0.53 to 2.46) in the unlikely category, 0.38 (95% CI 0.22 to 0.65) in the possible category, and 0.10 (95% CI 0.03 to 0.35) in the probable category.',
   },
@@ -1258,7 +1261,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     title: 'Patent Foramen Ovale Closure in Stroke and the PASCAL Classification System',
     year: 2026,
     url: 'https://doi.org/10.1001/jamaneurol.2025.5446',
-    last_reviewed: '2026-07-23',
+    last_reviewed: '2026-07-27',
     quoted_text: 'Among 3,740 randomized patients classified by the PASCAL system, 1,382 (37.0%) were probable, 1,811 (48.4%) possible, and 547 (14.6%) unlikely. Expressed in absolute terms rather than as hazard ratios, closure in the probable and possible categories reduced recurrent stroke by more than it increased late atrial fibrillation, whereas in the unlikely category there was no reduction in stroke and the excess of late atrial fibrillation was magnified, yielding net harm.',
   },
 
@@ -1270,7 +1273,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     title: 'Twenty-Year Follow-Up After Patent Foramen Ovale Closure in Patients With Paradoxical Embolism',
     year: 2026,
     url: 'https://doi.org/10.1001/jamacardio.2026.0020',
-    last_reviewed: '2026-07-23',
+    last_reviewed: '2026-07-27',
     review_window_months: 36,
     quoted_text: 'In a single-center cohort of 130 patients followed for approximately 20 years after patent foramen ovale closure for paradoxical embolism (attrition 3.8%), 1 recurrent ischemic stroke occurred: an incidence of 0.04 per 100 patient-years and a cumulative recurrence rate under 1%. Observational registry data without a concurrent control group.',
   },
@@ -1286,7 +1289,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     year: 2024,
     url: 'https://doi.org/10.1016/j.jacc.2024.07.015',
     pmid: '39357939',
-    last_reviewed: '2026-07-23',
+    last_reviewed: '2026-07-27',
     review_window_months: 36,
     quoted_text: 'Among 1,162 patients who underwent patent foramen ovale closure in Denmark from 2008 to 2021 and 11,620 matched general-population comparators, the 4-year absolute risk of ischemic stroke after closure was 2.5% (95% CI 1.5 to 4.0) versus 0.4% in the general population, and the 1-year risk was 1.4% versus 0.1% (adjusted hazard ratio 6.3, 95% CI 3.1 to 12.6). The 4-year risk was comparable to that observed in clinical trials but remained higher than in the general population.',
   },
@@ -1301,7 +1304,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     year: 2021,
     url: 'https://doi.org/10.1161/STROKEAHA.121.034451',
     pmid: '34455822',
-    last_reviewed: '2026-07-23',
+    last_reviewed: '2026-07-27',
     review_window_months: 36,
     quoted_text: 'Among 560 REDUCE participants with follow-up imaging (383 closure, 177 medical therapy), the composite of recurrent clinical stroke or new brain infarct on MRI occurred in 4.7% with closure versus 10.7% with medical therapy (RR 0.44, 95% CI 0.24 to 0.81; P=0.02). Clinical strokes occurred in 1.3% versus 6.8% (P=0.001), whereas silent (covert) MRI infarcts did not differ (3.4% versus 4.0%; P=0.81), and there was no difference in the number, volume, or distribution of new infarcts.',
   },
@@ -1323,7 +1326,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     year: 2026,
     url: 'https://doi.org/10.1161/CIRCULATIONAHA.125.074609',
     pmid: '41078120',
-    last_reviewed: '2026-07-23',
+    last_reviewed: '2026-07-27',
     review_window_months: 12,
     quoted_text: 'In 190 patients randomized at 7 Chinese hospitals to a novel biodegradable occluder (96 patients) or a conventional nitinol device (94 patients), effective closure on echocardiography at 6 months was 90.63% versus 91.49% (difference about -0.86%; lower bound of the 95% CI -8.98%), meeting the prespecified noninferiority margin of -10%. No deaths, embolism, device thrombus, or device erosion occurred in either group. The primary endpoint is echocardiographic closure success, a technical surrogate; the trial was not powered for clinical stroke prevention.',
   },
@@ -1338,7 +1341,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     year: 2025,
     url: 'https://doi.org/10.1001/jama.2025.10946',
     pmid: '40720119',
-    last_reviewed: '2026-07-23',
+    last_reviewed: '2026-07-27',
     quoted_text: 'Pooled data from 6 randomized trials (3,740 patients, median follow-up 57 months) show recurrent stroke rates of 0.47% per year after closure versus 1.09% per year with medical therapy. The RoPE score and the PASCAL classification identify patients whose stroke is likely attributable to the patent foramen ovale; among patients classified as probable, device closure was associated with approximately a 90% relative reduction in recurrent stroke at 2 years, consistent with the pooled hazard ratio of 0.10 for that category.',
   },
 

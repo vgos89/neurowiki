@@ -371,7 +371,7 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
               status: "Consult",
               criteriaName: "Basilar EVT - Prestroke mRS ≥2 (IDD)",
               reason: "Basilar EVT in prestroke mRS ≥2: insufficient data to determine",
-              details: "For basilar artery occlusion with prestroke mRS ≥2, there is insufficient data to determine the benefit of EVT within 24 hours. The 2026 AHA/ASA basilar trial enrollment criteria (ATTENTION, BAOCHE) restricted enrollment to baseline mRS 0–1; the guideline therefore makes no positive recommendation outside that population. Decision should be individualized in discussion with Vascular Neurology and Neurointerventional based on premorbid trajectory, family/patient goals, and reperfusion feasibility.",
+              details: "For basilar artery occlusion with prestroke mRS ≥2, there is insufficient data to determine the benefit of EVT within 24 hours from symptom onset. BAOCHE restricted enrolment to baseline mRS 0–1 and ATTENTION permitted pre-stroke mRS ≤2 in patients under 80, but both §4.7.3 recommendations specify baseline mRS 0 to 1; the guideline therefore makes no positive recommendation outside that population. Decision should be individualized in discussion with Vascular Neurology and Neurointerventional based on premorbid trajectory, family/patient goals, and reperfusion feasibility.",
               exclusionReason: "Basilar EVT in prestroke mRS ≥2 falls outside trial enrollment; insufficient data to determine.",
               variant: 'warning'
           };
@@ -394,7 +394,7 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
               status: "Eligible", 
               criteriaName: "Basilar EVT - Class I",
               reason: `Favorable Imaging (pc-ASPECTS ${pcScore}, NIHSS ${nihssNum})`, 
-              details: "In patients with basilar artery occlusion, baseline mRS 0–1, NIHSS ≥10, and pc-ASPECTS ≥6, EVT within 24 hours is strongly recommended. Class I recommendation based on ATTENTION and BAOCHE.",
+              details: "In patients with basilar artery occlusion, baseline mRS 0–1, NIHSS ≥10, and pc-ASPECTS ≥6, EVT within 24 hours from symptom onset is strongly recommended. Class I recommendation based on ATTENTION and BAOCHE.",
               variant: 'success' 
           };
       }
@@ -418,7 +418,7 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
               status: "Consult",
               criteriaName: "Basilar EVT - Low NIHSS",
               reason: `Low NIHSS (< 6): Specialist Consultation`,
-              details: "The 2026 AHA/ASA basilar EVT pathway within 24 hours requires baseline mRS 0–1, pc-ASPECTS ≥6, and NIHSS ≥6 for guideline-supported positive recommendations. For basilar occlusion with NIHSS <6, no approval branch is established; discuss urgently with Vascular Neurology and Neurointerventional.",
+              details: "The 2026 AHA/ASA basilar EVT pathway within 24 hours from symptom onset requires baseline mRS 0–1, pc-ASPECTS ≥6, and NIHSS ≥6 for guideline-supported positive recommendations. For basilar occlusion with NIHSS <6, no approval branch is established; discuss urgently with Vascular Neurology and Neurointerventional.",
               variant: 'warning'
           };
       }
@@ -1404,7 +1404,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                 <div className="pt-2 border-t border-slate-100 space-y-1 mt-2">
                   <PathwayLearningPearl
                     title="2026 Guideline Update"
-                    content="The 2026 AHA/ASA Guidelines (Section 4.7.2): Early anterior window (0–6h): Class I for ASPECTS 3–10, NIHSS ≥6, mRS 0–1; Class IIa (§4.7.2 Rec #5, LOE B-NR) for prestroke mRS 2 with ASPECTS ≥6; Class IIb (§4.7.2 Rec #6, LOE B-NR) for prestroke mRS 3–4 with ASPECTS ≥6; Class IIa for ASPECTS 0–2 (age <80, no significant mass effect). Late anterior window (6–24h): Class I for ASPECTS ≥6 with NIHSS ≥6 and mRS 0–1 (NCCT ASPECTS alone: perfusion mismatch not required; DAWN/DEFUSE-3 remain a recognized perfusion-selected route), and Class I for selected ASPECTS 3–5 patients age <80 without significant mass effect (anchored by RESCUE-Japan LIMIT / ANGEL-ASPECT / SELECT2 / TENSION / LASTE; HERMES does NOT support ASPECTS 3–5; HERMES enrolled ASPECTS ≥6 only). Basilar EVT uses a separate unified 0–24h pathway anchored by baseline mRS 0–1, pc-ASPECTS ≥6, and NIHSS severity."
+                    content="The 2026 AHA/ASA Guidelines (Section 4.7.2): Early anterior window (0–6h): Class I for ASPECTS 3–10, NIHSS ≥6, mRS 0–1; Class IIa (§4.7.2 Rec #5, LOE B-NR) for prestroke mRS 2 with ASPECTS ≥6; Class IIb (§4.7.2 Rec #6, LOE B-NR) for prestroke mRS 3–4 with ASPECTS ≥6; Class IIa for ASPECTS 0–2 (age <80, no significant mass effect). Late anterior window (6–24h): Class I for ASPECTS ≥6 with NIHSS ≥6 and mRS 0–1 (NCCT ASPECTS alone: perfusion mismatch not required; DAWN/DEFUSE-3 remain a recognized perfusion-selected route), and Class I for selected ASPECTS 3–5 patients age <80 without significant mass effect (anchored by RESCUE-Japan LIMIT / ANGEL-ASPECT / SELECT2 / TENSION / LASTE; HERMES does NOT support ASPECTS 3–5; HERMES enrolled ASPECTS ≥6 only). Basilar EVT uses a separate unified 0–24h pathway, measured from symptom onset and gated by baseline mRS 0–1, pc-ASPECTS ≥6, and NIHSS severity."
                   />
                   <PathwayLearningPearl
                     title="Tenecteplase dose: 0.25 mg/kg only"
@@ -1547,7 +1547,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                       <div className="pt-2 border-t border-slate-100 space-y-1 mt-4">
                         <PathwayLearningPearl
                           title="pc-ASPECTS & 2026 Guidelines"
-                          content="pc-ASPECTS scores the posterior circulation on a 10-point scale: Thalami (1 each), Occipital lobes (1 each), Midbrain (2), Pons (2), Cerebellar hemispheres (1 each). Per AHA/ASA 2026, basilar EVT is a unified 0–24h pathway requiring baseline mRS 0–1 and pc-ASPECTS ≥6, then stratified by NIHSS: ≥10 is the strongest recommendation, 6–9 is weaker, and <6 has no guideline-supported approval branch."
+                          content="pc-ASPECTS scores the posterior circulation on a 10-point scale: Thalami (1 each), Occipital lobes (1 each), Midbrain (2), Pons (2), Cerebellar hemispheres (1 each). Per AHA/ASA 2026, basilar EVT is a unified 0–24h pathway measured from symptom onset, requiring baseline mRS 0–1 and pc-ASPECTS ≥6, then stratified by NIHSS: ≥10 is the strongest recommendation, 6–9 is weaker, and <6 has no guideline-supported approval branch."
                         />
                       </div>
                     </div>
