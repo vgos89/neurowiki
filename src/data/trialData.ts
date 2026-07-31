@@ -1630,11 +1630,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the chart show?',
-        answer: 'A stacked bar across mRS 0 to 6 for each arm, where mRS 0 is no symptoms and mRS 6 is death. The width of each segment is the percentage of patients in that disability category at 90 days.',
+        answer: 'A 100-dot chart of the mRS 0 to 2 rate in each arm at 90 days, where each dot is one patient in a hundred. This is the dichotomised secondary outcome; the trial primary was the full ordinal mRS shift, reported in the header above the chart.',
       },
       {
         question: 'What do the numbers mean clinically?',
-        answer: 'Functional independence (mRS 0 to 2) was 32.6% with intra-arterial treatment versus 19.1% with usual care. The full ordinal shift is captured by the adjusted common odds ratio of 1.67, meaning intervention patients had 1.67 times the odds of being one mRS point better.',
+        answer: 'Functional independence (mRS 0 to 2) was 32.6% with intra-arterial treatment versus 19.1% with usual care. Two different estimates appear on this page and they answer different questions: the chart shows the adjusted odds ratio of 2.16 for that mRS 0 to 2 dichotomisation, while the trial primary was the full ordinal shift, captured by the adjusted common odds ratio of 1.67, meaning intervention patients had 1.67 times the odds of being one mRS point better.',
       },
       {
         question: 'What is the key limitation to keep in mind?',
@@ -2028,11 +2028,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the chart show?',
-        answer: 'Distribution of mRS scores at 90 days as stacked segments per arm. Each segment is the percentage of patients at that disability level. Lower scores (left side) are better.',
+        answer: 'A 100-dot chart of the mRS 0 to 2 rate in each arm at 90 days, where each dot is one patient in a hundred. This is the dichotomised secondary outcome; the trial primary was the full ordinal mRS shift, reported in the header above the chart.',
       },
       {
         question: 'What do the numbers mean clinically?',
-        answer: 'Functional independence (mRS 0 to 2) was 43.7% with Solitaire thrombectomy versus 28.2% with medical therapy alone, an absolute increase of 15.5 percentage points. The adjusted common odds ratio for shifting one mRS level was 1.7 (95% CI 1.05 to 2.8).',
+        answer: 'Functional independence (mRS 0 to 2) was 43.7% with Solitaire thrombectomy versus 28.2% with medical therapy alone, an absolute increase of 15.5 percentage points. Two different estimates appear on this page and they answer different questions: the chart shows the adjusted odds ratio of 2.1 for that mRS 0 to 2 dichotomisation, while the trial primary was the full ordinal shift. The adjusted common odds ratio for shifting one mRS level was 1.7 (95% CI 1.05 to 2.8).',
       },
       {
         question: 'What is the key limitation to keep in mind?',
@@ -2421,7 +2421,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the chart show?',
-        answer: 'Distribution of mRS 0 to 6 at 90 days for each arm as stacked segments. The shift toward lower scores in the EVT arm reflects the primary mRS shift analysis.',
+        answer: 'A 100-dot chart of the mRS 0 to 2 rate in each arm at 90 days, where each dot is one patient in a hundred. This is the dichotomised secondary outcome; the trial primary was the full ordinal mRS shift, reported in the header above the chart.',
       },
       {
         question: 'What do the numbers mean clinically?',
@@ -2439,7 +2439,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       cautions: 'Stopped early after 196 of 833 planned patients, increasing the risk of overestimating treatment effect. Industry-sponsored. Imaging eligibility criteria changed mid-trial from RAPID core to ASPECTS, limiting consistency. The high reperfusion rate (88% TICI 2b/3) and median imaging-to-puncture time of 57 minutes reflect highly experienced centers.',
     },
     /* claimId: swift-prime-bedside-pearl | source: Saver NEJM 2015 */
-    bedsidePearl: 'For an alteplase-eligible LVO patient inside 6 hours with a small infarct core, SWIFT PRIME supports proceeding to Solitaire thrombectomy without delay. The primary mRS shift was significant and the functional independence gap was the largest of any 2015 trial that used a uniform device protocol (60% vs 35%, NNT of 4 from the secondary mRS 0-2 outcome).',
+    bedsidePearl: 'For an alteplase-eligible LVO patient inside 6 hours with a small infarct core, SWIFT PRIME supports proceeding to Solitaire thrombectomy without delay. The primary mRS shift was significant and functional independence rose from 35% to 60% (NNT of 4, derived from the secondary mRS 0-2 outcome). EXTEND-IA, in a perfusion-selected population, reported a larger absolute gap of 71% versus 40%.',
     bottomLineSummary: 'SWIFT PRIME showed that adding Solitaire stent-retriever thrombectomy to IV alteplase in anterior circulation LVO patients within 6 hours of onset shifted the entire mRS distribution toward better outcomes and raised functional independence from 35% to 60%. The trial was stopped early for efficacy.',
     ordinalStats: {
       commonOR: 2.63,
@@ -3139,16 +3139,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'How is the test judged here?',
-        answer: 'The trial tested both superiority and non-inferiority. The adjusted common OR was 0.84 (95% CI 0.62-1.15, P = 0.28), so superiority of direct EVT was not demonstrated. The non-inferiority margin (-10 percentage points on mRS 0-2) was also not met. The point estimate (0.84) numerically favors bridging therapy.',
+        answer: 'The trial tested both superiority and non-inferiority. The adjusted common OR was 0.84 (95% CI 0.62-1.15, P = 0.28), so superiority of direct EVT was not demonstrated. The pre-specified non-inferiority margin was a lower 95% CI bound of 0.8 for the adjusted common OR; the observed lower bound of 0.62 did not clear it. The point estimate (0.84) numerically favors bridging therapy.',
       },
       {
         question: 'What about safety and secondary outcomes?',
-        answer: 'Median mRS was 3 with direct EVT vs 2 with bridging. mRS 0-2 was approximately 39.7% vs 44.3%. sICH was similar (5.9% vs 5.3%). 90-day mortality was numerically higher with direct EVT (20.5% vs 15.8%) but not statistically significant. TICI 2b-3 reperfusion was similar between arms.',
+        answer: 'Median mRS was 3 with direct EVT vs 2 with bridging. mRS 0-2 was 49.1% vs 51.1% (OR 0.95, 95% CI 0.65-1.39). sICH was similar (5.9% vs 5.3%). 90-day mortality was numerically higher with direct EVT (20.5% vs 15.8%) but not statistically significant. TICI 2b-3 reperfusion was similar between arms.',
       },
     ],
     /* claimId: mr-clean-no-iv-ordinal | source: LeCouffe NEJM 2021 */
     howToInterpret: {
-      proves: 'In a European population presenting directly to EVT centers within 4.5 hours, direct EVT was neither superior nor non-inferior to alteplase 0.9 mg/kg plus EVT for ordinal mRS at 90 days (adjusted common OR 0.84, 95% CI 0.62-1.15, P = 0.28). The non-inferiority margin was not met. The point estimate numerically favored bridging therapy, with median mRS of 2 (bridging) vs 3 (direct EVT).',
+      proves: 'In a European population presenting directly to EVT centers within 4.5 hours, direct EVT was neither superior nor non-inferior to alteplase 0.9 mg/kg plus EVT for ordinal mRS at 90 days (adjusted common OR 0.84, 95% CI 0.62-1.15, P = 0.28). The non-inferiority margin, a lower 95% CI bound of 0.8 on the adjusted common OR, was not met (observed lower bound 0.62). The point estimate numerically favored bridging therapy, with median mRS of 2 (bridging) vs 3 (direct EVT).',
       doesNotProve: 'The trial does not prove that omitting alteplase causes harm; the CI crosses 1.0. However, near-equal numbers do not establish non-inferiority either. The confidence interval was too wide to exclude clinically meaningful inferiority of direct EVT, and the point estimate is on the harm side.',
       cautions: 'This is the most consistently negative trial in the direct-EVT family: numerically lower mRS 0-2 and numerically higher mortality with direct EVT, against the strongest comparator (standard-dose alteplase in a Western population). Patients arrived directly at EVT-capable centers; results do not address drip-and-ship workflows. Both superiority and non-inferiority were tested and neither was met, which is methodologically distinct from a pure non-inferiority design.',
     },
@@ -3553,7 +3553,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the chart show?',
-        answer: 'The full mRS 0 to 6 distribution at 90 days for each arm. Because LASTE included unrestricted infarct size, the medical-care arm carries a heavy concentration in mRS 5 and 6, and the thrombectomy arm shifts that mass leftward toward lower disability scores.',
+        answer: 'The median mRS at 90 days in each arm, shown side by side, with the ordinal shift statistic beside it. The per-category mRS 0 to 6 distribution is not displayed. Because LASTE included unrestricted infarct size, the medical-care arm carries a heavy concentration in mRS 5 and 6, and the thrombectomy arm shifts that mass leftward toward lower disability scores.',
       },
       {
         question: 'What do the numbers mean clinically?',
@@ -3691,7 +3691,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the chart show?',
-        answer: 'The full mRS 0 to 6 distribution at 90 days in each arm. The TENSION population was selected almost entirely by non-contrast CT ASPECTS 3 to 5, so the chart represents pragmatic real-world selection without perfusion imaging.',
+        answer: 'The median mRS at 90 days in each arm, shown side by side, with the ordinal shift statistic beside it. The per-category mRS 0 to 6 distribution is not displayed. The TENSION population was selected almost entirely by non-contrast CT ASPECTS 3 to 5, so it represents pragmatic real-world selection without perfusion imaging.',
       },
       {
         question: 'What do the numbers mean clinically?',
@@ -4601,7 +4601,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     /* claimId: best-ii-interpret | source: Mistry et al. JAMA 2023 */
     howToInterpret: {
-      proves: 'In 120 patients at three US comprehensive stroke centers, no lower post-EVT BP target formally crossed the futility boundary (futility P=0.93). The highest-target arm (<=180 mm Hg) produced the best utility-weighted mRS: 0.58 versus 0.51 for <140 mm Hg and 0.55 for <160 mm Hg. The predicted probability of success in a future large superiority trial was 14-25% for the lower targets.',
+      proves: 'In 120 patients at three US comprehensive stroke centers, no lower post-EVT BP target formally crossed the futility boundary (futility P=0.93). Mean utility-weighted mRS was 0.58 (95% CI 0.46 to 0.71) in the <=180 mm Hg arm, 0.51 (0.38 to 0.63) for <140 mm Hg, and 0.47 (0.35 to 0.60) for <160 mm Hg. With about 40 patients per arm the three intervals overlap and the ordering is not monotonic, so no target separates from another. The predicted probability of success in a future large superiority trial was 14-25% for the lower targets.',
       doesNotProve: 'BEST-II does not prove that lower BP targets cause harm; the formal futility boundary was not crossed. It also cannot confirm any benefit; the 120-patient phase 2 design lacked statistical power. The trial does not address patients with unsuccessful EVT, posterior circulation LVO, or baseline mRS greater than 2.',
       cautions: 'Open-label phase 2 design with approximately 40 patients per arm. Utility-weighted mRS is not a standard clinical metric in daily practice. OPTIMAL-BP subsequently enrolled 306 patients and showed significant functional harm from SBP <140 mm Hg after successful EVT, providing stronger and more definitive evidence.',
     },
@@ -4611,12 +4611,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     inclusionCriteria: [
       'Age 18 or older',
       'Anterior circulation LVO stroke',
-      'Successful EVT (mTICI 2c or better)',
+      'Successful EVT (mTICI 2b, 2c, or 3)',
       'BP target initiated within 60 minutes of procedure end',
       'Treatment maintained for 24 hours',
     ],
     exclusionCriteria: [
-      'Unsuccessful EVT (mTICI below 2c)',
+      'Unsuccessful EVT (mTICI below 2b)',
       'Severe heart failure (EF below 30%)',
       'LVAD or extracorporeal membrane oxygenation',
       'Pre-stroke mRS greater than 2',
@@ -7968,7 +7968,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     rctChain: {
       chainName: 'Inconclusive first basilar EVT trials (2020-2021) to definitive benefit (2022)',
       chainNarrative:
-        'BEST and BASICS were the first randomized trials of thrombectomy for basilar artery occlusion, and both failed to reach statistical significance on the favorable-outcome endpoint. They failed for different reasons. BEST was terminated early after 22 of 65 medical-arm patients crossed over to thrombectomy, which diluted its intention-to-treat analysis toward the null. BASICS reached its full enrollment target of 300 patients but was underpowered against a higher-than-expected baseline severity, so its confidence interval stayed wide and did not exclude a clinically meaningful benefit. ATTENTION and BAOCHE resolved the question by preventing crossover, restricting enrollment to patients in the treatable severity band, and reaching adequate power. The lesson is that trial conduct and statistical power, not the concept of basilar thrombectomy, left the earlier question open.',
+        'BEST and BASICS were the first randomized trials of thrombectomy for basilar artery occlusion, and both failed to reach statistical significance on the favorable-outcome endpoint. They failed for different reasons. BEST was terminated early after 14 of 65 medical-arm patients (22%) crossed over to thrombectomy, which diluted its intention-to-treat analysis toward the null. BASICS reached its full enrollment target of 300 patients but was underpowered against a higher-than-expected baseline severity, so its confidence interval stayed wide and did not exclude a clinically meaningful benefit. ATTENTION and BAOCHE resolved the question by preventing crossover, restricting enrollment to patients in the treatable severity band, and reaching adequate power. The lesson is that trial conduct and statistical power, not the concept of basilar thrombectomy, left the earlier question open.',
       predecessors: [
         {
           trialId: 'best-trial',
@@ -7978,7 +7978,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
           n: 131,
           designNotes: 'EVT vs best medical management for CTA-confirmed basilar artery occlusion within 8 hours; terminated early at 131 of 240 planned patients.',
           keyResult: 'mRS 0-3 at 90 days 42% vs 32% (OR 1.74, 95% CI 0.81 to 3.74, P=0.23); not significant by intention-to-treat.',
-          whatWasMissing: 'Stopped early with 22 of 65 medical-arm patients crossing over to EVT, which diluted the intention-to-treat result toward the null.',
+          whatWasMissing: 'Stopped early with 14 of 65 medical-arm patients (22%) crossing over to EVT, which diluted the intention-to-treat result toward the null.',
         },
         {
           trialId: 'basics-trial',
@@ -12458,9 +12458,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     listCategory: 'acute',
     listDescription: 'Prehospital mobile stroke unit vs standard EMS in tPA-eligible stroke; positive quasi-experimental study.',
     inclusionCriteria: [
-      'Acute stroke symptoms within 24 hours',
-      'Located within the MSU service area of Houston, TX',
-      'Alert or minimally drowsy on initial evaluation',
+      'Stroke onset within 4.5 hours of last known well',
+      'Within the MSU catchment of one of the participating US urban EMS systems',
+      'Examination consistent with acute stroke causing any degree of disability (no formal NIHSS cutoff)',
       'Age 18 or older',
     ],
     exclusionCriteria: [
@@ -12528,12 +12528,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
     ],
     howToInterpret: {
-      proves: 'In tPA-eligible patients with acute ischemic stroke in Houston, TX, MSU-based prehospital care improved excellent functional outcome at 90 days compared with standard EMS transport (53.5% vs 45.5%, AOR 2.14, P<0.001), with median onset-to-treatment time 36 minutes shorter than EMS.',
-      doesNotProve: 'BEST-MSU does not prove benefit for non-tPA-eligible patients or those with hemorrhagic stroke. The single-city US setting may not generalize to different health systems, hospital proximity patterns, or EMS infrastructure. The benefit is not separable from other concurrent quality improvements during the study period.',
+      proves: 'In tPA-eligible patients with acute ischemic stroke at seven US urban centers, MSU-based prehospital care improved excellent functional outcome at 90 days compared with standard EMS transport (53.5% vs 45.5%, AOR 2.14, P<0.001), with median onset-to-treatment time 36 minutes shorter than EMS.',
+      doesNotProve: 'BEST-MSU does not prove benefit for non-tPA-eligible patients or those with hemorrhagic stroke. The seven-city US urban setting, weighted toward high-volume metropolitan EMS systems, may not generalize to different health systems, hospital proximity patterns, or rural EMS infrastructure. The benefit is not separable from other concurrent quality improvements during the study period.',
       cautions: 'Design quality: BEST-MSU used alternating-week allocation rather than individual randomization, making it a quasi-experimental controlled study. Secular trends, seasonal variation, or unmeasured confounders across alternating weeks could bias results. The infrastructure cost of MSU deployment is high, limiting generalizability to resource-limited settings.',
     },
     bedsidePearl: 'BEST-MSU showed that prehospital MSU care saved 36 minutes and improved outcomes in tPA-eligible patients (NNT 13). The mechanism is faster treatment, not better treatment. For hospitals without MSU access, the equivalent message is: every minute saved on door-to-needle time translates to measurable benefit.',
-    bottomLineSummary: 'In a quasi-experimental alternating-week study from Houston, mobile stroke unit care reduced onset-to-treatment time by 36 minutes and improved excellent functional outcome at 90 days in tPA-eligible patients (53.5% vs 45.5%, AOR 2.14, P<0.001). The benefit is time-mediated; the non-randomized design limits causal certainty.',
+    bottomLineSummary: 'In a quasi-experimental alternating-week study across seven US urban centers, mobile stroke unit care reduced onset-to-treatment time by 36 minutes and improved excellent functional outcome at 90 days in tPA-eligible patients (53.5% vs 45.5%, AOR 2.14, P<0.001). The benefit is time-mediated; the non-randomized design limits causal certainty.',
     legend: {
       finding: 'Prehospital MSU care saves 36 min and improves outcomes in tPA-eligible stroke.',
       bottomLineTag: 'NNT 13',
@@ -15833,21 +15833,21 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Endovascular thrombectomy (stent retriever, aspiration, or combined) within 8 hours',
       control: 'Best medical management including IV alteplase if eligible',
     },
-    clinicalContext: 'BEST was the first RCT to directly compare EVT versus medical management in basilar artery occlusion. It preceded the definitive ATTENTION and BAOCHE trials. High crossover (22 of 65 medical-arm patients received EVT) and premature termination substantially compromised the ITT analysis. The per-protocol analysis showed a nominally significant benefit, but early termination limits interpretation. BEST established neither definitive benefit nor harm for basilar EVT.',
+    clinicalContext: 'BEST was the first RCT to directly compare EVT versus medical management in basilar artery occlusion. It preceded the definitive ATTENTION and BAOCHE trials. High crossover (14 of 65 medical-arm patients, 22%, received EVT) and premature termination substantially compromised the ITT analysis. The per-protocol analysis showed a nominally significant benefit, but early termination limits interpretation. BEST established neither definitive benefit nor harm for basilar EVT.',
     pearls: [
       'Terminated early: 131 of 240 planned patients due to slow enrollment and crossover',
       'ITT primary: mRS 0-3 at 90 days 42% vs 32%, OR 1.74 (CI 0.81–3.74), p=0.23; not significant',
       'Per-protocol: OR 2.90 (CI 1.20–7.03), p=0.016; nominally significant; cautious interpretation required',
-      '22 of 65 medical-arm patients crossed over to EVT, diluting the ITT effect toward null',
-      'sICH higher in EVT arm (~14%) vs medical arm (~3%); 90-day mortality similar between arms',
+      '14 of 65 medical-arm patients (22%) crossed over to EVT and 3 of 66 EVT-arm patients (5%) crossed to medical management, diluting the ITT effect toward null',
+      'sICH occurred in 5 of 66 EVT patients (7.6%) versus 0 of 65 medical patients; 90-day mortality was 33% vs 38% (P=0.54)',
     ],
     conclusion: '',
     questionLede: 'In patients with acute basilar artery occlusion within 8 hours, does endovascular thrombectomy improve 90-day favorable functional outcome (mRS 0-3) compared with best medical management?',
     /* claimId: best-outcomes | source: Liu et al., Lancet Neurol 2020, doi: 10.1016/S1474-4422(19)30395-3 */
-    primaryOutcomeProse: 'In 131 patients with CTA-confirmed basilar artery occlusion randomized at 28 Chinese centers, endovascular thrombectomy did not significantly improve favorable functional outcome (mRS 0-3) at 90 days in the intention-to-treat analysis. mRS 0-3 was achieved in 42% of the EVT group versus 32% of the medical management group (OR 1.74, 95% CI 0.81 to 3.74, P=0.23). The trial was terminated early after enrolling 131 of 240 planned patients due to slow enrollment and high crossover: 22 patients randomized to medical management crossed over to EVT, substantially diluting the ITT analysis toward the null. A per-protocol analysis was nominally significant (OR 2.90, 95% CI 1.20 to 7.03, P=0.016), which is hypothesis-generating given the early termination and crossover contamination.',
+    primaryOutcomeProse: 'In 131 patients with CTA-confirmed basilar artery occlusion randomized at 28 Chinese centers, endovascular thrombectomy did not significantly improve favorable functional outcome (mRS 0-3) at 90 days in the intention-to-treat analysis. mRS 0-3 was achieved in 42% of the EVT group versus 32% of the medical management group (OR 1.74, 95% CI 0.81 to 3.74, P=0.23). The trial was terminated early after enrolling 131 of 240 planned patients due to slow enrollment and high crossover: 14 of 65 patients (22%) randomized to medical management crossed over to EVT, substantially diluting the ITT analysis toward the null. A per-protocol analysis was nominally significant (OR 2.90, 95% CI 1.20 to 7.03, P=0.016), which is hypothesis-generating given the early termination and crossover contamination.',
     /* claimId: best-design | source: Liu et al., Lancet Neurol 2020 */
-    trialDesignNarrative: 'BEST enrolled patients with acute basilar artery occlusion confirmed by CTA at 28 Chinese stroke centers between 2015 and 2019. Patients within 8 hours of symptom onset (or last known well) were randomized 1:1 to EVT (any available stent retriever or aspiration device) or best medical management (including IV alteplase at 0.9 mg/kg if eligible). Enrollment was hampered because physicians and families were reluctant to accept randomization to medical management alone for a high-mortality condition when EVT was available; 22 medical-arm patients crossed over, leading to termination at 131 of 240 participants. Crossover diluted the ITT analysis toward the null; per-protocol analysis showed nominal significance.',
-    safetyBrief: 'Symptomatic intracranial hemorrhage was higher in the EVT group (approximately 14%) than the medical group (approximately 3%). Mortality at 90 days was similar between arms (approximately 32% EVT vs 35% medical, non-significant). The elevated sICH rate in the EVT arm reflects reperfusion hemorrhage in basilar territory.',
+    trialDesignNarrative: 'BEST enrolled patients with acute basilar artery occlusion confirmed by CTA at 28 Chinese stroke centers between 2015 and 2019. Patients within 8 hours of symptom onset (or last known well) were randomized 1:1 to EVT (any available stent retriever or aspiration device) or best medical management (including IV alteplase at 0.9 mg/kg if eligible). Enrollment was hampered because physicians and families were reluctant to accept randomization to medical management alone for a high-mortality condition when EVT was available; 14 of 65 medical-arm patients (22%) crossed over, leading to termination at 131 of 240 participants. Crossover diluted the ITT analysis toward the null; per-protocol analysis showed nominal significance.',
+    safetyBrief: 'Symptomatic intracranial hemorrhage occurred in 5 of 66 EVT patients (7.6%) versus 0 of 65 medical patients. Mortality at 90 days was 33% (22 of 66) with EVT versus 38% (25 of 65) with medical management (P=0.54). The elevated sICH rate in the EVT arm reflects reperfusion hemorrhage in basilar territory.',
     successorTrialId: 'attention-trial',
     successorTrialDisplay: 'ATTENTION (2022)',
     successorTrialClause: 'for the modern successor trial that established endovascular thrombectomy for basilar artery occlusion',

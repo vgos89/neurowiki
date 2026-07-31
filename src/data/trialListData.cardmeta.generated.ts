@@ -238,7 +238,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "United States; August 2014 to August 2020",
     "listCategory": "acute",
     "listDescription": "Prehospital mobile stroke unit vs standard EMS in tPA-eligible stroke; positive quasi-experimental study.",
-    "bottomLineSummary": "In a quasi-experimental alternating-week study from Houston, mobile stroke unit care reduced onset-to-treatment time by 36 minutes and improved excellent functional outcome at 90 days in tPA-eligible patients (53.5% vs 45.5%, AOR 2.14, P<0.001). The benefit is time-mediated; the non-randomized design limits causal certainty.",
+    "bottomLineSummary": "In a quasi-experimental alternating-week study across seven US urban centers, mobile stroke unit care reduced onset-to-treatment time by 36 minutes and improved excellent functional outcome at 90 days in tPA-eligible patients (53.5% vs 45.5%, AOR 2.14, P<0.001). The benefit is time-mediated; the non-randomized design limits causal certainty.",
     "doi": "10.1056/NEJMoa2103879"
   },
   "best-trial": {

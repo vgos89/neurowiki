@@ -2839,10 +2839,11 @@ const TrialPageNew: React.FC = () => {
                 controlPct={45.5}
                 treatmentLabel={trialMetadata.efficacyResults.treatment.name}
                 controlLabel={trialMetadata.efficacyResults.control.name}
-                endpoint="mRS 0-1 at 90 Days (tPA-Eligible Patients)"
-                riskRatio="AOR 2.14"
-                ciLow="1.43"
-                ciHigh="3.22"
+                endpoint="mRS 0-1 at 90 Days (tPA-eligible); the primary outcome was the utility-weighted mRS at 90 days"
+                effectLabel="Adjusted OR"
+                riskRatio="2.14"
+                ciLow="1.55"
+                ciHigh="2.95"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="treatment"
               />
@@ -2859,7 +2860,7 @@ const TrialPageNew: React.FC = () => {
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
-          {renderTrialDesign(trialMetadata, '1,515 patients at 5 MSU sites in the United States. Alternating-week controlled trial. August 2014 to August 2020. Published NEJM 2021.')}
+          {renderTrialDesign(trialMetadata, '1,515 patients at seven US urban centers. Alternating-week controlled trial. August 2014 to August 2020. Published NEJM 2021.')}
           {trialMetadata.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>
@@ -4786,8 +4787,8 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Distribution at 90 Days</p>
-              <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Secondary Outcome: mRS 0-2 at 90 Days</p>
+              <p className="text-xs text-slate-500 mt-0.5">Protocol-defined primary was the ordinal mRS shift: adjusted common OR 1.67, 95% CI 1.21 to 2.30</p>
             </div>
             <div className="p-4">
               {tm.mrsDistribution && tm.ordinalStats ? (
@@ -4803,10 +4804,11 @@ const TrialPageNew: React.FC = () => {
                   treatmentLabel={tm.efficacyResults.treatment.name}
                   controlLabel={tm.efficacyResults.control.name}
                   endpoint="mRS 0-2 at 90 Days"
-                  riskRatio="1.67"
-                  ciLow="1.21"
-                  ciHigh="2.30"
-                  pValue="0.003"
+                  effectLabel="Adjusted OR"
+                  riskRatio="2.16"
+                  ciLow="1.39"
+                  ciHigh="3.38"
+                  pValue=""
                   winnerArm={isPositive ? 'treatment' : 'none'}
                 />
               )}
@@ -4963,10 +4965,11 @@ const TrialPageNew: React.FC = () => {
                   treatmentLabel={tm.efficacyResults.treatment.name}
                   controlLabel={tm.efficacyResults.control.name}
                   endpoint="mRS 0-2 at 90 Days"
-                  riskRatio="OR 2.1"
+                  effectLabel="Adjusted OR"
+                  riskRatio="2.1"
                   ciLow="1.1"
                   ciHigh="4.0"
-                  pValue="not reported"
+                  pValue=""
                   winnerArm={isPositive ? 'treatment' : 'none'}
                 />
               )}
@@ -5103,8 +5106,8 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome: mRS Distribution at 90 Days</p>
-              <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, IV alteplase within 4.5 hours)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Secondary Outcome: mRS 0-2 at 90 Days</p>
+              <p className="text-xs text-slate-500 mt-0.5">Protocol-defined primary was the ordinal mRS shift: common OR 2.63, 95% CI 1.57 to 4.40</p>
             </div>
             <div className="p-4">
               {tm.mrsDistribution && tm.ordinalStats ? (
@@ -5120,9 +5123,9 @@ const TrialPageNew: React.FC = () => {
                   treatmentLabel={tm.efficacyResults.treatment.name}
                   controlLabel={tm.efficacyResults.control.name}
                   endpoint="mRS 0-2 at 90 Days"
-                  riskRatio="2.75"
-                  ciLow="1.53"
-                  ciHigh="4.95"
+                  riskRatio="1.70"
+                  ciLow="1.23"
+                  ciHigh="2.33"
                   pValue="<0.001"
                   winnerArm={isPositive ? 'treatment' : 'none'}
                 />
@@ -6476,11 +6479,12 @@ const TrialPageNew: React.FC = () => {
                 controlPct={tm.efficacyResults.control.percentage}
                 treatmentLabel={tm.efficacyResults.treatment.name}
                 controlLabel={tm.efficacyResults.control.name}
-                endpoint="Utility-Weighted mRS at 90 days (x100)"
-                riskRatio="Delta -0.07"
+                endpoint="Utility-weighted mRS at 90 days (shown x100)"
+                effectLabel="Difference (0 to 1 utility scale)"
+                riskRatio="-0.07"
                 ciLow=""
                 ciHigh=""
-                pValue="Futility P=0.93"
+                pValue="0.93 (futility)"
                 winnerArm="none"
               />
             </div>
