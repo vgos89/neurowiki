@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "check:routes": "node scripts/validateRouteManifest.mjs",
     "check:claims": "tsx scripts/check-claims.ts",
+    "check:guideline-mirror": "tsx scripts/check-guideline-mirror.ts",
     "check:chains": "tsx scripts/check-trial-chains.ts",
     "check:card-meta": "tsx scripts/check-card-meta.ts",
     "check:trials": "tsx scripts/check-trial-coverage.ts",

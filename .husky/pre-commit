@@ -1,6 +1,7 @@
 set -e
 npm run typecheck
 npm run check:claims
+npm run check:guideline-mirror
 npm run check:chains
 npm run check:routes
 npm run check:card-meta

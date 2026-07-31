@@ -1,0 +1,16 @@
+{
+  "verifiedCount": 18,
+  "verifiedPaths": [
+    "acuteComplicationsRecommendations.brainSwelling::aha-asa-2026-6.3",
+    "bloodPressureRecommendations.afterEVT::aha-asa-2026-4.3",
+    "bloodPressureRecommendations.afterIVT::aha-asa-2026-4.3",
+    "bloodPressureRecommendations.beforeReperfusion::aha-asa-2026-4.3",
+    "evtRecommendations.adults::aha-asa-2026-4.7.2",
+    "evtRecommendations.posteriorCirculation::aha-asa-2026-4.7.3",
+    "evtRecommendations.posteriorCirculation::aha-asa-2026-4.7.3-nihss-6-9",
+    "glucoseRecommendations::aha-asa-2026-4.5",
+    "ivtRecommendations.concomitantWithEVT::aha-asa-2026-4.7.1",
+    "ivtRecommendations.decisionMaking::aha-asa-2026-4.6.1",
+    "prehospitalRecommendations.mobileStrokeUnits::aha-asa-2026-2.5"
+  ]
+}
