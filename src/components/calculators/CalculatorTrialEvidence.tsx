@@ -26,6 +26,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { TRIAL_QUESTIONS } from '../../data/trial-questions';
 import {
   CALCULATOR_TRIAL_MAP,
   type CalculatorId,
@@ -54,7 +55,13 @@ export const CalculatorTrialEvidence: React.FC<CalculatorTrialEvidenceProps> = (
       t.item !== undefined,
     );
 
-  if (trials.length === 0) return null;
+  // Clinical questions this calculator feeds. Same fail-safe as trials: a stale
+  // id is dropped rather than crashing the calculator page.
+  const questions = (entry.questionIds ?? [])
+    .map((id) => TRIAL_QUESTIONS.find((q) => q.id === id))
+    .filter((q): q is NonNullable<typeof q> => Boolean(q));
+
+  if (trials.length === 0 && questions.length === 0) return null;
 
   return (
     <section
@@ -73,6 +80,7 @@ export const CalculatorTrialEvidence: React.FC<CalculatorTrialEvidenceProps> = (
         </p>
       )}
 
+      {trials.length > 0 && (
       <ul className="px-4 py-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
         {trials.map(({ id, item }) => (
           <li key={id}>
@@ -99,6 +107,43 @@ export const CalculatorTrialEvidence: React.FC<CalculatorTrialEvidenceProps> = (
           </li>
         ))}
       </ul>
+      )}
+
+      {/* Clinical questions this calculator feeds into. The trial chips above
+          say "these studies set the thresholds"; this block says "and here is
+          the decision the number is for". Added 2026-07-31 so the RoPE score
+          reaches both PFO questions, per V. */}
+      {questions.length > 0 && (
+        <div className="px-4 pb-4 pt-1">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2 pt-3 border-t border-slate-100">
+            Where this score is used
+          </p>
+          <ul className="grid grid-cols-1 gap-2">
+            {questions.map((q) => (
+              <li key={q.id}>
+                <Link
+                  to={`/trials/q/${q.id}`}
+                  className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50 transition-colors px-3 py-2.5 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500"
+                >
+                  <span className="min-w-0">
+                    <span className="block text-sm font-semibold text-slate-900 truncate">
+                      {q.text}
+                    </span>
+                    {q.meta && (
+                      <span className="block text-[11px] text-slate-500 truncate mt-0.5">
+                        {q.meta}
+                      </span>
+                    )}
+                  </span>
+                  <svg className="w-4 h-4 text-slate-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </section>
   );
 };

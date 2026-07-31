@@ -43,6 +43,15 @@ export interface CalculatorTrialMapEntry {
   confidence: 'strong' | 'medium' | 'weak' | 'na';
   /** One-paragraph note shown above the trial list, if rendered. */
   note?: string;
+  /**
+   * Clinical questions this calculator feeds into, rendered beneath the trial
+   * chips as a second link group. A calculator answers "how likely is X"; the
+   * question answers "so what do I do about it". RoPE is the clearest case:
+   * it estimates how likely a PFO is causal rather than incidental, which is
+   * the premise of every PFO management decision, so both PFO questions belong
+   * beside it. Ids must resolve in TRIAL_QUESTIONS.
+   */
+  questionIds?: string[];
 }
 
 export const CALCULATOR_TRIAL_MAP: Record<CalculatorId, CalculatorTrialMapEntry> = {
@@ -105,7 +114,10 @@ export const CALCULATOR_TRIAL_MAP: Record<CalculatorId, CalculatorTrialMapEntry>
   // closure cohort: enrollment criteria and post-hoc interaction analyses.
   'rope-score': {
     confidence: 'strong',
-    note: 'PFO closure trials whose patient stratification operationalized the RoPE risk concept.',
+    note: 'PFO closure trials whose patient stratification operationalized the RoPE risk concept. The score estimates how likely the PFO is causal rather than incidental, which is the premise every PFO management decision rests on.',
+    // Both PFO questions depend on the causal-likelihood judgement this score
+    // estimates: whether to close the PFO, and what to give if it is not closed.
+    questionIds: ['pfo-closure-cryptogenic', 'pfo-antithrombotic-choice'],
     trialIds: [
       'close-trial',
       'respect-trial',

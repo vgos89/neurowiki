@@ -42,6 +42,12 @@ export interface TrialQuestion {
    * IDs must resolve in TRIAL_QUESTIONS — non-clinical wiring (taxonomy).
    */
   relatedQuestions?: string[];
+  /**
+   * Calculators that inform this question, rendered as a link group on the
+   * question page. Ids must resolve in CALCULATORS (src/data/calculators.ts).
+   * Non-clinical wiring: this is navigation, not a claim surface.
+   */
+  relatedCalculators?: string[];
 }
 
 export const TRIAL_QUESTIONS: TrialQuestion[] = [
@@ -393,6 +399,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'defense-pfo-trial',      // DEFENSE-PFO 2018: high-risk anatomy, positive on the 2-year composite
     ],
     relatedQuestions: ['pfo-closure-migraine', 'anticoagulation', 'asymptomatic-carotid'],
+    relatedCalculators: ['rope'],
   },
   {
     id: 'asymptomatic-carotid',

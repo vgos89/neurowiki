@@ -19,6 +19,7 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { TRIAL_QUESTIONS } from '../data/trial-questions';
+import { CALCULATORS } from '../data/calculators';
 import { findTrialById, getTrialCardMeta, type TrialItem, type TrialCardMeta } from '../data/trialListData';
 // Trial-card legend + stub-trial fields come from the lightweight generated
 // projection (getTrialCardMeta), so this page no longer imports the ~928 KB
@@ -263,6 +264,43 @@ export default function QuestionDetailPage() {
                 onFavToggle={handleFavToggle}
               />
             ))}
+          </div>
+        )}
+
+        {/* ── Calculators rail ─────────────────────────────────────────────
+            The reverse of the calculator page's "Where this score is used".
+            A question says what to do; the calculator says whether this
+            patient is the kind of patient the evidence is about. Added
+            2026-07-31 so the PFO questions reach the RoPE score, per V. */}
+        {question.relatedCalculators && question.relatedCalculators.length > 0 && (
+          <div className="mt-10 pt-6 border-t border-slate-100">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-400 mb-3">
+              Score this at the bedside
+            </p>
+            <div className="grid gap-2">
+              {question.relatedCalculators
+                .map((calcId) => CALCULATORS.find((c) => c.id === calcId))
+                .filter((c): c is NonNullable<typeof c> => Boolean(c))
+                .map((calc) => (
+                  <Link
+                    key={calc.id}
+                    to={calc.path}
+                    className="flex items-center justify-between rounded-lg border border-slate-100 hover:border-slate-200 hover:bg-slate-50 transition-colors px-4 py-3 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[14px] font-semibold text-slate-900 truncate">
+                        {calc.name}
+                      </p>
+                      <p className="text-[12px] text-slate-500 truncate mt-0.5">
+                        {calc.description}
+                      </p>
+                    </div>
+                    <svg className="w-4 h-4 text-slate-300 shrink-0 ml-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                ))}
+            </div>
           </div>
         )}
 
