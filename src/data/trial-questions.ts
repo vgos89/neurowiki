@@ -48,6 +48,25 @@ export interface TrialQuestion {
    * Non-clinical wiring: this is navigation, not a claim surface.
    */
   relatedCalculators?: string[];
+  /**
+   * Per-question legend overrides, keyed by trial id.
+   *
+   * A trial's canonical legend describes the comparison that trial is FAMOUS
+   * for. When a multi-arm trial is listed under a question about one of its
+   * OTHER comparisons, the canonical legend advertises the wrong numbers.
+   *
+   * CLOSE is the case this exists for. Its legend carries "NNT 20" and
+   * "HR 0.03 (0.00-0.26)", which are the CLOSURE-versus-antiplatelet figures
+   * and are correct on pfo-closure-cryptogenic. On the antithrombotic-choice
+   * question, where CLOSE appears only for its anticoagulation arm, those
+   * numbers read as the anticoagulation result: an NNT the evidence packet
+   * prohibits without exception, attached to a comparison whose real figure is
+   * HR 0.44 (0.11 to 1.48), not significant. Found by clinical review
+   * 2026-07-31.
+   *
+   * Overrides are display-only and never edit the canonical record.
+   */
+  legendOverrides?: Record<string, { finding?: string; bottomLineTag?: string; keyStat?: string }>;
 }
 
 export const TRIAL_QUESTIONS: TrialQuestion[] = [
@@ -370,6 +389,34 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
   },
   // ─── Tier 2 batch additions (2026-05-21) — group recently-shipped Tier 2 trials ──
   {
+    id: 'pfo-antithrombotic-choice',
+    text: 'PFO and stroke: anticoagulate or antiplatelet?',
+    icon: 'pill',
+    meta: 'When the PFO is not closed. No adequately powered trial has ever tested this; every dataset is a subgroup',
+    trialCount: 4,
+    trialIds: [
+      'picss-trial',        // PICSS 2002 — non-prespecified subgroup of the WARSS TEE substudy; low-intensity warfarin
+      'close-trial',        // CLOSE 2017 — the anticoagulation arm, a parallel comparison the trial was not powered for
+      'navigate-esus-trial',// NAVIGATE-ESUS 2018 — prespecified PFO subgroup, 45% power, trial stopped for futility + bleeding
+      'respect-esus-trial', // RE-SPECT ESUS 2021 — PFO interaction null; adding it collapsed the pooled signal
+    ],
+    relatedQuestions: ['pfo-closure-cryptogenic', 'anticoagulation'],
+    // CLOSE is listed here ONLY for its anticoagulation arm. Its canonical
+    // legend describes the closure comparison and carries an NNT, which the
+    // evidence packet prohibits for every source on this question.
+    legendOverrides: {
+      'close-trial': {
+        finding: 'The anticoagulation arm was a parallel comparison CLOSE was not powered for: 3 of 187 versus 7 of 174.',
+        bottomLineTag: 'Underpowered arm',
+        keyStat: 'HR 0.44 (0.11 to 1.48)',
+      },
+    },
+    // RoPE estimates how likely the PFO is causal rather than incidental, which
+    // is how far this evidence reaches for the patient in front of you. It is a
+    // probability estimate, not a threshold: no trial here stratified by RoPE.
+    relatedCalculators: ['rope'],
+  },
+  {
     id: 'pfo-closure-migraine',
     text: 'PFO closure for migraine?',
     icon: 'brain',
@@ -398,7 +445,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'respect-trial',          // RESPECT (long-term) 2017: 5.9y follow-up converted the 2013 cohort (HR 0.55, NNT 42)
       'defense-pfo-trial',      // DEFENSE-PFO 2018: high-risk anatomy, positive on the 2-year composite
     ],
-    relatedQuestions: ['pfo-closure-migraine', 'anticoagulation', 'asymptomatic-carotid'],
+    relatedQuestions: ['pfo-antithrombotic-choice', 'pfo-closure-migraine', 'anticoagulation'],
     relatedCalculators: ['rope'],
   },
   {

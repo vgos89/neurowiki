@@ -19011,6 +19011,709 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     conclusion: 'PREMIUM (Tobis JM et al., JACC 2017;70(22):2766-2774, NCT00355056) is the methodologically strongest randomized trial of PFO closure for migraine. It randomized 230 patients (117 device and 103 control analyzed) with 6 to 14 migraine days per month who had failed at least 3 preventive medications and who had a right-to-left shunt defined by transcranial Doppler, comparing transcatheter closure with the Amplatzer PFO Occluder against a sham right heart catheterization under double-blind conditions. The trial carried two CO-PRIMARY endpoints, efficacy and safety. The efficacy co-primary, the responder rate defined as at least a 50% reduction in migraine attacks, was NOT met: 38.5% with the device and 32.0% with sham, P=0.32. The safety co-primary WAS met. PREMIUM should therefore be reported as a split result and not as flatly negative. Two secondary endpoints separated: reduction in headache days (P=0.025) and complete migraine remission, 10 of 117 (8.5%) versus 1 of 103 (1.0%), P=0.01. Both sit on a failed efficacy co-primary and are hypothesis-generating rather than actionable treatment effects. No confidence interval was recoverable for any PREMIUM result, so no absolute risk difference is displayed, and because the efficacy co-primary was not met no NNT is computed. PREMIUM is frequently cited together with the 2021 Mojadidi individual-patient pooled analysis, which combined PREMIUM with PRIMA using endpoints re-defined post hoc and reported a reduction of 3.1 versus 1.9 monthly migraine days (P=0.02) and complete migraine cessation of 9% versus 0.7% as published. That pooling is not pooled sham-controlled evidence: PRIMA was unblinded with no sham arm, and MIST, the other sham-controlled trial, was excluded. Its own conventional responder rate was 38% versus 29%, P=0.13, and was not significant. With MIST (Dowson A et al., Circulation 2008;117(11):1397-1404) and PRIMA (Mattle HP et al., European Heart Journal 2016;37(26):2029-2036), PREMIUM completes a set of three randomized trials of PFO closure for migraine in which no primary endpoint was met. Every society document that addresses the question recommends against the procedure, and none endorses it. Among them, SCAI 2022 suggests against routine use of PFO closure for the treatment of migraine (conditional recommendation, moderate certainty of evidence), and VA/DoD 2023 Recommendation 40 suggests against PFO closure for the treatment or prevention of migraine (Weak against).',
   },
 
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PFO ANTITHROMBOTIC CHOICE: PICSS (2002), NAVIGATE-ESUS PFO (2018),
+  // RE-SPECT ESUS PFO (2021)
+  // ─────────────────────────────────────────────────────────────────────────
+  // Source of record: docs/evidence-packets/2026-07-31-pfo-anticoagulation.md
+  // (evidence-verifier, 2026-07-31). Every number below traces to that packet.
+  // Citations: homma-picss-2002, mohr-warss-2001, kasner-navigate-esus-pfo-2018,
+  // hart-navigate-esus-2018, diener-respect-esus-pfo-2021,
+  // diener-respect-esus-2019, messe-aan-pfo-advisory-2020,
+  // chi-anticoag-cryptogenic-2025, ghannam-esus-subgroups-2024,
+  // turc-close-meta-2018, kuijpers-bmj-rapidrec-pfo-2018,
+  // hariharan-esus-anticoag-meta-2022, huang-pfo-anticoag-meta-2022,
+  // close-2-nct05387954 (all registered in src/lib/citations/registry.ts).
+  //
+  // THE QUESTION these three answer is NOT the closure question. It is: when
+  // PFO closure is not chosen or not available, does anticoagulation beat
+  // antiplatelet therapy? Scope wall per packet §11: the pfo-closure-cryptogenic
+  // citations answer a different question and must not be lent to these records.
+  //
+  // THE FRAMING THAT GOVERNS EVERY STRING IN THIS CLUSTER:
+  //   NO ADEQUATELY POWERED TRIAL HAS EVER TESTED THIS QUESTION. Every dataset
+  //   is a subgroup or an underpowered arm. A real directional signal favouring
+  //   anticoagulation exists in pooled subgroups and is REPORTED, not
+  //   suppressed. It does not survive the tests that matter, and the bleeding
+  //   excess points the other way and reproduces. Any string that presents one
+  //   of these subgroup hazard ratios as a superiority result is a
+  //   clinical-safety failure, not a style problem.
+  //
+  // NNT IS PROHIBITED on all three records and anywhere on this topic. The NNT
+  // of 21 computed by the AAN carries a confidence interval of 19 to -60, which
+  // crosses infinity and includes net harm. `calculations` is deliberately
+  // ABSENT from all three records; the schema offers no boolean suppression
+  // flag, so omission plus this comment is the control. Do not add one.
+  //
+  // PAIRED-DISPLAY RULE, binding on every surface (packet §10): the pooled
+  // OR 0.48 (0.24 to 0.96) may ONLY appear alongside OR 0.70 (0.43 to 1.14),
+  // and the Ghannam RR 0.59 (0.35 to 0.98) may ONLY appear alongside the Chi
+  // p-interaction of 0.28. Showing either positive figure alone is selective
+  // reporting of the same class the migraine cluster exists to prevent.
+  //
+  // FIVE MANDATORY howToInterpret CAVEATS (packet §10) appear on ALL THREE
+  // records: (1) not one is an adequately powered trial of this question;
+  // (2) every within-trial interaction test is null; (3) PICSS used
+  // low-intensity warfarin, INR 1.4 to 2.8, not modern anticoagulation;
+  // (4) neither ESUS trial mandated TEE or bubble study, so the PFO subgroups
+  // are incompletely ascertained; (5) the efficacy signal is fragile across
+  // pooling choices and the bleeding excess is not. Do not strip any of them.
+  //
+  // ARCHETYPE NOTE for the render block. Packet §8 requires all three to render
+  // as `forest-row`, never `bar-binary`, and requires that a subgroup result
+  // never display in a superiority frame without an explicit disclaimer. The
+  // `archetypeId` enum carries only A, B and G, so it is OMITTED on all three
+  // rather than mislabelled, following the migraine-cluster precedent. The
+  // disclaimer is carried by designDisclaimer plus prose on every surface.
+  //
+  // TAGGED 2026-07-31. All three records carry `claimId` and
+  // `bedsidePearlClaimId`, and all three claims (picss-pfo-warfarin-2002,
+  // navigate-esus-pfo-2018, respect-esus-pfo-2021) are registered in
+  // src/lib/citations/claims.ts, as is pfo-antithrombotic-choice-synthesis.
+  // Do NOT strip the tags: per §13.3 an untagged clinical data surface CANNOT
+  // MERGE, and the pre-commit hook detects an unregistered tag but cannot
+  // detect an ABSENT one, so removing them would fail silently.
+  //
+  // listCategory 'antiplatelets' is correct here rather than a fallback: the
+  // comparator arm in all three is antiplatelet monotherapy and the question is
+  // an antithrombotic-agent choice.
+  //
+  // fullEligibility on all three is the VERIFIER-CONFIRMED SUBSET, not the
+  // complete published criteria list. The publications were not retrieved in
+  // full (ahajournals.org returned 403 for PICSS). The ClinicalTrials.gov
+  // records for NAVIGATE-ESUS (NCT02313909) and RE-SPECT ESUS (NCT02239120)
+  // were not mirrored, following the migraine-cluster precedent.
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  'picss-trial': {
+    claimId: 'picss-pfo-warfarin-2002',
+    id: 'picss-trial',
+    title: 'PICSS',
+    subtitle: 'Patent Foramen Ovale in Cryptogenic Stroke Study: Low-Intensity Warfarin vs Aspirin in the WARSS TEE Substudy (Homma et al., 2002)',
+    category: 'Neuro Trials',
+    trialResult: 'INCONCLUSIVE',
+    pmid: '12045168',
+    doi: '10.1161/01.CIR.0000017498.88393.44',
+    source: 'Homma S et al. (Circulation 2002;105(22):2625-2631)',
+    listCategory: 'antiplatelets',
+    listDescription: 'TEE substudy of WARSS (N=630). The 98-patient cryptogenic-stroke-with-PFO comparison of low-intensity warfarin against aspirin is a NON-PRESPECIFIED SUBGROUP: 4 of 42 vs 10 of 56, HR 0.52 (95% CI 0.16 to 1.67), P=0.28. Hypothesis-generating only.',
+    // primaryDesign and primaryResult are DELIBERATELY OMITTED. The parent
+    // framework is superiority, but the figure this record displays is a
+    // NON-PRESPECIFIED SUBGROUP OF A SUBSTUDY. Declaring binary-superiority
+    // here would drive a superiority frame around a subgroup hazard ratio,
+    // which packet §8 forbids in exactly those words. Following the in-schema
+    // estimation-strategy precedent and the prima-trial precedent above, both
+    // fields are left null and the design is carried in prose on every surface.
+    // No `calculations` block: NNT is prohibited (see cluster header).
+    inclusionCriteria: [
+      'Enrolled in WARSS: non-cardioembolic ischemic stroke, excluding atrial fibrillation and extracranial carotid stenosis',
+      'Underwent transesophageal echocardiography (referral was clinician-driven, not protocolised)',
+      'For the published subgroup: cryptogenic stroke subtype AND a patent foramen ovale on TEE',
+    ],
+    exclusionCriteria: [
+      'Atrial fibrillation (excluded by the parent trial)',
+      'Extracranial carotid stenosis (excluded by the parent trial)',
+      'Cardioembolic stroke mechanism',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: 'Verifier-confirmed inclusion',
+          items: [
+            'Enrolled in WARSS: non-cardioembolic ischemic stroke',
+            'Underwent transesophageal echocardiography as part of the PICSS substudy (630 of the WARSS cohort, 42 US centres, 1993 to 2000)',
+            'For the subgroup NeuroWiki publishes: cryptogenic stroke subtype AND a patent foramen ovale on TEE (98 patients, warfarin 42 and aspirin 56)',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Verifier-confirmed exclusion (parent trial)',
+          items: [
+            'Atrial fibrillation',
+            'Extracranial carotid stenosis',
+          ],
+        },
+        {
+          label: 'Remaining exclusions (not recoverable)',
+          items: [
+            'The full published exclusion list was not retrieved: ahajournals.org returned 403 to the evidence-verifier on 2026-07-31 and the PICSS and WARSS full texts were not read. Read this as a gap in what NeuroWiki can source, not as an absence of exclusion criteria in the trial.',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1161/01.CIR.0000017498.88393.44',
+      sourceLabel: 'Homma S et al., Circulation 2002;105(22):2625-2631; parent Mohr JP et al., N Engl J Med 2001;345(20):1444-1451. Via docs/evidence-packets/2026-07-31-pfo-anticoagulation.md (partial: verifier-confirmed criteria only, secondary extraction)',
+      retrieved: '2026-07-31',
+    },
+    armDetails: [
+      {
+        arm: 'Low-intensity warfarin',
+        role: 'intervention',
+        agent: 'Warfarin',
+        dose: 'Titrated to a target INR of 1.4 to 2.8',
+        route: 'Oral',
+        frequency: 'Daily, dose-adjusted',
+        duration: '2 years',
+        note: 'THE governing caveat on this trial. This is LOW-INTENSITY anticoagulation. It is not the INR 2 to 3 used in CLOSE and it is not a direct oral anticoagulant, so PICSS supports no inference about standard-intensity vitamin K antagonism or about any DOAC.',
+      },
+      {
+        arm: 'Aspirin',
+        role: 'control',
+        agent: 'Aspirin',
+        dose: '325 mg daily',
+        route: 'Oral',
+        frequency: 'Daily',
+        duration: '2 years',
+        note: 'Double-blind against warfarin in the parent WARSS design.',
+      },
+    ],
+    intervention: {
+      treatment: 'Low-intensity warfarin, target INR 1.4 to 2.8. Not modern-intensity anticoagulation and not a DOAC.',
+      control: 'Aspirin 325 mg daily. Double-blind.',
+    },
+    stats: {
+      sampleSize: {
+        value: '98',
+        label: 'Cryptogenic stroke with PFO (warfarin 42 : aspirin 56), within a 630-patient TEE substudy',
+        info: 'PICSS enrolled 630 WARSS patients (warfarin 312, aspirin 318) and detected a PFO in 203 of 630 (33.8%). The comparison NeuroWiki displays is the 98-patient cryptogenic-stroke-with-PFO cell, which is a non-prespecified subgroup of that substudy.',
+      },
+      primaryEndpoint: {
+        value: 'SUBGROUP, NOT A PRIMARY',
+        label: 'Recurrent ischemic stroke or death from any cause within 2 years: 4 of 42 (9.5%) with warfarin vs 10 of 56 (17.9%) with aspirin',
+        info: 'The parent primary endpoint was "recurrent ischemic stroke or death from any cause within two years." The cryptogenic-stroke-with-PFO comparison shown here is a NON-PRESPECIFIED SUBGROUP OF A SUBSTUDY and must never be read as a primary result.',
+      },
+      pValue: {
+        value: '0.28',
+        label: 'Warfarin vs aspirin in the cryptogenic-stroke-with-PFO subgroup (not significant)',
+        highlight: true,
+      },
+      effectSize: {
+        value: 'HR 0.52 (0.16 to 1.67)',
+        label: 'Recurrent ischemic stroke or death at 2 years (non-prespecified subgroup)',
+        info: '14 events across 98 patients. The interval spans a large benefit and a large harm. No NNT is computed: the comparison is a non-prespecified subgroup of a substudy and the interval includes 1.',
+        highlight: true,
+      },
+    },
+    trialDesign: {
+      type: [
+        'Transesophageal-echocardiography SUBSTUDY of the WARSS randomized trial, not a standalone trial',
+        'Parent design: double-blind randomized comparison of low-intensity warfarin (INR 1.4 to 2.8) against aspirin 325 mg daily',
+        'Parent population: non-cardioembolic ischemic stroke, excluding atrial fibrillation and extracranial carotid stenosis',
+        'TEE referral was clinician-driven rather than protocolised, so PICSS is a SELECTED subset of WARSS',
+        'The cryptogenic-stroke-with-PFO comparison is a NON-PRESPECIFIED SUBGROUP of that substudy',
+        'Parent primary endpoint: recurrent ischemic stroke or death from any cause within two years',
+      ],
+      timeline: '42 US centres, enrolled 1993 to 2000; 2-year follow-up. Published Circulation 2002;105(22):2625-2631',
+    },
+    // Percentages here are the 2-year composite of recurrent ischemic stroke or
+    // death within the 98-patient cryptogenic-stroke-with-PFO cell. They are a
+    // SUBGROUP, not a primary result. The render block must carry the subgroup
+    // disclaimer alongside any visualization of these two values.
+    efficacyResults: {
+      treatment: { percentage: 9.5, label: 'Recurrent ischemic stroke or death at 2 years (4 of 42, non-prespecified subgroup)', name: 'Low-Intensity Warfarin' },
+      control: { percentage: 17.9, label: 'Recurrent ischemic stroke or death at 2 years (10 of 56, non-prespecified subgroup)', name: 'Aspirin 325 mg' },
+    },
+    designDisclaimer: {
+      category: 'other',
+      text: 'The PFO comparison is a non-prespecified subgroup of a TEE substudy, not a trial result, and the anticoagulant was low-intensity warfarin (INR 1.4 to 2.8), not modern anticoagulation.',
+      source: 'Homma S et al., Circulation 2002;105(22):2625-2631; parent Mohr JP et al., NEJM 2001;345(20):1444-1451; docs/evidence-packets/2026-07-31-pfo-anticoagulation.md §2',
+    },
+    safetyData: 'No safety or bleeding data were obtained for the PFO subgroup at any level, so none are stated here. Nothing on this page should be read as evidence that low-intensity warfarin was safe in this population. The bleeding evidence that does apply to the anticoagulation-versus-antiplatelet question comes from the pooled analyses, and it points away from anticoagulation: bleeding was higher with anticoagulation in two independent meta-analyses (Chi 2025, RR 1.69, 95% CI 1.18 to 2.43 for major bleeding other than intracranial haemorrhage; Hariharan 2022, RR 1.57, 95% CI 1.26 to 1.97).',
+    clinicalContext: 'PICSS is the transesophageal-echocardiography substudy of WARSS, and it is the oldest of the four randomized datasets people reach for when asked whether anticoagulation beats antiplatelet therapy in PFO-associated cryptogenic stroke. It enrolled 630 WARSS patients at 42 US centres between 1993 and 2000 and found a PFO in 203 of them (33.8%). The comparison that gets quoted lives inside a single cell of that substudy: the 98 patients who had both a cryptogenic stroke and a PFO, 42 assigned to warfarin and 56 to aspirin. Over 2 years, recurrent ischemic stroke or death occurred in 4 of 42 (9.5%) on warfarin and 10 of 56 (17.9%) on aspirin, HR 0.52 (95% CI 0.16 to 1.67), P=0.28. Two facts govern how far that number travels. It is a non-prespecified subgroup of a substudy, resting on 14 events. And the anticoagulant was low-intensity warfarin, target INR 1.4 to 2.8, which is neither the INR 2 to 3 used in CLOSE nor any direct oral anticoagulant. The headline finding of PICSS was not about treatment at all: having a PFO did not raise the risk of recurrence on medical therapy, either overall (HR 0.96, 95% CI 0.62 to 1.48) or within cryptogenic stroke (HR 1.17, 95% CI 0.60 to 2.37).',
+    keyMessage: 'PICSS cannot answer whether anticoagulation beats antiplatelet therapy in PFO-associated cryptogenic stroke. The 4 of 42 versus 10 of 56 comparison is a non-prespecified subgroup of a substudy, built on 14 events, with a confidence interval running from 0.16 to 1.67, and the anticoagulant was low-intensity warfarin at INR 1.4 to 2.8. What PICSS does establish is that on medical therapy, having a PFO did not raise 2-year recurrence risk.',
+    pearls: [
+      'PICSS is a SUBSTUDY of WARSS, and the PFO comparison inside it is a NON-PRESPECIFIED SUBGROUP. It is hypothesis-generating only. Do not quote it as a trial result.',
+      'The single most important caveat: WARSS used LOW-INTENSITY warfarin, target INR 1.4 to 2.8. That is not the INR 2 to 3 of CLOSE and it is not a DOAC. PICSS supports no inference about modern anticoagulation.',
+      'The published numbers: recurrent ischemic stroke or death at 2 years in 4 of 42 (9.5%) on warfarin vs 10 of 56 (17.9%) on aspirin, HR 0.52 (95% CI 0.16 to 1.67), P=0.28. Fourteen events decide the whole comparison.',
+      'Two extractions of this subgroup disagree. Turc and colleagues report the composite above; the AAN 2020 advisory reports "recurrent stroke at 2 years" as 2 of 42 (4.8%) vs 8 of 56 (14.3%). Both attach the IDENTICAL hazard ratio and interval to different numerators, which cannot both be right. NeuroWiki publishes the composite because it matches the actual primary endpoint, and records the conflict here.',
+      'TEE referral in PICSS was clinician-driven rather than protocolised, so the substudy is a selected subset of WARSS rather than a random sample of it.',
+      'What PICSS DOES establish, and the part to carry forward: on medical therapy, having a PFO did not raise 2-year recurrence risk, regardless of PFO size or the presence of an atrial septal aneurysm.',
+      'No safety or bleeding data were obtained for the PFO subgroup at any level. Nothing here says low-intensity warfarin was safe in these patients.',
+      'No NNT. A non-prespecified subgroup of a substudy with an interval that includes 1 has no valid superiority absolute risk difference to invert.',
+      'The AAN 2020 advisory (Statement 3a, Level C) treats antiplatelet therapy and anticoagulation as equally acceptable when closure is not chosen. It does not endorse aspirin: its own sentence is that the high end of the confidence interval rules out a clinically important benefit for aspirin.',
+    ],
+    limitations: [
+      'The PFO comparison is a NON-PRESPECIFIED SUBGROUP of a TEE substudy. It was never a primary or a prespecified secondary analysis.',
+      'Ninety-eight patients and 14 events. The confidence interval (0.16 to 1.67) spans a large benefit and a large harm.',
+      'The anticoagulant was low-intensity warfarin (INR 1.4 to 2.8). Results do not transfer to standard-intensity vitamin K antagonism or to any direct oral anticoagulant.',
+      'TEE referral was clinician-driven, not protocolised, so PICSS is a selected subset of WARSS.',
+      'The subgroup numerators conflict between the two available extractions (4 of 42 vs 10 of 56 composite; 2 of 42 vs 8 of 56 stroke-only), and no source separates recurrent stroke from the composite.',
+      'No safety or bleeding data were obtained for the PFO subgroup.',
+      'The full text was not retrieved: ahajournals.org returned 403 to the evidence-verifier, so every figure on this page is secondary extraction at medium confidence.',
+      'Enrolment ran 1993 to 2000, before the modern cryptogenic-stroke workup (prolonged cardiac monitoring, routine vessel imaging) and before the ESUS construct existed.',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'The 2-year rate of recurrent ischemic stroke or death from any cause, in the 98 patients who had both a cryptogenic stroke and a PFO: 4 of 42 (9.5%) on low-intensity warfarin and 10 of 56 (17.9%) on aspirin. Read the two bars as a subgroup, not as a trial result.',
+      },
+      {
+        question: 'What should I look at first?',
+        answer: 'The confidence interval, 0.16 to 1.67, and the fact that 14 events decide the whole comparison. The point estimate favours warfarin and the interval comfortably includes both a large benefit and a large harm.',
+      },
+      {
+        question: 'Why does this not count as evidence that anticoagulation wins?',
+        answer: 'Because of what the comparison is. PICSS is a substudy of WARSS, and this cell inside it is a non-prespecified subgroup. It was never the question either trial was built to answer, and it is hypothesis-generating only.',
+      },
+      {
+        question: 'What kind of anticoagulation was this?',
+        answer: 'Low-intensity warfarin, target INR 1.4 to 2.8. That is the single most important thing to know about this trial. It is not the INR 2 to 3 used in CLOSE and it is not a direct oral anticoagulant, so the result says nothing about how a patient anticoagulated to modern targets would fare.',
+      },
+      {
+        question: 'Why is there no NNT?',
+        answer: 'A non-prespecified subgroup of a substudy whose interval includes 1 has no valid superiority absolute risk difference to invert. The prohibition holds across this whole question: the NNT of 21 computed by the AAN carries a confidence interval of 19 to -60, which includes net harm.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In patients on medical therapy after a non-cardioembolic ischemic stroke, having a patent foramen ovale did not raise the 2-year risk of recurrent stroke or death, regardless of PFO size or the presence of an atrial septal aneurysm (HR 0.96, 95% CI 0.62 to 1.48 overall; HR 1.17, 95% CI 0.60 to 2.37 within cryptogenic stroke). That is what PICSS was designed to look at and what it reported.',
+      doesNotProve: 'It does not prove that warfarin beats aspirin in PFO-associated cryptogenic stroke. That comparison rests on 98 patients and 14 events in a NON-PRESPECIFIED SUBGROUP of a substudy, with a confidence interval of 0.16 to 1.67. It says nothing about standard-intensity anticoagulation or about any direct oral anticoagulant, because the anticoagulant here was low-intensity warfarin at a target INR of 1.4 to 2.8. It is hypothesis-generating only, and that is the correct phrase for it.',
+      cautions: 'Two extractions of this subgroup disagree and both are recorded here. Turc and colleagues report the 2-year composite of recurrent stroke or death as 4 of 42 (9.5%) versus 10 of 56 (17.9%); the AAN 2020 advisory reports "recurrent stroke at 2 years" as 2 of 42 (4.8%) versus 8 of 56 (14.3%). Both attach the identical hazard ratio of 0.52 and the identical interval of 0.16 to 1.67 to different numerators, which cannot both be right, and Turc records that no separate information on recurrent stroke was provided. NeuroWiki publishes the composite because it matches the actual primary endpoint. Five caveats govern this question as a whole and apply to this record. First, not one of the available datasets is an adequately powered trial of the anticoagulation-versus-antiplatelet question; every one is a subgroup or an underpowered arm. Second, every within-trial interaction test is null (NAVIGATE-ESUS p=0.18, RE-SPECT ESUS p=0.8290), and the largest study-level meta-analysis finds no interaction by PFO status either (Chi 2025, p-interaction 0.28). Third, PICSS used low-intensity warfarin (INR 1.4 to 2.8), not modern anticoagulation. Fourth, neither of the two ESUS trials that contribute PFO subgroups mandated transesophageal echocardiography or a bubble study: a PFO was detected in 7.4% of NAVIGATE-ESUS and 12.6% of RE-SPECT ESUS, against the 33.8% PICSS itself found when every substudy patient had a TEE, so those subgroups are incompletely and non-randomly ascertained. Fifth, the efficacy signal is fragile across pooling choices while the bleeding excess is not: the pooled odds ratio moved from 0.48 (95% CI 0.24 to 0.96) in 2018 to 0.70 (95% CI 0.43 to 1.14) in 2021 when RE-SPECT ESUS was added to the same pool by the same method, while bleeding was higher with anticoagulation in two independent analyses (Chi RR 1.69, 95% CI 1.18 to 2.43; Hariharan RR 1.57, 95% CI 1.26 to 1.97). No safety data were obtained for the PFO subgroup, and the full text was not retrieved, so every figure here is secondary extraction at medium confidence.',
+    },
+    educationalContext: 'PICSS is the trial to teach when the question is how much weight a subgroup can carry. It is a substudy: WARSS randomized patients with non-cardioembolic ischemic stroke to low-intensity warfarin or aspirin, and PICSS is the 630 of them who went for a transesophageal echocardiogram. Inside that substudy sits a cell of 98 patients who had both a cryptogenic stroke and a PFO, and inside that cell sits the number people quote: 4 of 42 versus 10 of 56, HR 0.52 (95% CI 0.16 to 1.67), P=0.28. It is a subgroup of a substudy, it was not prespecified, and 14 events decide it. Two further problems sit underneath. TEE referral was clinician-driven rather than protocolised, so the substudy population was selected by the treating team rather than by protocol. And the anticoagulant was warfarin titrated to an INR of 1.4 to 2.8, a target chosen so the parent trial could be run double-blind against aspirin, which is well below what any clinician means today by anticoagulation for a suspected paradoxical embolism. The result is that the oldest and most frequently cited randomized dataset on this question cannot answer it. That is also the pattern for the other three: the CLOSE anticoagulation arm was a parallel comparison the trial was not powered for, and the NAVIGATE-ESUS and RE-SPECT ESUS PFO analyses are subgroups of trials designed around ESUS rather than around PFO. Read PICSS for what it does establish, which is that a PFO did not raise recurrence risk on medical therapy, and read the treatment comparison as the hypothesis it is.',
+    clinicalApplication: 'Do not use PICSS to choose between anticoagulation and antiplatelet therapy. When a patient with a PFO-associated cryptogenic stroke is not having the PFO closed, the AAN 2020 practice advisory (Statement 3a, Level C) states that clinicians may recommend either an antiplatelet medication such as aspirin or anticoagulation with a vitamin K antagonist, a direct thrombin inhibitor, or a factor Xa inhibitor. That is equipoise, not a preference. Antiplatelet therapy is the practical default because it is simpler and safer and because no trial has shown anticoagulation to be better, and the bleeding excess with anticoagulation is the finding in this literature that reproduces. Anticoagulation becomes the preferred choice when there is an independent indication for it: AAN Statement 3b (Level B) covers the patient with suspected or proven hypercoagulability, defined as a defined thrombophilia, an unprovoked deep venous thrombosis, or an unprovoked pulmonary embolism. If a patient or a colleague quotes PICSS at you, the accurate reply is that it is a non-prespecified subgroup of a substudy that used low-intensity warfarin. CLOSE-2 (NCT05387954) is recruiting 792 patients aged 60 to 80 into three arms and will test this directly, with primary completion in July 2031.',
+    applicability: {
+      populationExclusions: [
+        'Patients with atrial fibrillation. WARSS excluded them, and AF-associated stroke is a separate question with its own trials.',
+        'Patients with extracranial carotid stenosis. Excluded by the parent trial.',
+        'Patients with any identified cardioembolic source. The parent trial enrolled non-cardioembolic stroke.',
+        'Any question about PFO CLOSURE. That is a separate indication with separate trials and a separate recommendation.',
+      ],
+      imagingSelection: 'Transesophageal echocardiography, but referral was clinician-driven rather than protocolised, so the substudy is a selected subset of the parent trial rather than a random sample of it.',
+      doseSpecific: 'Warfarin titrated to a target INR of 1.4 to 2.8. This is LOW-INTENSITY anticoagulation. The result does not transfer to standard-intensity vitamin K antagonism (INR 2 to 3) or to any direct oral anticoagulant.',
+      geography: '42 centres in the United States, enrolled 1993 to 2000, before prolonged cardiac monitoring and routine vessel imaging became standard in the cryptogenic-stroke workup.',
+    },
+    legend: {
+      finding: 'Non-prespecified subgroup of a substudy; low-intensity warfarin did not beat aspirin.',
+      bottomLineTag: 'Subgroup only',
+      keyStat: 'HR 0.52 (0.16 to 1.67)',
+    },
+    bedsidePearlClaimId: 'picss-pfo-warfarin-2002',
+    bedsidePearl: 'PICSS (Circulation 2002) cannot answer whether anticoagulation beats aspirin in PFO-associated cryptogenic stroke. The quoted comparison, 4 of 42 (9.5%) vs 10 of 56 (17.9%) for recurrent ischemic stroke or death at 2 years, HR 0.52 (95% CI 0.16 to 1.67), P=0.28, is a NON-PRESPECIFIED SUBGROUP OF A SUBSTUDY resting on 14 events, and the anticoagulant was LOW-INTENSITY warfarin at INR 1.4 to 2.8, not modern anticoagulation. Hypothesis-generating only. The AAN 2020 advisory (Statement 3a, Level C) treats the two agents as equally acceptable. No NNT.',
+    bottomLineSummary: 'PICSS is the TEE substudy of WARSS (630 patients, PFO in 33.8%). Within it, a non-prespecified subgroup of 98 patients with cryptogenic stroke and a PFO showed recurrent ischemic stroke or death at 2 years in 4 of 42 (9.5%) on low-intensity warfarin versus 10 of 56 (17.9%) on aspirin, HR 0.52 (95% CI 0.16 to 1.67), P=0.28. The anticoagulant was warfarin at a target INR of 1.4 to 2.8, so nothing here transfers to standard-intensity anticoagulation or to a DOAC. What PICSS does establish is that a PFO did not raise 2-year recurrence risk on medical therapy.',
+    conclusion: 'PICSS (Homma S et al., Circulation 2002;105(22):2625-2631) is the transesophageal-echocardiography substudy of WARSS (Mohr JP et al., NEJM 2001;345(20):1444-1451), a double-blind randomized comparison of low-intensity warfarin (target INR 1.4 to 2.8) against aspirin 325 mg daily in patients with non-cardioembolic ischemic stroke, excluding atrial fibrillation and extracranial carotid stenosis. PICSS enrolled 630 WARSS patients at 42 US centres between 1993 and 2000 and detected a patent foramen ovale in 203 of them (33.8%). TEE referral was clinician-driven rather than protocolised, so the substudy is a selected subset of the parent trial. The parent primary endpoint was recurrent ischemic stroke or death from any cause within two years. The figure that circulates as evidence on the anticoagulation-versus-antiplatelet question is a NON-PRESPECIFIED SUBGROUP of that substudy: among the 98 patients with both a cryptogenic stroke and a PFO (warfarin 42, aspirin 56), the 2-year endpoint occurred in 4 of 42 (9.5%) versus 10 of 56 (17.9%), HR 0.52 (95% CI 0.16 to 1.67), P=0.28. Fourteen events decide the comparison and the interval spans a large benefit and a large harm. The single most important caveat is the anticoagulant: low-intensity warfarin at a target INR of 1.4 to 2.8 is neither the INR 2 to 3 used in CLOSE nor any direct oral anticoagulant, so PICSS supports no inference about modern anticoagulation. A second caveat is a conflict between the two available extractions: Turc and colleagues report the composite above, while the AAN 2020 advisory reports recurrent stroke at 2 years as 2 of 42 (4.8%) versus 8 of 56 (14.3%), attaching the identical hazard ratio and interval to different numerators; NeuroWiki publishes the composite because it matches the actual primary endpoint and records the conflict rather than resolving it. What PICSS does establish is a different and useful thing: on medical therapy, having a PFO did not raise the chance of an adverse event, either overall (HR 0.96, 95% CI 0.62 to 1.48) or within cryptogenic stroke (HR 1.17, 95% CI 0.60 to 2.37), regardless of PFO size or the presence of an atrial septal aneurysm. No safety or bleeding data were obtained for the PFO subgroup at any level, and the full text was not retrieved (ahajournals.org returned 403), so every figure here is secondary extraction at medium confidence. No NNT is computed: a non-prespecified subgroup of a substudy whose interval includes 1 has no valid superiority absolute risk difference to invert, and the NNT of 21 computed by the AAN for this question carries a confidence interval of 19 to -60 that includes net harm. PICSS sits with the CLOSE anticoagulation arm, the NAVIGATE-ESUS PFO subgroup (Kasner SE et al., Lancet Neurology 2018;17(12):1053-1060) and the RE-SPECT ESUS PFO subgroup (Diener HC et al., Stroke 2021;52(3):1065-1068) in a record where no dataset was designed to answer the question being asked of it. CLOSE-2 (NCT05387954) is recruiting and has a primary completion date of July 2031.',
+  },
+
+  'navigate-esus-trial': {
+    claimId: 'navigate-esus-pfo-2018',
+    id: 'navigate-esus-trial',
+    title: 'NAVIGATE-ESUS (PFO subgroup)',
+    subtitle: 'Rivaroxaban vs Aspirin in the Prespecified Patent Foramen Ovale Subgroup of NAVIGATE-ESUS (Kasner et al., 2018)',
+    category: 'Neuro Trials',
+    trialResult: 'NEGATIVE',
+    pmid: '30274772',
+    doi: '10.1016/S1474-4422(18)30319-3',
+    clinicalTrialsId: 'NCT02313909',
+    source: 'Kasner SE et al. (Lancet Neurology 2018;17(12):1053-1060); parent Hart RG et al. (NEJM 2018;378(23):2191-2201)',
+    listCategory: 'antiplatelets',
+    listDescription: 'Prespecified PFO subgroup (534 of 7,213) of an ESUS trial stopped early for futility plus excess bleeding. Rivaroxaban 15 mg vs aspirin 100 mg: HR 0.54 (95% CI 0.22 to 1.36), p-interaction 0.18, at 45% power.',
+    primaryDesign: 'binary-superiority',
+    // primaryResult 'futility-stopped' describes the PARENT trial, which was
+    // halted at interim for futility plus excess bleeding. The packet §8 table
+    // labels the framework "futility (stopped for futility + bleeding)" and the
+    // result "not met"; both are true and 'futility-stopped' is the enum member
+    // that carries the more informative of the two. The PFO analysis displayed
+    // on this record is a prespecified SUBGROUP of that parent, not a primary.
+    primaryResult: 'futility-stopped',
+    resultSubtype: 'superiority',
+    harmSignal: 'Stopped early for futility plus excess bleeding; parent major bleeding 1.8% vs 0.7% per year with rivaroxaban.',
+    inclusionCriteria: [
+      'Embolic stroke of undetermined source (ESUS)',
+      'For the subgroup: a patent foramen ovale detected during standard workup',
+    ],
+    exclusionCriteria: [
+      'Atrial fibrillation on the monitoring performed before randomization',
+      'An identified cardioembolic, large-artery or small-vessel stroke mechanism (the ESUS construct excludes these by definition)',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: 'Verifier-confirmed inclusion',
+          items: [
+            'Embolic stroke of undetermined source, enrolled at 459 centres in 31 countries',
+            'For the PFO subgroup: a patent foramen ovale detected during workup (534 of 7,213 patients, 7.4%; rivaroxaban 259 and aspirin 275)',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Ascertainment note that functions as an eligibility caveat',
+          items: [
+            'The trial did NOT mandate transesophageal echocardiography or bubble contrast, so entry into the PFO subgroup depended on whichever imaging the enrolling site happened to perform. A 7.4% detected prevalence, against the 33.8% PICSS detected in a cohort that did undergo transesophageal echocardiography, means the subgroup is incompletely and non-randomly ascertained. This is not a PFO-selected population.',
+          ],
+        },
+        {
+          label: 'Remaining exclusions (not recoverable)',
+          items: [
+            'The full published exclusion list was not retrieved by the evidence packet. The ClinicalTrials.gov record (NCT02313909) was not mirrored, following the precedent set for the PFO-for-migraine cluster. Read this as a gap in what NeuroWiki can source, not as an absence of exclusion criteria in the trial.',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1016/S1474-4422(18)30319-3',
+      sourceLabel: 'Kasner SE et al., Lancet Neurology 2018;17(12):1053-1060 (PMCID PMC6662613, read in full); parent Hart RG et al., NEJM 2018;378(23):2191-2201 (NCT02313909). Via docs/evidence-packets/2026-07-31-pfo-anticoagulation.md (partial: verifier-confirmed criteria only)',
+      retrieved: '2026-07-31',
+    },
+    armDetails: [
+      {
+        arm: 'Rivaroxaban',
+        role: 'intervention',
+        agent: 'Rivaroxaban',
+        dose: '15 mg once daily',
+        route: 'Oral',
+        frequency: 'Once daily',
+        note: 'Note the dose. 15 mg once daily is NOT the 20 mg dose used for stroke prevention in atrial fibrillation, so this trial does not test the AF-strength regimen.',
+      },
+      {
+        arm: 'Aspirin',
+        role: 'control',
+        agent: 'Aspirin',
+        dose: '100 mg daily',
+        route: 'Oral',
+        frequency: 'Once daily',
+      },
+    ],
+    intervention: {
+      treatment: 'Rivaroxaban 15 mg once daily. Not the 20 mg dose used in atrial fibrillation.',
+      control: 'Aspirin 100 mg daily.',
+    },
+    stats: {
+      sampleSize: {
+        value: '534',
+        label: 'Patients with a detected PFO (rivaroxaban 259 : aspirin 275), out of 7,213 randomized',
+        info: 'A PFO was detected in 534 of 7,213 patients (7.4%). The trial did not mandate TEE or bubble contrast, so the subgroup is incompletely and non-randomly ascertained: PICSS, which did use transesophageal echocardiography, detected a PFO in 33.8% of its cohort.',
+      },
+      primaryEndpoint: {
+        value: 'PRESPECIFIED SUBGROUP, 45% POWER',
+        label: 'Recurrent ischaemic stroke in the PFO subgroup: 7 events on rivaroxaban (2.6 per 100 patient-years) vs 13 on aspirin (4.8 per 100 patient-years)',
+        info: 'The subgroup analysis was prespecified, described by the authors as planned before completion of the trial. It had 45% power. The parent trial was stopped early at interim for futility plus excess bleeding.',
+      },
+      pValue: {
+        value: '0.18',
+        label: 'Interaction between PFO status and treatment effect (null)',
+        highlight: true,
+      },
+      effectSize: {
+        value: 'HR 0.54 (0.22 to 1.36)',
+        label: 'Recurrent ischaemic stroke, PFO subgroup (prespecified, 45% power)',
+        info: 'Twenty events across 534 patients. The authors record that substantial imprecision remains and that the results should be interpreted with caution. No NNT: this is an underpowered subgroup of a trial stopped for futility, and the interval includes 1.',
+        highlight: true,
+      },
+    },
+    trialDesign: {
+      type: [
+        'Prespecified PFO subgroup of NAVIGATE-ESUS, a randomized superiority trial of rivaroxaban 15 mg once daily against aspirin 100 mg daily',
+        'Parent population: 7,213 patients with embolic stroke of undetermined source at 459 centres in 31 countries',
+        'Parent trial TERMINATED EARLY at interim analysis for FUTILITY PLUS EXCESS BLEEDING; median follow-up 11 months',
+        'The subgroup analysis was prespecified, described by the authors as planned before completion of the trial',
+        'Subgroup power 45%; the authors state that substantial imprecision remains',
+        'The trial did NOT mandate transesophageal echocardiography or bubble contrast, so PFO ascertainment is incomplete and non-random',
+      ],
+      timeline: 'Median follow-up 11 months after early termination. Subgroup published Lancet Neurology 2018;17(12):1053-1060; parent NEJM 2018;378(23):2191-2201',
+    },
+    // WARNING TO THE RENDER BLOCK: these values are EVENTS PER 100
+    // PATIENT-YEARS, not percentages. Do not append a percent sign and do not
+    // use a 0 to 100 axis for them. Same class of hazard as the days-per-month
+    // values on prima-trial above.
+    efficacyResults: {
+      treatment: { percentage: 2.6, label: 'Recurrent ischaemic stroke, events per 100 patient-years (7 events; RATE, not percent)', name: 'Rivaroxaban 15 mg' },
+      control: { percentage: 4.8, label: 'Recurrent ischaemic stroke, events per 100 patient-years (13 events; RATE, not percent)', name: 'Aspirin 100 mg' },
+    },
+    designDisclaimer: {
+      category: 'stopped-early-futility',
+      text: 'The parent trial was stopped early at interim for futility plus excess bleeding, with a median follow-up of 11 months. The PFO subgroup was prespecified but had only 45% power, and the authors record that substantial imprecision remains.',
+      source: 'Kasner SE et al., Lancet Neurology 2018;17(12):1053-1060; parent Hart RG et al., NEJM 2018;378(23):2191-2201',
+    },
+    safetyData: 'Major bleeding in the PFO subgroup was directionally toward harm and wildly imprecise: HR 2.05 (95% CI 0.51 to 8.18). That interval spans a halving and an eight-fold increase, so the subgroup figure carries no usable precision and is never quoted without it. The fact that governs at the bedside comes from the parent trial, where major bleeding was significantly higher with rivaroxaban at 1.8% per year versus 0.7% per year, and where excess bleeding was one of the two reasons the trial was stopped at interim analysis. The bleeding direction is the reproducible finding across this literature: two independent pooled analyses put bleeding higher with anticoagulation (Chi 2025, RR 1.69, 95% CI 1.18 to 2.43 for major bleeding other than intracranial haemorrhage; Hariharan 2022, RR 1.57, 95% CI 1.26 to 1.97).',
+    clinicalContext: 'NAVIGATE-ESUS randomized 7,213 patients with embolic stroke of undetermined source to rivaroxaban 15 mg once daily or aspirin 100 mg daily, and it was stopped early at interim analysis for futility plus excess bleeding, with a median follow-up of 11 months. Inside it sits the prespecified PFO subgroup that people cite on the anticoagulation-versus-antiplatelet question: 534 of the 7,213 patients (7.4%) had a detected PFO, and among them recurrent ischaemic stroke occurred at 2.6 per 100 patient-years on rivaroxaban and 4.8 per 100 patient-years on aspirin, HR 0.54 (95% CI 0.22 to 1.36), with a null interaction (p=0.18). Three things bound that number, and the authors state all three themselves. The subgroup had 45% power because the trial stopped early, the results should be interpreted with caution, and substantial imprecision remains. A fourth thing bounds it from outside: the trial never mandated transesophageal echocardiography or bubble contrast, so a detected prevalence of 7.4% against the 33.8% PICSS detected in a cohort that did undergo transesophageal echocardiography means the subgroup was assembled by whichever imaging each site happened to order. This paper also carries the single strongest number in this literature, a meta-analysis pooling this subgroup with PICSS and CLOSE that returned OR 0.48 (95% CI 0.24 to 0.96). It did not survive the next trial.',
+    keyMessage: 'The NAVIGATE-ESUS PFO subgroup was prespecified, which is more than can be said for PICSS, but it had 45% power in a trial stopped early for futility plus excess bleeding, and its interaction test was null (p=0.18). HR 0.54 (95% CI 0.22 to 1.36) on 20 events. The pooled OR 0.48 (95% CI 0.24 to 0.96) reported in the same paper moved to OR 0.70 (95% CI 0.43 to 1.14) once RE-SPECT ESUS was added to the same pool.',
+    pearls: [
+      'The PFO subgroup here WAS prespecified, described by the authors as planned before completion of the trial. That distinguishes it from PICSS, and it still is not enough.',
+      'Forty-five percent power, stated by the authors, because the trial was stopped early. They also write that the results should be interpreted with caution and that substantial imprecision remains.',
+      'HR 0.54 (95% CI 0.22 to 1.36) on 20 events: 7 on rivaroxaban (2.6 per 100 patient-years) vs 13 on aspirin (4.8 per 100 patient-years). The interaction test with PFO status was null, p=0.18.',
+      'The parent trial was stopped at interim for FUTILITY PLUS EXCESS BLEEDING. Both halves matter: it was not going to work, and it was causing harm while not working.',
+      'Major bleeding in the PFO subgroup was HR 2.05 (95% CI 0.51 to 8.18). Never quote that figure without the interval; it spans a halving and an eight-fold increase. The parent-trial excess (1.8% vs 0.7% per year) is the fact that governs at the bedside.',
+      'Note the dose: rivaroxaban 15 mg once daily, not the 20 mg used in atrial fibrillation. This trial does not test the AF-strength regimen.',
+      'Ascertainment: a PFO was detected in 7.4% of patients because no TEE or bubble study was mandated, against the 33.8% PICSS detected in a cohort that did undergo transesophageal echocardiography. This is not a PFO-selected population.',
+      'The meta-analysis inside this paper pooled PICSS, CLOSE and this subgroup and returned OR 0.48 (95% CI 0.24 to 0.96, p=0.04). It is the strongest single number in the record and it did NOT survive: adding RE-SPECT ESUS to the same pool by the same method returned OR 0.70 (95% CI 0.43 to 1.14). Quote the two together or neither.',
+      'A formal correction to this article was published (Lancet Neurology 2018;17(12):e1, PMID 30366869). Its substance was not obtained, so nothing beyond its existence can be characterised.',
+      'No NNT. An underpowered subgroup of a futility-stopped trial has no valid superiority absolute risk difference to invert.',
+    ],
+    limitations: [
+      'Forty-five percent power for the subgroup, stated by the authors, following early termination of the parent trial.',
+      'The parent trial was stopped at interim analysis for futility plus excess bleeding; median follow-up was 11 months.',
+      'The interaction between PFO status and treatment effect was null (p=0.18), so the subgroup point estimate is not evidence that PFO patients respond differently.',
+      'Twenty events across 534 patients. The confidence interval (0.22 to 1.36) includes 1.',
+      'PFO ascertainment was incomplete and non-random: no TEE or bubble study was mandated and only 7.4% were detected, against the 33.8% PICSS detected in a cohort that did undergo transesophageal echocardiography.',
+      'Major bleeding in the subgroup (HR 2.05, 95% CI 0.51 to 8.18) is too imprecise to act on and must never be shown without its interval.',
+      'Rivaroxaban 15 mg once daily is not the 20 mg dose used in atrial fibrillation, so the result does not transfer to that regimen.',
+      'A formal correction to this article exists (Lancet Neurology 2018;17(12):e1); its content was not obtained, so every figure here is provisional against it.',
+      'The full published inclusion and exclusion criteria were not retrieved. The eligibility shown here is the verifier-confirmed subset.',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'Rates, not percentages. Each value is recurrent ischaemic stroke in events per 100 patient-years within the PFO subgroup: 2.6 on rivaroxaban (7 events) and 4.8 on aspirin (13 events). Read the scale as a rate per 100 patient-years.',
+      },
+      {
+        question: 'What should I look at first?',
+        answer: 'Two numbers side by side. The hazard ratio is 0.54 with an interval of 0.22 to 1.36, and the interaction test with PFO status is 0.18. A point estimate that looks favourable next to a null interaction test is the textbook weak-subgroup pattern, and this one sits on 20 events.',
+      },
+      {
+        question: 'Was this subgroup prespecified?',
+        answer: 'Yes. The authors describe it as planned before completion of the trial, which puts it ahead of PICSS on that axis. It still had only 45% power, because the parent trial was stopped early, and the authors themselves write that substantial imprecision remains.',
+      },
+      {
+        question: 'What about the pooled odds ratio of 0.48 from this paper?',
+        answer: 'It is real, it is the strongest single number in this literature, and it did not survive. Pooling PICSS, CLOSE and this subgroup gave OR 0.48 (95% CI 0.24 to 0.96, p=0.04). Adding RE-SPECT ESUS to the same pool by the same method in 2021 returned OR 0.70 (95% CI 0.43 to 1.14), which is not significant. NeuroWiki shows the two together everywhere, because showing 0.48 alone is selective reporting.',
+      },
+      {
+        question: 'Why is the bleeding hazard ratio shown with such a wide interval?',
+        answer: 'Because that is what it is. Major bleeding in the PFO subgroup was HR 2.05 (95% CI 0.51 to 8.18), which spans a halving and an eight-fold increase. It points toward harm and it carries no usable precision, so it appears only with the interval attached. The number to act on is the parent trial: major bleeding 1.8% per year with rivaroxaban versus 0.7% with aspirin.',
+      },
+      {
+        question: 'Why is there no NNT?',
+        answer: 'An underpowered subgroup of a trial stopped for futility has no valid superiority absolute risk difference to invert. The prohibition holds across this whole question: the NNT of 21 computed by the AAN carries a confidence interval of 19 to -60, which includes net harm.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In the 534 patients with embolic stroke of undetermined source and a detected patent foramen ovale within NAVIGATE-ESUS, rivaroxaban 15 mg once daily did not significantly reduce recurrent ischaemic stroke compared with aspirin 100 mg: 7 events (2.6 per 100 patient-years) versus 13 (4.8 per 100 patient-years), HR 0.54 (95% CI 0.22 to 1.36), with a null interaction by PFO status (p=0.18). The subgroup analysis was prespecified. The parent trial was stopped early at interim for futility plus excess bleeding.',
+      doesNotProve: 'It does not show that anticoagulation works in PFO-associated stroke. The subgroup had 45% power by the account of the authors, the interval includes 1, the interaction test is null, and 20 events decide it. It does not describe a PFO-selected population, because no TEE or bubble study was mandated and only 7.4% of patients had a PFO detected. It does not test the 20 mg rivaroxaban dose used in atrial fibrillation. And the pooled OR 0.48 (95% CI 0.24 to 0.96) reported in the same paper does not establish benefit either: adding RE-SPECT ESUS to that pool moved it to OR 0.70 (95% CI 0.43 to 1.14).',
+      cautions: 'Show the pooled OR 0.48 only alongside the OR 0.70 that replaced it. Showing the first without the second is selective reporting, and the decay is the more informative fact: the signal did not survive the next trial. Show the subgroup major-bleeding HR of 2.05 only with its interval of 0.51 to 8.18 in the same sentence. A formal correction to this article was published (Lancet Neurology 2018;17(12):e1, PMID 30366869) and its content was not obtained, so every figure here is provisional against it; nothing beyond the existence of that correction may be characterised. Five caveats govern this question as a whole and apply to this record. First, not one of the available datasets is an adequately powered trial of the anticoagulation-versus-antiplatelet question; every one is a subgroup or an underpowered arm. Second, every within-trial interaction test is null (NAVIGATE-ESUS p=0.18, RE-SPECT ESUS p=0.8290), and the largest study-level meta-analysis finds no interaction by PFO status either (Chi 2025, p-interaction 0.28). Third, PICSS used low-intensity warfarin (INR 1.4 to 2.8), not modern anticoagulation. Fourth, neither ESUS trial mandated transesophageal echocardiography or a bubble study: a PFO was detected in 7.4% of NAVIGATE-ESUS and 12.6% of RE-SPECT ESUS, against the 33.8% PICSS found when every substudy patient had a TEE, so those subgroups are incompletely and non-randomly ascertained. Fifth, the efficacy signal is fragile across pooling choices while the bleeding excess is not: the pooled odds ratio moved from 0.48 (95% CI 0.24 to 0.96) in 2018 to 0.70 (95% CI 0.43 to 1.14) in 2021 when RE-SPECT ESUS was added to the same pool by the same method, while bleeding was higher with anticoagulation in two independent analyses (Chi RR 1.69, 95% CI 1.18 to 2.43; Hariharan RR 1.57, 95% CI 1.26 to 1.97).',
+    },
+    educationalContext: 'The NAVIGATE-ESUS PFO subgroup is where the anticoagulation signal looks most convincing, so it is the one worth reading most carefully. Everything about its framing is better than PICSS: it was prespecified rather than assembled after the fact, it comes from a 7,213-patient trial rather than a substudy, and its hazard ratio of 0.54 is in the same direction as every other estimate on this question. Then the qualifiers arrive, and the authors supply them themselves. The parent trial was stopped at interim for futility plus excess bleeding, which left the subgroup at 45% power, and the paper states that the results should be interpreted with caution and that substantial imprecision remains. The interaction test is null at 0.18, which means the data do not show that PFO patients respond differently from everyone else in the trial, and everyone else in the trial did not benefit. Twenty events carry the estimate. Underneath sits an ascertainment problem that no amount of statistical care can fix: the trial never required a TEE or a bubble study, so a PFO was recorded in 7.4% of patients against the 33.8% PICSS detected in a cohort that did undergo transesophageal echocardiography, which means the subgroup was built by whichever imaging each site happened to order rather than by protocol. The last part of this paper is the part that has aged most instructively. Its authors pooled PICSS, the CLOSE anticoagulation arm and this subgroup and reported OR 0.48 (95% CI 0.24 to 0.96, p=0.04) with no heterogeneity, the strongest number this literature has produced. Three years later, adding RE-SPECT ESUS to the same pool by the same method returned OR 0.70 (95% CI 0.43 to 1.14). The signal was not robust to the next trial, which is what a fragile signal looks like from the inside.',
+    clinicalApplication: 'Do not start anticoagulation for a PFO-associated cryptogenic stroke on the strength of this subgroup. It is prespecified, underpowered, null on interaction, and it comes from a trial that was stopped because the drug was not working and was causing bleeding. When PFO closure is not chosen, the AAN 2020 practice advisory (Statement 3a, Level C) states that clinicians may recommend either an antiplatelet medication such as aspirin or anticoagulation with a vitamin K antagonist, a direct thrombin inhibitor, or a factor Xa inhibitor. Antiplatelet therapy is the practical default because it is simpler and safer and because no trial has shown anticoagulation to be better, and because the bleeding excess is the finding that reproduces while the efficacy signal is the one that decays. Anticoagulation becomes preferred when there is an independent indication: AAN Statement 3b (Level B) addresses the patient with a defined thrombophilia, an unprovoked deep venous thrombosis, or an unprovoked pulmonary embolism. If a colleague quotes the pooled OR 0.48 at you, the complete answer is that the same pool returned 0.70 once RE-SPECT ESUS was added. CLOSE-2 (NCT05387954) is recruiting 792 patients aged 60 to 80 into three arms, with primary completion in July 2031.',
+    applicability: {
+      populationExclusions: [
+        'Patients with atrial fibrillation. The ESUS construct excludes AF detected before randomization, and AF-associated stroke is a separate question with its own trials.',
+        'Patients with an identified large-artery, small-vessel or cardioembolic mechanism. ESUS excludes them by definition.',
+        'Any patient in whom the PFO was confirmed on protocolised TEE with bubble study. This trial did not require one, so its subgroup is not equivalent to a TEE-selected population.',
+        'Any question about PFO CLOSURE. That is a separate indication with separate trials and a separate recommendation.',
+      ],
+      imagingSelection: 'None mandated. The trial did not require transesophageal echocardiography or bubble contrast, so PFO ascertainment depended on local practice and a PFO was detected in only 7.4% of patients.',
+      doseSpecific: 'Rivaroxaban 15 mg once daily, not the 20 mg once-daily dose used for stroke prevention in atrial fibrillation. The result does not transfer to that regimen.',
+      geography: '459 centres in 31 countries.',
+    },
+    legend: {
+      finding: 'Prespecified PFO subgroup at 45% power, in a trial stopped for futility and bleeding.',
+      bottomLineTag: 'Underpowered',
+      keyStat: 'HR 0.54 (0.22 to 1.36)',
+    },
+    bedsidePearlClaimId: 'navigate-esus-pfo-2018',
+    bedsidePearl: 'NAVIGATE-ESUS PFO subgroup (Lancet Neurol 2018): rivaroxaban 15 mg vs aspirin 100 mg in the 534 of 7,213 patients (7.4%) with a detected PFO. HR 0.54 (95% CI 0.22 to 1.36) on 20 events, p-interaction 0.18. The subgroup WAS prespecified but had 45% POWER, in a parent trial stopped early for FUTILITY PLUS EXCESS BLEEDING (parent major bleeding 1.8% vs 0.7% per year). Subgroup major bleeding HR 2.05 (95% CI 0.51 to 8.18), too imprecise to act on. The pooled OR 0.48 (95% CI 0.24 to 0.96) reported in this paper became OR 0.70 (95% CI 0.43 to 1.14) once RE-SPECT ESUS was added to the same pool. No NNT.',
+    bottomLineSummary: 'In the prespecified PFO subgroup of NAVIGATE-ESUS (534 of 7,213 patients, 7.4% detected), rivaroxaban 15 mg once daily gave 7 recurrent ischaemic strokes (2.6 per 100 patient-years) against 13 on aspirin 100 mg (4.8 per 100 patient-years), HR 0.54 (95% CI 0.22 to 1.36), p-interaction 0.18. The subgroup had 45% power because the parent trial was stopped early for futility plus excess bleeding, and the authors record that substantial imprecision remains. The pooled OR 0.48 (95% CI 0.24 to 0.96) reported in the same paper moved to OR 0.70 (95% CI 0.43 to 1.14) when RE-SPECT ESUS was added.',
+    conclusion: 'The NAVIGATE-ESUS PFO subgroup (Kasner SE et al., Lancet Neurology 2018;17(12):1053-1060) is a PRESPECIFIED subgroup analysis, described by the authors as planned before completion of the trial, drawn from the parent trial of Hart RG and colleagues (NEJM 2018;378(23):2191-2201, NCT02313909), which randomized 7,213 patients with embolic stroke of undetermined source at 459 centres in 31 countries to rivaroxaban 15 mg once daily or aspirin 100 mg daily and was TERMINATED EARLY at interim analysis for FUTILITY PLUS EXCESS BLEEDING, with a median follow-up of 11 months. A patent foramen ovale was detected in 534 of the 7,213 patients (7.4%): rivaroxaban 259, aspirin 275. Recurrent ischaemic stroke occurred in 7 patients on rivaroxaban (2.6 per 100 patient-years) and 13 on aspirin (4.8 per 100 patient-years), HR 0.54 (95% CI 0.22 to 1.36), with a null interaction by PFO status (p=0.18). The authors state the power limit directly: because of early termination the power of the subgroup study was limited to 45%, the results should be interpreted with caution, and substantial imprecision remains. Ascertainment is the second structural limit. The trial did not mandate transesophageal echocardiography or bubble contrast, so a detected prevalence of 7.4% against the 33.8% PICSS detected in a cohort that did undergo transesophageal echocardiography means the subgroup was assembled non-randomly and is not a PFO-selected population. Safety in the subgroup points toward harm without usable precision: major bleeding HR 2.05 (95% CI 0.51 to 8.18), an interval spanning a halving and an eight-fold increase, which is never quoted without it. The parent-trial figure is the one that governs at the bedside: major bleeding was significantly higher with rivaroxaban at 1.8% per year versus 0.7% per year, and excess bleeding was one of the two reasons the trial was stopped. This paper also reports a meta-analysis pooling PICSS, the CLOSE anticoagulation arm and this subgroup, returning OR 0.48 (95% CI 0.24 to 0.96, p=0.04) with I-squared of 0%. That is the strongest single number in this literature and it did not survive: adding RE-SPECT ESUS to the same pool by the same method returned OR 0.70 (95% CI 0.43 to 1.14) in 2021 (Diener HC et al., Stroke 2021;52(3):1065-1068). NeuroWiki shows those two figures together on every surface, because showing 0.48 alone is selective reporting. Note the dose: rivaroxaban 15 mg once daily is not the 20 mg used for stroke prevention in atrial fibrillation. A formal correction to this article was published (Lancet Neurology 2018;17(12):e1, PMID 30366869); its substance was not obtained, so every figure here is provisional against it and nothing beyond its existence may be characterised. No NNT is computed: an underpowered subgroup of a futility-stopped trial has no valid superiority absolute risk difference to invert, and the NNT of 21 computed by the AAN for this question carries a confidence interval of 19 to -60 that includes net harm. CLOSE-2 (NCT05387954) is recruiting and has a primary completion date of July 2031.',
+  },
+
+  'respect-esus-trial': {
+    claimId: 'respect-esus-pfo-2021',
+    id: 'respect-esus-trial',
+    title: 'RE-SPECT ESUS (PFO subgroup)',
+    subtitle: 'Dabigatran vs Aspirin in the Patent Foramen Ovale Subgroup of RE-SPECT ESUS (Diener et al., Stroke 2021)',
+    category: 'Neuro Trials',
+    trialResult: 'NEGATIVE',
+    pmid: '33504190',
+    doi: '10.1161/STROKEAHA.120.031237',
+    clinicalTrialsId: 'NCT02239120',
+    source: 'Diener HC et al. (Stroke 2021;52(3):1065-1068); parent Diener HC et al. (NEJM 2019;380(20):1906-1917)',
+    listCategory: 'antiplatelets',
+    listDescription: 'PFO subgroup (680 of 5,388, 12.6%) of RE-SPECT ESUS. Interaction with treatment null at p=0.8290. Per-arm event rates were never published; the HR 0.88 (95% CI 0.45 to 1.71) that circulates is an AAN 2020 extraction.',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'not-met',
+    resultSubtype: 'superiority',
+    // primaryDesign/primaryResult describe the PARENT trial, which ran to
+    // completion and missed its primary. The PFO analysis on this record is a
+    // SUBGROUP whose prespecification could NOT be established by the evidence
+    // packet; the record never claims it was prespecified.
+    inclusionCriteria: [
+      'Embolic stroke of undetermined source (ESUS)',
+      'For the subgroup: a patent foramen ovale detected during standard workup',
+    ],
+    exclusionCriteria: [
+      'Atrial fibrillation on the monitoring performed before randomization',
+      'An identified cardioembolic, large-artery or small-vessel stroke mechanism (the ESUS construct excludes these by definition)',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: 'Verifier-confirmed inclusion',
+          items: [
+            'Embolic stroke of undetermined source; 5,390 patients randomized',
+            'For the PFO subgroup: a patent foramen ovale detected during workup (680 of 5,388 patients with PFO status recorded, 12.6%)',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Ascertainment note that functions as an eligibility caveat',
+          items: [
+            'The trial did NOT mandate transesophageal echocardiography or bubble contrast, so entry into the PFO subgroup depended on whichever imaging the enrolling site happened to perform. A 12.6% detected prevalence, against the 33.8% PICSS detected in a cohort that did undergo transesophageal echocardiography, means the subgroup is incompletely and non-randomly ascertained. This is not a PFO-selected population.',
+          ],
+        },
+        {
+          label: 'Remaining exclusions (not recoverable)',
+          items: [
+            'The full published exclusion list was not retrieved by the evidence packet. The ClinicalTrials.gov record (NCT02239120) was not mirrored, following the precedent set for the PFO-for-migraine cluster. Read this as a gap in what NeuroWiki can source, not as an absence of exclusion criteria in the trial.',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1161/STROKEAHA.120.031237',
+      sourceLabel: 'Diener HC et al., Stroke 2021;52(3):1065-1068; parent Diener HC et al., NEJM 2019;380(20):1906-1917 (NCT02239120). Via docs/evidence-packets/2026-07-31-pfo-anticoagulation.md (partial: verifier-confirmed criteria only)',
+      retrieved: '2026-07-31',
+    },
+    armDetails: [
+      {
+        arm: 'Dabigatran',
+        role: 'intervention',
+        agent: 'Dabigatran etexilate',
+        dose: '150 mg or 110 mg twice daily',
+        route: 'Oral',
+        frequency: 'Twice daily',
+        note: 'Both dose strata were used in the parent trial. Safety was not presented for the PFO subgroup; overall, clinically relevant non-major bleeding was more common with dabigatran.',
+      },
+      {
+        arm: 'Aspirin',
+        role: 'control',
+        agent: 'Aspirin',
+        dose: '100 mg daily',
+        route: 'Oral',
+        frequency: 'Once daily',
+      },
+    ],
+    intervention: {
+      treatment: 'Dabigatran 150 mg or 110 mg twice daily.',
+      control: 'Aspirin 100 mg daily.',
+    },
+    stats: {
+      sampleSize: {
+        value: '680',
+        label: 'Patients with a detected PFO, out of 5,388 with PFO status recorded (12.6%)',
+        info: 'The parent trial randomized 5,390 patients. The trial did not mandate TEE or bubble contrast, so the subgroup is incompletely and non-randomly ascertained: PICSS, which did use transesophageal echocardiography, detected a PFO in 33.8% of its cohort.',
+      },
+      primaryEndpoint: {
+        value: 'SUBGROUP, INTERACTION NULL',
+        label: 'PFO-by-treatment interaction p=0.8290. Per-arm event rates were never published for this subgroup.',
+        info: 'The parent trial ran to completion and its primary endpoint was not met. Whether this subgroup analysis was prespecified was NOT established by the evidence packet, and NeuroWiki does not claim that it was.',
+      },
+      pValue: {
+        value: '0.8290',
+        label: 'Interaction between PFO status and treatment effect (null)',
+        highlight: true,
+      },
+      effectSize: {
+        value: 'HR 0.88 (0.45 to 1.71)',
+        label: 'PFO subgroup; figure extracted by the AAN 2020 advisory, not published by Diener 2021',
+        info: 'ATTRIBUTION RULE, binding: this hazard ratio comes from the AAN 2020 practice advisory extraction and was not confirmed against the Stroke primary publication. It is attributed to the AAN wherever it appears. The interval includes 1 and no NNT is computed.',
+        highlight: true,
+      },
+    },
+    trialDesign: {
+      type: [
+        'PFO subgroup of RE-SPECT ESUS, a randomized superiority trial of dabigatran 150 or 110 mg twice daily against aspirin 100 mg daily',
+        'Parent population: 5,390 patients with embolic stroke of undetermined source',
+        'The parent trial RAN TO COMPLETION and its primary endpoint was NOT met',
+        'The PFO subgroup has a DEDICATED publication in Stroke (2021), two years after the parent; it is NOT reported in the 2019 NEJM paper, and citing NEJM 2019 for it is a misattribution',
+        'Whether the subgroup analysis was PRESPECIFIED could NOT be established, and NeuroWiki does not claim that it was',
+        'The trial did NOT mandate transesophageal echocardiography or bubble contrast, so PFO ascertainment is incomplete and non-random',
+      ],
+      timeline: 'Parent published NEJM 2019;380(20):1906-1917; PFO subgroup published Stroke 2021;52(3):1065-1068',
+    },
+    // WARNING TO THE RENDER BLOCK: efficacyResults carries NO DATA on this
+    // record, and the two zeros below are placeholders, not results. Per-arm
+    // event counts and rates were NEVER PUBLISHED for the RE-SPECT ESUS PFO
+    // subgroup; the only quantities that exist are the interaction p value
+    // (0.8290) and a hazard ratio extracted by the AAN (0.88, 95% CI 0.45 to
+    // 1.71). The render block MUST NOT draw a bar chart, a percentage or any
+    // comparison from these zeros. Render the forest row from `stats` and
+    // `howToReadChart` instead, and state that per-arm rates do not exist.
+    efficacyResults: {
+      treatment: { percentage: 0, label: 'Per-arm event rates were never published for the PFO subgroup (hazard ratio only). This is a placeholder, not a result.', name: 'Dabigatran' },
+      control: { percentage: 0, label: 'Per-arm event rates were never published for the PFO subgroup (hazard ratio only). This is a placeholder, not a result.', name: 'Aspirin 100 mg' },
+    },
+    designDisclaimer: {
+      category: 'other',
+      text: 'A PFO subgroup analysis whose prespecification could not be established. The interaction test is null (p=0.8290) and the arm-level hazard ratio in circulation is an AAN 2020 extraction, not a figure published by Diener 2021.',
+      source: 'Diener HC et al., Stroke 2021;52(3):1065-1068; Messé SR et al., AAN Practice Advisory Update, Neurology 2020;94(20):876-885',
+    },
+    safetyData: 'Safety was not presented for the PFO subgroup, so no subgroup figures are stated here. In the parent trial there was no significant overall difference (risk difference 0.5%, 95% CI -0.4% to 1.3%), and clinically relevant non-major bleeding was more common with dabigatran. Across this literature the bleeding direction is the reproducible finding and it points away from anticoagulation: two independent pooled analyses put bleeding higher with anticoagulation (Chi 2025, RR 1.69, 95% CI 1.18 to 2.43 for major bleeding other than intracranial haemorrhage; Hariharan 2022, RR 1.57, 95% CI 1.26 to 1.97).',
+    clinicalContext: 'RE-SPECT ESUS randomized 5,390 patients with embolic stroke of undetermined source to dabigatran 150 or 110 mg twice daily or aspirin 100 mg daily. Unlike NAVIGATE-ESUS it ran to completion, and its primary endpoint was not met. The PFO analysis has its own publication in Stroke two years later, which is the first thing to get right about it: the 2019 NEJM parent paper does not report this subgroup, and citing NEJM 2019 for it is a misattribution that appears often. A patent foramen ovale was present in 680 of 5,388 patients with PFO status recorded (12.6%), and the interaction between PFO status and treatment effect was flatly null at p=0.8290. Per-arm event rates were never published for the subgroup. The hazard ratio of 0.88 (95% CI 0.45 to 1.71) that circulates for it is an extraction by the AAN 2020 practice advisory rather than a figure printed by Diener and colleagues, and NeuroWiki attributes it to the AAN wherever it appears. The most consequential thing this paper did was arithmetic: it added RE-SPECT ESUS to the pool that Kasner and colleagues had reported in 2018 as OR 0.48 (95% CI 0.24 to 0.96) and returned OR 0.70 (95% CI 0.43 to 1.14). Its own conclusion is that there is insufficient evidence to recommend anticoagulation over antiplatelet therapy for patients with ESUS and a PFO.',
+    keyMessage: 'The RE-SPECT ESUS PFO subgroup is where the anticoagulation signal stopped being significant. Its interaction test is null at p=0.8290, per-arm rates were never published, the hazard ratio in circulation (0.88, 95% CI 0.45 to 1.71) is an AAN extraction, and adding this trial to the 2018 pool moved OR 0.48 to OR 0.70. Its authors conclude that there is insufficient evidence to recommend anticoagulation over antiplatelet therapy in ESUS with a PFO.',
+    pearls: [
+      'The PFO subgroup is NOT in the 2019 NEJM parent paper. It has a dedicated publication in Stroke in 2021, and citing NEJM 2019 for it is a misattribution.',
+      'NeuroWiki does NOT claim this subgroup was prespecified. The evidence packet could not establish it, so the claim is not made.',
+      'The interaction between PFO status and treatment was flatly null: p=0.8290. Nothing in this dataset suggests PFO patients respond differently.',
+      'Per-arm event rates were never published for the subgroup. The HR 0.88 (95% CI 0.45 to 1.71) that circulates is an AAN 2020 EXTRACTION, not a figure printed by Diener 2021, and it is attributed to the AAN wherever it appears.',
+      'This is the paper where the signal decayed. Adding RE-SPECT ESUS to the pool Kasner reported as OR 0.48 (95% CI 0.24 to 0.96) returned OR 0.70 (95% CI 0.43 to 1.14). Same pool, same method, one more trial.',
+      'The authors state the conclusion plainly: there is insufficient evidence to recommend anticoagulation over antiplatelet therapy for patients with ESUS and a PFO.',
+      'A PFO was detected in 12.6% of patients because no TEE or bubble study was mandated, against the 33.8% PICSS detected in a cohort that did undergo transesophageal echocardiography. This is not a PFO-selected population.',
+      'Safety was not presented for the subgroup. In the parent trial there was no significant overall difference (risk difference 0.5%, 95% CI -0.4% to 1.3%), and clinically relevant non-major bleeding was more common with dabigatran.',
+      'No NNT. A subgroup with a null interaction test and an interval that includes 1 has no valid superiority absolute risk difference to invert.',
+    ],
+    limitations: [
+      'Prespecification could not be established. NeuroWiki does not claim the analysis was prespecified.',
+      'The interaction test is null (p=0.8290), so the subgroup estimate is not evidence that PFO patients respond differently.',
+      'Per-arm event counts and rates were never published for the subgroup, so no rates can be displayed.',
+      'The arm-level hazard ratio of 0.88 (95% CI 0.45 to 1.71) is an AAN 2020 extraction and was not confirmed against the Stroke primary publication.',
+      'PFO ascertainment was incomplete and non-random: no TEE or bubble study was mandated and only 12.6% were detected, against the 33.8% PICSS detected in a cohort that did undergo transesophageal echocardiography.',
+      'Safety was not presented for the PFO subgroup at any level.',
+      'The parent trial ran to completion and missed its primary endpoint, so the subgroup sits inside a null trial.',
+      'The full published inclusion and exclusion criteria were not retrieved. The eligibility shown here is the verifier-confirmed subset.',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'A single forest row, not a pair of bars. Per-arm event rates were never published for this subgroup, so there are no two values to compare. What exists is a hazard ratio of 0.88 with an interval of 0.45 to 1.71, and an interaction p value of 0.8290.',
+      },
+      {
+        question: 'Where does the hazard ratio come from?',
+        answer: 'From the AAN 2020 practice advisory, which extracted it. It was not confirmed against the Stroke primary publication, so NeuroWiki attributes it to the AAN rather than to Diener 2021 everywhere it appears. That attribution is not a formality: the primary paper reports the interaction test and the updated pooled estimate, not this arm-level figure.',
+      },
+      {
+        question: 'What should I look at first?',
+        answer: 'The interaction p value, 0.8290. It is about as null as an interaction test gets. Whatever the point estimate looks like, this dataset gives no indication that patients with a PFO respond differently to anticoagulation than patients without one.',
+      },
+      {
+        question: 'Why does this trial matter more than its own numbers?',
+        answer: 'Because of what it did to the pooled estimate. Kasner and colleagues had reported OR 0.48 (95% CI 0.24 to 0.96, p=0.04) across PICSS, CLOSE and the NAVIGATE-ESUS subgroup. Adding RE-SPECT ESUS to that same pool by the same method returned OR 0.70 (95% CI 0.43 to 1.14). One additional trial moved the strongest number in the literature out of significance, which is the clearest available demonstration that the signal is fragile.',
+      },
+      {
+        question: 'Was this subgroup prespecified?',
+        answer: 'Unknown. The evidence packet could not establish it, so NeuroWiki does not claim it either way. Treat the analysis as at best exploratory until the prespecification status is confirmed against the protocol.',
+      },
+      {
+        question: 'Why is there no NNT?',
+        answer: 'A subgroup with a null interaction test, no published per-arm rates and an interval that includes 1 has no valid superiority absolute risk difference to invert. The prohibition holds across this whole question: the NNT of 21 computed by the AAN carries a confidence interval of 19 to -60, which includes net harm.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In RE-SPECT ESUS, a patent foramen ovale was present in 680 of 5,388 patients with PFO status recorded (12.6%), and there was no interaction between PFO status and the effect of dabigatran versus aspirin (p=0.8290). Adding this trial to the pooled analysis that Kasner and colleagues had reported in 2018 as OR 0.48 (95% CI 0.24 to 0.96) returned OR 0.70 (95% CI 0.43 to 1.14), which is not significant. The authors conclude that there is insufficient evidence to recommend anticoagulation over antiplatelet therapy for patients with ESUS and a PFO.',
+      doesNotProve: 'It does not establish an arm-level treatment effect in the PFO subgroup, because per-arm event rates were never published and the hazard ratio of 0.88 (95% CI 0.45 to 1.71) in circulation is an AAN extraction rather than a figure from the primary publication. It does not describe a PFO-selected population, because no TEE or bubble study was mandated and only 12.6% of patients had a PFO detected. It does not rule out a benefit of anticoagulation either: a null interaction test in an unpowered subgroup is an absence of evidence, not evidence of absence.',
+      cautions: 'Three attribution rules apply to every surface that uses this record. Do not cite NEJM 2019 for this subgroup: it has a dedicated Stroke publication two years later, and the parent paper does not report it. Do not claim the analysis was prespecified: the evidence packet could not establish it. And attribute the hazard ratio of 0.88 (95% CI 0.45 to 1.71) to the AAN 2020 practice advisory, which extracted it, rather than to Diener 2021. Five caveats govern this question as a whole and apply to this record. First, not one of the available datasets is an adequately powered trial of the anticoagulation-versus-antiplatelet question; every one is a subgroup or an underpowered arm. Second, every within-trial interaction test is null (NAVIGATE-ESUS p=0.18, RE-SPECT ESUS p=0.8290), and the largest study-level meta-analysis finds no interaction by PFO status either (Chi 2025, p-interaction 0.28). Third, PICSS used low-intensity warfarin (INR 1.4 to 2.8), not modern anticoagulation. Fourth, neither ESUS trial mandated transesophageal echocardiography or a bubble study: a PFO was detected in 7.4% of NAVIGATE-ESUS and 12.6% of RE-SPECT ESUS, against the 33.8% PICSS found when every substudy patient had a TEE, so those subgroups are incompletely and non-randomly ascertained. Fifth, the efficacy signal is fragile across pooling choices while the bleeding excess is not: the pooled odds ratio moved from 0.48 (95% CI 0.24 to 0.96) in 2018 to 0.70 (95% CI 0.43 to 1.14) in 2021 when this trial was added to the same pool by the same method, while bleeding was higher with anticoagulation in two independent analyses (Chi RR 1.69, 95% CI 1.18 to 2.43; Hariharan RR 1.57, 95% CI 1.26 to 1.97).',
+    },
+    educationalContext: 'RE-SPECT ESUS is the trial that shows what a fragile signal does when one more dataset arrives. By 2018 the anticoagulation case in PFO-associated stroke rested on a pooled odds ratio of 0.48 (95% CI 0.24 to 0.96) across PICSS, the CLOSE anticoagulation arm and the NAVIGATE-ESUS subgroup, with no heterogeneity. Three years later the same pool, extended by the same method to include RE-SPECT ESUS, returned 0.70 (95% CI 0.43 to 1.14). Nothing changed except that another trial reported. That is what it means to say a subgroup signal is not robust: it was never resting on enough events to withstand new data. The trial itself is instructive in a second way, about how figures acquire authority. This subgroup is not in the 2019 NEJM parent paper; it has a dedicated publication in Stroke in 2021, which reports the interaction (p=0.8290), the updated pooled estimate, and the conclusion that there is insufficient evidence to recommend anticoagulation over antiplatelet therapy. The arm-level hazard ratio of 0.88 that appears in reviews and slide decks was extracted by the AAN 2020 practice advisory, not printed by the primary paper, and per-arm event rates were never published at all. That pattern is common enough to watch for: a number in wide circulation, cited to a paper that never carried it. The third lesson is about interaction tests. A p value of 0.8290 does not prove the treatment works equally in both groups, since the subgroup was never powered to detect a difference. It does mean there is no signal in these data that PFO status modifies the effect, which is exactly what the two other interaction tests in this literature also say (0.18 and 0.28).',
+    clinicalApplication: 'Do not start anticoagulation for a PFO-associated cryptogenic stroke on the strength of this subgroup, and do not quote its hazard ratio without saying where it came from. When PFO closure is not chosen, the AAN 2020 practice advisory (Statement 3a, Level C) states that clinicians may recommend either an antiplatelet medication such as aspirin or anticoagulation with a vitamin K antagonist, a direct thrombin inhibitor, or a factor Xa inhibitor. That is equipoise. Antiplatelet therapy is the practical default because it is simpler and safer and because no trial has shown anticoagulation to be better, and because the bleeding excess reproduces while the efficacy signal decays. Anticoagulation becomes preferred when there is an independent indication: AAN Statement 3b (Level B) addresses the patient with a defined thrombophilia, an unprovoked deep venous thrombosis, or an unprovoked pulmonary embolism. Take the conclusion of this paper at face value when counselling: there is insufficient evidence to recommend anticoagulation over antiplatelet therapy for patients with ESUS and a PFO. CLOSE-2 (NCT05387954) is recruiting 792 patients aged 60 to 80 into three arms, with primary completion in July 2031.',
+    applicability: {
+      populationExclusions: [
+        'Patients with atrial fibrillation. The ESUS construct excludes AF detected before randomization, and AF-associated stroke is a separate question with its own trials.',
+        'Patients with an identified large-artery, small-vessel or cardioembolic mechanism. ESUS excludes them by definition.',
+        'Any patient in whom the PFO was confirmed on protocolised TEE with bubble study. This trial did not require one, so its subgroup is not equivalent to a TEE-selected population.',
+        'Any question about PFO CLOSURE. That is a separate indication with separate trials and a separate recommendation.',
+      ],
+      imagingSelection: 'None mandated. The trial did not require transesophageal echocardiography or bubble contrast, so PFO ascertainment depended on local practice and a PFO was detected in only 12.6% of patients.',
+      doseSpecific: 'Dabigatran 150 mg or 110 mg twice daily. Both dose strata were used in the parent trial and safety was not presented for the PFO subgroup.',
+    },
+    legend: {
+      finding: 'PFO subgroup null; interaction p=0.83, and the hazard ratio is an AAN extraction.',
+      bottomLineTag: 'No interaction',
+      keyStat: 'HR 0.88 (0.45 to 1.71)',
+    },
+    bedsidePearlClaimId: 'respect-esus-pfo-2021',
+    bedsidePearl: 'RE-SPECT ESUS PFO subgroup (Stroke 2021, NOT the 2019 NEJM parent): dabigatran vs aspirin 100 mg in the 680 of 5,388 patients (12.6%) with a detected PFO. The interaction with treatment is flatly null, p=0.8290. Per-arm rates were never published, and the HR 0.88 (95% CI 0.45 to 1.71) in circulation is an AAN 2020 EXTRACTION, not a Diener 2021 figure. Prespecification could not be established, so NeuroWiki does not claim it. Adding this trial to the 2018 pool moved OR 0.48 (95% CI 0.24 to 0.96) to OR 0.70 (95% CI 0.43 to 1.14). Authors: there is insufficient evidence to recommend anticoagulation over antiplatelet therapy in ESUS with a PFO. No NNT.',
+    bottomLineSummary: 'In the PFO subgroup of RE-SPECT ESUS (680 of 5,388 patients, 12.6% detected), the interaction between PFO status and the effect of dabigatran versus aspirin was null at p=0.8290. Per-arm event rates were never published; the HR 0.88 (95% CI 0.45 to 1.71) that circulates is an AAN 2020 extraction. Adding this trial to the pool that Kasner reported in 2018 as OR 0.48 (95% CI 0.24 to 0.96) returned OR 0.70 (95% CI 0.43 to 1.14). The authors conclude that there is insufficient evidence to recommend anticoagulation over antiplatelet therapy for patients with ESUS and a PFO.',
+    conclusion: 'The RE-SPECT ESUS PFO subgroup (Diener HC, Chutinet A, Easton JD, et al., Stroke 2021;52(3):1065-1068) is a dedicated publication appearing two years after the parent trial (Diener HC, Sacco RL, Easton JD, et al., NEJM 2019;380(20):1906-1917, NCT02239120), which randomized 5,390 patients with embolic stroke of undetermined source to dabigatran 150 or 110 mg twice daily or aspirin 100 mg daily, ran to completion, and did not meet its primary endpoint. The first thing to get right about this subgroup is where it lives: it is NOT reported in the 2019 NEJM paper, and citing NEJM 2019 for it is a misattribution. A patent foramen ovale was present in 680 of 5,388 patients with PFO status recorded (12.6%), and the interaction between PFO status and treatment effect was null at p=0.8290. Whether the analysis was prespecified could NOT be established by the evidence packet, so NeuroWiki does not claim that it was. Per-arm event counts and rates were never published for the subgroup; the arm-level hazard ratio of 0.88 (95% CI 0.45 to 1.71) that circulates for it is an extraction by the AAN 2020 practice advisory (Messé SR et al., Neurology 2020;94(20):876-885), was not confirmed against the Stroke primary publication, and is attributed to the AAN on every NeuroWiki surface. Ascertainment is the same structural problem as in NAVIGATE-ESUS: the trial did not mandate transesophageal echocardiography or bubble contrast, so a 12.6% detected prevalence against the 33.8% PICSS detected in a cohort that did undergo transesophageal echocardiography means the subgroup is incompletely and non-randomly assembled and is not a PFO-selected population. Safety was not presented for the subgroup; in the parent trial there was no significant overall difference (risk difference 0.5%, 95% CI -0.4% to 1.3%) and clinically relevant non-major bleeding was more common with dabigatran. The most consequential contribution of this paper is arithmetic. Kasner and colleagues had reported a pooled OR of 0.48 (95% CI 0.24 to 0.96, p=0.04, I-squared 0%) across PICSS, the CLOSE anticoagulation arm and the NAVIGATE-ESUS PFO subgroup, the strongest single number in this literature. Adding RE-SPECT ESUS to that same pool by the same method returned OR 0.70 (95% CI 0.43 to 1.14), which is not significant. One further trial moved the signal out of significance, which is the clearest available demonstration that it is fragile, and it is why NeuroWiki shows the two figures together on every surface. The authors state their own conclusion plainly: there is insufficient evidence to recommend anticoagulation over antiplatelet therapy for patients with ESUS and a PFO. No NNT is computed: a subgroup with a null interaction test, no published per-arm rates and an interval that includes 1 has no valid superiority absolute risk difference to invert, and the NNT of 21 computed by the AAN for this question carries a confidence interval of 19 to -60 that includes net harm. CLOSE-2 (NCT05387954) is recruiting and has a primary completion date of July 2031.',
+  },
+
   // ─── IST (International Stroke Trial, 1997) — foundational aspirin RCT ──
   //     Lancet 1997;349(9065):1569-1581. Factorial 2x2 aspirin + heparin trial,
   //     N=19,435 within 48h of acute ischaemic stroke. Paired with CAST in

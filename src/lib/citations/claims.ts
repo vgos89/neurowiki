@@ -800,6 +800,128 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'REDUCE trial: in 664 patients ages 18–59 with cryptogenic ischemic stroke within 180 days and TEE-confirmed PFO (81% moderate or large shunt; ASA not required), PFO closure with Gore HELEX or Cardioform Septal Occluder + antiplatelet vs antiplatelet alone (2:1 randomization; clean antiplatelet comparator with no anticoagulation permitted) reduced clinical ischemic stroke over median 3.2-year follow-up: 6/441 (1.4%, 0.39 per 100 patient-years) vs 12/223 (5.4%, 1.71 per 100 patient-years), HR 0.23 (95% CI 0.09–0.62), P=0.002 by log-rank. Authors reported NNT ~28 over 24 months. Second coprimary endpoint of new brain infarction at 24 months (clinical or silent on T2 MRI) also met: 4.7% vs 10.7%, RR 0.44 (95% CI 0.24–0.81), multiplicity-adjusted P=0.048; silent infarction component alone did not differ (3.4% vs 4.0%, P=0.75) — the clinical-stroke component drove the composite. Safety: atrial fibrillation/flutter 6.6% (29/441) closure vs 0.4% (1/223) antiplatelet, P<0.001 — the largest absolute AF signal of the three 2017 trials. 83% of AF detected within 45 days, 59% resolved within 2 weeks; predominantly transient periprocedural AF. Serious device-related adverse events 1.4% (device dislocation, device-related thrombosis, aortic dissection). Major bleeding did not differ (1.8% vs 2.7%). Statistical analysis plan revised mid-trial (without unblinding) to add the new-brain-infarction coprimary and rescind the planned interim analysis — documented limitation. Supports AHA/ASA 2021 Class IIa, Level B-R and FDA approval (March 2018) of the Gore Cardioform Septal Occluder for cryptogenic stroke prevention.',
   },
 
+  // ─── PFO ANTITHROMBOTIC CHOICE (anticoagulation vs antiplatelet) ─────────
+  //     Added 2026-07-31 from docs/evidence-packets/2026-07-31-pfo-anticoagulation.md.
+  //     A DISTINCT clinical question from PFO closure and from PFO closure for
+  //     migraine: this is what to give when closure is NOT chosen. These claims
+  //     must not inherit citations from either of those clusters, and neither
+  //     may inherit from these. In particular mas-close-2017 is scoped to
+  //     closure vs antiplatelet and is deliberately NOT mapped here; the CLOSE
+  //     anticoagulation-arm figure is carried by turc-close-meta-2018 and
+  //     messe-aan-pfo-advisory-2020.
+  //
+  //     Each of the three trial claims maps the whole cluster because each of
+  //     the three trial records carries all five mandatory howToInterpret
+  //     caveats from packet §10, and those caveats assert content from the
+  //     other trials, the pooled analyses and the AAN advisory. A record that
+  //     mapped only its own publication would assert more than it carries.
+  //
+  //     NNT is prohibited on every surface in this cluster. The NNT of 21
+  //     computed by the AAN has a confidence interval of 19 to -60, which
+  //     crosses infinity and includes net harm. No `calculations` block is set
+  //     on any of the three trialData.ts records.
+  //
+  //     PAIRED-DISPLAY RULE, binding: the pooled OR 0.48 may only appear
+  //     alongside OR 0.70, and RR 0.59 may only appear alongside the Chi
+  //     p-interaction of 0.28. Every surface under these claims honours it.
+
+  'picss-pfo-warfarin-2002': {
+    id: 'picss-pfo-warfarin-2002',
+    citation_ids: [
+      'homma-picss-2002',
+      'mohr-warss-2001',
+      'kasner-navigate-esus-pfo-2018',
+      'hart-navigate-esus-2018',
+      'diener-respect-esus-2019',
+      'diener-respect-esus-pfo-2021',
+      'close-2-nct05387954',
+      'messe-aan-pfo-advisory-2020',
+      'turc-close-meta-2018',
+      'hariharan-esus-anticoag-meta-2022',
+      'ghannam-esus-subgroups-2024',
+      'chi-anticoag-cryptogenic-2025',
+    ],
+    surfaces: [DATA_SURFACE, BEDSIDE_PEARL_SURFACE],
+    description: 'PICSS 2002: the TEE substudy of WARSS (630 patients). The figure NeuroWiki publishes is a NON-PRESPECIFIED SUBGROUP OF A SUBSTUDY and never renders in a superiority frame: among 98 patients with cryptogenic stroke and a PFO, 2-year recurrent ischemic stroke or death occurred in 4 of 42 (9.5%) on warfarin versus 10 of 56 (17.9%) on aspirin, HR 0.52 (95% CI 0.16 to 1.67), P=0.28. The composite is published (rather than the AAN stroke-only extraction of 2 of 42 versus 8 of 56) because it matches the actual primary endpoint; the discrepancy is recorded in cautions because the two extractions attach the identical hazard ratio and interval to different numerators and cannot both be right. The governing caveat is the anticoagulant: WARSS used LOW-INTENSITY warfarin, target INR 1.4 to 2.8, which is neither the INR 2 to 3 of CLOSE nor any DOAC, so PICSS supports no inference about modern anticoagulation. Hypothesis-generating only, and every surface says so in those words. The cluster caveats mapped through the remaining citations: no adequately powered trial has tested this question; every within-trial interaction test is null (0.18, 0.83) and the largest study-level analysis finds no interaction either (0.28); neither ESUS trial mandated TEE or bubble study; and the efficacy signal is fragile across pooling choices while the bleeding excess is not. No NNT.',
+  },
+
+  'navigate-esus-pfo-2018': {
+    id: 'navigate-esus-pfo-2018',
+    citation_ids: [
+      'kasner-navigate-esus-pfo-2018',
+      'hart-navigate-esus-2018',
+      'homma-picss-2002',
+      'mohr-warss-2001',
+      'diener-respect-esus-2019',
+      'diener-respect-esus-pfo-2021',
+      'close-2-nct05387954',
+      'messe-aan-pfo-advisory-2020',
+      'turc-close-meta-2018',
+      'hariharan-esus-anticoag-meta-2022',
+      'ghannam-esus-subgroups-2024',
+      'chi-anticoag-cryptogenic-2025',
+    ],
+    surfaces: [DATA_SURFACE, BEDSIDE_PEARL_SURFACE],
+    description: 'NAVIGATE-ESUS PFO subgroup 2018: rivaroxaban 15 mg once daily versus aspirin 100 mg in the 534 of 7,213 ESUS patients (7.4%) in whom a PFO was detected. Recurrent ischaemic stroke 7 events on rivaroxaban (2.6 per 100 patient-years) versus 13 on aspirin (4.8 per 100 patient-years), HR 0.54 (95% CI 0.22 to 1.36), p-interaction 0.18. The subgroup WAS prespecified, and three facts bound how far it travels: the trial was stopped early at interim for futility plus excess bleeding, the subgroup had 45% power, which the authors state directly, and they record that substantial imprecision remains. Major bleeding in the subgroup was HR 2.05 (95% CI 0.51 to 8.18); that figure appears only with its imprecision stated in the same sentence, and the parent-trial excess (1.8% vs 0.7% per year) is the fact that governs at the bedside. This paper also carries the strongest single number in the literature, the pooled OR 0.48 (95% CI 0.24 to 0.96, p=0.04, I-squared 0%) across PICSS, CLOSE and this subgroup, and the fact that it did not survive: adding RE-SPECT ESUS to the same pool by the same method returned OR 0.70 (95% CI 0.43 to 1.14). Those two figures appear together on every surface. No NNT.',
+  },
+
+  'respect-esus-pfo-2021': {
+    id: 'respect-esus-pfo-2021',
+    citation_ids: [
+      'diener-respect-esus-pfo-2021',
+      'diener-respect-esus-2019',
+      'homma-picss-2002',
+      'mohr-warss-2001',
+      'kasner-navigate-esus-pfo-2018',
+      'hart-navigate-esus-2018',
+      'close-2-nct05387954',
+      'messe-aan-pfo-advisory-2020',
+      'turc-close-meta-2018',
+      'hariharan-esus-anticoag-meta-2022',
+      'ghannam-esus-subgroups-2024',
+      'chi-anticoag-cryptogenic-2025',
+    ],
+    surfaces: [DATA_SURFACE, BEDSIDE_PEARL_SURFACE],
+    description: 'RE-SPECT ESUS PFO subgroup 2021: dabigatran 150 or 110 mg twice daily versus aspirin 100 mg in the 680 of 5,388 patients (12.6%) with a PFO. Three attribution rules govern every surface. First, this subgroup is NOT in the 2019 NEJM parent paper; it has a dedicated Stroke publication two years later, and citing NEJM 2019 for it is a misattribution. Second, NeuroWiki does NOT claim the analysis was prespecified: the evidence packet could not establish it. Third, the arm-level HR 0.88 (95% CI 0.45 to 1.71) is an AAN 2020 extraction, is not confirmed against the Stroke primary, and is attributed to the AAN on every surface rather than to Diener 2021. What the primary publication does carry is the null interaction (p=0.8290), the updated pooled OR 0.70 (95% CI 0.43 to 1.14) that replaced the 2018 OR 0.48, and the conclusion that there is insufficient evidence to recommend anticoagulation over antiplatelet therapy for patients with ESUS and a PFO. Per-arm event rates were never published for this subgroup, so none are displayed. No NNT.',
+  },
+
+  // The synthesis claim for /trials/q/pfo-antithrombotic-choice. Maps every
+  // citation in the cluster, including the three registered beyond packet §8
+  // (hariharan, huang, close-2), because the prose states a figure or a fact
+  // from each. V approved a SEPARATE question rather than appending this to the
+  // existing `anticoagulation` question, which holds AF-timing trials: AF
+  // timing and PFO antithrombotic choice are different bedside decisions that
+  // share only a verb.
+  'pfo-antithrombotic-choice-synthesis': {
+    id: 'pfo-antithrombotic-choice-synthesis',
+    citation_ids: [
+      // The randomized datasets, chronological. None was designed for this question.
+      'mohr-warss-2001',
+      'homma-picss-2002',
+      'kasner-navigate-esus-pfo-2018',
+      'hart-navigate-esus-2018',
+      'diener-respect-esus-2019',
+      'diener-respect-esus-pfo-2021',
+      // The trial that will settle it.
+      'close-2-nct05387954',
+      // Guidelines, newest first. The AAN is the governing verified document;
+      // the BMJ Rapid Recommendation is the dissenting one that makes "no
+      // guideline recommends anticoagulation" false as usually written.
+      'messe-aan-pfo-advisory-2020',
+      'kuijpers-bmj-rapidrec-pfo-2018',
+      // Pooled analyses, newest first. Chi tests the interaction; Ghannam and
+      // Huang report within-stratum estimates; Hariharan carries the second
+      // independent bleeding excess; Turc is the CLOSE-investigator review.
+      'chi-anticoag-cryptogenic-2025',
+      'ghannam-esus-subgroups-2024',
+      'hariharan-esus-anticoag-meta-2022',
+      'huang-pfo-anticoag-meta-2022',
+      'turc-close-meta-2018',
+    ],
+    surfaces: [DATA_SURFACE],
+    description: 'ClinicalSynthesisCard on /trials/q/pfo-antithrombotic-choice. The question: in a patient with PFO-associated cryptogenic stroke for whom closure is not chosen or not available, does anticoagulation beat antiplatelet therapy? Governing fact, asserted in the headline and carried through every paragraph: no adequately powered trial has ever tested it. PICSS is a non-prespecified subgroup of a substudy that used low-intensity warfarin (INR 1.4 to 2.8); the CLOSE anticoagulation arm is a parallel comparison the trial was not powered for (3 of 187 vs 7 of 174, HR 0.44, 95% CI 0.11 to 1.48); NAVIGATE-ESUS and RE-SPECT ESUS are ESUS trials in which PFO is a subgroup with incomplete ascertainment (7.4% and 12.6% detected). A real directional signal exists and is reported rather than suppressed: three pooled analyses put the PFO-subgroup estimate below 1 with an interval excluding 1 (Kasner OR 0.48, 95% CI 0.24 to 0.96; Huang RR 0.61, 95% CI 0.41 to 0.91; Ghannam RR 0.59, 95% CI 0.35 to 0.98). The central teaching point is that it decayed: adding RE-SPECT ESUS to the same pool by the same method moved OR 0.48 (2018) to OR 0.70 (95% CI 0.43 to 1.14) in 2021. The PAIRED-DISPLAY RULE from the evidence packet is honoured throughout: 0.48 never appears without 0.70, and 0.59 never appears without the Chi p-interaction of 0.28. Every within-trial interaction test is null (NAVIGATE-ESUS 0.18, RE-SPECT ESUS 0.8290) and the largest study-level analysis finds no interaction by PFO status either (Chi 2025, p-interaction 0.28). The asymmetry that decides the default is stated explicitly: the efficacy signal is fragile across pooling choices while the bleeding excess reproduces and points the other way (Chi RR 1.69, 95% CI 1.18 to 2.43; Hariharan RR 1.57, 95% CI 1.26 to 1.97). Guideline handling corrects two common misreadings. The AAN 2020 advisory (Statement 3a, Level C) declares equipoise rather than a preference for aspirin, and its own sentence is quoted because clinicians read it backwards: "the high end of the CI does rule out a clinically important benefit for aspirin"; Statement 3b (Level B) covers the patient with an independent anticoagulation indication (defined thrombophilia, unprovoked DVT or PE). And "no guideline recommends anticoagulation" is FALSE as stated: BMJ Rapid Recommendations 2018 made a weak recommendation FOR anticoagulation on low-quality evidence, which no society adopted. The RoPE score is tied in explicitly because it is the gate on whether any of this evidence applies to a given patient: a high RoPE score means the PFO is more likely the culprit, which is what makes the antithrombotic choice worth having, while a low score means the PFO is probably incidental and the stroke needs another explanation. NO RoPE threshold or cut-point is asserted anywhere: the evidence packet verifies none, and none of these trials stratified by RoPE. NNT is prohibited on every surface: the AAN NNT of 21 carries a confidence interval of 19 to -60 that includes net harm. CLOSE-2 (NCT05387954) is named as the trial that will settle it, primary completion July 2031. Evidence packet: docs/evidence-packets/2026-07-31-pfo-anticoagulation.md.',
+  },
+
   // ─── IST (1997) — foundational aspirin RCT in acute ischaemic stroke ─────
   //     Lancet 1997;349(9065):1569-1581. Paired with CAST in Chen et al. 2000
   //     pooled analysis underwriting AHA/ASA Class I, Level A early aspirin.

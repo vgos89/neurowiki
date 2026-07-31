@@ -123,9 +123,16 @@ export default function QuestionDetailPage() {
 
   const resolvedTrials = question.trialIds
     .map((id) => {
+      // A per-question override wins over the canonical legend, so a
+      // multi-arm trial listed under a question about a different one of its
+      // comparisons cannot advertise the wrong comparison's numbers.
+      const override = question.legendOverrides?.[id];
+      const applyOverride = (legend: TrialItem['legend']) =>
+        override ? { ...(legend ?? {}), ...override } : legend;
+
       const fromList = findTrialById(id);
       if (fromList) {
-        return { ...fromList, legend: getTrialCardMeta(id)?.legend };
+        return { ...fromList, legend: applyOverride(getTrialCardMeta(id)?.legend) };
       }
       // Fallback for stub trials — synthesize a TrialItem from the projection.
       const stub = getTrialCardMeta(id);
@@ -140,7 +147,7 @@ export default function QuestionDetailPage() {
           path: `/trials/${id}`,
           isPlaceholder: false,
           description: stub.listDescription || stub.bottomLineSummary || stub.subtitle,
-          legend: stub.legend,
+          legend: applyOverride(stub.legend),
         } as TrialItem;
       }
       return undefined;

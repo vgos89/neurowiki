@@ -1141,6 +1141,30 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.neurowiki.ai/trials/picss-trial</loc>
+    <lastmod>2026-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.neurowiki.ai/trials/navigate-esus-trial</loc>
+    <lastmod>2026-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.neurowiki.ai/trials/respect-esus-trial</loc>
+    <lastmod>2026-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.neurowiki.ai/trials/q/pfo-antithrombotic-choice</loc>
+    <lastmod>2026-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.neurowiki.ai/trials/mist-trial</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>monthly</changefreq>

@@ -108,6 +108,31 @@ export const LEGACY_TRIAL_CATALOG_META: Record<string, LegacyTrialCatalogMeta> =
   // PFO closure for MIGRAINE (2008-2017). Distinct indication from the
   // PFO-for-stroke trials: all three missed their primary endpoint, and both
   // SCAI 2022 and VA/DoD 2023 recommend against the procedure for migraine.
+  // PFO ANTITHROMBOTIC CHOICE (2002-2021). Anticoagulation vs antiplatelet when
+  // a PFO is not closed. Not one of these is an adequately powered trial of that
+  // question: PICSS is a subgroup of a substudy, and both ESUS trials carry PFO
+  // as a subgroup. Every within-trial interaction test is null.
+  'picss-trial': {
+    name: 'PICSS',
+    year: 2002,
+    doi: '10.1161/01.CIR.0000017498.88393.44',
+    description: 'Warfarin versus aspirin in the PFO substudy of WARSS; in cryptogenic stroke with PFO, 4 of 42 versus 10 of 56 (HR 0.52, 95% CI 0.16 to 1.67).',
+    clinicalContext: 'A non-prespecified subgroup of a substudy, 98 patients and 14 events, using low-intensity warfarin (INR 1.4 to 2.8) rather than modern anticoagulation. Its own headline finding was that having a PFO did not raise recurrence risk on medical therapy.',
+  },
+  'navigate-esus-trial': {
+    name: 'NAVIGATE-ESUS',
+    year: 2018,
+    doi: '10.1016/S1474-4422(18)30319-3',
+    description: 'Rivaroxaban 15 mg versus aspirin in embolic stroke of undetermined source; the prespecified PFO subgroup gave HR 0.54 (95% CI 0.22 to 1.36).',
+    clinicalContext: 'Stopped early for futility plus excess bleeding, leaving the PFO analysis at 45% power. PFO was detected in only 7.4% against the 33.8% PICSS detected in a cohort that did undergo transesophageal echocardiography, because neither ESUS trial mandated an echo bubble study.',
+  },
+  'respect-esus-trial': {
+    name: 'RE-SPECT ESUS',
+    year: 2021,
+    doi: '10.1161/STROKEAHA.120.031237',
+    description: 'Dabigatran versus aspirin in embolic stroke of undetermined source; the PFO interaction was null (p=0.8290).',
+    clinicalContext: 'Adding this trial to the 2018 pooled analysis moved the estimate from OR 0.48 to OR 0.70 and it stopped being significant. Its own conclusion: insufficient evidence to recommend anticoagulation over antiplatelet therapy.',
+  },
   'mist-trial': {
     name: 'MIST',
     year: 2008,

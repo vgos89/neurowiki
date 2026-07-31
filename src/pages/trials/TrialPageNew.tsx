@@ -8238,6 +8238,184 @@ const TrialPageNew: React.FC = () => {
   }
 
   // ─────────────────────────────────────────────────────────────────────────
+  //  PFO ANTITHROMBOTIC CHOICE (PICSS 2002 · NAVIGATE-ESUS 2018 · RE-SPECT ESUS 2021)
+  //  Anticoagulation vs antiplatelet when the PFO is NOT closed.
+  //
+  //  NONE of these three uses DeltaBandChart, and each for a different reason.
+  //  The dot grid means "one dot = one percentage point of patients", and that
+  //  is wrong for all three:
+  //    PICSS       98 patients, 14 events. One patient is 2.4 points in the
+  //                warfarin arm, so a 100-dot grid implies a precision the data
+  //                does not have. It is also a NON-PRESPECIFIED SUBGROUP OF A
+  //                SUBSTUDY and must never render in a superiority frame.
+  //    NAVIGATE    2.6 and 4.8 are EVENTS PER 100 PATIENT-YEARS, not percents.
+  //                Same class of defect as PRIMA's migraine-days: the grid would
+  //                render "2.6%" and be flatly wrong.
+  //    RE-SPECT    efficacyResults holds PLACEHOLDER ZEROS. Per-arm event rates
+  //                were never published for this subgroup; only a hazard ratio
+  //                exists, and that is an AAN extraction. Drawing anything
+  //                per-arm here would invent data.
+  //  No NNT on any of the three: every one is a subgroup or an underpowered arm,
+  //  and the AAN's own NNT for this question spans 19 to -60, i.e. into net harm.
+  //  See docs/evidence-packets/2026-07-31-pfo-anticoagulation.md §10.
+  // ─────────────────────────────────────────────────────────────────────────
+
+  if (
+    (trialId === 'picss-trial' || trialId === 'navigate-esus-trial' || trialId === 'respect-esus-trial') &&
+    trialMetadata
+  ) {
+    const tm = trialMetadata;
+    const categoryBadgeLabel = tm.listCategory
+      ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
+      : 'Trial';
+
+    const CONFIG: Record<string, {
+      abbr: string;
+      question: string;
+      banner: string;
+      arms: { label: string; value: string; unit: string }[] | null;
+      effect: { label: string; value: string; interval: string; p?: string };
+      footnote: string;
+      design: string;
+    }> = {
+      'picss-trial': {
+        abbr: 'PICSS',
+        question:
+          'In patients with cryptogenic stroke and a patent foramen ovale, does low-intensity warfarin reduce recurrent stroke or death compared with aspirin? Read this as a subgroup of a substudy, not as a trial result.',
+        banner:
+          'NOT A TRIAL RESULT. This is a non-prespecified subgroup of the PICSS transesophageal-echo substudy of WARSS: 98 patients and 14 events in total. The anticoagulant was LOW-INTENSITY warfarin, INR 1.4 to 2.8, so nothing here transfers to modern anticoagulation or to any direct oral anticoagulant.',
+        arms: [
+          { label: 'Low-intensity warfarin', value: '4 of 42', unit: '9.5% recurrent stroke or death at 2 years' },
+          { label: 'Aspirin 325 mg', value: '10 of 56', unit: '17.9% recurrent stroke or death at 2 years' },
+        ],
+        effect: { label: 'Hazard ratio', value: '0.52', interval: '0.16 to 1.67', p: '0.28' },
+        footnote:
+          'Per-arm counts are shown rather than a 100-dot grid because one patient is 2.4 percentage points in the warfarin arm: a dot grid would imply a precision these 98 patients cannot support. Two published extractions of this subgroup disagree on the numerators while carrying the same hazard ratio and interval, which cannot both be right; the composite figures shown here match the endpoint the parent trial actually set. No NNT is computed.',
+        design:
+          '630 WARSS patients underwent transesophageal echocardiography and a PFO was found in 203 (33.8%). The cell displayed here is the 98 patients who had both cryptogenic stroke and a PFO. WARSS randomized warfarin titrated to INR 1.4 to 2.8 against aspirin 325 mg daily, double-blind. Published Circulation 2002; parent trial NEJM 2001.',
+      },
+      'navigate-esus-trial': {
+        abbr: 'NAVIGATE-ESUS',
+        question:
+          'In embolic stroke of undetermined source with a detected patent foramen ovale, does rivaroxaban 15 mg reduce recurrent ischaemic stroke compared with aspirin? This is the prespecified PFO subgroup.',
+        banner:
+          'PRESPECIFIED SUBGROUP AT 45% POWER. The parent trial was stopped early at interim for futility PLUS excess bleeding, at a median follow-up of 11 months, and the authors record that substantial imprecision remains. The interaction test was null (p=0.18): PFO status did not modify the treatment effect.',
+        arms: [
+          { label: 'Rivaroxaban 15 mg', value: '2.6', unit: 'events per 100 patient-years (7 events)' },
+          { label: 'Aspirin 100 mg', value: '4.8', unit: 'events per 100 patient-years (13 events)' },
+        ],
+        effect: { label: 'Hazard ratio', value: '0.54', interval: '0.22 to 1.36' },
+        footnote:
+          'These two figures are RATES PER 100 PATIENT-YEARS, not percentages, and they are not drawn as a dot grid for that reason. Major bleeding in this subgroup ran the other way, hazard ratio 2.05 with a 95% interval of 0.51 to 8.18, which spans a halving and an eight-fold increase and cannot be interpreted. In the parent trial major bleeding was significantly higher with rivaroxaban. No NNT is computed.',
+        design:
+          '7,213 patients with embolic stroke of undetermined source at 459 centres in 31 countries. A PFO was detected in 534 (7.4%), rivaroxaban 259 and aspirin 275. Note the dose: rivaroxaban 15 mg once daily, not the 20 mg used for atrial fibrillation. Neither this trial nor RE-SPECT ESUS mandated transesophageal echocardiography or bubble contrast, so the subgroup is incompletely and non-randomly ascertained. Published Lancet Neurology 2018; parent trial NEJM 2018.',
+      },
+      'respect-esus-trial': {
+        abbr: 'RE-SPECT ESUS',
+        question:
+          'In embolic stroke of undetermined source with a detected patent foramen ovale, does dabigatran reduce recurrent stroke compared with aspirin? The interaction test was null.',
+        banner:
+          'NO PER-ARM RATES EXIST FOR THIS SUBGROUP. The publication reports a hazard ratio only, and the arm-level figure in circulation comes from the AAN 2020 practice advisory rather than from the paper itself. NeuroWiki does not claim this subgroup analysis was prespecified: the evidence packet could not establish it.',
+        arms: null,
+        effect: { label: 'Hazard ratio (AAN 2020 extraction)', value: '0.88', interval: '0.45 to 1.71' },
+        footnote:
+          'No arms are drawn because no per-arm event rates were published for this subgroup. The PFO-by-treatment interaction was p=0.8290: PFO status did not modify the treatment effect. This trial matters most for what it did to the pooled evidence. Adding it to the 2018 pooled analysis, by the same method and on the same set, moved the estimate from an odds ratio of 0.48 (0.24 to 0.96, significant) to 0.70 (0.43 to 1.14, not significant). No NNT is computed.',
+        design:
+          '5,390 patients randomized in the parent trial, which ran to completion and did not meet its primary endpoint. A PFO was documented in 680 of the 5,388 with PFO status recorded (12.6%). Dabigatran 150 mg or 110 mg twice daily against aspirin 100 mg daily. The PFO subgroup has a dedicated publication in Stroke 2021; do not cite the 2019 parent paper for it.',
+      },
+    };
+    const cfg = CONFIG[trialId];
+
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <TrialHeaderBar abbreviation={cfg.abbr} categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="neutral" />
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">{cfg.question}</p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+
+          {renderPopulationSection(tm)}
+
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Result in the PFO group</p>
+              <p className="text-xs text-slate-500 mt-0.5">{tm.stats.primaryEndpoint.value}</p>
+            </div>
+            <div className="p-4 space-y-4">
+              <div className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
+                <p className="text-xs text-amber-900 leading-relaxed">{cfg.banner}</p>
+              </div>
+
+              {cfg.arms && (
+                <div className="grid grid-cols-2 gap-3">
+                  {cfg.arms.map((arm) => (
+                    <div key={arm.label} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: '14px 16px', textAlign: 'center' }}>
+                      <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#64748b', marginBottom: 4 }}>
+                        {arm.label}
+                      </p>
+                      <p style={{ fontSize: 30, fontWeight: 700, color: '#475569', lineHeight: 1.1 }}>{arm.value}</p>
+                      <p style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>{arm.unit}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="rounded-lg bg-white border border-slate-200 px-4 py-3 text-center">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">{cfg.effect.label}</p>
+                <p className="text-2xl font-bold text-slate-700 tabular-nums">{cfg.effect.value}</p>
+                <p className="text-[12px] text-slate-500 mt-1">
+                  95% CI {cfg.effect.interval}
+                  {cfg.effect.p ? ` · p = ${cfg.effect.p}` : ''}
+                </p>
+                <p className="text-[11px] text-slate-400 mt-1">The interval includes 1, so no difference was demonstrated.</p>
+              </div>
+
+              <p className="text-[11px] text-slate-400 leading-relaxed">{cfg.footnote}</p>
+            </div>
+          </div>
+
+          {renderStudyArms(tm)}
+          {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this result" items={tm.howToReadChart} />}
+          {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
+          {renderSafetySection(tm)}
+          {renderTrialDesign(tm, cfg.design)}
+
+          {tm.bedsidePearl && (
+            <div className="bg-slate-100 border-l-2 border-slate-500 rounded-r-xl px-5 py-4">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-2">Bedside Pearl</p>
+              <p className="text-sm text-slate-800 leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/q/pfo-antithrombotic-choice" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Anticoagulation or antiplatelet?</Link>
+              <Link to="/calculators/rope-score" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">RoPE score</Link>
+              <Link to="/trials/q/pfo-closure-cryptogenic" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">PFO closure for stroke</Link>
+            </div>
+          </div>
+        </div>
+
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer trialName={cfg.abbr} body={tm.bottomLineSummary} bedsidePearl={tm.bedsidePearl}
+            resultBadgeOverride={trialId === 'picss-trial' ? 'Subgroup only' : undefined}
+            seeAlsoLinks={[
+              { label: 'Anticoagulation or antiplatelet?', href: '/trials/q/pfo-antithrombotic-choice' },
+              { label: 'RoPE score', href: '/calculators/rope-score' },
+              { label: 'PFO closure for stroke', href: '/trials/q/pfo-closure-cryptogenic' },
+            ]}
+            citation={tm.source} doi={tm.doi} trialResult={tm.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
   //  PFO CLOSURE FOR MIGRAINE (MIST 2008 · PRIMA 2016 · PREMIUM 2017)
   //  A different indication from the PFO-for-stroke cluster above, and a
   //  different answer: all three missed their primary endpoint, and both

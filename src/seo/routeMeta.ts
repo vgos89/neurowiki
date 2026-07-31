@@ -99,6 +99,11 @@ const QUESTION_ROUTE_META: Record<string, Pick<MetaData, 'title' | 'description'
     description: 'Four-PCC vs FFP for warfarin (Sarode 2013), platelet HARM in antiplatelet-ICH (PATCH), andexanet for FXa inhibitors (ANNEXA-4, ANNEXA-I).',
     keywords: 'ICH anticoagulation reversal, 4 factor PCC, Sarode 2013, PATCH trial platelet, ANNEXA-4 andexanet, ANNEXA-I trial, FXa inhibitor reversal, warfarin reversal ICH',
   },
+  'pfo-antithrombotic-choice': {
+    title: 'Anticoagulation vs Antiplatelet for PFO Stroke · NeuroWiki',
+    description: 'No adequately powered trial has ever compared anticoagulation with antiplatelet therapy for PFO-associated stroke; every dataset is a subgroup.',
+    keywords: 'PFO anticoagulation, PFO antiplatelet, cryptogenic stroke anticoagulation, PICSS trial, NAVIGATE-ESUS PFO, RE-SPECT ESUS PFO, patent foramen ovale medical therapy, RoPE score',
+  },
   'pfo-closure-migraine': {
     title: 'PFO Closure for Migraine · NeuroWiki',
     description: 'All three randomized trials of PFO closure for migraine missed their primary endpoint, and every society document that has addressed it recommends against.',

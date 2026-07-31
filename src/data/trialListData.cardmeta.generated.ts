@@ -946,6 +946,21 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "bottomLineSummary": "MR RESCUE randomized 118 patients with proximal LVO stroke to mechanical embolectomy (MERCI or Penumbra) or standard care within 8 hours, stratified by penumbral imaging pattern. Mean mRS at 90 days was 3.9 in both arms. Penumbral imaging did not identify a benefiting subgroup (interaction p=0.14). Successful reperfusion was achieved in only 27% of the embolectomy arm, reflecting low first-generation device efficacy. The trial does not establish benefit or harm; its teaching value is illustrating why device generation and imaging selection were insufficient in the first-generation EVT era.",
     "doi": "10.1056/NEJMoa1212793"
   },
+  "navigate-esus-trial": {
+    "title": "NAVIGATE-ESUS (PFO subgroup)",
+    "legend": {
+      "finding": "Prespecified PFO subgroup at 45% power, in a trial stopped for futility and bleeding.",
+      "bottomLineTag": "Underpowered",
+      "keyStat": "HR 0.54 (0.22 to 1.36)"
+    },
+    "subtitle": "Rivaroxaban vs Aspirin in the Prespecified Patent Foramen Ovale Subgroup of NAVIGATE-ESUS (Kasner et al., 2018)",
+    "source": "Kasner SE et al. (Lancet Neurology 2018;17(12):1053-1060); parent Hart RG et al. (NEJM 2018;378(23):2191-2201)",
+    "timeline": "Median follow-up 11 months after early termination. Subgroup published Lancet Neurology 2018;17(12):1053-1060; parent NEJM 2018;378(23):2191-2201",
+    "listCategory": "antiplatelets",
+    "listDescription": "Prespecified PFO subgroup (534 of 7,213) of an ESUS trial stopped early for futility plus excess bleeding. Rivaroxaban 15 mg vs aspirin 100 mg: HR 0.54 (95% CI 0.22 to 1.36), p-interaction 0.18, at 45% power.",
+    "bottomLineSummary": "In the prespecified PFO subgroup of NAVIGATE-ESUS (534 of 7,213 patients, 7.4% detected), rivaroxaban 15 mg once daily gave 7 recurrent ischaemic strokes (2.6 per 100 patient-years) against 13 on aspirin 100 mg (4.8 per 100 patient-years), HR 0.54 (95% CI 0.22 to 1.36), p-interaction 0.18. The subgroup had 45% power because the parent trial was stopped early for futility plus excess bleeding, and the authors record that substantial imprecision remains. The pooled OR 0.48 (95% CI 0.24 to 0.96) reported in the same paper moved to OR 0.70 (95% CI 0.43 to 1.14) when RE-SPECT ESUS was added.",
+    "doi": "10.1016/S1474-4422(18)30319-3"
+  },
   "ninds-trial": {
     "title": "NINDS Trial",
     "legend": {
@@ -1063,6 +1078,21 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "listDescription": "European RCT (N=414, age <60) of Amplatzer PFO Occluder vs medical therapy after cryptogenic stroke, TIA, or peripheral embolism. Primary composite 3.4% vs 5.2% (HR 0.63, P=0.34). Underpowered (only 18 primary events). Negative.",
     "bottomLineSummary": "In 414 patients younger than 60 with PFO and prior ischemic stroke, TIA, or peripheral thromboembolic event of presumed paradoxical embolic origin, percutaneous closure with the Amplatzer PFO Occluder vs medical therapy (antiplatelet or anticoagulation per investigator) over mean ~4 years did not reduce the primary composite of death, nonfatal stroke, TIA, or peripheral embolism (3.4% vs 5.2%, HR 0.63, 95% CI 0.24–1.62, P=0.34). Underpowered: only 18 primary events accrued. Secondary nonfatal stroke 0.5% vs 2.4% (HR 0.20, P=0.14) and TIA 2.5% vs 3.3% (HR 0.71, P=0.56) numerically favored closure.",
     "doi": "10.1056/NEJMoa1211716"
+  },
+  "picss-trial": {
+    "title": "PICSS",
+    "legend": {
+      "finding": "Non-prespecified subgroup of a substudy; low-intensity warfarin did not beat aspirin.",
+      "bottomLineTag": "Subgroup only",
+      "keyStat": "HR 0.52 (0.16 to 1.67)"
+    },
+    "subtitle": "Patent Foramen Ovale in Cryptogenic Stroke Study: Low-Intensity Warfarin vs Aspirin in the WARSS TEE Substudy (Homma et al., 2002)",
+    "source": "Homma S et al. (Circulation 2002;105(22):2625-2631)",
+    "timeline": "42 US centres, enrolled 1993 to 2000; 2-year follow-up. Published Circulation 2002;105(22):2625-2631",
+    "listCategory": "antiplatelets",
+    "listDescription": "TEE substudy of WARSS (N=630). The 98-patient cryptogenic-stroke-with-PFO comparison of low-intensity warfarin against aspirin is a NON-PRESPECIFIED SUBGROUP: 4 of 42 vs 10 of 56, HR 0.52 (95% CI 0.16 to 1.67), P=0.28. Hypothesis-generating only.",
+    "bottomLineSummary": "PICSS is the TEE substudy of WARSS (630 patients, PFO in 33.8%). Within it, a non-prespecified subgroup of 98 patients with cryptogenic stroke and a PFO showed recurrent ischemic stroke or death at 2 years in 4 of 42 (9.5%) on low-intensity warfarin versus 10 of 56 (17.9%) on aspirin, HR 0.52 (95% CI 0.16 to 1.67), P=0.28. The anticoagulant was warfarin at a target INR of 1.4 to 2.8, so nothing here transfers to standard-intensity anticoagulation or to a DOAC. What PICSS does establish is that a PFO did not raise 2-year recurrence risk on medical therapy.",
+    "doi": "10.1161/01.CIR.0000017498.88393.44"
   },
   "point-trial": {
     "title": "POINT Trial",
@@ -1241,6 +1271,21 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "listDescription": "First positive large-core EVT trial: ASPECTS 3-5; mRS 0-3 31% vs 13%; NNT 5-6.",
     "bottomLineSummary": "RESCUE-Japan LIMIT was the first randomized trial to show EVT benefit in large-core stroke (ASPECTS 3-5). Among 203 Japanese patients with ICA or M1 occlusion within 24 hours of LKW, EVT increased mRS 0-3 at 90 days from 12.7% to 31.0% (RR 2.43, 95% CI 1.35-4.37, P=0.002, NNT 5-6). The any-ICH rate nearly doubled (58.0% vs 31.4%, P<0.001) but symptomatic ICH and 90-day mortality were not significantly different. The trial opened the large-core EVT question that SELECT2, ANGEL-ASPECT, TENSION, and LASTE confirmed. AHA/ASA 2026 §4.7.2 supports Class I large-core EVT based in part on this index trial.",
     "doi": "10.1056/NEJMoa2118191"
+  },
+  "respect-esus-trial": {
+    "title": "RE-SPECT ESUS (PFO subgroup)",
+    "legend": {
+      "finding": "PFO subgroup null; interaction p=0.83, and the hazard ratio is an AAN extraction.",
+      "bottomLineTag": "No interaction",
+      "keyStat": "HR 0.88 (0.45 to 1.71)"
+    },
+    "subtitle": "Dabigatran vs Aspirin in the Patent Foramen Ovale Subgroup of RE-SPECT ESUS (Diener et al., Stroke 2021)",
+    "source": "Diener HC et al. (Stroke 2021;52(3):1065-1068); parent Diener HC et al. (NEJM 2019;380(20):1906-1917)",
+    "timeline": "Parent published NEJM 2019;380(20):1906-1917; PFO subgroup published Stroke 2021;52(3):1065-1068",
+    "listCategory": "antiplatelets",
+    "listDescription": "PFO subgroup (680 of 5,388, 12.6%) of RE-SPECT ESUS. Interaction with treatment null at p=0.8290. Per-arm event rates were never published; the HR 0.88 (95% CI 0.45 to 1.71) that circulates is an AAN 2020 extraction.",
+    "bottomLineSummary": "In the PFO subgroup of RE-SPECT ESUS (680 of 5,388 patients, 12.6% detected), the interaction between PFO status and the effect of dabigatran versus aspirin was null at p=0.8290. Per-arm event rates were never published; the HR 0.88 (95% CI 0.45 to 1.71) that circulates is an AAN 2020 extraction. Adding this trial to the pool that Kasner reported in 2018 as OR 0.48 (95% CI 0.24 to 0.96) returned OR 0.70 (95% CI 0.43 to 1.14). The authors conclude that there is insufficient evidence to recommend anticoagulation over antiplatelet therapy for patients with ESUS and a PFO.",
+    "doi": "10.1161/STROKEAHA.120.031237"
   },
   "respect-original-trial": {
     "title": "RESPECT (Original 2013)",

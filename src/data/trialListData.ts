@@ -581,6 +581,10 @@ const legacyTrialCategories: Record<string, TrialCategoryKey> = {
   'enrich-trial': 'surgical-interventions',
   // PFO closure for migraine (2008-2017). Filed under secondary-prevention to
   // sit beside the PFO-for-stroke trials; the indication tested is migraine.
+  // PFO antithrombotic choice: what to give when the PFO is not closed.
+  'picss-trial': 'secondary-prevention',
+  'navigate-esus-trial': 'secondary-prevention',
+  'respect-esus-trial': 'secondary-prevention',
   'mist-trial': 'secondary-prevention',
   'prima-trial': 'secondary-prevention',
   'premium-trial': 'secondary-prevention',
