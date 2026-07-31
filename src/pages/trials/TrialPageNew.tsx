@@ -899,7 +899,7 @@ const TrialPageNew: React.FC = () => {
                 treatmentLabel={trialMetadata.efficacyResults.treatment.name}
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="mRS 0-1 at 90 Days"
-                riskRatio="1.61"
+                riskRatio="OR 1.61"
                 ciLow="1.09"
                 ciHigh="2.36"
                 pValue={trialMetadata.stats.pValue.value}
@@ -1505,7 +1505,7 @@ const TrialPageNew: React.FC = () => {
                 treatmentLabel={trialMetadata.efficacyResults.treatment.name}
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="Event-free at 1 Year"
-                riskRatio="1.10"
+                riskRatio="HR 1.10"
                 ciLow="0.52"
                 ciHigh="2.35"
                 pValue={trialMetadata.stats.pValue.value}
@@ -1577,7 +1577,7 @@ const TrialPageNew: React.FC = () => {
                 treatmentLabel={trialMetadata.efficacyResults.treatment.name}
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="Event-free at 12 Months"
-                riskRatio="0.32"
+                riskRatio="HR 0.32"
                 ciLow="0.16"
                 ciHigh="0.63"
                 pValue={trialMetadata.stats.pValue.value}
@@ -2136,6 +2136,7 @@ const TrialPageNew: React.FC = () => {
                 winnerArm="treatment"
                 // Quasi-experimental dispatch design. The callout on this same card states that residual confounding prevents a causal absolute-risk-difference reading; a band would assert exactly that.
                 suppressBand
+                effectLabel="Common OR (worse mRS)"
               />
               <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2 text-xs text-slate-500">
                 NNT suppressed (quasi-experimental design, see clinical-trial-audit rules)
@@ -2337,7 +2338,7 @@ const TrialPageNew: React.FC = () => {
                 treatmentLabel={trialMetadata.efficacyResults.treatment.name}
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="Stroke-free at 90 Days"
-                riskRatio="0.68"
+                riskRatio="HR 0.68"
                 ciLow="0.57"
                 ciHigh="0.81"
                 pValue={trialMetadata.stats.pValue.value}
@@ -2412,7 +2413,7 @@ const TrialPageNew: React.FC = () => {
                 treatmentLabel={trialMetadata.efficacyResults.treatment.name}
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="Major-event-free at 90 Days"
-                riskRatio="0.75"
+                riskRatio="HR 0.75"
                 ciLow="0.59"
                 ciHigh="0.95"
                 pValue={trialMetadata.stats.pValue.value}
@@ -2487,7 +2488,7 @@ const TrialPageNew: React.FC = () => {
                 treatmentLabel={trialMetadata.efficacyResults.treatment.name}
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="Event-free at 90 Days"
-                riskRatio="0.89"
+                riskRatio="HR 0.89"
                 ciLow="0.78"
                 ciHigh="1.01"
                 pValue={trialMetadata.stats.pValue.value}
@@ -2555,7 +2556,7 @@ const TrialPageNew: React.FC = () => {
                 treatmentLabel={trialMetadata.efficacyResults.treatment.name}
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="Stroke-free (annual rate per year)"
-                riskRatio="0.92"
+                riskRatio="HR 0.92"
                 ciLow="0.72"
                 ciHigh="1.16"
                 pValue={trialMetadata.stats.pValue.value}
@@ -2622,7 +2623,7 @@ const TrialPageNew: React.FC = () => {
                 treatmentLabel={trialMetadata.efficacyResults.treatment.name}
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="Stroke-free at 5 Years"
-                riskRatio="0.84"
+                riskRatio="HR 0.84"
                 ciLow="0.71"
                 ciHigh="0.99"
                 pValue={trialMetadata.stats.pValue.value}
@@ -2696,7 +2697,7 @@ const TrialPageNew: React.FC = () => {
                 treatmentLabel={trialMetadata.efficacyResults.treatment.name}
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="Event-free at 30 Days"
-                riskRatio="0.83"
+                riskRatio="HR 0.83"
                 ciLow="0.71"
                 ciHigh="0.96"
                 pValue={trialMetadata.stats.pValue.value}
@@ -4928,7 +4929,7 @@ const TrialPageNew: React.FC = () => {
                   treatmentLabel={tm.efficacyResults.treatment.name}
                   controlLabel={tm.efficacyResults.control.name}
                   endpoint="mRS 0-2 at 90 Days"
-                  riskRatio="2.60"
+                  riskRatio="cOR 2.60"
                   ciLow="1.70"
                   ciHigh="3.80"
                   pValue="<0.001"
@@ -5246,7 +5247,7 @@ const TrialPageNew: React.FC = () => {
                   treatmentLabel={tm.efficacyResults.treatment.name}
                   controlLabel={tm.efficacyResults.control.name}
                   endpoint="mRS 0-2 at 3 Months"
-                  riskRatio="1.55"
+                  riskRatio="OR 1.55"
                   ciLow="1.05"
                   ciHigh="2.30"
                   pValue="0.028"
@@ -8192,6 +8193,7 @@ const TrialPageNew: React.FC = () => {
                 ciHigh=""
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm={isPositive ? 'treatment' : 'none'}
+                effectLabel="Primary events"
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
@@ -8611,6 +8613,7 @@ const TrialPageNew: React.FC = () => {
                 ciHigh=""
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm={isPositive ? 'treatment' : 'none'}
+                effectLabel="Events per 1000 treated"
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
@@ -8687,6 +8690,7 @@ const TrialPageNew: React.FC = () => {
                 ciHigh=""
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm={isPositive ? 'treatment' : 'none'}
+                effectLabel="Events per 1000 treated"
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
@@ -8843,6 +8847,7 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="22.2"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm={isPositive ? 'treatment' : 'none'}
+                effectLabel="Absolute risk difference"
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
@@ -8934,6 +8939,7 @@ const TrialPageNew: React.FC = () => {
                 // extra recoveries per 100 patients" against an arm that does
                 // not exist. Found 2026-07-31 during the PFO-migraine review.
                 suppressBand
+                effectLabel="Anti-FXa reduction"
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
@@ -9016,6 +9022,7 @@ const TrialPageNew: React.FC = () => {
                 // Noninferiority design: the reported primary verdict is not a
                 // superiority p-value, so the chart must not describe it as one.
                 suppressReason="noninferiority"
+                effectLabel="Absolute risk difference"
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
@@ -9099,6 +9106,7 @@ const TrialPageNew: React.FC = () => {
                 suppressReason="ordinal-primary"
                 // Harm wording must come from the record, not from winnerArm.
                 primaryResult={trialMetadata.primaryResult}
+                effectLabel="Adjusted common OR"
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
@@ -9813,6 +9821,7 @@ const TrialPageNew: React.FC = () => {
                 suppressReason="ordinal-primary"
                 // Harm wording must come from the record, not from winnerArm.
                 primaryResult={trialMetadata.primaryResult}
+                effectLabel="Adjusted common OR"
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">

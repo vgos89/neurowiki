@@ -254,11 +254,75 @@ export const DeltaBandChart: React.FC<DeltaBandChartProps> = ({
     };
   }, [startIdx, endIdx, showBand]);
 
-  const showP = !isBlank(pValue);
+  // Most call sites embed the metric name INSIDE the value ("HR 0.79",
+  // "ARR 52.8 pp") while passing no effectLabel, so the row rendered the default
+  // label in front of it: "Risk ratio HR 0.79", "Risk ratio ARR 52.8 pp",
+  // "Risk ratio cOR 2.77". A hazard ratio, an odds ratio and a risk difference
+  // are not risk ratios, and a reader comparing across trial pages is being told
+  // they are. 57 of 95 call sites did this. Rather than edit 57 sites and leave
+  // the default waiting for the next one, resolve the label from the value:
+  // recognise the metric token, name it properly, and drop the duplicate prefix.
+  // An explicit effectLabel always wins.
+  //
+  // NO DIRECTIONAL TERMS IN THIS TABLE. "Absolute risk reduction" presumes the
+  // intervention lowered risk, and this component receives two percentages and a
+  // string, so it cannot know outcome polarity. Mapping ARR to "reduction"
+  // rendered "Absolute risk reduction +8.9pp" on SAMMPRIS, six lines under its
+  // own STOPPED FOR HARM callout, and "Absolute risk reduction 52.8 pp" on a
+  // SURVIVAL endpoint where a "reduction" would be harm. ARR/ARD/RD are the same
+  // quantity anyway, differing only by an assumed sign, and which token a call
+  // site typed is an authoring accident: CREST-2 wrote ARD and OPTIMAL-BP wrote
+  // RD for statistically identical figures. All three collapse to the neutral
+  // term. A call site that genuinely means direction passes effectLabel.
+  const METRIC_NAMES: Record<string, string> = {
+    OR: 'Odds ratio',
+    aOR: 'Adjusted odds ratio',
+    cOR: 'Common OR',
+    acOR: 'Adjusted common OR',
+    gOR: 'Generalized OR',
+    HR: 'Hazard ratio',
+    RR: 'Risk ratio',
+    IRR: 'Incidence rate ratio',
+    aIR: 'Adjusted incidence ratio',
+    ARR: 'Absolute risk difference',
+    ARD: 'Absolute risk difference',
+    RD: 'Absolute risk difference',
+    SRD: 'Standardised risk difference',
+    SMD: 'Standardised mean difference',
+    MD: 'Mean difference',
+  };
+  // Which scale each metric lives on. The null value differs: a ratio is null at
+  // 1.0, a difference is null at 0. The interval tooltip below depends on this.
+  const RATIO_METRICS = new Set(['OR', 'aOR', 'cOR', 'acOR', 'gOR', 'HR', 'RR', 'IRR', 'aIR']);
+  // Longest-first so aOR/cOR/acOR/gOR are not shadowed by OR, ARR/ARD/SRD not by RR/RD.
+  const METRIC_TOKEN = /^\s*(acOR|aOR|cOR|gOR|aIR|ARR|ARD|SRD|IRR|SMD|OR|HR|RR|RD|MD)\b[\s:]*/;
+  const embeddedMetric = (riskRatio ?? '').match(METRIC_TOKEN);
+  const resolvedEffectLabel =
+    effectLabel ?? (embeddedMetric ? METRIC_NAMES[embeddedMetric[1]] : 'Risk ratio');
+  // Strip a recognised token even when effectLabel is passed, or a future call
+  // site pairing effectLabel="Adjusted common OR" with riskRatio="acOR 2.05"
+  // re-creates the duplicated-prefix bug this block exists to prevent.
+  const resolvedEffectValue = embeddedMetric ? riskRatio.replace(METRIC_TOKEN, '') : riskRatio;
+  // Difference-scale when the call site declared a difference metric, or when an
+  // explicit effectLabel names one. Default (no token) stays ratio-scale.
+  const effectIsRatioScale = embeddedMetric
+    ? RATIO_METRICS.has(embeddedMetric[1])
+    : !/difference|reduction|increase|\bpp\b/i.test(effectLabel ?? '');
+
+  // pIsUnparseable is excluded here, not just from the suppression note: the row
+  // was still rendering "p = NI met", "p = Met per-protocol", "p = NI not est."
+  // and "p = n/a (estimation design)". None of those is a p-value.
+  const showP = !isBlank(pValue) && !pIsUnparseable;
   const showInterval = hasInterval;
   // A gap big enough to have drawn a band, that we chose not to draw.
   const bandSuppressedDespiteGap = arr >= 2 && startIdx <= endIdx && !showBand;
-  const pSig = parseFloat(pValue) < 0.05;
+  // Significance green is a SUCCESS colour, so it must not paint a harm result.
+  // OPTIMAL-BP was rendering "p = 0.03 (HARM)" in the same green as a positive
+  // primary, and SAMMPRIS, PATCH and NOR-TEST 2 did the same on their harm
+  // findings. A significant harm p-value is significant, but it is not good news,
+  // and colour is the fastest thing a clinician reads.
+  const resultIsHarm = winnerArm === 'control' || primaryResult === 'harm-stopped';
+  const pSig = parseFloat(pValue) < 0.05 && !resultIsHarm;
   const treatmentIsWinner = winnerArm === 'treatment';
   const controlIsWinner = winnerArm === 'control';
 
@@ -461,8 +525,8 @@ export const DeltaBandChart: React.FC<DeltaBandChartProps> = ({
       {/* Stat row: Risk ratio | 95% CI [tooltip] | p-value */}
       <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm mt-4 pt-4 border-t border-slate-100">
         <span className="text-slate-700">
-          {effectLabel ?? 'Risk ratio'}{' '}
-          <span className="font-semibold tabular-nums">{riskRatio}</span>
+          {resolvedEffectLabel}{' '}
+          <span className="font-semibold tabular-nums">{resolvedEffectValue}</span>
         </span>
         {/* One-sided noninferiority trials publish only a lower bound. Passing an empty
             ciHigh renders the bound alone instead of a dangling en-dash, and relabels the
@@ -479,8 +543,17 @@ export const DeltaBandChart: React.FC<DeltaBandChartProps> = ({
             <MedicalTooltip
               term="Confidence Interval"
               definition={
-                MEDICAL_GLOSSARY['confidence-interval'] ||
-                'Range of values consistent with the study data. A 95% CI that excludes 1.0 (for a ratio) indicates statistical significance.'
+                // The null value depends on the SCALE, and the shipped glossary
+                // entry states only the ratio rule ("if CI crosses 1.0..."). On a
+                // difference row the null is 0, so the ratio rule flips the
+                // verdict: ELAN and TASTE both cross 0 (null) without crossing
+                // 1.0, and CHOICE (RD +18.4 pp, CI 0.3 to 36.4, p=0.047, a
+                // POSITIVE primary) contains 1.0 and was being read as possibly
+                // not significant. Found 2026-07-31.
+                effectIsRatioScale
+                  ? (MEDICAL_GLOSSARY['confidence-interval'] ||
+                     'Range of values consistent with the study data. For a ratio, a 95% CI that excludes 1.0 indicates statistical significance.')
+                  : 'Range of values consistent with the study data. This effect is a DIFFERENCE, so the no-effect value is 0, not 1.0: a 95% CI that excludes 0 indicates statistical significance.'
               }
             />
           ) : intervalLabel.includes('sided') ? (
