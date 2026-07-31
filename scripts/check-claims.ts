@@ -52,10 +52,23 @@ const REG_FILE    = path.resolve(ROOT, cli['registry-file'] ?? 'src/lib/citation
 // ── Phase 1 regex patterns (CLAUDE.md §13.4) ──────────────────────────────
 
 const ID = '[a-z0-9][a-z0-9._-]*';
+
+// The claim text in `claim("...", "id")` is arbitrary clinical prose and WILL contain
+// apostrophes ("the clinician's judgment", "doesn't"). The previous pattern used
+// [^"']* for that argument, which excludes BOTH quote characters regardless of which
+// one opened the string, so any tag whose text contained an apostrophe silently failed
+// to match and the tag became invisible to every check below: a tagged claim would
+// read as untagged, which is the false-sense-of-coverage failure §13.3 exists to stop.
+//
+// Fixed with an alternation of complete quoted strings (each terminated only by its own
+// quote character, with escapes honoured). All groups are non-capturing so the claim ID
+// stays capture group 1, which the extraction below relies on.
+const QUOTED = `(?:"(?:[^"\\\\]|\\\\.)*"|'(?:[^'\\\\]|\\\\.)*'|\`(?:[^\`\\\\]|\\\\.)*\`)`;
+
 const PHASE1: Record<string, RegExp> = {
   jsx:          new RegExp(`\\bdata-claim=["'](${ID})["']`, 'g'),
   data:         new RegExp(`\\bclaimId\\s*:\\s*["'](${ID})["']`, 'g'),
-  computed:     new RegExp(`\\bclaim\\s*\\(\\s*["'][^"']*["']\\s*,\\s*["'](${ID})["']\\s*\\)`, 'g'),
+  computed:     new RegExp(`\\bclaim\\s*\\(\\s*${QUOTED}\\s*,\\s*["'](${ID})["']\\s*\\)`, 'g'),
   bedsidePearl: new RegExp(`\\bbedsidePearlClaimId\\s*:\\s*["'](${ID})["']`, 'g'),
 };
 

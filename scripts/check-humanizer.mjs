@@ -267,6 +267,43 @@ function detect(str) {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
+// Clinical-value placeholder rule
+//
+// Distinct from the em-dash prose rule. A calculator showing "—" before the
+// user has entered anything is correct UI. A CLINICAL VALUE slot carrying a
+// placeholder glyph is not: it renders as "95% CI —–—" or "p = N/A" on a trial
+// page, which is what shipped on IST, CAST, ANNEXA-4, BEST-II, DECIMAL,
+// DESTINY, HAMLET, TIMING and OPTIMAS until 2026-07-27.
+//
+// The correct way to say "no value published" is an empty string: the chart
+// components treat empty as absent and suppress the row. A glyph renders.
+const CLINICAL_VALUE_PROPS = [
+  'ciLow', 'ciHigh', 'pValue', 'riskRatio', 'effectSize',
+  'treatmentPct', 'controlPct', 'nnt', 'intervalLabel', 'effectLabel',
+];
+const PLACEHOLDER_GLYPHS = ['\u2014', '\u2013', 'N/A', 'n/a', 'NA', '--', '-', '?', 'TBD', 'tbd'];
+
+function scanClinicalValuePlaceholders(src) {
+  const out = [];
+  const propAlt = CLINICAL_VALUE_PROPS.join('|');
+  const re = new RegExp(`\\b(${propAlt})\\s*=\\s*["'\`]([^"'\`]*)["'\`]`, 'g');
+  let m;
+  while ((m = re.exec(src)) !== null) {
+    const value = m[2].trim();
+    if (value === '') continue;                       // empty = "absent", correct
+    if (!PLACEHOLDER_GLYPHS.includes(value)) continue; // a real value
+    const line = src.slice(0, m.index).split('\n').length;
+    out.push({
+      line,
+      severity: 'ERROR',
+      rule: 'clinical-value-placeholder',
+      sample: `${m[1]}="${value}" renders a placeholder where a clinical value belongs; use "" so the row is suppressed`,
+    });
+  }
+  return out;
+}
+
+// ────────────────────────────────────────────────────────────────────────────
 // File targets
 // ────────────────────────────────────────────────────────────────────────────
 
@@ -313,6 +350,9 @@ for (const { path, extractor } of TARGETS) {
   const src = stripBlockComments(readFileSync(abs, 'utf8'));
   const strings = extractor(src);
   const fileFindings = [];
+  // Prop-level scan runs on raw source: these are attribute values, not
+  // extracted prose strings, so the length floor never applies to them.
+  fileFindings.push(...scanClinicalValuePlaceholders(src));
   for (const { line, text } of strings) {
     const allowed = EMDASH_ALLOWLIST.has(text.trim());
     for (const f of detect(text)) {
