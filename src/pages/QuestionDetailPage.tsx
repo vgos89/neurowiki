@@ -20,6 +20,7 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { TRIAL_QUESTIONS } from '../data/trial-questions';
 import { CALCULATORS } from '../data/calculators';
+import { GuidelineTimeline } from '../components/trials/GuidelineTimeline';
 import { findTrialById, getTrialCardMeta, type TrialItem, type TrialCardMeta } from '../data/trialListData';
 // Trial-card legend + stub-trial fields come from the lightweight generated
 // projection (getTrialCardMeta), so this page no longer imports the ~928 KB
@@ -272,6 +273,14 @@ export default function QuestionDetailPage() {
               />
             ))}
           </div>
+        )}
+
+        {/* ── Guideline timeline ───────────────────────────────────────────
+            Several guidelines over several years, where the sequence and the
+            divergence by indication are the teaching point. Added 2026-07-31
+            for the PFO cluster (Phase 5). */}
+        {question.guidelineTimelineId && (
+          <GuidelineTimeline timelineId={question.guidelineTimelineId} />
         )}
 
         {/* ── Calculators rail ─────────────────────────────────────────────

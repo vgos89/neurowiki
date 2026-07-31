@@ -321,6 +321,24 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   //     percent detected within 45 days") that fused two distinct REDUCE
   //     figures; REDUCE reports 83% DETECTED within 45 days and 59% RESOLVED
   //     within 2 weeks. Both defects pre-dated this refresh and were live.
+  'pfo-guideline-timeline': {
+    id: 'pfo-guideline-timeline',
+    citation_ids: [
+      // Antithrombotic choice after cryptogenic stroke.
+      'kuijpers-bmj-rapidrec-pfo-2018',
+      'messe-aan-pfo-advisory-2020',
+      // Closure after cryptogenic stroke.
+      'aha-asa-2021-secondary-prevention-pfo',
+      // Closure for migraine.
+      'kavinsky-scai-pfo-2022',
+      'vadod-headache-cpg-2023',
+      'kim-asia-pacific-pfo-2025',
+    ],
+    surfaces: [DATA_SURFACE],
+    description:
+      'GuidelineTimeline on the PFO question pages. Renders six already-registered guideline-tier documents chronologically, 2018 to 2025, across THREE distinct indications: antithrombotic choice after cryptogenic stroke, closure after cryptogenic stroke, and closure for migraine. The verbatim recommendation text is NOT authored on this surface: each entry reads quoted_text from CITATION_REGISTRY, so this claim covers only the authored per-entry whatChanged lines, the stance categorisation and the closing takeaway. The teaching point the sequence exists to make is that one anatomical finding carries OPPOSITE recommendations by indication, and a clinician who has read only the stroke guidance can carry it into a migraine conversation where it does not apply. Specific assertions the authored lines make, each traceable to the mapped quoted_text: CORRECTED 2026-07-31 after clinical review blocked five authored lines for asserting more than their citations carry. BMJ Rapid Recommendations 2018 gave anticoagulation its most favourable position, weakly and on low-quality evidence, before RE-SPECT ESUS reported, and no society adopted it. The surface does NOT assert the evidence was refuted: the evidence that would support that is registered in this repo but deliberately not mapped to this claim; AAN 2020 was equipoise rather than preference, and a 2022 to 2026 search located no later society guideline on the question, which the surface states as a search result rather than as verified absence; and its interval also rules out a clinically important benefit for ASPIRIN, which is the sentence most often misread as an aspirin endorsement; AHA/ASA 2021 is a recommendation about HOW the decision is made, jointly by the patient, the cardiologist and the neurologist, scoped to patients 18 to 60 with a nonlacunar stroke of undetermined cause, and it renders under a distinct shared-decision stance rather than as a recommendation to close; SCAI 2022 recommends against for migraine while preserving a shared-decision carve-out for debilitating refractory migraine; VA/DoD 2023 Recommendation 40 is an ACTIVE Weak against and NOT an insufficient-evidence finding, since that guideline maintains a separate insufficient-evidence category and did not place PFO closure in it; and the 2025 Asian-Pacific document is an expert consensus rather than a graded guideline, from a summit funded by the manufacturer of the device used in PRIMA and PREMIUM specifically, NOT the device used in MIST, which had a different manufacturer, which strengthens rather than weakens its recommendation against. Two documents carry an explicit not-graded disclosure on the rendered surface (BMJ Rapid Recommendations and the 2025 expert consensus) so neither is read as a practice guideline. No stance beyond the three registered categories is asserted, no strength is invented, and no document is summarised beyond what its own quoted_text supports.',
+  },
+
   'pfo-closure-migraine-synthesis': {
     id: 'pfo-closure-migraine-synthesis',
     citation_ids: [

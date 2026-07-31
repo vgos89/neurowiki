@@ -67,6 +67,13 @@ export interface TrialQuestion {
    * Overrides are display-only and never edit the canonical record.
    */
   legendOverrides?: Record<string, { finding?: string; bottomLineTag?: string; keyStat?: string }>;
+  /**
+   * Guideline timeline to render on this question, keyed into
+   * GUIDELINE_TIMELINES. Use when several guidelines over several years are
+   * the story, rather than one guideline (guidelineSummariesByQuestion) or a
+   * synthesis across trials (clinicalSynthesesByQuestion).
+   */
+  guidelineTimelineId?: string;
 }
 
 export const TRIAL_QUESTIONS: TrialQuestion[] = [
@@ -415,6 +422,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     // is how far this evidence reaches for the patient in front of you. It is a
     // probability estimate, not a threshold: no trial here stratified by RoPE.
     relatedCalculators: ['rope'],
+    guidelineTimelineId: 'pfo',
   },
   {
     id: 'pfo-closure-migraine',
@@ -428,6 +436,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'premium-trial',  // PREMIUM 2017 — Amplatzer vs SHAM; efficacy co-primary not met (P=0.32), safety co-primary met
     ],
     relatedQuestions: ['pfo-closure-cryptogenic'],
+    guidelineTimelineId: 'pfo',
   },
   {
     id: 'pfo-closure-cryptogenic',
@@ -447,6 +456,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     ],
     relatedQuestions: ['pfo-antithrombotic-choice', 'pfo-closure-migraine', 'anticoagulation'],
     relatedCalculators: ['rope'],
+    guidelineTimelineId: 'pfo',
   },
   {
     id: 'asymptomatic-carotid',
