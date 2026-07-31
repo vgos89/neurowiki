@@ -859,6 +859,21 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "bottomLineSummary": "MATCH enrolled 7,599 patients with recent stroke/TIA on clopidogrel and randomized them to add aspirin vs continue clopidogrel alone for 18 months. No efficacy benefit: 15.7% vs 16.7% composite endpoint (RR 0.94, CI 0.84–1.05, P=0.244). Major bleeding doubled: 2.6% vs 1.3%. Established that long-duration DAPT after stroke causes net harm. POINT (2018) subsequently showed short-duration DAPT (21 days) is beneficial; duration is the key variable.",
     "doi": "10.1016/S0140-6736(04)16721-4"
   },
+  "mist-trial": {
+    "title": "MIST Trial",
+    "legend": {
+      "finding": "Sham-controlled STARFlex trial: primary endpoint of migraine cessation was not met.",
+      "bottomLineTag": "Primary not met",
+      "keyStat": "3/74 vs 3/73 (P=0.51)"
+    },
+    "subtitle": "PFO Closure With STARFlex vs Sham for Refractory Migraine With Aura (Dowson et al., 2008)",
+    "source": "Dowson A et al. (Circulation 2008;117(11):1397-1404)",
+    "timeline": "6-month follow-up; published Circulation 2008;117(11):1397-1404",
+    "listCategory": "antiplatelets",
+    "listDescription": "Sham-controlled STARFlex trial (N=147) in refractory migraine with aura. Primary endpoint of migraine cessation NOT met (3 of 74 vs 3 of 73, P=0.51). The only positive signal is exploratory, post-hoc, and outlier-excluded.",
+    "bottomLineSummary": "MIST randomized 147 patients with migraine with aura, refractory to at least 2 preventive classes and with a moderate or large right-to-left shunt, to STARFlex PFO closure or a sham procedure. The primary endpoint, cessation of migraine 91 to 180 days after the procedure, was not met (3 of 74 vs 3 of 73, P=0.51), and secondary endpoints were negative. The only positive signal is an exploratory post-hoc day-count analysis that deleted 2 outlier patients and is not a trial result.",
+    "doi": "10.1161/CIRCULATIONAHA.107.727271"
+  },
   "mistie-iii-trial": {
     "title": "MISTIE III Trial",
     "legend": {
@@ -1063,6 +1078,36 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "listDescription": "Dual antiplatelet in TIA and minor stroke (Western population); confirms CHANCE but major hemorrhage higher at 90 days.",
     "bottomLineSummary": "POINT confirmed in an international population that clopidogrel plus aspirin reduces major ischemic events after TIA or minor stroke, but also showed significantly increased major hemorrhage with 90-day dual therapy. Together with CHANCE, it established that the optimal DAPT duration is 21 days rather than 90.",
     "doi": "10.1056/NEJMoa1800410"
+  },
+  "premium-trial": {
+    "title": "PREMIUM Trial",
+    "legend": {
+      "finding": "Sham-controlled Amplatzer trial: efficacy co-primary not met, safety co-primary met.",
+      "bottomLineTag": "Efficacy not met",
+      "keyStat": "38.5% vs 32.0% (P=0.32)"
+    },
+    "subtitle": "Amplatzer PFO Closure vs Sham for Migraine, Co-Primary Efficacy and Safety Endpoints (Tobis et al., 2017)",
+    "source": "Tobis JM et al. (JACC 2017;70(22):2766-2774)",
+    "timeline": "Published Journal of the American College of Cardiology 2017;70(22):2766-2774",
+    "listCategory": "antiplatelets",
+    "listDescription": "Double-blind sham-controlled Amplatzer trial (N=230). Efficacy co-primary (responder rate) NOT met (38.5% vs 32.0%, P=0.32); the safety co-primary WAS met. Remission and headache-day findings are secondary.",
+    "bottomLineSummary": "PREMIUM randomized 230 patients with 6 to 14 migraine days per month, refractory to at least 3 preventives and with a transcranial-Doppler-defined shunt, to Amplatzer PFO closure or a sham right heart catheterization under double-blind conditions. Of its two co-primary endpoints, the efficacy co-primary was not met (responder rate 38.5% vs 32.0%, P=0.32) and the safety co-primary was met. Headache-day reduction (P=0.025) and complete remission of 8.5% vs 1.0% (P=0.01) are secondary.",
+    "doi": "10.1016/j.jacc.2017.09.1105"
+  },
+  "prima-trial": {
+    "title": "PRIMA Trial",
+    "legend": {
+      "finding": "Unblinded Amplatzer trial: primary endpoint of monthly migraine days was not met.",
+      "bottomLineTag": "Primary not met",
+      "keyStat": "2.9 vs 1.7 days (P=0.17)"
+    },
+    "subtitle": "Percutaneous PFO Closure vs Medical Therapy in Migraine With Aura (Mattle et al., 2016)",
+    "source": "Mattle HP et al. (European Heart Journal 2016;37(26):2029-2036)",
+    "timeline": "Primary comparison at months 9 to 12 against a 3-month baseline; closure adjudicated at 6 months; published European Heart Journal 2016;37(26):2029-2036",
+    "listCategory": "antiplatelets",
+    "listDescription": "Unblinded Amplatzer trial (N=107) in migraine with aura, stopped early for slow enrolment. Primary endpoint of monthly migraine-day reduction NOT met (2.9 vs 1.7 days, P=0.17). Device implanted in only 77% of the closure arm.",
+    "bottomLineSummary": "PRIMA randomized 107 patients with migraine with aura to Amplatzer PFO closure or medical therapy, unblinded and with no sham arm, and stopped early for slow enrolment. The primary endpoint, reduction in monthly migraine days over months 9 to 12 against a 3-month baseline, was not met (2.9 days vs 1.7 days, P=0.17), and overall attacks were not significantly reduced (P=0.09). The aura-specific endpoints and the 38% vs 15% responder rate are secondary.",
+    "doi": "10.1093/eurheartj/ehw027"
   },
   "prisms-trial": {
     "title": "PRISMS Trial",

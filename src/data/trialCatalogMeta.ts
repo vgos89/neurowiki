@@ -105,6 +105,30 @@ export const LEGACY_TRIAL_CATALOG_META: Record<string, LegacyTrialCatalogMeta> =
     description: 'Western DAPT replication trial showing reduced ischemic events but increased major bleeding.',
     clinicalContext: 'Western DAPT replication trial showing reduced ischemic events but increased major bleeding.',
   },
+  // PFO closure for MIGRAINE (2008-2017). Distinct indication from the
+  // PFO-for-stroke trials: all three missed their primary endpoint, and both
+  // SCAI 2022 and VA/DoD 2023 recommend against the procedure for migraine.
+  'mist-trial': {
+    name: 'MIST',
+    year: 2008,
+    doi: '10.1161/CIRCULATIONAHA.107.727271',
+    description: 'Sham-controlled STARFlex closure for migraine with aura; migraine cessation occurred in 3 of 74 versus 3 of 73 (P=0.51).',
+    clinicalContext: 'First sham-controlled PFO-closure migraine trial, and negative. Its one positive signal came from an exploratory analysis that excluded 2 outliers; a Correction was published and two members of the trial steering committee declined authorship over that exclusion.',
+  },
+  'prima-trial': {
+    name: 'PRIMA',
+    year: 2016,
+    doi: '10.1093/eurheartj/ehw027',
+    description: 'Unblinded Amplatzer closure versus medical therapy for migraine with aura; monthly migraine days fell 2.9 versus 1.7 (P=0.17).',
+    clinicalContext: 'Primary endpoint not met. Aura-specific secondary measures did separate, but the trial was unblinded with no sham arm, was stopped early for slow enrolment, and reached adjudicated closure in only 35 of 53 randomized to the device.',
+  },
+  'premium-trial': {
+    name: 'PREMIUM',
+    year: 2017,
+    doi: '10.1016/j.jacc.2017.09.1105',
+    description: 'Sham-controlled Amplatzer closure for refractory migraine; responder rate 38.5% versus 32.0% (P=0.32).',
+    clinicalContext: 'The largest and best-blinded of the three trials, and the one that most cleanly missed its efficacy endpoint. Its co-primary safety endpoint was met: the procedure was safe in this population, it simply did not prevent migraine.',
+  },
   'sammpris-trial': {
     name: 'SAMMPRIS',
     year: 2011,

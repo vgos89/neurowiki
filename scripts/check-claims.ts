@@ -290,13 +290,46 @@ if (fs.existsSync(TRIAL_DATA_FILE)) {
     const TRIAL_DATA = tdMod['TRIAL_DATA'] as Record<string, {
       id?: string;
       primaryDesign?: string;
+      primaryResult?: string;
       calculations?: { nnt?: number | null };
     }> | undefined;
     if (TRIAL_DATA) {
       for (const [id, trial] of Object.entries(TRIAL_DATA)) {
         const nnt = trial?.calculations?.nnt;
         const design = trial?.primaryDesign;
-        if (nnt == null || design == null) continue;
+        const result = trial?.primaryResult;
+        if (nnt == null) continue;
+
+        // A NULL design used to `continue` here, which silently exempted every
+        // record that omits primaryDesign from the only hook-enforced NNT guard
+        // in the repo. That is backwards: a record with no declared design is
+        // exactly the one whose NNT nobody has validated. Records legitimately
+        // omit the field when no enum member fits (PRIMA's continuous
+        // mean-difference primary), and those records must not silently acquire
+        // an NNT later. Found 2026-07-31 by trial-statistician.
+        if (design == null) {
+          failures.push(
+            `Check 4 — NNT validity: trial "${id}" has calculations.nnt=${nnt} ` +
+            `but declares no primaryDesign, so the NNT cannot be validated. ` +
+            `Set primaryDesign, or remove the NNT.`,
+          );
+          continue;
+        }
+
+        // A NOT-MET primary has no valid superiority absolute risk difference,
+        // so it has no valid NNT, whatever the design. Previously only the
+        // design was checked, so a binary-superiority trial that MISSED its
+        // primary could carry an NNT through the hook untouched.
+        if (result != null && result !== 'met' && !NNT_EXPLICIT_ALLOW.has(id)) {
+          failures.push(
+            `Check 4 — NNT validity: trial "${id}" has calculations.nnt=${nnt} ` +
+            `but primaryResult="${result}". Only a met primary supports an NNT: ` +
+            `a null or noninferiority result has no valid superiority absolute ` +
+            `risk difference. See .claude/skills/trial-statistics/.`,
+          );
+          continue;
+        }
+
         if (!NNT_VALID_DESIGNS.has(design)) {
           if (NNT_EXPLICIT_ALLOW.has(id)) {
             // Permanently allowed — coprimary binary endpoint with full

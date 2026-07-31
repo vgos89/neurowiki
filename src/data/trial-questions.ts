@@ -364,6 +364,19 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
   },
   // ─── Tier 2 batch additions (2026-05-21) — group recently-shipped Tier 2 trials ──
   {
+    id: 'pfo-closure-migraine',
+    text: 'PFO closure for migraine?',
+    icon: 'brain',
+    meta: 'Three randomized trials, three missed primary endpoints; every society document that has addressed it recommends against',
+    trialCount: 3,
+    trialIds: [
+      'mist-trial',     // MIST 2008 — STARFlex vs SHAM; cessation not met (3/74 vs 3/73, P=0.51)
+      'prima-trial',    // PRIMA 2016 — Amplatzer vs medical, UNBLINDED; migraine days not met (P=0.17)
+      'premium-trial',  // PREMIUM 2017 — Amplatzer vs SHAM; efficacy co-primary not met (P=0.32), safety co-primary met
+    ],
+    relatedQuestions: ['pfo-closure-cryptogenic'],
+  },
+  {
     id: 'pfo-closure-cryptogenic',
     text: 'PFO closure for cryptogenic stroke?',
     icon: 'brain',
@@ -379,7 +392,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'respect-trial',          // RESPECT (long-term) 2017: 5.9y follow-up converted the 2013 cohort (HR 0.55, NNT 42)
       'defense-pfo-trial',      // DEFENSE-PFO 2018: high-risk anatomy, positive on the 2-year composite
     ],
-    relatedQuestions: ['anticoagulation', 'asymptomatic-carotid'],
+    relatedQuestions: ['pfo-closure-migraine', 'anticoagulation', 'asymptomatic-carotid'],
   },
   {
     id: 'asymptomatic-carotid',

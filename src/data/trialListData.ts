@@ -579,6 +579,11 @@ const legacyTrialCategories: Record<string, TrialCategoryKey> = {
   'inspires-trial': 'secondary-prevention',
   'chance-2-trial': 'secondary-prevention',
   'enrich-trial': 'surgical-interventions',
+  // PFO closure for migraine (2008-2017). Filed under secondary-prevention to
+  // sit beside the PFO-for-stroke trials; the indication tested is migraine.
+  'mist-trial': 'secondary-prevention',
+  'prima-trial': 'secondary-prevention',
+  'premium-trial': 'secondary-prevention',
 };
 
 function enrichTrial(item: Omit<TrialItem, 'year'> & { year?: number }): TrialItem {

@@ -44,6 +44,52 @@ export interface DeltaBandChartProps {
   /** P-value string, e.g. "0.04". Values < 0.05 render green. */
   pValue: string;
   /**
+   * Force-suppress the delta band. Pass `true` when a rendered difference would
+   * assert a comparative benefit the design cannot support.
+   * A null-but-randomized comparison does NOT need this: an explicitly
+   * non-significant `pValue` suppresses the band on its own.
+   */
+  suppressBand?: boolean;
+  /**
+   * WHY the band is suppressed. Drives the explanatory line under the grids, so
+   * it must match the actual design or the page contradicts itself.
+   * - `'no-comparator'` (default): the two grids are not a randomized
+   *   comparison at all. Single-arm cohorts with a placeholder `controlPct`,
+   *   quasi-experimental allocation, benchmark and observational displays.
+   * - `'noninferiority'`: a perfectly good RCT whose conclusion is "not worse
+   *   by more than the margin", not "better". Required for NI call sites:
+   *   telling the reader an NI trial was "not a randomized comparison" is false,
+   *   and sits a few lines from copy on the same page calling it an RCT.
+   * - `'ordinal-primary'`: the primary was an ordinal shift and the grids show a
+   *   dichotomization of it, so a band would be an absolute risk difference over
+   *   a cut point the trial did not test.
+   *
+   * Pass this WHENEVER it applies, not only alongside `suppressBand`: a call
+   * site suppressed by the p-value rule still needs an accurate reason, and the
+   * component cannot infer the design from numbers.
+   *
+   * PRECEDENCE for the rendered line: harm-direction wins first (that the
+   * intervention arm did worse is the most important thing to say), then this
+   * explicit reason, then `suppressBand`'s default, then the p-value branches.
+   * So a harm-direction site passing `'ordinal-primary'` renders the harm line;
+   * that is intended, and both statements are true of it.
+   */
+  suppressReason?: 'no-comparator' | 'noninferiority' | 'ordinal-primary';
+  /**
+   * The record's `primaryResult`, passed straight through. Required for any
+   * call site that says the intervention did WORSE, because that is an
+   * evidentiary claim and must come from the record rather than be inferred.
+   *
+   * `winnerArm` is a STYLING prop: its own contract is "which arm gets the
+   * cobalt accent", and some call sites use `'control'` merely as a direction
+   * hint. Reading it as a harm verdict put "the intervention arm did worse" on
+   * PRISMS, whose interval crosses zero, whose p is NS, whose result is
+   * `terminated-administrative` (stopped for slow enrolment at 33% of planned
+   * enrolment), and whose own pearl says only that the direction "did not
+   * favor" alteplase. Found 2026-07-31.
+   */
+  primaryResult?: string;
+  /**
    * Which arm receives the winning-arm cobalt accent (ADR-005 Decision 3).
    * - 'treatment': intervention arm won (trialResult POSITIVE, normal case).
    * - 'control': control arm favored (POSITIVE trial where intervention caused harm).
@@ -82,18 +128,85 @@ export const DeltaBandChart: React.FC<DeltaBandChartProps> = ({
   effectLabel,
   pValue,
   winnerArm = 'none',
+  suppressBand = false,
+  suppressReason = 'no-comparator',
+  primaryResult,
 }) => {
   // Math.floor per spec — matches mockup "35 of 100" / "29 of 100" for EXTEND
   const treatmentFilled = Math.floor(treatmentPct);
   const controlFilled = Math.floor(controlPct);
+
+  // Treat placeholder strings as absent so a degenerate call site cannot render
+  // "95% CI N/A-N/A" or "p = N/A" on a clinical surface.
+  const PLACEHOLDERS = ['N/A', 'n/a', '—', '–', '-', ''];
+  const isBlank = (v: string) => PLACEHOLDERS.includes((v ?? '').trim());
+  const hasInterval = !isBlank(ciLow);
 
   // Band spans from the first "extra" dot to the last "extra" dot
   const startIdx = Math.floor(controlPct);          // e.g. 29 for EXTEND
   const endIdx = Math.floor(treatmentPct) - 1;      // e.g. 34 for EXTEND
   const arr = treatmentPct - controlPct;            // absolute risk reduction in pp
 
-  // ADR-005 Decision 5 threshold table
-  const showBand = arr >= 2 && startIdx <= endIdx;
+  // A p-value that does NOT positively establish a difference. "<0.001" and
+  // friends do; a parseable value below 0.05 does. Everything else does not,
+  // and that deliberately includes UNPARSEABLE strings: the call sites pass
+  // things like "NI met", "Non-inf" and "Met per-protocol", which parseFloat
+  // turns into NaN. Treating NaN as significant let every one of those draw a
+  // superiority band off a noninferiority conclusion, which is a no-difference
+  // finding. A blank p is left alone (Bayesian and single-arm call sites
+  // legitimately pass none) and is handled by suppressBand where needed.
+  const pTrimmed = (pValue ?? '').trim();
+  // Three states, not two. Several call sites put a DESIGN VERDICT in this slot
+  // ("NI met", "Non-inf", "Met per-protocol") rather than a number. Those must
+  // suppress the band, because a noninferiority verdict is a no-difference
+  // conclusion, but they must never be described as "not statistically
+  // significant" and must never be printed after "p =": "p = NI met" is not a
+  // p-value, and it rendered three lines above copy stating noninferiority WAS
+  // established. Found 2026-07-31 on SARODE, ORIGINAL, ACT, TRACE-2 and TASTE.
+  const pIsNumeric = !isBlank(pValue) && Number.isFinite(parseFloat(pTrimmed));
+  const pIsUnparseable = !isBlank(pValue) && !pTrimmed.startsWith('<') && !pIsNumeric;
+  const pEstablishesDifference =
+    !isBlank(pValue) && (pTrimmed.startsWith('<') || parseFloat(pTrimmed) < 0.05);
+  const pIsNonSignificant = !isBlank(pValue) && !pEstablishesDifference;
+
+  // The band is drawn on the TREATMENT grid and announced as "extra
+  // recoveries". When the control arm is the winner the extra dots are extra
+  // BAD outcomes, so that framing inverts the meaning of the trial: SAMMPRIS
+  // was reading "9 extra recoveries per 100 patients" for 9 extra strokes and
+  // deaths, and PATCH "16 extra recoveries" for 16 extra death-or-dependence
+  // outcomes. Both are harm results, significant, and stopped or published as
+  // such. Suppress rather than relabel: a harm-coloured band would still be an
+  // absolute risk difference, and these call sites do not all have an interval.
+  const bandWouldInvertHarm = winnerArm === 'control' && arr > 0;
+
+  // ADR-005 Decision 5 threshold table, plus two safety preconditions.
+  //
+  // The band IS an absolute-risk-difference display: it highlights the extra
+  // dots and announces "N extra recoveries per 100 patients" to assistive
+  // technology. That is an unqualified causal-benefit claim, and arithmetically
+  // an NNT. It must not draw when the trial did not establish a difference.
+  //
+  // Two ways that goes wrong, both found live on 2026-07-31:
+  //   1. A null result. PREMIUM's efficacy co-primary was NOT met (38.5% vs
+  //      32.0%, P=0.32) and the page drew a 6-dot band reading "7 extra
+  //      recoveries per 100 patients", directly above its own caption stating
+  //      the between-arm difference is not given as a number. Any explicitly
+  //      non-significant p-value now suppresses the band.
+  //   2. No comparator at all. ANNEXA-4 is a single-arm cohort whose call site
+  //      passes controlPct={0} as a placeholder, so the band read "82 extra
+  //      recoveries per 100 patients" against an arm that does not exist. That
+  //      cannot be inferred from the numbers, so those call sites pass
+  //      suppressBand explicitly.
+  //
+  // Deliberately NOT gated on hasInterval alone: DAWN (Bayesian posterior
+  // >0.999) and LASTE (P<0.001) pass no CI to this component and their
+  // differences are real. Suppressing those would be the opposite error.
+  const showBand =
+    arr >= 2 &&
+    startIdx <= endIdx &&
+    !suppressBand &&
+    !pIsNonSignificant &&
+    !bandWouldInvertHarm;
 
   const treatmentGridRef = useRef<HTMLDivElement>(null);
   const dotRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -141,12 +254,10 @@ export const DeltaBandChart: React.FC<DeltaBandChartProps> = ({
     };
   }, [startIdx, endIdx, showBand]);
 
-  // Treat placeholder strings as absent so a degenerate call site cannot render
-  // "95% CI N/A-N/A" or "p = N/A" on a clinical surface.
-  const PLACEHOLDERS = ['N/A', 'n/a', '\u2014', '\u2013', '-', ''];
-  const isBlank = (v: string) => PLACEHOLDERS.includes((v ?? '').trim());
   const showP = !isBlank(pValue);
-  const showInterval = !isBlank(ciLow);
+  const showInterval = hasInterval;
+  // A gap big enough to have drawn a band, that we chose not to draw.
+  const bandSuppressedDespiteGap = arr >= 2 && startIdx <= endIdx && !showBand;
   const pSig = parseFloat(pValue) < 0.05;
   const treatmentIsWinner = winnerArm === 'treatment';
   const controlIsWinner = winnerArm === 'control';
@@ -277,16 +388,69 @@ export const DeltaBandChart: React.FC<DeltaBandChartProps> = ({
         </div>
       </div>
 
-      {/* ARR threshold notes (ADR-005 Decision 5) */}
-      {arr < 2 && (
+      {/* ARR threshold notes (ADR-005 Decision 5).
+          Gated with the band: when the band is suppressed, telling the reader
+          there is "a small absolute difference to interpret with caution" is
+          the same over-claim in words that the band made in pixels. Suppression
+          is also explained rather than silent, so a missing band reads as a
+          deliberate decision and not as a rendering fault. */}
+      {bandSuppressedDespiteGap ? (
         <p className="text-xs text-slate-500 italic mt-1">
-          Negligible absolute difference
+          {/* Precedence, deliberate and documented on the suppressReason prop:
+              harm-direction first (it is the most clinically important thing to
+              say), then any EXPLICIT reason the call site gave, then the
+              inferred ones. An explicit reason beats an inferred one because the
+              call site knows the design and the component only sees numbers. */}
+          {bandWouldInvertHarm
+            ? 'The intervention arm did worse on this endpoint, so no benefit band is drawn.'
+            : suppressReason === 'noninferiority'
+              ? 'Noninferiority design, so no superiority band is drawn: this trial tested whether one arm is not worse than the other by more than a pre-set margin, not whether it is better. Whether that margin was met is stated above.'
+              : suppressReason === 'ordinal-primary'
+                ? 'The primary outcome was an ordinal shift across the whole scale, so no band is drawn over this dichotomized view of it.'
+                : suppressBand
+                  ? 'Not a randomized comparison, so no difference band is drawn.'
+                  : pIsUnparseable
+                    ? // The reported value is not a number, so nothing can be
+                      // concluded from it here. Do NOT guess at the design: an
+                      // earlier version assumed "unparseable implies
+                      // noninferiority verdict", which would be false for a
+                      // record whose p-value field simply holds a malformed
+                      // string. Call sites that know the design pass
+                      // suppressReason and never reach this branch.
+                      ''
+                    : `Difference not statistically significant${showP ? ` (p = ${pTrimmed})` : ''}; no difference band is drawn.`}
         </p>
-      )}
-      {arr >= 2 && arr < 5 && (
-        <p className="text-xs text-amber-600 italic mt-1">
-          Small absolute difference, interpret with caution
-        </p>
+      ) : (
+        <>
+          {/* Guard on the ABSOLUTE gap. This branch used to fire on any arr < 2,
+              including large NEGATIVE ones, so OPTIMAL-BP (39.4% vs 54.4%,
+              arr -15.0) printed "Negligible absolute difference" directly under
+              its own STOPPED FOR SAFETY callout reporting that exact deficit.
+              Found 2026-07-31. */}
+          {Math.abs(arr) < 2 && (
+            <p className="text-xs text-slate-500 italic mt-1">
+              Negligible absolute difference
+            </p>
+          )}
+          {/* A NEGATIVE gap does not mean the intervention did worse: on a
+              bad-outcome endpoint (recurrent stroke, death, sICH) a lower number
+              is BETTER. CLOSE is 0% vs 6% recurrent stroke, DEFENSE-PFO 0% vs
+              12.9%, REDUCE 1.4% vs 5.4% — all wins for the intervention. The
+              component sees only two numbers and cannot know the polarity, so it
+              says nothing directional unless the CALL SITE has declared it via
+              winnerArm. Caught pre-merge 2026-07-31 after an earlier version of
+              this branch told six positive trials their intervention did worse. */}
+          {arr <= -2 && primaryResult === 'harm-stopped' && (
+            <p className="text-xs text-amber-600 italic mt-1">
+              The intervention arm did worse on this endpoint; no benefit band is drawn.
+            </p>
+          )}
+          {arr >= 2 && arr < 5 && (
+            <p className="text-xs text-amber-600 italic mt-1">
+              Small absolute difference, interpret with caution
+            </p>
+          )}
+        </>
       )}
 
       {/* Endpoint label */}

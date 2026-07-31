@@ -99,6 +99,11 @@ const QUESTION_ROUTE_META: Record<string, Pick<MetaData, 'title' | 'description'
     description: 'Four-PCC vs FFP for warfarin (Sarode 2013), platelet HARM in antiplatelet-ICH (PATCH), andexanet for FXa inhibitors (ANNEXA-4, ANNEXA-I).',
     keywords: 'ICH anticoagulation reversal, 4 factor PCC, Sarode 2013, PATCH trial platelet, ANNEXA-4 andexanet, ANNEXA-I trial, FXa inhibitor reversal, warfarin reversal ICH',
   },
+  'pfo-closure-migraine': {
+    title: 'PFO Closure for Migraine · NeuroWiki',
+    description: 'All three randomized trials of PFO closure for migraine missed their primary endpoint, and every society document that has addressed it recommends against.',
+    keywords: 'PFO closure migraine, MIST trial, PRIMA trial, PREMIUM trial, patent foramen ovale migraine, migraine with aura PFO, SCAI PFO migraine',
+  },
   'pfo-closure-cryptogenic': {
     title: 'PFO Closure for Cryptogenic Stroke · NeuroWiki',
     description: 'Three NEJM 2017 RCTs (CLOSE, RESPECT long-term, REDUCE) established benefit of PFO closure for cryptogenic stroke, with excess atrial fibrillation as the trade-off.',

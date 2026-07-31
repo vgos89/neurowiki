@@ -1345,6 +1345,242 @@ export const CITATION_REGISTRY: CitationRegistry = {
     quoted_text: 'Pooled data from 6 randomized trials (3,740 patients, median follow-up 57 months) show recurrent stroke rates of 0.47% per year after closure versus 1.09% per year with medical therapy. The RoPE score and the PASCAL classification identify patients whose stroke is likely attributable to the patent foramen ovale; among patients classified as probable, device closure was associated with approximately a 90% relative reduction in recurrent stroke at 2 years, consistent with the pooled hazard ratio of 0.10 for that category.',
   },
 
+  // ─── PFO closure for MIGRAINE — 6 citations added 2026-07-31 ──────────────
+  //     Source: docs/evidence-packets/2026-07-30-pfo-migraine.md
+  //     (evidence-verifier, 2026-07-30; skills clinical-trial-audit +
+  //     trial-statistics). The packet corrected 14 items in the supplied source
+  //     material, 3 of them clinically misleading. Every figure below traces to
+  //     that packet; nothing is derived, recomputed, or supplemented.
+  //
+  //     THE FRAMING THAT GOVERNS ALL SIX (packet §"THE FRAMING"):
+  //       EVERY randomized trial of PFO closure for migraine MISSED its primary
+  //       endpoint. Without exception. Every positive number in this cluster is
+  //       secondary, subgroup, or post-hoc. Every society document that addresses the
+  //       question recommend AGAINST the procedure. Any surface that leads with
+  //       a positive secondary before establishing that the primary was not met
+  //       is a clinical-safety failure, not a style problem.
+  //
+  //     STATISTICS GUARD (packet §"Display constraints"): NNT IS PROHIBITED for
+  //     every source in this cluster. No trial met its primary endpoint, so
+  //     there is no valid superiority absolute risk difference to invert. No
+  //     `calculations.nnt` is set on any of the three trialData.ts records and
+  //     none may be added. Confidence intervals were NOT recoverable for ANY
+  //     result in ANY of the four studies, so per the trial-statistics skill no
+  //     absolute risk difference may be displayed either.
+  //
+  //     DO NOT PUBLISH (packet §"Could NOT verify"):
+  //       - PRIMA's responder-rate P value. The 38% vs 15% point estimates are
+  //         confirmed; the P=0.02 attached to them is NOT. It is omitted below.
+  //       - Confidence intervals for any result in any of these four studies.
+  //       - Recomputed denominators for the pooled analysis's complete-cessation
+  //         rate. Report "9% vs 0.7%" as published; 14/176 and 1/161 do not
+  //         reconcile with it (likely 12-month-completer denominators).
+  //       - Any funding or conflict-of-interest statement for the pooled
+  //         analysis. JACC returned 403; the packet could not verify it.
+  //
+  //     Article titles, journals, volumes, issues, and pages below were
+  //     confirmed against NCBI E-utilities esummary on 2026-07-31 (PMIDs
+  //     18316488, 26908949, 29191325, 33573735, 39131947) and match the packet's
+  //     citation lines exactly. No statistic came from that lookup.
+  //
+  //     Review windows per §13.7: 36 months for the three trials and the pooled
+  //     analysis (fixed, complete datasets, and the two devices are historical);
+  //     6 months for the two guidelines (current clinical guidelines).
+
+  // MIST 2008. STARFlex vs SHAM. The primary endpoint (cessation of migraine
+  // 91 to 180 days after the procedure) was NOT met. The trial's only positive
+  // signal is EXPLORATORY and outlier-excluded and must never be presented as a
+  // trial result. MIST also carries a documented conduct controversy (formal
+  // Correction; two steering-committee members (Peter Wilmshurst, who published
+  // his own account in Eye 2018, and Simon Nightingale) refused to be authors of
+  // the manuscript, objecting specifically to the post-hoc
+  // deletion of the two outliers). STARFlex is discontinued and the sponsor
+  // ceased operations in 2011, so this trial does not generalize to
+  // Amplatzer-era practice.
+  'dowson-mist-2008': {
+    id: 'dowson-mist-2008',
+    source: 'trial',
+    title: 'Migraine Intervention With STARFlex Technology (MIST) trial: a prospective, multicenter, double-blind, sham-controlled trial to evaluate the effectiveness of patent foramen ovale closure with STARFlex septal repair implant to resolve refractory migraine headache',
+    year: 2008,
+    url: 'https://doi.org/10.1161/CIRCULATIONAHA.107.727271',
+    pmid: '18316488',
+    last_reviewed: '2026-07-31',
+    review_window_months: 36,
+    quoted_text: 'In 147 patients with migraine with aura who had failed at least 2 classes of preventive medication and had a moderate or large right-to-left shunt, transcatheter PFO closure with the STARFlex implant was compared with a sham procedure over 6 months of follow-up. The primary endpoint, cessation of migraine 91 to 180 days after the procedure, was NOT met: 3 of 74 with closure versus 3 of 73 with sham (P=0.51). Secondary endpoints were also negative. The only positive signal, a reduction in total migraine days (P=0.027), came from an exploratory post-hoc analysis that deleted 2 outlier patients. A formal Correction was published (Circulation 2009, doi:10.1161/CIRCULATIONAHA.109.192626), and two members of the trial steering committee refused authorship, objecting specifically to that outlier exclusion.',
+  },
+
+  // PRIMA 2016. Amplatzer vs medical therapy, UNBLINDED with no sham arm, and
+  // terminated early for slow enrolment. The primary endpoint (reduction in
+  // monthly migraine days, months 9 to 12 against a 3-month baseline) was NOT
+  // met. The internal-validity caveat is first-order and belongs on every
+  // interpretive surface: of 53 patients randomized to closure the device was
+  // implanted in 41 (77%) and successful closure was adjudicated at 6 months in
+  // only 35 (66%). The 38% vs 15% responder rate is a SECONDARY endpoint scored
+  // on migraine DAYS, not attacks, and its P value could not be verified, so no
+  // P value is attached to it here or anywhere downstream.
+  'mattle-prima-2016': {
+    id: 'mattle-prima-2016',
+    source: 'trial',
+    title: 'Percutaneous closure of patent foramen ovale in migraine with aura, a randomized controlled trial',
+    year: 2016,
+    url: 'https://doi.org/10.1093/eurheartj/ehw027',
+    pmid: '26908949',
+    last_reviewed: '2026-07-31',
+    review_window_months: 36,
+    quoted_text: 'In 107 patients randomized to percutaneous PFO closure with the Amplatzer device or to medical therapy, unblinded and with no sham arm, and terminated early for slow enrolment, the primary endpoint of reduction in monthly migraine days over months 9 to 12 against a 3-month baseline was NOT met: a reduction of 2.9 days with closure versus 1.7 days with medical therapy (P=0.17). Overall migraine attacks were not significantly reduced (P=0.09). Migraine-with-aura days (P=0.014), aura attacks (P<0.01), and the responder rate of 38% versus 15% are all SECONDARY endpoints. Of the 53 patients randomized to closure, the device was implanted in 41 (77%) and successful closure was adjudicated at 6 months in only 35 (66%).',
+  },
+
+  // PREMIUM 2017. Amplatzer vs SHAM right heart catheterization, double-blind.
+  // The trial had CO-PRIMARY endpoints, efficacy and safety. The efficacy
+  // co-primary (responder rate, at least a 50% reduction in migraine attacks)
+  // was NOT met; the safety co-primary WAS met. Do not describe PREMIUM as
+  // flatly negative without that split. Headache-day reduction and complete
+  // remission are SECONDARY.
+  'tobis-premium-2017': {
+    id: 'tobis-premium-2017',
+    source: 'trial',
+    title: 'Percutaneous Closure of Patent Foramen Ovale in Patients With Migraine: The PREMIUM Trial',
+    year: 2017,
+    url: 'https://doi.org/10.1016/j.jacc.2017.09.1105',
+    pmid: '29191325',
+    last_reviewed: '2026-07-31',
+    review_window_months: 36,
+    quoted_text: 'In 230 patients randomized (117 device and 103 control analyzed) with 6 to 14 migraine days per month who had failed at least 3 preventive medications and had a transcranial-Doppler-defined right-to-left shunt, transcatheter PFO closure with the Amplatzer PFO Occluder was compared with a sham right heart catheterization under double-blind conditions. The trial had co-primary endpoints. The efficacy co-primary, responder rate defined as at least a 50% reduction in migraine attacks, was NOT met: 38.5% versus 32.0% (P=0.32). The safety co-primary, adverse events, WAS met. Reduction in headache days (P=0.025) and complete migraine remission of 8.5% (10 of 117) versus 1.0% (1 of 103) (P=0.01) are SECONDARY endpoints.',
+  },
+
+  // Mojadidi 2021 pooled analysis. MISATTRIBUTION GUARD (packet correction #7,
+  // graded "blocking if published"): this is NOT a pooled analysis of the
+  // sham-controlled trials. It pools PRIMA, which was unblinded with no sham
+  // arm, with PREMIUM, which was sham-controlled, and it EXCLUDES MIST, the
+  // other sham-controlled trial. Every reference to it must say what it
+  // actually is. Correction #10, graded "clinical omission": the analysis's own
+  // conventional responder rate was 38% vs 29%, P=0.13, NOT significant, and
+  // the supplied source material had omitted it while reporting the day and
+  // attack counts. That selective-reporting pattern is the one this cluster
+  // exists to avoid, so the null responder rate is carried in quoted_text.
+  // Source type is 'review': a post-hoc pooled re-analysis with re-defined
+  // endpoints is not primary trial evidence. 36-month window per §13.7 (the
+  // contributing datasets are fixed and both parent trials are complete), same
+  // override precedent as kent-scope-2021 and gutierrez-icas-review-2022.
+  'mojadidi-pfo-migraine-pooled-2021': {
+    id: 'mojadidi-pfo-migraine-pooled-2021',
+    source: 'review',
+    title: 'Pooled Analysis of PFO Occluder Device Trials in Patients With PFO and Migraine',
+    year: 2021,
+    url: 'https://doi.org/10.1016/j.jacc.2020.11.068',
+    pmid: '33573735',
+    last_reviewed: '2026-07-31',
+    review_window_months: 36,
+    quoted_text: 'A post-hoc individual-patient pooled analysis of PRIMA and PREMIUM (337 patients: 176 device, 161 control) using re-defined endpoints reported a reduction of 3.1 monthly migraine days with closure versus 1.9 days with control (P=0.02, a between-group difference of 1.2 days) and complete migraine cessation in 9% versus 0.7% as published. The conventional responder rate was 38% versus 29% (P=0.13) and was NOT significant. This is not pooled sham-controlled evidence: it combines PRIMA, which was unblinded with no sham arm, with PREMIUM, which was sham-controlled, and it excludes MIST, the other sham-controlled trial.',
+  },
+
+  // SCAI 2022, verbatim from PMC open access via the evidence packet. SCAI does
+  // not use the AHA COR/LOE vocabulary, so the strength is stated in the
+  // sentence itself and restated in the repo's trailing-parenthetical form so
+  // the guideline card has a terminal strength marker to read. The second
+  // sentence is retained because the shared-decision escape hatch is part of
+  // the recommendation, not a softening gloss added here.
+  'kavinsky-scai-pfo-2022': {
+    id: 'kavinsky-scai-pfo-2022',
+    source: 'guideline',
+    title: 'SCAI Guidelines for the Management of Patent Foramen Ovale · PFO closure for the treatment of migraine',
+    year: 2022,
+    section: 'PFO closure for migraine (conditional recommendation against)',
+    url: 'https://doi.org/10.1016/j.jscai.2022.100039',
+    pmid: '39131947',
+    last_reviewed: '2026-07-31',
+    review_window_months: 6,
+    quoted_text: 'In persons experiencing migraines without a prior PFO-associated stroke, the SCAI guideline panel suggests against the routine use of PFO closure for the treatment of migraine (conditional recommendation, moderate certainty of evidence). Patients, particularly those with debilitating migraines who have failed to benefit from conventional medical therapy, who place a high value on the uncertain benefits … may reasonably choose PFO closure. (Conditional recommendation against, moderate certainty of evidence.)',
+  },
+
+  // VA/DoD 2023, read from the primary PDF by the evidence-verifier.
+  // CORRECTION #11 (graded "clinical"): the supplied source material called this
+  // "insufficient evidence to recommend." It is NOT. Recommendation 40 is an
+  // ACTIVE "Weak against" recommendation. That guideline carries a separate
+  // "neither for nor against" category for insufficient evidence, used for 19
+  // other recommendations, and PFO closure was deliberately not placed in it.
+  // It sits in the same strength class as the guideline's recommendations
+  // against gabapentin and IV ketamine. Never render this as equipoise.
+  // No DOI exists; url is the VA/DoD guideline landing page (public, verified
+  // to resolve 2026-07-31), which carries the full CPG PDF the packet read.
+  'vadod-headache-cpg-2023': {
+    id: 'vadod-headache-cpg-2023',
+    source: 'guideline',
+    title: 'VA/DoD Clinical Practice Guideline for the Management of Headache, Version 2.0 · Recommendation 40 (PFO closure for migraine)',
+    year: 2023,
+    section: 'Recommendation 40 (Strength: Weak against)',
+    url: 'https://www.healthquality.va.gov/guidelines/Pain/headache/',
+    last_reviewed: '2026-07-31',
+    review_window_months: 6,
+    quoted_text: 'We suggest against patent foramen ovale closure for the treatment or prevention of migraine. (Recommendation 40; Strength: Weak against.)',
+  },
+
+  // ─── §8 ADDITIONS, 2026-07-31 ───────────────────────────────────────────
+  // Both added after the clinical-reviewer blocked the packet for a missing §8.
+  // Neither contradicts the framing; both were required to stop it going stale.
+
+  // Asian-Pacific Expert Opinion 2025, verbatim from PMC open access.
+  // NOT a graded practice guideline: an expert-opinion consensus from the
+  // Asia-Pacific Heart-Brain Summit (Bangkok, 3 Oct 2024) with no class, level
+  // or certainty rating. Never display it with one, and never let it stand in
+  // for SCAI or VA/DoD. Registered because "both societies that have addressed
+  // it" had become a false exhaustiveness claim once this existed.
+  //
+  // FUNDING, disclosed on every surface that cites it: "Abbott provided funding
+  // to facilitate the Asia-Pacific Heart-Brain Summit. There was no involvement
+  // from industry in the content of this expert consensus." Diener discloses
+  // Abbott honoraria; Albers received an Abbott honorarium for preparing the
+  // manuscript. Abbott makes the Amplatzer occluder used in PRIMA and PREMIUM.
+  // This CUTS AGAINST the device: an industry-funded panel declining to endorse
+  // its funder's device is a stronger signal than an independent one doing so.
+  'kim-asia-pacific-pfo-2025': {
+    id: 'kim-asia-pacific-pfo-2025',
+    source: 'review',
+    title: 'Asian-Pacific Expert Opinion on Patent Foramen Ovale Closure: Review of New Evidence and Focused Update · PFO closure for migraine',
+    year: 2025,
+    section: 'Expert Opinion Table 3 (expert consensus, not a graded recommendation)',
+    url: 'https://doi.org/10.5853/jos.2025.02908',
+    pmid: '41084288',
+    last_reviewed: '2026-07-31',
+    review_window_months: 6,
+    quoted_text: 'PFO closure should not be considered as a first-line/routine treatment for migraine. Patients undergoing PFO closure for other indications may experience a reduction in migraine symptoms. Rationale: complete resolution of migraine was only observed in observational studies, not RCTs … These findings provide insufficient support for PFO closure as a standalone treatment for migraine. (Expert consensus; Abbott-funded summit, no industry involvement in content.)',
+  },
+
+  // Silalahi 2024, the most recent meta-analysis of PFO closure for migraine and
+  // the one the 2025 Asian-Pacific consensus relied on. Registered because it
+  // reads POSITIVE in its abstract and any clinician who searches will find it;
+  // leaving it unaddressed would make the page look stale rather than careful.
+  //
+  // The reconciliation, which the page states rather than hides: the CONTINUOUS
+  // and COUNT outcomes separate, while every DICHOTOMOUS patient-relevant
+  // outcome is null, including complete resolution on RCT evidence (p=0.24) and
+  // both validated disability instruments (HIT-6 p=0.08, MIDAS p=0.15). A
+  // therapy that moves a mean attack count by about a third of a standard
+  // deviation without moving migraine-specific disability is exactly the pattern
+  // guideline panels have declined to act on. Mixes RCT with observational data.
+  // SMDs are NOT converted to days here: the source reports standardised mean
+  // differences and no back-transformation was verified.
+  //
+  // review_window_months: 36 per §13.7. A completed systematic review with a
+  // fixed search date (2024-03-12) does not itself change; what changes is
+  // whether a newer meta-analysis supersedes it. Packet §8d records that none
+  // has as of 2026-07-31, and no randomized trial of closure for migraine has
+  // been published since PREMIUM 2017, so the 6-month guideline window would
+  // re-review a static document against a static literature. Matches the
+  // override already documented for mojadidi-pfo-migraine-pooled-2021.
+  'silalahi-pfo-migraine-meta-2024': {
+    id: 'silalahi-pfo-migraine-meta-2024',
+    source: 'review',
+    title: 'Efficacy and safety of patent foramen ovale closure for mitigating migraine: a systematic review and meta-analysis of randomized trials and observational studies',
+    year: 2024,
+    section: 'Pooled efficacy outcomes (5 RCTs + 6 observational, search to 2024-03-12)',
+    url: 'https://doi.org/10.1177/17562864241271033',
+    pmid: '39371639',
+    last_reviewed: '2026-07-31',
+    review_window_months: 36,
+    quoted_text: 'Monthly migraine attacks SMD -0.34 (95% CI -0.51 to -0.18), p < 0.0001, I2 = 19%, favouring closure. Monthly migraine days SMD -0.30 (95% CI -0.53 to -0.08), p = 0.009, I2 = 0%, favouring closure. Complete resolution of migraine was NOT significant, and specifically not significant on randomized evidence (p = 0.24). HIT-6 was not significant (p = 0.08) and MIDAS was not significant (p = 0.15).',
+  },
+
   // ─── IST (International Stroke Trial, 1997) — foundational aspirin RCT ───
   // Lancet 1997;349(9065):1569-1581. UK CTSU-led international factorial 2x2
   // trial of subcutaneous heparin (5000 IU or 12500 IU bd) and/or aspirin

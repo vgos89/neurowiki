@@ -321,6 +321,29 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   //     percent detected within 45 days") that fused two distinct REDUCE
   //     figures; REDUCE reports 83% DETECTED within 45 days and 59% RESOLVED
   //     within 2 weeks. Both defects pre-dated this refresh and were live.
+  'pfo-closure-migraine-synthesis': {
+    id: 'pfo-closure-migraine-synthesis',
+    citation_ids: [
+      // The three randomized trials, chronological. All three missed primary.
+      'dowson-mist-2008',
+      'mattle-prima-2016',
+      'tobis-premium-2017',
+      // The pooled analysis most often cited as though it settles the question.
+      'mojadidi-pfo-migraine-pooled-2021',
+      // Society documents addressing it. All recommend against; none endorses.
+      'kavinsky-scai-pfo-2022',
+      'vadod-headache-cpg-2023',
+      // Added 2026-07-31 per packet §8c/§8d. The 2025 expert opinion is NOT a
+      // graded guideline. The 2024 meta-analysis reads positive on continuous
+      // outcomes and null on every dichotomous one; the page states both.
+      'kim-asia-pacific-pfo-2025',
+      'silalahi-pfo-migraine-meta-2024',
+    ],
+    surfaces: [DATA_SURFACE],
+    description:
+      'ClinicalSynthesisCard on /trials/q/pfo-closure-migraine. Deliberately separate from pfo-closure-cryptogenic-synthesis: none of the PFO-stroke citations addresses migraine, and the two questions have opposite bottom lines. Governing fact, asserted in the headline and carried through every paragraph: all three randomized trials of PFO closure for migraine missed their primary endpoint. MIST (Dowson, Circulation 2008; N=147, migraine with aura refractory to at least 2 preventive classes, STARFlex vs sham) primary endpoint of migraine cessation 3/74 vs 3/73, P=0.51, with pre-specified secondaries also negative; its only positive signal (total migraine days) came from an exploratory analysis excluding 2 outliers, a formal Correction was published, and two steering-committee members declined authorship citing that exclusion. PRIMA (Mattle, Eur Heart J 2016; N=107, Amplatzer vs medical therapy, UNBLINDED, no sham) primary endpoint of monthly migraine-day reduction 2.9 vs 1.7, P=0.17; aura-specific secondaries separated (migraine-with-aura days P=0.014, aura attacks P<0.01, responder 38% vs 15%) while overall attacks did not (P=0.09); stopped early for slow enrolment; device implanted in 41/53 (77%) of the closure arm with adjudicated closure at 6 months in 35/53 (66%). PREMIUM (Tobis, JACC 2017; N=230, 6 to 14 migraine days/month refractory to at least 3 preventives, Amplatzer vs sham right heart catheterization) efficacy co-primary responder rate 38.5% vs 32.0%, P=0.32, NOT met; safety co-primary MET (a real and separate finding: safe, but not effective for migraine prevention); secondaries headache days P=0.025 and complete remission 8.5% vs 1.0%, P=0.01. Three corrections to the common secondary-source account are asserted explicitly because they are widespread: (1) the 2021 pooled analysis (Mojadidi, JACC) is NOT pooled sham-controlled evidence, it pooled PRIMA (unblinded, no sham) with PREMIUM for N=337 and EXCLUDED MIST (the analysis states no reason for the exclusion, and no NeuroWiki surface supplies one); (2) its headline figures (3.1 vs 1.9 monthly migraine days P=0.02; cessation 9% vs 0.7%) rest on endpoints re-defined for the analysis, while the conventional responder rate the source trials were built on was 38% vs 29%, P=0.13, NOT significant, and that null is stated rather than omitted; (3) VA/DoD 2023 did not find the evidence insufficient, Recommendation 40 is an active Weak against, and that guideline maintains a separate insufficient-evidence category into which PFO closure was not placed. Guideline anchors: SCAI 2022 (Kavinsky) conditional recommendation against routine use for migraine treatment, moderate certainty, with an explicit shared-decision-making carve-out for a patient with debilitating refractory migraine who places high value on uncertain benefit, which the bottomLine reproduces rather than flattening into a blanket prohibition; VA/DoD 2023 Recommendation 40, Weak against. No NNT is displayed anywhere on this surface: every positive figure is a secondary, subgroup, post-hoc, or re-defined-endpoint result on a trial whose primary was null, and an NNT computed from any of them would imply a demonstrated effect that does not exist. The open question is stated as open: the aura-specific signals in PRIMA and the pooled analysis have never been tested as a pre-specified primary in an adequately powered blinded trial, so subgroup benefit defined by aura burden or shunt size is unresolved, not refuted. Evidence packet: docs/evidence-packets/2026-07-30-pfo-migraine.md.',
+  },
+
   'pfo-closure-cryptogenic-synthesis': {
     id: 'pfo-closure-cryptogenic-synthesis',
     citation_ids: [
@@ -662,6 +685,74 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   //     negative), PC (2013, Amplatzer, negative), original RESPECT (2013,
   //     Amplatzer, ITT not met at 2.1y), DEFENSE-PFO (2018, high-risk
   //     anatomy, positive on the 2-year composite).
+  // ─── PFO closure for MIGRAINE (2008-2017) — added 2026-07-31 ──────────────
+  //     Distinct clinical question from PFO closure for stroke: these claims must
+  //     NOT inherit the stroke synthesis citations. ALL THREE TRIALS MISSED THEIR
+  //     PRIMARY ENDPOINT; every positive figure on these surfaces is secondary or
+  //     post-hoc, and every society document that has addressed it recommends against the procedure.
+  //     NNT is prohibited on all three: no valid superiority ARD exists.
+  'mist-pfo-migraine-2008': {
+    id: 'mist-pfo-migraine-2008',
+    citation_ids: [
+      'dowson-mist-2008',
+      // The prose under this claim states SCAI 2022 (conditional against,
+      // moderate certainty) and VA/DoD 2023 Rec 40 (Weak against). Those
+      // recommendation strengths come from the guideline citations below,
+      // not from the trial report, so they are mapped here explicitly.
+      'kavinsky-scai-pfo-2022',
+      'vadod-headache-cpg-2023',
+    
+      // The prose under this claim asserts a UNIVERSAL: every society document
+      // that has addressed this recommends against. That set has three members,
+      // so the third must be mapped or the claim asserts more than it carries.
+      // NOT a graded guideline; registered source: 'review'.
+      'kim-asia-pacific-pfo-2025',
+    ],
+    surfaces: [DATA_SURFACE, BEDSIDE_PEARL_SURFACE],
+    description: 'MIST 2008: STARFlex closure vs SHAM in 147 patients with migraine with aura who had failed at least 2 preventive classes. Primary endpoint (migraine cessation 91 to 180 days) NOT met, 3 of 74 vs 3 of 73, P=0.51; secondary endpoints also negative. The only positive signal (total migraine days, P=0.027) is EXPLORATORY and came from a post-hoc analysis that deleted 2 outlier patients. A formal Correction was published and two members of the trial steering committee refused authorship, objecting to that exclusion. STARFlex is discontinued.',
+  },
+  'prima-pfo-migraine-2016': {
+    id: 'prima-pfo-migraine-2016',
+    citation_ids: [
+      'mattle-prima-2016',
+      // The prose under this claim states SCAI 2022 (conditional against,
+      // moderate certainty) and VA/DoD 2023 Rec 40 (Weak against). Those
+      // recommendation strengths come from the guideline citations below,
+      // not from the trial report, so they are mapped here explicitly.
+      'mojadidi-pfo-migraine-pooled-2021',
+      'kavinsky-scai-pfo-2022',
+      'vadod-headache-cpg-2023',
+    
+      // The prose under this claim asserts a UNIVERSAL: every society document
+      // that has addressed this recommends against. That set has three members,
+      // so the third must be mapped or the claim asserts more than it carries.
+      // NOT a graded guideline; registered source: 'review'.
+      'kim-asia-pacific-pfo-2025',
+    ],
+    surfaces: [DATA_SURFACE, BEDSIDE_PEARL_SURFACE],
+    description: 'PRIMA 2016: Amplatzer closure vs medical therapy in 107 patients with migraine with aura, UNBLINDED with no sham, terminated early for slow enrolment. Primary endpoint (reduction in monthly migraine days, months 9 to 12) NOT met, 2.9 vs 1.7 days, P=0.17. Overall migraine attacks were NOT significant (P=0.09); only the aura-specific figures and the responder rate were, and all are SECONDARY. Of 53 randomized to closure the device was implanted in 41 (77%) and closure adjudicated at 6 months in only 35 (66%). The responder-rate P value could not be verified and is not published on any surface.',
+  },
+  'premium-pfo-migraine-2017': {
+    id: 'premium-pfo-migraine-2017',
+    citation_ids: [
+      'tobis-premium-2017',
+      'mojadidi-pfo-migraine-pooled-2021',
+      // The prose under this claim states SCAI 2022 (conditional against,
+      // moderate certainty) and VA/DoD 2023 Rec 40 (Weak against). Those
+      // recommendation strengths come from the guideline citations below,
+      // not from the trial report, so they are mapped here explicitly.
+      'kavinsky-scai-pfo-2022',
+      'vadod-headache-cpg-2023',
+    
+      // The prose under this claim asserts a UNIVERSAL: every society document
+      // that has addressed this recommends against. That set has three members,
+      // so the third must be mapped or the claim asserts more than it carries.
+      // NOT a graded guideline; registered source: 'review'.
+      'kim-asia-pacific-pfo-2025',
+    ],
+    surfaces: [DATA_SURFACE, BEDSIDE_PEARL_SURFACE],
+    description: 'PREMIUM 2017: Amplatzer closure vs SHAM right heart catheterization, double-blind, in 230 randomized with 6 to 14 migraine days per month who had failed at least 3 preventives. CO-PRIMARY endpoints: the efficacy co-primary (responder rate) was NOT met, 38.5% vs 32.0%, P=0.32, while the safety co-primary WAS met. Headache-day reduction and complete remission (8.5% vs 1.0%) are SECONDARY. The 2021 Mojadidi pooled analysis is NOT pooled sham-controlled evidence: it combines PRIMA (unblinded, no sham) with PREMIUM and excludes MIST, and its conventional responder rate (38% vs 29%, P=0.13) was NOT significant.',
+  },
   'closure-i-pfo-2012': {
     id: 'closure-i-pfo-2012',
     citation_ids: ['furlan-closure-i-2012'],

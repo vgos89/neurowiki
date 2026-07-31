@@ -1436,6 +1436,8 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="14.4"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="control"
+                // Harm wording must come from the record, not from winnerArm.
+                primaryResult={trialMetadata.primaryResult}
               />
             </div>
           </div>
@@ -1651,6 +1653,9 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="1.09"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="none"
+                // Noninferiority design: the reported primary verdict is not a
+                // superiority p-value, so the chart must not describe it as one.
+                suppressReason="noninferiority"
               />
             </div>
           </div>
@@ -2129,6 +2134,8 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="0.86"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="treatment"
+                // Quasi-experimental dispatch design. The callout on this same card states that residual confounding prevents a causal absolute-risk-difference reading; a band would assert exactly that.
+                suppressBand
               />
               <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2 text-xs text-slate-500">
                 NNT suppressed (quasi-experimental design, see clinical-trial-audit rules)
@@ -2846,6 +2853,8 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="2.95"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="treatment"
+                // Alternating-week cluster allocation, not patient-level randomization, and the charted endpoint is a tPA-eligible subgroup dichotomization rather than the utility-weighted primary.
+                suppressBand
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
@@ -2919,6 +2928,9 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="+6.9"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="none"
+                // Noninferiority design: the reported primary verdict is not a
+                // superiority p-value, so the chart must not describe it as one.
+                suppressReason="noninferiority"
               />
             </div>
           </div>
@@ -2986,6 +2998,15 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="+6.2"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="none"
+                // Noninferiority conclusion. A significant NI p-value means "not worse by
+                // more than the margin", not "better", so a benefit band would convert a
+                // no-difference finding into an absolute risk reduction. Derived from the
+                // record so it stays correct if the design is ever re-graded.
+                suppressBand={
+                  trialMetadata.primaryDesign === 'noninferiority' ||
+                  trialMetadata.primaryDesign === 'bayesian-noninferiority'
+                }
+                suppressReason="noninferiority"
               />
             </div>
           </div>
@@ -3124,6 +3145,8 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="0.82"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="control"
+                // Harm wording must come from the record, not from winnerArm.
+                primaryResult={trialMetadata.primaryResult}
               />
             </div>
           </div>
@@ -3191,6 +3214,8 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="+3.4"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="control"
+                // Harm wording must come from the record, not from winnerArm.
+                primaryResult={trialMetadata.primaryResult}
               />
             </div>
           </div>
@@ -3257,6 +3282,9 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="+8.3"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="none"
+                // Noninferiority design: the reported primary verdict is not a
+                // superiority p-value, so the chart must not describe it as one.
+                suppressReason="noninferiority"
               />
             </div>
           </div>
@@ -3323,6 +3351,15 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="1.10"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="none"
+                // Noninferiority conclusion. A significant NI p-value means "not worse by
+                // more than the margin", not "better", so a benefit band would convert a
+                // no-difference finding into an absolute risk reduction. Derived from the
+                // record so it stays correct if the design is ever re-graded.
+                suppressBand={
+                  trialMetadata.primaryDesign === 'noninferiority' ||
+                  trialMetadata.primaryDesign === 'bayesian-noninferiority'
+                }
+                suppressReason="noninferiority"
               />
             </div>
           </div>
@@ -3455,6 +3492,9 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="+0.12"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="none"
+                // Noninferiority design: the reported primary verdict is not a
+                // superiority p-value, so the chart must not describe it as one.
+                suppressReason="noninferiority"
               />
             </div>
           </div>
@@ -3589,6 +3629,9 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="1.16"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="none"
+                // Noninferiority design: the reported primary verdict is not a
+                // superiority p-value, so the chart must not describe it as one.
+                suppressReason="noninferiority"
               />
             </div>
           </div>
@@ -5600,6 +5643,9 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="1.40"
                 pValue="0.04 (NI)"
                 winnerArm="none"
+                // Noninferiority design: the reported primary verdict is not a
+                // superiority p-value, so the chart must not describe it as one.
+                suppressReason="noninferiority"
               />
             </div>
           </div>
@@ -5683,6 +5729,15 @@ const TrialPageNew: React.FC = () => {
                 intervalLabel="1-sided 97.5% CI"
                 pValue="0.003 (NI)"
                 winnerArm="none"
+                // Noninferiority conclusion. A significant NI p-value means "not worse by
+                // more than the margin", not "better", so a benefit band would convert a
+                // no-difference finding into an absolute risk reduction. Derived from the
+                // record so it stays correct if the design is ever re-graded.
+                suppressBand={
+                  trialMetadata.primaryDesign === 'noninferiority' ||
+                  trialMetadata.primaryDesign === 'bayesian-noninferiority'
+                }
+                suppressReason="noninferiority"
               />
             </div>
           </div>
@@ -5760,6 +5815,15 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="11 pp"
                 pValue="0.0014 (NI)"
                 winnerArm="none"
+                // Noninferiority conclusion. A significant NI p-value means "not worse by
+                // more than the margin", not "better", so a benefit band would convert a
+                // no-difference finding into an absolute risk reduction. Derived from the
+                // record so it stays correct if the design is ever re-graded.
+                suppressBand={
+                  trialMetadata.primaryDesign === 'noninferiority' ||
+                  trialMetadata.primaryDesign === 'bayesian-noninferiority'
+                }
+                suppressReason="noninferiority"
               />
             </div>
           </div>
@@ -5993,6 +6057,9 @@ const TrialPageNew: React.FC = () => {
                 intervalLabel="1-sided 97.5% CI"
                 pValue="0.18 (NI)"
                 winnerArm="none"
+                // Noninferiority design: the reported primary verdict is not a
+                // superiority p-value, so the chart must not describe it as one.
+                suppressReason="noninferiority"
               />
             </div>
           </div>
@@ -6168,6 +6235,9 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="5.9 pp"
                 pValue="NI not met"
                 winnerArm="none"
+                // Noninferiority design: the reported primary verdict is not a
+                // superiority p-value, so the chart must not describe it as one.
+                suppressReason="noninferiority"
               />
             </div>
           </div>
@@ -6244,6 +6314,9 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="+2.1 pp"
                 pValue="NI not met"
                 winnerArm="none"
+                // Noninferiority design: the reported primary verdict is not a
+                // superiority p-value, so the chart must not describe it as one.
+                suppressReason="noninferiority"
               />
             </div>
           </div>
@@ -6563,6 +6636,8 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="-3.9 pp"
                 pValue="0.03 (HARM)"
                 winnerArm="control"
+                // Harm wording must come from the record, not from winnerArm.
+                primaryResult={trialMetadata.primaryResult}
               />
             </div>
           </div>
@@ -7184,6 +7259,9 @@ const TrialPageNew: React.FC = () => {
                 ciHigh=""
                 pValue="0.004 (NI)"
                 winnerArm="none"
+                // Noninferiority design: the reported primary verdict is not a
+                // superiority p-value, so the chart must not describe it as one.
+                suppressReason="noninferiority"
               />
             </div>
           </div>
@@ -7261,6 +7339,9 @@ const TrialPageNew: React.FC = () => {
                 ciHigh=""
                 pValue="0.0003 (NI)"
                 winnerArm="none"
+                // Noninferiority design: the reported primary verdict is not a
+                // superiority p-value, so the chart must not describe it as one.
+                suppressReason="noninferiority"
               />
             </div>
           </div>
@@ -8154,6 +8235,266 @@ const TrialPageNew: React.FC = () => {
     );
   }
 
+  // ─────────────────────────────────────────────────────────────────────────
+  //  PFO CLOSURE FOR MIGRAINE (MIST 2008 · PRIMA 2016 · PREMIUM 2017)
+  //  A different indication from the PFO-for-stroke cluster above, and a
+  //  different answer: all three missed their primary endpoint, and both
+  //  SCAI 2022 and VA/DoD 2023 recommend against closure for migraine.
+  //  Every block below sets winnerArm="none" and passes empty ciLow/ciHigh:
+  //  no confidence interval was recoverable for any result in any of the
+  //  three trials, so the interval row suppresses rather than inventing one.
+  //  See docs/evidence-packets/2026-07-30-pfo-migraine.md.
+  // ─────────────────────────────────────────────────────────────────────────
+
+  // ── MIST: Archetype A (negative superiority, sham-controlled) ─────────────
+  if (trialId === 'mist-trial' && trialMetadata) {
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <TrialHeaderBar abbreviation="MIST" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="neutral" />
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with migraine with aura refractory to at least 2 classes of preventive medication and a moderate or large right-to-left shunt, does STARFlex PFO closure stop migraine compared with a sham procedure?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-xs text-slate-500 mt-0.5">Cessation of migraine, days 91 to 180 after the procedure</p>
+            </div>
+            <div className="p-4">
+              <div className="mb-3 rounded-lg bg-slate-50 border border-slate-200 px-3 py-2">
+                <p className="text-xs text-slate-700 leading-relaxed">
+                  <strong>PRIMARY ENDPOINT NOT MET.</strong> Migraine cessation occurred in 3 of 74 with closure and 3 of 73 with sham (P=0.51). The pre-specified secondary endpoints were also negative. The one positive figure attached to MIST, a reduction in total migraine days, came from an exploratory analysis that deleted 2 outlier patients; a formal Correction was later published, and two members of the trial steering committee refused authorship over that exclusion.
+                </p>
+              </div>
+              <DeltaBandChart
+                treatmentPct={4.1}
+                controlPct={4.1}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Migraine cessation, days 91 to 180"
+                effectLabel="Migraine cessation"
+                riskRatio="3 of 74 vs 3 of 73"
+                ciLow=""
+                ciHigh=""
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm="none"
+              />
+              <p className="text-[11px] text-slate-400 leading-relaxed mt-3">
+                No confidence interval was recoverable for any MIST result, so no interval, no absolute risk difference and no NNT are shown. The two arms are drawn at the same height because the same number of events occurred in each arm, 3 and 3; the denominators differ slightly (74 and 73).
+              </p>
+            </div>
+          </div>
+          {renderStudyArms(trialMetadata)}
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '147 patients randomized 74 closure : 73 sham. STARFlex septal repair implant, a device later discontinued; its sponsor ceased operations in 2011, so MIST does not speak to any device in current use. Published Circulation 2008; Correction published 2009.')}
+          {trialMetadata.bedsidePearl && (
+            <div className="bg-slate-100 border-l-2 border-slate-500 rounded-r-xl px-5 py-4">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-2">Bedside Pearl</p>
+              <p className="text-sm text-slate-800 leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/q/pfo-closure-migraine" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">PFO closure for migraine</Link>
+              <Link to="/trials/prima-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">PRIMA</Link>
+              <Link to="/trials/premium-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">PREMIUM</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="MIST" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'PFO closure for migraine', href: '/trials/q/pfo-closure-migraine' }, { label: 'PRIMA', href: '/trials/prima-trial' }, { label: 'PREMIUM', href: '/trials/premium-trial' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── PRIMA: continuous mean-days primary. NOT a rate. ──────────────────────
+  //    efficacyResults.percentage carries DAYS PER MONTH for this record
+  //    (2.9 and 1.7), not percentages. DeltaBandChart draws a 100-dot grid
+  //    where each dot is one percentage point, so passing these values to it
+  //    would render "2.9% vs 1.7%" and be flatly wrong. A two-panel value
+  //    comparison with the unit spelled out on every surface is used instead.
+  if (trialId === 'prima-trial' && trialMetadata) {
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <TrialHeaderBar abbreviation="PRIMA" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="neutral" />
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with migraine with aura, does percutaneous PFO closure with the Amplatzer occluder reduce monthly migraine days compared with medical therapy alone? The trial was unblinded, with no sham arm.
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-xs text-slate-500 mt-0.5">Reduction in monthly migraine days, months 9 to 12 versus a 3-month baseline</p>
+            </div>
+            <div className="p-4 space-y-4">
+              <div className="rounded-lg bg-slate-50 border border-slate-200 px-3 py-2">
+                <p className="text-xs text-slate-700 leading-relaxed">
+                  <strong>PRIMARY ENDPOINT NOT MET (P=0.17).</strong> This is a continuous outcome measured in days per month, not a responder rate and not a percentage. The figures below are days.
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: '14px 16px', textAlign: 'center' }}>
+                  <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#64748b', marginBottom: 4 }}>
+                    Amplatzer PFO closure
+                  </p>
+                  <p style={{ fontSize: 32, fontWeight: 700, color: '#475569', lineHeight: 1.1 }}>2.9</p>
+                  <p style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>fewer migraine days per month, vs its own 3-month baseline</p>
+                </div>
+                <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: '14px 16px', textAlign: 'center' }}>
+                  <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#64748b', marginBottom: 4 }}>
+                    Medical therapy
+                  </p>
+                  <p style={{ fontSize: 32, fontWeight: 700, color: '#475569', lineHeight: 1.1 }}>1.7</p>
+                  <p style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>fewer migraine days per month, vs its own 3-month baseline</p>
+                </div>
+              </div>
+              <div className="rounded-lg bg-white border border-slate-200 px-4 py-3 text-center">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Between-arm comparison</p>
+                <p className="text-lg font-bold text-slate-700">P = 0.17</p>
+                <p className="text-[11px] text-slate-500 mt-1">Not significant. Do not subtract the two figures above: each is a reduction measured against that arm's own baseline, and the trial's between-arm comparison was model-based, so the difference of the two is not the trial's estimate. The publication reports no confidence interval we could verify, and no NNT is computed. The comparison the trial actually made is the P value.</p>
+              </div>
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                Read both figures against the design. PRIMA was unblinded against a self-reported diary endpoint, was stopped early for slow enrolment, and the device was implanted in 41 of the 53 patients assigned to closure (77%), with closure adjudicated at 6 months in 35 (66%).
+              </p>
+            </div>
+          </div>
+          {renderStudyArms(trialMetadata)}
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '107 patients randomized, 53 assigned to closure (NCT00505570). Amplatzer PFO Occluder. Open-label with no sham procedure. Stopped early for slow enrolment. Published European Heart Journal 2016.')}
+          {trialMetadata.bedsidePearl && (
+            <div className="bg-slate-100 border-l-2 border-slate-500 rounded-r-xl px-5 py-4">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-2">Bedside Pearl</p>
+              <p className="text-sm text-slate-800 leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/q/pfo-closure-migraine" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">PFO closure for migraine</Link>
+              <Link to="/trials/mist-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">MIST</Link>
+              <Link to="/trials/premium-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">PREMIUM</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="PRIMA" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'PFO closure for migraine', href: '/trials/q/pfo-closure-migraine' }, { label: 'MIST', href: '/trials/mist-trial' }, { label: 'PREMIUM', href: '/trials/premium-trial' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── PREMIUM: Archetype A, CO-PRIMARY design. Efficacy not met, safety met. ─
+  //    Both co-primaries are reported. Neither statement stands alone.
+  if (trialId === 'premium-trial' && trialMetadata) {
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <TrialHeaderBar abbreviation="PREMIUM" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="neutral" />
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with 6 to 14 migraine days per month refractory to at least 3 preventive medications, does Amplatzer PFO closure increase the proportion of patients with at least a 50% reduction in migraine attacks compared with a sham right heart catheterization?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Co-Primary Outcomes</p>
+              <p className="text-xs text-slate-500 mt-0.5">Efficacy: responder rate. Safety: adverse events. Report both.</p>
+            </div>
+            <div className="p-4">
+              <div className="mb-3 rounded-lg bg-slate-50 border border-slate-200 px-3 py-2">
+                <p className="text-xs text-slate-700 leading-relaxed">
+                  <strong>EFFICACY CO-PRIMARY NOT MET.</strong> Responder rate, defined as at least a 50% reduction in migraine attacks, was 38.5% with the device and 32.0% with sham (P=0.32). <strong>The safety co-primary WAS met.</strong> That is a real and separate finding: in this population the procedure was safe, it simply did not prevent migraine. Quoting either co-primary without the other misrepresents the trial.
+                </p>
+              </div>
+              <DeltaBandChart
+                treatmentPct={38.5}
+                controlPct={32.0}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Responder rate: at least a 50% reduction in migraine attacks"
+                effectLabel="Responder rate"
+                riskRatio="38.5% vs 32.0%"
+                ciLow=""
+                ciHigh=""
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm="none"
+              />
+              <p className="text-[11px] text-slate-400 leading-relaxed mt-3">
+                No confidence interval was recoverable for any PREMIUM result, so the between-arm difference is not stated as a number and no NNT is computed. The secondary endpoints did separate: headache days fell (P=0.025) and complete migraine remission reached 8.5% versus 1.0% (P=0.01). Those are secondary results on a trial whose efficacy co-primary was null.
+              </p>
+            </div>
+          </div>
+          {renderStudyArms(trialMetadata)}
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '230 patients randomized, 117 device and 103 control analyzed (NCT00355056). Amplatzer PFO Occluder against a sham right heart catheterization, double-blind. Co-primary efficacy and safety endpoints. Published JACC 2017.')}
+          {trialMetadata.bedsidePearl && (
+            <div className="bg-slate-100 border-l-2 border-slate-500 rounded-r-xl px-5 py-4">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-2">Bedside Pearl</p>
+              <p className="text-sm text-slate-800 leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/q/pfo-closure-migraine" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">PFO closure for migraine</Link>
+              <Link to="/trials/mist-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">MIST</Link>
+              <Link to="/trials/prima-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">PRIMA</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="PREMIUM" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            // trialResult is NEGATIVE, which renders a bare "Negative" chip. PREMIUM is
+            // co-primary: efficacy not met, safety MET. The record forbids describing it
+            // as flatly negative in four places, so the always-visible handle states both.
+            resultBadgeOverride="Efficacy not met · safety met"
+            seeAlsoLinks={[{ label: 'PFO closure for migraine', href: '/trials/q/pfo-closure-migraine' }, { label: 'MIST', href: '/trials/mist-trial' }, { label: 'PRIMA', href: '/trials/prima-trial' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
   // ── THEIA: 2026-05-23 Archetype A render (CRAO thrombolysis) ──────────────
   // Lancet Neurology 2025;24(11):909-919. Préterre et al. First phase 3 RCT
   // of IV alteplase for non-arteritic CRAO within 4.5h. Primary not met
@@ -8423,6 +8764,9 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="1.11"
                 pValue="NI not est."
                 winnerArm="none"
+                // Noninferiority design: the reported primary verdict is not a
+                // superiority p-value, so the chart must not describe it as one.
+                suppressReason="noninferiority"
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
@@ -8585,6 +8929,11 @@ const TrialPageNew: React.FC = () => {
                 ciHigh=""
                 pValue=""
                 winnerArm="none"
+                // Single-arm cohort: controlPct={0} is a placeholder, not a
+                // randomized comparator. Without this the band rendered "82
+                // extra recoveries per 100 patients" against an arm that does
+                // not exist. Found 2026-07-31 during the PFO-migraine review.
+                suppressBand
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
@@ -8664,6 +9013,9 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="19.9"
                 pValue="NI met"
                 winnerArm={isPositive ? 'treatment' : 'none'}
+                // Noninferiority design: the reported primary verdict is not a
+                // superiority p-value, so the chart must not describe it as one.
+                suppressReason="noninferiority"
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
@@ -8742,6 +9094,11 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="3.56"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="control"
+                // Ordinal-shift primary shown through a dichotomization the endpoint label itself flags as unverified. A band here is an absolute risk difference, and therefore an NNT, computed off an unconfirmed cut point.
+                suppressBand
+                suppressReason="ordinal-primary"
+                // Harm wording must come from the record, not from winnerArm.
+                primaryResult={trialMetadata.primaryResult}
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
@@ -9366,6 +9723,9 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="19.9"
                 pValue="NI met"
                 winnerArm={isPositive ? 'treatment' : 'none'}
+                // Noninferiority design: the reported primary verdict is not a
+                // superiority p-value, so the chart must not describe it as one.
+                suppressReason="noninferiority"
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
@@ -9448,6 +9808,11 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="3.56"
                 pValue="0.0114"
                 winnerArm="control"
+                // Ordinal-shift primary displayed through a dichotomization the endpoint label itself flags as unverified. A band here is an absolute risk difference, and therefore an NNT, computed off an unconfirmed cut point.
+                suppressBand
+                suppressReason="ordinal-primary"
+                // Harm wording must come from the record, not from winnerArm.
+                primaryResult={trialMetadata.primaryResult}
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
@@ -9675,6 +10040,9 @@ const TrialPageNew: React.FC = () => {
                 ciHigh="1.11"
                 pValue="NI not met"
                 winnerArm="none"
+                // Noninferiority design: the reported primary verdict is not a
+                // superiority p-value, so the chart must not describe it as one.
+                suppressReason="noninferiority"
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
