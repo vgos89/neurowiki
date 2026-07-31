@@ -304,6 +304,13 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Clinical impact:** low today, high if any of the three latent paths activates.
 - **Rollback plan:** each of the three is independent and additive; revert individually.
 
+### DECISIONS RESOLVED BY V — 2026-07-31
+
+- **BEST-MSU NNT vs band contradiction → DROP THE FIGURE.** The page refused to draw the difference (alternating-week cluster allocation, not patient-level randomization) and then stated that same difference as an NNT ten lines later. V resolved in favour of the caution. The NNT row is removed from the BEST-MSU render block and replaced with the reason it is absent. Per-arm rates, the adjusted odds ratio and its interval all remain. Note the hook could not have caught this: BEST-MSU carries `primaryResult: 'met'`, so the Check 4 extension does not fire on it.
+- **Benefit blocks on a secondary endpoint (DECIMAL, DESTINY, HAMLET) → LEAVE IT.** These chart 6-month survival, a secondary endpoint significant at p=0.001, while their `primaryResult` describes the null mRS primary. V reviewed and chose to keep them. The charted endpoint is itself significant and the endpoint label says "Survival", so the band matches what is drawn. Item closed; no further action. The related aria-label defect (the band hard-codes "extra recoveries" regardless of endpoint, which is wrong for a survival endpoint) stays open under `trial-display-schema-gaps`, since it is a labelling bug rather than a question about whether to draw the band.
+- **CLAUDE.md §10.3 humanizer scope → CORRECT THE MANUAL.** Done. The contract described a fixed `TARGETS` file list; the scanner has been walking `src/pages`, `src/components`, `src/data`, `src/seo`, `src/config` and `src/lib/cases` and scanning every `.ts`/`.tsx` under them. The wall was WIDER than documented, not narrower. This also closes the open coverage question: `clinicalSynthesesByQuestion.ts` and `src/seo/schema.ts` are both inside scanned directories and need no registration. Two deliberate exclusions are now documented: `src/lib/citations/` is a no-touch zone because `quoted_text` is verbatim external text, and test/type/dev/generated files are skipped.
+- **Stale agent worktree → DELETE IT.** Removed `.claude/worktrees/agent-ab9d815fae22ee79d` (9.6 MB) and pruned the metadata. **The branch was NOT deleted.** It carries one commit that is not on main, `518e4dc feat(home): rebuild Home page per HOME_SPEC v1.4` dated 2026-05-04, so the branch pointer `worktree-agent-ab9d815fae22ee79d` is retained and the work is recoverable with `git worktree add`. Deleting the branch as well would have made that commit unreachable, which is beyond what was asked.
+
 ### trial-safetydata-has-no-render-path — Class C [ ] open [from clinical review 2026-07-31]
 - **Status:** planned
 - **User-visible goal:** safety text authored on a trial record should reach the page.
@@ -311,7 +318,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Clinical impact:** low today, unknown across the library until audited.
 - **Rollback plan:** n/a, display-only.
 
-### humanizer-targets-coverage-confirm — Class C [ ] open [from clinical review 2026-07-31]
+### humanizer-targets-coverage-confirm — Class C [x] CLOSED 2026-07-31: coverage confirmed, manual corrected
 - **Status:** planned
 - **Context:** confirm `src/data/clinicalSynthesesByQuestion.ts` and `src/seo/schema.ts` sit inside the humanizer scanner's targets. No em-dash was found in any new rendered string in either, but synthesis bodies and JSON-LD answers are authored prose on public-indexable surfaces and deserve mechanical coverage rather than a manual check. Related to the already-tracked CLAUDE.md §10.3 doc staleness.
 - **Clinical impact:** none directly; it is a coverage gap in the wall.
@@ -321,7 +328,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Context:** `huang-pfo-anticoag-meta-2022` (RR 0.61, 95% CI 0.41 to 0.91) renders in the PFO-antithrombotic synthesis. Packet §1 lists it as one of three positive poolings that must be reported rather than suppressed, but packet §10's display whitelist enumerates explicit pairings only for Kasner-with-Diener and Ghannam-with-Chi, so this figure has no named partner. It is currently constrained to the paragraph that states the decay and Chi's null interaction, and a binding display rule is recorded at the citation. Needs evidence-verifier sign-off adding an explicit pairing rule to §10, or removal of the sentence and the citation from the synthesis claim.
 - **Clinical impact:** low as shipped (the figure is bound to the decay in situ); the risk is drift if the paragraph is ever edited.
 
-### best-msu-nnt-vs-band-contradiction — Class E [ ] open [from clinical review round 3, 2026-07-31]
+### best-msu-nnt-vs-band-contradiction — Class E [x] RESOLVED by V decision 2026-07-31: DROP THE FIGURE
 - **Status:** planned
 - **User-visible goal:** the BEST-MSU page must not simultaneously refuse to draw a difference and state that difference as an NNT.
 - **Files likely touched:** `src/pages/trials/TrialPageNew.tsx` (BEST-MSU block), possibly `src/data/trialData.ts`
@@ -329,7 +336,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Clinical impact:** low (display contradiction, no wrong number), but it is exactly the self-contradicting-page class this PR spent three review rounds removing.
 - **Rollback plan:** n/a, display-only.
 
-### chart-band-on-secondary-endpoint — Class C-clinical [ ] open [from trial-statistician 2026-07-31]
+### chart-band-on-secondary-endpoint — Class C-clinical [x] CLOSED by V decision 2026-07-31: LEAVE IT
 - **Status:** planned
 - **User-visible goal:** decide, once, whether a benefit band may be drawn on a secondary endpoint of a trial that missed its primary.
 - **Files likely touched:** `src/pages/trials/TrialPageNew.tsx` (DECIMAL, DESTINY, HAMLET blocks), `src/components/trials/archetypes/DeltaBandChart.tsx`

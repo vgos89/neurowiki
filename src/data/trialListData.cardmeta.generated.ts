@@ -230,7 +230,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "title": "BEST-MSU Trial",
     "legend": {
       "finding": "Prehospital MSU care saves 36 min and improves outcomes in tPA-eligible stroke.",
-      "bottomLineTag": "NNT 13",
+      "bottomLineTag": "MSU faster",
       "keyStat": "uw-mRS OR 2.14"
     },
     "subtitle": "Mobile Stroke Units vs Standard EMS in Acute Stroke",

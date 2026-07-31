@@ -2857,13 +2857,19 @@ const TrialPageNew: React.FC = () => {
                 // Alternating-week cluster allocation, not patient-level randomization, and the charted endpoint is a tPA-eligible subgroup dichotomization rather than the utility-weighted primary.
                 suppressBand
               />
-              {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
-                <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
-                  <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
-                  <span className="text-xs text-slate-500">to gain one additional excellent recovery (mRS 0-1)</span>
-                </div>
-              )}
+              {/* NNT REMOVED by V decision 2026-07-31. The chart directly above
+                  declines to draw the difference, because allocation was by
+                  alternating week rather than at patient level, and an NNT is
+                  that same absolute risk difference inverted. The page was
+                  refusing to draw the number and then stating it ten lines
+                  later. Resolved in favour of the caution: the per-arm rates,
+                  the adjusted odds ratio and its interval all remain, and the
+                  reader is not handed a per-patient benefit figure that a
+                  cluster-allocated comparison cannot support. See TASKS.md
+                  best-msu-nnt-vs-band-contradiction. */}
+              <p className="mt-3 pt-3 border-t border-slate-100 text-[11px] text-slate-400 leading-relaxed">
+                No number needed to treat is shown. Allocation was by alternating week rather than at the level of the individual patient, so an absolute per-patient benefit cannot be derived from this comparison.
+              </p>
             </div>
           </div>
           {renderStudyArms(trialMetadata)}

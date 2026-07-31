@@ -12431,10 +12431,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       control: 'Standard EMS transport to hospital for in-hospital stroke evaluation and reperfusion treatment'
     },
     clinicalContext: 'BEST-MSU addressed whether the impressive process advantages of mobile stroke units in the US translate into better clinical outcomes. Unlike earlier feasibility studies, it focused on patient-centered 90-day outcomes in a multicenter real-world framework.',
-    calculations: {
-      nnt: 12.5,
-      nntExplanation: 'For every 12.5 tPA-eligible patients managed by MSU instead of standard EMS, one additional patient achieved mRS 0-1 at 90 days (53.5% vs 45.5%).'
-    },
+    // NNT REMOVED by V decision 2026-07-31. Allocation was by alternating week,
+    // not at patient level, so an absolute per-patient benefit cannot be derived
+    // from this comparison. The page was declining to draw that difference on the
+    // chart and then stating it as an NNT. The 53.5% vs 45.5% rates and the
+    // adjusted OR 2.14 (1.55 to 2.95) remain. See TASKS.md
+    // best-msu-nnt-vs-band-contradiction.
     pearls: [
       'Median onset-to-tPA time was reduced from 108 minutes to 72 minutes with MSU care',
       'Among tPA-eligible patients, 97.1% received thrombolysis with MSU vs 79.5% with standard EMS',
@@ -12523,8 +12525,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         answer: 'The primary endpoint was utility-weighted mRS. A composite ordinal score. The AOR 2.14 reflects adjusted odds of excellent outcome across all mRS categories. The 53.5% vs 45.5% shown here is the secondary dichotomized mRS 0-1 rate, presented for visual clarity.',
       },
       {
-        question: 'What is the NNT?',
-        answer: 'NNT ≈ 13: approximately 13 tPA-eligible stroke patients must be managed by MSU instead of standard EMS for one additional patient to achieve mRS 0-1 at 90 days. The benefit is time-mediated. Faster treatment, fewer dead neurons.',
+        question: 'Why is there no NNT?',
+        answer: 'Because allocation was by alternating week rather than at the level of the individual patient. A number needed to treat is an absolute per-patient benefit, and a cluster-allocated comparison does not support one: the chart above declines to draw the difference for the same reason. The per-arm rates, the adjusted odds ratio and its interval are all shown instead. V decision 2026-07-31; see TASKS.md best-msu-nnt-vs-band-contradiction.',
       },
     ],
     howToInterpret: {
@@ -12532,11 +12534,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       doesNotProve: 'BEST-MSU does not prove benefit for non-tPA-eligible patients or those with hemorrhagic stroke. The seven-city US urban setting, weighted toward high-volume metropolitan EMS systems, may not generalize to different health systems, hospital proximity patterns, or rural EMS infrastructure. The benefit is not separable from other concurrent quality improvements during the study period.',
       cautions: 'Design quality: BEST-MSU used alternating-week allocation rather than individual randomization, making it a quasi-experimental controlled study. Secular trends, seasonal variation, or unmeasured confounders across alternating weeks could bias results. The infrastructure cost of MSU deployment is high, limiting generalizability to resource-limited settings.',
     },
-    bedsidePearl: 'BEST-MSU showed that prehospital MSU care saved 36 minutes and improved outcomes in tPA-eligible patients (NNT 13). The mechanism is faster treatment, not better treatment. For hospitals without MSU access, the equivalent message is: every minute saved on door-to-needle time translates to measurable benefit.',
+    bedsidePearl: 'BEST-MSU showed that prehospital MSU care saved 36 minutes and improved outcomes in tPA-eligible patients. The mechanism is faster treatment, not better treatment. For hospitals without MSU access, the equivalent message is: every minute saved on door-to-needle time translates to measurable benefit.',
     bottomLineSummary: 'In a quasi-experimental alternating-week study across seven US urban centers, mobile stroke unit care reduced onset-to-treatment time by 36 minutes and improved excellent functional outcome at 90 days in tPA-eligible patients (53.5% vs 45.5%, AOR 2.14, P<0.001). The benefit is time-mediated; the non-randomized design limits causal certainty.',
     legend: {
       finding: 'Prehospital MSU care saves 36 min and improves outcomes in tPA-eligible stroke.',
-      bottomLineTag: 'NNT 13',
+      bottomLineTag: 'MSU faster',
       keyStat: 'uw-mRS OR 2.14',
     },
   },
