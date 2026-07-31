@@ -1515,6 +1515,45 @@ export const CITATION_REGISTRY: CitationRegistry = {
     quoted_text: 'We suggest against patent foramen ovale closure for the treatment or prevention of migraine. (Recommendation 40; Strength: Weak against.)',
   },
 
+  // ─── PFO DIAGNOSIS, 2026-07-31 ──────────────────────────────────────────
+  // Registered to support a CLINICAL-SAFETY correction on the stroke-code
+  // workup checklist, which described a transthoracic bubble study as the test
+  // that "detects PFO". It is a rule-IN test. See
+  // docs/evidence-packets/2026-07-31-pfo-diagnosis-imaging.md §0A.
+  //
+  // DISPLAY RULE, binding: a sensitivity or specificity figure from this
+  // cluster ships ONLY with its 95% CI and its reference standard in the same
+  // sentence. And a PFO PREVALENCE figure ships ONLY paired with the causal
+  // correction below, because prevalence without it is the exact error the
+  // packet was commissioned to prevent.
+  'katsanos-pfo-echo-accuracy-2016': {
+    id: 'katsanos-pfo-echo-accuracy-2016',
+    source: 'review',
+    title: 'Transcranial Doppler versus transthoracic echocardiography for the detection of patent foramen ovale in patients with cryptogenic cerebral ischemia: A systematic review and diagnostic test accuracy meta-analysis',
+    year: 2016,
+    section: 'Pooled diagnostic accuracy against transesophageal echocardiography (35 studies, 3,067 patients)',
+    url: 'https://doi.org/10.1002/ana.24609',
+    pmid: '26833864',
+    last_reviewed: '2026-07-31',
+    review_window_months: 36,
+    quoted_text: 'Transthoracic echocardiography with contrast: pooled sensitivity 45.1% (95% CI 30.8 to 60.3), specificity 99.6% (95% CI 96.5 to 99.9), negative likelihood ratio 0.55 (0.42 to 0.72), against transesophageal echocardiography as the reference standard. Transcranial Doppler with contrast: pooled sensitivity 96.1% (93.0 to 97.8), specificity 92.4% (85.5 to 96.1), negative likelihood ratio 0.04 (0.02 to 0.08). Area under the summary ROC curve 0.98 (0.97 to 0.99) for transcranial Doppler versus 0.86 (0.82 to 0.89) for transthoracic echocardiography, p < 0.001.',
+  },
+  // MANDATORY PAIRING for any prevalence figure. Same cohort as the SPARC
+  // prevalence estimate, prospectively followed: a PFO is common and, adjusted,
+  // does not independently predict stroke.
+  'meissner-sparc-outcome-2006': {
+    id: 'meissner-sparc-outcome-2006',
+    source: 'trial',
+    title: 'Patent foramen ovale: innocent or guilty? Evidence from a prospective population-based study (SPARC)',
+    year: 2006,
+    section: 'Prospective cerebrovascular outcome in a random population sample aged 45 and over',
+    url: 'https://doi.org/10.1016/j.jacc.2005.10.044',
+    pmid: '16412874',
+    last_reviewed: '2026-07-31',
+    review_window_months: 36,
+    quoted_text: 'In 585 randomly sampled subjects aged 45 years or older undergoing transesophageal echocardiography by a single echocardiographer, a patent foramen ovale was identified in 140 (24.3%) and an atrial septal aneurysm in 11 (1.9%). After adjustment for age and comorbidity, PFO was not a significant independent predictor of stroke (hazard ratio 1.46, 95% confidence interval 0.74 to 2.88, p = 0.28). Median follow-up 5.1 years, 41 cerebrovascular events.',
+  },
+
   // ─── §8 ADDITIONS, 2026-07-31 ───────────────────────────────────────────
   // Both added after the clinical-reviewer blocked the packet for a missing §8.
   // Neither contradicts the framing; both were required to stop it going stale.

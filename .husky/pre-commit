@@ -7,3 +7,4 @@ npm run check:routes
 npm run check:card-meta
 npm run check:trials
 npm run check:humanizer
+npm run check:quotes

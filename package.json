@@ -19,6 +19,7 @@
     "check:trials": "tsx scripts/check-trial-coverage.ts",
     "generate:card-meta": "tsx scripts/gen-trial-card-meta.ts",
     "check:humanizer": "node scripts/check-humanizer.mjs",
+    "check:quotes": "node scripts/check-quote-safety.mjs",
     "fix:em-dashes": "node scripts/fix-em-dashes.mjs --write",
     "seo:auth-login": "node --env-file=.env.local scripts/seo/auth-login.mjs",
     "seo:fetch-ga4": "node --env-file=.env.local scripts/seo/fetch-ga4.mjs",

@@ -209,10 +209,28 @@ const ORDERS: Order[] = [
   },
   {
     id: 'tte',
+    claimId: 'pfo-bubble-study-rules-in-not-out',
     label: 'Transthoracic echocardiogram with bubble study',
     category: 'stroke-workup',
     evidence: 'Class I, Level B',
-    rationale: 'Identifies cardioembolic sources in 20-25% of strokes: LV thrombus, atrial thrombus (AF), valvular disease, PFO with RLS. Bubble study detects PFO (present in 25% of population, 40% of cryptogenic strokes in young patients).',
+    // CLINICAL-SAFETY CORRECTION 2026-07-31. This previously read "Bubble study
+    // detects PFO (present in 25% of population, 40% of cryptogenic strokes in
+    // young patients)". Two defects on a bedside checklist:
+    //   1. Transthoracic contrast echo has pooled sensitivity 45.1% (95% CI
+    //      30.8 to 60.3) against transesophageal echo (Katsanos, Ann Neurol
+    //      2016, 35 studies, 3,067 patients with cryptogenic cerebral
+    //      ischaemia). Calling it the test that "detects PFO" told a resident a
+    //      negative study rules one out. It does not: it is a rule-IN test
+    //      (specificity 99.6%, 96.5 to 99.9).
+    //   2. The "40% of cryptogenic strokes in young patients" figure is not
+    //      verified by any source and is removed rather than re-sourced.
+    // The 25% population figure is retained: it is now supported by AAN 2020
+    // at Level B ("about 1 in 4 adults"), by SPARC population TEE (25.6% +/-
+    // 1.9%) and by Hagen 1984 autopsy (27.3%). Per the evidence packet, a
+    // prevalence figure must never travel without the causal correction, so
+    // the not-an-explanation clause below is mandatory and must not be cut.
+    // See docs/evidence-packets/2026-07-31-pfo-diagnosis-imaging.md §0A.
+    rationale: 'Identifies cardioembolic sources in 20-25% of strokes: LV thrombus, atrial thrombus (AF), valvular disease, PFO with RLS. On PFO specifically, a transthoracic bubble study rules IN, not out: sensitivity is about 45% against transesophageal echo, so a negative study does not exclude a PFO. If the answer would change management, go to TEE with agitated saline and Valsalva. And finding one is not the same as explaining the stroke: a PFO is present in roughly 1 in 4 adults, and after adjustment for age and comorbidity it does not independently predict stroke.',
     defaultSelected: true,
     evidenceClass: 'I',
     evidenceLevel: 'B'

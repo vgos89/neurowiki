@@ -17621,7 +17621,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         'Patients with an indication mandating anticoagulation',
         'Patients with contraindication to PFO closure',
       ],
-      imagingSelection: 'TEE with agitated saline (rest and Valsalva) to characterize PFO right-to-left shunt; classification 0/no shunt, 1–5 microbubbles small, 6–25 moderate, >25 large. Atrial septal aneurysm defined as septum primum excursion >10 mm on TEE. CLOSE required either ASA or large shunt (>30 microbubbles).',
+      imagingSelection: 'TEE with agitated saline (rest and Valsalva) to characterize PFO right-to-left shunt; The published inclusion threshold for CLOSE is a large shunt of more than 30 microbubbles within 3 cardiac cycles, or an atrial septal aneurysm with septum primum excursion greater than 10 mm. (A microbubble GRADING scale previously appeared here; it was the scale published by REDUCE rather than by CLOSE, and it has been removed rather than re-attributed. Correction 2026-07-31.) Atrial septal aneurysm defined as septum primum excursion >10 mm on TEE. CLOSE required either ASA or large shunt (>30 microbubbles).',
       geography: 'Enrolled at 32 sites in France and 2 sites in Germany. European population. Generalizability to other populations is supported by the parallel RESPECT long-term (US/Canada) and REDUCE (Northern Europe + US/Canada) trials in the same NEJM 2017 issue.',
     },
     legend: {
@@ -19178,7 +19178,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       sampleSize: {
         value: '98',
         label: 'Cryptogenic stroke with PFO (warfarin 42 : aspirin 56), within a 630-patient TEE substudy',
-        info: 'PICSS enrolled 630 WARSS patients (warfarin 312, aspirin 318) and detected a PFO in 203 of 630 (33.8%). The comparison NeuroWiki displays is the 98-patient cryptogenic-stroke-with-PFO cell, which is a non-prespecified subgroup of that substudy.',
+        info: 'PICSS enrolled 630 WARSS patients (warfarin 312, aspirin 318) and detected a PFO in 33.8% of the cohort (the published figure; the exact denominator could not be confirmed against the primary text, so the raw counts are deliberately not presented here as a fraction). The comparison NeuroWiki displays is the 98-patient cryptogenic-stroke-with-PFO cell, which is a non-prespecified subgroup of that substudy.',
       },
       primaryEndpoint: {
         value: 'SUBGROUP, NOT A PRIMARY',

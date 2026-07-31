@@ -321,6 +321,22 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   //     percent detected within 45 days") that fused two distinct REDUCE
   //     figures; REDUCE reports 83% DETECTED within 45 days and 59% RESOLVED
   //     within 2 weeks. Both defects pre-dated this refresh and were live.
+  'pfo-bubble-study-rules-in-not-out': {
+    id: 'pfo-bubble-study-rules-in-not-out',
+    citation_ids: [
+      'katsanos-pfo-echo-accuracy-2016',
+      // AAN 2020 Statement 1f (Level B) is the TTE-then-TEE-with-contrast-and-
+      // Valsalva pathway, and its Level B counselling statement is the source
+      // for "about 1 in 4 adults".
+      'messe-aan-pfo-advisory-2020',
+      // Mandatory pairing: prevalence never travels without the causal null.
+      'meissner-sparc-outcome-2006',
+    ],
+    surfaces: [DATA_SURFACE],
+    description:
+      'Stroke-code workup checklist, transthoracic-echo-with-bubble-study item. CLINICAL-SAFETY correction 2026-07-31: the item previously read "Bubble study detects PFO (present in 25% of population, 40% of cryptogenic strokes in young patients)". On a bedside checklist that told a resident a negative transthoracic bubble study rules out a PFO. It does not. Pooled sensitivity against transesophageal echo is 45.1% (95% CI 30.8 to 60.3) with specificity 99.6% (96.5 to 99.9), so it is a rule-IN test with a negative likelihood ratio of 0.55, which barely moves the probability. The corrected text states the rule-in direction explicitly, gives the approximate sensitivity, and routes to TEE with agitated saline and Valsalva when the answer would change management, which is AAN 2020 Statement 1f at Level B. The unverified "40% of cryptogenic strokes in young patients" figure was REMOVED rather than re-sourced: the nearest retrieved statement is a background sentence about up to 43% of cryptogenic cerebral ischaemia patients investigated with TEE, which is neither a result nor age-restricted. The 25% population figure is RETAINED and is now supported at AAN Level B ("about 1 in 4 adults in the general population"), corroborated by SPARC population TEE and by autopsy. It is paired, as the evidence packet requires without exception, with the causal correction from the same SPARC cohort: adjusted for age and comorbidity a PFO does not independently predict stroke (HR 1.46, 95% CI 0.74 to 2.88). Prevalence without that pairing is the specific error the packet was commissioned to prevent, because a resident who reads only the prevalence concludes the PFO explains the stroke. Evidence packet: docs/evidence-packets/2026-07-31-pfo-diagnosis-imaging.md.',
+  },
+
   'pfo-guideline-timeline': {
     id: 'pfo-guideline-timeline',
     citation_ids: [
