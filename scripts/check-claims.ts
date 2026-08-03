@@ -70,7 +70,43 @@ const PHASE1: Record<string, RegExp> = {
   data:         new RegExp(`\\bclaimId\\s*:\\s*["'](${ID})["']`, 'g'),
   computed:     new RegExp(`\\bclaim\\s*\\(\\s*${QUOTED}\\s*,\\s*["'](${ID})["']\\s*\\)`, 'g'),
   bedsidePearl: new RegExp(`\\bbedsidePearlClaimId\\s*:\\s*["'](${ID})["']`, 'g'),
+  // A registry claim tag written in BLOCK-COMMENT form:
+  //
+  //     /* claimId: annexa-i-andexanet-fxa-ich-2024 */
+  //
+  // Enforced identically to the quoted `claimId:` field above: same registry lookup
+  // (Check 1), same surface rules (Check 2). Before this existed, writing a claim tag
+  // as a comment made it invisible to every check below, which is the
+  // false-sense-of-coverage failure §13.3 exists to stop. It found 3 on first run.
+  //
+  // THE DISCRIMINATOR IS THE SOURCE NOTE, NOT THE ID SHAPE. A bare annotation is a
+  // registry claim tag; one carrying `| source: …` is a statistic-level provenance
+  // note and is handled by Check 5 instead. An earlier version of this split on
+  // whether the ID contained a dot, which was wrong: 107 provenance notes use
+  // hyphenated IDs indistinguishable in shape from registry IDs, and requiring them
+  // to exist in CLAIM_REGISTRY would have been a false failure on 107 correct
+  // annotations. The `[^|*]` in the ID position is what keeps them apart.
+  dataComment:  new RegExp(`/\\*\\s*claimId:\\s*(${ID})\\s*\\*/`, 'g'),
 };
+
+// ── Statistic-level provenance annotations ─────────────────────────────────
+//
+// A SECOND, separate convention lives in trialData.ts and is NOT a registry claim:
+//
+//     /* claimId: extend.sich       | source: NEJM 2019 Table 2 p.1800 */
+//     /* claimId: eagle-safety-ae   | source: Schumacher Ophthalmology 2010 Table 3 */
+//
+// The ID names one STATISTIC or section on one trial, and the `source:` note is its
+// provenance. There are 136. They must NOT be forced into CLAIM_REGISTRY: the
+// registry maps a CLAIM to its CITATIONS, whereas these map a single number to the
+// page of the paper it came from. Different jobs, and 107 of the 136 are not
+// registered precisely because they were never meant to be.
+//
+// Nothing checked them either, so one could lose its source note, or be malformed,
+// and stay invisible. An annotation that asserts provenance without giving any is
+// worse than none, because it reads as checked. Check 5 enforces the contract: if it
+// carries the `|` separator, the source must be non-empty.
+const STAT_ANNOTATION = /\/\*\s*claimId:\s*([A-Za-z0-9_.-]+)\s*(\|\s*source:\s*([^*]*?))?\s*\*\//g;
 
 // ── TS module loader ───────────────────────────────────────────────────────
 
@@ -124,7 +160,12 @@ function collectTags(srcRoot: string): Tag[] {
       let m: RegExpExecArray | null;
       while ((m = re.exec(content)) !== null) {
         const line = content.slice(0, m.index).split('\n').length;
-        tags.push({ claimId: m[1], surface, file: path.relative(ROOT, file), line });
+        // A comment-form claim tag IS a data-surface tag. It differs only in how it
+        // is written, so it must satisfy the same `surfaces: [DATA_SURFACE]`
+        // declaration a quoted `claimId:` field would. Without this alias, Check 2
+        // rejects every one of them as an undeclared surface.
+        const surfaceType = surface === 'dataComment' ? 'data' : surface;
+        tags.push({ claimId: m[1], surface: surfaceType, file: path.relative(ROOT, file), line });
       }
     }
   }
@@ -364,6 +405,49 @@ if (fs.existsSync(TRIAL_DATA_FILE)) {
       `${path.relative(ROOT, TRIAL_DATA_FILE)}: ${e instanceof Error ? e.message : e}\n`,
     );
   }
+}
+
+// ── Check 5 — statistic-level provenance annotations ──────────────────────
+//
+// Every `/* claimId: <dotted.id> | source: … */` annotation must carry a non-empty
+// source. These annotate individual trial statistics with the page of the paper the
+// number came from. Until now nothing read them at all, so a malformed or
+// provenance-less one was invisible: it looked like a checked number and was not.
+//
+// Registry-shaped IDs (kebab-case, no dot) are NOT handled here. Those are real claim
+// tags and are picked up by the `dataComment` pattern above, then run through Checks
+// 1 to 3 exactly like a quoted `claimId:` field.
+{
+  let annotated = 0;
+  let missingSource = 0;
+  for (const file of walkSrc(SRC_ROOT)) {
+    const content = fs.readFileSync(file, 'utf8');
+    const re = new RegExp(STAT_ANNOTATION.source, STAT_ANNOTATION.flags);
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(content)) !== null) {
+      const id = m[1];
+      // No `|` separator at all => a bare registry claim tag, already enforced above
+      // by the `dataComment` pattern and Checks 1 to 3. Not our business.
+      if (m[2] === undefined) continue;
+      annotated += 1;
+      const source = (m[3] ?? '').trim();
+      if (source === '') {
+        missingSource += 1;
+        const line = content.slice(0, m.index).split('\n').length;
+        failures.push(
+          `Check 5 — Statistic annotation without provenance: "${id}" at ` +
+          `${path.relative(ROOT, file)}:${line} declares a claimId but gives no ` +
+          `"| source: …" note. Either add the source (journal, year, table or page) ` +
+          `or remove the annotation. An annotation that asserts provenance without ` +
+          `giving any reads as checked and is not.`,
+        );
+      }
+    }
+  }
+  process.stdout.write(
+    `[check-claims] Check 5 — ${annotated} statistic-level provenance annotation(s), ` +
+    `${annotated - missingSource} with a source.\n`,
+  );
 }
 
 // ── Output & exit ──────────────────────────────────────────────────────────
