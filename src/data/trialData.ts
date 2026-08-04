@@ -2139,10 +2139,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         note: "Control = continue alteplase alone with no further therapy (Campbell NEJM 2015 p.1011). Both arms received identical IV alteplase; the trial isolates the added effect of Solitaire FR thrombectomy. Control-arm BP/glucose/antithrombotic targets appendix-deferred. Source: NCT01492725.",
       },
     ],
-    clinicalContext: 'EXTEND-IA showed that CT perfusion imaging could identify patients with salvageable tissue most likely to benefit from thrombectomy. Reperfusion at 24h improved from 37% to 100% in the EVT group.',
+    clinicalContext: 'EXTEND-IA showed that CT perfusion imaging could identify patients with salvageable tissue most likely to benefit from thrombectomy. The median share of the ischemic territory reperfused at 24 hours was 100% with thrombectomy versus 37% with alteplase alone.',
     pearls: [
       'Used CT perfusion to target salvageable tissue and avoid large completed infarcts',
-      'Reperfusion at 24 hours improved from 37% to 100%',
+      'Median share of the ischemic territory reperfused at 24 hours was 100% with thrombectomy versus 37% with alteplase alone',
       'Early neurologic improvement at day 3 was 80% vs 37%',
       'Functional independence at 90 days rose to 71% vs 40%'
     ],
@@ -2223,11 +2223,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the chart show?',
-        answer: 'The chart displays the secondary functional outcome (mRS 0 to 2 at 90 days): 71% with thrombectomy plus alteplase versus 40% with alteplase alone. The two co-primary endpoints (24-hour reperfusion of 100% vs 37% and early neurological improvement at day 3 of 80% vs 37%) were both met before this secondary outcome was assessed.',
+        answer: 'The chart displays the secondary functional outcome (mRS 0 to 2 at 90 days): 71% with thrombectomy plus alteplase versus 40% with alteplase alone. The two co-primary endpoints (median territory reperfused at 24 hours, 100% vs 37%, and early neurological improvement at day 3 of 80% vs 37%) were both met before this secondary outcome was assessed.',
       },
       {
         question: 'What do the numbers mean clinically?',
-        answer: 'A 31 percentage point absolute gain in functional independence corresponds to an NNT of about 3 in this perfusion-selected population, the largest absolute effect in any 2015 EVT trial. Reperfusion was near-complete in the EVT arm (100% versus 37% with alteplase alone).',
+        answer: 'A 31 percentage point absolute gain in functional independence corresponds to an NNT of about 3 in this perfusion-selected population, the largest absolute effect in any 2015 EVT trial. Reperfusion was near-complete in the EVT arm: a median 100% of the ischemic territory reperfused versus 37% with alteplase alone.',
       },
       {
         question: 'What is the key limitation to keep in mind?',
@@ -2236,12 +2236,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     howToInterpret: {
       /* claimId: extend-ia-primary-result | source: Campbell NEJM 2015 */
-      proves: 'In patients with anterior circulation LVO selected by CT perfusion (core less than 70 mL, mismatch ratio greater than 1.2) who had received IV alteplase within 4.5 hours, adding Solitaire FR thrombectomy markedly improved both co-primary endpoints: reperfusion at 24 hours (100% vs 37%, P less than 0.001) and early neurological improvement at day 3 (80% vs 37%, P less than 0.001). The secondary outcome of functional independence at 90 days (71% vs 40%) was consistent with these effects.',
+      proves: 'In patients with anterior circulation LVO selected by CT perfusion (core less than 70 mL, mismatch ratio greater than 1.2) who had received IV alteplase within 4.5 hours, adding Solitaire FR thrombectomy markedly improved both co-primary endpoints: median territory reperfused at 24 hours (100% vs 37%, P less than 0.001) and early neurological improvement at day 3 (80% vs 37%, P less than 0.001). The secondary outcome of functional independence at 90 days (71% vs 40%) was consistent with these effects.',
       doesNotProve: 'It does not establish thrombectomy benefit in patients without perfusion mismatch, who were specifically excluded. With only 70 patients and early termination, the trial cannot precisely estimate the size of the mRS shift, and subgroup analyses are underpowered. It does not test direct thrombectomy without alteplase.',
       cautions: 'Stopped early at 70 patients after positive interim analysis, which inflates effect estimates and widens confidence intervals. CT perfusion automated post-processing (RAPID) may not be available at all centers and requires consistent quality control. Strict mismatch criteria selected an enriched population likely to benefit; real-world effect sizes are typically smaller.',
     },
     /* claimId: extend-ia-bedside-pearl | source: Campbell NEJM 2015 */
-    bedsidePearl: 'When CT perfusion shows a small core and a large penumbra in an LVO patient who has just received alteplase, EXTEND-IA supports moving immediately to thrombectomy. The reperfusion gap (100% vs 37%) is the mechanistic anchor for the functional benefit; the mRS gain (71% vs 40%) is the bedside number to quote.',
+    bedsidePearl: 'When CT perfusion shows a small core and a large penumbra in an LVO patient who has just received alteplase, EXTEND-IA supports moving immediately to thrombectomy. The reperfusion gap (a median 100% of territory versus 37%) is the mechanistic anchor for the functional benefit; the mRS gain (71% vs 40%) is the bedside number to quote.',
     bottomLineSummary: 'EXTEND-IA established that adding Solitaire thrombectomy to alteplase in patients with perfusion-imaging mismatch dramatically improves reperfusion and early neurological recovery, with a large secondary gain in 90-day functional independence (71% vs 40%). The trial was stopped early after only 70 patients.',
     legend: {
       finding: 'Perfusion-selected EVT after tPA raised independence from 40% to 71%.',
@@ -7749,7 +7749,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       cautions: 'TRACE-III was conducted exclusively in China, where EVT access is limited. This is not a "bridging" IVT-before-EVT trial; it is specifically for settings without EVT access. sICH was higher with tenecteplase (3.0% vs 0.8%); this tradeoff is acceptable at the population level but should inform individual patient counseling. Perfusion imaging selection is required. Do not apply to unselected patients.',
     },
     bedsidePearl: 'TRACE-III is the key trial for late-window IVT when EVT cannot be performed. In perfusion-selected LVO patients 4.5-24 hours from onset without EVT access, tenecteplase 0.25 mg/kg improved mRS 0-1 from 24.2% to 33.0% (NNT 11, P=0.03). This is not a reason to delay EVT when it is available; TIMELESS showed no benefit when EVT was performed.',
-    bottomLineSummary: 'TRACE-III showed tenecteplase 0.25 mg/kg improved functional independence at 90 days versus standard medical treatment in perfusion-selected LVO patients treated 4.5-24 hours after stroke onset when EVT was unavailable (33.0% vs 24.2%, relative rate 1.37, P=0.03, NNT 11). sICH was higher (3.0% vs 0.8%). Results apply specifically to EVT-unavailable settings with LVO confirmed on imaging.',
+    bottomLineSummary: 'TRACE-III showed tenecteplase 0.25 mg/kg improved the rate of no or minimal disability (mRS 0 to 1) at 90 days versus standard medical treatment in perfusion-selected LVO patients treated 4.5-24 hours after stroke onset when EVT was unavailable (33.0% vs 24.2%, relative rate 1.37, P=0.03, NNT 11). sICH was higher (3.0% vs 0.8%). Results apply specifically to EVT-unavailable settings with LVO confirmed on imaging.',
     legend: {
       finding: 'IV tenecteplase 4.5–24 h with perfusion mismatch in EVT-ineligible LVO improves mRS 0–1 at 90 d.',
       bottomLineTag: 'NNT 11',
@@ -8061,7 +8061,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       doesNotProve: 'It does not prove benefit in anterior circulation LVO (separate evidence). It does not apply beyond 12 hours (BAOCHE covers 6–24h) or to NIHSS <10. Patients with PC-ASPECTS <6 or complete bilateral thalamic/brainstem infarction were excluded.',
       cautions: 'Chinese cohort, with ~44% of strokes large-artery atherosclerotic (higher than Western populations where embolic mechanisms predominate). Adjunctive intracranial angioplasty/stenting was used in 40%, higher than typical Western practice. Stopped early for efficacy, so effect size may be inflated. sICH 5% vs 0% is real procedural harm but the mortality benefit (RR 0.66) outweighs it.',
     },
-    bedsidePearl: 'In acute basilar artery occlusion with NIHSS ≥10, PC-ASPECTS ≥6, and pre-stroke mRS ≤2, EVT within 12 hours roughly halves mortality (37% vs 55%) and doubles the chance of mRS 0–3 at 90 days. mRS 0–3 (not 0–2) is used because BAO carries up to 80% untreated mortality.',
+    bedsidePearl: 'In acute basilar artery occlusion with NIHSS ≥10, PC-ASPECTS ≥6, and pre-stroke mRS ≤2, EVT within 12 hours cuts 90-day mortality by about a third (37% vs 55%) and doubles the chance of mRS 0–3 at 90 days. mRS 0–3 (not 0–2) is used because BAO carries up to 80% untreated mortality.',
     bottomLineSummary: 'ATTENTION establishes EVT for basilar artery occlusion within 12 hours. mRS 0–3 at 90 days: 46% vs 23% (adjusted RR 2.06, 95% CI 1.46–2.91, P<0.001; NNT 4.3). 90-day mortality 37% vs 55%. Chinese cohort with ~44% intracranial atherosclerosis. The 12 h figure is the ATTENTION enrolment window; AHA/ASA 2026 §4.7.3 gives one 24 h window measured from symptom onset, COR 1 / LOE A for baseline mRS 0–1, NIHSS ≥10, PC-ASPECTS ≥6.',
     applicability: {
       geography: 'China',
@@ -8145,7 +8145,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     listCategory: 'thrombectomy',
     listDescription: 'Basilar artery thrombectomy within 12 hours; China trial.',
     legend: {
-      finding: 'EVT within 12 h for basilar artery occlusion (NIHSS ≥10) roughly halves mortality and doubles good outcome.',
+      finding: 'EVT within 12 h for basilar artery occlusion (NIHSS ≥10) cuts 90-day mortality by about a third (37% vs 55%) and doubles good outcome.',
       bottomLineTag: 'NNT 4',
       keyStat: '+23% mRS 0–3',
     },
@@ -13839,7 +13839,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     exclusionCriteria: [
       'Contraindication to thrombolysis',
       'Hemorrhagic stroke on baseline imaging',
-      'Severe stroke (high NIHSS). Enrolled in small numbers',
+      'No NIHSS ceiling was applied; severe strokes were eligible but enrolled in small numbers, which is a case-mix limitation rather than an exclusion',
     ],
     fullEligibility: {
       inclusion: [
@@ -14080,10 +14080,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       doesNotProve: 'NOR-TEST 2 Part A does not prove that tenecteplase at any dose is harmful. The harm was specific to the 0.4 mg/kg dose in moderate-severe stroke. It does not apply to tenecteplase 0.25 mg/kg, which has been validated as safe and non-inferior to alteplase in multiple large RCTs.',
       cautions: 'N=204 (stopped early), so estimates are imprecise. The trial was designed as a non-inferiority study for the 0.4 mg/kg dose; the harm signal emerged despite, not because of, the NI framing. The confidence interval for OR (0.25-0.80) does not cross 1.0, making the harm finding robust despite small sample size.',
     },
-    bedsidePearl: 'NOR-TEST 2 Part A is a clear harm signal: tenecteplase 0.4 mg/kg in moderate-severe stroke caused 6× more sICH and 3× more deaths than alteplase. The 0.4 mg/kg dose is not used in practice. Current guidelines endorse tenecteplase 0.25 mg/kg as a safe alternative based on entirely separate trials (AcT, TRACE-2). Do not conflate the doses.',
+    bedsidePearl: 'NOR-TEST 2 Part A is a clear harm signal: tenecteplase 0.4 mg/kg in moderate-severe stroke gave sICH 6% vs 1% (6 versus 1 events, not statistically significant) and significantly higher mortality, 16% vs 5% than alteplase. The 0.4 mg/kg dose is not used in practice. Current guidelines endorse tenecteplase 0.25 mg/kg as a safe alternative based on entirely separate trials (AcT, TRACE-2). Do not conflate the doses.',
     bottomLineSummary: 'NOR-TEST 2 Part A was stopped early for harm after tenecteplase 0.4 mg/kg showed substantially worse outcomes than alteplase in moderate-severe stroke: mRS 0-1 32% vs 51%, sICH 6% vs 1%, and mortality 16% vs 5%. The 0.4 mg/kg dose is contraindicated. This trial does not affect the safety profile of tenecteplase 0.25 mg/kg.',
     legend: {
-      finding: 'Tenecteplase 0.4 mg/kg in moderate-severe stroke caused 6× more sICH and 3× more deaths vs alteplase.',
+      finding: 'Tenecteplase 0.4 mg/kg in moderate-severe stroke: sICH 6% vs 1% (6 versus 1 events, not statistically significant) and significantly higher mortality, 16% vs 5%.',
       bottomLineTag: 'Harm',
       keyStat: 'OR 0.45 mRS 0–1',
     },
@@ -15457,7 +15457,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Age 18 to 82 years',
       'Acute ischemic stroke with onset within 3 hours',
       'IV alteplase initiated (0.9 mg/kg standard dose)',
-      'NIHSS 8 to 29 (moderate to severe stroke)',
+      'NIHSS 10 or higher; after amendment 3, NIHSS 8 to 9 was permitted only with CT-angiographic confirmation of an M1, ICA or basilar occlusion',
       'CT or MRI excluding hemorrhage',
     ],
     exclusionCriteria: [
@@ -17374,7 +17374,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
     },
     safetyData: 'Periprocedural (day 0 to 44) safety. Stenting trial: 0 strokes or deaths in 629 medical-therapy patients vs 7 strokes and 1 death in 616 stenting patients (1.3%, 95% CI 0.6–2.5). Endarterectomy trial: 3 strokes in 623 medical-therapy patients (0.5%, 95% CI 0.1–1.4) vs 9 strokes in 617 endarterectomy patients (1.5%, 95% CI 0.7–2.8). The periprocedural difference of −1.3 pp (stenting trial, 95% CI −2.2 to 0.4) and −1.0 pp (endarterectomy trial, 95% CI −2.1 to 0.1) reflects the front-loaded harm of revascularization. The trade-off favors stenting at 4 years because postprocedural ipsilateral ischemic stroke is markedly lower with revascularization (stenting: 0.4%/y vs 1.7%/y in medical-therapy, RR 4.07; endarterectomy: 0.5%/y vs 1.3%/y, RR 2.38). The endarterectomy 4-year net benefit did not reach statistical significance. Serious adverse events through 4 years were dominated by repeat carotid revascularization: 4.7% stenting vs 18.8% medical-therapy (stenting trial); 7.1% CEA vs 21.0% medical-therapy (endarterectomy trial), reflecting medical-therapy patients undergoing late revascularization for new symptoms, stenosis progression, or preference. Source: Brott TG et al., NEJM 2026, p.225 and Table 2.',
-    clinicalContext: 'CREST-2 was designed to settle whether revascularization (carotid-artery stenting or carotid endarterectomy) adds benefit beyond modern intensive medical management for asymptomatic ≥70% extracranial carotid stenosis. The landmark trials that established CEA for asymptomatic stenosis (ACAS 1995, ACST 2004/2010) used 1990s and early-2000s medical management. Aspirin monotherapy, less stringent BP targets, low-potency statins. In the years since, intensive medical management has evolved: SBP target <130 mm Hg, LDL <70 mg/dL with PCSK9 inhibitor availability, dual antiplatelet selection per stroke etiology, glucose and weight optimization. CREST-2 ran two parallel observer-blinded RCTs in 2,485 asymptomatic patients with ≥70% stenosis, comparing each revascularization modality plus intensive medical management against intensive medical management alone. The stenting trial demonstrated a significant reduction in the 4-year composite of periprocedural stroke/death plus postprocedural ipsilateral ischemic stroke (6.0% vs 2.8%, P=0.02; NNT 31). The endarterectomy trial showed a numerically smaller difference (5.3% vs 3.7%) that did not reach statistical significance (P=0.24). The medical-therapy arms achieved annual primary-outcome rates of 1.6%/y (stenting trial) and 1.4%/y (endarterectomy trial). Substantially lower than the 3.6% per year assumed in the sample-size calculation, reflecting the efficacy of modern medical management.',
+    clinicalContext: 'CREST-2 was designed to settle whether revascularization (carotid-artery stenting or carotid endarterectomy) adds benefit beyond modern intensive medical management for asymptomatic ≥70% extracranial carotid stenosis. The landmark trials that established CEA for asymptomatic stenosis (ACAS 1995, ACST 2004/2010) used 1990s and early-2000s medical management. Aspirin monotherapy, less stringent BP targets, low-potency statins. In the years since, intensive medical management has evolved: SBP target <130 mm Hg, LDL <70 mg/dL with PCSK9 inhibitor availability, dual antiplatelet selection per stroke etiology, glucose and weight optimization. CREST-2 ran two parallel observer-blinded RCTs in 2,485 asymptomatic patients with ≥70% stenosis, comparing each revascularization modality plus intensive medical management against intensive medical management alone. The stenting trial demonstrated a significant reduction in the 4-year composite of periprocedural stroke/death plus postprocedural ipsilateral ischemic stroke (6.0% vs 2.8%, P=0.02; NNT 31). The endarterectomy trial showed a numerically smaller difference (5.3% vs 3.7%) that did not reach statistical significance (P=0.24). The medical-therapy arms reached 4-year primary-outcome rates of about 6% (stenting trial) and 5.3% (endarterectomy trial). The sample-size calculation had assumed a 4-year rate of 3.6%, so the observed rates ran ABOVE the assumption rather than below it. The trial conclusions were unaffected.',
     keyMessage: 'Asymptomatic carotid stenosis is no longer a near-automatic indication for revascularization. CREST-2 shows the stenting arm beat modern intensive medical management at 4 years (2.8% vs 6.0%, NNT 31) but the endarterectomy arm did not reach statistical significance (3.7% vs 5.3%, P=0.24). The medical-therapy arms achieved annual primary-outcome rates near 1.5%/y. Far lower than the ACAS-era medical comparators. Confirming that modern medical management has narrowed the revascularization advantage.',
     pearls: [
       'CREST-2 is two parallel RCTs, not one. Read each primary separately. Stenting trial: P=0.02, ARD 3.2 pp, NNT 31. Endarterectomy trial: P=0.24, ARD 1.6 pp, not met.',
@@ -20307,7 +20307,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     legend: {
       finding: 'First phase 3 RCT of IV alteplase vs aspirin for CRAO within 4.5h; directional but underpowered; safety reassuring.',
-      bottomLineTag: 'No benefit',
+      bottomLineTag: 'Underpowered',
       keyStat: '66% vs 48%, p=0.95',
     },
   },

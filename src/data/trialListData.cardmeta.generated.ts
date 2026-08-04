@@ -128,7 +128,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
   "attention-trial": {
     "title": "ATTENTION Trial",
     "legend": {
-      "finding": "EVT within 12 h for basilar artery occlusion (NIHSS ≥10) roughly halves mortality and doubles good outcome.",
+      "finding": "EVT within 12 h for basilar artery occlusion (NIHSS ≥10) cuts 90-day mortality by about a third (37% vs 55%) and doubles good outcome.",
       "bottomLineTag": "NNT 4",
       "keyStat": "+23% mRS 0–3"
     },
@@ -979,7 +979,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
   "nor-test-2-part-a-trial": {
     "title": "NOR-TEST 2 (Part A)",
     "legend": {
-      "finding": "Tenecteplase 0.4 mg/kg in moderate-severe stroke caused 6× more sICH and 3× more deaths vs alteplase.",
+      "finding": "Tenecteplase 0.4 mg/kg in moderate-severe stroke: sICH 6% vs 1% (6 versus 1 events, not statistically significant) and significantly higher mortality, 16% vs 5%.",
       "bottomLineTag": "Harm",
       "keyStat": "OR 0.45 mRS 0–1"
     },
@@ -1583,7 +1583,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "title": "THEIA Trial",
     "legend": {
       "finding": "First phase 3 RCT of IV alteplase vs aspirin for CRAO within 4.5h; directional but underpowered; safety reassuring.",
-      "bottomLineTag": "No benefit",
+      "bottomLineTag": "Underpowered",
       "keyStat": "66% vs 48%, p=0.95"
     },
     "subtitle": "IV Alteplase vs Oral Aspirin for Acute Non-Arteritic CRAO within 4.5 Hours",
@@ -1662,7 +1662,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Published 2024",
     "listCategory": "thrombolysis",
     "listDescription": "Late-window tenecteplase 4.5-24h for ICA/MCA occlusion without EVT access; POSITIVE, NNT 11.",
-    "bottomLineSummary": "TRACE-III showed tenecteplase 0.25 mg/kg improved functional independence at 90 days versus standard medical treatment in perfusion-selected LVO patients treated 4.5-24 hours after stroke onset when EVT was unavailable (33.0% vs 24.2%, relative rate 1.37, P=0.03, NNT 11). sICH was higher (3.0% vs 0.8%). Results apply specifically to EVT-unavailable settings with LVO confirmed on imaging.",
+    "bottomLineSummary": "TRACE-III showed tenecteplase 0.25 mg/kg improved the rate of no or minimal disability (mRS 0 to 1) at 90 days versus standard medical treatment in perfusion-selected LVO patients treated 4.5-24 hours after stroke onset when EVT was unavailable (33.0% vs 24.2%, relative rate 1.37, P=0.03, NNT 11). sICH was higher (3.0% vs 0.8%). Results apply specifically to EVT-unavailable settings with LVO confirmed on imaging.",
     "doi": "10.1056/NEJMoa2402980"
   },
   "triage-stroke-trial": {

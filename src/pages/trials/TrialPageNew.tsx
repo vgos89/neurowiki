@@ -5104,7 +5104,7 @@ const TrialPageNew: React.FC = () => {
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
                 <p className="text-xs text-amber-800 leading-relaxed">
-                  <strong>Co-primary endpoint note:</strong> Both co-primary endpoints were met: reperfusion at 24 hours (100% vs 37%, P less than 0.001) and early neurological improvement at day 3 (80% vs 37%, P less than 0.001). The chart below shows the secondary functional outcome (mRS 0 to 2 at 90 days) for bedside context.
+                  <strong>Co-primary endpoint note:</strong> Both co-primary endpoints were met: median share of the ischemic territory reperfused at 24 hours (100% vs 37%, P less than 0.001) and early neurological improvement at day 3 (80% vs 37%, P less than 0.001). The chart below shows the secondary functional outcome (mRS 0 to 2 at 90 days) for bedside context.
                 </p>
               </div>
               <DeltaBandChart
@@ -5113,10 +5113,18 @@ const TrialPageNew: React.FC = () => {
                 treatmentLabel={tm.efficacyResults.treatment.name}
                 controlLabel={tm.efficacyResults.control.name}
                 endpoint="mRS 0-2 at 90 Days (Secondary Outcome)"
-                riskRatio="2.92"
-                ciLow="1.20"
-                ciHigh="7.11"
-                pValue="0.02"
+                // 2.92 with a 95% CI of 1.20-7.11 and p=0.02 appear NOWHERE in the
+                // extend-ia-trial record, which carries effectSize "+31%" and
+                // pValue "<0.001". The bare 2.92 also rendered under the default
+                // "Risk ratio" label while the two percentages drawn beside it give
+                // a risk ratio of about 1.78 and an odds ratio of about 3.67, so it
+                // was neither. Labelling it correctly would only make an unsourced
+                // figure look authoritative. Removed; the per-arm grids and the
+                // endpoint remain, and the effect row suppresses when blank.
+                riskRatio=""
+                ciLow=""
+                ciHigh=""
+                pValue=""
                 winnerArm={isPositive ? 'treatment' : 'none'}
               />
             </div>
