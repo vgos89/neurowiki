@@ -3,6 +3,14 @@
  * check-quote-safety — catches an unescaped apostrophe inside a single-quoted
  * TypeScript string literal in the clinical data files.
  *
+ * NOT extended to catch an inner QUOTED PHRASE (e.g. '>3 cm' nested inside a
+ * single-quoted literal). That variant adds TWO quotes, so parity misses it, and
+ * every pattern broad enough to catch it also fires on ordinary lines carrying
+ * several string values, of which this file has hundreds: a type union, an object
+ * literal with three string fields. A guard that reports 100+ false positives gets
+ * disabled, which is worse than the gap. The compiler catches that variant
+ * immediately anyway; it is the silent possessive that needed a named check.
+ *
  * Why this exists: authoring clinical prose into single-quoted TS strings, an
  * apostrophe in a possessive ("CLOSE's", "Kasner's", "the arm's own baseline")
  * silently terminates the literal. tsc catches it, but only after the edit has

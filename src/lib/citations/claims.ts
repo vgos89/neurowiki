@@ -609,7 +609,7 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
       'pradilla-enrich-2024',
     ],
     surfaces: [DATA_SURFACE],
-    description: 'ClinicalSynthesisCard on /trials/q/ich-surgery. Synthesizes the spontaneous-ICH surgical chain: STICH-I/II (negative for open craniotomy in supratentorial ICH), MISTIE-III (volume reduction without functional benefit), ENRICH 2024 (Bayesian primary met for early minimally invasive parafascicular surgery in 30–80 mL supratentorial ICH; posterior probability 0.981). Cerebellar ICH >3 cm with brainstem compression / hydrocephalus retains separate Class I surgical indication per 2022 AHA/ASA ICH §10. ENRICH is reported as Bayesian posterior per trial-statistics skill; no NNT.',
+    description: 'ClinicalSynthesisCard on /trials/q/ich-surgery. Synthesizes the spontaneous-ICH surgical chain: STICH-I/II (negative for open craniotomy in supratentorial ICH), MISTIE-III (volume reduction without functional benefit), ENRICH 2024 (Bayesian primary met for early minimally invasive parafascicular surgery in 30–80 mL supratentorial ICH; posterior probability 0.981). Cerebellar ICH with neurologic deterioration, brainstem compression or hydrocephalus retains a separate Class 1 surgical indication per 2022 AHA/ASA ICH §10. The registered quoted_text carries NO diameter threshold; a previously shipped greater-than-3-cm criterion was invented and was removed from 6 surfaces on 2026-08-03. ENRICH is reported as Bayesian posterior per trial-statistics skill; no NNT.',
   },
 
   // ─── ICAS stenting clinical synthesis ───────────────────────────────────────

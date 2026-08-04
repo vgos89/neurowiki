@@ -3026,17 +3026,18 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     bedsidePearl: 'Do not skip alteplase before thrombectomy on the basis of SKIP. Even with low-dose Japanese alteplase as comparator, non-inferiority failed. Give standard-dose IV thrombolysis in eligible LVO patients while activating the EVT pathway in parallel.',
     bottomLineSummary: 'Japanese non-inferiority trial of thrombectomy alone vs low-dose alteplase plus thrombectomy in LVO stroke within 4.5 hours. mRS 0-2 was numerically similar (59.4% vs 57.3%) but non-inferiority was not met (OR 1.09, one-sided 97.5% CI lower bound 0.63, below the 0.74 margin). Lower any-ICH with direct EVT.',
     inclusionCriteria: [
-      'Age 18 or older',
-      'Acute ischemic stroke with LVO of intracranial ICA, M1, M2, or basilar artery',
-      'NIHSS 6 to 29',
+      'Age 18 to 85',
+      'Acute ischemic stroke with ICA or M1 occlusion on MRA or CTA',
+      'NIHSS 6 or greater',
+      'Baseline ASPECTS 6 to 10 (DWI-ASPECTS 5 to 10)',
       'Eligible for IV thrombolysis',
       'Treatment within 4.5 hours of last known well',
-      'Pre-stroke mRS 0 or 1',
+      'Pre-stroke mRS 0 to 2',
     ],
     exclusionCriteria: [
       'Contraindication to IV alteplase',
-      'Pre-stroke mRS greater than 1',
-      'NIHSS less than 6 or greater than 29',
+      'Pre-stroke mRS greater than 2',
+      'NIHSS less than 6',
       'Presentation beyond 4.5 hours from last known well',
     ],
     fullEligibility: {
@@ -6580,7 +6581,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     inclusionCriteria: [
       'Age 18 years or older',
-      'Acute ischemic stroke with medium vessel occlusion confirmed on vessel imaging (M2, M3, A1, A2, P1, P2 segments)',
+      'Acute ischemic stroke with medium vessel occlusion confirmed on vessel imaging (M2 or M3 of the MCA, A2 or A3 of the ACA, P2 or P3 of the PCA; A1 and P1 are NOT included)',
       'NIHSS score above 5, or disabling neurological deficit with NIHSS 3 to 5',
       'Treatment possible within 12 hours of last known well',
       'Favorable baseline imaging without large established infarct',

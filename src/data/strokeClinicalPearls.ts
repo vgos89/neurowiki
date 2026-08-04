@@ -1164,7 +1164,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'neurosurgery-indications',
         title: 'Surgical Intervention for ICH',
-        content: 'STAT neurosurgery consult for: Cerebellar hemorrhage >3 cm with neurological decline or brainstem compression or hydrocephalus (evacuate; Class I, Level B). EVD for hydrocephalus from IVH. Superficial lobar ICH with mass effect + declining GCS (STICH II-type). Any ICH with herniation signs. STICH I and STICH II: no demonstrated benefit for open craniotomy in supratentorial ICH, including the dedicated superficial lobar population (STICH II primary endpoint not met: 59% vs 62% unfavorable, OR 0.86, 95% CI 0.62–1.20, P=0.367). Deep hemorrhages (basal ganglia, thalamus) generally managed medically.',
+        content: 'STAT neurosurgery consult for: Cerebellar hemorrhage with neurological decline or brainstem compression or hydrocephalus (evacuate; Class 1, Level B-NR). EVD for hydrocephalus from IVH. Superficial lobar ICH with mass effect + declining GCS (STICH II-type). Any ICH with herniation signs. STICH I and STICH II: no demonstrated benefit for open craniotomy in supratentorial ICH, including the dedicated superficial lobar population (STICH II primary endpoint not met: 59% vs 62% unfavorable, OR 0.86, 95% CI 0.62–1.20, P=0.367). Deep hemorrhages (basal ganglia, thalamus) generally managed medically.',
         type: 'pearl',
         section: 'step-6',
         evidence: 'AHA/ASA 2022 ICH Guidelines; STICH, STICH II',

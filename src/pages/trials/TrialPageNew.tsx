@@ -1042,8 +1042,11 @@ const TrialPageNew: React.FC = () => {
             </div>
             <div className="p-4">
               <DeltaBandChart
-                treatmentPct={42.6}
-                controlPct={27.2}
+                // Was hard-coded 42.6 / 27.2 while every other surface on this page,
+                // including the record's own efficacyResults, said 39 / 26. The chart
+                // contradicted its own trial record. Now reads the record.
+                treatmentPct={trialMetadata.efficacyResults.treatment.percentage}
+                controlPct={trialMetadata.efficacyResults.control.percentage}
                 treatmentLabel={trialMetadata.efficacyResults.treatment.name}
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="mRS 0–1 at 90 Days"
@@ -3493,10 +3496,15 @@ const TrialPageNew: React.FC = () => {
                 controlPct={55}
                 treatmentLabel={trialMetadata.efficacyResults.treatment.name}
                 controlLabel={trialMetadata.efficacyResults.control.name}
+                // The label said ITT and the numbers were PER-PROTOCOL. That is the
+                // one substitution TASTE cannot tolerate: noninferiority was met in
+                // per-protocol and NOT reached in ITT, so showing the per-protocol
+                // estimate under an ITT heading reversed the trial's own verdict.
+                // ITT values per the record: SRD 0.03, 95% CI -0.033 to 0.10.
                 endpoint="mRS 0-1 at 3 Months (ITT)"
-                riskRatio="SRD +0.05"
-                ciLow="−0.02"
-                ciHigh="+0.12"
+                riskRatio="SRD +0.03"
+                ciLow="−0.033"
+                ciHigh="+0.10"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="none"
                 // Noninferiority design: the reported primary verdict is not a
