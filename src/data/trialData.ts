@@ -4336,18 +4336,18 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What about safety and secondary outcomes?',
-        answer: 'Symptomatic ICH was significantly higher with tirofiban (9.7% vs 6.4%, P = 0.04). 90-day mortality was similar (18.3% vs 17.3%). Successful reperfusion (TICI 2b-3) was approximately 83% in both arms. The combination of null efficacy and increased sICH represents a net harm signal.',
+        answer: 'Symptomatic ICH was numerically higher with tirofiban but the difference was not statistically significant (9.7% vs 6.4%, difference 3.3%, 95% CI −0.2% to +6.8%). 90-day mortality was similar (18.3% vs 17.3%). Successful reperfusion (TICI 2b-3) was approximately 83% in both arms. The combination of null efficacy and increased sICH represents a net harm signal.',
       },
     ],
     /* claimId: rescue-bt-ordinal | source: RESCUE BT Investigators JAMA 2022 */
     howToInterpret: {
-      proves: 'In Chinese patients with acute LVO stroke treated with thrombectomy within 24 hours, peri-procedural IV tirofiban did not improve 90-day functional outcome compared with placebo (adjusted common OR 1.08, 95% CI 0.86-1.36, P = 0.50). Symptomatic ICH was significantly higher with tirofiban (9.7% vs 6.4%, P = 0.04). The combination of null efficacy and a significant safety signal argues against routine peri-EVT tirofiban use.',
+      proves: 'In Chinese patients with acute LVO stroke treated with thrombectomy within 24 hours, peri-procedural IV tirofiban did not improve 90-day functional outcome compared with placebo (adjusted common OR 1.08, 95% CI 0.86-1.36, P = 0.50). Symptomatic ICH was numerically higher with tirofiban, but the confidence interval crosses zero, so the trial did not establish a difference (9.7% vs 6.4%, difference 3.3%, 95% CI −0.2% to +6.8%). Null efficacy alongside an unfavourable but unproven bleeding signal argues against routine peri-EVT tirofiban use.',
       doesNotProve: 'The trial does not exclude potential benefit in narrowly defined subgroups (for example, intracranial atherosclerotic disease with rescue stenting), which were not the primary question. It does not address tirofiban given for other indications such as carotid stenting or post-procedural reocclusion management.',
-      cautions: 'Single-country (China) cohort, which limits generalizability. The enrolled population was anterior-circulation LVO only (intracranial ICA, M1, or M2); posterior-circulation occlusion was excluded, so these results do not speak to basilar or other posterior-circulation thrombectomy. The sICH increase (P = 0.04) is the most actionable finding from a null efficacy trial: when adding an antiplatelet agent does not help and increases bleeding, the default position is not to add it. Reperfusion rates were similar (~83%), so the harm is not offset by mechanical benefit.',
+      cautions: 'Single-country (China) cohort, which limits generalizability. The enrolled population was anterior-circulation LVO only (intracranial ICA, M1, or M2); posterior-circulation occlusion was excluded, so these results do not speak to basilar or other posterior-circulation thrombectomy. The sICH signal (difference 3.3%, 95% CI −0.2% to +6.8%) is the most actionable finding from a null efficacy trial, even though it did not reach significance: when adding an antiplatelet agent does not help and may increase bleeding, the default position is not to add it. Reperfusion rates were similar (~83%), so the harm is not offset by mechanical benefit.',
     },
     /* claimId: rescue-bt-bedside | source: RESCUE BT Investigators JAMA 2022 */
-    bedsidePearl: 'Do not give peri-procedural IV tirofiban as routine adjunct to thrombectomy. RESCUE BT showed no functional benefit and a significant increase in symptomatic ICH (9.7% vs 6.4%). Reserve GP IIb/IIIa inhibitors for selected indications such as rescue stenting in intracranial atherosclerosis, not for general LVO thrombectomy.',
-    bottomLineSummary: 'Chinese double-blind placebo-controlled trial of peri-procedural IV tirofiban vs placebo during thrombectomy in LVO stroke within 24 hours. Adjusted common OR 1.08 (95% CI 0.86-1.36, P = 0.50): no functional benefit. Symptomatic ICH significantly higher with tirofiban (9.7% vs 6.4%, P = 0.04). Net harm signal.',
+    bedsidePearl: 'Do not give peri-procedural IV tirofiban as routine adjunct to thrombectomy. RESCUE BT showed no functional benefit and a numerically higher rate of symptomatic ICH that did not reach significance (9.7% vs 6.4%, difference 3.3%, 95% CI −0.2% to +6.8%). Reserve GP IIb/IIIa inhibitors for selected indications such as rescue stenting in intracranial atherosclerosis, not for general LVO thrombectomy.',
+    bottomLineSummary: 'Chinese double-blind placebo-controlled trial of peri-procedural IV tirofiban vs placebo during thrombectomy in LVO stroke within 24 hours. Adjusted common OR 1.08 (95% CI 0.86-1.36, P = 0.50): no functional benefit. Symptomatic ICH numerically higher with tirofiban, not significant (9.7% vs 6.4%, difference 3.3%, 95% CI −0.2% to +6.8%). No benefit, with an unfavourable safety trend.',
     inclusionCriteria: [
       'Age 18 to 80',
       'Acute ischemic stroke with anterior-circulation intracranial LVO (ICA, M1, or M2)',
@@ -4369,7 +4369,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     legend: {
       finding: 'Pre-EVT IV tirofiban did not improve outcome and raised sICH 9.7% vs 6.4%.',
-      bottomLineTag: 'NS / Harm',
+      bottomLineTag: 'No benefit',
       keyStat: 'cOR 1.08 (0.86-1.36)',
     },
   },

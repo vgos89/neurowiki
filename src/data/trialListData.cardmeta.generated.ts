@@ -1246,7 +1246,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "title": "RESCUE BT Trial",
     "legend": {
       "finding": "Pre-EVT IV tirofiban did not improve outcome and raised sICH 9.7% vs 6.4%.",
-      "bottomLineTag": "NS / Harm",
+      "bottomLineTag": "No benefit",
       "keyStat": "cOR 1.08 (0.86-1.36)"
     },
     "subtitle": "Intravenous Tirofiban Before Endovascular Thrombectomy",
@@ -1254,7 +1254,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Enrolled 2018-2021",
     "listCategory": "thrombectomy",
     "listDescription": "Adjunct pre-EVT tirofiban trial showing no functional benefit.",
-    "bottomLineSummary": "Chinese double-blind placebo-controlled trial of peri-procedural IV tirofiban vs placebo during thrombectomy in LVO stroke within 24 hours. Adjusted common OR 1.08 (95% CI 0.86-1.36, P = 0.50): no functional benefit. Symptomatic ICH significantly higher with tirofiban (9.7% vs 6.4%, P = 0.04). Net harm signal.",
+    "bottomLineSummary": "Chinese double-blind placebo-controlled trial of peri-procedural IV tirofiban vs placebo during thrombectomy in LVO stroke within 24 hours. Adjusted common OR 1.08 (95% CI 0.86-1.36, P = 0.50): no functional benefit. Symptomatic ICH numerically higher with tirofiban, not significant (9.7% vs 6.4%, difference 3.3%, 95% CI −0.2% to +6.8%). No benefit, with an unfavourable safety trend.",
     "doi": "10.1001/jama.2022.12584"
   },
   "rescue-japan-limit-trial": {
