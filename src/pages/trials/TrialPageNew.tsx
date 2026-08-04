@@ -2754,7 +2754,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="EAGLE" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="harm" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with central retinal artery occlusion presenting within 20 hours, does local intra-arterial fibrinolysis via ophthalmic artery microcatheter improve visual acuity compared with conservative standard treatment?
             </p>
@@ -2781,8 +2781,10 @@ const TrialPageNew: React.FC = () => {
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="≥15-Letter Visual Improvement at 1 Month"
                 riskRatio="0.95"
-                ciLow="0.73"
-                ciHigh="1.24"
+                // CI 0.73-1.24 appears nowhere in the eagle-trial record nor in its
+                // citation. Removed rather than substituted; the row suppresses when blank.
+                ciLow=""
+                ciHigh=""
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm={isPositive ? 'treatment' : 'none'}
               />
@@ -3233,7 +3235,7 @@ const TrialPageNew: React.FC = () => {
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
-          {renderTrialDesign(trialMetadata, '313 of 948 planned patients. Stopped early (futility). May 2014 to December 2016. Published JAMA 2018.')}
+          {renderTrialDesign(trialMetadata, '313 of 948 planned patients. Terminated early by the sponsor for slow enrolment, not on a futility boundary. May 2014 to December 2016. Published JAMA 2018.')}
           {trialMetadata.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>
@@ -7210,7 +7212,7 @@ const TrialPageNew: React.FC = () => {
           {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
-          {renderTrialDesign(tm, '112 patients aged 61-82 at multiple German centers (planned 188; stopped early for enrollment difficulty). Open-label randomized trial with blinded outcome assessment. Surgery within 48 hours of stroke onset. Published NEJM 2014.')}
+          {renderTrialDesign(tm, '112 patients aged 61-82 at multiple German centers, stopped early (reason not established by any registered source). Open-label randomized trial with blinded outcome assessment. Surgery within 48 hours of stroke onset. Published NEJM 2014.')}
           {tm.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>

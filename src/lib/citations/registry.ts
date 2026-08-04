@@ -916,7 +916,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     pmid: '20609991',
     last_reviewed: '2026-05-23',
     review_window_months: 36,
-    quoted_text: 'EAGLE randomized 84 patients with non-arteritic CRAO to local intra-arterial fibrinolysis (rt-PA up to 50 mg) vs conservative standard therapy. The trial was stopped early after a planned interim analysis showed no significant difference in mean visual acuity change at 1 month (60.3% vs 57.1%) and a higher rate of adverse events in the IA fibrinolysis arm (37.1% vs 4.3%, primarily intracerebral hemorrhage and procedural complications). IA fibrinolysis is not recommended.',
+    quoted_text: 'EAGLE randomized 84 patients with non-arteritic CRAO to local intra-arterial fibrinolysis (rt-PA up to 50 mg) vs conservative standard therapy. The trial was stopped early after a planned interim analysis showed no significant difference on the primary endpoint, mean logMAR BCVA change at 1 month (P=0.69), nor on the dichotomised secondary endpoint (60.0% vs 57.1% achieving clinically meaningful improvement) and a higher rate of adverse events in the IA fibrinolysis arm (37.1% vs 4.3%, primarily intracerebral hemorrhage and procedural complications). IA fibrinolysis is not recommended.',
   },
 
   // ─── CHARM 2024 — IV glibenclamide for large hemispheric infarct ──────────
