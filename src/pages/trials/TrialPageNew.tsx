@@ -2206,8 +2206,8 @@ const TrialPageNew: React.FC = () => {
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="mRS 0-2 at 90 Days"
                 riskRatio="0.95"
-                ciLow="0.82"
-                ciHigh="1.10"
+                ciLow="0.79"
+                ciHigh="1.15"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm={isPositive ? 'treatment' : 'none'}
               />
@@ -3152,7 +3152,7 @@ const TrialPageNew: React.FC = () => {
                 endpoint="mRS 0-1 at 3 Months"
                 riskRatio="OR 0.45"
                 ciLow="0.25"
-                ciHigh="0.82"
+                ciHigh="0.80"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="control"
                 // Harm wording must come from the record, not from winnerArm.
@@ -3220,8 +3220,8 @@ const TrialPageNew: React.FC = () => {
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="mRS 0-1 at 90 Days"
                 riskRatio="RD −1.1 pp"
-                ciLow="−5.6"
-                ciHigh="+3.4"
+                ciLow="−9.4"
+                ciHigh="+7.3"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="control"
                 // Harm wording must come from the record, not from winnerArm.
@@ -3357,7 +3357,7 @@ const TrialPageNew: React.FC = () => {
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="mRS 0-1 at 90 Days"
                 riskRatio="RR 1.04"
-                ciLow="0.99"
+                ciLow="0.98"
                 ciHigh="1.10"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="none"
@@ -4864,8 +4864,14 @@ const TrialPageNew: React.FC = () => {
                   endpoint="mRS 0-2 at 90 Days"
                   effectLabel="Adjusted OR"
                   riskRatio="2.16"
-                  ciLow="1.39"
-                  ciHigh="3.38"
+                  // CI 1.39-3.38 appears NOWHERE in the record. The only documented
+                  // OR interval belongs to a DIFFERENT estimate (adjusted OR 1.67,
+                  // 1.21-2.30), which the stat card on this same page displays. The
+                  // page was showing "Adjusted OR 2.16 (1.39-3.38)" beside "Adjusted
+                  // OR 1.67". Removed rather than substituted: the interval row
+                  // suppresses when the bound is blank, so no number is invented.
+                  ciLow=""
+                  ciHigh=""
                   pValue=""
                   winnerArm={isPositive ? 'treatment' : 'none'}
                 />
@@ -5025,8 +5031,11 @@ const TrialPageNew: React.FC = () => {
                   endpoint="mRS 0-2 at 90 Days"
                   effectLabel="Adjusted OR"
                   riskRatio="2.1"
-                  ciLow="1.1"
-                  ciHigh="4.0"
+                  // CI 1.1-4.0 appears NOWHERE in the record. Its only stated interval
+                  // (1.05-2.8) belongs to the different cOR 1.7 estimate, and the two
+                  // ORs sit adjacent, so a reader could easily bind the wrong pair.
+                  ciLow=""
+                  ciHigh=""
                   pValue=""
                   winnerArm={isPositive ? 'treatment' : 'none'}
                 />
@@ -5480,7 +5489,7 @@ const TrialPageNew: React.FC = () => {
                     </div>
                   </div>
                   <p style={{ fontSize: 11, color: '#94a3b8', textAlign: 'center' }}>
-                    Mortality: 40% (EVT) vs 51% (medical treatment) · sICH: 5% both arms
+                    Mortality: 40% (EVT) vs 51% (medical treatment) · sICH: 6% (EVT) vs 5% (medical treatment)
                   </p>
                 </div>
               ) : (

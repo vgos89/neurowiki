@@ -300,9 +300,19 @@ export const ivtRecommendations = {
       text: "In patients with AIS taking single or dual antiplatelet therapy (DAPT) and otherwise eligible for IVT, IVT should be used because it improves functional outcomes despite a small absolute increased risk of sICH (~0.9%–1.2%), outweighed by anticipated treatment benefit (~8%).",
     },
     {
+      // CORRECTED 2026-08-04 against §4.6.1 (e38). Two separate recommendations had
+      // been merged into one entry, and the merge demoted a Class 1 directive to
+      // Class 2a. The "do not delay IVT to obtain MRI" clause is rec 11, COR 1 /
+      // B-NR, and now stands as its own entry below at its real strength.
       cor: "2a",
       loe: "B-NR",
-      text: "In patients with AIS with 1–10 cerebral microbleeds (CMBs) on pretreatment MRI, treatment with IVT can reasonably be considered. Do NOT delay IVT to obtain MRI to screen for CMBs.",
+      text: "In patients with AIS with 1–10 cerebral microbleeds (CMBs) on pretreatment MRI, treatment with IVT can reasonably be considered.",
+    },
+    {
+      // §4.6.1 rec 11, previously folded into the entry above at COR 2a.
+      cor: "1",
+      loe: "B-NR",
+      text: "In patients with AIS who are eligible for IVT within 4.5 hours of symptom onset with unknown burden of cerebral microbleeds (CMB), it is recommended that IVT be administered without first obtaining MRI to exclude CMBs.",
     },
     {
       cor: "2b",
@@ -660,9 +670,13 @@ export const antiplateletRecommendations = {
 
 export const anticoagulationRecommendations = [
   {
+    // CORRECTED 2026-08-04 against §4.9 (e68). Three defects: LOE was B-R and the
+    // source says A (ELAN, OPTIMAS and TIMING are three RCTs); the patient-selection
+    // qualifier "carefully selected (eg, milder severity)" had been dropped; and
+    // "oral anticoagulation" had been narrowed to "a DOAC".
     cor: "2a",
-    loe: "B-R",
-    text: "In patients with AIS and AF who are selected for anticoagulation poststroke, a strategy of early initiation of a DOAC rather than delayed initiation is safe and reasonable compared with a strategy of delayed anticoagulation, although the efficacy of early anticoagulation for prevention of early recurrent stroke is not established.",
+    loe: "A",
+    text: "In carefully selected (eg, milder severity) patients with AIS with atrial fibrillation, a strategy of early oral anticoagulation poststroke is low risk and is reasonable compared with a strategy of delayed anticoagulation, although the efficacy of early anticoagulation for prevention of early recurrent stroke is not established.",
   },
   {
     cor: "2b",
@@ -756,7 +770,7 @@ export const inHospitalManagementRecommendations = {
     {
       cor: "3: Harm",
       loe: "A",
-      text: "For AIS, graded compression stockings (GCS) are potentially harmful and are should not be used routinely for prevention of DVT.",
+      text: "For AIS, graded compression stockings (GCS) are potentially harmful and should not be used routinely for prevention of DVT.",
     },
   ],
 
@@ -780,17 +794,33 @@ export const inHospitalManagementRecommendations = {
 
   oxygenation: [
     {
+      // CORRECTED 2026-08-04 against §4.1 (e31-e32). The entry conflated THREE
+      // separate recommendations. It took the COR/LOE of rec 5 but dropped its
+      // "who are ineligible for EVT" scoping, generalising a narrow no-benefit
+      // statement to all nonhypoxic AIS patients, which directly contradicts the
+      // COR 2b recommendation that normobaric hyperoxia before EVT may be
+      // reasonable. It then grafted on an SpO2 target belonging to rec 2, a
+      // COR 1 recommendation, and rendered it as >=94% where the source says >94%.
       cor: "3: No Benefit",
       loe: "B-R",
-      text: "Supplemental oxygen in nonhypoxic patients with AIS should not be used routinely (targets normal oxygen saturation SpO2 ≥94%).",
+      text: "In patients with AIS without hypoxia who are ineligible for EVT, supplemental oxygen is not recommended to improve functional outcomes.",
+    },
+    {
+      // §4.1 rec 2, previously conflated into the entry above.
+      cor: "1",
+      loe: "C-LD",
+      text: "In patients with AIS with hypoxia, supplemental oxygen should be provided to maintain oxygen saturation (SpO₂) >94%.",
     },
   ],
 
   earlyMobilization: [
     {
+      // CORRECTED 2026-08-04 against §5.7 (e80). COR was right; LOE was inflated from
+      // B-R to A. Note this is the OPPOSITE direction from D2 and D4, which is why
+      // the packet concluded the LOE values were reconstructed rather than transcribed.
       cor: "3: Harm",
-      loe: "A",
-      text: "Very early (within 24 hours of stroke onset) high-intensity out-of-bed activities (sitting, standing, walking) is potentially harmful and should not be used routinely.",
+      loe: "B-R",
+      text: "In patients with AIS, high-dose, very early mobilization within 24 hours of stroke onset is not recommended to improve the odds of a favorable outcome at 3 months and may be harmful.",
     },
   ],
 } as const;
@@ -873,9 +903,19 @@ export const headPositioningRecommendations = [
     text: "Routine flat (0°) head positioning compared with 30° head elevation for the first 24 hours in patients with AIS should not be used routinely, as it does not improve functional outcomes or reduce stroke progression.",
   },
   {
-    cor: "2b",
-    loe: "C-EO",
-    text: "In patients with AIS and evidence of elevated intracranial pressure, head-of-bed elevation to 30° may be considered as a simple measure to reduce ICP and improve cerebral venous drainage.",
+    // CORRECTED 2026-08-04 against the published PDF, §4.2 Head Positioning (e34).
+    // The entry previously here was a COR 2b / C-EO head-of-bed-elevation
+    // recommendation that DOES NOT EXIST in §4.2, and the genuine second
+    // recommendation below was absent entirely. Same failure mode as the §4.7.3
+    // basilar defect: invented text with an invented strength, in a file that
+    // declares itself a validation reference. §4.2 contains exactly two
+    // recommendations and both are COR 3: No Benefit / B-R.
+    // NOTE, stated rather than assumed: §6.1-6.2 (Brain Swelling) was not read in
+    // that pass, so a head-elevation statement may exist elsewhere. It does not
+    // exist HERE, at that strength.
+    cor: "3: No Benefit",
+    loe: "B-R",
+    text: "In patients with AIS with probable large artery atherosclerosis cause for whom no reperfusion intervention is available, there is no benefit of routine head-down positioning (−20 degrees) compared with 0- to 30-degree head positioning to improve functional outcome.",
   },
 ] as const;
 
@@ -925,16 +965,22 @@ export const cardiacMonitoringRecommendations = [
 export const infectionManagementRecommendations = {
   pneumonia: [
     {
+      // CORRECTED 2026-08-04 against §5.6 (e79). LOE was B-R; the source says A.
+      // The previous text also carried a grammatical corruption, "are should not",
+      // which is itself a sign the entry was retyped rather than transcribed.
       cor: "3: No Benefit",
-      loe: "B-R",
-      text: "Prophylactic antibiotics are should not be used routinely in patients with AIS who do not have evidence of active infection, as they do not reduce risk of pneumonia or improve functional outcomes.",
+      loe: "A",
+      text: "In patients with AIS, routine use of prophylactic antibiotics has not been shown to be beneficial in improving functional outcomes.",
     },
   ],
   urinary: [
     {
-      cor: "3: No Benefit",
-      loe: "B-R",
-      text: "Routine urinary catheterization for prevention of urinary tract infections should not be used routinely in patients with AIS without urinary retention, as it does not reduce UTI rates and may increase infections.",
+      // CORRECTED 2026-08-04 against §5.6 (e79). BOTH fields were wrong, and the COR
+      // error softened a harm finding: the guideline says this causes HARM, the
+      // mirror said it merely does not help. LOE C-LD was also overstated to B-R.
+      cor: "3: Harm",
+      loe: "C-LD",
+      text: "In patients with AIS, routine placement of indwelling bladder catheters should not be performed because of the associated risk of catheter-associated urinary tract infections (UTIs).",
     },
   ],
 } as const;
