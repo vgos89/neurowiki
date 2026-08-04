@@ -6742,7 +6742,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What is the ordinal-shift design?',
-        answer: 'The primary outcome was the full mRS distribution (0–6) analyzed by ordinal logistic regression. Common OR 2.77 (95% CI 1.63–4.70) means each mRS category was 2.77× more likely to favor EVT vs medical. NNT 3.6 is from the dichotomized SECONDARY (mRS 0–2), not the primary.',
+        answer: 'The primary outcome was the full mRS distribution (0–6) analyzed by ordinal logistic regression. Common OR 2.77 (95% CI 1.63–4.70) means the odds of a better mRS were 2.77 times higher with EVT, and the ratio is assumed to be the same wherever the scale is cut. NNT 3.6 is from the dichotomized SECONDARY (mRS 0–2), not the primary.',
       },
       {
         question: 'What does it mean for my patient?',
@@ -6857,7 +6857,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     legend: {
       finding: 'Perfusion-selected thrombectomy at 6–16 h triples functional independence (45% vs 17%).',
       bottomLineTag: '+28 / 100',
-      keyStat: 'NNT 3.6',
+      keyStat: 'NNT 3.6 (mRS 0–2)',
     },
   },
   'dawn-trial': {
@@ -10843,7 +10843,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     inclusionCriteria: [
       'Age 35–80',
       'Acute mild ischemic stroke (NIHSS ≤5) OR high-risk TIA (ABCD² ≥4)',
-      'Within 24–72 hours of symptom onset',
+      'Within 72 hours of symptom onset',
       'Presumed atherosclerotic mechanism: ≥50% stenosis of intracranial/extracranial artery OR multiple acute infarctions of presumed large-artery origin',
     ],
     exclusionCriteria: [
@@ -10860,7 +10860,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
           label: "Core qualifying event",
           items: [
             "35 to 80 years of age",
-            "Ischemic stroke with an NIHSS score of 5 or less or a high-risk TIA with an ABCD2 score of 4 or higher within 24 to 72 hours after symptom onset",
+            "Ischemic stroke with an NIHSS score of 5 or less or a high-risk TIA with an ABCD2 score of 4 or higher within 72 hours after symptom onset",
             "Or an ischemic stroke (NIHSS score 4 or 5) within 24 hours after symptom onset",
             "Presumed atherosclerotic cause (stenosis of an extracranial or intracranial artery ipsilateral to the ischemic field, or multiple infarctions with nonstenotic atherosclerotic plaque ipsilateral to the ischemic field)",
           ],
@@ -10958,11 +10958,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
     ],
     howToInterpret: {
-      proves: 'In patients with minor ischemic stroke (NIHSS ≤5) or high-risk TIA (ABCD² ≥4) of presumed atherosclerotic mechanism (≥50% stenosis or multiple acute infarctions), starting clopidogrel + aspirin within 24–72 hours and continuing DAPT for 21 days then clopidogrel alone reduces 90-day recurrent stroke vs aspirin alone.',
-      doesNotProve: 'It does not prove benefit for non-atherosclerotic etiology (cardioembolic, lacunar without stenosis). It does not address the 0–24h window directly. That is covered by CHANCE and POINT. It does not establish that 21 days is the optimal duration vs alternatives.',
+      proves: 'In patients with minor ischemic stroke (NIHSS ≤5) or high-risk TIA (ABCD² ≥4) of presumed atherosclerotic mechanism (≥50% stenosis or multiple acute infarctions), starting clopidogrel + aspirin within 72 hours and continuing DAPT for 21 days then clopidogrel alone reduces 90-day recurrent stroke vs aspirin alone.',
+      doesNotProve: 'It does not prove benefit for non-atherosclerotic etiology (cardioembolic, lacunar without stenosis). It is not a well-powered test of the 0–24h window: only 12.8% of patients were randomised within 24 hours, so CHANCE and POINT remain the evidence there. It does not establish that 21 days is the optimal duration vs alternatives.',
       cautions: 'Chinese cohort only (98.5% Han Chinese), with higher intracranial atherosclerosis prevalence than Western populations. Hemorrhagic stroke HR 3.01 (CI 1.09–8.28) is uncommon but elevated; patient selection matters. Requires vascular imaging to document ≥50% stenosis; without this confirmation, DAPT eligibility is uncertain.',
     },
-    bedsidePearl: 'For atherosclerotic minor stroke or high-risk TIA presenting 24–72 hours after onset, clopidogrel + aspirin × 21 days then clopidogrel alone through day 90 reduces recurrent stroke (NNT ≈ 53). Requires ≥50% stenosis on vascular imaging. Within 24h, CHANCE/POINT remain the primary evidence base.',
+    bedsidePearl: 'For atherosclerotic minor stroke or high-risk TIA presenting within 72 hours of onset, clopidogrel + aspirin × 21 days then clopidogrel alone through day 90 reduces recurrent stroke (NNT ≈ 53). Requires ≥50% stenosis on vascular imaging. Within 24h, CHANCE/POINT remain the primary evidence base.',
     bottomLineSummary: 'INSPIRES extends the DAPT initiation window to 72 hours for atherosclerotic minor stroke/TIA. New stroke at 90 days: 7.3% vs 9.2% (HR 0.79, 95% CI 0.66–0.94, P=0.008; NNT ≈ 53). Bleeding HR 2.08 (NNH ≈ 200). AHA/ASA 2026 §4.8 COR 2a.',
     harmSignal: 'Moderate-severe bleeding (GUSTO) 0.9% vs 0.4% (HR 2.08, 95% CI 1.07–4.04)',
     applicability: {
@@ -11958,7 +11958,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Age 18+, presenting after ictus',
     ],
     exclusionCriteria: [
-      'Deep ICH (thalamic/putaminal. Anterior basal ganglia subgroup halted for futility)',
+      'Thalamic, posterior fossa, or brainstem ICH (anterior basal ganglia hemorrhage, including putaminal, was eligible, but new enrollment into that subgroup was stopped for futility at interim 2)',
       'Posterior fossa or brainstem ICH',
       'Volume <30 mL or >80 mL',
       'Pre-stroke severe disability',
@@ -12047,7 +12047,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     howToInterpret: {
       proves: 'In LOBAR intracerebral hemorrhage 30–80 mL within 24 hours, minimally invasive parafascicular surgery (trans-sulcal corridor, BrainPath + Myriad) improves utility-weighted mRS at 180 days (lobar stratum difference +0.127, 95% CrI 0.035–0.219; overall Bayesian P(sup)=0.981) and reduces 30-day mortality (9.3% vs 18.0%).',
-      doesNotProve: 'It does not prove benefit in anterior basal ganglia ICH. That subgroup was halted for futility at interim 2 (point estimate −0.013, CrI crossing zero). It does not apply to deep (thalamic/putaminal) ICH, posterior fossa, brainstem, or volumes <30 mL or >80 mL.',
+      doesNotProve: 'It does not prove benefit in anterior basal ganglia ICH. That subgroup was halted for futility at interim 2 (point estimate −0.013, CrI crossing zero). It does not apply to thalamic ICH, posterior fossa or brainstem ICH, or volumes <30 mL or >80 mL.',
       cautions: 'Industry-funded by NICO Corporation (device manufacturer). Bayesian adaptive randomization: effect size may be inflated. Open-label (impossible to blind surgery), mitigated by central blinded mRS adjudication via redacted audio recordings. 59 trained neurosurgeons across 37 US centers; generalizability outside trained centers is unestablished. NNT 12 is approximate, from PRIMARY SAFETY endpoint (30-day mortality), not primary efficacy.',
     },
     bedsidePearl: 'For LOBAR ICH 30–80 mL within 24 hours, minimally invasive parafascicular surgery (BrainPath + Myriad) reduces 30-day mortality (9.3% vs 18.0%) and improves 180-day UW-mRS (Bayesian posterior P>0.98). Anterior basal ganglia subgroup was halted for futility; benefit is in LOBAR ICH.',
@@ -12152,7 +12152,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'MIPS trans-sulcal parafascicular approach avoids cortical transgression; key advantage vs open craniotomy',
       'Requires BrainPath® + Myriad® devices (NICO Corporation. Industry funder); 59 trained neurosurgeons across 37 US centers; needs manufacturer training. Generalizability outside trained centers is unestablished',
       'Eligibility: LOBAR or ANTERIOR BASAL GANGLIA ICH only, volume 30–80 mL, within 24 hours',
-      'NOT applicable to: deep (thalamic/putaminal) ICH, posterior fossa ICH, brainstem ICH',
+      'NOT applicable to: thalamic ICH, posterior fossa ICH, brainstem ICH',
       'NOT applicable to: volume <30 mL (less severe) or >80 mL (typically non-survivable)',
       'Bayesian adaptive design. Superiority established by posterior probability, not a frequentist p-value. No frequentist p was reported in the primary analysis',
       'Per AHA/ASA 2022 ICH Guideline: minimally invasive surgery may be considered (Class IIb). ENRICH is the first positive RCT; guideline may update with future focused review',
@@ -12322,7 +12322,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         'Prospective, nonrandomized controlled intervention study (quasi-experimental)',
         'Allocation by MSU availability. Not patient-level randomization',
         'MSU dispatch plus ambulance vs conventional ambulance alone',
-        'Pragmatic Berlin stroke system evaluation (3 MSU base stations, 24/7 staffing, paramedic + radiology tech + emergency neurologist)'
+        'Pragmatic Berlin stroke system evaluation (3 MSU base stations, 7am-11pm operating hours 7 days a week, paramedic + radiology tech + emergency neurologist)'
       ],
       timeline: 'Berlin, Germany; February 1, 2017 to October 30, 2019 (final inclusion target reached May 8, 2019)'
     },
@@ -13662,7 +13662,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Tenecteplase was noninferior, but not superior, to alteplase for 90-day ordinal mRS distribution',
       'Excellent recovery occurred in 44% vs 42%',
       'Mortality was identical at about 8% in both groups',
-      'This large UK cohort confirms tenecteplase and alteplase are interchangeable at 0.25 mg/kg'
+      'This large UK cohort supports tenecteplase 0.25 mg/kg as a noninferior alternative to alteplase in the standard window, not as a demonstrated equal'
     ],
     conclusion: '',
     source: 'Muir KW, et al. (Lancet Neurol 2024)',
@@ -15903,7 +15903,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         'CTA- or MRA-confirmed basilar artery occlusion',
         'EVT plus best medical treatment vs best medical treatment alone',
         'Treatment window: within 6 hours of onset',
-        'Best medical treatment included IV alteplase if eligible (~40% of medical arm)',
+        'Best medical treatment included IV alteplase if eligible (~80% of medical arm)',
       ],
       timeline: '300 patients enrolled; full enrollment target achieved',
     },
@@ -15919,7 +15919,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     pearls: [
       'Primary: mRS 0-3 at 90 days 44.2% EVT vs 37.7% medical (RR 1.18, CI 0.92–1.50, P=0.19); not significant',
       'CI upper bound 1.50: a 50% relative increase in favorable outcome was not excluded',
-      '~40% of the medical arm received IV alteplase as part of best medical treatment',
+      '79.5% of the medical arm received IV alteplase as part of best medical treatment',
       'Mortality numerically lower with EVT (38.0% vs 43.2%), not statistically significant',
       'sICH 4.5% EVT vs 0.7% medical (P=0.07); trending toward significance',
     ],
@@ -15928,7 +15928,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     /* claimId: basics-outcomes | source: Langezaal et al., NEJM 2021, doi: 10.1056/NEJMoa2030297 */
     primaryOutcomeProse: 'In 300 patients with CTA- or MRA-confirmed basilar artery occlusion enrolled across 11 countries, EVT plus best medical treatment did not significantly improve favorable functional outcome (mRS 0-3) at 90 days compared with best medical treatment alone. mRS 0-3 was achieved in 44.2% (68 of 154) of the EVT group versus 37.7% (55 of 146) of the medical group (rate ratio 1.18, 95% CI 0.92 to 1.50, P=0.19). The confidence interval was wide and included a potential 50% relative increase in favorable outcomes with EVT, meaning the trial did not exclude a clinically meaningful benefit. Mortality was numerically lower in the EVT arm (38.0% vs 43.2%), though not statistically significant.',
     /* claimId: basics-design | source: Langezaal et al., NEJM 2021 */
-    trialDesignNarrative: 'BASICS was an international open-label RCT enrolling patients with acute basilar artery occlusion at centers in Europe and Asia. Patients within 6 hours of onset (or last known well) with CTA- or MRA-confirmed basilar occlusion were randomized to EVT plus best medical treatment or best medical treatment alone. Best medical treatment included IV alteplase (0.9 mg/kg) if eligible; approximately 40% of the medical arm received alteplase. EVT could use any approved thrombectomy technique. The trial was designed to detect a 10-percentage-point difference in mRS 0-3 but the enrolled population had higher baseline severity than anticipated, limiting statistical power.',
+    trialDesignNarrative: 'BASICS was an international open-label RCT enrolling patients with acute basilar artery occlusion at centers in Europe and Asia. Patients within 6 hours of onset (or last known well) with CTA- or MRA-confirmed basilar occlusion were randomized to EVT plus best medical treatment or best medical treatment alone. Best medical treatment included IV alteplase (0.9 mg/kg) if eligible; 79.5% of the medical arm received IV thrombolysis (78.6% in the endovascular arm), so the control arm was not undertreated. EVT could use any approved thrombectomy technique. The trial was designed to detect a 10-percentage-point difference in mRS 0-3 but the enrolled population had higher baseline severity than anticipated, limiting statistical power.',
     safetyBrief: 'Symptomatic intracranial hemorrhage occurred in 4.5% of the EVT group versus 0.7% of the medical group (P=0.07). Mortality at 90 days was 38.0% EVT versus 43.2% medical, a non-significant difference. The sICH difference trended toward significance, consistent with reperfusion hemorrhage risk in the basilar territory.',
     successorTrialId: 'attention-trial',
     successorTrialDisplay: 'ATTENTION (2022)',
@@ -15969,7 +15969,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     doi: '10.1016/S0140-6736(04)16721-4',
     source: 'Diener et al. (Lancet 2004)',
     listCategory: 'antiplatelets',
-    listDescription: 'Aspirin added to clopidogrel vs clopidogrel alone for 18 months after stroke/TIA: no efficacy benefit (15.7% vs 16.7%, RR 0.94, CI 0.84–1.05, P=0.244) and major bleeding doubled (2.6% vs 1.3%). Preceded POINT (2018).',
+    listDescription: 'Aspirin added to clopidogrel vs clopidogrel alone for 18 months after stroke/TIA: no efficacy benefit (15.7% vs 16.7%, RR 0.94, CI 0.84–1.05, P=0.244) and life-threatening bleeding doubled (2.6% vs 1.3%). Preceded POINT (2018).',
     stats: {
       sampleSize: { value: '7,599', label: 'Randomized Patients' },
       primaryEndpoint: { value: 'Composite', label: 'Stroke/MI/Vascular Death/Rehospitalization' },
@@ -15996,7 +15996,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalContext: 'MATCH tested whether adding aspirin to long-term clopidogrel therapy after stroke or TIA would reduce recurrent vascular events. It found no efficacy benefit and a doubling of major bleeding, establishing that long-duration DAPT causes net harm. This set the stage for CHANCE (2013) and POINT (2018), which showed that short-duration DAPT (21 days) is beneficial. The critical teaching insight: duration of DAPT, not the combination itself, is the key variable.',
     pearls: [
       'No efficacy benefit: 15.7% vs 16.7% composite endpoint (RR 0.94, CI 0.84–1.05, P=0.244)',
-      'Major bleeding doubled: 2.6% combination vs 1.3% clopidogrel alone',
+      'Life-threatening bleeding doubled: 2.6% combination vs 1.3% clopidogrel alone',
       'Comparator was clopidogrel alone, not aspirin alone: important for interpreting results vs CHARISMA',
       '18-month treatment duration; harm emerged with prolonged exposure',
       'Established that long-term DAPT after stroke causes net harm; duration is the critical variable',
@@ -16004,7 +16004,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     conclusion: '',
     questionLede: 'In patients with recent ischemic stroke or TIA with at least one additional vascular risk factor already receiving clopidogrel, does adding aspirin reduce recurrent vascular events over 18 months?',
     /* claimId: match-outcomes | source: Diener et al., Lancet 2004, doi: 10.1016/S0140-6736(04)16721-4 */
-    primaryOutcomeProse: 'In 7,599 patients with recent ischemic stroke or TIA plus at least one additional vascular risk factor already receiving clopidogrel, adding aspirin 75 mg/day did not reduce the composite endpoint of ischemic stroke, myocardial infarction, vascular death, or rehospitalization for acute ischemia over 18 months. The primary endpoint occurred in 15.7% of the combination group versus 16.7% of the clopidogrel-alone group (relative risk 0.94, 95% CI 0.84 to 1.05, P=0.244). Major bleeding and life-threatening bleeding were both significantly higher with the combination (2.6% vs 1.3%), establishing that adding aspirin to long-term clopidogrel causes harm without efficacy benefit.',
+    primaryOutcomeProse: 'In 7,599 patients with recent ischemic stroke or TIA plus at least one additional vascular risk factor already receiving clopidogrel, adding aspirin 75 mg/day did not reduce the composite endpoint of ischemic stroke, myocardial infarction, vascular death, or rehospitalization for acute ischemia over 18 months. The primary endpoint occurred in 15.7% of the combination group versus 16.7% of the clopidogrel-alone group (relative risk 0.94, 95% CI 0.84 to 1.05, P=0.244). Life-threatening bleeding was significantly higher with the combination (2.6% vs 1.3%), and major bleeding was raised in parallel, establishing that adding aspirin to long-term clopidogrel causes harm without efficacy benefit.',
     /* claimId: match-design | source: Diener et al., Lancet 2004 */
     trialDesignNarrative: 'MATCH enrolled patients within 3 months of a qualifying ischemic stroke or TIA who had at least one additional vascular risk factor (prior stroke or TIA, diabetes, symptomatic peripheral arterial disease, or ischemic heart disease). All patients were already receiving clopidogrel 75 mg/day and were randomized to aspirin 75 mg/day or matching placebo for 18 months. The comparator arm was clopidogrel monotherapy, not aspirin monotherapy, a critical design difference from CHARISMA. The primary composite endpoint included ischemic stroke, MI, vascular death, and rehospitalization for acute ischemia.',
     safetyBrief: 'Life-threatening bleeding occurred in 2.6% of the combination group versus 1.3% of the clopidogrel-alone group (absolute difference 1.3%). Major bleeding was similarly doubled. Fatal and intracranial hemorrhage were both numerically higher with the combination. The net harm of adding aspirin to long-term clopidogrel was unambiguous and statistically significant.',
@@ -16013,7 +16013,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     successorTrialClause: 'for the modern successor trial that defined the appropriate short-duration window for dual antiplatelet therapy after minor stroke',
     chainContext: 'short-duration dual antiplatelet therapy after minor stroke or high-risk TIA',
     /* claimId: match-bottom-line | source: Diener et al., Lancet 2004 */
-    bottomLineSummary: 'MATCH enrolled 7,599 patients with recent stroke/TIA on clopidogrel and randomized them to add aspirin vs continue clopidogrel alone for 18 months. No efficacy benefit: 15.7% vs 16.7% composite endpoint (RR 0.94, CI 0.84–1.05, P=0.244). Major bleeding doubled: 2.6% vs 1.3%. Established that long-duration DAPT after stroke causes net harm. POINT (2018) subsequently showed short-duration DAPT (21 days) is beneficial; duration is the key variable.',
+    bottomLineSummary: 'MATCH enrolled 7,599 patients with recent stroke/TIA on clopidogrel and randomized them to add aspirin vs continue clopidogrel alone for 18 months. No efficacy benefit: 15.7% vs 16.7% composite endpoint (RR 0.94, CI 0.84–1.05, P=0.244). Life-threatening bleeding doubled: 2.6% vs 1.3%. Established that long-duration DAPT after stroke causes net harm. POINT (2018) subsequently showed short-duration DAPT (21 days) is beneficial; duration is the key variable.',
     inclusionCriteria: [
       'Age 40 years or older',
       'Recent ischemic stroke (within 3 months) or TIA with at least one additional vascular risk factor',
@@ -20031,7 +20031,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       mortality: { evt: 3.3, control: 3.9, label: '4-week in-hospital mortality (primary)', tooltip: 'Aspirin 3.3% (343/10,554) vs placebo 3.9% (398/10,552), 2p=0.04. 14% (SD 7) proportional reduction; 5.4 (SD 2.6) fewer deaths per 1000.' },
     },
     safetyData: 'Haemorrhagic stroke: 1.1% aspirin vs 0.9% placebo (115 vs 93 events; +2.1 per 1000, 2p>0.1, not significant in CAST alone). Transfused or fatal extracranial bleeds: 0.8% aspirin vs 0.6% placebo (86 vs 58 events; +2.7 per 1000, 2p=0.02). In the analysis restricted to patients alive at the end of the scheduled treatment period (to avoid double-counting deaths and major events), non-fatal transfused bleeds excess was 1.9 per 1000 (47 vs 27 events; 0.5% vs 0.3%, 2p=0.02), and non-fatal pulmonary embolus rates were similar (7 vs 10 events). Recurrent stroke during the scheduled 4-week treatment period: 335 (3.2%) aspirin vs 351 (3.4%) placebo (NS in total). Comprising significantly fewer recurrent ischaemic strokes (167/1.6% vs 215/2.1%, 2p=0.01) and a non-significant excess of haemorrhagic strokes (115/1.1% vs 93/0.9%, 2p>0.1). Combined endpoint of death or non-fatal recurrent stroke at 4 weeks: 545 (5.3%) vs 614 (5.9%), 2p=0.03; absolute difference 6.8 (SD 3.2) fewer cases per 1000 with aspirin. Dead or dependent at discharge (modified Rankin scale assessed at discharge or death): 3153 (30.5%) aspirin vs 3266 (31.6%) placebo, 2p=0.08; absolute difference 11.4 (6.4) fewer per 1000. Directionally favourable but did not reach 2p<0.05 for this co-primary endpoint. Information on non-fatal myocardial infarction was not sought (rare in Chinese stroke patients).',
-    clinicalContext: 'CAST asked whether early aspirin 160 mg/day, started within 48 hours of suspected acute ischaemic stroke and continued in hospital for up to 4 weeks, reduces in-hospital mortality and disability. Before CAST and IST, no large-scale RCT evidence was available for early antiplatelet therapy in acute ischaemic stroke, and clinical practice varied widely. CAST was designed in parallel with IST (the two trials were prospectively planned for joint analysis) and enrolled 21,106 patients across 413 Chinese hospitals between November 1993 and March 1997. The trial used a double-blind placebo-controlled design, the rigorous-blinding counterpart to the open-label IST, and a fixed aspirin dose of 160 mg/day. Both co-primary endpoints were met for mortality (3.3% vs 3.9%, 2p=0.04; 14% proportional reduction) and for the combined in-hospital endpoint of death or non-fatal stroke (5.3% vs 5.9%, 2p=0.03; 12% proportional reduction; 6.8 fewer cases per 1000). The death-or-dependence-at-discharge co-primary was directionally favourable (30.5% vs 31.6%; 11.4 fewer per 1000) but did not quite reach conventional significance (2p=0.08). The pooled IST + CAST analysis (Chen ZM et al., Stroke 2000;31:1240-1249, PMID 10835439) is the canonical clinical reference: in approximately 40,000 randomised patients, early aspirin prevented approximately 9 deaths or non-fatal recurrent strokes per 1000 in the acute phase and caused approximately 2 additional haemorrhagic strokes per 1000, net benefit of approximately 7 per 1000. This is the basis for the AHA/ASA Class I, Level A recommendation for aspirin within 24-48 hours of acute ischaemic stroke once intracranial haemorrhage is excluded. CAST also provided a critical generalisability anchor: the trial enrolled exclusively in mainland China, with a population weighted toward intracranial atherosclerosis and lacunar/small-vessel disease, stroke subtypes that are less common in Western populations and might plausibly have responded differently to antiplatelet therapy. The concordant signal in CAST and IST (across both populations) underwrites the global applicability of the early-aspirin recommendation.',
+    clinicalContext: 'CAST asked whether early aspirin 160 mg/day, started within 48 hours of suspected acute ischaemic stroke and continued in hospital for up to 4 weeks, reduces in-hospital mortality and disability. Before CAST and IST, no large-scale RCT evidence was available for early antiplatelet therapy in acute ischaemic stroke, and clinical practice varied widely. CAST was designed in parallel with IST (the two trials were prospectively planned for joint analysis) and enrolled 21,106 patients across 413 Chinese hospitals between November 1993 and March 1997. The trial used a double-blind placebo-controlled design, the rigorous-blinding counterpart to the open-label IST, and a fixed aspirin dose of 160 mg/day. Two of the three co-primary endpoints were met: mortality (3.3% vs 3.9%, 2p=0.04; 14% proportional reduction) and for the combined in-hospital endpoint of death or non-fatal stroke (5.3% vs 5.9%, 2p=0.03; 12% proportional reduction; 6.8 fewer cases per 1000). The death-or-dependence-at-discharge co-primary was directionally favourable (30.5% vs 31.6%; 11.4 fewer per 1000) but did not quite reach conventional significance (2p=0.08). The pooled IST + CAST analysis (Chen ZM et al., Stroke 2000;31:1240-1249, PMID 10835439) is the canonical clinical reference: in approximately 40,000 randomised patients, early aspirin prevented approximately 9 deaths or non-fatal recurrent strokes per 1000 in the acute phase and caused approximately 2 additional haemorrhagic strokes per 1000, net benefit of approximately 7 per 1000. This is the basis for the AHA/ASA Class I, Level A recommendation for aspirin within 24-48 hours of acute ischaemic stroke once intracranial haemorrhage is excluded. CAST also provided a critical generalisability anchor: the trial enrolled exclusively in mainland China, with a population weighted toward intracranial atherosclerosis and lacunar/small-vessel disease, stroke subtypes that are less common in Western populations and might plausibly have responded differently to antiplatelet therapy. The concordant signal in CAST and IST (across both populations) underwrites the global applicability of the early-aspirin recommendation.',
     keyMessage: 'In 21,106 patients within 48 hours of acute ischaemic stroke, double-blind placebo-controlled aspirin 160 mg/day reduced in-hospital mortality (3.3% vs 3.9%, 2p=0.04; 14% proportional reduction; 5.4 fewer deaths per 1000) and combined 4-week death or non-fatal stroke (5.3% vs 5.9%, 2p=0.03; 6.8 fewer cases per 1000). Dead-or-dependent at discharge directionally favoured aspirin (30.5% vs 31.6%, 2p=0.08; trend). Small excess of major extracranial bleeding (+2.7 per 1000, 2p=0.02) and non-significant excess of haemorrhagic stroke (+2 per 1000). Foundational evidence (with IST) for the AHA/ASA Class I, Level A early-aspirin recommendation.',
     pearls: [
       'CAST + IST together: ~40,000 patients. The Chen et al. 2000 pooled analysis (PMID 10835439) is the canonical clinical reference. About 9 fewer deaths or non-fatal strokes per 1000 with aspirin, about 2 excess haemorrhagic strokes per 1000, net benefit ~7 per 1000.',

@@ -1274,7 +1274,7 @@ ENRICH used utility-weighted mRS (UW-mRS), which assigns quality-of-life weights
 *   **Requires BrainPath + Myriad (NICO Corporation)**: specialty equipment, needs institutional setup and training
 *   MIPS trans-sulcal approach = no cortical transgression = less surgical brain injury vs open craniotomy
 *   Bayesian adaptive design: statistically valid but n=300 smaller than traditional RCTs; subgroup analyses underpowered
-*   **NOT for deep ICH** (thalamic/putaminal): those patients excluded, different surgical risk profile
+*   **NOT for thalamic, posterior fossa, or brainstem ICH**: those patients were excluded, different surgical risk profile. Putaminal hemorrhage was *not* excluded, it falls inside the anterior basal ganglia stratum above, which was enrolled and then stopped for futility
 *   Complements MISTIE III (stereotactic) and STICH (open): different technique, different results
 
 *Source: [Pradilla G, et al. N Engl J Med. 2024;390(14):1277–1289](https://www.nejm.org/doi/abs/10.1056/NEJMoa2308440). DOI: 10.1056/NEJMoa2308440*

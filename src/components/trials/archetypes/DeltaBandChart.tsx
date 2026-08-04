@@ -169,8 +169,16 @@ export const DeltaBandChart: React.FC<DeltaBandChartProps> = ({
     !isBlank(pValue) && (pTrimmed.startsWith('<') || parseFloat(pTrimmed) < 0.05);
   const pIsNonSignificant = !isBlank(pValue) && !pEstablishesDifference;
 
-  // The band is drawn on the TREATMENT grid and announced as "extra
-  // recoveries". When the control arm is the winner the extra dots are extra
+  // The band is drawn on the TREATMENT grid. It used to be announced to
+  // assistive technology as "N extra recoveries per 100 patients", which is
+  // wrong on every bad-outcome endpoint even when the intervention wins:
+  // ENRICH reads 9.3% vs 18.0% 30-day mortality, and the band was announcing
+  // 9 extra RECOVERIES rather than 9 fewer DEATHS. The label is now
+  // polarity-neutral and names the endpoint it belongs to, so it stays correct
+  // whether the endpoint counts good outcomes or bad ones. Do not reintroduce
+  // outcome-polarity wording here without a per-call-site polarity prop.
+  //
+  // When the control arm is the winner the extra dots are extra
   // BAD outcomes, so that framing inverts the meaning of the trial: SAMMPRIS
   // was reading "9 extra recoveries per 100 patients" for 9 extra strokes and
   // deaths, and PATCH "16 extra recoveries" for 16 extra death-or-dependence
@@ -385,7 +393,7 @@ export const DeltaBandChart: React.FC<DeltaBandChartProps> = ({
           {/* Delta band overlay (ADR-005 Decision 5, locked) */}
           {showBand && bandStyle && (
             <div
-              aria-label={`Delta band: ${Math.round(arr)} extra recoveries per 100 patients`}
+              aria-label={`Delta band: absolute difference of ${Math.round(arr)} per 100 patients in ${endpoint || 'the primary endpoint'}, favouring ${treatmentLabel}`}
               style={{
                 position: 'absolute',
                 left: bandStyle.left,

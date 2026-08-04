@@ -498,7 +498,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "legend": {
       "finding": "Perfusion-selected thrombectomy at 6–16 h triples functional independence (45% vs 17%).",
       "bottomLineTag": "+28 / 100",
-      "keyStat": "NNT 3.6"
+      "keyStat": "NNT 3.6 (mRS 0–2)"
     },
     "subtitle": "Thrombectomy for Ischemic Stroke (6-16 Hours)",
     "source": "Albers et al. (NEJM 2018;378(8):708–718)",
@@ -855,8 +855,8 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "source": "Diener et al. (Lancet 2004)",
     "timeline": "7,599 patients enrolled; 18-month follow-up per patient",
     "listCategory": "antiplatelets",
-    "listDescription": "Aspirin added to clopidogrel vs clopidogrel alone for 18 months after stroke/TIA: no efficacy benefit (15.7% vs 16.7%, RR 0.94, CI 0.84–1.05, P=0.244) and major bleeding doubled (2.6% vs 1.3%). Preceded POINT (2018).",
-    "bottomLineSummary": "MATCH enrolled 7,599 patients with recent stroke/TIA on clopidogrel and randomized them to add aspirin vs continue clopidogrel alone for 18 months. No efficacy benefit: 15.7% vs 16.7% composite endpoint (RR 0.94, CI 0.84–1.05, P=0.244). Major bleeding doubled: 2.6% vs 1.3%. Established that long-duration DAPT after stroke causes net harm. POINT (2018) subsequently showed short-duration DAPT (21 days) is beneficial; duration is the key variable.",
+    "listDescription": "Aspirin added to clopidogrel vs clopidogrel alone for 18 months after stroke/TIA: no efficacy benefit (15.7% vs 16.7%, RR 0.94, CI 0.84–1.05, P=0.244) and life-threatening bleeding doubled (2.6% vs 1.3%). Preceded POINT (2018).",
+    "bottomLineSummary": "MATCH enrolled 7,599 patients with recent stroke/TIA on clopidogrel and randomized them to add aspirin vs continue clopidogrel alone for 18 months. No efficacy benefit: 15.7% vs 16.7% composite endpoint (RR 0.94, CI 0.84–1.05, P=0.244). Life-threatening bleeding doubled: 2.6% vs 1.3%. Established that long-duration DAPT after stroke causes net harm. POINT (2018) subsequently showed short-duration DAPT (21 days) is beneficial; duration is the key variable.",
     "doi": "10.1016/S0140-6736(04)16721-4"
   },
   "mist-trial": {

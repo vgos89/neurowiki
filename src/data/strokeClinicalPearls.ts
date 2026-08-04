@@ -795,7 +795,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'enchanted-trial',
         title: 'ENCHANTED Trial',
-        content: 'Intensive BP lowering (<140) vs standard (<180) post-tPA. No benefit from intensive lowering, trend toward worse outcomes. Current practice: Moderate control to balance hemorrhage prevention with perfusion maintenance.',
+        content: 'Target SBP 130-140 vs guideline management (<180) during and after alteplase. The 90-day disability primary was null (OR 1.01, 95% CI 0.87-1.17, P=0.87), with no signal of harm. A pre-specified secondary, any ICH at 24 hours, was reduced (14.8% vs 18.7%, P=0.014) but did not translate into functional benefit. Current practice: keep below 180/105 and do not lower further for the purpose of improving recovery.',
         type: 'trial',
         section: 'step-4',
         link: '/trials/enchanted',
