@@ -1560,8 +1560,8 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "source": "Johnston SC, et al. (NEJM 2020)",
     "timeline": "Enrolled 2018–2019; published NEJM 2020",
     "listCategory": "antiplatelets",
-    "listDescription": "Ticagrelor + aspirin vs aspirin alone; AHA 2026 COR 3: No Benefit. NNT=91, bleeding 5× higher.",
-    "bottomLineSummary": "Ticagrelor plus aspirin for 30 days statistically reduced composite stroke or death versus aspirin alone after minor stroke or TIA (HR 0.83, P=0.02, NNT=91), but severe hemorrhage was 5x higher (0.5% vs 0.1%). AHA/ASA 2026 guidelines rate ticagrelor DAPT COR 3: No Benefit for the general population given unfavorable risk-benefit versus clopidogrel-based DAPT. Clopidogrel plus aspirin remains the preferred DAPT regimen; ticagrelor is considered only in confirmed CYP2C19 poor metabolizers (COR 2b).",
+    "listDescription": "Ticagrelor + aspirin vs aspirin alone; AHA 2026 COR 2b, may be considered. NNT=91, bleeding 5× higher.",
+    "bottomLineSummary": "Ticagrelor plus aspirin for 30 days statistically reduced composite stroke or death versus aspirin alone after minor stroke or TIA (HR 0.83, P=0.02, NNT=91), but severe hemorrhage was 5x higher (0.5% vs 0.1%). AHA/ASA 2026 rates this regimen COR 2b, LOE B-R, may be considered within 24 hours, rather than first line, given the risk-benefit against clopidogrel-based DAPT. Clopidogrel plus aspirin remains the preferred DAPT regimen; ticagrelor is considered only in confirmed CYP2C19 poor metabolizers (COR 2b).",
     "doi": "10.1056/NEJMoa1916870"
   },
   "thaws-trial": {

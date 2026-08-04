@@ -1088,7 +1088,7 @@ If seizures persist despite 24 hours of anesthesia:
 ## Clinical Context
 THALES tested whether ticagrelor (a more potent, direct-acting P2Y12 inhibitor) could outperform aspirin alone in preventing early recurrent stroke after minor stroke or TIA. It enrolled 11,016 patients across 414 sites in 28 countries with broader eligibility than CHANCE/POINT (NIHSS ≤5 vs ≤3; ABCD2 ≥6 vs ≥4).
 
-**AHA/ASA 2026 verdict: COR 3: No Benefit**: ticagrelor is NOT recommended over aspirin alone for this indication.
+**AHA/ASA 2026 verdict: COR 2b, LOE B-R**: ticagrelor plus aspirin for 30 days may be considered within 24 hours of a minor stroke or high-risk TIA (§4.8 recommendation 13, which cites THALES). The separate **COR 3: No Benefit** in the same section is a different question: it covers ticagrelor used *instead of* aspirin, and cites SOCRATES.
 
 ## Trial Summary
 *   **Design:** Randomized double-blind placebo-controlled; 28 countries, 414 sites.
@@ -1112,7 +1112,7 @@ The trial is statistically significant. But net clinical benefit is unfavorable:
 |-------|---------|--------|-----|---------|-----|
 | CHANCE | Clop+ASA | 24h | 28 | No ↑ | COR 1 |
 | POINT | Clop+ASA | 12h | 67 | Slight ↑ | COR 1 |
-| **THALES** | **Ticag+ASA** | **24h** | **91** | **5× higher** | **COR 3** |
+| **THALES** | **Ticag+ASA** | **24h** | **91** | **5× higher** | **COR 2b** |
 | CHANCE-2 | Ticag+ASA (CYP2C19 LOF) | 24h | 63 | No ↑ | COR 2b |
 | INSPIRES | Clop+ASA (atherosclerotic) | 72h | 53 | Slight ↑ | COR 2a |
 
@@ -1211,7 +1211,7 @@ CHANCE-2 is the first large stroke trial using mandatory pharmacogenomic eligibi
 *   **If testing unavailable:** start clopidogrel DAPT NOW; never delay treatment waiting for genotyping
 *   Only LOF carriers benefit from switching; normal metabolizers use standard clopidogrel DAPT
 *   COR 2b (weak); practical barriers include testing availability, ticagrelor cost, and dyspnea side effect
-*   Do NOT confuse with THALES (ticagrelor vs aspirin alone, COR 3): CHANCE-2 compares vs clopidogrel DAPT in a specific genotype
+*   Do NOT confuse with THALES (ticagrelor plus aspirin vs aspirin alone, COR 2b): CHANCE-2 compares vs clopidogrel DAPT in a specific genotype
 
 *Source: [Wang Y, et al. N Engl J Med. 2021;385(27):2497–2505](https://www.nejm.org/doi/full/10.1056/NEJMoa2111749). DOI: 10.1056/NEJMoa2111749*
 `

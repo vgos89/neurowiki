@@ -588,6 +588,12 @@ export const antiplateletRecommendations = {
       details: "Clopidogrel loading dose: 300–600 mg then 75 mg/day; Aspirin 75–100 mg/day; Duration: 21 days DAPT, then SAPT.",
     },
     {
+      cor: "2b",
+      loe: "B-R",
+      text: "In patients with recent (<24 hours) minor (NIHSS score ≤5) noncardioembolic AIS or high-risk TIA (ABCD2 score ≥6 or symptomatic intracranial or extracranial ≥50% stenosis of an artery that could account for TIA) who did not receive IVT, DAPT with ticagrelor (including loading dose) plus aspirin for 30 days may be considered to reduce the risk of 30-day recurrent stroke.",
+      details: "Recommendation 13 of §4.8. This is the recommendation that covers THALES (reference 26). It is distinct from the COR 3 below, which cites SOCRATES (reference 15) and concerns ticagrelor used INSTEAD OF aspirin.",
+    },
+    {
       cor: "2a",
       loe: "B-R",
       text: "In patients with minor (NIHSS ≤5) noncardioembolic AIS or high-risk TIA (ABCD2 ≥4) within 24–72 hours from stroke onset, or NIHSS 4–5 within 24 hours, who did NOT receive IVT, with presumed atherosclerotic cause (≥50% stenosis of intracranial or extracranial artery likely accounting for the presentation), DAPT (clopidogrel + aspirin) for 21 days followed by SAPT can reasonably be considered.",
@@ -600,7 +606,8 @@ export const antiplateletRecommendations = {
     {
       cor: "3: No Benefit",
       loe: "B-R",
-      text: "In patients with minor (NIHSS ≤3) noncardioembolic AIS or high-risk TIA (ABCD2 ≥4), ticagrelor should not be used routinely over aspirin to reduce the composite endpoint of stroke, MI, or death.",
+      text: "In patients with minor (NIHSS score ≤3) noncardioembolic AIS or high-risk TIA (ABCD2 score ≥4), ticagrelor is not recommended over aspirin to reduce the composite endpoint of stroke, myocardial infarction, or death.",
+      details: "Recommendation 9 of §4.8, cited to reference 15 (Johnston/Amarenco, ticagrelor versus aspirin, ie SOCRATES). This concerns ticagrelor monotherapy in place of aspirin. It does NOT cover ticagrelor plus aspirin DAPT, which is recommendation 13 at COR 2b above.",
     },
   ],
 

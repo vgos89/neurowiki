@@ -10589,7 +10589,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     applicability: {
       populationExclusions: [
         'Noncardioembolic minor stroke (NIHSS ≤5) or high-risk TIA (ABCD2 ≥6) within 24 hours only',
-        'AHA/ASA 2026 COR 3 (No Benefit) for general population. NNT=91, severe bleeding 5× higher vs clopidogrel DAPT (NNT=28)',
+        'AHA/ASA 2026 COR 2b (may be considered), not a first-line regimen. NNT=91, severe bleeding 5× higher vs clopidogrel DAPT (NNT=28)',
         'Reserve for confirmed CYP2C19 LOF carriers when clopidogrel pharmacologically inadequate (see CHANCE-2, COR 2b)',
       ],
     },
@@ -10607,7 +10607,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       pValue: {
         value: '0.02',
         label: 'Stat. Significant',
-        info: 'p=0.02. Statistically significant but AHA/ASA 2026 rates ticagrelor as COR 3: No Benefit over aspirin alone: NNT=91 and severe bleeding 5× higher outweigh benefit vs clopidogrel DAPT (CHANCE NNT=28).',
+        info: 'p=0.02. Statistically significant, and AHA/ASA 2026 rates this regimen COR 2b, LOE B-R (may be considered) rather than first line: NNT=91 with severe bleeding 5× higher compares unfavourably with clopidogrel DAPT (CHANCE NNT=28).',
         highlight: false
       },
       effectSize: {
@@ -10674,13 +10674,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         ]
       }
     },
-    clinicalContext: 'THALES tested ticagrelor (a more potent P2Y12 inhibitor than clopidogrel) vs aspirin alone for minor stroke/TIA. It enrolled a broader population (NIHSS ≤5 vs ≤3 in CHANCE) using a 30-day protocol. While statistically significant, the 2026 AHA/ASA guidelines rate ticagrelor as COR 3: No Benefit for this indication. The NNT of 91 is far worse than clopidogrel DAPT (NNT 28–67) and severe bleeding was 5× higher. Ticagrelor-based DAPT is only appropriate for confirmed CYP2C19 loss-of-function carriers (see CHANCE-2, COR 2b).',
+    clinicalContext: 'THALES tested ticagrelor (a more potent P2Y12 inhibitor than clopidogrel) vs aspirin alone for minor stroke/TIA. It enrolled a broader population (NIHSS ≤5 vs ≤3 in CHANCE) using a 30-day protocol. The 2026 AHA/ASA guidelines rate this regimen COR 2b, LOE B-R: ticagrelor plus aspirin for 30 days may be considered within 24 hours in this population (§4.8 recommendation 13, which cites THALES). The COR 3 No Benefit in the same section is a different question: it covers ticagrelor used instead of aspirin, and cites SOCRATES. The 2b rather than a stronger rating reflects the numbers here: NNT 91 against clopidogrel DAPT at 28 to 67, with severe bleeding 5× higher. Clopidogrel plus aspirin remains the COR 1 default; ticagrelor-based DAPT is preferred over it only in confirmed CYP2C19 loss-of-function carriers (CHANCE-2).',
     calculations: {
       nnt: 91,
       nntExplanation: 'NNT=91 at 30 days. 91 patients must be treated to prevent one stroke/death, while each patient faces severe bleeding risk 5× higher than aspirin alone.'
     },
     pearls: [
-      'AHA/ASA 2026: COR 3: No Benefit; ticagrelor NOT recommended over aspirin alone for minor stroke/TIA',
+      'AHA/ASA 2026: COR 2b, LOE B-R; ticagrelor plus aspirin for 30 days may be considered within 24 hours, but is not first line',
       'Statistically significant (p=0.02) but clinically inadequate: NNT=91, severe bleeding 5× higher',
       'Severe hemorrhage: 0.5% (ticagrelor+ASA) vs 0.1% (ASA alone), p<0.001',
       'Net clinical benefit unfavorable vs clopidogrel DAPT: CHANCE NNT=28 with comparable safety',
@@ -10696,7 +10696,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     doi: '10.1056/NEJMoa1916870',
     pmid: '32668111',
     clinicalTrialsId: 'NCT03354429',
-    keyMessage: 'AHA/ASA 2026 COR 3: No Benefit. Ticagrelor NOT recommended over aspirin for minor stroke/TIA. Use clopidogrel-based DAPT (CHANCE protocol) instead.',
+    keyMessage: 'AHA/ASA 2026 COR 2b, LOE B-R: ticagrelor plus aspirin for 30 days may be considered. Clopidogrel-based DAPT (CHANCE protocol, COR 1) remains the default.',
     limitations: [
       'Broader eligibility (NIHSS ≤5, ABCD2 ≥6) makes direct comparison with CHANCE/POINT difficult',
       '30-day endpoint vs 90-day in CHANCE. Different time horizons complicate NNT comparison',
@@ -10705,13 +10705,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       '57% Asian patients. Higher CYP2C19 LOF prevalence may have partially confounded results'
     ],
     listCategory: 'antiplatelets',
-    listDescription: 'Ticagrelor + aspirin vs aspirin alone; AHA 2026 COR 3: No Benefit. NNT=91, bleeding 5× higher.',
+    listDescription: 'Ticagrelor + aspirin vs aspirin alone; AHA 2026 COR 2b, may be considered. NNT=91, bleeding 5× higher.',
     safetyProfile: {
       severeHemorrhage: {
         evt: 0.5,
         control: 0.1,
         label: 'Severe hemorrhage at 30 days (ticagrelor+ASA vs ASA alone)',
-        tooltip: 'Severe bleeding was 5x higher with ticagrelor plus aspirin versus aspirin alone (0.5% vs 0.1%, P<0.001). This disproportionate hemorrhagic risk relative to the 1.1% absolute efficacy gain is the basis for the AHA/ASA 2026 COR 3 downgrade. /* claimId: thales-severe-hemorrhage | source: Johnston NEJM 2020 Table 3 */',
+        tooltip: 'Severe bleeding was 5x higher with ticagrelor plus aspirin versus aspirin alone (0.5% vs 0.1%, P<0.001). This disproportionate hemorrhagic risk relative to the 1.1% absolute efficacy gain is why AHA/ASA 2026 rates the regimen COR 2b, may be considered, rather than recommending it. /* claimId: thales-severe-hemorrhage | source: Johnston NEJM 2020 Table 3 */',
         color: 'danger',
       },
     },
@@ -10808,8 +10808,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         answer: 'Event-free rates at 30 days: ticagrelor plus aspirin 94.5% vs aspirin alone 93.4%. The 1.1% absolute difference was statistically significant (HR 0.83, 95% CI 0.71 to 0.96, P=0.02, NNT=91). /* claimId: thales-primary-result | source: Johnston NEJM 2020 Table 2 */',
       },
       {
-        question: 'If this trial is POSITIVE, why does the AHA 2026 give COR 3 (No Benefit)?',
-        answer: 'COR 3 reflects net clinical benefit versus available alternatives, not just statistical significance. The NNT is 91 versus CHANCE NNT of 28 for clopidogrel-based DAPT, and severe bleeding is 5x higher (0.5% vs 0.1%). Guideline bodies concluded that ticagrelor DAPT is statistically significant but clinically inferior to clopidogrel DAPT in most patients.',
+        question: 'If this trial is POSITIVE, why is the AHA 2026 rating only COR 2b?',
+        answer: 'A class of recommendation reflects net clinical benefit against the available alternatives, not statistical significance alone. The NNT is 91 versus 28 for clopidogrel-based DAPT in CHANCE, and severe bleeding is 5x higher (0.5% vs 0.1%). That is enough for may be considered (2b) but not for the COR 1 that clopidogrel plus aspirin carries. Note the separate COR 3 No Benefit in the same guideline section is about ticagrelor used instead of aspirin (SOCRATES), not about this regimen.',
       },
       {
         question: 'When might ticagrelor DAPT still be chosen?',
@@ -10819,10 +10819,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToInterpret: {
       proves: 'In patients with acute non-cardioembolic minor ischemic stroke or high-risk TIA enrolled within 24 hours, ticagrelor plus aspirin for 30 days reduced composite stroke or death compared with aspirin alone (5.5% vs 6.6%, HR 0.83, 95% CI 0.71 to 0.96, P=0.02, NNT=91). /* claimId: thales-primary-result | source: Johnston NEJM 2020 */',
       doesNotProve: 'It does not prove that ticagrelor DAPT is preferable to clopidogrel DAPT. No head-to-head comparison exists within THALES. The trial does not establish whether extending the treatment window from 21 to 30 days adds incremental benefit over clopidogrel-based protocols.',
-      cautions: 'Severe hemorrhage was significantly higher with ticagrelor plus aspirin (0.5% vs 0.1%, P<0.001). The AHA/ASA 2026 downgraded this regimen to COR 3 (No Benefit over alternatives) for the general population. Ticagrelor-related dyspnea affected approximately 12% of the treatment arm and may have influenced discontinuation. Asian patients made up 57% of the trial, limiting generalizability in Western populations.',
+      cautions: 'Severe hemorrhage was significantly higher with ticagrelor plus aspirin (0.5% vs 0.1%, P<0.001). AHA/ASA 2026 rates this regimen COR 2b, LOE B-R, may be considered rather than recommended. Ticagrelor-related dyspnea affected approximately 12% of the treatment arm and may have influenced discontinuation. Asian patients made up 57% of the trial, limiting generalizability in Western populations.',
     },
-    bedsidePearl: 'THALES is statistically positive (P=0.02) but the guideline verdict is COR 3 (No Benefit) because the NNT of 91 and a 5x increase in severe bleeding make it clinically inferior to clopidogrel DAPT (CHANCE NNT=28, similar safety). In practice: use aspirin plus clopidogrel for 21 days in most patients with TIA or minor stroke. Reserve ticagrelor-based DAPT for confirmed CYP2C19 poor metabolizers (CHANCE-2, COR 2b), where clopidogrel is pharmacologically inadequate.',
-    bottomLineSummary: 'Ticagrelor plus aspirin for 30 days statistically reduced composite stroke or death versus aspirin alone after minor stroke or TIA (HR 0.83, P=0.02, NNT=91), but severe hemorrhage was 5x higher (0.5% vs 0.1%). AHA/ASA 2026 guidelines rate ticagrelor DAPT COR 3: No Benefit for the general population given unfavorable risk-benefit versus clopidogrel-based DAPT. Clopidogrel plus aspirin remains the preferred DAPT regimen; ticagrelor is considered only in confirmed CYP2C19 poor metabolizers (COR 2b).',
+    bedsidePearl: 'THALES is statistically positive (P=0.02) and the guideline verdict is COR 2b, may be considered, rather than a stronger rating, because the NNT of 91 and a 5x increase in severe bleeding leave it behind clopidogrel DAPT (CHANCE NNT=28, similar safety). In practice: use aspirin plus clopidogrel for 21 days in most patients with TIA or minor stroke. Reserve ticagrelor-based DAPT for confirmed CYP2C19 poor metabolizers (CHANCE-2, COR 2b), where clopidogrel is pharmacologically inadequate.',
+    bottomLineSummary: 'Ticagrelor plus aspirin for 30 days statistically reduced composite stroke or death versus aspirin alone after minor stroke or TIA (HR 0.83, P=0.02, NNT=91), but severe hemorrhage was 5x higher (0.5% vs 0.1%). AHA/ASA 2026 rates this regimen COR 2b, LOE B-R, may be considered within 24 hours, rather than first line, given the risk-benefit against clopidogrel-based DAPT. Clopidogrel plus aspirin remains the preferred DAPT regimen; ticagrelor is considered only in confirmed CYP2C19 poor metabolizers (COR 2b).',
     legend: {
       finding: 'Ticagrelor+aspirin × 30 d cuts stroke/death after minor stroke/TIA but increases severe bleeding 5×.',
       bottomLineTag: 'NNT 91',
