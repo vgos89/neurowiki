@@ -20424,7 +20424,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Mortality 24% platelet vs 17% standard care. Serious adverse events 42% vs 30%. Both directions consistent with the primary shift.',
       'Hematoma expansion did not differ significantly between arms. The mechanism of harm is not simple rebleeding; thromboembolic and pro-inflammatory effects of platelet transfusion are the leading hypotheses.',
       'Excluded patients with planned neurosurgical evacuation. PATCH does NOT apply to platelet transfusion before craniotomy, which remains an off-trial case-by-case decision.',
-      'AHA/ASA 2022 ICH Guideline §5.2.4: Class III: Harm, Level B-R. Platelet transfusions should not be administered in antiplatelet-associated ICH.',
+      'AHA/ASA 2022 ICH Antiplatelet-Related Hemorrhage rec 3: COR 3: Harm, LOE B-R, for patients on aspirin who are NOT scheduled for emergency surgery. The guideline carves out the surgical case separately: rec 1 is COR 2b, LOE C-LD, platelet transfusion might be considered for patients on aspirin who require emergency neurosurgery, to reduce postoperative bleeding and mortality.',
       'ESO 2022 ICH Guidelines: strong recommendation against routine platelet transfusion.',
       'No subsequent RCT has been mounted to challenge the harm signal, so PATCH remains the only randomized evidence on this question; the estimate rests on 190 patients with a wide confidence interval (aOR 1.18-3.56).',
       'Open-label PROBE design; outcome adjudication was masked. The harm direction is unlikely to be a treatment-arm assessment bias because mortality (a hard outcome) moved in the same direction.',

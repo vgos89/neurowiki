@@ -84,9 +84,9 @@ export default function IchManagement() {
 
           <Paragraph
             viewMode={viewMode}
-            detail="STICH: no benefit for most. STICH II: lobar ICH 10–100 ml, GCS 5–14, superficial, no IVH; early surgery did not meet its primary endpoint (41% vs 38%, P=0.367); non-significant mortality trend favored surgery; consider in selected cases. Cerebellar ICH with neurological decline, brainstem compression, or hydrocephalus from ventricular obstruction: suboccipital craniectomy with hematoma evacuation (Class 1, Level B-NR, 2022 AHA/ASA ICH). The guideline sets no diameter threshold; size alone is not an indication. EVD for hydrocephalus from IVH."
+            detail="STICH: no benefit for most. STICH II: lobar ICH 10–100 ml, GCS 5–14, superficial, no IVH; early surgery did not meet its primary endpoint (41% vs 38%, P=0.367); non-significant mortality trend favored surgery; consider in selected cases. Cerebellar ICH with neurological decline, brainstem compression and/or hydrocephalus from ventricular obstruction, OR a volume of 15 mL or more: immediate surgical removal with or without EVD (COR 1, LOE B-NR, 2022 AHA/ASA ICH §10). The three triggers are alternatives, so a volume of 15 mL or more is an indication on its own. The threshold is a VOLUME, not a diameter. EVD is separately COR 1, LOE B-NR for large IVH with impaired level of consciousness."
           >
-            Most supratentorial ICH: medical. <Term detail="superficial lobar, 10–100 ml">STICH II</Term>-type: consider evacuation. Cerebellar hemorrhage with neurological decline, brainstem compression, or hydrocephalus: <Critical>evacuate</Critical> (Class 1, Level B-NR). No diameter threshold: size alone is not an indication. EVD for hydrocephalus from IVH.
+            Most supratentorial ICH: medical. <Term detail="superficial lobar, 10–100 ml">STICH II</Term>-type: consider evacuation. Cerebellar hemorrhage with neurological decline, brainstem compression, hydrocephalus, <Critical>or volume ≥15 mL</Critical>: <Critical>evacuate</Critical> (COR 1, Level B-NR). Any one of those triggers is sufficient. EVD is separately COR 1 for large IVH with impaired consciousness.
           </Paragraph>
 
           <Section number={6} title="ICU and Complications" />

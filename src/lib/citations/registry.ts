@@ -414,8 +414,15 @@ export const CITATION_REGISTRY: CitationRegistry = {
     section: '§9 Supratentorial Surgical Management + §10 Cerebellar Surgical Management',
     url: 'https://www.ahajournals.org/doi/10.1161/STR.0000000000000407',
     pmid: '35579034',
-    last_reviewed: '2026-05-23',
-    quoted_text: 'For patients with cerebellar ICH and neurologic deterioration or brainstem compression or hydrocephalus from ventricular obstruction, suboccipital craniectomy with hematoma evacuation is recommended (Class 1, Level B-NR). For patients with spontaneous supratentorial ICH of moderate or larger volume, open craniotomy for hematoma evacuation is not routinely recommended (Class 3: No Benefit) based on the STICH-I and STICH-II trials. Minimally invasive hematoma evacuation may be considered in selected patients with supratentorial ICH (Class 2b, B-R per MISTIE-III; the 2022 guideline pre-dates ENRICH 2024).',
+    last_reviewed: '2026-08-05',
+    // CORRECTED 2026-08-05 against the published 2022 ICH guideline, which V
+    // supplied on this date. The previous quote omitted the VOLUME trigger and
+    // over-specified the operation. §10 recommendation 1 lists three alternative
+    // triggers joined by OR, one of which is a volume of 15 mL or more, and calls
+    // for immediate surgical removal with or without EVD rather than naming
+    // suboccipital craniectomy. The EVD recommendation, previously absent, is
+    // added from the IVH section.
+    quoted_text: 'For patients with cerebellar ICH who are deteriorating neurologically, have brainstem compression and/or hydrocephalus from ventricular obstruction, or have cerebellar ICH volume ≥15 mL, immediate surgical removal of the hemorrhage with or without EVD is recommended in preference to medical management alone to reduce mortality (COR 1, LOE B-NR). For patients with spontaneous ICH, large IVH, and impaired level of consciousness, EVD is recommended in preference to medical management alone to reduce mortality (COR 1, LOE B-NR). For patients with spontaneous supratentorial ICH of moderate or larger volume, open craniotomy for hematoma evacuation is not routinely recommended (Class 3: No Benefit) based on the STICH-I and STICH-II trials. Minimally invasive hematoma evacuation may be considered in selected patients with supratentorial ICH (Class 2b, B-R per MISTIE-III; the 2022 guideline pre-dates ENRICH 2024).',
   },
   'mendelow-stich-i-2005': {
     id: 'mendelow-stich-i-2005',
