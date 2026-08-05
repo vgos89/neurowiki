@@ -102,16 +102,33 @@ export const prehospitalRecommendations = {
     },
   ],
 
+  // §2.5 Mobile Stroke Units. Corrected and completed against the published PDF
+  // on 2026-08-05. Two of the four recommendations were absent, and BOTH of the
+  // two that were present carried the wrong level of evidence: recommendation 1
+  // read B-R where the guideline says A, and recommendation 4 read B-R where the
+  // guideline says B-NR. Recommendation 4 was also written in 2b language ("may
+  // help triage") for a 2a recommendation, and dropped the prehospital
+  // notification clause.
   mobileStrokeUnits: [
     {
       cor: "1",
+      loe: "A",
+      text: "In patients with suspected AIS, the use of MSUs over conventional EMS where available is recommended for the transport and management of thrombolytic-eligible patients to ensure the fastest achievable onset-to-treatment time and improve functional outcomes.",
+    },
+    {
+      cor: "1",
+      loe: "A",
+      text: "In patients with suspected acute stroke, MSUs must be equipped to diagnose and treat patients with IVT.",
+    },
+    {
+      cor: "1",
       loe: "B-R",
-      text: "For patients with AIS who are eligible for IVT, treatment with IVT on a mobile stroke unit (MSU) should be used because it improves functional outcomes compared with standard EMS transport.",
+      text: "In patients with suspected acute stroke, MSU care, including streamlined protocols and use of neurological expertise, either in-person or remote telemedicine consultation, is beneficial for emergent evaluation and treatment of patient symptoms without safety concerns.",
     },
     {
       cor: "2a",
-      loe: "B-R",
-      text: "In endovascular thrombectomy-eligible patients, MSU dispatch may help triage patients to the appropriate thrombectomy-capable center.",
+      loe: "B-NR",
+      text: "In endovascular thrombectomy-eligible patients, use of MSUs can be beneficial to identify and triage patients to the appropriate thrombectomy-capable facility with prehospital notification of receiving stroke teams.",
     },
   ],
 } as const;
@@ -254,17 +271,17 @@ export const glucoseRecommendations = [
   {
     cor: "1",
     loe: "C-LD",
-    text: "For AIS, hypoglycemia (blood glucose <60 mg/dL) should be treated to avoid complications.",
+    text: "In patients with AIS, hypoglycemia (blood glucose <60 mg/dL) should be treated to avoid complications.",
   },
   {
     cor: "2a",
     loe: "C-LD",
-    text: "For AIS, it can reasonably be considered to treat persistent hyperglycemia to achieve blood glucose levels in a range of 140–180 mg/dL with close monitoring to prevent worse functional outcomes.",
+    text: "In patients with AIS, it is reasonable to treat persistent hyperglycemia to achieve blood glucose levels in a range of 140 to 180 mg/dL with close monitoring to prevent worse functional outcomes.",
   },
   {
     cor: "3: No Benefit",
     loe: "A",
-    text: "In hospitalized patients with AIS with hyperglycemia, treatment with IV insulin to achieve blood glucose levels in the range of 80–130 mg/dL should not be used routinely to improve 3-month functional outcomes.",
+    text: "In hospitalized patients with AIS with hyperglycemia, treatment with IV insulin to achieve blood glucose levels in the range of 80 to 130 mg/dL is not recommended to improve 3-month functional outcomes.",
   },
 ] as const;
 

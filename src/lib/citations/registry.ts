@@ -279,13 +279,15 @@ export const CITATION_REGISTRY: CitationRegistry = {
     year: 2026,
     section: '§4.5 Blood Glucose Management',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
-    last_reviewed: '2026-05-22',
-    // Verbatim from src/data/aha2026StrokeGuideline.ts lines 253–268. Refresh
-    // 2026-05-22 adds the hypoglycemia treat-threshold (row 1) and persistent
-    // hyperglycemia target (row 2) alongside the existing COR 3 No Benefit
-    // intensive-control row. Triggered by audit BLOCKING
-    // stroke-code-glucose-threshold-60 (modal threshold drift from <50 to <60).
-    quoted_text: 'For AIS, hypoglycemia (blood glucose <60 mg/dL) should be treated to avoid complications (COR 1, LOE C-LD). For AIS, it can reasonably be considered to treat persistent hyperglycemia to achieve blood glucose levels in a range of 140–180 mg/dL with close monitoring (COR 2a, LOE C-LD). In hospitalized patients with AIS with hyperglycemia, treatment with IV insulin to achieve blood glucose levels in the range of 80–130 mg/dL should not be used routinely to improve 3-month functional outcomes (COR 3 No Benefit, LOE A).',
+    last_reviewed: '2026-08-05',
+    // CORRECTED 2026-08-05. The previous quoted_text was transcribed from
+    // src/data/aha2026StrokeGuideline.ts, not from the guideline, so this
+    // citation was validating our internal copy against a copy of itself. The
+    // three grades were right, but the text paraphrased a COR 2a recommendation
+    // into 2b language ("can reasonably be considered" for "it is reasonable")
+    // and softened the COR 3 ("should not be used routinely" for "is not
+    // recommended"). Now transcribed from the published §4.5 table.
+    quoted_text: 'In patients with AIS, hypoglycemia (blood glucose <60 mg/dL) should be treated to avoid complications (COR 1, LOE C-LD). In patients with AIS, it is reasonable to treat persistent hyperglycemia to achieve blood glucose levels in a range of 140 to 180 mg/dL with close monitoring to prevent worse functional outcomes (COR 2a, LOE C-LD). In hospitalized patients with AIS with hyperglycemia, treatment with IV insulin to achieve blood glucose levels in the range of 80 to 130 mg/dL is not recommended to improve 3-month functional outcomes (COR 3: No Benefit, LOE A).',
   },
   // ─── AHA/ASA 2026 §4.7.4 — Endovascular Techniques ───────────────────────
   // Registered 2026-05-23 to close the last two question-page placeholders.
@@ -583,10 +585,15 @@ export const CITATION_REGISTRY: CitationRegistry = {
   },
 
   // ─── AHA/ASA 2026 §2.5 — Mobile Stroke Units ──────────────────────────────
-  // Verbatim from src/data/aha2026StrokeGuideline.ts prehospitalRecommendations.
-  // mobileStrokeUnits[0–1]. Registered 2026-05-23 for the msu-dispatch
-  // GuidelineSummaryCard. New §2 row in the registry; first prehospital
-  // citation registered.
+  // Registered 2026-05-23 for the msu-dispatch GuidelineSummaryCard.
+  //
+  // CORRECTED 2026-08-05. The previous quoted_text was transcribed from
+  // src/data/aha2026StrokeGuideline.ts, not from the guideline, so this citation
+  // was validating our internal copy against a copy of itself. It carried two of
+  // the section's four recommendations and BOTH of their levels of evidence were
+  // wrong: recommendation 1 is LOE A, not B-R, and recommendation 4 is LOE B-NR,
+  // not B-R. Recommendation 4 was also rendered in 2b language for a 2a. All
+  // four are now transcribed from the published §2.5 table.
   'aha-asa-2026-2.5': {
     id: 'aha-asa-2026-2.5',
     source: 'guideline',
@@ -595,16 +602,22 @@ export const CITATION_REGISTRY: CitationRegistry = {
     section: '§2.5 Mobile Stroke Units',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
     pmid: '41582814',
-    last_reviewed: '2026-05-23',
-    quoted_text: 'For patients with AIS who are eligible for IVT, treatment with IVT on a mobile stroke unit (MSU) should be used because it improves functional outcomes compared with standard EMS transport (COR 1, LOE B-R). In endovascular thrombectomy-eligible patients, MSU dispatch may help triage patients to the appropriate thrombectomy-capable center (COR 2a, LOE B-R).',
+    last_reviewed: '2026-08-05',
+    quoted_text: 'In patients with suspected AIS, the use of MSUs over conventional EMS where available is recommended for the transport and management of thrombolytic-eligible patients to ensure the fastest achievable onset-to-treatment time and improve functional outcomes (COR 1, LOE A). In patients with suspected acute stroke, MSUs must be equipped to diagnose and treat patients with IVT (COR 1, LOE A). In patients with suspected acute stroke, MSU care, including streamlined protocols and use of neurological expertise, either in-person or remote telemedicine consultation, is beneficial for emergent evaluation and treatment of patient symptoms without safety concerns (COR 1, LOE B-R). In endovascular thrombectomy-eligible patients, use of MSUs can be beneficial to identify and triage patients to the appropriate thrombectomy-capable facility with prehospital notification of receiving stroke teams (COR 2a, LOE B-NR).',
   },
 
   // ─── AHA/ASA 2026 §4.7.1 — EVT Concomitant with IVT ───────────────────────
-  // Verbatim from src/data/aha2026StrokeGuideline.ts ivtRecommendations.
-  // concomitantWithEVT[0–1]. Registered 2026-05-23 for the direct-vs-bridging
-  // GuidelineSummaryCard. Resolves the long-standing "skip IVT to go to EVT"
-  // question: 2026 explicitly says don't skip, don't observe — give IVT
-  // immediately even when EVT is planned.
+  // Registered 2026-05-23 for the direct-vs-bridging GuidelineSummaryCard.
+  // Resolves the "skip IVT to go to EVT" question: do not skip, do not observe,
+  // give IVT immediately even when EVT is planned.
+  //
+  // CORRECTED 2026-08-05. The previous quoted_text was transcribed from
+  // src/data/aha2026StrokeGuideline.ts rather than from the guideline. Both
+  // grades were RIGHT here (COR 1, LOE A for each), which is worth recording:
+  // the self-referential provenance does not always imply a wrong grade. The
+  // text did carry editorial emphasis and a line lifted from the Synopsis rather
+  // than the recommendation, and dropped the stated purpose of the second
+  // recommendation. Now transcribed from the published §4.7.1 table.
   'aha-asa-2026-4.7.1': {
     id: 'aha-asa-2026-4.7.1',
     source: 'guideline',
@@ -613,8 +626,8 @@ export const CITATION_REGISTRY: CitationRegistry = {
     section: '§4.7.1 EVT Concomitant with IVT',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
     pmid: '41582814',
-    last_reviewed: '2026-05-23',
-    quoted_text: 'In patients with AIS eligible for BOTH IVT and EVT, IVT is safe and recommended to improve overall reperfusion efficacy and clinical outcomes. Do NOT skip IVT to facilitate EVT (COR 1, LOE A). In patients with AIS eligible for both IVT and EVT, IVT should be administered as rapidly as possible WITHOUT observation to assess clinical response or delay in initiating EVT (COR 1, LOE A).',
+    last_reviewed: '2026-08-05',
+    quoted_text: 'In patients with AIS who are eligible for both IVT and EVT, IVT is safe and recommended to improve overall reperfusion efficacy and clinical outcomes (COR 1, LOE A). In patients with AIS who are eligible for both IVT and EVT, IVT should be administered as rapidly as possible, without observation, to assess clinical response or delay in initiating EVT, to improve treatment times and clinical outcomes (COR 1, LOE A).',
   },
 
   'aha-asa-2026-4.6.1': {
