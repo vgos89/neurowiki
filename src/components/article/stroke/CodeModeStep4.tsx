@@ -158,7 +158,7 @@ const ORDERS: Order[] = [
     id: 'no-anticoag-24h',
     label: 'No anticoagulation or antiplatelet agents × 24 hours',
     category: 'post-tpa',
-    evidence: 'Class III, Level B',
+    evidence: 'COR 3: Harm, LOE B-R for IV aspirin within 90 min of IVT (AHA 2026 §4.8 #17); oral antiplatelet in the first 24 h is COR 2b, LOE B-NR (§4.8 #2); early anticoagulation is COR 3: No Benefit, LOE A (§4.9 #6)',
     rationale: 'ARTIS trial showed aspirin within 24h post-tPA increased symptomatic ICH from 1.6% to 4.3% without improving outcomes. Hold all antithrombotics until 24h CT confirms no hemorrhage.',
     defaultSelected: true,
     evidenceClass: 'III',

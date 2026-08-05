@@ -215,7 +215,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         evidenceClass: 'IIb',
         evidenceLevel: 'C',
         plainEnglish: 'DOAC <48h ago = no tPA. If >48h AND drug-specific lab is normal, tPA may be considered.',
-        evidence: 'AHA/ASA 2026 §4.2 (DOAC and IV thrombolysis)',
+        evidence: 'Observational cohorts. AHA/ASA 2026 addresses recent DOAC exposure in Table 8 as ungraded relative-contraindication guidance and assigns it no COR or LOE; §4.6.5 Knowledge Gaps calls for definitive trials.',
       },
       {
         id: 'extended-window-exclusions',
@@ -237,7 +237,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         evidenceClass: 'IIa',
         evidenceLevel: 'B',
         plainEnglish: 'When clinical suspicion for stroke is high, don\'t delay tPA for extended workup. The low sICH risk in mimics is outweighed by the cost of withholding tPA from a real stroke.',
-        evidence: 'Zinkstok et al, Stroke 2013; AHA/ASA 2026 (Class IIa)',
+        evidence: 'Zinkstok et al, Stroke 2013. AHA/ASA 2026 addresses diagnostic uncertainty and stroke mimics in Table 8, where the benefit of IV thrombolysis is judged to likely outweigh risk, but assigns no COR or LOE.',
       },
       {
         id: 'pregnancy-tpa',
@@ -248,7 +248,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         evidenceClass: 'IIb',
         evidenceLevel: 'C',
         plainEnglish: 'Pregnant with severe stroke? tPA may be appropriate. Get OB involved immediately.',
-        evidence: 'AHA/ASA 2026 Guidelines',
+        evidence: 'AHA/ASA 2026 Table 8, pregnancy and post-partum period (ungraded relative contraindication).',
       },
       {
         id: 'ist3-trial',
