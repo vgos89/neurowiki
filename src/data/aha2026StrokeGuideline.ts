@@ -533,6 +533,60 @@ export const evtRecommendations = {
     },
   ],
 
+  // §4.7.4 Endovascular Techniques. Transcribed from the published guideline PDF
+  // on 2026-08-05. This whole section was previously absent from the mirror, which
+  // is why the RESCUE BT page carried no guideline verdict and the medium-vessel
+  // trials carried none either. Recommendation numbering follows the published table.
+  techniques: [
+    {
+      cor: "1",
+      loe: "A",
+      text: "In patients with AIS due to an LVO, EVT with stent retrievers, contact aspiration, or combination techniques is recommended to achieve rapid and adequate reperfusion.",
+    },
+    {
+      cor: "1",
+      loe: "A",
+      text: "In patients with AIS undergoing EVT, reperfusion to an extended TICI grade 2b/2c/3 is recommended as early as possible within the therapeutic window to achieve maximum functional benefit at 90 days.",
+    },
+    {
+      cor: "1",
+      loe: "B-R",
+      text: "In patients with AIS undergoing EVT, either general anesthesia or procedural sedation are recommended to facilitate EVT.",
+    },
+    {
+      cor: "2b",
+      loe: "B-R",
+      text: "In patients with AIS undergoing EVT, the use of a proximal balloon to guide catheters to achieve improved outcomes remains uncertain.",
+    },
+    {
+      cor: "3: No Benefit",
+      loe: "A",
+      text: "In patients with AIS from occlusion of medium or distal vessels of the anterior, middle (non-dominant or codominant M2, M3), or posterior cerebral arteries, EVT with stent retrievers is of no benefit for improving functional outcomes.",
+      details: "Recommendation 5 of §4.7.4. This is the guideline verdict covering the medium and distal vessel occlusion trials (ESCAPE-MeVO, DISTAL). Note the scope: non-dominant or codominant M2 and M3, not M2 generally.",
+    },
+    {
+      cor: "2b",
+      loe: "B-NR",
+      text: "In patients with AIS undergoing EVT in the setting of tandem extracranial-intracranial anterior circulation occlusions, acute treatment of both, including emergent extracranial stenting, may be reasonable to achieve higher good functional outcome.",
+    },
+    {
+      cor: "2b",
+      loe: "B-NR",
+      text: "In patients with AIS in the setting of failed EVT, the use of rescue intracranial balloon angioplasty and/or stenting to improve functional outcome remains uncertain.",
+    },
+    {
+      cor: "2b",
+      loe: "B-R",
+      text: "In patients with AIS who achieve complete or near-complete EVT (modified TICI 2b or greater), the administration of adjunctive intraarterial thrombolytics with urokinase, alteplase, or tenecteplase may be reasonable to improve cerebral reperfusion and 90-day functional outcome.",
+    },
+    {
+      cor: "3: No Benefit",
+      loe: "B-R",
+      text: "In the management of patients with AIS in the setting of LVO, preoperative administration of tirofiban before EVT is not useful to improve 90-day functional outcome.",
+      details: "Recommendation 9 of §4.7.4. This is the guideline verdict on RESCUE BT. The supporting text notes the trial showed no functional benefit at 90 days and a higher incidence of symptomatic hemorrhage; the trial itself reported that hemorrhage difference as 3.3%, 95% CI −0.2% to +6.8%, which does not exclude zero.",
+    },
+  ],
+
   pediatric: [
     {
       cor: "2a",
@@ -837,29 +891,91 @@ export const inHospitalManagementRecommendations = {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const acuteComplicationsRecommendations = {
-  brainSwelling: [
+  // §6.1 Brain Swelling (General Recommendations). Transcribed from the published
+  // guideline PDF on 2026-08-05. This subsection was previously absent.
+  brainSwellingGeneral: [
     {
       cor: "1",
-      loe: "B-R",
-      text: "In patients with AIS and malignant cerebral edema who are candidates for surgical intervention, early decompressive hemicraniectomy should be used to reduce mortality and improve functional outcomes in patients ≤60 years of age.",
+      loe: "C-EO",
+      text: "In patients with large cerebral or cerebellar infarctions at high risk for developing brain swelling and herniation, an early discussion of care options and possible outcomes should take place with patients (if feasible) and family or next of kin to ascertain patient-centered preferences in shared decision-making, especially during prognosis formation and when considering interventions or limitations in care.",
     },
     {
-      cor: "2a",
-      loe: "B-R",
-      text: "In patients with AIS and malignant cerebral edema, decompressive hemicraniectomy may be considered in patients >60 years of age, with individualized decision-making regarding functional outcomes.",
+      cor: "1",
+      loe: "C-EO",
+      text: "In patients with large cerebral or cerebellar infarctions, close monitoring of the patient for signs of neurological worsening during the first days after stroke is recommended to rapidly evaluate the need for potential interventions.",
     },
     {
-      cor: "2a",
-      loe: "B-NR",
-      text: "In patients with AIS and mild to moderate cerebral edema, osmotic therapy (mannitol or hypertonic saline) can reasonably be considered as a temporizing measure to control elevated ICP.",
+      cor: "1",
+      loe: "C-LD",
+      text: "In patients with large cerebral or cerebellar infarctions who are at increased risk for malignant brain swelling, early transfer to an institution with appropriate neurosurgical and critical care expertise is recommended to ensure timely treatment.",
     },
   ],
 
+  // §6.2 Brain Swelling (Medical Management). Corrected against the published PDF
+  // on 2026-08-05. The osmotic-therapy entry previously read LOE B-NR and was
+  // scoped to "mild to moderate cerebral edema ... as a temporizing measure to
+  // control elevated ICP". The guideline says C-LD and scopes it to patients with
+  // neurological DECLINE, as a bridge TO SURGERY. The glibenclamide COR 3 was absent.
+  brainSwelling: [
+    {
+      cor: "2a",
+      loe: "C-LD",
+      text: "In patients with large cerebral or cerebellar infarctions and neurological decline from brain swelling, the use of osmotic therapy as a bridge to a surgical intervention is reasonable to improve functional outcome and reduce mortality.",
+    },
+    {
+      cor: "3: No Benefit",
+      loe: "B-R",
+      text: "In patients with large hemispheric infarction 18 to 70 years of age, the use of IV glibenclamide does not improve functional outcome.",
+      details: "Recommendation 2 of §6.2, citing the CHARM trial.",
+    },
+  ],
+
+  // §6.3 Supratentorial Infarction (Surgical Management). Corrected and completed
+  // against the published PDF on 2026-08-05. The mirror previously carried two
+  // paraphrases of this section inside brainSwelling, both wrong: the ≤60
+  // recommendation was graded LOE B-R (the guideline says A) with every scoping
+  // condition dropped, and the >60 recommendation was graded COR 2a (the guideline
+  // says 2b) and framed around functional outcomes when the guideline states
+  // mortality reduction only. Recommendations 1 and 4 were absent entirely.
+  supratentorialSurgical: [
+    {
+      cor: "2a",
+      loe: "B-NR",
+      text: "In patients with large territorial cerebral infarctions at high risk for developing brain swelling and herniation, decreased level of consciousness attributed to brain swelling is a reasonable trigger for decompressive hemicraniectomy selection.",
+    },
+    {
+      cor: "1",
+      loe: "A",
+      text: "In patients ≤60 years of age with unilateral MCA infarctions who deteriorate neurologically within 48 hours from brain swelling despite medical therapy, decompressive craniectomy with dural expansion is beneficial to reduce mortality and improve functional outcome.",
+      details: "Recommendation 2 of §6.3. Supported by DECIMAL, DESTINY and HAMLET.",
+    },
+    {
+      cor: "2b",
+      loe: "B-R",
+      text: "In patients >60 years of age with unilateral MCA infarctions who deteriorate neurologically within 48 hours from brain swelling despite medical therapy, decompressive craniectomy with dural expansion may be considered to reduce mortality.",
+      details: "Recommendation 3 of §6.3, supported by DESTINY II. Note the stated benefit is mortality reduction alone, not functional outcome. Most survivors in this age band are mRS 4 to 5.",
+    },
+    {
+      cor: "2b",
+      loe: "B-NR",
+      text: "In patients with AIS who received IV tPA thrombolysis and develop malignant cerebral edema despite medical therapy, early decompressive craniectomy within 48 hours may still be considered without additional safety concerns.",
+    },
+  ],
+
+  // §6.4 Cerebellar Infarction (Surgical Management). Corrected against the
+  // published PDF on 2026-08-05. The ventriculostomy recommendation was absent,
+  // and the craniectomy entry dropped the ≥35 mL volume threshold and the dural
+  // expansion, and understated the benefit as mortality only.
   cerebellarInfarction: [
     {
       cor: "1",
+      loe: "C-LD",
+      text: "In patients with cerebellar infarction and obstructive hydrocephalus, ventriculostomy is recommended to improve neurological function and decrease mortality. Concomitant or subsequent decompressive craniectomy may or may not be necessary on the basis of factors such as the size of the infarction, neurological condition, degree of brainstem compression, and effectiveness of medical management.",
+    },
+    {
+      cor: "1",
       loe: "B-NR",
-      text: "In patients with AIS due to large cerebellar infarction with significant mass effect, posterior fossa decompressive surgery should be used to reduce mortality.",
+      text: "In patients with cerebellar infarction causing neurological deterioration from brainstem compression or volumes ≥35 mL, decompressive suboccipital craniectomy with dural expansion should be performed to improve outcomes and decrease mortality.",
     },
   ],
 

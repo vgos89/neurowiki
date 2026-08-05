@@ -449,17 +449,31 @@ export const mindmapRoot: MindmapNode = {
               description: 'Management of malignant edema, cerebellar infarction, post-IVT hemorrhage, and seizures.',
               children: [
                 {
-                  id: 'brain-swelling',
-                  label: 'Brain Swelling\n(Edema)',
+                  id: 'brain-swelling-general',
+                  label: 'Brain Swelling\n(General)',
                   color: 'rose',
-                  description: 'Malignant cerebral edema: decompressive hemicraniectomy reduces mortality (COR 1 for ≤60 y); osmotic therapy as temporizing measure.',
+                  description: 'Early shared decision-making with patient and family, close neurological monitoring in the first days, and early transfer to a centre with neurosurgical and critical care expertise.',
+                  recommendations: acuteComplicationsRecommendations.brainSwellingGeneral.map(toRec),
+                },
+                {
+                  id: 'brain-swelling',
+                  label: 'Brain Swelling\n(Medical)',
+                  color: 'rose',
+                  description: 'Osmotic therapy is a bridge to surgery in patients already declining, not a treatment for mild oedema. IV glibenclamide does not improve functional outcome.',
                   recommendations: acuteComplicationsRecommendations.brainSwelling.map(toRec),
+                },
+                {
+                  id: 'supratentorial-surgical',
+                  label: 'Supratentorial\nDecompression',
+                  color: 'rose',
+                  description: 'Decompressive craniectomy with dural expansion: COR 1 (Level A) at 60 years or under, COR 2b above 60 where the stated benefit is mortality reduction alone.',
+                  recommendations: acuteComplicationsRecommendations.supratentorialSurgical.map(toRec),
                 },
                 {
                   id: 'cerebellar-infarction',
                   label: 'Cerebellar\nInfarction',
                   color: 'rose',
-                  description: 'Large cerebellar infarction with mass effect: posterior fossa decompressive surgery recommended to reduce mortality.',
+                  description: 'Ventriculostomy for obstructive hydrocephalus; suboccipital craniectomy with dural expansion for brainstem compression or volumes 35 mL or greater.',
                   recommendations: acuteComplicationsRecommendations.cerebellarInfarction.map(toRec),
                 },
                 {

@@ -521,7 +521,7 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     id: 'evt-adjunct-pharmacotherapy-guideline-summary',
     citation_ids: ['aha-asa-2026-4.7.4'],
     surfaces: [DATA_SURFACE],
-    description: 'GuidelineSummaryCard on /trials/q/evt-adjunct-pharmacotherapy. Surfaces AHA/ASA 2026 §4.7.4 adjunctive pharmacotherapy recommendations: preoperative IV tirofiban before EVT is not useful (COR 3 No Benefit, LOE A per RESCUE-BT). Post-EVT adjunctive intraarterial thrombolytics (urokinase, alteplase, or tenecteplase) after successful TICI 2b+ reperfusion may be reasonable (COR 2b, LOE B-R per CHOICE).',
+    description: 'GuidelineSummaryCard on /trials/q/evt-adjunct-pharmacotherapy. Surfaces AHA/ASA 2026 §4.7.4 adjunctive pharmacotherapy recommendations: preoperative IV tirofiban before EVT is not useful (COR 3: No Benefit, LOE B-R; the supporting trial is RESCUE BT). Post-EVT adjunctive intraarterial thrombolytics (urokinase, alteplase, or tenecteplase) after successful TICI 2b+ reperfusion may be reasonable (COR 2b, LOE B-R; CHOICE among the supporting trials). LOE corrected from A to B-R on 2026-08-05 against the published guideline table.',
   },
 
   'minor-stroke-choice-guideline-summary': {

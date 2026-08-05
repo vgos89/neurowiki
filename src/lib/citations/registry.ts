@@ -288,12 +288,24 @@ export const CITATION_REGISTRY: CitationRegistry = {
     quoted_text: 'For AIS, hypoglycemia (blood glucose <60 mg/dL) should be treated to avoid complications (COR 1, LOE C-LD). For AIS, it can reasonably be considered to treat persistent hyperglycemia to achieve blood glucose levels in a range of 140–180 mg/dL with close monitoring (COR 2a, LOE C-LD). In hospitalized patients with AIS with hyperglycemia, treatment with IV insulin to achieve blood glucose levels in the range of 80–130 mg/dL should not be used routinely to improve 3-month functional outcomes (COR 3 No Benefit, LOE A).',
   },
   // ─── AHA/ASA 2026 §4.7.4 — Endovascular Techniques ───────────────────────
-  // Verbatim from the source PDF page e57 (read 2026-05-22). Covers technique
-  // choice (stent retrievers vs contact aspiration vs combination, all
-  // equivalent COR 1 LOE A) and preoperative adjunctive pharmacotherapy
-  // (tirofiban COR 3 No Benefit per RESCUE-BT). Registered 2026-05-23 to
-  // close the last two question-page placeholders.
+  // Registered 2026-05-23 to close the last two question-page placeholders.
   // 6-month review window per §13.7 (current clinical guideline).
+  //
+  // CORRECTED 2026-08-05, re-read from the published PDF body table (the
+  // recommendation table on the page carrying "Recommendations for Endovascular
+  // Techniques (Continued)", extracted in reading order rather than from the
+  // two-column layout dump). Two faults in the previous quoted_text:
+  //   1. It graded the tirofiban recommendation LOE A. The guideline grade cell
+  //      reads "3: No Benefit" over "B-R". The mirror was correct and this
+  //      citation was not, which is the reverse of the usual direction.
+  //   2. It embedded editorial attributions ("A based on RESCUE-BT", "B-R per
+  //      CHOICE") INSIDE a field labelled verbatim. Whatever their merit as
+  //      annotation, text that is not in the source must not sit inside
+  //      quoted_text, because quoted_text is what every other check treats as
+  //      ground truth. Those notes are moved into this comment.
+  // Supporting trials, for reference only and NOT part of the quote: the
+  // tirofiban recommendation cites RESCUE BT; the intraarterial thrombolytics
+  // recommendation cites CHOICE among others.
   'aha-asa-2026-4.7.4': {
     id: 'aha-asa-2026-4.7.4',
     source: 'guideline',
@@ -302,8 +314,8 @@ export const CITATION_REGISTRY: CitationRegistry = {
     section: '§4.7.4 Endovascular Techniques',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
     pmid: '41582814',
-    last_reviewed: '2026-05-23',
-    quoted_text: 'In patients with AIS due to an LVO, EVT with stent retrievers, contact aspiration, or combination techniques is recommended to achieve rapid and adequate reperfusion (COR 1, LOE A). In the management of patients with AIS in the setting of LVO, preoperative administration of tirofiban before EVT is not useful to improve 90-day functional outcome (COR 3 No Benefit, LOE A based on RESCUE-BT). In patients with AIS who achieve complete or near-complete EVT (modified TICI 2b or greater), the administration of adjunctive intraarterial thrombolytics with urokinase, alteplase, or tenecteplase may be reasonable to improve cerebral reperfusion and 90-day functional outcomes (COR 2b, LOE B-R per CHOICE).',
+    last_reviewed: '2026-08-05',
+    quoted_text: 'In patients with AIS due to an LVO, EVT with stent retrievers, contact aspiration, or combination techniques is recommended to achieve rapid and adequate reperfusion (COR 1, LOE A). In the management of patients with AIS in the setting of LVO, preoperative administration of tirofiban before EVT is not useful to improve 90-day functional outcome (COR 3: No Benefit, LOE B-R). In patients with AIS who achieve complete or near-complete EVT (modified TICI 2b or greater), the administration of adjunctive intraarterial thrombolytics with urokinase, alteplase, or tenecteplase may be reasonable to improve cerebral reperfusion and 90-day functional outcome (COR 2b, LOE B-R).',
   },
 
   // ─── AHA/ASA 2026 §4.6.1 — Thrombolysis Decision-Making ───────────────────
@@ -955,9 +967,16 @@ export const CITATION_REGISTRY: CitationRegistry = {
   },
 
   // ─── 2026 AHA/ASA §6.3 — Supratentorial Infarction Surgical Management ────
-  // Verbatim from src/data/aha2026StrokeGuideline.ts
-  // acuteComplicationsRecommendations.brainSwelling[0-1]. Registered
-  // 2026-05-24 for the hemicraniectomy clinical-synthesis card.
+  // Registered 2026-05-24 for the hemicraniectomy clinical-synthesis card.
+  //
+  // CORRECTED 2026-08-05. The previous quoted_text was transcribed from
+  // src/data/aha2026StrokeGuideline.ts rather than from the guideline, so this
+  // citation was validating the mirror against a copy of itself. Both grades in
+  // that text were wrong: the recommendation for patients 60 and under is LOE A
+  // (not B-R) and carries scoping conditions the paraphrase had dropped, and the
+  // recommendation for patients over 60 is COR 2b (not 2a) with mortality
+  // reduction as its stated benefit. quoted_text below is now transcribed from
+  // the published PDF, §6.3 recommendations 1 to 4.
   'aha-asa-2026-6.3': {
     id: 'aha-asa-2026-6.3',
     source: 'guideline',
@@ -966,8 +985,8 @@ export const CITATION_REGISTRY: CitationRegistry = {
     section: '§6.3 Supratentorial Infarction (Surgical Management)',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
     pmid: '41582814',
-    last_reviewed: '2026-05-24',
-    quoted_text: 'In patients with AIS and malignant cerebral edema who are candidates for surgical intervention, early decompressive hemicraniectomy should be used to reduce mortality and improve functional outcomes in patients ≤60 years of age (COR 1, LOE B-R). In patients with AIS and malignant cerebral edema, decompressive hemicraniectomy may be considered in patients >60 years of age, with individualized decision-making regarding functional outcomes (COR 2a, LOE B-R).',
+    last_reviewed: '2026-08-05',
+    quoted_text: 'In patients with large territorial cerebral infarctions at high risk for developing brain swelling and herniation, decreased level of consciousness attributed to brain swelling is a reasonable trigger for decompressive hemicraniectomy selection (COR 2a, LOE B-NR). In patients ≤60 years of age with unilateral MCA infarctions who deteriorate neurologically within 48 hours from brain swelling despite medical therapy, decompressive craniectomy with dural expansion is beneficial to reduce mortality and improve functional outcome (COR 1, LOE A). In patients >60 years of age with unilateral MCA infarctions who deteriorate neurologically within 48 hours from brain swelling despite medical therapy, decompressive craniectomy with dural expansion may be considered to reduce mortality (COR 2b, LOE B-R). In patients with AIS who received IV tPA thrombolysis and develop malignant cerebral edema despite medical therapy, early decompressive craniectomy within 48 hours may still be considered without additional safety concerns (COR 2b, LOE B-NR).',
   },
 
   // ─── 2021 AHA/ASA Secondary Prevention of Stroke Guideline — PFO closure ──
