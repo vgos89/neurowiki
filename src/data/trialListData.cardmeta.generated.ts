@@ -193,7 +193,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "300 patients enrolled; full enrollment target achieved",
     "listCategory": "thrombectomy",
     "listDescription": "Multinational RCT of EVT for basilar artery occlusion within 6 hours. Primary (mRS 0-3 at 90 days): 44.2% EVT vs 37.7% medical (RR 1.18, CI 0.92–1.50, P=0.19). Statistically negative; CI did not rule out meaningful benefit. Preceded ATTENTION (2022).",
-    "bottomLineSummary": "BASICS randomized 300 patients with basilar artery occlusion at international centers within 6 hours. Primary (mRS 0-3 at 90 days): 44.2% EVT vs 37.7% medical (RR 1.18, CI 0.92–1.50, P=0.19). Not significant but with wide CI not ruling out meaningful benefit. Mortality favored EVT numerically (38.0% vs 43.2%). sICH higher in EVT (4.5% vs 0.7%). ATTENTION (2022) subsequently demonstrated definitive benefit for basilar EVT.",
+    "bottomLineSummary": "BASICS randomized 300 patients with basilar artery occlusion at international centers within 6 hours. Primary (mRS 0-3 at 90 days): 44.2% EVT vs 37.7% medical (RR 1.18, CI 0.92–1.50, P=0.19). Not significant but with wide CI not ruling out meaningful benefit. Mortality favored EVT numerically (38.3% vs 43.2%). sICH higher in EVT (4.5% vs 0.7%). ATTENTION (2022) subsequently demonstrated definitive benefit for basilar EVT.",
     "doi": "10.1056/NEJMoa2030297"
   },
   "basis-trial": {
@@ -733,7 +733,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "legend": {
       "finding": "Perfusion-selected EVT after tPA raised independence from 40% to 71%.",
       "bottomLineTag": "+31 / 100",
-      "keyStat": "NNT ~3 (mRS 0–2)"
+      "keyStat": "NNT ~3 (mRS 0–2 secondary)"
     },
     "subtitle": "Perfusion-Selected EVT After Alteplase",
     "source": "Campbell et al. (NEJM 2015)",
@@ -783,7 +783,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "source": "Broderick et al. (NEJM 2013)",
     "timeline": "Stopped early for futility; 656 of planned 900 enrolled",
     "listCategory": "thrombectomy",
-    "listDescription": "First-generation endovascular therapy added to IV tPA: no benefit (mRS 0-2 40.8% vs 38.7%, RR 1.05, 95% CI 0.85-1.30). Stopped early for futility. Historical predecessor; ESCAPE (2015) established modern EVT.",
+    "listDescription": "First-generation endovascular therapy added to IV tPA: no benefit (mRS 0-2 40.8% vs 38.7%, RR 1.05, 95% CI 0.83-1.30). Stopped early for futility. Historical predecessor; ESCAPE (2015) established modern EVT.",
     "bottomLineSummary": "IMS-III stopped early for futility after enrolling 656 of 900 planned patients. In moderate-severe stroke (NIHSS >=8) treated with IV alteplase within 3 hours, adding endovascular therapy (mostly older coil-based devices, no mandatory vessel-occlusion confirmation) did not improve 90-day mRS 0-2: 40.8% vs 38.7% (adjusted RR 1.05, 95% CI 0.83-1.30). The trial predates modern stent retrievers and CTA-based patient selection.",
     "doi": "10.1056/NEJMoa1214300"
   },
@@ -834,7 +834,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "title": "LASTE Trial",
     "legend": {
       "finding": "Large-core EVT (ASPECTS ≤5) shifted median mRS from 6 to 4 and cut mortality 55%→36%.",
-      "bottomLineTag": "NNT 4 (mRS shift)",
+      "bottomLineTag": "−19.4 pp mortality",
       "keyStat": "gOR 1.63 (1.29–2.06)"
     },
     "subtitle": "Thrombectomy for Large Infarct of Unrestricted Size",
@@ -1591,7 +1591,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Enrolled 8 June 2018 – 2 October 2023; published Lancet Neurology November 2025.",
     "listCategory": "thrombolysis",
     "listDescription": "First phase 3 RCT of IV alteplase for CRAO within 4.5h. Neutral on visual acuity vs aspirin; underpowered (N=70); safety reassuring.",
-    "bottomLineSummary": "THEIA enrolled 70 patients with acute non-arteritic CRAO (Snellen <20/400) within 4.5h across 16 French stroke units and randomised them to IV alteplase 0.9 mg/kg or 300 mg oral aspirin. Visual acuity improvement of at least 0.3 LogMAR at 1 month occurred in 19/29 (66%) alteplase vs 13/27 (48%) aspirin patients; adjusted OR 1.10 (95% CI 0.07–18.39), p=0.95. The trial was explicitly underpowered (sized for a 30 pp difference; observed difference 17 pp). Safety was reassuring: 0 symptomatic ICH, 0 major bleeding related to study treatment, 1 asymptomatic incidental haematoma in the alteplase arm. Functional reading vision (Snellen 20/63) was achieved in only 14% alteplase and 7% aspirin patients, consistent with the hypothesis that retinal ischaemic tolerance may be much shorter than 4.5h. Authors call for an individual-patient-data meta-analysis combining THEIA + TenCRAOS (NCT04526951) + REVISION (NCT04965038) to produce level 1 evidence.",
+    "bottomLineSummary": "THEIA enrolled 70 patients with acute non-arteritic CRAO (Snellen <20/400) within 4.5h across 16 French stroke units and randomised them to IV alteplase 0.9 mg/kg or 300 mg oral aspirin. Visual acuity improvement of at least 0.3 LogMAR at 1 month occurred in 19/29 (66%) alteplase vs 13/27 (48%) aspirin patients; adjusted OR 1.10 (95% CI 0.07–18.39), p=0.95. The trial was explicitly underpowered (sized for a 30 pp difference; observed difference 17 pp). Safety was reassuring: 0 symptomatic ICH, 0 major bleeding related to study treatment, 1 treatment-related asymptomatic intracranial haematoma in the alteplase arm. Functional reading vision (Snellen 20/63) was achieved in only 14% alteplase and 7% aspirin patients, consistent with the hypothesis that retinal ischaemic tolerance may be much shorter than 4.5h. Authors call for an individual-patient-data meta-analysis combining THEIA + TenCRAOS (NCT04526951) + REVISION (NCT04965038) to produce level 1 evidence.",
     "doi": "10.1016/S1474-4422(25)00308-4"
   },
   "thrace-trial": {
@@ -1653,7 +1653,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
   "trace-iii-trial": {
     "title": "TRACE-III Trial",
     "legend": {
-      "finding": "IV tenecteplase 4.5–24 h with perfusion mismatch in EVT-ineligible LVO improves mRS 0–1 at 90 d.",
+      "finding": "IV tenecteplase 4.5–24 h with perfusion mismatch in LVO without EVT access improves mRS 0–1 at 90 d.",
       "bottomLineTag": "NNT 11",
       "keyStat": "+8.8% mRS 0–1"
     },

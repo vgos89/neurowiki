@@ -607,8 +607,8 @@ const QUESTION_META: Record<string, { title: string; description: string; answer
   },
   'post-evt-bp-target': {
     title: 'Post-EVT Blood Pressure Target · NeuroWiki',
-    description: 'Four RCTs (BP-TARGET, BEST-II, OPTIMAL-BP, ENCHANTED) on post-EVT blood pressure management. OPTIMAL-BP showed harm from intensive lowering.',
-    answer: 'Post-EVT BP evidence from four RCTs does not support intensive BP lowering after successful thrombectomy. OPTIMAL-BP showed early harm with intensive targets. BP-TARGET and BEST-II were neutral. Current guidance (AHA/ASA 2026) recommends avoiding aggressive BP lowering to below 130 mmHg post-EVT.',
+    description: 'Three post-EVT RCTs (BP-TARGET, BEST-II, OPTIMAL-BP) plus ENCHANTED for peri-thrombolysis BP context. OPTIMAL-BP showed harm from intensive lowering.',
+    answer: 'Post-EVT BP evidence from three randomized post-EVT trials does not support intensive BP lowering after successful thrombectomy. OPTIMAL-BP showed early harm with intensive targets. BP-TARGET and BEST-II were neutral. Current guidance (AHA/ASA 2026) recommends avoiding aggressive BP lowering to below 130 mmHg post-EVT.',
   },
   // ─── Phase 2c additions (2026-05-21) — 16 new question pages ────────────────
   'tpa-timing': {
@@ -698,8 +698,8 @@ const QUESTION_META: Record<string, { title: string; description: string; answer
   },
   'crao-management': {
     title: 'CRAO Thrombolysis: EAGLE and THEIA · NeuroWiki',
-    description: 'Central retinal artery occlusion: intra-arterial alteplase halted for harm in EAGLE (2010); IV alteplase neutral but directionally favorable in the small THEIA RCT (2025).',
-    answer: 'EAGLE (2010), intra-arterial alteplase within 24 h of CRAO, was halted for harm versus conservative management; intra-arterial thrombolysis is not recommended. THEIA (2025) was the first RCT of IV alteplase versus aspirin in CRAO within 4.5 h. The trial was small (N=70) and neutral on the primary endpoint, but directionally favored alteplase. Evidence is insufficient to recommend systemic thrombolysis routinely for CRAO; treatment within a 4.5 h ischemia window, weighed against hemorrhagic risk, is reasonable on a case-by-case basis at centers familiar with stroke thrombolysis. CRAO is a stroke equivalent and warrants full stroke workup.',
+    description: 'Central retinal artery occlusion: intra-arterial alteplase stopped early for futility and excess adverse events in EAGLE (2010); IV alteplase neutral but directionally favorable in the small THEIA RCT (2025).',
+    answer: 'EAGLE (2010), intra-arterial alteplase within 20 h of CRAO, was stopped early by the data and safety monitoring committee for similar efficacy and a higher adverse-event rate versus conservative management; intra-arterial thrombolysis is not recommended. THEIA (2025) was the first RCT of IV alteplase versus aspirin in CRAO within 4.5 h. The trial was small (N=70) and neutral on the primary endpoint, but directionally favored alteplase. Evidence is insufficient to recommend systemic thrombolysis routinely for CRAO; treatment within a 4.5 h ischemia window, weighed against hemorrhagic risk, is reasonable on a case-by-case basis at centers familiar with stroke thrombolysis. CRAO is a stroke equivalent and warrants full stroke workup.',
   },
 };
 

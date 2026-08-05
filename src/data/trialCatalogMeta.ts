@@ -52,14 +52,14 @@ export const LEGACY_TRIAL_CATALOG_META: Record<string, LegacyTrialCatalogMeta> =
   'defuse-3-trial': {
     name: 'DEFUSE-3',
     year: 2018,
-    doi: '10.1056/NEJMoa1706442',
+    doi: '10.1056/NEJMoa1713973',
     description: 'Late-window thrombectomy trial using perfusion imaging to identify salvageable tissue up to 16 hours.',
     clinicalContext: 'Late-window thrombectomy trial using perfusion imaging to identify salvageable tissue up to 16 hours.',
   },
   'dawn-trial': {
     name: 'DAWN',
     year: 2018,
-    doi: '10.1056/NEJMoa1713973',
+    doi: '10.1056/NEJMoa1706442',
     description: 'Clinical-imaging mismatch trial that redefined thrombectomy eligibility out to 24 hours.',
     clinicalContext: 'Clinical-imaging mismatch trial that redefined thrombectomy eligibility out to 24 hours.',
   },

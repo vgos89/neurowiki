@@ -21,7 +21,7 @@ The NINDS tPA Stroke Study was the landmark trial that established intravenous a
 *   **Population:** 624 patients with acute ischemic stroke treated within **3 hours** of onset.
 *   **Intervention:** IV Alteplase (0.9 mg/kg, max 90 mg) vs. Placebo.
 *   **Results (Part 2 - Efficacy):**
-    *   **Minimal Disability (mRS 0-1):** 42.6% in tPA group vs 27.2% in Placebo group at 3 months.
+    *   **Minimal Disability (mRS 0-1):** 39% in tPA group vs 26% in Placebo group at 3 months.
     *   **Odds Ratio:** 1.7 (95% CI 1.2–2.6) for favorable outcome.
     *   **Safety:** Symptomatic Intracranial Hemorrhage (sICH) occurred in **6.4%** of tPA patients vs 0.6% of placebo patients.
     *   **Mortality:** No significant difference in mortality at 3 months (17% vs 21%).
@@ -379,7 +379,7 @@ Historically, mechanical thrombectomy was limited to 6 hours from symptom onset.
 *   **Late window:** Along with DAWN, DEFUSE-3 shifted selection from time-based to tissue-based: perfusion mismatch over clock.
 *   **Implementation:** Requires automated perfusion software (e.g., RAPID) for standardized core/penumbra calculation.
 
-*Source: [Albers et al. (NEJM 2018)](https://www.nejm.org/doi/full/10.1056/NEJMoa1706442)*
+*Source: [Albers et al. (NEJM 2018)](https://www.nejm.org/doi/full/10.1056/NEJMoa1713973)*
 `
   },
   'dawn-trial': {
@@ -407,7 +407,7 @@ The DAWN trial investigated whether thrombectomy is effective in patients with a
 *   **Patient Selection:** Relies heavily on **age** and **[NIHSS](/calculators/nihss)** relative to core volume, unlike DEFUSE-3 which uses a flat core/penumbra cutoff.
 *   **Wake-Up Strokes:** Provided the first randomized evidence for treating patients with unknown onset time (e.g., waking up with symptoms) if physiology was favorable.
 
-*Source: [Nogueira et al. (NEJM 2018)](https://www.nejm.org/doi/full/10.1056/NEJMoa1713973)*
+*Source: [Nogueira et al. (NEJM 2018)](https://www.nejm.org/doi/full/10.1056/NEJMoa1706442)*
 `
   },
   'select2-trial': {
@@ -458,7 +458,7 @@ Conducted in China, ANGEL-ASPECT complemented SELECT2 by investigating thrombect
 
 ## Clinical PEARLS
 *   **Confirmation:** Validated the findings of SELECT2 in an Asian population and with slightly different volume criteria (pushing the upper limit to 100ml).
-*   **Hemorrhage Risk:** Unlike SELECT2, this trial showed a statistically significant increase in symptomatic intracranial hemorrhage (sICH) in the EVT group (6.1% vs 2.7%), emphasizing the need for careful patient selection and BP management.
+*   **Hemorrhage Risk:** This trial showed a numerically higher but statistically non-significant rate of symptomatic intracranial hemorrhage (sICH) in the EVT group (6.1% vs 2.7%, P=0.12), emphasizing the need for careful patient selection and BP management.
 *   **Mortality:** Despite higher hemorrhage risk, there was no difference in 90-day mortality, and functional outcomes were superior.
 
 *Source: [Huo et al. (NEJM 2023)](https://www.nejm.org/doi/full/10.1056/NEJMoa2213379)*

@@ -38,7 +38,7 @@ const QUESTION_ROUTE_META: Record<string, Pick<MetaData, 'title' | 'description'
   },
   'post-evt-bp-target': {
     title: 'Post-EVT Blood Pressure Target · NeuroWiki',
-    description: 'Four RCTs (BP-TARGET, BEST-II, OPTIMAL-BP, ENCHANTED) on post-EVT blood pressure management. OPTIMAL-BP showed harm from intensive lowering.',
+    description: 'Three post-EVT RCTs (BP-TARGET, BEST-II, OPTIMAL-BP) plus ENCHANTED for peri-thrombolysis BP context. OPTIMAL-BP showed harm from intensive lowering.',
     keywords: 'post EVT blood pressure, thrombectomy BP target, OPTIMAL-BP trial, BP-TARGET trial, BEST-II trial, post thrombectomy hypertension, EVT BP management',
   },
   // 16 entries added 2026-05-22 — sourced from QUESTION_META in
@@ -131,7 +131,7 @@ const QUESTION_ROUTE_META: Record<string, Pick<MetaData, 'title' | 'description'
   },
   'crao-management': {
     title: 'CRAO Thrombolysis: EAGLE and THEIA · NeuroWiki',
-    description: 'Central retinal artery occlusion: intra-arterial alteplase halted for harm in EAGLE (2010); IV alteplase neutral but directionally favorable in the small THEIA RCT (2025).',
+    description: 'Central retinal artery occlusion: intra-arterial alteplase stopped early for futility and excess adverse events in EAGLE (2010); IV alteplase neutral but directionally favorable in the small THEIA RCT (2025).',
     keywords: 'CRAO management, central retinal artery occlusion, EAGLE trial, THEIA trial, retinal stroke thrombolysis, CRAO IV alteplase',
   },
 };

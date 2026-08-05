@@ -330,7 +330,11 @@ export const DeltaBandChart: React.FC<DeltaBandChartProps> = ({
   // findings. A significant harm p-value is significant, but it is not good news,
   // and colour is the fastest thing a clinician reads.
   const resultIsHarm = winnerArm === 'control' || primaryResult === 'harm-stopped';
-  const pSig = parseFloat(pValue) < 0.05 && !resultIsHarm;
+  // Was parseFloat(pValue) < 0.05, which is NaN for any "<0.001" style value and
+  // therefore painted three live charts in the not-significant grey. Reuse
+  // pEstablishesDifference, defined above, which handles the leading "<" and
+  // excludes unparseable design verdicts.
+  const pSig = pEstablishesDifference && !resultIsHarm;
   const treatmentIsWinner = winnerArm === 'treatment';
   const controlIsWinner = winnerArm === 'control';
 

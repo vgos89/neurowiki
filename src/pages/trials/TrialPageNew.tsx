@@ -1956,7 +1956,7 @@ const TrialPageNew: React.FC = () => {
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
                 <p className="text-xs text-blue-900 leading-relaxed">
-                  <strong>Ordinal-shift design:</strong> Primary is generalized OR for ordinal mRS shift (gOR 1.37, 95% CI 1.11–1.69, P=0.004). The mRS 0–2 binary (functional independence) shown below is a secondary outcome. Higher any-ICH rate than SELECT2 (49.1% vs 17.3%); careful BP management required.
+                  <strong>Ordinal-shift design:</strong> Primary is generalized OR for ordinal mRS shift (gOR 1.37, 95% CI 1.11–1.69, P=0.004). The mRS 0–2 binary (functional independence) shown below is a secondary outcome. Higher any-ICH rate with EVT than with medical management (49.1% vs 17.3%); careful BP management required.
                 </p>
               </div>
               <DeltaBandChart
@@ -2571,7 +2571,7 @@ const TrialPageNew: React.FC = () => {
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
-          {renderTrialDesign(trialMetadata, '3,020 of 3,600 planned patients enrolled. Stopped early by DSMB for harm (increased mortality in DAPT arm). Enrolled 2003 to 2011.')}
+          {renderTrialDesign(trialMetadata, '3,020 patients enrolled 2003 to 2011; planned enrollment was completed. Antiplatelet arm terminated early by the DSMB in July 2011 for futility with excess mortality and major hemorrhage.')}
           {trialMetadata.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>
@@ -4083,7 +4083,7 @@ const TrialPageNew: React.FC = () => {
             </div>
           )}
           {renderStudyArms(tm)}
-          {renderTrialDesign(tm, 'Randomized September 2018 to May 2022 across Denmark. National, multicenter, assessor-blinded trial. Stopped early at 171 of 424 planned patients. Ambulance-based randomization.')}
+          {renderTrialDesign(tm, 'Randomized September 2018 to May 2022 across Denmark. National, multicenter, assessor-blinded trial. Stopped early at 171 of 600 planned patients. Ambulance-based randomization.')}
           {tm.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>
@@ -5104,7 +5104,7 @@ const TrialPageNew: React.FC = () => {
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
                 <p className="text-xs text-amber-800 leading-relaxed">
-                  <strong>Co-primary endpoint note:</strong> Both co-primary endpoints were met: median share of the ischemic territory reperfused at 24 hours (100% vs 37%, P less than 0.001) and early neurological improvement at day 3 (80% vs 37%, P less than 0.001). The chart below shows the secondary functional outcome (mRS 0 to 2 at 90 days) for bedside context.
+                  <strong>Co-primary endpoint note:</strong> Both co-primary endpoints were met: median share of the ischemic territory reperfused at 24 hours (100% vs 37%, P less than 0.001) and early neurological improvement at day 3 (80% vs 37%, P=0.002). The chart below shows the secondary functional outcome (mRS 0 to 2 at 90 days) for bedside context.
                 </p>
               </div>
               <DeltaBandChart
@@ -5931,9 +5931,9 @@ const TrialPageNew: React.FC = () => {
                 treatmentLabel={tm.efficacyResults.treatment.name}
                 controlLabel={tm.efficacyResults.control.name}
                 endpoint="mTICI 2b-3 Revascularization"
-                riskRatio="RD +2.3 pp"
-                ciLow=""
-                ciHigh=""
+                riskRatio="RD +2.4 pp"
+                ciLow="−5.4"
+                ciHigh="+9.7"
                 pValue="0.53"
                 winnerArm="none"
               />
@@ -6977,7 +6977,7 @@ const TrialPageNew: React.FC = () => {
                 riskRatio="ARR 52.8 pp"
                 ciLow=""
                 ciHigh=""
-                pValue="0.001"
+                pValue="<0.0001"
                 winnerArm="treatment"
               />
               <div style={{ background: '#fffbeb', borderLeft: '3px solid #f59e0b', borderRadius: '0 8px 8px 0', padding: '10px 14px' }}>
@@ -7127,8 +7127,8 @@ const TrialPageNew: React.FC = () => {
                 controlLabel={tm.efficacyResults.control.name}
                 endpoint="1-Year Survival"
                 riskRatio="ARR 38 pp"
-                ciLow=""
-                ciHigh=""
+                ciLow="15"
+                ciHigh="60"
                 pValue="0.002"
                 winnerArm="treatment"
               />

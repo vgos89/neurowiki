@@ -384,7 +384,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     id: 'post-evt-bp-target',
     text: "What's the post-EVT blood pressure target?",
     icon: 'waveform',
-    meta: 'four RCTs across the post-EVT BP target question. And one harm signal',
+    meta: 'three post-EVT BP-target RCTs, plus ENCHANTED for peri-thrombolysis BP context. And one harm signal',
     trialCount: 4,
     trialIds: [
       'enchanted-trial',   // ENCHANTED 2019 — peri-thrombolysis BP context (peri-EVT framework reference)

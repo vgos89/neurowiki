@@ -2070,7 +2070,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     secondaryDesign: 'ordinal-shift',
     secondaryResult: 'met',
     applicability: {
-      imagingSelection: 'CT or MR perfusion mismatch required (RAPID: core <70 mL, mismatch ratio ≥1.8)',
+      imagingSelection: 'CT or MR perfusion mismatch required (RAPID: core <70 mL, mismatch ratio >1.2, mismatch volume >10 mL)',
       populationExclusions: [
         'Stopped early at N=70. Very small trial, effect size likely inflated',
         'All patients received IV tPA (bridging context only)',
@@ -2236,7 +2236,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     howToInterpret: {
       /* claimId: extend-ia-primary-result | source: Campbell NEJM 2015 */
-      proves: 'In patients with anterior circulation LVO selected by CT perfusion (core less than 70 mL, mismatch ratio greater than 1.2) who had received IV alteplase within 4.5 hours, adding Solitaire FR thrombectomy markedly improved both co-primary endpoints: median territory reperfused at 24 hours (100% vs 37%, P less than 0.001) and early neurological improvement at day 3 (80% vs 37%, P less than 0.001). The secondary outcome of functional independence at 90 days (71% vs 40%) was consistent with these effects.',
+      proves: 'In patients with anterior circulation LVO selected by CT perfusion (core less than 70 mL, mismatch ratio greater than 1.2) who had received IV alteplase within 4.5 hours, adding Solitaire FR thrombectomy markedly improved both co-primary endpoints: median territory reperfused at 24 hours (100% vs 37%, P less than 0.001) and early neurological improvement at day 3 (80% vs 37%, P=0.002). The secondary outcome of functional independence at 90 days (71% vs 40%) was consistent with these effects.',
       doesNotProve: 'It does not establish thrombectomy benefit in patients without perfusion mismatch, who were specifically excluded. With only 70 patients and early termination, the trial cannot precisely estimate the size of the mRS shift, and subgroup analyses are underpowered. It does not test direct thrombectomy without alteplase.',
       cautions: 'Stopped early at 70 patients after positive interim analysis, which inflates effect estimates and widens confidence intervals. CT perfusion automated post-processing (RAPID) may not be available at all centers and requires consistent quality control. Strict mismatch criteria selected an enriched population likely to benefit; real-world effect sizes are typically smaller.',
     },
@@ -2246,7 +2246,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     legend: {
       finding: 'Perfusion-selected EVT after tPA raised independence from 40% to 71%.',
       bottomLineTag: '+31 / 100',
-      keyStat: 'NNT ~3 (mRS 0–2)',
+      keyStat: 'NNT ~3 (mRS 0–2 secondary)',
     },
   },
   'swift-prime-trial': {
@@ -3583,7 +3583,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     legend: {
       finding: 'Large-core EVT (ASPECTS ≤5) shifted median mRS from 6 to 4 and cut mortality 55%→36%.',
-      bottomLineTag: 'NNT 4 (mRS shift)',
+      bottomLineTag: '−19.4 pp mortality',
       keyStat: 'gOR 1.63 (1.29–2.06)',
     },
   },
@@ -5216,7 +5216,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Age 18 or older',
       'Acute ischemic stroke with anterior-circulation LVO (intracranial ICA or M1)',
       'EVT eligible and planned within 12 hours of last known well',
-      'ASPECTS 5 or greater or equivalent favorable perfusion imaging',
+      'ASPECTS 5 to 10 on non-contrast CT and moderate-to-good collaterals (50% or more MCA pial filling) on CT angiography',
       'Pre-stroke mRS 0-1',
     ],
     exclusionCriteria: [
@@ -7292,7 +7292,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         evt: 6.1,
         control: 2.7,
         label: 'Symptomatic ICH',
-        tooltip: '6.1% EVT vs 2.7% medical (P=0.12, NS but trending higher). Higher than SELECT2. Careful BP management warranted.',
+        tooltip: '6.1% EVT vs 2.7% medical (P=0.12, not significant but trending higher). Careful BP management warranted.',
         color: 'warning',
       },
       adverseEvents: {
@@ -7316,7 +7316,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'How does this compare to SELECT2?',
-        answer: 'ANGEL-ASPECT enrolled a broader large-core population, including ASPECTS 0–2 with core 70–100 mL. mRS 0–2 was higher in ANGEL-ASPECT (30%) than SELECT2 (20%), likely because the Chinese cohort had lower baseline severity. ANGEL-ASPECT had more periprocedural ICH (sICH 6.1% vs 2.7% trend; any-ICH 49.1% vs 17.3%).',
+        answer: 'ANGEL-ASPECT enrolled a broader large-core population, including ASPECTS 0–2 with core 70–100 mL. mRS 0–2 was higher in ANGEL-ASPECT (30%) than SELECT2 (20%), likely because the Chinese cohort had lower baseline severity. Both ANGEL-ASPECT hemorrhage figures are within-trial EVT-vs-medical rates (sICH 6.1% vs 2.7%, P=0.12; any-ICH 49.1% vs 17.3%, P<0.001), not comparisons against SELECT2. Cross-trial hemorrhage rates are not directly comparable because the two trials used different imaging follow-up and bleeding definitions.',
       },
       {
         question: 'What does it mean for my patient?',
@@ -7326,7 +7326,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToInterpret: {
       proves: 'In Chinese anterior LVO patients with large ischemic core, age ≤80, NIHSS 6–30, pre-stroke mRS 0–1, within 24 hours, endovascular thrombectomy improves the ordinal mRS distribution at 90 days vs medical management alone.',
       doesNotProve: 'It does not prove benefit outside the specific selection criteria. It does not establish that ANGEL-ASPECT and SELECT2 selection criteria are interchangeable. ANGEL-ASPECT enrolled some ASPECTS 0–2 patients that SELECT2 did not.',
-      cautions: 'Higher any-ICH rate than SELECT2 (49.1% vs 17.3%, P<0.001). Most are asymptomatic, but careful BP management is warranted. Stopped early at 2nd interim. Chinese cohort: generalizability to Western populations may differ. NNT 5.4 is from SECONDARY mRS 0–2 outcome; ordinal-shift primary does not yield a valid NNT. P=0.004 (not <0.001); the trial barely crossed its alpha-spending boundary.',
+      cautions: 'Higher any-ICH rate with EVT than with medical management (49.1% vs 17.3%, P<0.001). Most are asymptomatic, but careful BP management is warranted. Stopped early at 2nd interim. Chinese cohort: generalizability to Western populations may differ. NNT 5.4 is from SECONDARY mRS 0–2 outcome; ordinal-shift primary does not yield a valid NNT. P=0.004 (not <0.001); the trial barely crossed its alpha-spending boundary.',
     },
     bedsidePearl: 'In a broader large-core population (China, includes ASPECTS 0–2 with core 70–100 mL), EVT improves ordinal mRS shift (gOR 1.37, P=0.004). Functional independence 30% vs 11.6% (NNT 5.4 from secondary). Higher ICH rates than SELECT2; BP management is critical.',
     bottomLineSummary: 'ANGEL-ASPECT validates SELECT2 in a Chinese population with broader volume criteria. Primary ordinal mRS shift: gOR 1.37 (95% CI 1.11–1.69, P=0.004). Secondary mRS 0–2: 30% vs 11.6% (NNT 5.4 from secondary). sICH 6.1% vs 2.7% (NS but trending). AHA/ASA 2026 §4.7.2 COR 1 (6–24h) / COR 2a (within 6h).',
@@ -7338,7 +7338,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         'Stopped early for efficacy (2nd interim)',
         'Large-core context. Primary is ordinal mRS shift (gOR 1.37, 95% CI 1.11–1.69); functional independence (mRS 0–2) is a secondary outcome at 30% vs 11.6%',
         'NNT 5.4 is derived from the SECONDARY mRS 0–2 outcome. Display with explicit secondary-outcome label (ordinal-shift primaries do not yield valid NNT)',
-        'Higher any-ICH (49.1% vs 17.3%, P<0.001) and sICH trend (6.1% vs 2.7%) than SELECT2. Careful BP management and patient selection required',
+        'Higher any-ICH with EVT than with medical management (49.1% vs 17.3%, P<0.001) and a sICH trend (6.1% vs 2.7%, P=0.12). Careful BP management and patient selection required',
       ],
     },
     stats: {
@@ -7751,7 +7751,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     bedsidePearl: 'TRACE-III is the key trial for late-window IVT when EVT cannot be performed. In perfusion-selected LVO patients 4.5-24 hours from onset without EVT access, tenecteplase 0.25 mg/kg improved mRS 0-1 from 24.2% to 33.0% (NNT 11, P=0.03). This is not a reason to delay EVT when it is available; TIMELESS showed no benefit when EVT was performed.',
     bottomLineSummary: 'TRACE-III showed tenecteplase 0.25 mg/kg improved the rate of no or minimal disability (mRS 0 to 1) at 90 days versus standard medical treatment in perfusion-selected LVO patients treated 4.5-24 hours after stroke onset when EVT was unavailable (33.0% vs 24.2%, relative rate 1.37, P=0.03, NNT 11). sICH was higher (3.0% vs 0.8%). Results apply specifically to EVT-unavailable settings with LVO confirmed on imaging.',
     legend: {
-      finding: 'IV tenecteplase 4.5–24 h with perfusion mismatch in EVT-ineligible LVO improves mRS 0–1 at 90 d.',
+      finding: 'IV tenecteplase 4.5–24 h with perfusion mismatch in LVO without EVT access improves mRS 0–1 at 90 d.',
       bottomLineTag: 'NNT 11',
       keyStat: '+8.8% mRS 0–1',
     },
@@ -8255,7 +8255,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         'Conducted in China',
         'Late window (6-24 hours)',
         '1:1 allocation (Thrombectomy vs. Medical)',
-        'Stopped early at interim for efficacy (Apr 2022) after 212/318 planned patients'
+        'Stopped early at prespecified interim for efficacy (Apr 2022); 217 analyzed against a planned 318'
       ],
       timeline: 'Enrolled Aug 2016 – Jun 2021 (stopped early Apr 2022 for efficacy)'
     },
@@ -8796,7 +8796,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the chart show?',
-        answer: '100 dots represent 100 patients in each group. A filled dot is a patient free of major ischemic events at 90 days; an open dot had a stroke, MI, or ischemic vascular death. The DAPT arm has 2 fewer events per 100 patients (95 vs 93.5 stroke-free).',
+        answer: '100 dots represent 100 patients in each group. A filled dot is a patient free of major ischemic events at 90 days; an open dot had a stroke, MI, or ischemic vascular death. The DAPT arm has 1.5 fewer events per 100 patients (95 vs 93.5 event-free).',
       },
       {
         question: 'What should I look at first?',
@@ -10202,7 +10202,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToInterpret: {
       proves: 'In patients with MRI-confirmed symptomatic lacunar infarction, long-term DAPT (aspirin plus clopidogrel) did not reduce recurrent stroke compared with aspirin alone (2.5% vs 2.7% per year, HR 0.92, 95% CI 0.72 to 1.16, P=0.48) and significantly increased mortality (HR 1.52, P=0.004) and major bleeding (2.1% vs 1.1%). /* claimId: sps3-primary-result | source: SPS3 Investigators NEJM 2012 */',
       doesNotProve: 'It does not prove that any antiplatelet is ineffective in lacunar stroke; aspirin monotherapy remains standard. It also does not generalize to short-duration DAPT (21 days or less) in acute presentations, which is the CHANCE/POINT evidence base.',
-      cautions: 'The trial was stopped early (3,020 of planned 3,600 enrolled), which may reduce statistical precision for secondary endpoints. The dose of aspirin (325 mg) is higher than commonly used in Europe. The BP-lowering arm of SPS3 ran in parallel; interpretation of the antiplatelet arm is independent but conducted in the same population.',
+      cautions: 'Enrollment was completed (3,020 randomized), but the antiplatelet arm was terminated early by the data and safety monitoring board in July 2011, which truncates follow-up and may reduce statistical precision for secondary endpoints. The dose of aspirin (325 mg) is higher than commonly used in Europe. The BP-lowering arm of SPS3 ran in parallel; interpretation of the antiplatelet arm is independent but conducted in the same population.',
     },
     bedsidePearl: 'SPS3 is a HARM signal trial: long-term DAPT in lacunar stroke increases mortality and bleeding with no stroke reduction. This is the opposite of CHANCE/POINT, which show short-term DAPT benefit in acute presentations. The practical rule: DAPT is for the first 21 days after TIA or minor stroke, not for chronic secondary prevention in lacunar disease. Aspirin monotherapy remains the long-term standard in this population.',
     bottomLineSummary: 'In patients with MRI-confirmed symptomatic lacunar infarction, long-term DAPT (aspirin 325 mg plus clopidogrel 75 mg) was stopped early because DAPT did not reduce recurrent stroke (HR 0.92, P=0.48) and significantly increased all-cause mortality (HR 1.52, P=0.004) and major bleeding. Aspirin monotherapy remains the standard of long-term secondary prevention in established lacunar stroke. Short-duration DAPT immediately following TIA or minor stroke is a separate evidence base and is not contraindicated by SPS3.',
@@ -10589,7 +10589,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     applicability: {
       populationExclusions: [
         'Noncardioembolic minor stroke (NIHSS ≤5) or high-risk TIA (ABCD2 ≥6) within 24 hours only',
-        'AHA/ASA 2026 COR 2b (may be considered), not a first-line regimen. NNT=91, severe bleeding 5× higher vs clopidogrel DAPT (NNT=28)',
+        'AHA/ASA 2026 COR 2b (may be considered), not a first-line regimen. NNT=91, severe bleeding 5× higher than aspirin alone; clopidogrel DAPT NNT=28',
         'Reserve for confirmed CYP2C19 LOF carriers when clopidogrel pharmacologically inadequate (see CHANCE-2, COR 2b)',
       ],
     },
@@ -10607,7 +10607,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       pValue: {
         value: '0.02',
         label: 'Stat. Significant',
-        info: 'p=0.02. Statistically significant, and AHA/ASA 2026 rates this regimen COR 2b, LOE B-R (may be considered) rather than first line: NNT=91 with severe bleeding 5× higher compares unfavourably with clopidogrel DAPT (CHANCE NNT=28).',
+        info: 'p=0.02. Statistically significant, and AHA/ASA 2026 rates this regimen COR 2b, LOE B-R (may be considered) rather than first line: NNT=91 with severe bleeding 5× higher than aspirin alone compares unfavourably with clopidogrel DAPT (CHANCE NNT=28).',
         highlight: false
       },
       effectSize: {
@@ -10809,7 +10809,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'If this trial is POSITIVE, why is the AHA 2026 rating only COR 2b?',
-        answer: 'A class of recommendation reflects net clinical benefit against the available alternatives, not statistical significance alone. The NNT is 91 versus 28 for clopidogrel-based DAPT in CHANCE, and severe bleeding is 5x higher (0.5% vs 0.1%). That is enough for may be considered (2b) but not for the COR 1 that clopidogrel plus aspirin carries. Note the separate COR 3 No Benefit in the same guideline section is about ticagrelor used instead of aspirin (SOCRATES), not about this regimen.',
+        answer: 'A class of recommendation reflects net clinical benefit against the available alternatives, not statistical significance alone. The NNT is 91 versus 28 for clopidogrel-based DAPT in CHANCE, and severe bleeding is 5x higher than with aspirin alone (0.5% vs 0.1%). That is enough for may be considered (2b) but not for the COR 1 that clopidogrel plus aspirin carries. Note the separate COR 3 No Benefit in the same guideline section is about ticagrelor used instead of aspirin (SOCRATES), not about this regimen.',
       },
       {
         question: 'When might ticagrelor DAPT still be chosen?',
@@ -10821,7 +10821,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       doesNotProve: 'It does not prove that ticagrelor DAPT is preferable to clopidogrel DAPT. No head-to-head comparison exists within THALES. The trial does not establish whether extending the treatment window from 21 to 30 days adds incremental benefit over clopidogrel-based protocols.',
       cautions: 'Severe hemorrhage was significantly higher with ticagrelor plus aspirin (0.5% vs 0.1%, P<0.001). AHA/ASA 2026 rates this regimen COR 2b, LOE B-R, may be considered rather than recommended. Ticagrelor-related dyspnea affected approximately 12% of the treatment arm and may have influenced discontinuation. Asian patients made up 57% of the trial, limiting generalizability in Western populations.',
     },
-    bedsidePearl: 'THALES is statistically positive (P=0.02) and the guideline verdict is COR 2b, may be considered, rather than a stronger rating, because the NNT of 91 and a 5x increase in severe bleeding leave it behind clopidogrel DAPT (CHANCE NNT=28, similar safety). In practice: use aspirin plus clopidogrel for 21 days in most patients with TIA or minor stroke. Reserve ticagrelor-based DAPT for confirmed CYP2C19 poor metabolizers (CHANCE-2, COR 2b), where clopidogrel is pharmacologically inadequate.',
+    bedsidePearl: 'THALES is statistically positive (P=0.02) and the guideline verdict is COR 2b, may be considered, rather than a stronger rating, because the NNT of 91 and a 5x increase in severe bleeding versus aspirin alone leave it behind clopidogrel DAPT (CHANCE NNT=28, similar safety). In practice: use aspirin plus clopidogrel for 21 days in most patients with TIA or minor stroke. Reserve ticagrelor-based DAPT for confirmed CYP2C19 poor metabolizers (CHANCE-2, COR 2b), where clopidogrel is pharmacologically inadequate.',
     bottomLineSummary: 'Ticagrelor plus aspirin for 30 days statistically reduced composite stroke or death versus aspirin alone after minor stroke or TIA (HR 0.83, P=0.02, NNT=91), but severe hemorrhage was 5x higher (0.5% vs 0.1%). AHA/ASA 2026 rates this regimen COR 2b, LOE B-R, may be considered within 24 hours, rather than first line, given the risk-benefit against clopidogrel-based DAPT. Clopidogrel plus aspirin remains the preferred DAPT regimen; ticagrelor is considered only in confirmed CYP2C19 poor metabolizers (COR 2b).',
     legend: {
       finding: 'Ticagrelor+aspirin × 30 d cuts stroke/death after minor stroke/TIA but increases severe bleeding 5×.',
@@ -11221,7 +11221,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToInterpret: {
       proves: 'In confirmed CYP2C19 loss-of-function carriers with minor stroke (NIHSS ≤3) or high-risk TIA (ABCD² ≥4) within 24 hours, ticagrelor + aspirin × 21 days then ticagrelor alone reduces 90-day stroke recurrence vs standard clopidogrel + aspirin DAPT.',
       doesNotProve: 'It does not prove benefit in CYP2C19 normal metabolizers (excluded by design). It does not establish ticagrelor DAPT vs aspirin alone. CHANCE-2 is a head-to-head DAPT comparison, not a DAPT-vs-monotherapy test.',
-      cautions: 'Chinese cohort (98% Han Chinese); CYP2C19 LOF prevalence is 50–60% in East Asians vs ~25% in White populations. Genotype-guided strategy depends on rapid point-of-care testing (GMEX, ~80 min turnaround). Mild bleeding doubled (5.3% vs 2.5%) without severe bleeding increase. Ticagrelor causes dyspnea in ~15% (class effect, may reduce adherence).',
+      cautions: 'Chinese cohort (98% Han Chinese); CYP2C19 LOF prevalence is 50–60% in East Asians vs ~25% in White populations. Genotype-guided strategy depends on rapid point-of-care testing (GMEX, ~85 min turnaround). Mild bleeding doubled (5.3% vs 2.5%) without severe bleeding increase. Ticagrelor causes dyspnea in ~15% (class effect, may reduce adherence).',
     },
     bedsidePearl: 'In confirmed CYP2C19 loss-of-function carriers with minor stroke (NIHSS ≤3) or high-risk TIA within 24h, ticagrelor + aspirin × 21 days then ticagrelor alone outperforms standard clopidogrel DAPT (NNT 63). If rapid genotyping is unavailable, use clopidogrel DAPT now. Do NOT delay treatment for testing.',
     bottomLineSummary: 'CHANCE-2 tests genotype-guided DAPT in CYP2C19 LOF carriers (15-30% Europeans, 50-60% Asians). Stroke recurrence at 90 days: 6.0% (ticagrelor) vs 7.6% (clopidogrel), HR 0.77 (95% CI 0.64–0.94, P=0.008; NNT 63). Severe bleeding unchanged. AHA/ASA 2026 §4.8 COR 2b for confirmed LOF carriers.',
@@ -11262,7 +11262,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         '202 centers in China',
         '1:1 allocation (ticagrelor+aspirin vs clopidogrel+aspirin)',
         'CYP2C19 *2 or *3 LOF allele required for enrollment',
-        'Rapid point-of-care bedside genotyping (30–60 min)'
+        'Rapid point-of-care bedside genotyping (about 85 min)'
       ],
       timeline: 'Enrolled 2019–2021; published NEJM 2021',
       sampleSize: {
@@ -11326,7 +11326,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     pearls: [
       'AHA/ASA 2026: COR 2b; ticagrelor DAPT may be reasonable over clopidogrel DAPT in CYP2C19 LOF carriers',
       'CYP2C19 *2/*3 LOF alleles present in ~15–30% Europeans, ~50–60% East Asians',
-      'Rapid point-of-care genotyping (30–60 min) available at many comprehensive stroke centers',
+      'Rapid point-of-care genotyping is available at some comprehensive stroke centers; CHANCE-2 used the GMEX bedside system with an average turnaround of 85 min',
       'Ticagrelor direct-acting P2Y12 inhibitor; genotype-independent, no CYP2C19 conversion needed',
       'Severe/moderate bleeding: 0.28% (ticagrelor) vs 0.39% (clopidogrel), no significant difference',
       'Dyspnea: ~15% with ticagrelor vs ~5% clopidogrel, pharmacologic not cardiac, manageable',
@@ -12284,7 +12284,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What does it mean for my patient?',
-        answer: 'In Berlin\'s MSU-capable EMS system, MSU dispatch shifts disability toward less severe (common OR 0.71 for worse mRS) and roughly doubles thrombolysis-within-60-min (12.8% vs 4.0%). Workflow gains (faster dispatch-to-tPA by ~26 min) are more transferable than absolute effect estimates to other EMS systems.',
+        answer: 'In Berlin\'s MSU-capable EMS system, MSU dispatch shifts disability toward less severe (common OR 0.71 for worse mRS) and roughly triples thrombolysis-within-60-min (12.8% vs 4.0%, adjusted OR 2.96). Workflow gains (faster dispatch-to-tPA by ~26 min) are more transferable than absolute effect estimates to other EMS systems.',
       },
     ],
     howToInterpret: {
@@ -13525,7 +13525,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Disabling stroke (significant functional impairment)',
       'Prior use of antiplatelet or anticoagulant therapy',
       'Contraindication to clopidogrel or aspirin',
-      'Planned IV alteplase treatment',
+      'Prestroke disability (modified Rankin Scale score 2 or higher)',
     ],
     fullEligibility: {
       inclusion: [
@@ -14775,7 +14775,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       doesNotProve: 'RAISE does not prove reteplase is safe for all patients or should replace alteplase or tenecteplase in routine practice. Any intracranial hemorrhage was higher (7.7% vs 4.9%), and adverse events were higher (91.6% vs 82.4%). A single Chinese trial cannot establish a new standard of care without independent replication.',
       cautions: 'RAISE is currently the only large RCT showing a thrombolytic superior to alteplase for stroke. Any-ICH was higher with reteplase (RR 1.59, CI 1.00-2.51, borderline significant). High adverse event rates (91.6%) warrant scrutiny. Reteplase is not approved for stroke in the US or most of Europe. Independent replication is needed before practice change.',
     },
-    bedsidePearl: 'RAISE is the first RCT showing a thrombolytic (reteplase) superior to alteplase for stroke (79.5% vs 70.4%, NNT 11, P=0.002). However, any-ICH was higher (7.7% vs 4.9%) and adverse events were higher (91.6%). Reteplase is not guideline-endorsed for stroke outside of select regions. Watch for replication trials and guideline updates.',
+    bedsidePearl: 'RAISE is one of the few RCTs showing a thrombolytic (reteplase) statistically superior to alteplase for stroke (79.5% vs 70.4%, NNT 11, P=0.002). However, any-ICH was higher (7.7% vs 4.9%) and adverse events were higher (91.6%). Reteplase is not guideline-endorsed for stroke outside of select regions. Watch for replication trials and guideline updates.',
     bottomLineSummary: 'RAISE demonstrated reteplase double-bolus was superior to alteplase for mRS 0-1 at 90 days in Chinese stroke patients within 4.5 hours (79.5% vs 70.4%, RR 1.13, P=0.002). Any intracranial hemorrhage was higher with reteplase (7.7% vs 4.9%). RAISE is provocative but requires independent replication before guideline adoption.',
     legend: {
       finding: 'Reteplase superior to alteplase for mRS 0–1 at 90 d (79.5% vs 70.4%; P=0.002).',
@@ -15409,7 +15409,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     doi: '10.1056/NEJMoa1214300',
     source: 'Broderick et al. (NEJM 2013)',
     listCategory: 'thrombectomy',
-    listDescription: 'First-generation endovascular therapy added to IV tPA: no benefit (mRS 0-2 40.8% vs 38.7%, RR 1.05, 95% CI 0.85-1.30). Stopped early for futility. Historical predecessor; ESCAPE (2015) established modern EVT.',
+    listDescription: 'First-generation endovascular therapy added to IV tPA: no benefit (mRS 0-2 40.8% vs 38.7%, RR 1.05, 95% CI 0.83-1.30). Stopped early for futility. Historical predecessor; ESCAPE (2015) established modern EVT.',
     stats: {
       sampleSize: { value: '656', label: 'Randomized Patients' },
       primaryEndpoint: { value: 'mRS 0-2', label: 'at 90 Days' },
@@ -15446,7 +15446,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     primaryOutcomeProse: 'In 656 patients with moderate-to-severe ischemic stroke (NIHSS 8 or greater) who received IV alteplase within 3 hours, adding endovascular therapy did not improve functional independence at 90 days. mRS 0-2 was achieved in 40.8% of the endovascular group versus 38.7% in the IV-only group (adjusted RR 1.05, 95% CI 0.83 to 1.30), a difference that was not statistically significant. The trial was stopped early at a planned interim analysis for futility; the data safety monitoring board concluded the primary endpoint was very unlikely to be met with full enrollment.',
     /* claimId: ims-iii-design | source: Broderick et al., NEJM 2013 */
     trialDesignNarrative: 'IMS-III enrolled patients who received IV alteplase (0.9 mg/kg standard dose) within 3 hours of stroke onset and had an NIHSS of 8 or greater. Patients were randomized within 40 minutes of alteplase infusion start to continue IV alteplase alone or proceed to endovascular therapy. The endovascular arm used intra-arterial tPA and, in many cases, coil-based mechanical devices (MERCI retriever, early Penumbra system). Critically, CTA or MRA confirmation of large-vessel occlusion was not required; a substantial proportion of enrolled patients likely had no retrievable thrombus, diluting any treatment effect.',
-    safetyBrief: 'Symptomatic intracranial hemorrhage was 6.2% endovascular versus 5.9% IV-only (p=0.83). Mortality at 90 days was 19.1% versus 21.6% (p=0.33). No significant safety difference between arms.',
+    safetyBrief: 'Symptomatic intracranial hemorrhage was 6.2% endovascular versus 5.9% IV-only (p=0.83). Mortality at 90 days was 19.1% versus 21.6% (p=0.52). No significant safety difference between arms.',
     successorTrialId: 'escape-trial',
     successorTrialDisplay: 'ESCAPE (2015)',
     successorTrialClause: 'for the modern successor trial that established EVT as standard of care',
@@ -15920,22 +15920,22 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Primary: mRS 0-3 at 90 days 44.2% EVT vs 37.7% medical (RR 1.18, CI 0.92–1.50, P=0.19); not significant',
       'CI upper bound 1.50: a 50% relative increase in favorable outcome was not excluded',
       '79.5% of the medical arm received IV alteplase as part of best medical treatment',
-      'Mortality numerically lower with EVT (38.0% vs 43.2%), not statistically significant',
+      'Mortality numerically lower with EVT (38.3% vs 43.2%), not statistically significant',
       'sICH 4.5% EVT vs 0.7% medical (P=0.07); trending toward significance',
     ],
     conclusion: '',
     questionLede: 'In patients with acute basilar artery occlusion within 6 hours, does EVT plus best medical treatment improve 90-day favorable functional outcome (mRS 0-3) compared with best medical treatment alone?',
     /* claimId: basics-outcomes | source: Langezaal et al., NEJM 2021, doi: 10.1056/NEJMoa2030297 */
-    primaryOutcomeProse: 'In 300 patients with CTA- or MRA-confirmed basilar artery occlusion enrolled across 11 countries, EVT plus best medical treatment did not significantly improve favorable functional outcome (mRS 0-3) at 90 days compared with best medical treatment alone. mRS 0-3 was achieved in 44.2% (68 of 154) of the EVT group versus 37.7% (55 of 146) of the medical group (rate ratio 1.18, 95% CI 0.92 to 1.50, P=0.19). The confidence interval was wide and included a potential 50% relative increase in favorable outcomes with EVT, meaning the trial did not exclude a clinically meaningful benefit. Mortality was numerically lower in the EVT arm (38.0% vs 43.2%), though not statistically significant.',
+    primaryOutcomeProse: 'In 300 patients with CTA- or MRA-confirmed basilar artery occlusion enrolled across 11 countries, EVT plus best medical treatment did not significantly improve favorable functional outcome (mRS 0-3) at 90 days compared with best medical treatment alone. mRS 0-3 was achieved in 44.2% (68 of 154) of the EVT group versus 37.7% (55 of 146) of the medical group (rate ratio 1.18, 95% CI 0.92 to 1.50, P=0.19). The confidence interval was wide and included a potential 50% relative increase in favorable outcomes with EVT, meaning the trial did not exclude a clinically meaningful benefit. Mortality was numerically lower in the EVT arm (38.3% vs 43.2%), though not statistically significant.',
     /* claimId: basics-design | source: Langezaal et al., NEJM 2021 */
     trialDesignNarrative: 'BASICS was an international open-label RCT enrolling patients with acute basilar artery occlusion at centers in Europe and Asia. Patients within 6 hours of onset (or last known well) with CTA- or MRA-confirmed basilar occlusion were randomized to EVT plus best medical treatment or best medical treatment alone. Best medical treatment included IV alteplase (0.9 mg/kg) if eligible; 79.5% of the medical arm received IV thrombolysis (78.6% in the endovascular arm), so the control arm was not undertreated. EVT could use any approved thrombectomy technique. The trial was designed to detect a 10-percentage-point difference in mRS 0-3 but the enrolled population had higher baseline severity than anticipated, limiting statistical power.',
-    safetyBrief: 'Symptomatic intracranial hemorrhage occurred in 4.5% of the EVT group versus 0.7% of the medical group (P=0.07). Mortality at 90 days was 38.0% EVT versus 43.2% medical, a non-significant difference. The sICH difference trended toward significance, consistent with reperfusion hemorrhage risk in the basilar territory.',
+    safetyBrief: 'Symptomatic intracranial hemorrhage occurred in 4.5% of the EVT group versus 0.7% of the medical group (P=0.07). Mortality at 90 days was 38.3% EVT versus 43.2% medical, a non-significant difference. The sICH difference trended toward significance, consistent with reperfusion hemorrhage risk in the basilar territory.',
     successorTrialId: 'attention-trial',
     successorTrialDisplay: 'ATTENTION (2022)',
     successorTrialClause: 'for the modern successor trial that established endovascular thrombectomy for basilar artery occlusion',
     chainContext: 'selective use of endovascular thrombectomy for basilar artery occlusion based on imaging and time window',
     /* claimId: basics-bottom-line | source: Langezaal et al., NEJM 2021 */
-    bottomLineSummary: 'BASICS randomized 300 patients with basilar artery occlusion at international centers within 6 hours. Primary (mRS 0-3 at 90 days): 44.2% EVT vs 37.7% medical (RR 1.18, CI 0.92–1.50, P=0.19). Not significant but with wide CI not ruling out meaningful benefit. Mortality favored EVT numerically (38.0% vs 43.2%). sICH higher in EVT (4.5% vs 0.7%). ATTENTION (2022) subsequently demonstrated definitive benefit for basilar EVT.',
+    bottomLineSummary: 'BASICS randomized 300 patients with basilar artery occlusion at international centers within 6 hours. Primary (mRS 0-3 at 90 days): 44.2% EVT vs 37.7% medical (RR 1.18, CI 0.92–1.50, P=0.19). Not significant but with wide CI not ruling out meaningful benefit. Mortality favored EVT numerically (38.3% vs 43.2%). sICH higher in EVT (4.5% vs 0.7%). ATTENTION (2022) subsequently demonstrated definitive benefit for basilar EVT.',
     inclusionCriteria: [
       'Age 18 years or older',
       'CTA- or MRA-confirmed basilar artery occlusion',
@@ -16234,7 +16234,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     conclusion: '',
     questionLede: 'In patients with spontaneous superficial lobar intracerebral hemorrhage (10–100 mL, within 1 cm of cortex), does early surgical evacuation improve 6-month functional outcome compared with initial best medical management?',
     /* claimId: stich-ii-outcomes | source: Mendelow et al., Lancet 2013, doi: 10.1016/S0140-6736(13)60986-1 */
-    primaryOutcomeProse: 'In 601 patients with spontaneous superficial lobar ICH (10–100 mL, within 1 cm of the cortical surface, no intraventricular extension) enrolled using equipoise-based randomization, early surgical evacuation did not significantly reduce unfavorable functional outcome at 6 months. Unfavorable outcome occurred in 59% (174 of 307) of the surgical group versus 62% (178 of 286) of the conservative group (OR 0.86, 95% CI 0.62 to 1.20, P=0.367). The STICH I lobar subgroup signal was not confirmed in this dedicated, adequately powered trial.',
+    primaryOutcomeProse: 'In 601 patients with spontaneous superficial lobar ICH (10–100 mL, within 1 cm of the cortical surface, no intraventricular extension) enrolled using equipoise-based randomization, early surgical evacuation did not significantly reduce unfavorable functional outcome at 6 months. Unfavorable outcome occurred in 59% (174 of 297) of the surgical group versus 62% (178 of 286) of the conservative group (OR 0.86, 95% CI 0.62 to 1.20, P=0.367). The STICH I lobar subgroup signal was not confirmed in this dedicated, adequately powered trial.',
     /* claimId: stich-ii-design | source: Mendelow et al., Lancet 2013 */
     trialDesignNarrative: 'STICH II was designed based on the STICH I post-hoc finding that lobar ICH within 1 cm of the cortical surface might benefit from early surgery. The trial enrolled patients with spontaneous superficial lobar ICH (10–100 mL, within 1 cm of cortex, no intraventricular extension, GCS 5 or greater) using the same equipoise-based design as STICH I. Early surgery was required within 12 hours of randomization and was predominantly craniotomy. The conservative arm allowed delayed surgery if the patient deteriorated; 21% of initially conservative patients ultimately required surgery. The primary outcome was a prognosis-adjusted endpoint: favorable or unfavorable outcome at 6 months.',
     safetyBrief: 'Mortality at 6 months was 18% in the surgical group versus 24% in the conservative group (not statistically significant). Surgical complications and rebleeding were not significantly different between groups. The surgical arm had more early procedure-related events but achieved numerically lower mortality; neither difference was statistically significant.',
@@ -17960,7 +17960,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       doesNotProve: 'It does not prove benefit in patients ≥60 (excluded. REDUCE capped at 59). It does not prove benefit in patients with any identified competing stroke mechanism. It does not prove that PFO closure reduces silent brain infarction independently. The silent-infarct subcomponent did not differ (P=0.75) and may have been undercounted by T2 MRI methodology. It does not establish that closure devices other than the Gore HELEX or Cardioform achieve the same effect. It does not compare PFO closure to oral anticoagulation. Anticoagulation was prohibited by protocol; for that comparison, see CLOSE (underpowered) and emerging registry data. It does not address atrial fibrillation as an alternative stroke etiology. Prolonged ECG monitoring was not required pre-enrollment.',
       cautions: 'Atrial fibrillation/flutter occurred in 6.6% of closure patients vs 0.4% of antiplatelet patients (P<0.001), the largest absolute AF signal of the three 2017 PFO trials. 83% of closure-arm AF was detected within 45 days of the procedure and 59% resolved within 2 weeks of onset; this pattern is consistent with transient periprocedural irritation rather than new durable arrhythmic substrate. 1 of 29 patients with post-closure AF had a recurrent stroke. Long-term stroke risk from procedure-induced AF, particularly in patients who do not receive continuous cardiac monitoring post-closure, has not been fully characterized; discuss with the patient and counsel on AF symptoms. The statistical analysis plan revision mid-trial (rescinding the interim analysis and adding the second coprimary) is a documented limitation but did not affect the headline clinical-stroke result. Decision-making should be shared and morphology-aware: AHA/ASA 2021 Class IIa, Level B-R applies broadly to non-lacunar stroke <60 with PFO and no other apparent etiology, but the strongest evidence concentrates in patients with atrial septal aneurysm or substantial shunt (see CLOSE inclusion and the PASCAL classification framework). Cryptogenic stroke workup must be complete before applying REDUCE, at minimum, vessel imaging, prolonged cardiac monitoring (per current AHA/ASA 2021 recommendations, though not required in REDUCE), and TEE.',
     },
-    educationalContext: 'REDUCE is the third member of the NEJM 2017;377(11) cluster (with CLOSE pp. 1011–1021 and RESPECT long-term pp. 1022–1032, all September 14, 2017). The pre-2017 evidence base was inconclusive: CLOSURE-I (Furlan AJ et al., NEJM 2012;366:991–999) with the STARFlex device, the original RESPECT (Carroll JD et al., NEJM 2013;368:1092–1100) at median 2.1-year follow-up, and the PC trial (Meier B et al., NEJM 2013;368:1083–1091) had all failed to demonstrate superiority of PFO closure in their primary intention-to-treat analyses. REDUCE was designed to address two specific concerns with those earlier trials: (1) the medical-therapy comparators had often included anticoagulation, confounding the antiplatelet-vs-closure question, REDUCE prohibited anticoagulation entirely; (2) the earlier trials had broader inclusion that diluted the high-risk PFO morphology signal, REDUCE used a 2:1 randomization to maximize information about the intervention. The result (HR 0.23, P=0.002) was the strongest of the three 2017 trials. The trial also met the second coprimary endpoint (new brain infarction at 24 months on T2 MRI, RR 0.44), although the silent-infarct subcomponent alone did not differ, a methodological caveat that current DWI/FLAIR practice would partly resolve. The dominant safety signal, 6.6% atrial fibrillation/flutter (largest of the three trials), was almost entirely transient periprocedural (83% within 45 days, 59% resolved within 2 weeks). The accompanying NEJM editorial (Ropper AH, NEJM 2017;377:1093–1095) called the 2017 cluster a tipping point and emphasized the AF trade-off as the central safety question requiring further investigation. REDUCE supported FDA approval (March 2018) of the Gore Cardioform Septal Occluder for cryptogenic stroke recurrence prevention. Subsequent meta-analyses (Mir H et al., BMJ 2018;362:k2515, IPD pooling 6 RCTs, pooled HR 0.36 for recurrent stroke, AF OR ~4.7) and the PASCAL classification system (Kent DM et al., JAMA 2021;326:2277–2286) integrated REDUCE with the other trials to refine patient selection. AHA/ASA 2021 (Kleindorfer DO et al., Stroke 2021;52:e364–e467) recommends PFO closure as Class IIa, Level B-R for non-lacunar stroke <60 with PFO and no other apparent etiology, citing REDUCE, CLOSE, and RESPECT together.',
+    educationalContext: 'REDUCE is the third member of the NEJM 2017;377(11) cluster (with CLOSE pp. 1011–1021 and RESPECT long-term pp. 1022–1032, all September 14, 2017). The pre-2017 evidence base was inconclusive: CLOSURE-I (Furlan AJ et al., NEJM 2012;366:991–999) with the STARFlex device, the original RESPECT (Carroll JD et al., NEJM 2013;368:1092–1100) at median 2.1-year follow-up, and the PC trial (Meier B et al., NEJM 2013;368:1083–1091) had all failed to demonstrate superiority of PFO closure in their primary intention-to-treat analyses. REDUCE was designed to address two specific concerns with those earlier trials: (1) the medical-therapy comparators had often included anticoagulation, confounding the antiplatelet-vs-closure question, REDUCE prohibited anticoagulation entirely; (2) the earlier trials had broader inclusion that diluted the high-risk PFO morphology signal, REDUCE used a 2:1 randomization to maximize information about the intervention. The result (HR 0.23, P=0.002) was the second largest effect of the three 2017 trials, behind CLOSE (HR 0.03) and ahead of RESPECT long-term (HR 0.55); what distinguishes REDUCE is the clean antiplatelet-only comparator rather than the size of the effect. The trial also met the second coprimary endpoint (new brain infarction at 24 months on T2 MRI, RR 0.44), although the silent-infarct subcomponent alone did not differ, a methodological caveat that current DWI/FLAIR practice would partly resolve. The dominant safety signal, 6.6% atrial fibrillation/flutter (largest of the three trials), was almost entirely transient periprocedural (83% within 45 days, 59% resolved within 2 weeks). The accompanying NEJM editorial (Ropper AH, NEJM 2017;377:1093–1095) called the 2017 cluster a tipping point and emphasized the AF trade-off as the central safety question requiring further investigation. REDUCE supported FDA approval (March 2018) of the Gore Cardioform Septal Occluder for cryptogenic stroke recurrence prevention. Subsequent meta-analyses (Mir H et al., BMJ 2018;362:k2515, IPD pooling 6 RCTs, pooled HR 0.36 for recurrent stroke, AF OR ~4.7) and the PASCAL classification system (Kent DM et al., JAMA 2021;326:2277–2286) integrated REDUCE with the other trials to refine patient selection. AHA/ASA 2021 (Kleindorfer DO et al., Stroke 2021;52:e364–e467) recommends PFO closure as Class IIa, Level B-R for non-lacunar stroke <60 with PFO and no other apparent etiology, citing REDUCE, CLOSE, and RESPECT together.',
     clinicalApplication: 'For patients 18–59 with confirmed cryptogenic ischemic stroke (vessel imaging confirming no ≥50% major-vessel stenosis, prolonged cardiac monitoring per current AHA/ASA 2021 recommendations, TEE with bubble study, hypercoagulable workup as indicated, no small-vessel/lacunar features) and a PFO, discuss transcatheter PFO closure with Gore HELEX or Cardioform plus long-term antiplatelet therapy vs antiplatelet therapy alone. Expected benefit per REDUCE: approximately 1 clinical stroke prevented per 28 patients treated over 24 months; effect maintained over 3.2-year median follow-up (HR 0.23). The principal trade-off is a 6.6% incidence of atrial fibrillation/flutter post-procedure (vs 0.4% on antiplatelet alone); predominantly transient (83% within 45 days, 59% resolved within 2 weeks), but counsel patients to seek evaluation for palpitations, fatigue, or other AF symptoms post-closure. Procedure-related serious adverse events occur in 2.5% (device dislocation, thrombosis, tamponade, vascular access bleeding). Effective closure is achieved in 94.5% at 12 months. For young patients with PFO and high-risk morphology (atrial septal aneurysm or large shunt), the closure-vs-antiplatelet decision is well-supported by REDUCE (clean antiplatelet comparator), CLOSE (restricted to high-risk PFO), and RESPECT long-term (broader inclusion, longer follow-up). REDUCE specifically does not address patients ≥60, patients with any identified competing stroke etiology, or comparisons between closure and oral anticoagulation. Apply per AHA/ASA 2021 Class IIa, Level B-R for non-lacunar stroke <60 with PFO and no other apparent etiology.',
     applicability: {
       populationExclusions: [
@@ -20146,7 +20146,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         },
       ],
       source: 'publication',
-      sourceLabel: 'Mac Grory et al., Lancet Neurol 2025;24:909-919',
+      sourceLabel: 'Préterre et al., Lancet Neurol 2025;24:909-919',
       sourceUrl: 'https://doi.org/10.1016/S1474-4422(25)00308-4',
       retrieved: '2026-06-09',
     },
@@ -20243,7 +20243,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         tooltip: 'Alteplase 5/35 (14%) vs aspirin 6/35 (17%). Most were extra-ocular ischaemic events (carotid endarterectomy in 6, pyelonephritis in 5, melena on colon polyps, and one manic episode in a known bipolar patient). None related to acute study treatment.',
       },
     },
-    safetyData: 'Zero symptomatic intracranial haemorrhages in either arm. One asymptomatic intracranial haemorrhage (alteplase group): a 15 mm right parietal haematoma detected on day 1 CT, with no lesion on initial MRI, no neurological consequences, and judged unrelated to active treatment. Zero major extracranial bleeding events related to study treatment. The very low haemorrhagic-event rate is a striking deviation from the typical 6% sICH rate seen with IV alteplase in acute ischaemic stroke, and most likely reflects the smaller territory of ischaemic brain at risk in CRAO (a retinal artery occlusion without established brain infarct). One alteplase patient with known bipolar disorder experienced a manic episode shortly after treatment. Serious adverse events after the acute phase were similar between arms (alteplase 14%, aspirin 17%) and were mostly atherosclerotic; six patients required carotid endarterectomy and five had pyelonephritis. Retinal neovascularisation occurred in 2 (6%) alteplase and 1 (3%) aspirin patients between 1-month and 3-month follow-up, including one intravitreal haemorrhage at 3 months. THEIA confirms that IV alteplase within 4.5h of CRAO onset is safe at the standard 0.9 mg/kg dose.',
+    safetyData: 'Zero symptomatic intracranial haemorrhages in either arm. One asymptomatic intracranial haemorrhage (alteplase group): a 15 mm right parietal haematoma detected on day 1 CT, with no lesion on initial MRI, no neurological consequences, and reported by the investigators as related to study treatment. Zero major extracranial bleeding events related to study treatment. The very low haemorrhagic-event rate is a striking deviation from the typical 6% sICH rate seen with IV alteplase in acute ischaemic stroke, and most likely reflects the smaller territory of ischaemic brain at risk in CRAO (a retinal artery occlusion without established brain infarct). One alteplase patient with known bipolar disorder experienced a manic episode shortly after treatment. Serious adverse events after the acute phase were similar between arms (alteplase 14%, aspirin 17%) and were mostly atherosclerotic; six patients required carotid endarterectomy and five had pyelonephritis. Retinal neovascularisation occurred in 2 (6%) alteplase and 1 (3%) aspirin patients between 1-month and 3-month follow-up, including one intravitreal haemorrhage at 3 months. THEIA confirms that IV alteplase within 4.5h of CRAO onset is safe at the standard 0.9 mg/kg dose.',
     pearls: [
       'First Phase 3 RCT: THEIA is the first randomised controlled trial of IV alteplase for CRAO. Pre-THEIA evidence was limited to retrospective cohorts and individual-patient-data meta-analyses (Schrag 2015, Mac Grory 2020).',
       'Primary Result Neutral, Trial Underpowered: 66% alteplase vs 48% aspirin reached ≥0.3 LogMAR improvement at 1 month (adjusted OR 1.10, 95% CI 0.07–18.39, p=0.95). Sample size of 70 powered for a 30 pp difference; observed aspirin response of 48% (not the assumed 10%) made the real difference too small to detect.',
@@ -20281,16 +20281,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'How does this compare to EAGLE (the older CRAO trial)?',
-        answer: 'EAGLE (Schumacher 2010) tested intra-arterial fibrinolysis with treatment windows up to 20 hours; a fundamentally different intervention. EAGLE showed no efficacy and a 37% adverse-event rate vs 4%. THEIA tested intravenous alteplase within a strict 4.5h window and showed neither efficacy nor harm (0 symptomatic ICH, 1 asymptomatic incidental haematoma). The two trials test different drugs, different routes, different windows, and different patient populations.',
+        answer: 'EAGLE (Schumacher 2010) tested intra-arterial fibrinolysis with treatment windows up to 20 hours; a fundamentally different intervention. EAGLE showed no efficacy and a 37% adverse-event rate vs 4%. THEIA tested intravenous alteplase within a strict 4.5h window and showed neither efficacy nor harm (0 symptomatic ICH, 1 treatment-related asymptomatic haematoma). The two trials test different drugs, different routes, different windows, and different patient populations.',
       },
     ],
     howToInterpret: {
-      proves: 'Among 56 patients with non-arteritic acute CRAO treated within 4.5 h of severe vision loss (Snellen <20/400) in 16 French stroke units, IV alteplase 0.9 mg/kg did not produce a statistically significant improvement in visual acuity at 1 month compared with 300 mg oral aspirin (66% vs 48%, adjusted OR 1.10, 95% CI 0.07–18.39, p=0.95). IV alteplase at this dose within this window was safe in this population: 0 symptomatic ICH, 0 major extracranial bleeds, and only 1 asymptomatic incidentally-detected intracranial haematoma in the alteplase arm.',
+      proves: 'Among 56 patients with non-arteritic acute CRAO treated within 4.5 h of severe vision loss (Snellen <20/400) in 16 French stroke units, IV alteplase 0.9 mg/kg did not produce a statistically significant improvement in visual acuity at 1 month compared with 300 mg oral aspirin (66% vs 48%, adjusted OR 1.10, 95% CI 0.07–18.39, p=0.95). IV alteplase at this dose within this window was safe in this population: 0 symptomatic ICH, 0 major extracranial bleeds, and only 1 treatment-related asymptomatic intracranial haematoma in the alteplase arm.',
       doesNotProve: 'THEIA does not prove IV alteplase is ineffective for CRAO. The trial was underpowered (N=70 instead of the planned size that would be needed to detect a smaller real difference); the directionally favourable +17 pp result is compatible with a true benefit. It does not establish or refute efficacy outside the 4.5h window or in patients with foveal-sparing CRAO. It does not justify withholding aspirin or other antiplatelet therapy from a CRAO patient (≥1/3 have concomitant cerebral ischaemia on DWI). It does not test tenecteplase (TenCRAOS) or earlier treatment windows specifically.',
       cautions: 'Trial underpowered. Aspirin comparator means alteplase was tested against an active treatment, not placebo; interpret the 17 pp signal accordingly. Mean treatment time was 232 min and only 11% of patients were treated within 3.0h; retinal ischaemic tolerance may be much shorter than 4.5h (potentially as short as 15 min for complete CRAO), making the trial window itself a potential confounder. Boehringer Ingelheim co-sponsorship with manuscript review for alteplase-related accuracy noted. Conducted in French stroke units with mature ophthalmology-stroke integration; generalisability to systems without such integration uncertain. Apply the AHA / NANOS 2021 Scientific Statement "may be considered" recommendation pending the planned IPD meta-analysis with TenCRAOS and REVISION.',
     },
     bedsidePearl: 'THEIA (Lancet Neurology 2025): first phase 3 RCT of IV alteplase 0.9 mg/kg vs aspirin 300 mg within 4.5h of non-arteritic CRAO. Visual acuity improvement at 1 month 66% vs 48% (adjusted OR 1.10, p=0.95); directionally favouring alteplase but not significant; trial underpowered at N=70. Zero symptomatic ICH in either arm. Result does not prove alteplase ineffective; it underscores the need for the planned IPD meta-analysis (THEIA + TenCRAOS + REVISION). Pre-THEIA guidance (Mac Grory AHA/NANOS 2021): IV alteplase "may be considered" for disabling CRAO meeting criteria. THEIA does not change that.',
-    bottomLineSummary: 'THEIA enrolled 70 patients with acute non-arteritic CRAO (Snellen <20/400) within 4.5h across 16 French stroke units and randomised them to IV alteplase 0.9 mg/kg or 300 mg oral aspirin. Visual acuity improvement of at least 0.3 LogMAR at 1 month occurred in 19/29 (66%) alteplase vs 13/27 (48%) aspirin patients; adjusted OR 1.10 (95% CI 0.07–18.39), p=0.95. The trial was explicitly underpowered (sized for a 30 pp difference; observed difference 17 pp). Safety was reassuring: 0 symptomatic ICH, 0 major bleeding related to study treatment, 1 asymptomatic incidental haematoma in the alteplase arm. Functional reading vision (Snellen 20/63) was achieved in only 14% alteplase and 7% aspirin patients, consistent with the hypothesis that retinal ischaemic tolerance may be much shorter than 4.5h. Authors call for an individual-patient-data meta-analysis combining THEIA + TenCRAOS (NCT04526951) + REVISION (NCT04965038) to produce level 1 evidence.',
+    bottomLineSummary: 'THEIA enrolled 70 patients with acute non-arteritic CRAO (Snellen <20/400) within 4.5h across 16 French stroke units and randomised them to IV alteplase 0.9 mg/kg or 300 mg oral aspirin. Visual acuity improvement of at least 0.3 LogMAR at 1 month occurred in 19/29 (66%) alteplase vs 13/27 (48%) aspirin patients; adjusted OR 1.10 (95% CI 0.07–18.39), p=0.95. The trial was explicitly underpowered (sized for a 30 pp difference; observed difference 17 pp). Safety was reassuring: 0 symptomatic ICH, 0 major bleeding related to study treatment, 1 treatment-related asymptomatic intracranial haematoma in the alteplase arm. Functional reading vision (Snellen 20/63) was achieved in only 14% alteplase and 7% aspirin patients, consistent with the hypothesis that retinal ischaemic tolerance may be much shorter than 4.5h. Authors call for an individual-patient-data meta-analysis combining THEIA + TenCRAOS (NCT04526951) + REVISION (NCT04965038) to produce level 1 evidence.',
     conclusion: 'THEIA is the first phase 3 randomised controlled trial of intravenous thrombolysis for acute non-arteritic central retinal artery occlusion (CRAO). Conducted across 16 French stroke units between June 2018 and October 2023, the trial enrolled 70 patients with severe monocular vision loss (Snellen <20/400) confirmed as CRAO by ophthalmologist within 4.5h of symptom onset and randomised them 1:1 to IV alteplase 0.9 mg/kg (the standard ischaemic-stroke dose) plus oral placebo or to 300 mg oral aspirin plus IV saline placebo, using a double-dummy patient-blinded and assessor-blinded design. The primary endpoint of visual acuity improvement of at least 0.3 LogMAR at 1 month occurred in 19/29 (66%) alteplase patients vs 13/27 (48%) aspirin patients, unadjusted risk difference +17.4 percentage points (95% CI -11.8 to +46.5), adjusted OR 1.10 (95% CI 0.07–18.39), p=0.95. The directionally favourable but non-significant primary result was explicitly attributed by the authors to underpowering: the trial was sized for a 30 pp absolute improvement (40% alteplase vs assumed 10% aspirin), but observed aspirin response was 48%, far higher than expected. Functional reading vision (≤0.5 LogMAR / Snellen 20/63) at 1 month occurred in only 14% alteplase and 7% aspirin patients, low durable recovery in both arms is consistent with the hypothesis that retinal ischaemic tolerance may be much shorter than the trial window (potentially as little as 15 minutes for complete CRAO per Tobalem 2018). Safety was strongly reassuring: zero symptomatic intracranial haemorrhages, zero major extracranial bleeds related to study treatment in either arm; one asymptomatic 15 mm parietal haematoma detected on day 1 CT in the alteplase arm without neurological consequence. The low haemorrhagic-event rate is striking given the typical 6% sICH rate with IV alteplase in acute ischaemic stroke and likely reflects the absence of an established large ischaemic brain lesion in CRAO. Limitations include the small sample size, the use of aspirin (rather than placebo) as comparator (chosen because at least one-third of CRAO patients have concomitant cerebral ischaemia on DWI MRI), open-label treating staff despite double-dummy patient and assessor masking, slow recruitment over 5+ years extended by COVID-19, and Boehringer Ingelheim co-sponsorship with manuscript review for alteplase-related accuracy. THEIA does not change the existing AHA / NANOS 2021 Scientific Statement on CRAO management (Mac Grory et al., Stroke 2021;52:e282-e294), which suggests IV alteplase "may be considered" for patients with disabling visual deficits meeting criteria. The trial confirms that IV alteplase 0.9 mg/kg within 4.5h is safe in CRAO, fails to demonstrate (but does not refute) efficacy versus active aspirin comparator, and motivates the planned individual-patient-data meta-analysis combining THEIA with TenCRAOS (NCT04526951) and REVISION (NCT04965038), both still recruiting at time of THEIA publication, to produce level 1 evidence. The predecessor CRAO trial, EAGLE (Schumacher et al., Ophthalmology 2010), tested intra-arterial fibrinolysis with windows up to 20 hours and found no efficacy with increased adverse events; THEIA tests a fundamentally different intervention (IV vs IA) within a much narrower and earlier window. The clinical implications are: CRAO belongs in the stroke pathway (triage to ED, stroke code activation, funduscopy, GCA screening, brain imaging, ophthalmology co-management); IV alteplase remains "may be considered" pending the IPD meta-analysis; aspirin should not be withheld; the secondary-prevention workup follows the standard ischaemic stroke pathway because CRAO is a marker of cerebrovascular and cardiovascular disease.',
     source: 'Préterre et al. (Lancet Neurology 2025)',
     applicability: {
