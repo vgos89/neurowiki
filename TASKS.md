@@ -43,7 +43,15 @@
 
 ## ACTIVE
 
-(none)
+### ANDROID-TWA-PLAY-STORE - Bubblewrap Android wrapper and Play handoff - Class D
+- **Status:** ready_for_merge (local commit; push/PR delegated to Claude)
+- **User-visible goal:** Package the existing `neurowiki.ai` PWA as a signed Android Trusted Web Activity with permanent package ID `ai.neurowiki.app`, ready for a human to upload to Google Play internal testing.
+- **Non-goals:** no clinical prose, citation, pathway, calculator, or web-runtime behavior changes; no Play Console submission from this task.
+- **Files:** `android/**`; `.gitignore`; `public/manifest.json`; `public/.well-known/assetlinks.json`; `docs/android/**`; `docs/adrs/ADR-009-android-twa-wrapper.md`; `docs/reviews/arch-PR-android-twa.md`.
+- **Acceptance checks:** Bubblewrap 1.24.1 build passed; signed APK + AAB generated locally and ignored; APK package/version verified (`ai.neurowiki.app`, version 1); APK signature SHA-256 matches upload certificate; `compileSdkVersion` + `targetSdkVersion` 36; no user-facing runtime permission; typecheck, claims, routes, humanizer, and production build passed; prerender 171/171; `dist/.well-known/assetlinks.json` parses and byte-matches the public source.
+- **Clinical impact:** none (platform packaging and store-operations documentation only; clinical content preserved).
+- **Human handoff:** back up `.android-secrets/`; upload `android/app-release-bundle.aab`; enroll in Play App Signing; replace the documented placeholder with the Play App Signing SHA-256 fingerprint and redeploy; complete store declarations, feature graphic, and compliance/legal review.
+- **Rollback plan:** revert the Android packaging commit and remove the ignored local artifacts/secrets if the Play release is abandoned; the web PWA remains unchanged.
 
 ### EXTIVT-PATHC-REORDER-SICH — Late-window IVT: Path A territory wording + Path C LVO-first reorder + sICH caution — Class E
 - **Status:** merged — live on main (PR #8, squash b5becce), 2026-07-19
