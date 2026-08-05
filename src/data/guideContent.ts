@@ -1100,7 +1100,7 @@ THALES tested whether ticagrelor (a more potent, direct-acting P2Y12 inhibitor) 
     *   **Absolute reduction:** 1.1%; **NNT = 91**
     *   **Severe hemorrhage:** 0.5% vs 0.1%; **5× higher**, p<0.001
 
-## Why AHA/ASA 2026 Rates This COR 3: No Benefit
+## Why AHA/ASA 2026 Rates This COR 2b Rather Than Higher
 The trial is statistically significant. But net clinical benefit is unfavorable:
 *   **NNT of 91** is far inferior to clopidogrel DAPT: CHANCE NNT=28, POINT NNT=67, INSPIRES NNT=53
 *   **Severe bleeding 5× higher** than aspirin alone (0.5% vs 0.1%)
@@ -1150,7 +1150,7 @@ CHANCE established DAPT within 24 hours. INSPIRES extends the evidence to two im
 ## Who Qualifies (AHA/ASA 2026 COR 2a)
 1.  Mild ischemic stroke (NIHSS ≤5) OR high-risk TIA (ABCD2 ≥4)
 2.  **Confirmed atherosclerotic cause**. ≥50% stenosis of intracranial or extracranial artery on CTA/MRA
-3.  Within **72 hours** of symptom onset
+3.  Within **24–72 hours** of symptom onset, or within 24 hours if NIHSS 4–5
 4.  Did NOT receive IV thrombolysis
 5.  No indication for anticoagulation (e.g., AF)
 
@@ -1175,7 +1175,7 @@ Clopidogrel is a prodrug requiring CYP2C19 enzymatic conversion to its active me
 
 CHANCE-2 is the first large stroke trial using mandatory pharmacogenomic eligibility (only CYP2C19 LOF carriers enrolled), testing whether ticagrelor (a direct-acting, CYP2C19-independent P2Y12 inhibitor) outperforms clopidogrel-based DAPT in these patients.
 
-**AHA/ASA 2026: COR 2b**: ticagrelor-based DAPT may be reasonable over clopidogrel DAPT in confirmed CYP2C19 LOF carriers.
+**AHA/ASA 2026: COR 2b**: in patients with minor stroke (NIHSS ≤3) or high-risk TIA (ABCD2 ≥4) within 24 hours who did not receive IV thrombolysis, ticagrelor-based DAPT may be reasonable over clopidogrel DAPT in confirmed CYP2C19 LOF carriers.
 
 ## Trial Summary
 *   **Design:** Randomized double-blind placebo-controlled; 202 centers, China.
@@ -1197,7 +1197,7 @@ CHANCE-2 is the first large stroke trial using mandatory pharmacogenomic eligibi
 
 ## Practical Bedside Algorithm
 
-    Minor stroke (NIHSS ≤3) or high-risk TIA (ABCD2 ≥4) within 24h
+    Minor stroke (NIHSS ≤3) or high-risk TIA (ABCD2 ≥4) within 24h, no IV thrombolysis given
             ↓
     CYP2C19 testing available AND results within 24h?
         ├── YES → Genotype

@@ -129,7 +129,7 @@ const ORDERS: Order[] = [
     label: 'Strict BP control: maintain <180/105 mmHg × 24 hours',
     category: 'post-tpa',
     evidence: 'Class I, Level B',
-    rationale: 'Elevated BP post-thrombolysis increases hemorrhagic transformation risk 3-fold. Target <180/105 mmHg for first 24h (AHA 2026 §4.3 #7, COR 1 LOE B-R). Use IV labetalol, nicardipine, or clevidipine for precise control. Intensive SBP <140 mmHg post-IVT is NOT recommended (COR 3: No Benefit, LOE B-R per §4.3 #8); ENCHANTED found no functional benefit. For successfully recanalized anterior LVO post-EVT, intensive SBP <140 mmHg for 72h is HARMFUL (COR 3: Harm, LOE A per §4.3 #10).',
+    rationale: 'Elevated BP post-thrombolysis increases hemorrhagic transformation risk 3-fold. Target <180/105 mmHg for first 24h (AHA 2026 §4.3 #7, COR 1 LOE B-R). Use IV labetalol, nicardipine, or clevidipine for precise control. In mild to moderate severity AIS treated with IVT, intensive SBP reduction to <140 mmHg is NOT recommended (COR 3: No Benefit, LOE B-R per §4.3 #8); ENCHANTED found no functional benefit. For successfully recanalized anterior LVO post-EVT, intensive SBP <140 mmHg for 72h is HARMFUL (COR 3: Harm, LOE A per §4.3 #10).',
     defaultSelected: true,
     evidenceClass: 'I',
     evidenceLevel: 'B'
@@ -148,7 +148,7 @@ const ORDERS: Order[] = [
     id: 'npo-swallow',
     label: 'NPO until swallow screen passed',
     category: 'post-tpa',
-    evidence: 'Class I, Level B',
+    evidence: 'COR 1, LOE C-EO (AHA 2026 §5.2 #1)',
     rationale: 'Dysphagia occurs in 40-70% of acute stroke patients. Aspiration pneumonia increases mortality 3-fold and prolongs hospitalization. Formal swallow evaluation reduces pneumonia risk from 11.7% to 5.4%.',
     defaultSelected: true,
     evidenceClass: 'I',
@@ -188,7 +188,7 @@ const ORDERS: Order[] = [
     id: 'stat-ct-decline',
     label: 'STAT CT head for any acute neurological decline',
     category: 'post-tpa',
-    evidence: 'Class I, Level A',
+    evidence: 'AHA 2026 Tables 5 and 7 (protocol guidance, not COR/LOE graded)',
     claimId: 'fxa-reversal-4fpcc-andexanet-withdrawn',
     rationale: 'Symptomatic ICH presents with sudden worsening (≥4 NIHSS points), severe headache, vomiting, or decreased consciousness. Requires immediate CT, neurosurgery consult, and reversal per AHA 2026 Table 5: cryoprecipitate ≥10 U IV over 10–30 min (target fibrinogen ≥150 mg/dL); tranexamic acid (TXA) 1000 mg IV over 10 min OR ε-aminocaproic acid 4–5 g over 1 h as alternative. For non-tPA anticoagulation reversal: 4-factor PCC + vitamin K (warfarin), idarucizumab (dabigatran), 4-factor PCC 50 units/kg for Xa inhibitors (andexanet alfa withdrawn from US market Dec 22, 2025).',
     defaultSelected: true,
@@ -282,11 +282,11 @@ const ORDERS: Order[] = [
     id: 'dvt-prophylaxis',
     label: 'DVT prophylaxis: SCDs bilaterally (no pharmacologic × 24h)',
     category: 'general',
-    evidence: 'Class I, Level A',
+    evidence: 'COR 1, LOE B-R (AHA 2026 §5.4 #1)',
     rationale: 'DVT occurs in 10% of immobilized stroke patients without prophylaxis. CLOTS-3 trial: intermittent pneumatic compression (IPC) reduced DVT from 12.1% to 8.5% (ARR 3.6 percentage points, ~30% relative reduction); IPC is safe immediately post-tPA (AHA 2026 §5.4 #1, COR 1 LOE B-R). Start pharmacologic prophylaxis (heparin SQ) after 24h if no hemorrhage on CT (§5.4 #2, COR 2a LOE B-R).',
     defaultSelected: true,
     evidenceClass: 'I',
-    evidenceLevel: 'A'
+    evidenceLevel: 'B'
   },
   {
     id: 'aspiration-precautions',
@@ -303,7 +303,7 @@ const ORDERS: Order[] = [
     label: 'PT, OT, and Speech Therapy consults',
     category: 'general',
     evidence: 'Class I, Level A',
-    rationale: 'Early mobilization within 24h improves functional outcomes and reduces complications (pneumonia, DVT, pressure ulcers). PT/OT started within 48h shortens length of stay by 3 days. Speech therapy for dysphagia reduces aspiration pneumonia 50%.',
+    rationale: 'In-hospital, formal, interdisciplinary rehabilitation assessment is recommended to improve functional recovery (AHA 2026 §5.7 #1, COR 1 LOE A). Dose and timing matter: high-dose, very early mobilization within 24 hours of onset is NOT recommended and may be harmful (§5.7 #3, COR 3: Harm, LOE B-R, AVERT). SSRIs are not effective for motor recovery (§5.7 #2, COR 3: No Benefit, LOE A). Speech therapy is indicated for dysphagia; screen before any oral intake (§5.2 #1).',
     defaultSelected: true,
     evidenceClass: 'I',
     evidenceLevel: 'A'

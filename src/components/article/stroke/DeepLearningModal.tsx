@@ -257,7 +257,7 @@ export const DeepLearningModal: React.FC<DeepLearningModalProps> = ({
                     {selectedFilters.has('III') && <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />}
                   </span>
                   Class III
-                  <span className="text-[10px] font-normal opacity-75">Harmful</span>
+                  <span className="text-[10px] font-normal opacity-75">Not recommended</span>
                 </button>
 
                 <button
