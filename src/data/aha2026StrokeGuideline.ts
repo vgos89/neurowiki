@@ -477,7 +477,7 @@ export const evtRecommendations = {
       loe: "A",
       timeWindow: "6–24 hours",
       aspects: "3–5",
-      text: "In selected patients with AIS from anterior circulation proximal LVO of the ICA or M1, presenting between 6 and 24 hours from onset, with age <80 years, NIHSS ≥6, prestroke mRS 0–1, ASPECTS 3–5, and without significant mass effect, EVT should be used.",
+      text: "In selected patients with AIS from anterior circulation proximal LVO of the ICA or M1, presenting between 6 and 24 hours from onset of symptoms, with age <80 years, NIHSS score ≥6, prestroke mRS score 0 to 1, ASPECTS 3 to 5, and without significant mass effect on imaging, EVT is recommended to improve functional clinical outcomes and reduce mortality.",
       criteria: {
         occlusion: "ICA or M1 (anterior circulation)",
         timeWindow: "6–24 hours",
@@ -495,7 +495,7 @@ export const evtRecommendations = {
       loe: "B-R",
       timeWindow: "0–6 hours",
       aspects: "0–2",
-      text: "In selected patients with AIS from anterior circulation proximal LVO of the ICA or M1, presenting within 6 hours, with age <80 years, NIHSS ≥6, prestroke mRS 0–1, ASPECTS 0–2, and without significant mass effect, EVT can reasonably be considered.",
+      text: "In selected patients with AIS from anterior circulation proximal LVO of the ICA or M1 presenting within 6 hours from onset of symptoms, with age <80 years, NIHSS score ≥6, prestroke mRS 0 to 1, ASPECTS 0 to 2, and without significant mass effect on imaging, EVT is reasonable to improve functional clinical outcomes and reduce mortality.",
       note: "Limited generalizability in individuals >80 years, significant head/neck vessel tortuosity, life expectancy <6 months.",
     },
     // Mild prestroke disability (mRS 2)

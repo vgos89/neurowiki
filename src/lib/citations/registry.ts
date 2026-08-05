@@ -674,13 +674,22 @@ export const CITATION_REGISTRY: CitationRegistry = {
     year: 2026,
     section: '§4.7.2',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
-    last_reviewed: '2026-05-22',
-    // Verbatim concatenation of the two large-core anterior-circulation EVT
-    // rows from src/data/aha2026StrokeGuideline.ts lines 453 and 471. Refresh
-    // 2026-05-22 replaces the prior paraphrase (which lacked NIHSS ≥6 and
-    // prestroke mRS 0–1 qualifiers) per audit aha-2026-audit-2026-05-22.md
+    last_reviewed: '2026-08-05',
+    // Refresh 2026-05-22 replaced a prior paraphrase that lacked the NIHSS ≥6
+    // and prestroke mRS 0–1 qualifiers, per audit aha-2026-audit-2026-05-22.md
     // §4.2 + clinical review clinical-PR-aspects-cor-2a-correction-2026-05-22.md.
-    quoted_text: 'In selected patients with AIS from anterior circulation proximal LVO of the ICA or M1, presenting between 6 and 24 hours from onset, with age <80 years, NIHSS ≥6, prestroke mRS 0–1, ASPECTS 3–5, and without significant mass effect, EVT should be used (COR 1, LOE A). In selected patients with AIS from anterior circulation proximal LVO of the ICA or M1, presenting within 6 hours, with age <80 years, NIHSS ≥6, prestroke mRS 0–1, ASPECTS 0–2, and without significant mass effect, EVT can reasonably be considered (COR 2a, LOE B-R).',
+    //
+    // CORRECTED 2026-08-05. That refresh transcribed from
+    // src/data/aha2026StrokeGuideline.ts rather than from the guideline, so this
+    // citation was validating our internal copy against a copy of itself. Both
+    // grades were RIGHT (§4.7.2 recommendation 3 is COR 1 LOE A for the 6 to 24
+    // hour ASPECTS 3 to 5 row; recommendation 4 is COR 2a LOE B-R for the 0 to 6
+    // hour ASPECTS 0 to 2 row). The text, however, rendered "EVT is recommended"
+    // as "EVT should be used" and "EVT is reasonable" as "EVT can reasonably be
+    // considered". The second of those is 2b language attached to a 2a
+    // recommendation, which is how a grade drifts without anyone editing a
+    // grade. Now transcribed from the published §4.7.2 table.
+    quoted_text: 'In selected patients with AIS from anterior circulation proximal LVO of the ICA or M1, presenting between 6 and 24 hours from onset of symptoms, with age <80 years, NIHSS score ≥6, prestroke mRS score 0 to 1, ASPECTS 3 to 5, and without significant mass effect on imaging, EVT is recommended to improve functional clinical outcomes and reduce mortality (COR 1, LOE A). In selected patients with AIS from anterior circulation proximal LVO of the ICA or M1 presenting within 6 hours from onset of symptoms, with age <80 years, NIHSS score ≥6, prestroke mRS 0 to 1, ASPECTS 0 to 2, and without significant mass effect on imaging, EVT is reasonable to improve functional clinical outcomes and reduce mortality (COR 2a, LOE B-R).',
   },
   // ─── 2010 trial: carotid revascularization head-to-head (CAS vs CEA) ─────
   'crest-brott-2010': {
