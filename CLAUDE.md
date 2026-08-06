@@ -510,8 +510,9 @@ Directory: `/Users/vaibhav/Documents/NeuroWiki/Articles/Guidelines/`
 | Spontaneous intracerebral haemorrhage | `2022-guideline-for-the-management-of-patients-with-spontaneous-intracerebral-hemorrhage-a.pdf` | 2026-08-05 |
 | Lipids / dyslipidemia | `2026-Guideline on the Management of Dyslipidemia.pdf` | 2026-08-05 |
 | **Primary** stroke prevention | `2024-...-primary-prevention-of-stroke-....pdf` | 2026-08-05 |
+| **Secondary** stroke prevention (post-stroke/TIA) | `2021-2021-guideline-for-the-prevention-of-stroke-in-patients-with-stroke-and-transient-ischemic.pdf` | 2026-08-05 |
 
-**Not held:** the AHA/ASA **secondary** prevention guideline (Kleindorfer, *Stroke* 2021;52:e364–e467, or a newer edition). Primary and secondary prevention answer different questions. A primary-prevention recommendation does **not** settle a post-stroke management claim (cardiac monitoring after cryptogenic stroke, bubble-study echo, follow-up HbA1c). When only the primary-prevention document speaks to a post-stroke claim, the correct verdict is `blocked:needs-source`, not a substitution.
+**The full set is now held.** Primary and secondary prevention answer different questions and are not interchangeable: primary covers preventing a *first* stroke, secondary covers preventing recurrence after a stroke or TIA (cardiac monitoring for AF, bubble-study echo, HbA1c screening, antiplatelet choice). Route each claim to the right one. The 2021 secondary-prevention guideline is the current edition; there is no later replacement as of 2026-08. It carries a published correction, *Stroke* 2021;52(7):e483–e484, DOI 10.1161/STR.0000000000000383, which is **not** in the held PDF and must be checked separately before relying on any single recommendation.
 
 **Superseded, deliberately not held:** the 2019 AHA/ASA AIS guideline (Powers). Claims that cite it should be re-pointed to the 2026 guideline or have the guideline attribution removed; they must not be re-grounded in a retired document.
 

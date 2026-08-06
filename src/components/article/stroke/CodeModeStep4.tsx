@@ -96,11 +96,11 @@ const ORDERS: Order[] = [
     id: 'hba1c',
     label: 'Hemoglobin A1c',
     category: 'labs',
-    evidence: 'Class I, Level B',
-    rationale: 'Diabetes in 30–40% of stroke patients; A1c >6.5% confirms diabetes. Uncontrolled diabetes increases recurrent stroke risk. Do not delay tPA for A1c.',
+    evidence: 'COR 2a, LOE C-EO (AHA/ASA 2021 secondary prevention, Glucose rec 5)',
+    rationale: 'It is reasonable to screen for prediabetes or diabetes after TIA or ischemic stroke using HbA1c, which the guideline prefers among the available methods because it needs no fasting and takes a single sample. Diabetes in 30 to 40% of stroke patients; A1c >6.5% confirms diabetes. Do not delay tPA for A1c.',
     defaultSelected: false,
-    evidenceClass: 'I',
-    evidenceLevel: 'B'
+    evidenceClass: 'IIa',
+    evidenceLevel: 'C'
   },
 
   // POST-THROMBOLYSIS MONITORING
@@ -212,7 +212,7 @@ const ORDERS: Order[] = [
     claimId: 'pfo-bubble-study-rules-in-not-out',
     label: 'Transthoracic echocardiogram with bubble study',
     category: 'stroke-workup',
-    evidence: 'Class I, Level B',
+    evidence: 'COR 2a, LOE B-R (AHA/ASA 2021 secondary prevention, Diagnostic Evaluation rec 6, scoped to cryptogenic stroke)',
     // CLINICAL-SAFETY CORRECTION 2026-07-31. This previously read "Bubble study
     // detects PFO (present in 25% of population, 40% of cryptogenic strokes in
     // young patients)". Two defects on a bedside checklist:
@@ -232,7 +232,7 @@ const ORDERS: Order[] = [
     // See docs/evidence-packets/2026-07-31-pfo-diagnosis-imaging.md §0A.
     rationale: 'Identifies cardioembolic sources in 20-25% of strokes: LV thrombus, atrial thrombus (AF), valvular disease, PFO with RLS. On PFO specifically, a transthoracic bubble study rules IN, not out: sensitivity is about 45% against transesophageal echo, so a negative study does not exclude a PFO. If the answer would change management, go to TEE with agitated saline and Valsalva. And finding one is not the same as explaining the stroke: a PFO is present in roughly 1 in 4 adults, and after adjustment for age and comorbidity it does not independently predict stroke.',
     defaultSelected: true,
-    evidenceClass: 'I',
+    evidenceClass: 'IIa',
     evidenceLevel: 'B'
   },
   {
@@ -249,10 +249,10 @@ const ORDERS: Order[] = [
     id: 'holter',
     label: '30-day cardiac event monitor',
     category: 'stroke-workup',
-    evidence: 'Class I, Level B',
+    evidence: 'COR 2a, LOE B-R (AHA/ASA 2021 secondary prevention, Diagnostic Evaluation rec 7). The guideline names modalities, not a duration, and states that improvement in patient outcomes with long-term rhythm monitoring has not been established.',
     rationale: 'CRYSTAL-AF trial: implantable cardiac monitor vs standard external monitoring after cryptogenic stroke. AF detection 8.9% at 6 months and 12.4% at 12 months with the implantable monitor, vs 1.4% at 6 months and 2.0% at 12 months with standard external monitoring. Detection rate continues to rise with longer monitoring duration; extended monitoring (minimum 30 days) is the standard after cryptogenic stroke and may change anticoagulation strategy.',
     defaultSelected: true,
-    evidenceClass: 'I',
+    evidenceClass: 'IIa',
     evidenceLevel: 'B'
   },
   {
@@ -268,13 +268,13 @@ const ORDERS: Order[] = [
   // BUG-01 fix: renamed from 'hba1c' (duplicate) to 'hba1c_workup'
   {
     id: 'hba1c_workup',
-    label: 'HbA1c and fasting glucose',
+    label: 'HbA1c',
     category: 'stroke-workup',
-    evidence: 'Class I, Level B',
-    rationale: 'Diabetes present in 30-40% of stroke patients, often undiagnosed. HbA1c >6.5% confirms diabetes. Uncontrolled diabetes (A1c >7%) increases recurrent stroke risk 2-fold and worsens functional outcomes.',
+    evidence: 'COR 2a, LOE C-EO (AHA/ASA 2021 secondary prevention, Glucose rec 5)',
+    rationale: 'It is reasonable to screen for prediabetes or diabetes using HbA1c. The guideline lists HbA1c, fasting plasma glucose and oral glucose tolerance as the available methods and prefers HbA1c for convenience, so a fasting glucose is not required alongside it. Diabetes present in 30 to 40% of stroke patients, often undiagnosed. HbA1c >6.5% confirms diabetes.',
     defaultSelected: true,
-    evidenceClass: 'I',
-    evidenceLevel: 'B'
+    evidenceClass: 'IIa',
+    evidenceLevel: 'C'
   },
 
   // GENERAL CARE

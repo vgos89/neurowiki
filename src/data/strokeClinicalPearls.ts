@@ -713,11 +713,11 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'cardiac-workup',
         title: 'Cardiac Evaluation',
-        content: 'ECG: Assess for AF or acute STEMI. Telemetry: Minimum 24h (EMBRACE: a 30-day event monitor detected AF in 16.1% versus 3.2% with an additional 24h Holter; CRYSTAL-AF: an implantable monitor detected AF in 12.4% versus 2.0% at 12 months). Troponin: Check baseline, repeat if chest pain. TTE: Routine for all. TEE: Higher sensitivity for LA appendage thrombus, PFO, aortic arch atheroma.',
+        content: 'ECG: assess for AF or acute STEMI. Extended rhythm monitoring after cryptogenic stroke (EMBRACE: a 30-day event monitor detected AF in 16.1% versus 3.2% with an additional 24h Holter; CRYSTAL-AF: an implantable monitor detected AF in 12.4% versus 2.0% at 12 months). No guideline minimum duration is specified. Troponin: check baseline.',
         type: 'pearl',
         section: 'step-3',
-        evidence: 'EMBRACE, NEJM 2014; CRYSTAL-AF, NEJM 2014',
-        evidenceClass: 'I',
+        evidence: 'AHA/ASA 2021 secondary prevention Diagnostic Evaluation rec 7 gives COR 2a, LOE B-R to long-term rhythm monitoring after cryptogenic stroke in patients without a contraindication to anticoagulation. It names modalities, not a minimum duration, and states that improvement in patient outcomes with long-term rhythm monitoring has not been established.',
+        evidenceClass: 'IIa',
         evidenceLevel: 'B',
       },
       {
@@ -945,7 +945,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'trial',
         section: 'step-5',
         link: '/trials/crystal-af',
-        evidenceClass: 'I',
+        evidenceClass: 'IIa',
         evidenceLevel: 'B',
         plainEnglish: 'A continuously implanted monitor found AF in 30% of cryptogenic stroke patients by 3 years, versus 3% with conventional follow-up. Prolonged monitoring is essential in the cryptogenic workup.',
         evidence: 'NEJM 2014; 36-month follow-up Circ Arrhythm Electrophysiol 2016',
@@ -985,11 +985,11 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'telemetry-monitoring',
         title: 'Cardiac Monitoring',
-        content: 'Continuous telemetry minimum 24h (ideally 72h) to screen for AF. 30% of cryptogenic strokes have paroxysmal AF. EMBRACE: a 30-day event monitor detected AF in 16.1% versus 3.2% with an additional 24h Holter. CRYSTAL-AF: an implantable cardiac monitor detected AF in 12.4% versus 2.0% with conventional follow-up at 12 months. Consider implantable loop recorder if high suspicion + negative workup.',
+        content: 'Telemetry to screen for AF, then extended monitoring if the stroke is cryptogenic. About 30% of cryptogenic strokes have paroxysmal AF. EMBRACE: a 30-day event monitor detected AF in 16.1% versus 3.2% with an additional 24h Holter. CRYSTAL-AF: an implantable cardiac monitor detected AF in 12.4% versus 2.0% at 12 months. The guideline sets no minimum monitoring duration and does not establish that longer monitoring improves outcomes, so the choice of modality and duration is a clinical judgement.',
         type: 'pearl',
         section: 'step-5',
-        evidence: 'EMBRACE, NEJM 2014; CRYSTAL-AF, NEJM 2014',
-        evidenceClass: 'I',
+        evidence: 'AHA/ASA 2021 secondary prevention Diagnostic Evaluation rec 7 gives COR 2a, LOE B-R to long-term rhythm monitoring after cryptogenic stroke in patients without a contraindication to anticoagulation. It names modalities, not a minimum duration, and states that improvement in patient outcomes with long-term rhythm monitoring has not been established.',
+        evidenceClass: 'IIa',
         evidenceLevel: 'B',
       },
       {
