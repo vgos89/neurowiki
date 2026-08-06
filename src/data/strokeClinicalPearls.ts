@@ -525,14 +525,14 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         content: 'French-Spanish trial in 333 adults with anterior LVO ≤6.5h from LKW and ASPECTS ≤5 with no lower bound on core size. EVT vs medical care alone. Ordinal mRS at 90 days: generalized OR 1.63 (95% CI 1.29–2.06) favoring EVT. Median mRS 4 vs 6. All-cause mortality 36.1% vs 55.5% (RR 0.65). sICH 9.6% vs 5.7%. AHA/ASA 2026 §4.7.2 Rec 4: Class 2a, LOE B-R for ASPECTS 0–2 (the lowest stratum).',
         type: 'trial',
         section: 'step-2',
-        link: '/trials/laste',
+        link: '/trials/laste-trial',
         evidence: 'Costalat V et al, NEJM 2024; AHA/ASA 2026 §4.7.2 (Class 2a, LOE B-R for ASPECTS 0–2)',
         evidenceClass: 'IIa',
         evidenceLevel: 'B',
         plainEnglish: 'LASTE extended EVT down to ASPECTS 0–2 with no minimum-core threshold. Survival benefit was the most striking finding.',
         pmid: '38718358',
         nctId: 'NCT03811769',
-        trialSlug: '/trials/laste',
+        trialSlug: '/trials/laste-trial',
         detailedContent: {
           overview: 'LASTE went further than SELECT-2 and ANGEL-ASPECT by removing the lower bound on core size. Enrollment was anterior LVO within 6.5h and ASPECTS ≤5. Stopped early in February 2023.',
           clinicalTips: [

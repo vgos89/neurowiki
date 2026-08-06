@@ -151,7 +151,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
     pmid: '31067369',
     last_reviewed: '2026-06-10',
     review_window_months: 36,
-    quoted_text: 'Among the patients in this trial who had ischemic stroke and salvageable brain tissue, the use of alteplase between 4.5 and 9.0 hours after stroke onset or at the time the patient awoke (if within 9 hours after the midpoint of sleep) resulted in a higher percentage of patients with no or minor neurologic deficits than the use of placebo. There were more cases of symptomatic cerebral hemorrhage in the alteplase group than in the placebo group.',
+    quoted_text: 'Among the patients in this trial who had ischemic stroke and salvageable brain tissue, the use of alteplase between 4.5 and 9.0 hours after stroke onset or at the time the patient awoke with stroke symptoms resulted in a higher percentage of patients with no or minor neurologic deficits than the use of placebo. There were more cases of symptomatic cerebral hemorrhage in the alteplase group than in the placebo group.',
   },
   'wake-up-trial-2018': {
     id: 'wake-up-trial-2018',

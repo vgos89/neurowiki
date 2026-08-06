@@ -577,7 +577,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Enrolled 2018-2021 across Australia, New Zealand, China, and Vietnam",
     "listCategory": "thrombectomy",
     "listDescription": "International direct-EVT trial that did not support skipping thrombolysis.",
-    "bottomLineSummary": "International non-inferiority trial of direct EVT vs IV thrombolysis (alteplase or tenecteplase) plus EVT in LVO stroke within 4.5 hours. mRS 0-2 or pre-stroke baseline: 55.0% vs 61.4%; intention-to-treat RD -5.1% (95% CI -16.0% to 5.9%). Non-inferiority not met (lower CI crossed -10 pp margin). sICH 1.0% in both arms.",
+    "bottomLineSummary": "International non-inferiority trial of direct EVT vs IV thrombolysis (alteplase or tenecteplase) plus EVT in LVO stroke within 4.5 hours. mRS 0-2 or pre-stroke baseline: 54.8% vs 60.5%; intention-to-treat RD -5.1% (95% CI -16.0% to 5.9%). Non-inferiority not met (lower CI crossed -10 pp margin). sICH 1.4% vs 0.7% (2 of 146 vs 1 of 147).",
     "doi": "10.1016/S0140-6736(22)00564-5"
   },
   "distal-trial": {
@@ -842,7 +842,8 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Stopped early after external positive large-core data",
     "listCategory": "thrombectomy",
     "listDescription": "Large-core thrombectomy trial showing better outcomes and lower mortality despite more bleeding.",
-    "bottomLineSummary": "LASTE showed that thrombectomy benefits patients with large established infarcts (ASPECTS 5 or lower, with no lower ASPECTS bound below age 80; ASPECTS 4 or 5 required above age 80) treated within 6.5 hours, shifting median 90-day mRS from 6 to 4 and lowering mortality from 55.5% to 36.1%, at the cost of more symptomatic hemorrhage."
+    "bottomLineSummary": "LASTE showed that thrombectomy benefits patients with large established infarcts (ASPECTS 5 or lower, with no lower ASPECTS bound below age 80; ASPECTS 4 or 5 required above age 80) treated within 6.5 hours, shifting median 90-day mRS from 6 to 4 and lowering mortality from 55.5% to 36.1%, at the cost of more symptomatic hemorrhage.",
+    "doi": "10.1056/NEJMoa2314063"
   },
   "match-trial": {
     "title": "MATCH Trial",
@@ -1091,7 +1092,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "42 US centres, enrolled 1993 to 2000; 2-year follow-up. Published Circulation 2002;105(22):2625-2631",
     "listCategory": "antiplatelets",
     "listDescription": "TEE substudy of WARSS (N=630). The 98-patient cryptogenic-stroke-with-PFO comparison of low-intensity warfarin against aspirin is a NON-PRESPECIFIED SUBGROUP: 4 of 42 vs 10 of 56, HR 0.52 (95% CI 0.16 to 1.67), P=0.28. Hypothesis-generating only.",
-    "bottomLineSummary": "PICSS is the TEE substudy of WARSS (630 patients, PFO in 33.8%). Within it, a non-prespecified subgroup of 98 patients with cryptogenic stroke and a PFO showed recurrent ischemic stroke or death at 2 years in 4 of 42 (9.5%) on low-intensity warfarin versus 10 of 56 (17.9%) on aspirin, HR 0.52 (95% CI 0.16 to 1.67), P=0.28. The anticoagulant was warfarin at a target INR of 1.4 to 2.8, so nothing here transfers to standard-intensity anticoagulation or to a DOAC. What PICSS does establish is that a PFO did not raise 2-year recurrence risk on medical therapy.",
+    "bottomLineSummary": "PICSS is the TEE substudy of WARSS (630 patients, PFO in 33.8%). Within it, a non-prespecified subgroup of 98 patients with cryptogenic stroke and a PFO showed recurrent ischemic stroke or death at 2 years in 4 of 42 (9.5%) on low-intensity warfarin versus 10 of 56 (17.9%) on aspirin, HR 0.52 (95% CI 0.16 to 1.67), P=0.28. Read that against the comparison PICSS itself published, which points the other way: across the PFO-positive patients, warfarin versus aspirin gave HR 1.29 (95% CI 0.63 to 2.64), P=0.49, with 2-year event rates of 16.5% versus 13.2%. The chart above shows the subgroup, not that result. The anticoagulant was warfarin at a target INR of 1.4 to 2.8, so nothing here transfers to standard-intensity anticoagulation or to a DOAC. What PICSS does establish is that a PFO did not raise 2-year recurrence risk on medical therapy.",
     "doi": "10.1161/01.CIR.0000017498.88393.44"
   },
   "point-trial": {

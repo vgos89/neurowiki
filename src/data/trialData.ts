@@ -1161,7 +1161,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     inclusionCriteria: [
       'Age 18 years or older',
       'Acute ischemic stroke with onset 4.5 to 9 hours prior (or wake-up stroke)',
-      'CT perfusion or DWI/FLAIR mismatch confirming ischemic penumbra',
+      'CT perfusion or perfusion-diffusion MRI mismatch confirming salvageable penumbra',
       'Core infarct volume under 70 mL on perfusion imaging',
       'Penumbra volume over 10 mL',
       'Penumbra-to-core ratio above 1.2',
@@ -1169,7 +1169,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     exclusionCriteria: [
       'Prior stroke within 3 months',
       'Intracranial hemorrhage on baseline imaging',
-      'NIHSS above 25 or below 4',
+      'NIHSS above 26 or below 4',
       'Blood glucose below 50 or above 400 mg/dL',
       'Platelet count below 100,000',
       'Anticoagulation with INR above 1.7 or direct anticoagulant taken within 48 hours',
@@ -1443,7 +1443,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       doesNotProve: 'It does not prove that any thrombolytic approach is ineffective in CRAO within the first few hours. IV tPA within 4.5 hours of CRAO onset was outside the EAGLE protocol window and is still considered by some centers based on stroke-mechanism analogy. EAGLE was conducted with a 20-hour window; early window trials are a separate question.',
       cautions: 'The trial enrolled only 84 of 200 planned patients before early stopping, reducing statistical power and widening confidence intervals. Open-label design prevents blinding of treatment allocation. The heterogeneous conservative treatment (hemodilution, ocular massage, timolol, acetazolamide) may not reflect current standard of care.',
     },
-    bedsidePearl: 'EAGLE was stopped early after IA tPA for CRAO showed no visual benefit and a much higher adverse-event rate (37.1% vs 4.3%, including intracranial hemorrhage). The procedure is not indicated for CRAO. The procedure is not indicated for CRAO. The current clinical debate is about IV tPA in the very early window (within 4.5 hours), which was not tested in EAGLE. If a CRAO patient presents within hours, the stroke team conversation is about IV tPA eligibility, not IA fibrinolysis.',
+    bedsidePearl: 'EAGLE was stopped early after IA tPA for CRAO showed no visual benefit and a much higher adverse-event rate (37.1% vs 4.3%, including intracranial hemorrhage). The procedure is not indicated for CRAO. The current clinical debate is about IV tPA in the very early window (within 4.5 hours), which was not tested in EAGLE. If a CRAO patient presents within hours, the stroke team conversation is about IV tPA eligibility, not IA fibrinolysis.',
     bottomLineSummary: 'Local intra-arterial fibrinolysis for CRAO presenting within 20 hours showed no improvement in visual acuity compared with conservative treatment (primary P=0.69; secondary dichotomized endpoint 57.1% vs 60.0% with clinically meaningful improvement) and caused significantly more adverse events (37.1% vs 4.3%), including procedure-related intracranial hemorrhage. The DSMB stopped the trial at 84 patients for futility and safety. IA tPA is not recommended for CRAO.',
     legend: {
       finding: 'IA tPA for CRAO causes harm (37% adverse events incl. ICH) with no visual benefit.',
@@ -1479,7 +1479,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
           year: 2013,
           journal: 'NEJM (Ciccone et al.)',
           n: 362,
-          designNotes: 'Endovascular therapy alone versus IV alteplase within 6 hours; no CTA requirement.',
+          designNotes: 'Endovascular therapy alone versus IV alteplase, randomized within 4.5 hours of onset; no CTA requirement.',
           keyResult: 'mRS 0-1 at 90 days OR 0.71 (95% CI 0.44 to 1.14); no superiority.',
           whatWasMissing: 'No occlusion confirmation and older devices; endovascular therapy was not consistently faster than IV alteplase.',
         },
@@ -1518,7 +1518,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       pValue: {
         value: 'Significant',
-        label: 'Adjusted OR 1.67'
+        label: 'Adjusted common OR 1.67'
       },
       effectSize: {
         value: '+13.5%',
@@ -1635,7 +1635,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What do the numbers mean clinically?',
-        answer: 'Functional independence (mRS 0 to 2) was 32.6% with intra-arterial treatment versus 19.1% with usual care. Two different estimates appear on this page and they answer different questions: the chart shows the adjusted odds ratio of 2.16 for that mRS 0 to 2 dichotomisation, while the trial primary was the full ordinal shift, captured by the adjusted common odds ratio of 1.67, meaning intervention patients had 1.67 times the odds of being one mRS point better.',
+        answer: 'Functional independence (mRS 0 to 2) was 32.6% with intra-arterial treatment versus 19.1% with usual care. Two different estimates appear on this page and they answer different questions: the chart shows the adjusted odds ratio of 2.16 for that mRS 0 to 2 dichotomisation, while the trial primary was the full ordinal shift, captured by the adjusted common odds ratio of 1.67. A common odds ratio does not mean patients moved one mRS point: it means that at every cut point of the scale, the odds of landing on the better side were 1.67 times higher with intra-arterial treatment.',
       },
       {
         question: 'What is the key limitation to keep in mind?',
@@ -1645,7 +1645,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToInterpret: {
       /* claimId: mr-clean-primary-result | source: Berkhemer NEJM 2015 */
       proves: 'In patients with imaging-confirmed proximal anterior circulation large-vessel occlusion treatable within 6 hours, intra-arterial treatment (predominantly stent-retriever thrombectomy) added to usual care reduced disability across the full mRS distribution at 90 days (adjusted common OR 1.67, 95% CI 1.21 to 2.30) and increased functional independence from 19.1% to 32.6%.',
-      doesNotProve: 'It does not address late-window EVT (beyond 6 hours), which was tested by DAWN and DEFUSE-3. It does not establish efficacy in posterior circulation occlusion, large established infarcts (low ASPECTS), or patients with severe pre-stroke disability, all of which were excluded.',
+      doesNotProve: 'It does not address late-window EVT (beyond 6 hours), which was tested by DAWN and DEFUSE-3. It does not establish efficacy in posterior circulation occlusion or in patients with severe pre-stroke disability, both of which were excluded. MR CLEAN set no ASPECTS threshold, so it does not settle the large-core question either way.',
       cautions: 'Pragmatic Dutch trial with heterogeneous device use including older first-generation devices in some patients; modern stent-retriever and aspiration platforms produce higher reperfusion rates. About 89% received IV alteplase. ASPECTS was not required for enrollment, so a small fraction of patients had low ASPECTS and may not represent current selection. Open-label design with blinded outcome assessment.',
     },
     /* claimId: mr-clean-bedside-pearl | source: Berkhemer NEJM 2015 */
@@ -1856,7 +1856,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       ciLow: 1.7,
       ciHigh: 3.8,
       direction: 'positive',
-      pValue: 0.001,
+      // Goyal NEJM 2015 reports P<0.001 for the primary common OR. GrottaBarChart
+      // renders the string '<0.001' only when this value is strictly below 0.001,
+      // so storing 0.001 exactly makes the chart badge read p=0.001 and overstates
+      // the bound. Same convention as the Costalat NEJM 2024 record in this file.
+      pValue: 0.0009,
     },
     legend: {
       finding: 'Small-core LVO thrombectomy raised independence to 53% vs 29%; mortality cut from 19% to 10%.',
@@ -2314,7 +2318,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         role: "intervention",
         agent: "Solitaire FR (Flow Restoration) or Solitaire 2 stent retriever (Covidien); uniform device protocol",
         route: "Endovascular (mechanical thrombectomy)",
-        frequency: "Single procedure following IV t-PA. Workflow targets: qualifying-imaging-to-groin-puncture within 70 min; groin puncture within 6 h of onset and within 90 min of angiography.",
+        frequency: "Single procedure following IV t-PA. Workflow targets: qualifying-imaging-to-groin-puncture within 70 min; groin puncture within 6 h of onset and within 90 min of the qualifying CTA or MRA.",
         duration: "One-time procedure",
         coInterventions: "IV t-PA (alteplase) initiated within 4.5 h of onset in ALL patients. Best medical care per local guidelines.",
         note: "Device + technique from Saver NEJM 2015 p.2287: Solitaire FR/2 only; concomitant cervical ICA stenting NOT permitted (angioplasty allowed for access). Stent retriever deployed 89%; GA 37%; mTICI 2b/3 88%; median imaging-to-groin 57 min. Funded by Covidien. Source: NCT01657461.",
@@ -2374,7 +2378,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
             'NIHSS ≥ 8 and < 30 at the time of randomization',
             'Initiation of IV t-PA within 4.5 hours of onset of stroke symptoms, with investigator verification of correct dosing',
             'Thrombolysis in Cerebral Infarction (TICI) 0-1 flow in the intracranial internal carotid artery, M1 segment of the MCA, or carotid terminus, confirmed by imaging',
-            'Treatment feasible within 6 hours of symptom onset and 90 minutes from angiography to groin puncture',
+            'Treatment feasible within 6 hours of symptom onset and within 90 minutes from CTA or MRA to groin puncture',
             'Willingness to complete protocol-required follow-up visits',
             'Signed informed consent obtained',
             'Subject is affiliated with a social security system (if required by individual country regulations)',
@@ -2447,7 +2451,6 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       ciLow: 1.57,
       ciHigh: 4.40,
       direction: 'positive',
-      pValue: 0.001,
     },
     legend: {
       finding: 'Solitaire EVT after IV tPA raised independence from 35% to 60% in anterior LVO ≤6 h.',
@@ -2556,7 +2559,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     inclusionCriteria: [
       'Age 18 to 80 years',
       'Acute ischemic stroke with NIHSS 10 to 25',
-      'Proximal anterior circulation occlusion (intracranial ICA, M1, or upper basilar) confirmed by CTA or MRA',
+      'Proximal cerebral artery occlusion: intracranial ICA, M1 segment of the MCA, or the upper third of the basilar, confirmed by CTA or MRA',
       'IV alteplase started within 4 hours of symptom onset (0.9 mg/kg, max 90 mg)',
       'Mechanical thrombectomy able to begin within 5 hours of symptom onset',
     ],
@@ -2726,12 +2729,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Eligible for IV alteplase per Chinese guidelines',
       'Endovascular treatment initiable within 4.5 hours of last known well',
       'NIHSS 2 or greater at presentation',
-      'Pre-stroke mRS 0 or 1',
+      'Pre-stroke mRS 0 to 2 (pre-stroke mRS greater than 2 was excluded)',
     ],
     exclusionCriteria: [
       'Contraindication to IV alteplase',
       'Posterior circulation occlusion',
-      'Pre-existing functional disability (mRS 2 or greater)',
+      'Pre-stroke disability interfering with 90-day outcome assessment (mRS greater than 2)',
       'Anticipated delay in EVT initiation beyond 4.5 hours',
       'Pregnancy',
       'Life expectancy under 6 months',
@@ -3270,22 +3273,22 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'How is non-inferiority judged here?',
-        answer: 'The pre-specified non-inferiority margin was -10 percentage points (-0.1) on the risk difference. The observed primary outcome was 55.0% (direct EVT) vs 61.4% (bridging), with intention-to-treat RD -5.1% (two-sided 95% CI -16.0% to 5.9%). Because the lower CI bound (-16.0%) crossed the -10 pp margin, non-inferiority was not met.',
+        answer: 'The pre-specified non-inferiority margin was -10 percentage points (-0.1) on the risk difference. The observed primary outcome was 54.8% (80 of 146, direct EVT) vs 60.5% (89 of 147, bridging), with intention-to-treat RD -5.1% (two-sided 95% CI -16.0% to 5.9%). Because the lower CI bound (-16.0%) crossed the -10 pp margin, non-inferiority was not met.',
       },
       {
         question: 'What about safety and secondary outcomes?',
-        answer: 'Symptomatic ICH was identical and very low in both arms (1.0% vs 1.0%), suggesting thrombolytics were not driving harm. 90-day mortality was similar between arms. Tenecteplase was permitted in some centers within the bridging arm.',
+        answer: 'Symptomatic ICH was very low in both arms (2 of 146, 1.4%, direct vs 1 of 147, 0.7%, bridging; adjusted OR 1.70, 95% CI 0.22 to 13.04), suggesting thrombolytics were not driving harm. 90-day mortality was similar between arms. Tenecteplase was permitted in some centers within the bridging arm.',
       },
     ],
     /* claimId: direct-safe-noninferiority | source: Mitchell Lancet 2022 */
     howToInterpret: {
-      proves: 'In a geographically diverse cohort across Australia, New Zealand, China, and Vietnam, direct EVT did not meet non-inferiority versus IV thrombolysis plus EVT for the composite of mRS 0-2 or return to pre-stroke baseline at 90 days (55.0% vs 61.4%; intention-to-treat RD -5.1%, two-sided 95% CI -16.0% to 5.9%). The lower CI bound (-16.0%) crossed the pre-specified non-inferiority margin of -10 percentage points (-0.1). sICH was identical at 1.0% in both arms.',
+      proves: 'In a geographically diverse cohort across Australia, New Zealand, China, and Vietnam, direct EVT did not meet non-inferiority versus IV thrombolysis plus EVT for the composite of mRS 0-2 or return to pre-stroke baseline at 90 days (54.8% vs 60.5%; intention-to-treat RD -5.1%, two-sided 95% CI -16.0% to 5.9%). The lower CI bound (-16.0%) crossed the pre-specified non-inferiority margin of -10 percentage points (-0.1). sICH was low in both arms (2 of 146, 1.4%, vs 1 of 147, 0.7%).',
       doesNotProve: 'Similar point estimates do not establish non-inferiority; the confidence interval was too wide to exclude clinically meaningful inferiority, and the lower bound crossed the margin by 6 percentage points. The trial does not support omitting thrombolysis before thrombectomy.',
       cautions: 'Tenecteplase was allowed alongside alteplase in the bridging arm, introducing heterogeneity that cannot be resolved at this sample size (N=295). The cohort included posterior circulation and M2 occlusions, broadening generalizability but reducing precision within subgroups. The very low sICH rate (1%) in both arms differs from other direct-EVT trials and may reflect population or technique differences.',
     },
     /* claimId: direct-safe-bedside | source: Mitchell Lancet 2022 */
     bedsidePearl: 'Give IV thrombolysis (alteplase or tenecteplase) in eligible LVO patients within 4.5 hours and do not delay for thrombectomy. DIRECT-SAFE failed non-inferiority by 6 percentage points beyond the margin, across diverse geography and vascular anatomy.',
-    bottomLineSummary: 'International non-inferiority trial of direct EVT vs IV thrombolysis (alteplase or tenecteplase) plus EVT in LVO stroke within 4.5 hours. mRS 0-2 or pre-stroke baseline: 55.0% vs 61.4%; intention-to-treat RD -5.1% (95% CI -16.0% to 5.9%). Non-inferiority not met (lower CI crossed -10 pp margin). sICH 1.0% in both arms.',
+    bottomLineSummary: 'International non-inferiority trial of direct EVT vs IV thrombolysis (alteplase or tenecteplase) plus EVT in LVO stroke within 4.5 hours. mRS 0-2 or pre-stroke baseline: 54.8% vs 60.5%; intention-to-treat RD -5.1% (95% CI -16.0% to 5.9%). Non-inferiority not met (lower CI crossed -10 pp margin). sICH 1.4% vs 0.7% (2 of 146 vs 1 of 147).',
     inclusionCriteria: [
       'Age 18 or older',
       'Acute ischemic stroke with LVO of ICA, M1, M2, or basilar artery',
@@ -3409,7 +3412,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToInterpret: {
       proves: 'In a European and Canadian cohort presenting directly to comprehensive stroke centers within 4.5 hours, stent-retriever thrombectomy alone did not meet non-inferiority versus alteplase 0.9 mg/kg plus thrombectomy (mRS 0-2: 57% vs 65%; adjusted RD -7.3%, 95% CI -16.6% to 2.1%). The lower limit of the one-sided 95% CI, -15.1%, crossed the pre-specified -12 pp non-inferiority margin, so a clinically meaningful loss of benefit could not be excluded. Reperfusion was also lower without alteplase (final expanded TICI 2b50-3: 91% vs 96%, p=0.047).',
       doesNotProve: 'Similar point estimates do not establish non-inferiority, and the reverse also holds: failing non-inferiority is not proof of inferiority. The two-sided 95% CI for the adjusted risk difference (-16.6% to 2.1%) crosses zero, and the mRS shift analysis was not significant (common OR 0.75, 95% CI 0.53 to 1.06, p=0.10). SWIFT DIRECT therefore does not demonstrate that thrombectomy alone is worse; what it shows is that the data cannot exclude a loss of up to about 15 percentage points, which is why omitting alteplase is not supported.',
-      cautions: 'Restricted to anterior circulation proximal LVO (intracranial ICA or M1), NIHSS 5 to 30, ASPECTS 4 or more, and Solitaire stent-retriever technique; there was no upper age limit (median age 73), and the trial does not address aspiration-first or distal occlusions. The mechanistic finding of lower reperfusion without alteplase (91% vs 96%) is biologically plausible: alteplase appears to assist catheter-based revascularization, not just precede it. Together with MR CLEAN-NO IV and DIRECT-SAFE, SWIFT DIRECT is the Western counterpart to the Asian direct-EVT trials and most strongly argues against omitting alteplase.',
+      cautions: 'Restricted to anterior circulation proximal LVO (intracranial ICA or M1), NIHSS 5 to 29, ASPECTS 4 or more, and Solitaire stent-retriever technique; there was no upper age limit (median age 73), and the trial does not address aspiration-first or distal occlusions. The mechanistic finding of lower reperfusion without alteplase (91% vs 96%) is biologically plausible: alteplase appears to assist catheter-based revascularization, not just precede it. Together with MR CLEAN-NO IV and DIRECT-SAFE, SWIFT DIRECT is the Western counterpart to the Asian direct-EVT trials and most strongly argues against omitting alteplase.',
     },
     /* claimId: swift-direct-bedside | source: Fischer Lancet 2022 */
     bedsidePearl: 'Give IV alteplase 0.9 mg/kg before thrombectomy in eligible anterior-circulation LVO. SWIFT DIRECT failed to show non-inferiority of thrombectomy alone: the one-sided 95% lower limit of the adjusted risk difference, -15.1%, crossed the pre-specified -12 pp margin, and final reperfusion was 5 points lower without alteplase (91% vs 96%).',
@@ -3418,7 +3421,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Age 18 or older, with no upper age limit',
       'Direct presentation at a comprehensive stroke center',
       'Anterior circulation proximal LVO (intracranial ICA or M1)',
-      'NIHSS 5 to 30, with deficits judged clearly disabling',
+      'NIHSS 5 to 29, with deficits judged clearly disabling',
       'Eligible for IV alteplase within 4.5 hours of symptom onset',
       'Pre-stroke mRS 0 to 2',
     ],
@@ -3426,7 +3429,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Contraindication to IV alteplase',
       'Posterior circulation occlusion',
       'M2 or more distal occlusion',
-      'NIHSS less than 5 or more than 30',
+      'NIHSS less than 5, or 30 or greater',
       'Transferred from non-EVT center',
       'Pre-stroke mRS greater than 2',
     ],
@@ -3525,6 +3528,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: '',
     source: 'Costalat et al. (NEJM 2024)',
+    doi: '10.1056/NEJMoa2314063',
     clinicalTrialsId: 'NCT03811769',
     listCategory: 'thrombectomy',
     listDescription: 'Large-core thrombectomy trial showing better outcomes and lower mortality despite more bleeding.',
@@ -19199,7 +19203,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       effectSize: {
         value: 'HR 0.52 (0.16 to 1.67)',
         label: 'Recurrent ischemic stroke or death at 2 years (non-prespecified subgroup)',
-        info: '14 events across 98 patients. The interval spans a large benefit and a large harm. No NNT is computed: the comparison is a non-prespecified subgroup of a substudy and the interval includes 1.',
+        info: '14 events across 98 patients. The interval spans a large benefit and a large harm. No NNT is computed: the comparison is a non-prespecified subgroup of a substudy and the interval includes 1. Read it alongside the treatment comparison PICSS itself published, which points the other way: across the PFO-positive patients, warfarin versus aspirin gave HR 1.29 (95% CI 0.63 to 2.64), P=0.49, with 2-year event rates of 16.5% versus 13.2%.',
         highlight: true,
       },
     },
@@ -19298,7 +19302,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearlClaimId: 'picss-pfo-warfarin-2002',
     bedsidePearl: 'PICSS (Circulation 2002) cannot answer whether anticoagulation beats aspirin in PFO-associated cryptogenic stroke. The quoted comparison, 4 of 42 (9.5%) vs 10 of 56 (17.9%) for recurrent ischemic stroke or death at 2 years, HR 0.52 (95% CI 0.16 to 1.67), P=0.28, is a NON-PRESPECIFIED SUBGROUP OF A SUBSTUDY resting on 14 events, and the anticoagulant was LOW-INTENSITY warfarin at INR 1.4 to 2.8, not modern anticoagulation. Hypothesis-generating only. The AAN 2020 advisory (Statement 3a, Level C) treats the two agents as equally acceptable. No NNT.',
-    bottomLineSummary: 'PICSS is the TEE substudy of WARSS (630 patients, PFO in 33.8%). Within it, a non-prespecified subgroup of 98 patients with cryptogenic stroke and a PFO showed recurrent ischemic stroke or death at 2 years in 4 of 42 (9.5%) on low-intensity warfarin versus 10 of 56 (17.9%) on aspirin, HR 0.52 (95% CI 0.16 to 1.67), P=0.28. The anticoagulant was warfarin at a target INR of 1.4 to 2.8, so nothing here transfers to standard-intensity anticoagulation or to a DOAC. What PICSS does establish is that a PFO did not raise 2-year recurrence risk on medical therapy.',
+    bottomLineSummary: 'PICSS is the TEE substudy of WARSS (630 patients, PFO in 33.8%). Within it, a non-prespecified subgroup of 98 patients with cryptogenic stroke and a PFO showed recurrent ischemic stroke or death at 2 years in 4 of 42 (9.5%) on low-intensity warfarin versus 10 of 56 (17.9%) on aspirin, HR 0.52 (95% CI 0.16 to 1.67), P=0.28. Read that against the comparison PICSS itself published, which points the other way: across the PFO-positive patients, warfarin versus aspirin gave HR 1.29 (95% CI 0.63 to 2.64), P=0.49, with 2-year event rates of 16.5% versus 13.2%. The chart above shows the subgroup, not that result. The anticoagulant was warfarin at a target INR of 1.4 to 2.8, so nothing here transfers to standard-intensity anticoagulation or to a DOAC. What PICSS does establish is that a PFO did not raise 2-year recurrence risk on medical therapy.',
     conclusion: 'PICSS (Homma S et al., Circulation 2002;105(22):2625-2631) is the transesophageal-echocardiography substudy of WARSS (Mohr JP et al., NEJM 2001;345(20):1444-1451), a double-blind randomized comparison of low-intensity warfarin (target INR 1.4 to 2.8) against aspirin 325 mg daily in patients with non-cardioembolic ischemic stroke, excluding atrial fibrillation and extracranial carotid stenosis. PICSS enrolled 630 WARSS patients at 42 US centres between 1993 and 2000 and detected a patent foramen ovale in 203 of them (33.8%). TEE referral was clinician-driven rather than protocolised, so the substudy is a selected subset of the parent trial. The parent primary endpoint was recurrent ischemic stroke or death from any cause within two years. The figure that circulates as evidence on the anticoagulation-versus-antiplatelet question is a NON-PRESPECIFIED SUBGROUP of that substudy: among the 98 patients with both a cryptogenic stroke and a PFO (warfarin 42, aspirin 56), the 2-year endpoint occurred in 4 of 42 (9.5%) versus 10 of 56 (17.9%), HR 0.52 (95% CI 0.16 to 1.67), P=0.28. Fourteen events decide the comparison and the interval spans a large benefit and a large harm. The single most important caveat is the anticoagulant: low-intensity warfarin at a target INR of 1.4 to 2.8 is neither the INR 2 to 3 used in CLOSE nor any direct oral anticoagulant, so PICSS supports no inference about modern anticoagulation. A second caveat is a conflict between the two available extractions: Turc and colleagues report the composite above, while the AAN 2020 advisory reports recurrent stroke at 2 years as 2 of 42 (4.8%) versus 8 of 56 (14.3%), attaching the identical hazard ratio and interval to different numerators; NeuroWiki publishes the composite because it matches the actual primary endpoint and records the conflict rather than resolving it. What PICSS does establish is a different and useful thing: on medical therapy, having a PFO did not raise the chance of an adverse event, either overall (HR 0.96, 95% CI 0.62 to 1.48) or within cryptogenic stroke (HR 1.17, 95% CI 0.60 to 2.37), regardless of PFO size or the presence of an atrial septal aneurysm. No safety or bleeding data were obtained for the PFO subgroup at any level, and the full text was not retrieved (ahajournals.org returned 403), so every figure here is secondary extraction at medium confidence. No NNT is computed: a non-prespecified subgroup of a substudy whose interval includes 1 has no valid superiority absolute risk difference to invert, and the NNT of 21 computed by the AAN for this question carries a confidence interval of 19 to -60 that includes net harm. PICSS sits with the CLOSE anticoagulation arm, the NAVIGATE-ESUS PFO subgroup (Kasner SE et al., Lancet Neurology 2018;17(12):1053-1060) and the RE-SPECT ESUS PFO subgroup (Diener HC et al., Stroke 2021;52(3):1065-1068) in a record where no dataset was designed to answer the question being asked of it. CLOSE-2 (NCT05387954) is recruiting and has a primary completion date of July 2031.',
   },
 

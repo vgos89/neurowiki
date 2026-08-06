@@ -306,7 +306,7 @@ const manualTrials: (Omit<TrialItem, 'year'> & { year?: number })[] = [
   }),
   buildTrial('skip-trial', 'SKIP', 'evt', '10.1001/jama.2020.23522', {
     isPlaceholder: false,
-    description: 'Japanese direct-EVT study that was directionally reassuring but statistically inconclusive.',
+    description: 'Japanese direct-EVT study that was inconclusive for noninferiority.',
     year: 2021,
   }),
   buildTrial('mr-clean-no-iv-trial', 'MR CLEAN-NO IV', 'evt', '10.1056/NEJMoa2107727', {
