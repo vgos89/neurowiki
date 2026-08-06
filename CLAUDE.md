@@ -498,6 +498,32 @@ Per-citation override: a citation can carry `review_window_months` to override t
 
 When a guideline is superseded, `medical-scientist` creates a Class E task: update citation, refresh `last_reviewed` via the §13.6 checklist, update or retire dependent claims, migration note in PR.
 
+### 13.9 Governing guideline documents — the source register
+
+These local PDFs are the **only** acceptable source for a class of recommendation (COR/Class), a level of evidence (LOE/Level), or a verbatim `quoted_text`. None is paywalled; all are on disk. **This register is the persistent record — when a newer edition arrives it REPLACES the row and the superseded edition is retired, not kept alongside.**
+
+Directory: `/Users/vaibhav/Documents/NeuroWiki/Articles/Guidelines/`
+
+| Governs | File | Added |
+|---|---|---|
+| Acute ischemic stroke | `2026-Guideline-for-acute-ischemic-stroke.pdf` | pre-existing |
+| Spontaneous intracerebral haemorrhage | `2022-guideline-for-the-management-of-patients-with-spontaneous-intracerebral-hemorrhage-a.pdf` | 2026-08-05 |
+| Lipids / dyslipidemia | `2026-Guideline on the Management of Dyslipidemia.pdf` | 2026-08-05 |
+| **Primary** stroke prevention | `2024-...-primary-prevention-of-stroke-....pdf` | 2026-08-05 |
+
+**Not held:** the AHA/ASA **secondary** prevention guideline (Kleindorfer, *Stroke* 2021;52:e364–e467, or a newer edition). Primary and secondary prevention answer different questions. A primary-prevention recommendation does **not** settle a post-stroke management claim (cardiac monitoring after cryptogenic stroke, bubble-study echo, follow-up HbA1c). When only the primary-prevention document speaks to a post-stroke claim, the correct verdict is `blocked:needs-source`, not a substitution.
+
+**Superseded, deliberately not held:** the 2019 AHA/ASA AIS guideline (Powers). Claims that cite it should be re-pointed to the 2026 guideline or have the guideline attribution removed; they must not be re-grounded in a retired document.
+
+#### 13.9.1 Reading these PDFs — four rules learned the hard way
+
+1. **Never verify against `src/data/aha2026StrokeGuideline.ts`.** That mirror omits whole sections, paraphrases in ways that shift both grade and scope, and was for a time "verified" by registry citations whose `quoted_text` had been transcribed out of the mirror itself. Circular validation is how every grade error found in the 2026-08 audits survived review. `docs/2026-AHA-Stroke-guideline.md` is likewise **not** the guideline; it is a build-plan document titled "Mindmap — Improvement Plan".
+2. **Whole-document text dumps interleave the columns.** A COR or LOE cell can land several lines from the recommendation it belongs to, so a grade must never be assigned by proximity in a full dump. Re-extract the single page in reading order: `pdftotext -f <page> -l <page> "<pdf>" /tmp/page.txt`.
+3. **Some tables are images and are invisible to text search.** In the AIS guideline, Table 8 (relative contraindications to thrombolysis) and Table 2 (COR/LOE definitions) are rasterized. **Absence from a text dump is inconclusive, not proof of silence.** Render before concluding: `pdftoppm -f <page> -l <page> -r 150 -png "<pdf>" /tmp/pg`.
+4. **Removing an unsourced threshold is not the same as proving no threshold exists.** Correcting a wrong cerebellar-surgery gate (">3 cm diameter") to "the guideline sets no size threshold" was itself wrong: §10 sets a *volume* trigger of ≥15 mL as an independent indication. Search for the concept, not the units the repo happened to use.
+
+Navigate every one of these documents by its `Recommendations for <Topic>` headings, then read the numbered rows with their COR and LOE cells.
+
 ---
 
 ## 14. Rollback protocol
