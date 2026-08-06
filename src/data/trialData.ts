@@ -3669,6 +3669,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: '',
     source: 'Bendszus et al. (Lancet 2023)',
+    doi: '10.1016/S0140-6736(23)02032-9',
+    pmid: '37837989',
     clinicalTrialsId: 'NCT03094715',
     listCategory: 'thrombectomy',
     listDescription: 'Large-core EVT trial using pragmatic non-contrast CT selection rather than perfusion imaging.',
@@ -3742,7 +3744,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         'Device/technique strategy trial. Not evidence that EVT itself helps vs no treatment',
         'Aspiration-first was noninferior to stent-retriever-first; supports either as first-line approach',
       ],
-      geography: 'United States',
+      geography: 'United States and Canada',
     },
     stats: {
       sampleSize: {
@@ -3814,7 +3816,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     resultSubtype: 'non-inferiority',
     inclusionCriteria: [
       'Age 18 years or older',
-      'Acute ischemic stroke with anterior circulation large vessel occlusion (ICA terminus, M1, or M2)',
+      'Acute ischemic stroke with a large proximal anterior circulation occlusion from the distal ICA through the MCA bifurcation',
       'Groin puncture initiable within 6 hours of last known well',
       'NIHSS 8 or greater',
       'Pre-stroke mRS 0 or 1',
@@ -3921,7 +3923,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     armDetails: [
       { arm: 'First-line contact aspiration (ADAPT)', role: 'intervention', agent: 'Direct aspiration first-pass technique (ADAPT): large-bore aspiration catheter, first-line', route: 'Endovascular (transfemoral)',
         coInterventions: 'IV thrombolysis (alteplase) first if eligible, then transfer to angiography; long sheath in distal cervical vasculature; aspiration catheter advanced to proximal thrombus with continuous aspiration; GA or conscious sedation per operator; ≥3 attempts with assigned technique required before switching (rescue at operator discretion: stent retriever, combined, or angioplasty±stenting).',
-        note: 'Aspiration-first arm, n=192; rescue stent retriever in 25.2%. Lapergue JAMA 2017 Methods p.444-445.' },
+        note: 'Aspiration-first arm, n=192; rescue treatment after first-line strategy in 32.8% (63/192). Lapergue JAMA 2017 Methods p.444-445.' },
       { arm: 'First-line stent retriever', role: 'comparator', agent: 'Stent retriever, first-line (Solitaire and Trevo most commonly used)', route: 'Endovascular (transfemoral)',
         coInterventions: 'IV thrombolysis (alteplase) first if eligible, then transfer to angiography; balloon-guide catheter in cervical ICA; stent retriever deployed across occlusion; proximal flow arrest by balloon-guide inflation during retrieval; GA or conscious sedation per operator; ≥3 attempts before rescue crossover.',
         note: 'Stent-retriever-first arm, n=189; per-protocol balloon-guide. Lapergue JAMA 2017 Methods p.444-445.' },
@@ -3945,8 +3947,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Age 18 years or older',
       'Acute ischemic stroke with anterior circulation large vessel occlusion (ICA, M1, or M2)',
       'Groin puncture initiable within 6 hours of symptom onset',
-      'NIHSS 6 or greater',
-      'Pre-stroke mRS 0 or 1',
+      'No protocol NIHSS threshold; enrollment required an anterior circulation occlusion judged treatable by thrombectomy',
+      'Pre-stroke mRS 3 or less (pre-event mRS greater than 3 was an exclusion)',
     ],
     exclusionCriteria: [
       'Posterior circulation occlusion',
@@ -3966,22 +3968,22 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What about clinical outcomes?',
-        answer: 'mRS 0-2 at 90 days was 45.3% (aspiration) vs 50.3% (stent retriever); P = 0.19. sICH was identical at 8.8% in both arms. Mortality was 25.0% vs 21.9% (P = 0.49). No statistically significant difference in any clinical endpoint.',
+        answer: 'mRS 0-2 at 90 days was 45.3% (82/181, aspiration) vs 50.0% (91/182, stent retriever); OR 0.83 (95% CI 0.54 to 1.26), P = 0.38. Symptomatic intracranial hemorrhage at 24 hours was 5.3% (10/188) with aspiration vs 6.5% (12/188) with stent retriever. All-cause mortality at 3 months was 19.3% (35/181) vs 19.2% (35/182). No statistically significant difference in any clinical endpoint.',
       },
       {
         question: 'Why does the rescue rate matter?',
-        answer: 'Rescue stent retriever was used in 25.2% of patients in the aspiration arm. The 85.4% reperfusion figure includes patients who needed crossover. Operator readiness to switch techniques is part of how this equivalent result was achieved.',
+        answer: 'Rescue treatment after the first-line strategy was used in 32.8% (63/192) of the aspiration arm and 23.8% (45/189) of the stent-retriever arm (OR 1.57, 95% CI 0.99 to 2.47, P = 0.05). The 85.4% reperfusion figure includes patients who needed crossover. Operator readiness to switch techniques is part of how this equivalent result was achieved.',
       },
     ],
     /* claimId: aster-null-difference | source: Lapergue JAMA 2017 */
     howToInterpret: {
-      proves: 'Contact aspiration as first-line technique produced similar end-of-procedure revascularization rates to stent retriever first-line in French comprehensive stroke centers. Clinical outcomes including mRS 0-2 (45.3% vs 50.3%) were not significantly different between arms.',
-      doesNotProve: 'The primary endpoint was procedural (mTICI 2b-3), not clinical. The trial was not powered to detect modest clinical differences. The numerically lower mRS 0-2 rate with aspiration (45.3% vs 50.3%) is not statistically significant but is not excluded by the data. The trial does not address combined techniques or distal occlusions.',
-      cautions: 'Rescue stent retriever was used in 25.2% of the aspiration arm; the headline reperfusion figure depends on this crossover. Procedural endpoints do not always translate to clinical outcomes. ASTER chose mTICI as primary, which limits clinical inference. Single-country (French) cohort enrolled 2015 to 2016.',
+      proves: 'Contact aspiration as first-line technique produced similar end-of-procedure revascularization rates to stent retriever first-line in French comprehensive stroke centers. Clinical outcomes including mRS 0-2 (45.3% vs 50.0%, P = 0.38) were not significantly different between arms.',
+      doesNotProve: 'The primary endpoint was procedural (mTICI 2b-3), not clinical. The trial was not powered to detect modest clinical differences. The numerically lower mRS 0-2 rate with aspiration (45.3% vs 50.0%) is not statistically significant but is not excluded by the data. The trial does not address combined techniques or distal occlusions.',
+      cautions: 'Rescue treatment was used in 32.8% of the aspiration arm versus 23.8% of the stent-retriever arm; the headline reperfusion figure depends on this crossover. Procedural endpoints do not always translate to clinical outcomes. ASTER chose mTICI as primary, which limits clinical inference. Single-country (French) cohort enrolled 2015 to 2016.',
     },
     /* claimId: aster-bedside | source: Lapergue JAMA 2017 */
-    bedsidePearl: 'ASTER showed no significant difference between aspiration-first and stent-retriever-first for revascularization or 90-day outcomes, but rescue device use was 25.2% in the aspiration arm. Choice of first-line technique is operator-dependent; readiness to switch techniques is part of getting equivalent outcomes.',
-    bottomLineSummary: 'No significant difference between contact-aspiration first-line and stent-retriever first-line for end-of-procedure revascularization (85.4% vs 83.1%) or 90-day mRS 0-2 (45.3% vs 50.3%). Rescue stent retriever was used in 25.2% of the aspiration arm. Supports operator choice with readiness to switch.',
+    bedsidePearl: 'ASTER showed no significant difference between aspiration-first and stent-retriever-first for revascularization or 90-day outcomes, but rescue treatment was used in 32.8% of the aspiration arm versus 23.8% of the stent-retriever arm. Choice of first-line technique is operator-dependent; readiness to switch techniques is part of getting equivalent outcomes.',
+    bottomLineSummary: 'No significant difference between contact-aspiration first-line and stent-retriever first-line for end-of-procedure revascularization (85.4% vs 83.1%) or 90-day mRS 0-2 (45.3% vs 50.0%). Rescue treatment was used in 32.8% of the aspiration arm versus 23.8% of the stent-retriever arm. Supports operator choice with readiness to switch.',
     legend: {
       finding: 'No significant difference between aspiration-first and stent-retriever-first reperfusion.',
       bottomLineTag: 'NS',
@@ -4073,15 +4075,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Age 18 years or older',
       'Acute ischemic stroke with anterior circulation large vessel occlusion (ICA, M1, or M2)',
       'Groin puncture initiable within 8 hours of symptom onset',
-      'NIHSS 6 or greater',
-      'Pre-stroke mRS 0 or 1',
+      'No minimum NIHSS score was required',
+      'Prestroke mRS 3 or less (mRS greater than 3 was an exclusion)',
     ],
     exclusionCriteria: [
       'Posterior circulation occlusion',
       'Pre-existing functional disability',
       'Contraindication to anesthesia or contrast',
       'Tandem cervical lesion requiring stenting',
-      'Life expectancy under 6 months',
+      'Severe or fatal comorbidity likely to prevent improvement, follow-up, or benefit from the procedure',
     ],
     fullEligibility: { source: 'clinicaltrials.gov', sourceUrl: 'https://clinicaltrials.gov/study/NCT03290885', sourceLabel: 'ClinicalTrials.gov NCT03290885', retrieved: '2026-06-08',
       inclusion: [ { items: ['Age 18 and older (i.e., candidates must have had their 18th birthday)','Groin puncture carried out within 8 hours of first symptoms','Neuroimaging demonstrates large vessel proximal occlusion (distal ICA through MCA bifurcation, M1 or M2)','Consenting requirements met according to French laws','With or without intravenous thrombolysis'] } ],
@@ -4094,22 +4096,22 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What about clinical outcomes?',
-        answer: 'mRS 0-2 at 90 days was 48.5% (combined) vs 49.5% (stent retriever alone). Mortality was 21.7% vs 19.7% (P = 0.58). sICH was 6.9% vs 5.4%. No clinical endpoint differed significantly.',
+        answer: 'mRS 0-2 at 90 days was 38.0% (73 of 192, combined) vs 41.9% (80 of 191, stent retriever alone). All-cause mortality at 90 days was 26% (50 of 195) vs 25% (50 of 197). Symptomatic intracranial hemorrhage at 24 hours was 7% (13 of 195) vs 8% (16 of 197). No clinical endpoint differed significantly.',
       },
       {
         question: 'Why does eTICI 2c-3 matter?',
-        answer: 'eTICI 2c-3 represents near-complete reperfusion, which correlates more tightly with good clinical outcome than mTICI 2b. ASTER2 hypothesized that combining techniques would improve this endpoint. The 6.6 pp numerical advantage was not statistically significant, and combined technique required longer procedure time.',
+        answer: 'eTICI 2c-3 represents near-complete reperfusion, which correlates more tightly with good clinical outcome than mTICI 2b. ASTER2 hypothesized that combining techniques would improve this endpoint. The 6.6 pp numerical advantage was not statistically significant, and procedure time did not differ between the techniques (median puncture to reperfusion 42 vs 44 minutes).',
       },
     ],
     /* claimId: aster2-null-difference | source: Lapergue JAMA 2021 */
     howToInterpret: {
-      proves: 'Combining contact aspiration with stent retriever (BADDASS technique) as first-pass technique did not significantly improve near-total reperfusion (eTICI 2c-3) compared to stent retriever alone in French comprehensive stroke centers. Clinical outcomes including mRS 0-2 (48.5% vs 49.5%) were not significantly different.',
+      proves: 'Combining contact aspiration with stent retriever (BADDASS technique) as first-pass technique did not significantly improve near-total reperfusion (eTICI 2c-3) compared to stent retriever alone in French comprehensive stroke centers. Clinical outcomes including mRS 0-2 (38.0% vs 41.9%) were not significantly different.',
       doesNotProve: 'The trial does not exclude a small benefit from combined technique that this sample size could not detect. It does not address the role of combined technique as rescue after stent-retriever failure. It does not address newer aspiration catheters or balloon-guide configurations.',
-      cautions: 'Combined technique required longer procedure time and higher device burden. The 6.6 pp numerical advantage in eTICI 2c-3 (64.5% vs 57.9%) was not statistically significant but is not excluded. Procedural endpoint was primary; clinical inference is secondary. Single-country (French) cohort enrolled 2017 to 2018.',
+      cautions: 'Combined technique used a higher device burden, although median puncture to reperfusion time did not differ (42 vs 44 minutes). The 6.6 pp numerical advantage in eTICI 2c-3 (64.5% vs 57.9%) was not statistically significant but is not excluded. Procedural endpoint was primary; clinical inference is secondary. Single-country (French) cohort enrolled 2017 to 2018.',
     },
     /* claimId: aster2-bedside | source: Lapergue JAMA 2021 */
-    bedsidePearl: 'ASTER2 did not show that routine first-pass combined aspiration plus stent retriever improves reperfusion or clinical outcome over stent retriever alone. The 6.6 pp numerical advantage in eTICI 2c-3 came at the cost of longer procedure time and added device burden. Reserve combined technique for rescue or operator-specific indications.',
-    bottomLineSummary: 'Routine first-pass combined aspiration plus stent retriever (BADDASS) did not significantly improve near-total reperfusion (64.5% vs 57.9%) or 90-day mRS 0-2 (48.5% vs 49.5%) compared to stent retriever alone. Combined technique took longer. Does not support routine first-pass combination; reserve for rescue.',
+    bedsidePearl: 'ASTER2 did not show that routine first-pass combined aspiration plus stent retriever improves reperfusion or clinical outcome over stent retriever alone. The 6.6 pp numerical advantage in eTICI 2c-3 came with added device burden and no shortening of the procedure (median puncture to reperfusion 42 vs 44 minutes). Reserve combined technique for rescue or operator-specific indications.',
+    bottomLineSummary: 'Routine first-pass combined aspiration plus stent retriever (BADDASS) did not significantly improve near-total reperfusion (64.5% vs 57.9%) or 90-day mRS 0-2 (38.0% vs 41.9%) compared to stent retriever alone. Procedure time did not differ. Does not support routine first-pass combination; reserve for rescue.',
     legend: {
       finding: 'Routine combined aspiration + stent retriever did not improve near-total reperfusion.',
       bottomLineTag: 'NS',
@@ -4125,7 +4127,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     primaryResult: 'met',
     applicability: {
       populationExclusions: [
-        'Small trial (N=121); stopped early due to alteplase supply shortage. Underpowered, effect size likely inflated',
+        'Small trial (N=121); stopped early when the placebo supply expired and COVID-era enrollment slowed. Underpowered, effect size likely inflated',
         'Requires confirmation; CHOICE-2 replication trial in progress',
         'Adjunct IA alteplase after successful EVT only (eTICI ≥2b). Not a pre-EVT or bridging intervention',
       ],
@@ -4150,7 +4152,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       absoluteReduction: {
         value: '+18.4 pp (95% CI 0.3 to 36.4)',
         label: 'Adjusted absolute difference in mRS 0–1 at 90 days',
-        info: 'Phase 2b CHOICE (Renu A et al., JAMA 2022;327:826-835): intra-arterial alteplase after successful EVT (eTICI 2b50–3) increased mRS 0–1 at 90 days. Adjusted absolute difference 18.4 percentage points (95% CI 0.3 to 36.4, P=0.047). The CI lower bound is close to zero. Trial was stopped early at planned interim due to COVID-19 enrollment challenges, and the question is being re-tested in larger trials (POST-UK, CHOICE-2).',
+        info: 'Phase 2b CHOICE (Renu A et al., JAMA 2022;327:826-835): intra-arterial alteplase after successful EVT (eTICI 2b50–3) increased mRS 0–1 at 90 days. Adjusted absolute difference 18.4 percentage points (95% CI 0.3 to 36.4, P=0.047). The CI lower bound is close to zero. The steering committee stopped the trial early on the placebo expiry date, without any interim analysis, after COVID-19 slowed enrollment; the question is being re-tested in larger trials (POST-UK, CHOICE-2).',
         highlight: true,
       },
     },
@@ -4196,6 +4198,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: '',
     source: 'Renu et al. (JAMA 2022)',
+    doi: '10.1001/jama.2022.1645',
     clinicalTrialsId: 'NCT03876119',
     listCategory: 'thrombectomy',
     listDescription: 'Post-thrombectomy adjunct IA alteplase trial suggesting better excellent outcomes.',
@@ -4235,7 +4238,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     howToInterpret: {
       /* claimId: choice-primary-result | source: Renu JAMA 2022 */
-      proves: 'In a Phase 2b trial of 121 patients with large vessel occlusion stroke who achieved eTICI 2b50 or higher reperfusion from thrombectomy, adjunct intra-arterial alteplase (0.225 mg/kg, max 22.5 mg) immediately after the procedure increased the rate of excellent functional outcome (mRS 0 to 1) at 90 days from 40.4% to 59.0% (adjusted risk difference 18.4%, 95% CI 0.3% to 36.4%, P=0.047), with no excess symptomatic intracranial hemorrhage at 24 hours.',
+      proves: 'In a Phase 2b trial that randomized 121 patients with large vessel occlusion stroke who achieved eTICI 2b50 or higher reperfusion from thrombectomy, analysed as the 113 patients treated as randomized (61 alteplase, 52 placebo), adjunct intra-arterial alteplase (0.225 mg/kg, max 22.5 mg) immediately after the procedure increased the rate of excellent functional outcome (mRS 0 to 1) at 90 days from 40.4% to 59.0% (adjusted risk difference 18.4%, 95% CI 0.3% to 36.4%, P=0.047), with no excess symptomatic intracranial hemorrhage at 24 hours.',
       doesNotProve: 'Because the primary endpoint was mRS 0 to 1 rather than mRS 0 to 2, CHOICE does not establish a benefit for the standard functional independence threshold used in most thrombectomy trials. It does not establish a population-wide standard of care; the 95% CI lower bound of 0.3% means the magnitude of benefit is highly uncertain. It does not address adjunct intra-arterial therapy after incomplete reperfusion (eTICI less than 2b50).',
       cautions: 'CHOICE is Phase 2b evidence (N=121), stopped early at 60% of planned enrollment during the pandemic, with a confidence interval that nearly crosses zero. Patients on oral anticoagulants were excluded, and only about 7% of thrombectomy patients in participating centers were eligible, limiting generalizability. Replication in a larger Phase 3 trial is required before routine use of adjunct intra-arterial alteplase after successful thrombectomy.',
     },
@@ -4274,7 +4277,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         label: 'at 90 Days'
       },
       pValue: {
-        value: '0.51',
+        value: '0.50',
         label: 'Not Significant'
       },
       effectSize: {
@@ -4337,18 +4340,18 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'How is the test judged here?',
-        answer: 'The trial was a superiority design. Adjusted common OR was 1.08 (95% CI 0.86-1.36, P = 0.50), which crosses 1.0 and is not statistically significant. mRS 0-1 was 36.3% (tirofiban) vs 32.4% (placebo) and mRS 0-2 was approximately 53-54% in both arms.',
+        answer: 'The trial was a superiority design. Adjusted common OR was 1.08 (95% CI 0.86-1.36, P = 0.50), which crosses 1.0 and is not statistically significant. mRS 0-1 was 36.3% (tirofiban) vs 32.4% (placebo) and mRS 0-2 was 49.2% (228 of 463) vs 45.2% (219 of 485).',
       },
       {
         question: 'What about safety and secondary outcomes?',
-        answer: 'Symptomatic ICH was numerically higher with tirofiban but the difference was not statistically significant (9.7% vs 6.4%, difference 3.3%, 95% CI −0.2% to +6.8%). 90-day mortality was similar (18.3% vs 17.3%). Successful reperfusion (TICI 2b-3) was approximately 83% in both arms. The combination of null efficacy and increased sICH represents a net harm signal.',
+        answer: 'Symptomatic ICH was numerically higher with tirofiban but the difference was not statistically significant (9.7% vs 6.4%, difference 3.3%, 95% CI −0.2% to +6.8%). 90-day mortality was similar (18.1% vs 16.9%). Substantial reperfusion (eTICI 2b50-3) at final angiogram was 92.2% vs 90.5%. The combination of null efficacy and increased sICH represents a net harm signal.',
       },
     ],
     /* claimId: rescue-bt-ordinal | source: RESCUE BT Investigators JAMA 2022 */
     howToInterpret: {
       proves: 'In Chinese patients with acute LVO stroke treated with thrombectomy within 24 hours, peri-procedural IV tirofiban did not improve 90-day functional outcome compared with placebo (adjusted common OR 1.08, 95% CI 0.86-1.36, P = 0.50). Symptomatic ICH was numerically higher with tirofiban, but the confidence interval crosses zero, so the trial did not establish a difference (9.7% vs 6.4%, difference 3.3%, 95% CI −0.2% to +6.8%). Null efficacy alongside an unfavourable but unproven bleeding signal argues against routine peri-EVT tirofiban use.',
       doesNotProve: 'The trial does not exclude potential benefit in narrowly defined subgroups (for example, intracranial atherosclerotic disease with rescue stenting), which were not the primary question. It does not address tirofiban given for other indications such as carotid stenting or post-procedural reocclusion management.',
-      cautions: 'Single-country (China) cohort, which limits generalizability. The enrolled population was anterior-circulation LVO only (intracranial ICA, M1, or M2); posterior-circulation occlusion was excluded, so these results do not speak to basilar or other posterior-circulation thrombectomy. The sICH signal (difference 3.3%, 95% CI −0.2% to +6.8%) is the most actionable finding from a null efficacy trial, even though it did not reach significance: when adding an antiplatelet agent does not help and may increase bleeding, the default position is not to add it. Reperfusion rates were similar (~83%), so the harm is not offset by mechanical benefit.',
+      cautions: 'Single-country (China) cohort, which limits generalizability. The enrolled population was anterior-circulation LVO only (intracranial ICA, M1, or M2); posterior-circulation occlusion was excluded, so these results do not speak to basilar or other posterior-circulation thrombectomy. The sICH signal (difference 3.3%, 95% CI −0.2% to +6.8%) is the most actionable finding from a null efficacy trial, even though it did not reach significance: when adding an antiplatelet agent does not help and may increase bleeding, the default position is not to add it. Reperfusion rates were similar and high in both arms (eTICI 2b50-3 92.2% vs 90.5%), so the harm is not offset by mechanical benefit.',
     },
     /* claimId: rescue-bt-bedside | source: RESCUE BT Investigators JAMA 2022 */
     bedsidePearl: 'AHA/ASA 2026 §4.7.4 recommendation 9 is COR 3: No Benefit, LOE B-R, stating that preoperative administration of tirofiban before EVT is not useful to improve 90-day functional outcome. Do not give peri-procedural IV tirofiban as routine adjunct to thrombectomy. RESCUE BT showed no functional benefit and a numerically higher rate of symptomatic ICH that did not reach significance (9.7% vs 6.4%, difference 3.3%, 95% CI −0.2% to +6.8%). Reserve GP IIb/IIIa inhibitors for selected indications such as rescue stenting in intracranial atherosclerosis, not for general LVO thrombectomy.',
@@ -4449,7 +4452,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does OR 1.01 represent?',
-        answer: 'OR 1.01 is the adjusted odds ratio for the PRIMARY outcome: mRS ordinal shift at 90 days in 2196 patients. OR 1.01 (95% CI 0.87-1.17, P=0.87) is clinically and statistically indistinguishable from no difference. A pre-specified secondary outcome (any ICH at 24 hours) was reduced (14.8% vs 18.7%, OR 0.75, P=0.014), labeled separately because it is secondary.',
+        answer: 'OR 1.01 is the unadjusted odds ratio for the PRIMARY outcome: mRS ordinal shift at 90 days in 2196 patients. OR 1.01 (95% CI 0.87-1.17, P=0.87) is clinically and statistically indistinguishable from no difference. A pre-specified secondary outcome (any ICH at 24 hours) was reduced (14.8% vs 18.7%, OR 0.75, P=0.014), labeled separately because it is secondary.',
       },
       {
         question: 'Why is the secondary ICH finding shown separately and not as the main result?',
@@ -4462,7 +4465,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     /* claimId: enchanted-interpret | source: Anderson et al. Lancet 2019 */
     howToInterpret: {
-      proves: 'In 2196 patients with acute ischemic stroke eligible for IV alteplase, intensive BP lowering (target SBP 130-140 mm Hg for 72 hours) did not improve the primary outcome of mRS ordinal shift at 90 days compared with guideline management (SBP below 180 mm Hg): adjusted OR 1.01, 95% CI 0.87-1.17, P=0.87. A pre-specified secondary outcome (any ICH at 24 hours) was reduced: 14.8% vs 18.7%, OR 0.75, P=0.014. This secondary finding did not alter the null primary result.',
+      proves: 'In 2196 patients with acute ischemic stroke eligible for IV alteplase, intensive BP lowering (target SBP 130-140 mm Hg for 72 hours) did not improve the primary outcome of mRS ordinal shift at 90 days compared with guideline management (SBP below 180 mm Hg): unadjusted OR 1.01, 95% CI 0.87-1.17, P=0.87. A pre-specified secondary outcome (any ICH at 24 hours) was reduced: 14.8% vs 18.7%, OR 0.75, P=0.014. This secondary finding did not alter the null primary result.',
       doesNotProve: 'A statistically significant secondary outcome (ICH reduction) does not establish clinical benefit when the primary endpoint is null. ENCHANTED does not prove that intensive BP lowering after alteplase improves functional outcome or reduces clinically important ICH. Reducing all-grade any-ICH, which includes small asymptomatic hemorrhagic transformation, did not shift 90-day disability. This trial does not provide functional evidence to justify adopting stricter post-alteplase BP targets.',
       cautions: 'Open-label trial with blinded endpoint assessment across 110 sites in 15 countries. The secondary ICH reduction was in all-grade any-ICH, not restricted to symptomatic or large hemorrhages. Inference to clinical practice based on the secondary ICH finding requires explicit recognition that the primary function-based endpoint was null. International heterogeneity across 15 countries is substantial.',
     },
@@ -4480,7 +4483,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'SBP below 150 mm Hg at presentation',
       'Contraindication to antihypertensive therapy',
       'Hemorrhagic stroke on baseline imaging',
-      'Pre-stroke mRS 3 or greater',
+      'Pre-stroke mRS 2 or greater (known significant pre-stroke disability)',
     ],
     fullEligibility: {
       source: 'publication',
@@ -4608,7 +4611,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     /* claimId: best-ii-interpret | source: Mistry et al. JAMA 2023 */
     howToInterpret: {
       proves: 'In 120 patients at three US comprehensive stroke centers, no lower post-EVT BP target formally crossed the futility boundary (futility P=0.93). Mean utility-weighted mRS was 0.58 (95% CI 0.46 to 0.71) in the <=180 mm Hg arm, 0.51 (0.38 to 0.63) for <140 mm Hg, and 0.47 (0.35 to 0.60) for <160 mm Hg. With about 40 patients per arm the three intervals overlap and the ordering is not monotonic, so no target separates from another. The predicted probability of success in a future large superiority trial was 14-25% for the lower targets.',
-      doesNotProve: 'BEST-II does not prove that lower BP targets cause harm; the formal futility boundary was not crossed. It also cannot confirm any benefit; the 120-patient phase 2 design lacked statistical power. The trial does not address patients with unsuccessful EVT, posterior circulation LVO, or baseline mRS greater than 2.',
+      doesNotProve: 'BEST-II does not prove that lower BP targets cause harm; the formal futility boundary was not crossed. It also cannot confirm any benefit; the 120-patient phase 2 design lacked statistical power. The trial does not address patients with unsuccessful EVT (mTICI below 2b) or posterior circulation LVO.',
       cautions: 'Open-label phase 2 design with approximately 40 patients per arm. Utility-weighted mRS is not a standard clinical metric in daily practice. OPTIMAL-BP subsequently enrolled 306 patients and showed significant functional harm from SBP <140 mm Hg after successful EVT, providing stronger and more definitive evidence.',
     },
     /* claimId: best-ii-pearl | source: Mistry et al. JAMA 2023 */
@@ -4625,8 +4628,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Unsuccessful EVT (mTICI below 2b)',
       'Severe heart failure (EF below 30%)',
       'LVAD or extracorporeal membrane oxygenation',
-      'Pre-stroke mRS greater than 2',
-      'Unable to maintain assigned BP target',
+      'Pregnancy',
+      'Enrollment in another clinical trial',
     ],
     fullEligibility: {
       source: 'publication',
@@ -4900,9 +4903,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     /* claimId: optimal-bp-interpret | source: Nam et al. JAMA 2023 */
     howToInterpret: {
-      proves: 'STOPPED FOR SAFETY. In 306 patients at 19 South Korean stroke centers, intensive BP management targeting SBP <140 mm Hg after successful EVT caused significantly lower functional independence compared with conventional management targeting SBP 140-180 mm Hg (39.4% vs 54.4%, absolute difference -15.1 percentage points, adjusted OR 0.56, 95% CI 0.33-0.96, P=0.03). Malignant cerebral edema was nearly 8-fold more frequent in the intensive arm (adjusted OR 7.88, 95% CI 1.57-39.39, P=0.01). The DSMB terminated enrollment at 306 of 450 planned patients.',
+      proves: 'STOPPED FOR SAFETY. In 306 patients at 19 South Korean stroke centers, intensive BP management targeting SBP <140 mm Hg after successful EVT caused significantly lower functional independence compared with conventional management targeting SBP 140-180 mm Hg (39.4% vs 54.4%, absolute difference -15.1 percentage points, adjusted OR 0.56, 95% CI 0.33-0.96, P=0.03). Malignant cerebral edema was nearly 8-fold more frequent in the intensive arm (adjusted OR 7.88, 95% CI 1.57-39.39, P=0.01). The DSMB terminated enrollment at 306 of a planned 634 patients (317 per group, adjusted to 668 for predicted dropout), fewer than half the target.',
       doesNotProve: 'The harm is specific to targeting SBP <140 mm Hg; it does not prove that any BP reduction below 180 mm Hg is harmful. Symptomatic ICH rates did not significantly differ between groups, so sICH was not the mechanism of harm. This was a Korean population; the magnitude of harm may differ in other populations.',
-      cautions: 'Open-label design with blinded endpoint assessment. Terminated early at 68% of planned enrollment; early stopping can inflate treatment effect estimates. Single-country Korean cohort at 19 centers. The mechanism by which intensive BP lowering increased malignant edema (possibly reduced collateral perfusion post-reperfusion) is biologically plausible but not definitively established.',
+      cautions: 'Open-label design with blinded endpoint assessment. Terminated early at fewer than half of planned enrollment (306 of a planned 634); early stopping can inflate treatment effect estimates. Single-country Korean cohort at 19 centers. The mechanism by which intensive BP lowering increased malignant edema (possibly reduced collateral perfusion post-reperfusion) is biologically plausible but not definitively established.',
     },
     /* claimId: optimal-bp-pearl | source: Nam et al. JAMA 2023 */
     bedsidePearl: 'OPTIMAL-BP stopped early for harm: SBP <140 mm Hg after successful EVT reduced functional independence by 15 percentage points and increased malignant cerebral edema 8-fold. After successful reperfusion, allow SBP up to 180 mm Hg. Do not target SBP below 140 mm Hg.',
@@ -5022,6 +5025,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     conclusion: '',
     source: 'Sheth et al. (Lancet Neurol 2024)',
     clinicalTrialsId: 'NCT02864953',
+    doi: '10.1016/S1474-4422(24)00425-3',
     specialDesign: 'negative-trial',
     keyMessage: 'CHARM does not support routine intravenous glibenclamide for malignant edema prevention after large hemispheric stroke.',
     archetypeId: 'B' as const,
@@ -5197,7 +5201,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the primary outcome show?',
-        answer: 'The chart shows the proportion achieving functional independence (mRS 0-2) at 90 days. Nerinetide: 61.4%, placebo: 59.2%. The 2.2 percentage point difference was not statistically significant (adjusted RR 1.04, 95% CI 0.96-1.13, P=0.35). The trial was adequately powered and clearly null overall.',
+        answer: 'The chart shows the proportion achieving functional independence (mRS 0-2) at 90 days. Nerinetide: 61.4%, placebo: 59.2%. The 2.2 percentage point difference was not statistically significant (adjusted RR 1.04, 95% CI 0.96-1.14, P=0.35). The trial was adequately powered and clearly null overall.',
       },
       {
         question: 'Why are both bars so similar?',
@@ -5210,9 +5214,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     /* claimId: escape-na1-interpret | source: Hill et al. Lancet 2020 */
     howToInterpret: {
-      proves: 'In 1105 patients with LVO stroke undergoing EVT within 12 hours with favorable imaging, a single IV dose of nerinetide did not improve functional independence (mRS 0-2) at 90 days compared with placebo: 61.4% vs 59.2%, adjusted RR 1.04, 95% CI 0.96-1.13, P=0.35. Mortality and symptomatic ICH rates were similar between groups.',
+      proves: 'In 1105 patients with LVO stroke undergoing EVT within 12 hours with favorable imaging, a single IV dose of nerinetide did not improve functional independence (mRS 0-2) at 90 days compared with placebo: 61.4% vs 59.2%, adjusted RR 1.04, 95% CI 0.96-1.14, P=0.35. Mortality and symptomatic ICH rates were similar between groups.',
       doesNotProve: 'ESCAPE-NA1 does not establish benefit of nerinetide in any subpopulation. The prespecified interaction suggesting differential benefit in alteplase-free patients (59.3% vs 49.8%) is hypothesis-generating only and does not constitute clinical evidence for any practice change. Nerinetide is not approved for clinical use. No clinical decision, including alteplase withholding, should be based on a subgroup interaction in an overall neutral trial.',
-      cautions: 'The alteplase-free subgroup (approximately 30% of enrolled patients) showed a numerically large difference (59.3% vs 49.8%), and the interaction was prespecified. However, this requires independent replication before clinical translation. Nerinetide is not approved; the ESCAPE-NEXT trial was designed to address this interaction in the alteplase-free population. Any inference of clinical actionability from this subgroup is premature.',
+      cautions: 'The alteplase-free subgroup (446 of 1105 patients, approximately 40% of those enrolled) showed a numerically large difference (59.3% vs 49.8%), and the interaction was prespecified. However, this requires independent replication before clinical translation. Nerinetide is not approved; the ESCAPE-NEXT trial was designed to address this interaction in the alteplase-free population. Any inference of clinical actionability from this subgroup is premature.',
     },
     /* claimId: escape-na1-pearl | source: Hill et al. Lancet 2020 */
     bedsidePearl: 'ESCAPE-NA1 was negative overall for nerinetide in EVT patients. The alteplase-free subgroup signal is hypothesis-generating only; do not alter thrombolysis decisions or advocate for nerinetide use based on this finding. Neuroprotection after EVT remains unproven.',
@@ -5222,11 +5226,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Acute ischemic stroke with anterior-circulation LVO (intracranial ICA or M1)',
       'EVT eligible and planned within 12 hours of last known well',
       'ASPECTS 5 to 10 on non-contrast CT and moderate-to-good collaterals (50% or more MCA pial filling) on CT angiography',
-      'Pre-stroke mRS 0-1',
+      'Pre-stroke modified Barthel Index above 90 (functioning independently before the stroke)',
     ],
     exclusionCriteria: [
       'ASPECTS below 5 on baseline CT',
-      'Pre-stroke mRS 2 or greater',
+      'Pre-stroke modified Barthel Index of 90 or below',
       'Contraindication to contrast or study drug',
       'Large intracranial hemorrhage on baseline imaging',
       'Pregnant or breastfeeding',
@@ -5280,7 +5284,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         frequency: 'Single dose, administered as soon as possible after randomisation',
         duration: 'Infused over 10 min (a difference of plus or minus 1 min allowed)',
         coInterventions: 'Rapid endovascular thrombectomy using available devices in all patients; intravenous alteplase given before or during EVT according to usual care and national or regional guidelines, at the discretion of the treating team (alteplase was not a requirement)',
-        note: 'Sites were asked to ensure the study drug was administered before arterial access closure. The trial was negative overall: functional independence (mRS 0 to 2) at 90 days was 61.4% with nerinetide versus 59.2% with placebo (adjusted risk ratio 1.04, 95% CI 0.96 to 1.13, p=0.35). A prespecified interaction suggested differential effect in patients not receiving alteplase, which is hypothesis-generating only.',
+        note: 'Sites were asked to ensure the study drug was administered before arterial access closure. The trial was negative overall: functional independence (mRS 0 to 2) at 90 days was 61.4% with nerinetide versus 59.2% with placebo (adjusted risk ratio 1.04, 95% CI 0.96 to 1.14, p=0.35). A prespecified interaction suggested differential effect in patients not receiving alteplase, which is hypothesis-generating only.',
       },
       {
         arm: 'Saline placebo plus endovascular thrombectomy',
@@ -5297,7 +5301,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     legend: {
       finding: 'Nerinetide during EVT did not improve 90-day independence overall.',
       bottomLineTag: 'NS',
-      keyStat: 'aRR 1.04 (0.96–1.13)',
+      keyStat: 'aRR 1.04 (0.96–1.14)',
     },
   },
   'decimal-trial': {
@@ -5413,7 +5417,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     pearls: [
       'Small trial stopped early at 38 patients; underpowered for its primary functional endpoint',
       'Primary 6-month mRS less than or equal to 3 was not statistically significant (P=0.18)',
-      'Mortality was reduced from 78% to 25%, an absolute reduction of 52.8 percentage points (P=0.001)',
+      'Mortality was reduced from 78% to 25%, an absolute reduction of 52.8 percentage points (P<0.0001)',
       'DECIMAL is most influential through its contribution to pooled European craniectomy analyses',
     ],
     howToReadChart: [
@@ -5432,9 +5436,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     /* claimId: decimal-interpret | source: Vahedi et al. Stroke 2007 */
     howToInterpret: {
-      proves: 'In 38 patients (20 surgery, 18 medical therapy), early decompressive hemicraniectomy reduced 6-month mortality from 78% to 25%, an absolute reduction of 52.8 percentage points (P=0.001). This mortality benefit is the primary established finding from DECIMAL. The trial was stopped after 38 patients had been randomized, against an anticipated median sample size of 30 per group (60 total), on the recommendation of the data safety monitoring committee: slow recruitment plus the decision to organize a pooled analysis with DESTINY and HAMLET. No stopping boundary was crossed for the primary endpoint.',
+      proves: 'In 38 patients (20 surgery, 18 medical therapy), early decompressive hemicraniectomy reduced 6-month mortality from 78% to 25%, an absolute reduction of 52.8 percentage points (P<0.0001). This mortality benefit is the primary established finding from DECIMAL. The trial was stopped after 38 patients had been randomized, against an anticipated median sample size of 30 per group (60 total), on the recommendation of the data safety monitoring committee: slow recruitment plus the decision to organize a pooled analysis with DESTINY and HAMLET. No stopping boundary was crossed for the primary endpoint.',
       doesNotProve: 'The primary endpoint (mRS less than or equal to 3 at 6 months) was not statistically significant in this sample (25% surgery vs 5.6% medical, P=0.18). DECIMAL does not prove that surgery restores functional independence. Survivors in the surgical arm were predominantly mRS 4 or mRS 5. The trial cannot establish quality of life or long-term functional benefit.',
-      cautions: 'DECIMAL enrolled only 38 patients against an anticipated median sample size of 60 (30 per group), and enrollment stopped before completion rather than at a primary-endpoint stopping boundary; the small sample inflates observed effect sizes. All patients were aged 18-55 years, limiting generalizability to older patients. Surgery was performed within 30 hours of symptom onset per protocol (observed mean 20.5 h, range 7 to 43 h); results may not apply to delayed intervention. Pooled analysis of DECIMAL, DESTINY, and HAMLET within 48 hours of stroke onset (HAMLET 2009, Figure 3) showed mortality ARR 49.9 percentage points (95% CI 33.9-65.9) and mRS greater than 4 ARR 41.9 percentage points (95% CI 25.2-58.6) favoring surgery.',
+      cautions: 'DECIMAL enrolled only 38 patients against an anticipated median sample size of 60 (30 per group), and enrollment stopped before completion rather than at a primary-endpoint stopping boundary; the small sample inflates observed effect sizes. All patients were aged 18-55 years, limiting generalizability to older patients. Surgery was performed within 30 hours of symptom onset per protocol (observed mean 20.5 h, range 7 to 43 h); results may not apply to delayed intervention. Pooled analysis of DECIMAL, DESTINY, and HAMLET within 48 hours of stroke onset (HAMLET 2009, Figure 3) showed mortality ARR 49.9 percentage points (95% CI 33.9-65.9) and mRS greater than 4 ARR 41.9 percentage points (95% CI 25.2-58.6) favoring surgery. The pooled primary functional outcome (poor outcome, mRS 4-6, at 1 year) was ARR 16 percentage points (95% CI -0.1 to 33), an interval that touches zero.',
     },
     /* claimId: decimal-pearl | source: Vahedi et al. Stroke 2007 */
     bedsidePearl: 'DECIMAL shows hemicraniectomy prevents death in malignant MCA infarction for patients under 56 years. Before consent, tell the family explicitly: most survivors will have severe disability (mRS 4-5) and will not return to independent function. Surgery saves life, not function. The pooled analysis (DECIMAL, DESTINY, HAMLET within 48 hours) provides the most reliable estimate of benefit and risk. Use it for family counseling.',
@@ -5486,6 +5490,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     trialResult: 'NEUTRAL',
     specialDesign: 'neutral-trial',
     archetypeId: 'A' as const,
+    doi: '10.1161/STROKEAHA.107.485649',
     listCategory: 'acute',
     efficacyResults: {
       treatment: {
@@ -5588,7 +5593,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToInterpret: {
       proves: 'In 32 patients (17 surgery, 15 conservative therapy), early hemicraniectomy reduced 30-day mortality from 53% to 12%, an absolute reduction of 41 percentage points (P=0.02): 15 of 17 (88%) surgical patients versus 7 of 15 (47%) conservative patients survived to 30 days. This survival benefit is the primary established finding from DESTINY.',
       doesNotProve: 'The primary endpoint (mRS 0-3 at 6 months) was not statistically significant in this 32-patient sample (47% surgery vs 27% conservative, P=0.23). DESTINY does not prove that surgery restores functional independence. The mRS distribution shift observed was numerical only. The trial cannot establish quality of life benefit.',
-      cautions: 'DESTINY enrolled only 32 patients; effect sizes should be interpreted with caution due to wide confidence intervals expected from small samples. All patients were aged 18-60 years, limiting generalizability to patients over 60. The trial was stopped early when pooled European analysis data became available. Pooled analysis of DECIMAL, DESTINY, and HAMLET within 48 hours of stroke onset (HAMLET 2009, Figure 3) showed mortality ARR 49.9 percentage points (95% CI 33.9-65.9) and mRS greater than 4 ARR 41.9 percentage points (95% CI 25.2-58.6) favoring surgery.',
+      cautions: 'DESTINY enrolled only 32 patients; effect sizes should be interpreted with caution due to wide confidence intervals expected from small samples. All patients were aged 18-60 years, limiting generalizability to patients over 60. The trial was stopped early when pooled European analysis data became available. Pooled analysis of DECIMAL, DESTINY, and HAMLET within 48 hours of stroke onset (HAMLET 2009, Figure 3) showed mortality ARR 49.9 percentage points (95% CI 33.9-65.9) and mRS greater than 4 ARR 41.9 percentage points (95% CI 25.2-58.6) favoring surgery. The pooled primary functional outcome (poor outcome, mRS 4-6, at 1 year) was ARR 16 percentage points (95% CI -0.1 to 33), an interval that touches zero.',
     },
     /* claimId: destiny-pearl | source: Juttler et al. Stroke 2007 */
     bedsidePearl: 'DESTINY confirms the pattern from DECIMAL: hemicraniectomy prevents death in malignant MCA infarction in patients under 61 years, but does not reliably restore functional independence. For family counseling, lead with the survival benefit, then explicitly state that most survivors will have severe to moderate disability and will not return to independent living. Use the pooled analysis (DECIMAL, DESTINY, HAMLET within 48 hours) for the most precise risk-benefit estimate.',
@@ -5722,7 +5727,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     pearls: [
       'Primary outcome mRS 0-3 at 1 year was neutral overall; patients randomized after 48 hours diluted the treatment effect',
-      'Case fatality was reduced by an absolute 38 percentage points (P=0.002)',
+      'Case fatality was reduced by an absolute 38 percentage points (95% CI 15 to 60)',
       'Functional benefit (and strongest mortality benefit) was concentrated in patients operated within 48 hours',
       'The trial showed that delayed surgery (48-96 hours) may save lives without clearly improving functional independence',
     ],
@@ -5742,13 +5747,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     /* claimId: hamlet-interpret | source: Hofmeijer et al. Lancet Neurol 2009 */
     howToInterpret: {
-      proves: 'In 64 patients (32 surgical, 32 medical), decompressive surgery reduced 1-year case fatality from 59% to 22%, an absolute reduction of 38 percentage points (P=0.002). This mortality benefit was consistent across the enrollment window up to 96 hours. HAMLET established that surgery saves lives even beyond the 30-48 hour window studied by DECIMAL and DESTINY.',
+      proves: 'In 64 patients (32 surgical, 32 medical), decompressive surgery reduced 1-year case fatality from 59% to 22%, an absolute reduction of 38 percentage points (95% CI 15 to 60). This mortality benefit was consistent across the enrollment window up to 96 hours. HAMLET established that surgery saves lives even beyond the 30-48 hour window studied by DECIMAL and DESTINY.',
       doesNotProve: 'The primary endpoint (mRS 0-3 at 1 year) was not statistically significant overall, due to inclusion of patients randomized up to 96 hours after onset, in whom functional benefit was not demonstrated. HAMLET does not prove that surgery improves functional independence when performed beyond 48 hours. The overall neutral primary endpoint means this trial alone cannot support a broad functional benefit claim.',
-      cautions: 'HAMLET enrolled patients up to 96 hours after onset; functional benefit was concentrated in patients treated within 48 hours and was not demonstrated for patients treated between 48 and 96 hours. Patients were aged 18-60 years. The 64-patient sample is small. Pooled analysis of DECIMAL, DESTINY, and HAMLET within 48 hours of stroke onset (HAMLET 2009, Figure 3) showed mortality ARR 49.9 percentage points (95% CI 33.9-65.9) and mRS greater than 4 ARR 41.9 percentage points (95% CI 25.2-58.6) favoring surgery.',
+      cautions: 'HAMLET enrolled patients up to 96 hours after onset; functional benefit was concentrated in patients treated within 48 hours and was not demonstrated for patients treated between 48 and 96 hours. Patients were aged 18-60 years. The 64-patient sample is small. Pooled analysis of DECIMAL, DESTINY, and HAMLET within 48 hours of stroke onset (HAMLET 2009, Figure 3) showed mortality ARR 49.9 percentage points (95% CI 33.9-65.9) and mRS greater than 4 ARR 41.9 percentage points (95% CI 25.2-58.6) favoring surgery. The pooled primary functional outcome (poor outcome, mRS 4-6, at 1 year) was ARR 16 percentage points (95% CI -0.1 to 33), an interval that touches zero.',
     },
     /* claimId: hamlet-pearl | source: Hofmeijer et al. Lancet Neurol 2009 */
     bedsidePearl: "HAMLET's most important teaching is the 48-hour window. Mortality benefit from hemicraniectomy is seen across the enrollment window (up to 96 hours), but functional benefit (and the strongest mortality benefit) is concentrated in patients operated within 48 hours of onset. For patients presenting after 48 hours and before 96 hours, surgery may still reduce death but does not reliably improve functional independence. Tell families explicitly: operating after 48 hours means accepting a higher chance the patient survives with severe disability. The pooled analysis (DECIMAL, DESTINY, HAMLET within 48 hours) is the definitive evidence base for counseling when operating within the 48-hour window.",
-    bottomLineSummary: 'HAMLET demonstrates mortality benefit from decompressive surgery up to 96 hours after malignant MCA infarction onset (38 percentage point case fatality reduction, P=0.002). The primary functional endpoint was neutral overall. Functional benefit is restricted to the within-48-hour window per pooled analysis.',
+    bottomLineSummary: 'HAMLET demonstrates mortality benefit from decompressive surgery up to 96 hours after malignant MCA infarction onset (38 percentage point case fatality reduction, 95% CI 15 to 60). The primary functional endpoint was neutral overall. Functional benefit is restricted to the within-48-hour window per pooled analysis.',
     conclusion: '',
     source: 'Hofmeijer et al. (Lancet Neurol 2009)',
     keyMessage: 'For malignant hemispheric infarction, timing is critical: hemicraniectomy within 48 hours offers both mortality and functional benefit. After 48 hours, surgery may save life but functional benefit is not established.',
@@ -5777,7 +5782,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
           journal: 'Stroke (Vahedi et al.)',
           n: 38,
           designNotes: 'Early decompressive hemicraniectomy plus medical therapy vs medical therapy alone in patients aged 18-55; stopped early after 38 patients (anticipated median sample size 60) because of slow recruitment and the decision to pool with DESTINY and HAMLET.',
-          keyResult: '6-month mortality reduced from 78% to 25% (absolute reduction 52.8 points, P=0.001); the primary endpoint mRS 3 or lower at 6 months was not significant (25% vs 5.6%, P=0.18).',
+          keyResult: '6-month mortality reduced from 78% to 25% (absolute reduction 52.8 points, P<0.0001); the primary endpoint mRS 3 or lower at 6 months was not significant (25% vs 5.6%, P=0.18).',
           whatWasMissing: 'Enrolled only patients up to age 55 and was too small to establish a functional benefit, so the over-60 question stayed open.',
         },
         {
@@ -5797,7 +5802,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
           journal: 'Lancet Neurology (Hofmeijer et al.)',
           n: 64,
           designNotes: 'Surgical decompression vs best medical treatment in patients aged 18-60, randomized up to 96 hours after onset.',
-          keyResult: '1-year case fatality reduced from 59% to 22% (absolute reduction 38 points, P=0.002); the primary endpoint mRS 0-3 at 1 year was neutral overall, diluted by patients enrolled after 48 hours.',
+          keyResult: '1-year case fatality reduced from 59% to 22% (absolute reduction 38 points, 95% CI 15 to 60); the primary endpoint mRS 0-3 at 1 year was neutral overall, diluted by patients enrolled after 48 hours.',
           whatWasMissing: 'Enrolled only up to age 60, and including patients treated beyond 48 hours diluted the functional benefit, so the over-60 question was not addressed.',
         },
       ],
@@ -5917,7 +5922,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Primary endpoint (mRS 0-4) was met: 38% vs 18%, OR 2.91, P=0.04',
       'Mortality was dramatically reduced: 33% vs 70%, a real, large survival benefit',
       '0% of patients in either group achieved mRS 0-2 (good functional outcome)',
-      'Virtually all surgical survivors who met the primary endpoint had mRS 4 (severe disability, dependent for most bodily needs)',
+      'Most surgical survivors who met the primary endpoint had mRS 4 (32% of the surgical group, severe disability, dependent for most bodily needs); 7% reached mRS 3',
     ],
     howToReadChart: [
       {
@@ -5926,7 +5931,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What does mRS 0-4 actually mean clinically?',
-        answer: 'mRS 0-4 is a wide range. In DESTINY II, virtually all surgical survivors who counted toward the primary endpoint were mRS 4: severe disability, unable to walk unaided, requiring assistance for most bodily needs. The primary outcome difference in this trial is largely the difference between severe disability (alive but highly dependent) and bedbound or dead. mRS 0-2 (independent function) was achieved by no patient in either arm.',
+        answer: 'mRS 0-4 is a wide range. In DESTINY II, most surgical survivors who counted toward the primary endpoint were mRS 4 (32% of the surgical group, against 7% who reached mRS 3): severe disability, unable to walk unaided, requiring assistance for most bodily needs. The primary outcome difference in this trial is largely the difference between severe disability (alive but highly dependent) and bedbound or dead. mRS 0-2 (independent function) was achieved by no patient in either arm.',
       },
       {
         question: 'Why does mortality matter separately from the primary endpoint?',
@@ -5935,13 +5940,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     /* claimId: destiny-ii-interpret | source: Juttler et al. NEJM 2014 */
     howToInterpret: {
-      proves: 'In 112 patients aged 61-82 years, early hemicraniectomy significantly improved the primary endpoint of survival without being bedbound or dead (mRS 0-4) at 6 months: 38% vs 18%, OR 2.91, 95% CI 1.06-7.49, P=0.04. Mortality was dramatically reduced: 33% vs 70%. However, 0% of patients in either group achieved mRS 0-2 (functional independence). Virtually all surgical survivors who met the primary endpoint had mRS 4, meaning severe disability requiring assistance for most bodily needs. The trial proves that surgery prevents death and completely bedbound status in patients over 60, not that it restores function.',
+      proves: 'In 112 patients aged 61-82 years, early hemicraniectomy significantly improved the primary endpoint of survival without being bedbound or dead (mRS 0-4) at 6 months: 38% vs 18%, OR 2.91, 95% CI 1.06-7.49, P=0.04. Mortality was dramatically reduced: 33% vs 70%. However, 0% of patients in either group achieved mRS 0-2 (functional independence). Most surgical survivors who met the primary endpoint had mRS 4 (32% of the surgical group, against 7% at mRS 3), meaning severe disability requiring assistance for most bodily needs. The trial proves that surgery prevents death and completely bedbound status in patients over 60, not that it restores function.',
       doesNotProve: 'DESTINY II does not prove that hemicraniectomy preserves functional independence or quality of life in patients aged 60 or older. The 0% mRS 0-2 rate in both arms means no patient achieved good functional recovery regardless of treatment assignment. The trial does not establish a meaningful rate of independence, return to daily activities, or quality of life that patients or families might find acceptable. It does not generalize to patients under 60 (DECIMAL, DESTINY, HAMLET address that population). The trial also cannot inform decisions about individual patients\' values or their definition of an acceptable outcome.',
-      cautions: 'DESTINY II enrolled 112 patients and stopped early, which may inflate effect estimates. The reason for stopping is not established by any registered source and is deliberately not asserted here. The CI is wide (OR 1.06-7.49), meaning the true effect could be modest. Mean age was approximately 70 years; results may not apply uniformly across the 61-82 age range. Most surgical survivors had severe disability (mRS 4), not moderate disability; clinicians should not present this trial to families as evidence of recovery. The trial defines the ethical question for older patients: whether survival with severe disability is consistent with the patient\'s values is not answerable by the trial.',
+      cautions: 'DESTINY II enrolled 112 patients and stopped early, which may inflate effect estimates. The reason for stopping is not established by any registered source and is deliberately not asserted here. The CI is wide (OR 1.06-7.49), meaning the true effect could be modest. Median age was 70 years (range 61 to 82); results may not apply uniformly across that age range. Most surgical survivors had severe disability (mRS 4), not moderate disability; clinicians should not present this trial to families as evidence of recovery. The trial defines the ethical question for older patients: whether survival with severe disability is consistent with the patient\'s values is not answerable by the trial.',
     },
     /* claimId: destiny-ii-pearl | source: Juttler et al. NEJM 2014 */
     bedsidePearl: "DESTINY II is a positive trial for survival and surgery is a legitimate option, but it must be offered with the right framing. Tell the family: 'Surgery reduces the chance of dying from 70% to 33%. But 0% of patients who had surgery regained the ability to care for themselves. Nearly all surgical survivors needed help for most bodily needs (mRS 4).' Do not show this trial to a family as evidence that their loved one will do well. Show it as evidence that surgery shifts the outcome from death to severe disability. The family and patient (if able) must decide whether that shift is consistent with their values.",
-    bottomLineSummary: 'DESTINY II randomized 112 patients aged 61-82 to early hemicraniectomy vs conservative intensive care. Primary endpoint (mRS 0-4 at 6 months) was met: 38% vs 18%, OR 2.91 (95% CI 1.06-7.49), P=0.04. Mortality was reduced: 33% vs 70%. But 0% of patients in either group achieved mRS 0-2 (independent function). Virtually all surgical survivors had mRS 4 (severe disability). The trial is positive for preventing death; it does not establish good functional recovery in this age group.',
+    bottomLineSummary: 'DESTINY II randomized 112 patients aged 61-82 to early hemicraniectomy vs conservative intensive care. Primary endpoint (mRS 0-4 at 6 months) was met: 38% vs 18%, OR 2.91 (95% CI 1.06-7.49), P=0.04. Mortality was reduced: 33% vs 70%. But 0% of patients in either group achieved mRS 0-2 (independent function). Most surgical survivors had mRS 4 (severe disability). The trial is positive for preventing death; it does not establish good functional recovery in this age group.',
     conclusion: '',
     source: 'Juttler et al. (NEJM 2014)',
     keyMessage: 'DESTINY II is positive for preventing death in older patients, but 0% achieved good functional recovery. Surgery shifts the outcome from death to severe disability; families must decide whether that is consistent with patient values.',
@@ -6097,11 +6102,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToInterpret: {
       proves: 'In 888 patients with AF-related ischemic stroke, early NOAC initiation within 4 days was non-inferior to delayed initiation (5-10 days) for the 90-day composite of recurrent stroke, symptomatic ICH, or death. The absolute risk difference was -1.79 percentage points (95% CI -5.31% to +1.74%; early 6.89% vs delayed 8.68%); the CI upper bound of +1.74 pp did not exceed the prespecified 3 pp NI margin (P for NI = 0.004). No symptomatic intracranial hemorrhages occurred in either arm.',
       doesNotProve: 'TIMING does not establish superiority of early over delayed NOAC initiation. The trial cannot determine the optimal specific day of initiation within the early window (any day from 1-4 was grouped together). It does not address initiation within 24 hours, or patients with large infarcts, active hemorrhagic transformation, or significant leukoaraiosis. The open-label design means prescribing behavior could differ between arms.',
-      cautions: 'Registry-based randomization via the Swedish Stroke Register is pragmatic but less controlled than a hospital-based double-blind RCT. The sample size (888 patients) was designed for a 3 percentage point NI margin; smaller absolute differences would require larger trials. Event rates were low overall (6.89% and 8.68%), meaning conclusions apply primarily to patients at modest-to-moderate risk. OPTIMAS (3621 patients, 100 UK hospitals) provides a larger, more definitive NI result with a wider delayed-initiation window (7-14 days).',
+      cautions: 'Registry-based randomization via the Swedish Stroke Register is pragmatic but less controlled than a hospital-based double-blind RCT. The trial was designed to enroll 1451 patients per group (about 3000 in total) for 80% power against the 3 percentage point NI margin, assuming a 12% event rate in each arm; the steering committee terminated it at 888 patients when the COVID-19 pandemic made the planned sample unreachable, so noninferiority rests on well under a third of the intended sample. Event rates were low overall (6.89% and 8.68%), meaning conclusions apply primarily to patients at modest-to-moderate risk. OPTIMAS (3621 patients, 100 UK hospitals) provides a larger, more definitive NI result with a wider delayed-initiation window (7-14 days).',
     },
     /* claimId: timing-pearl | source: Oldgren et al. Circulation 2022 */
     bedsidePearl: 'TIMING met its non-inferiority margin and supports early NOAC initiation within 4 days after AF-related ischemic stroke as safe. This does not mandate same-day initiation; the early window was days 1-4. Individualize timing based on infarct size, hemorrhagic transformation risk, and NIHSS. OPTIMAS (N=3621) provides larger, more definitive evidence and reached the same NI conclusion with a delayed window of 7-14 days.',
-    bottomLineSummary: 'Registry-based randomized noninferiority trial of 888 patients with AF-related stroke. Early NOAC within 4 days was non-inferior to delayed (5-10 days) for the 90-day composite of recurrent stroke, sICH, or death (6.89% vs 8.68%, risk difference -1.79 pp, P for NI = 0.004). Zero sICH in either arm. Noninferiority met; superiority not tested. Published Circulation 2022.',
+    bottomLineSummary: 'Registry-based randomized noninferiority trial of 888 patients with AF-related stroke. Early NOAC within 4 days was non-inferior to delayed (5-10 days) for the 90-day composite of recurrent stroke, sICH, or death (6.89% vs 8.68%, risk difference -1.79 pp, P for NI = 0.004). Zero sICH in either arm. Noninferiority met; superiority not demonstrated. The trial was terminated early at 888 of a planned 3000 patients. Published Circulation 2022.',
     conclusion: '',
     source: 'Oldgren et al. (Circulation 2022)',
     clinicalTrialsId: 'NCT02961348',
@@ -6263,7 +6268,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What do the identical bars mean?',
-        answer: 'Both bars show 3.3% event rates for the 90-day composite endpoint (recurrent stroke, symptomatic ICH, systemic embolism). The risk difference is 0.000: identical rates. In a noninferiority context, this is the most favorable possible result: early DOAC was not worse than delayed, with exactly equal event rates.',
+        answer: 'Both bars show 3.3% event rates for the 90-day composite endpoint (recurrent ischemic stroke, symptomatic ICH, unclassifiable stroke, systemic embolism). The risk difference is 0.000: identical rates. In a noninferiority context, this is the most favorable possible result: early DOAC was not worse than delayed, with exactly equal event rates.',
       },
       {
         question: 'With identical rates, why was superiority not declared?',
@@ -6276,13 +6281,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     /* claimId: optimas-interpret | source: Werring et al. Lancet 2024 */
     howToInterpret: {
-      proves: 'In 3621 patients with AF-related acute ischemic stroke at 100 UK hospitals, early DOAC initiation within 4 days was non-inferior to delayed initiation (7-14 days) for the primary composite of recurrent stroke, symptomatic ICH, or systemic embolism at 90 days. Event rates were identical: 3.3% in both arms (absolute risk difference 0.000, P for NI = 0.0003). Symptomatic ICH was rare and similar in both groups.',
+      proves: 'In 3621 patients with AF-related acute ischemic stroke at 100 UK hospitals, early DOAC initiation within 4 days was non-inferior to delayed initiation (7-14 days) for the primary composite of recurrent ischemic stroke, symptomatic intracranial hemorrhage, unclassifiable stroke, or systemic embolism at 90 days. Event rates were identical: 3.3% in both arms (absolute risk difference 0.000, P for NI = 0.0003). Symptomatic ICH was rare and similar in both groups.',
       doesNotProve: 'OPTIMAS does not establish superiority of early over delayed DOAC initiation. The trial cannot determine the optimal specific day within the early window (days 1-4 were grouped together). It does not address patients with large hemispheric infarcts or active hemorrhagic transformation at randomization. The open-label design means the clinical team knew the assigned treatment.',
       cautions: 'The delayed window in OPTIMAS (7-14 days) differs from TIMING (5-10 days), making direct numerical comparison between trials difficult. Event rates were very low (3.3%), limiting power to detect rare outcomes like sICH. The 100 UK hospitals reflect organized stroke services; generalizability to less-resourced settings requires consideration. The trial included only patients with clear indication for long-term anticoagulation.',
     },
     /* claimId: optimas-pearl | source: Werring et al. Lancet 2024 */
     bedsidePearl: 'OPTIMAS is the largest and most definitive trial supporting early DOAC initiation after AF-related stroke. Early within 4 days was non-inferior to waiting 7-14 days, with identical 3.3% event rates. This does not mandate same-day initiation; individualize based on infarct size and hemorrhagic transformation risk. For most patients with small-to-moderate AF-related stroke without hemorrhagic transformation, starting within 4 days is well-supported by the evidence.',
-    bottomLineSummary: 'Largest trial of DOAC timing after AF-related stroke: 3621 patients at 100 UK hospitals. Early DOAC within 4 days was non-inferior to delayed (7-14 days) for the 90-day composite of recurrent stroke, sICH, or systemic embolism. Event rates were identical (3.3% vs 3.3%, risk difference 0.000, P for NI = 0.0003). Superiority not demonstrated. Provides the most robust evidence for early DOAC initiation in AF-related ischemic stroke. Published Lancet 2024.',
+    bottomLineSummary: 'Largest trial of DOAC timing after AF-related stroke: 3621 patients at 100 UK hospitals. Early DOAC within 4 days was non-inferior to delayed (7-14 days) for the 90-day composite of recurrent ischemic stroke, sICH, unclassifiable stroke, or systemic embolism. Event rates were identical (3.3% vs 3.3%, risk difference 0.000, P for NI = 0.0003). Superiority not demonstrated. Provides the most robust evidence for early DOAC initiation in AF-related ischemic stroke. Published Lancet 2024.',
     conclusion: '',
     source: 'Werring et al. (Lancet 2024)',
     clinicalTrialsId: 'NCT03759938',

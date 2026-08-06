@@ -107,7 +107,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Enrolled 2015-2016",
     "listCategory": "thrombectomy",
     "listDescription": "Device-comparison trial showing no clear advantage for aspiration over stent retrievers.",
-    "bottomLineSummary": "No significant difference between contact-aspiration first-line and stent-retriever first-line for end-of-procedure revascularization (85.4% vs 83.1%) or 90-day mRS 0-2 (45.3% vs 50.3%). Rescue stent retriever was used in 25.2% of the aspiration arm. Supports operator choice with readiness to switch.",
+    "bottomLineSummary": "No significant difference between contact-aspiration first-line and stent-retriever first-line for end-of-procedure revascularization (85.4% vs 83.1%) or 90-day mRS 0-2 (45.3% vs 50.0%). Rescue treatment was used in 32.8% of the aspiration arm versus 23.8% of the stent-retriever arm. Supports operator choice with readiness to switch.",
     "doi": "10.1001/jama.2017.9644"
   },
   "aster2-trial": {
@@ -122,7 +122,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Enrolled 2017-2018 with 12-month follow-up",
     "listCategory": "thrombectomy",
     "listDescription": "Technical EVT trial showing no clear final reperfusion advantage from upfront combined strategy.",
-    "bottomLineSummary": "Routine first-pass combined aspiration plus stent retriever (BADDASS) did not significantly improve near-total reperfusion (64.5% vs 57.9%) or 90-day mRS 0-2 (48.5% vs 49.5%) compared to stent retriever alone. Combined technique took longer. Does not support routine first-pass combination; reserve for rescue.",
+    "bottomLineSummary": "Routine first-pass combined aspiration plus stent retriever (BADDASS) did not significantly improve near-total reperfusion (64.5% vs 57.9%) or 90-day mRS 0-2 (38.0% vs 41.9%) compared to stent retriever alone. Procedure time did not differ. Does not support routine first-pass combination; reserve for rescue.",
     "doi": "10.1001/jama.2021.13827"
   },
   "attention-trial": {
@@ -358,7 +358,8 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "143 stroke centers in 21 countries; stopped early for operational reasons",
     "listCategory": "acute",
     "listDescription": "Phase 3 glibenclamide for large hemispheric infarction: null primary (cOR 1.17, P=0.42); stopped early for COVID. Lancet Neurol 2024.",
-    "bottomLineSummary": "Phase 3 double-blind trial of IV glibenclamide vs placebo for large hemispheric infarction in 535 patients across 143 centers. Stopped early for COVID-19. Primary outcome (mRS ordinal shift at 90 days, age 18-70) was null: cOR 1.17, 95% CI 0.80-1.71, P=0.42. Mortality numerically higher with glibenclamide; hypoglycemia 6% vs 2%. Findings are inconclusive due to underpowering from early stopping."
+    "bottomLineSummary": "Phase 3 double-blind trial of IV glibenclamide vs placebo for large hemispheric infarction in 535 patients across 143 centers. Stopped early for COVID-19. Primary outcome (mRS ordinal shift at 90 days, age 18-70) was null: cOR 1.17, 95% CI 0.80-1.71, P=0.42. Mortality numerically higher with glibenclamide; hypoglycemia 6% vs 2%. Findings are inconclusive due to underpowering from early stopping.",
+    "doi": "10.1016/S1474-4422(24)00425-3"
   },
   "choice-trial": {
     "title": "CHOICE Trial",
@@ -372,7 +373,8 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Enrolled 2018-2021; stopped early during the pandemic",
     "listCategory": "thrombectomy",
     "listDescription": "Post-thrombectomy adjunct IA alteplase trial suggesting better excellent outcomes.",
-    "bottomLineSummary": "CHOICE was a small Phase 2b trial (N=121) suggesting that adjunct intra-arterial alteplase after successful thrombectomy improves excellent functional outcome (mRS 0 to 1) at 90 days from 40.4% to 59.0%. The trial stopped early during COVID, the confidence interval was wide, and replication is needed before routine use."
+    "bottomLineSummary": "CHOICE was a small Phase 2b trial (N=121) suggesting that adjunct intra-arterial alteplase after successful thrombectomy improves excellent functional outcome (mRS 0 to 1) at 90 days from 40.4% to 59.0%. The trial stopped early during COVID, the confidence interval was wide, and replication is needed before routine use.",
+    "doi": "10.1001/jama.2022.1645"
   },
   "close-trial": {
     "title": "CLOSE Trial",
@@ -519,7 +521,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "source": "Juttler et al. (NEJM 2014)",
     "timeline": "Germany; patients aged 61-82 years",
     "listCategory": "acute",
-    "bottomLineSummary": "DESTINY II randomized 112 patients aged 61-82 to early hemicraniectomy vs conservative intensive care. Primary endpoint (mRS 0-4 at 6 months) was met: 38% vs 18%, OR 2.91 (95% CI 1.06-7.49), P=0.04. Mortality was reduced: 33% vs 70%. But 0% of patients in either group achieved mRS 0-2 (independent function). Virtually all surgical survivors had mRS 4 (severe disability). The trial is positive for preventing death; it does not establish good functional recovery in this age group.",
+    "bottomLineSummary": "DESTINY II randomized 112 patients aged 61-82 to early hemicraniectomy vs conservative intensive care. Primary endpoint (mRS 0-4 at 6 months) was met: 38% vs 18%, OR 2.91 (95% CI 1.06-7.49), P=0.04. Mortality was reduced: 33% vs 70%. But 0% of patients in either group achieved mRS 0-2 (independent function). Most surgical survivors had mRS 4 (severe disability). The trial is positive for preventing death; it does not establish good functional recovery in this age group.",
     "doi": "10.1056/NEJMoa1311367"
   },
   "destiny-trial": {
@@ -533,7 +535,8 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "source": "Juttler et al. (Stroke 2007)",
     "timeline": "Germany; stopped after pooled European data emerged",
     "listCategory": "acute",
-    "bottomLineSummary": "Early hemicraniectomy reduces 30-day mortality by approximately 41 percentage points in malignant MCA infarction in patients aged 18-60. The primary functional endpoint (mRS 0-3 at 6 months) was not met in this 32-patient trial. The pooled European analysis is the more reliable efficacy estimate."
+    "bottomLineSummary": "Early hemicraniectomy reduces 30-day mortality by approximately 41 percentage points in malignant MCA infarction in patients aged 18-60. The primary functional endpoint (mRS 0-3 at 6 months) was not met in this 32-patient trial. The pooled European analysis is the more reliable efficacy estimate.",
+    "doi": "10.1161/STROKEAHA.107.485649"
   },
   "devt-trial": {
     "title": "DEVT Trial",
@@ -688,7 +691,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "legend": {
       "finding": "Nerinetide during EVT did not improve 90-day independence overall.",
       "bottomLineTag": "NS",
-      "keyStat": "aRR 1.04 (0.96–1.13)"
+      "keyStat": "aRR 1.04 (0.96–1.14)"
     },
     "subtitle": "Nerinetide Neuroprotection During EVT for Acute Ischemic Stroke",
     "source": "Hill et al. (Lancet 2020)",
@@ -769,7 +772,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "source": "Hofmeijer et al. (Lancet Neurol 2009)",
     "timeline": "Netherlands, 2002-2007",
     "listCategory": "acute",
-    "bottomLineSummary": "HAMLET demonstrates mortality benefit from decompressive surgery up to 96 hours after malignant MCA infarction onset (38 percentage point case fatality reduction, P=0.002). The primary functional endpoint was neutral overall. Functional benefit is restricted to the within-48-hour window per pooled analysis.",
+    "bottomLineSummary": "HAMLET demonstrates mortality benefit from decompressive surgery up to 96 hours after malignant MCA infarction onset (38 percentage point case fatality reduction, 95% CI 15 to 60). The primary functional endpoint was neutral overall. Functional benefit is restricted to the within-48-hour window per pooled analysis.",
     "doi": "10.1016/S1474-4422(09)70047-X"
   },
   "ims-iii-trial": {
@@ -1033,7 +1036,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "source": "Werring et al. (Lancet 2024)",
     "timeline": "100 UK hospitals, 2019-2024",
     "listCategory": "acute",
-    "bottomLineSummary": "Largest trial of DOAC timing after AF-related stroke: 3621 patients at 100 UK hospitals. Early DOAC within 4 days was non-inferior to delayed (7-14 days) for the 90-day composite of recurrent stroke, sICH, or systemic embolism. Event rates were identical (3.3% vs 3.3%, risk difference 0.000, P for NI = 0.0003). Superiority not demonstrated. Provides the most robust evidence for early DOAC initiation in AF-related ischemic stroke. Published Lancet 2024."
+    "bottomLineSummary": "Largest trial of DOAC timing after AF-related stroke: 3621 patients at 100 UK hospitals. Early DOAC within 4 days was non-inferior to delayed (7-14 days) for the 90-day composite of recurrent ischemic stroke, sICH, unclassifiable stroke, or systemic embolism. Event rates were identical (3.3% vs 3.3%, risk difference 0.000, P for NI = 0.0003). Superiority not demonstrated. Provides the most robust evidence for early DOAC initiation in AF-related ischemic stroke. Published Lancet 2024."
   },
   "original-trial": {
     "title": "ORIGINAL Trial",
@@ -1548,7 +1551,8 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Enrolled 2018-2023; stopped early for efficacy",
     "listCategory": "thrombectomy",
     "listDescription": "Large-core EVT trial using pragmatic non-contrast CT selection rather than perfusion imaging.",
-    "bottomLineSummary": "TENSION showed that endovascular thrombectomy benefits anterior circulation LVO patients with large established infarcts (ASPECTS 3 to 5) selected mainly by non-contrast CT and treated within 12 hours, shifting median 90-day mRS from 5 to 4 and lowering mortality from 51% to 40% with no increase in symptomatic hemorrhage."
+    "bottomLineSummary": "TENSION showed that endovascular thrombectomy benefits anterior circulation LVO patients with large established infarcts (ASPECTS 3 to 5) selected mainly by non-contrast CT and treated within 12 hours, shifting median 90-day mRS from 5 to 4 and lowering mortality from 51% to 40% with no increase in symptomatic hemorrhage.",
+    "doi": "10.1016/S0140-6736(23)02032-9"
   },
   "thales-trial": {
     "title": "THALES Trial",
@@ -1634,7 +1638,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "source": "Oldgren et al. (Circulation 2022)",
     "timeline": "Swedish Stroke Register, 2017-2020",
     "listCategory": "acute",
-    "bottomLineSummary": "Registry-based randomized noninferiority trial of 888 patients with AF-related stroke. Early NOAC within 4 days was non-inferior to delayed (5-10 days) for the 90-day composite of recurrent stroke, sICH, or death (6.89% vs 8.68%, risk difference -1.79 pp, P for NI = 0.004). Zero sICH in either arm. Noninferiority met; superiority not tested. Published Circulation 2022."
+    "bottomLineSummary": "Registry-based randomized noninferiority trial of 888 patients with AF-related stroke. Early NOAC within 4 days was non-inferior to delayed (5-10 days) for the 90-day composite of recurrent stroke, sICH, or death (6.89% vs 8.68%, risk difference -1.79 pp, P for NI = 0.004). Zero sICH in either arm. Noninferiority met; superiority not demonstrated. The trial was terminated early at 888 of a planned 3000 patients. Published Circulation 2022."
   },
   "trace-2-trial": {
     "title": "TRACE-2 Trial",

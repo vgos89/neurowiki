@@ -5921,7 +5921,7 @@ const TrialPageNew: React.FC = () => {
             <div style={{ background: '#FFFBEB', borderLeft: '3px solid #D97706', margin: '12px 16px 0', borderRadius: '0 6px 6px 0', padding: '10px 14px' }} role="note">
               <p style={{ fontSize: 10, fontWeight: 700, color: '#92400e', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>Procedural endpoint, not clinical outcome</p>
               <p style={{ fontSize: 12, color: '#78350f', lineHeight: 1.5 }}>
-                The chart shows end-of-procedure revascularization rates, not 90-day disability. mRS 0-2 at 90 days was 45.3% (aspiration) vs 50.3% (stent retriever); P = 0.19. No significant clinical difference between strategies.
+                The chart shows end-of-procedure revascularization rates, not 90-day disability. mRS 0-2 at 90 days was 45.3% (aspiration) vs 50.0% (stent retriever); P = 0.38. No significant clinical difference between strategies.
               </p>
             </div>
             <div className="p-4">
@@ -6000,7 +6000,7 @@ const TrialPageNew: React.FC = () => {
             <div style={{ background: '#FFFBEB', borderLeft: '3px solid #D97706', margin: '12px 16px 0', borderRadius: '0 6px 6px 0', padding: '10px 14px' }} role="note">
               <p style={{ fontSize: 10, fontWeight: 700, color: '#92400e', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>Procedural endpoint, not clinical outcome</p>
               <p style={{ fontSize: 12, color: '#78350f', lineHeight: 1.5 }}>
-                The chart shows end-of-procedure eTICI 2c-3 reperfusion rates. mRS 0-2 at 90 days was 48.5% (combined) vs 49.5% (stent retriever alone); no significant clinical difference. Longer procedure time with combined technique.
+                The chart shows end-of-procedure eTICI 2c-3 reperfusion rates. mRS 0-2 at 90 days was 38.0% (combined) vs 41.9% (stent retriever alone); no significant clinical difference. Procedure time did not differ (median 42 vs 44 minutes).
               </p>
             </div>
             <div className="p-4">
@@ -6443,7 +6443,7 @@ const TrialPageNew: React.FC = () => {
                     </div>
                   </div>
                   <p style={{ fontSize: 11, color: '#94a3b8', textAlign: 'center' }}>
-                    sICH: 9.7% (tirofiban) vs 6.4% (placebo) · Mortality: 18.3% vs 17.3%
+                    sICH: 9.7% (tirofiban) vs 6.4% (placebo) · Mortality: 18.1% vs 16.9%
                   </p>
                 </div>
               )}
@@ -6656,7 +6656,7 @@ const TrialPageNew: React.FC = () => {
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-red-50 border border-red-200 px-3 py-2">
                 <p className="text-xs text-red-800 leading-relaxed">
-                  <strong>STOPPED FOR SAFETY:</strong> Intensive BP management (SBP &lt;140 mm Hg) led to significantly lower functional independence (39.4% vs 54.4%, adjusted OR 0.56, P=0.03) and nearly 8-fold higher malignant cerebral edema (adjusted OR 7.88, P=0.01) after successful EVT. The DSMB terminated the trial at 306 of 450 planned patients.
+                  <strong>STOPPED FOR SAFETY:</strong> Intensive BP management (SBP &lt;140 mm Hg) led to significantly lower functional independence (39.4% vs 54.4%, adjusted OR 0.56, P=0.03) and nearly 8-fold higher malignant cerebral edema (adjusted OR 7.88, P=0.01) after successful EVT. The DSMB terminated the trial at 306 of a planned 634 patients.
                 </p>
               </div>
               <DeltaBandChart
@@ -6678,7 +6678,7 @@ const TrialPageNew: React.FC = () => {
           {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
-          {renderTrialDesign(tm, '306 patients at 19 South Korean stroke centers. Open-label randomized trial with blinded endpoint assessment. Stopped early by DSMB for safety at 68% of planned enrollment. Intensive BP strategy (SBP &lt;140 mm Hg) maintained for 24 hours. Published JAMA 2023.')}
+          {renderTrialDesign(tm, '306 patients at 19 South Korean stroke centers. Open-label randomized trial with blinded endpoint assessment. Stopped early by DSMB for safety at 306 of a planned 634 patients. Intensive BP strategy (SBP &lt;140 mm Hg) maintained for 24 hours. Published JAMA 2023.')}
           {tm.bedsidePearl && (
             <div className="bg-red-50 border-l-2 border-red-700 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-red-700 mb-2">Bedside Pearl</p>
@@ -6825,7 +6825,7 @@ const TrialPageNew: React.FC = () => {
                 endpoint="Functional Independence (mRS 0-2) at 90 Days"
                 riskRatio="RR 1.04"
                 ciLow="0.96"
-                ciHigh="1.13"
+                ciHigh="1.14"
                 pValue="0.35"
                 winnerArm="none"
               />
@@ -7199,7 +7199,7 @@ const TrialPageNew: React.FC = () => {
             <div style={{ background: '#fffbeb', borderLeft: '3px solid #f59e0b', margin: '12px 16px 0', borderRadius: '0 6px 6px 0', padding: '12px 14px' }} role="note">
               <p style={{ fontSize: 10, fontWeight: 700, color: '#92400e', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>Primary endpoint met, but no patient achieved good functional outcome</p>
               <p style={{ fontSize: 12, color: '#78350f', lineHeight: 1.5 }}>
-                0% of patients in <strong>either group</strong> achieved mRS 0-2 (independent function). Virtually all surgical survivors who met the primary endpoint had mRS 4 (severe disability, dependent for most bodily needs). Surgery reduces the chance of dying from 70% to 33%; it does not restore function.
+                0% of patients in <strong>either group</strong> achieved mRS 0-2 (independent function). Most surgical survivors who met the primary endpoint had mRS 4 (severe disability, dependent for most bodily needs); 7% reached mRS 3. Surgery reduces the chance of dying from 70% to 33%; it does not restore function.
               </p>
             </div>
             <div className="p-4">
@@ -7302,7 +7302,7 @@ const TrialPageNew: React.FC = () => {
           {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
-          {renderTrialDesign(tm, '888 patients randomized via the Swedish Stroke Register. Registry-based open-label randomized noninferiority trial. NOAC started within 4 days (early) or 5-10 days (delayed). Published Circulation 2022.')}
+          {renderTrialDesign(tm, '888 patients randomized via the Swedish Stroke Register, against a planned 3000; the trial was terminated early during the COVID-19 pandemic. Registry-based open-label randomized noninferiority trial. NOAC started within 4 days (early) or 5-10 days (delayed). Published Circulation 2022.')}
           {tm.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>
@@ -7343,7 +7343,7 @@ const TrialPageNew: React.FC = () => {
           <div>
             <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="neutral" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
-              In patients with AF-related acute ischemic stroke, is early DOAC initiation within 4 days non-inferior to delayed initiation (7-14 days) for the composite of recurrent stroke, symptomatic ICH, or systemic embolism at 90 days?
+              In patients with AF-related acute ischemic stroke, is early DOAC initiation within 4 days non-inferior to delayed initiation (7-14 days) for the composite of recurrent ischemic stroke, symptomatic ICH, unclassifiable stroke, or systemic embolism at 90 days?
             </p>
             <p className="text-sm text-slate-500 mt-1">
               {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
