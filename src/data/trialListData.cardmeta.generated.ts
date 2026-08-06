@@ -1061,7 +1061,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Enrolled February 2009 to October 2015; 3-month mRS follow-up",
     "listCategory": "acute",
     "listDescription": "Open-label RCT showing platelet transfusion INCREASED odds of death or dependence at 3 months in antiplatelet-associated ICH (adjusted common OR 2.05, P=0.0114). Establishes AHA/ASA 2022 Class III: Harm.",
-    "bottomLineSummary": "PATCH randomized 190 adults with spontaneous supratentorial ICH on antiplatelet therapy within 6 hours of onset to platelet transfusion plus standard care vs standard care alone. Platelet transfusion increased the adjusted common odds of death or dependence at 3 months by ~2-fold (aOR 2.05, 95% CI 1.18-3.56, P=0.0114). Mortality 24% vs 17%; serious adverse events 42% vs 30%. The trial established AHA/ASA 2022 Class III: Harm against routine platelet transfusion in antiplatelet-associated ICH. Patients with planned neurosurgical evacuation were excluded; bridging platelet transfusion before craniotomy remains an off-trial decision.",
+    "bottomLineSummary": "PATCH randomized 190 adults with spontaneous supratentorial ICH on antiplatelet therapy within 6 hours of onset to platelet transfusion plus standard care vs standard care alone. Platelet transfusion increased the adjusted common odds of death or dependence at 3 months by ~2-fold (aOR 2.05, 95% CI 1.18-3.56, P=0.0114). In-hospital mortality 24% vs 17%; serious adverse events 42% vs 29%. The trial established AHA/ASA 2022 Class III: Harm against routine platelet transfusion in antiplatelet-associated ICH. Patients with planned neurosurgical evacuation were excluded; bridging platelet transfusion before craniotomy remains an off-trial decision.",
     "doi": "10.1016/S0140-6736(16)30392-0"
   },
   "pc-trial": {
@@ -1075,7 +1075,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "source": "Meier B et al. (NEJM 2013;368:1083-1091)",
     "timeline": "Enrolled February 2000 to February 2009; mean follow-up 4.1 years (closure) and 4.0 years (medical); published NEJM 2013",
     "listCategory": "antiplatelets",
-    "listDescription": "European RCT (N=414, age <60) of Amplatzer PFO Occluder vs medical therapy after cryptogenic stroke, TIA, or peripheral embolism. Primary composite 3.4% vs 5.2% (HR 0.63, P=0.34). Underpowered (only 18 primary events). Negative.",
+    "listDescription": "International RCT (N=414, age <60) of Amplatzer PFO Occluder vs medical therapy after cryptogenic stroke, TIA, or peripheral embolism. Primary composite 3.4% vs 5.2% (HR 0.63, P=0.34). Underpowered (only 18 primary events). Negative.",
     "bottomLineSummary": "In 414 patients younger than 60 with PFO and prior ischemic stroke, TIA, or peripheral thromboembolic event of presumed paradoxical embolic origin, percutaneous closure with the Amplatzer PFO Occluder vs medical therapy (antiplatelet or anticoagulation per investigator) over mean ~4 years did not reduce the primary composite of death, nonfatal stroke, TIA, or peripheral embolism (3.4% vs 5.2%, HR 0.63, 95% CI 0.24–1.62, P=0.34). Underpowered: only 18 primary events accrued. Secondary nonfatal stroke 0.5% vs 2.4% (HR 0.20, P=0.14) and TIA 2.5% vs 3.3% (HR 0.71, P=0.56) numerically favored closure.",
     "doi": "10.1056/NEJMoa1211716"
   },

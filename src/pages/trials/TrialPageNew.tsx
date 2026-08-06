@@ -8241,7 +8241,7 @@ const TrialPageNew: React.FC = () => {
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
-          {renderTrialDesign(trialMetadata, '120 Korean patients (60 closure / 60 medication-only) at 2 sites (Asan Medical Center, Seoul St Mary\'s Hospital). Enrolled September 2011 to October 2017. 2-year follow-up. High-risk PFO anatomy required (atrial septal aneurysm, septal hypermobility ≥10 mm, or PFO size ≥2 mm). Published JACC 2018.')}
+          {renderTrialDesign(trialMetadata, '120 Korean patients (60 closure / 60 medication-only) at 2 sites (Asan Medical Center, Chungnam National University Hospital). Enrolled September 2011 to October 2017. 2-year follow-up. High-risk PFO anatomy required (atrial septal aneurysm, septal hypermobility ≥10 mm, or PFO size ≥2 mm). Published JACC 2018.')}
           {trialMetadata.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>
@@ -9321,7 +9321,7 @@ const TrialPageNew: React.FC = () => {
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  HARM trial. The adjusted common odds ratio of 2.05 (95% CI 1.18–3.56, P=0.0114) means platelet transfusion approximately DOUBLED the odds of a worse mRS at 3 months. Mortality 24% vs 17%; serious adverse events 42% vs 30%: same direction as the primary. Hematoma expansion did not differ; mechanism is not simple rebleeding. Trial excluded patients with planned neurosurgical evacuation; does NOT apply to bridging platelet transfusion before craniotomy.
+                  HARM trial. The adjusted common odds ratio of 2.05 (95% CI 1.18–3.56, P=0.0114) means platelet transfusion approximately DOUBLED the odds of a worse mRS at 3 months. In-hospital mortality 24% vs 17%; serious adverse events 42% vs 29%: same direction as the primary. Hematoma expansion did not differ; mechanism is not simple rebleeding. Trial excluded patients with planned neurosurgical evacuation; does NOT apply to bridging platelet transfusion before craniotomy.
                 </p>
               </div>
             </div>
