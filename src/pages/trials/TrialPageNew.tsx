@@ -1050,7 +1050,7 @@ const TrialPageNew: React.FC = () => {
                 treatmentLabel={trialMetadata.efficacyResults.treatment.name}
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="mRS 0–1 at 90 Days"
-                riskRatio="OR 1.7"
+                riskRatio="Global OR 1.7"
                 ciLow="1.2"
                 ciHigh="2.6"
                 pValue={trialMetadata.stats.pValue.value}
@@ -2035,7 +2035,7 @@ const TrialPageNew: React.FC = () => {
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
                 <p className="text-xs text-blue-900 leading-relaxed">
-                  <strong>Bayesian response-adaptive design:</strong> Primary is utility-weighted mRS at 180 days; superiority by posterior P(sup) = 0.981 (threshold 0.975). No frequentist p-value. The 30-day mortality result shown below is the primary SAFETY endpoint, not the primary EFFICACY endpoint. Anterior basal ganglia subgroup was halted for futility; benefit is in LOBAR ICH.
+                  <strong>Bayesian adaptive design:</strong> Primary is utility-weighted mRS at 180 days; superiority by posterior P(sup) = 0.981 (threshold 0.975). No frequentist p-value. The 30-day mortality result shown below is the primary SAFETY endpoint, not the primary EFFICACY endpoint. Anterior basal ganglia subgroup was halted for futility; benefit is in LOBAR ICH.
                 </p>
               </div>
               <DeltaBandChart
@@ -2063,7 +2063,7 @@ const TrialPageNew: React.FC = () => {
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
-          {renderTrialDesign(trialMetadata, '300 patients at 37 US hospitals (59 trained neurosurgeons; BrainPath + Myriad, NICO Corporation). Bayesian adaptive RAR design. Enrolled Dec 2016 – Aug 2022. Published NEJM 2024;390(14):1277–1289.')}
+          {renderTrialDesign(trialMetadata, '300 patients at 37 US hospitals (59 trained neurosurgeons; BrainPath + Myriad, NICO Corporation). Bayesian adaptive design, 1:1 allocation. Enrolled Dec 2016 – Aug 2022. Published NEJM 2024;390(14):1277–1289.')}
           {trialMetadata.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>

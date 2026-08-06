@@ -47,7 +47,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Enrolled 2020-2022",
     "listCategory": "thrombectomy",
     "listDescription": "Large core thrombectomy; China cohort (ASPECTS 3–5 or core ≥70 mL).",
-    "bottomLineSummary": "ANGEL-ASPECT validates SELECT2 in a Chinese population with broader volume criteria. Primary ordinal mRS shift: gOR 1.37 (95% CI 1.11–1.69, P=0.004). Secondary mRS 0–2: 30% vs 11.6% (NNT 5.4 from secondary). sICH 6.1% vs 2.7% (NS but trending). AHA/ASA 2026 §4.7.2 COR 1 (6–24h) / COR 2a (within 6h).",
+    "bottomLineSummary": "ANGEL-ASPECT validates SELECT2 in a Chinese population with broader volume criteria. Primary ordinal mRS shift: gOR 1.37 (95% CI 1.11–1.69, P=0.004). Secondary mRS 0–2: 30% vs 11.6% (NNT 5.4 from secondary). sICH 6.1% vs 2.7% (NS but trending). AHA/ASA 2026 §4.7.2 COR 1 for ASPECTS 3–5 in both the 0–6h and 6–24h windows.",
     "doi": "10.1056/NEJMoa2213379"
   },
   "annexa-4-trial": {
@@ -666,7 +666,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Enrolled Dec 1, 2016 – Aug 24, 2022; published NEJM April 2024",
     "listCategory": "acute",
     "listDescription": "First positive randomized minimally-invasive surgical ICH trial; 30-day mortality 9.3% vs 18.0% (Bayesian P>0.98). NEJM 2024.",
-    "bottomLineSummary": "ENRICH is the first randomized supratentorial ICH evacuation trial to meet its prespecified primary endpoint. UW-mRS at 180d: difference +0.084 (95% CrI 0.005–0.163, posterior P(sup)=0.981). 30-day mortality 9.3% vs 18.0% (ARD -8.7 pp, posterior P=0.987). Bayesian RAR design (no frequentist p-value). AHA/ASA 2022 ICH Class IIb (pre-ENRICH); may prompt focused update.",
+    "bottomLineSummary": "ENRICH is the first randomized supratentorial ICH evacuation trial to meet its prespecified primary endpoint. UW-mRS at 180d: difference +0.084 (95% CrI 0.005–0.163, posterior P(sup)=0.981). 30-day mortality 9.3% vs 18.0% (ARD -8.7 pp, posterior P=0.987). Bayesian adaptive design (no frequentist p-value). AHA/ASA 2022 ICH Class IIb (pre-ENRICH); may prompt focused update.",
     "doi": "10.1056/NEJMoa2308440"
   },
   "escape-mevo-trial": {

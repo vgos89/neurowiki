@@ -1183,9 +1183,9 @@ CHANCE-2 is the first large stroke trial using mandatory pharmacogenomic eligibi
 *   **Intervention:** Ticagrelor 180mg load → 90mg BID + Aspirin × 21 days, then ticagrelor monotherapy vs Clopidogrel-based DAPT.
 *   **Primary Outcome:** Stroke recurrence at 90 days.
 *   **Results:**
-    *   **Stroke recurrence:** 6.0% (ticagrelor) vs 7.6% (clopidogrel); HR 0.77, **p=0.009**
+    *   **Stroke recurrence:** 6.0% (ticagrelor) vs 7.6% (clopidogrel); HR 0.77, **p=0.008**
     *   **Absolute reduction:** 1.6%; **NNT = 63** (AHA/ASA 2026)
-    *   **Severe bleeding:** 0.28% vs 0.39%; **no significant difference**
+    *   **Severe or moderate bleeding:** 9 patients (0.3%) vs 11 patients (0.3%); **no significant difference**
     *   **1-year follow-up:** HR 0.80, p=0.007; durable benefit confirmed
 
 ## CYP2C19 Phenotype Quick Reference
@@ -1234,7 +1234,7 @@ ENRICH tested a fundamentally different approach: **minimally invasive parafasci
 **ENRICH is the FIRST positive randomized surgical ICH trial.**
 
 ## Trial Summary
-*   **Design:** Bayesian response-adaptive randomized trial; 37 US hospitals, 2017–2023.
+*   **Design:** Bayesian adaptive randomized trial (1:1 allocation); 37 US hospitals, 2017–2023.
 *   **Population:** 300 patients with **lobar or anterior basal ganglia ICH (30–80 mL)** within 24 hours.
 *   **Intervention:** MIPS using BrainPath® + Myriad® vs guideline-based medical management.
 *   **Primary Outcome:** Utility-weighted mRS (UW-mRS) at 180 days.

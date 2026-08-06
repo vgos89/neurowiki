@@ -552,7 +552,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         evt: 6.4,
         control: 0.6,
         label: 'Symptomatic ICH within 36h',
-        tooltip: 'Combined Parts 1+2: 6.4% tPA vs 0.6% placebo (P<0.001). Of 28 sICH patients, 17 (61%) died by 3 months. ICH risk is the central safety trade-off of IV thrombolysis.',
+        tooltip: 'Combined Parts 1+2: 6.4% tPA vs 0.6% placebo (P<0.001), within 36 hours of onset. ICH risk is the central safety trade-off of IV thrombolysis.',
         color: 'warning',
       },
       mortality: {
@@ -589,8 +589,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         label: 'Randomized Patients'
       },
       primaryEndpoint: {
-        value: 'mRS 0-1',
-        label: 'at 90 Days'
+        value: 'Global test',
+        label: 'Four scales at 90 days',
+        info: 'The Part 2 primary was a global test statistic combining the Barthel Index, modified Rankin Scale, Glasgow Outcome Scale and NIHSS at three months (global OR 1.7, 95% CI 1.2–2.6). The mRS 0–1 dichotomization (39% vs 26%) shown on the chart is one component of that global outcome, not the primary endpoint by itself. Part 1 tested 24-hour neurologic improvement and showed no significant difference. Source: NINDS rt-PA Stroke Study Group, NEJM 1995;333:1581–1587 abstract.',
       },
       pValue: {
         value: '<0.05',
@@ -6784,7 +6785,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         label: 'Ordinal shift, 95% CI 1.63–4.70'
       },
       absoluteReduction: {
-        value: '28 pp [verification pending]',
+        value: '28 pp',
         label: 'Secondary mRS 0–2: 45% vs 17%',
         info: 'Primary endpoint was the ordinal mRS shift (common OR 2.77, 95% CI 1.63–4.70, P<0.001). The 28 percentage-point absolute difference is from the SECONDARY mRS 0–2 dichotomization (45% vs 17%); the Albers 2018 NEJM publication does not report a frequentist 95% CI for this secondary ARD in the abstract. CI verification from the full text is pending V supply.',
         highlight: true,
@@ -7013,9 +7014,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         label: 'Utility-weighted mRS (Bayesian primary)'
       },
       absoluteReduction: {
-        value: '36 pp (95% CI 24–47)',
+        value: '36 pp (unadjusted)',
         label: 'Coprimary mRS 0–2: 49% vs 13%',
-        info: 'Unadjusted absolute difference in functional independence (mRS 0–2) at 90 days: 36 pp (95% CI 24–47). Adjusted difference 33 pp (95% CI 24–44). This is the mRS 0–2 binary coprimary; the trial primary is utility-weighted mRS analyzed by Bayesian methods (posterior P(superiority) >0.999), reported separately. Per trial-statistics skill, NNT for the Bayesian primary is not valid; the displayed NNT 2.8 derives from this mRS 0–2 binary coprimary and is shown with explicit Bayesian-design annotation.',
+        info: 'Unadjusted absolute difference in functional independence (mRS 0–2) at 90 days: 36 pp (49% vs 13%). The trial-reported adjusted difference is 33 pp (95% credible interval 24 to 44), posterior probability of superiority >0.999. DAWN reports Bayesian credible intervals, not frequentist confidence intervals. This is the mRS 0–2 binary coprimary; the trial primary is utility-weighted mRS analyzed by Bayesian methods (posterior P(superiority) >0.999), reported separately. Per trial-statistics skill, NNT for the Bayesian primary is not valid; the displayed NNT 2.8 derives from this mRS 0–2 binary coprimary and is shown with explicit Bayesian-design annotation.',
         highlight: true,
       },
     },
@@ -7129,7 +7130,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         evt: 0.6,
         control: 1.1,
         label: 'Symptomatic ICH',
-        tooltip: '0.6% EVT vs 1.1% medical (NS). Lower than ANGEL-ASPECT (6.1% vs 2.7%). SELECT2 had a notably cleaner safety profile.',
+        tooltip: 'Symptomatic ICH in 1 of 178 thrombectomy patients (0.6%) and 2 of 174 medical patients (1.1%). Cerebral hemorrhage was infrequent in both arms. Rates are not directly comparable with ANGEL-ASPECT, which used different imaging follow-up and bleeding definitions.',
       },
       mortality: {
         evt: 38.4,
@@ -7145,11 +7146,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What does the ordinal shift mean?',
-        answer: 'Generalized OR 1.51 (95% CI 1.20–1.89) means each mRS category was 1.51× more likely to favor EVT. EVT shifts the disability distribution one step lower on average, even when full functional independence remains uncommon.',
+        answer: 'Generalized OR 1.51 (95% CI 1.20–1.89) is a whole-distribution statistic: draw one patient from each arm, and the odds that the thrombectomy patient has the better 90-day mRS are 1.51 times the odds that the medical patient does. It does not mean any single mRS category is 1.51 times more likely, and an ordinal-shift statistic does not yield a valid NNT.',
       },
       {
         question: 'What does it mean for my patient?',
-        answer: 'For anterior LVO with large ischemic core (ASPECTS 3–5 OR perfusion core ≥50 mL) within 24h, age ≤85, pre-stroke mRS 0–1: EVT improves outcomes one step on average. NNT 7.7 is from the SECONDARY mRS 0–2 outcome; do not over-promise functional independence. Only 20% reach that bar.',
+        answer: 'For anterior LVO with large ischemic core (ASPECTS 3–5 OR perfusion core ≥50 mL) within 24h, age ≤85, pre-stroke mRS 0–1: EVT shifts the mRS distribution toward less disability. NNT 7.7 is from the SECONDARY mRS 0–2 outcome; do not over-promise functional independence. Only 20% reach that bar.',
       },
     ],
     howToInterpret: {
@@ -7157,7 +7158,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       doesNotProve: 'It does not prove benefit for ASPECTS ≥6. Those patients are addressed by smaller-core EVT evidence. It does not prove a mortality benefit (38.4% vs 41.5%, NS). It does not isolate which subgroup within large-core (ASPECTS 3–5 vs core ≥50 mL) benefits most.',
       cautions: 'Stopped early at 2nd interim. Truncation bias may inflate effect. Most patients remain disabled (80% have mRS ≥3 at 90 days). NNT 7.7 is from the SECONDARY mRS 0–2 outcome; ordinal-shift primaries do not yield a valid NNT per clinical-trial-audit rules. International cohort, US-dominant. ANGEL-ASPECT confirmed direction in a Chinese cohort but with higher sICH, suggesting selection may matter.',
     },
-    bedsidePearl: 'For anterior LVO with large ischemic core (ASPECTS 3–5 or core ≥50 mL) within 24h, EVT shifts disability one step lower on average (gOR 1.51). Functional independence (mRS 0–2) is uncommon at 20% (vs 7% medical). Frame as "less disability" not "independence restored". NNT 7.7 is from the secondary mRS 0–2 outcome.',
+    bedsidePearl: 'For anterior LVO with large ischemic core (ASPECTS 3–5 or core ≥50 mL) within 24h, EVT shifts the whole mRS distribution toward less disability (gOR 1.51, 95% CI 1.20–1.89). Functional independence (mRS 0–2) is uncommon at 20% (vs 7% medical). Frame as "less disability" not "independence restored". NNT 7.7 is from the secondary mRS 0–2 outcome.',
     bottomLineSummary: 'SELECT2 establishes EVT for large-core anterior LVO within 24h. Primary ordinal mRS shift: gOR 1.51 (95% CI 1.20–1.89, P<0.001). Secondary mRS 0–2: 20% vs 7% (NNT 7.7 from secondary). sICH 0.6% vs 1.1% (NS). Stopped early at 2nd interim. AHA/ASA 2026 §4.7.2 COR 1.',
     applicability: {
       imagingSelection: 'ASPECTS 3–5 OR perfusion-based core ≥50 mL required; ≤24h anterior LVO; age ≤85; pre-stroke mRS 0–1',
@@ -7182,8 +7183,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         label: 'Statistically Sig.'
       },
       effectSize: {
-        value: '13%',
-        label: 'Absolute Increase'
+        value: 'gOR 1.51',
+        label: 'Generalized OR (primary)'
       }
     },
     trialDesign: {
@@ -7238,9 +7239,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Selection Criteria: ASPECTS 3-5 on NCCT OR Core volume ≥ 50 ml on CTP; age ≤85; pre-stroke mRS 0–1',
       'Generalized Odds Ratio: 1.51 (95% CI 1.20–1.89). This is the primary statistic, not the mRS 0–2 dichotomization',
       'NNT framing: NNT 7.7 is for the secondary outcome mRS 0–2 (20% vs 7%). The ordinal-shift primary does not yield a valid NNT per clinical-trial-audit',
-      'Risk/Benefit: While outcomes are generally poorer than small-core patients, EVT shifts disability one step lower on average (e.g., walking-with-assistance vs bedbound)',
+      'Risk/Benefit: While outcomes are generally poorer than small-core patients, EVT shifts the whole mRS distribution toward less disability (e.g., more patients walking with assistance rather than bedbound)',
       'Safety: sICH 0.6% EVT vs 1.1% medical (NS); 90-d mortality 38.4% vs 41.5% (NS). No significant safety penalty',
-      'AHA/ASA 2026 §4.7.2 COR 1: EVT recommended for ASPECTS 3–5 LVO patients within 6h (and reasonable within 6–24h, COR 2a)'
+      'AHA/ASA 2026 §4.7.2: ASPECTS 3–5 is COR 1, LOE A in BOTH windows. Within 6 h it falls inside rec 1 (ASPECTS 3–10); from 6 to 24 h it is rec 3, which adds age <80, NIHSS ≥6, prestroke mRS 0–1 and no significant mass effect. The COR 2a in this section is rec 4 and belongs to ASPECTS 0–2 within 6 h, not to ASPECTS 3–5.'
     ],
     conclusion: '',
     source: 'Sarraj et al. (NEJM 2023;388(14):1259–1271)',
@@ -7329,7 +7330,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       cautions: 'Higher any-ICH rate with EVT than with medical management (49.1% vs 17.3%, P<0.001). Most are asymptomatic, but careful BP management is warranted. Stopped early at 2nd interim. Chinese cohort: generalizability to Western populations may differ. NNT 5.4 is from SECONDARY mRS 0–2 outcome; ordinal-shift primary does not yield a valid NNT. P=0.004 (not <0.001); the trial barely crossed its alpha-spending boundary.',
     },
     bedsidePearl: 'In a broader large-core population (China, includes ASPECTS 0–2 with core 70–100 mL), EVT improves ordinal mRS shift (gOR 1.37, P=0.004). Functional independence 30% vs 11.6% (NNT 5.4 from secondary). Higher ICH rates than SELECT2; BP management is critical.',
-    bottomLineSummary: 'ANGEL-ASPECT validates SELECT2 in a Chinese population with broader volume criteria. Primary ordinal mRS shift: gOR 1.37 (95% CI 1.11–1.69, P=0.004). Secondary mRS 0–2: 30% vs 11.6% (NNT 5.4 from secondary). sICH 6.1% vs 2.7% (NS but trending). AHA/ASA 2026 §4.7.2 COR 1 (6–24h) / COR 2a (within 6h).',
+    bottomLineSummary: 'ANGEL-ASPECT validates SELECT2 in a Chinese population with broader volume criteria. Primary ordinal mRS shift: gOR 1.37 (95% CI 1.11–1.69, P=0.004). Secondary mRS 0–2: 30% vs 11.6% (NNT 5.4 from secondary). sICH 6.1% vs 2.7% (NS but trending). AHA/ASA 2026 §4.7.2 COR 1 for ASPECTS 3–5 in both the 0–6h and 6–24h windows.',
     applicability: {
       imagingSelection: 'ASPECTS 3–5 (no core limit) OR ASPECTS 0–2 with core 70–100 mL OR ASPECTS >5 with core 70–100 mL (6–24h window); ≤24h anterior LVO; age ≤80; NIHSS 6–30; pre-stroke mRS 0–1',
       geography: 'China',
@@ -7414,7 +7415,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'NNT framing: NNT 5.4 is for the SECONDARY mRS 0–2 outcome (30% vs 11.6%). The ordinal-shift primary does not yield a valid NNT',
       'Hemorrhage Risk: sICH trend higher (6.1% vs 2.7%, NS); any ICH significantly higher (49.1% vs 17.3%, P<0.001). Careful BP management required',
       '90-day mortality: 21.7% vs 20.0% (NS). No mortality penalty despite higher ICH',
-      'AHA/ASA 2026 §4.7.2 COR 1: EVT recommended for ASPECTS 3–5 LVO patients within 6h; COR 2a for 6–24h window with significant mass effect exclusion'
+      'AHA/ASA 2026 §4.7.2: ASPECTS 3–5 is COR 1, LOE A in BOTH windows, within 6 h under rec 1 (ASPECTS 3–10) and from 6 to 24 h under rec 3, which requires age <80, NIHSS ≥6, prestroke mRS 0–1 and no significant mass effect. The COR 2a in this section is rec 4, covering ASPECTS 0–2 within 6 h.'
     ],
     conclusion: '',
     source: 'Huo et al. (NEJM 2023;388(14):1272–1283)',
@@ -7501,7 +7502,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Acute ischemic stroke with unknown time of onset (including wake-up stroke)',
       'DWI-positive and FLAIR-negative on MRI (DWI-FLAIR mismatch)',
       'Met standard thrombolysis criteria except for unknown onset time',
-      'Age 18 or older',
+      'Age 20 or older',
     ],
     exclusionCriteria: [
       'Known time of onset within the standard treatment window',
@@ -7988,7 +7989,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
           journal: 'NEJM (Langezaal et al.)',
           n: 300,
           designNotes: 'EVT plus best medical treatment vs best medical treatment alone for basilar artery occlusion within 6 hours, across 11 countries.',
-          keyResult: 'mRS 0-3 at 90 days 44.2% vs 37.7% (rate ratio 1.18, 95% CI 0.92 to 1.50, P=0.19); not significant.',
+          keyResult: 'mRS 0-3 at 90 days 44.2% vs 37.7% (risk ratio 1.18, 95% CI 0.92 to 1.50); not significant.',
           whatWasMissing: 'Reached its enrollment target but was underpowered against higher-than-expected baseline severity, so the confidence interval did not exclude a 50% relative increase in favorable outcome.',
         },
       ],
@@ -11200,7 +11201,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         evt: 16.8,
         control: 13.3,
         label: 'Any adverse event',
-        tooltip: 'Dyspnea and arrhythmia more frequent with ticagrelor (class effect). Mild bleeding also increased (5.3% vs 2.5%) but severe bleeding unchanged.',
+        tooltip: 'Dyspnea and arrhythmia more frequent with ticagrelor (class effect). Any bleeding was more frequent (5.3% vs 2.5%) while severe or moderate bleeding was unchanged.',
         color: 'warning',
       },
     },
@@ -11221,7 +11222,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToInterpret: {
       proves: 'In confirmed CYP2C19 loss-of-function carriers with minor stroke (NIHSS ≤3) or high-risk TIA (ABCD² ≥4) within 24 hours, ticagrelor + aspirin × 21 days then ticagrelor alone reduces 90-day stroke recurrence vs standard clopidogrel + aspirin DAPT.',
       doesNotProve: 'It does not prove benefit in CYP2C19 normal metabolizers (excluded by design). It does not establish ticagrelor DAPT vs aspirin alone. CHANCE-2 is a head-to-head DAPT comparison, not a DAPT-vs-monotherapy test.',
-      cautions: 'Chinese cohort (98% Han Chinese); CYP2C19 LOF prevalence is 50–60% in East Asians vs ~25% in White populations. Genotype-guided strategy depends on rapid point-of-care testing (GMEX, ~85 min turnaround). Mild bleeding doubled (5.3% vs 2.5%) without severe bleeding increase. Ticagrelor causes dyspnea in ~15% (class effect, may reduce adherence).',
+      cautions: 'Chinese cohort (98% Han Chinese); CYP2C19 LOF prevalence is 50–60% in East Asians vs ~25% in White populations. Genotype-guided strategy depends on rapid point-of-care testing (GMEX, ~85 min turnaround). Any bleeding roughly doubled (5.3% vs 2.5%) without an increase in severe or moderate bleeding. Ticagrelor causes dyspnea in ~15% (class effect, may reduce adherence).',
     },
     bedsidePearl: 'In confirmed CYP2C19 loss-of-function carriers with minor stroke (NIHSS ≤3) or high-risk TIA within 24h, ticagrelor + aspirin × 21 days then ticagrelor alone outperforms standard clopidogrel DAPT (NNT 63). If rapid genotyping is unavailable, use clopidogrel DAPT now. Do NOT delay treatment for testing.',
     bottomLineSummary: 'CHANCE-2 tests genotype-guided DAPT in CYP2C19 LOF carriers (15-30% Europeans, 50-60% Asians). Stroke recurrence at 90 days: 6.0% (ticagrelor) vs 7.6% (clopidogrel), HR 0.77 (95% CI 0.64–0.94, P=0.008; NNT 63). Severe bleeding unchanged. AHA/ASA 2026 §4.8 COR 2b for confirmed LOF carriers.',
@@ -11328,7 +11329,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'CYP2C19 *2/*3 LOF alleles present in ~15–30% Europeans, ~50–60% East Asians',
       'Rapid point-of-care genotyping is available at some comprehensive stroke centers; CHANCE-2 used the GMEX bedside system with an average turnaround of 85 min',
       'Ticagrelor direct-acting P2Y12 inhibitor; genotype-independent, no CYP2C19 conversion needed',
-      'Severe/moderate bleeding: 0.28% (ticagrelor) vs 0.39% (clopidogrel), no significant difference',
+      'Severe or moderate bleeding: 9 patients (0.3%) with ticagrelor vs 11 patients (0.3%) with clopidogrel, no significant difference',
       'Dyspnea: ~15% with ticagrelor vs ~5% clopidogrel, pharmacologic not cardiac, manageable',
       '1-year benefit confirmed: HR 0.80 (95% CI 0.68–0.95), p=0.007; durable effect',
       'Only CYP2C19 LOF carriers benefit; normal metabolizers should use standard clopidogrel DAPT',
@@ -11938,7 +11939,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
           journal: 'Lancet (Hanley et al.)',
           n: 506,
           designNotes: 'Image-guided stereotactic catheter plus intermittent alteplase vs standard medical management for supratentorial ICH of 30 mL or larger.',
-          keyResult: 'mRS 0-3 at 1 year 45% vs 41% (adjusted OR 1.20, 95% CI 0.81 to 1.81, P=0.33); a pre-specified subgroup reaching 15 mL or less residual clot did benefit.',
+          keyResult: 'mRS 0-3 at 1 year 45% vs 41% (adjusted risk difference 4 percentage points, 95% CI -4 to 12, P=0.33); a pre-specified subgroup reaching 15 mL or less residual clot did benefit.',
           whatWasMissing: 'Catheter lysis often left more than 15 mL of residual clot, and the procedure carried infection and rebleeding risk over its prolonged catheter dwell time.',
         },
       ],
@@ -11955,7 +11956,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Lobar OR anterior basal ganglia ICH on baseline CT',
       'Hematoma volume 30–80 mL',
       'Within 24 hours of last known well',
-      'Age 18+, presenting after ictus',
+      'Age 18 to 80 years, presenting after ictus',
     ],
     exclusionCriteria: [
       'Thalamic, posterior fossa, or brainstem ICH (anterior basal ganglia hemorrhage, including putaminal, was eligible, but new enrollment into that subgroup was stopped for futility at interim 2)',
@@ -12048,15 +12049,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToInterpret: {
       proves: 'In LOBAR intracerebral hemorrhage 30–80 mL within 24 hours, minimally invasive parafascicular surgery (trans-sulcal corridor, BrainPath + Myriad) improves utility-weighted mRS at 180 days (lobar stratum difference +0.127, 95% CrI 0.035–0.219; overall Bayesian P(sup)=0.981) and reduces 30-day mortality (9.3% vs 18.0%).',
       doesNotProve: 'It does not prove benefit in anterior basal ganglia ICH. That subgroup was halted for futility at interim 2 (point estimate −0.013, CrI crossing zero). It does not apply to thalamic ICH, posterior fossa or brainstem ICH, or volumes <30 mL or >80 mL.',
-      cautions: 'Industry-funded by NICO Corporation (device manufacturer). Bayesian adaptive randomization: effect size may be inflated. Open-label (impossible to blind surgery), mitigated by central blinded mRS adjudication via redacted audio recordings. 59 trained neurosurgeons across 37 US centers; generalizability outside trained centers is unestablished. NNT 12 is approximate, from PRIMARY SAFETY endpoint (30-day mortality), not primary efficacy.',
+      cautions: 'Industry-funded by NICO Corporation (device manufacturer). Enrollment was restricted to lobar hemorrhage after 175 patients, so the overall effect estimate is carried by the lobar stratum and may be optimistic. Open-label (impossible to blind surgery), mitigated by central blinded mRS adjudication via redacted audio recordings. 59 trained neurosurgeons across 37 US centers; generalizability outside trained centers is unestablished. NNT 12 is approximate, from PRIMARY SAFETY endpoint (30-day mortality), not primary efficacy.',
     },
     bedsidePearl: 'For LOBAR ICH 30–80 mL within 24 hours, minimally invasive parafascicular surgery (BrainPath + Myriad) reduces 30-day mortality (9.3% vs 18.0%) and improves 180-day UW-mRS (Bayesian posterior P>0.98). Anterior basal ganglia subgroup was halted for futility; benefit is in LOBAR ICH.',
-    bottomLineSummary: 'ENRICH is the first randomized supratentorial ICH evacuation trial to meet its prespecified primary endpoint. UW-mRS at 180d: difference +0.084 (95% CrI 0.005–0.163, posterior P(sup)=0.981). 30-day mortality 9.3% vs 18.0% (ARD -8.7 pp, posterior P=0.987). Bayesian RAR design (no frequentist p-value). AHA/ASA 2022 ICH Class IIb (pre-ENRICH); may prompt focused update.',
+    bottomLineSummary: 'ENRICH is the first randomized supratentorial ICH evacuation trial to meet its prespecified primary endpoint. UW-mRS at 180d: difference +0.084 (95% CrI 0.005–0.163, posterior P(sup)=0.981). 30-day mortality 9.3% vs 18.0% (ARD -8.7 pp, posterior P=0.987). Bayesian adaptive design (no frequentist p-value). AHA/ASA 2022 ICH Class IIb (pre-ENRICH); may prompt focused update.',
     stats: {
       sampleSize: {
         value: '300',
         label: 'Randomized Patients',
-        info: 'Patients with lobar or anterior basal ganglia ICH (30–80 mL) within 24 hours. 37 US hospitals. Bayesian response-adaptive randomized design. Final allocation: 150 surgery / 150 medical. Median age 64 (surgery) / 62 (control); female 48% (surgery) / 52% (control).'
+        info: 'Patients with lobar or anterior basal ganglia ICH (30–80 mL) within 24 hours. 37 US hospitals. Bayesian adaptive design, 1:1 allocation block randomized by hemorrhage location and GCS. Final allocation: 150 surgery / 150 medical. Median age 64 (surgery) / 62 (control); female 48% (surgery) / 52% (control).'
       },
       primaryEndpoint: {
         value: 'UW-mRS',
@@ -12078,7 +12079,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     trialDesign: {
       type: [
-        'Multicenter Bayesian response-adaptive randomized trial',
+        'Multicenter Bayesian adaptive randomized trial (1:1 allocation)',
         '37 US hospitals (Dec 2016 – Aug 2022)',
         'MIPS. Trans-sulcal parafascicular approach',
         'BrainPath® + Myriad® (NICO Corporation. Industry-funded)',
@@ -12088,7 +12089,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       timeline: 'Enrolled Dec 1, 2016 – Aug 24, 2022; published NEJM April 2024',
       sampleSize: {
         value: '300 patients (adaptive design)',
-        info: 'Bayesian adaptive design: allocation ratio adjusted by interim results. Final: 150 surgery, 150 medical. Adaptive design maintains validity with smaller n than traditional RCTs.'
+        info: 'Bayesian adaptive design: prespecified rules adapted the ENROLLMENT CRITERIA by hemorrhage location, not the 1:1 allocation ratio. After 175 patients, only lobar hemorrhage was enrolled. Final: 150 surgery, 150 medical.'
       },
       primaryEndpoint: {
         value: 'UW-mRS at 180 days',
@@ -12171,7 +12172,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Industry-funded by NICO Corporation (device manufacturer)',
       'US-only trial. Generalizability to other healthcare systems uncertain',
       'Open-label. Mitigated by central blinded mRS adjudication via redacted audio recordings of structured interviews',
-      'Adaptive randomization ratio changed over time. Potential allocation bias',
+      'Enrollment criteria adapted mid-trial: after 175 patients only lobar hemorrhage was enrolled, so the anterior basal ganglia stratum remained small',
       'Does not address deep ICH (thalamus/putamen), posterior fossa, or volumes outside 30–80 mL',
       'Longer-term outcomes (>180 days) not reported',
       'UW-mRS endpoint not specifically validated for ICH (population utility weights)'
@@ -12560,8 +12561,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         label: 'at 90 Days'
       },
       pValue: {
-        value: '1.00',
-        label: 'Not Significant'
+        value: 'cOR 1.00 (0.87–1.15)',
+        label: 'Ordinal shift, not significant'
       },
       effectSize: {
         value: 'OR 1.00',
@@ -12603,6 +12604,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     conclusion: '',
     source: 'INTERACT4 Investigators (NEJM 2024)',
     doi: '10.1056/NEJMoa2314741',
+    pmid: '38752650',
     trialResult: 'NEUTRAL',
     archetypeId: 'B',
     inclusionCriteria: [
@@ -13598,7 +13600,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       doesNotProve: 'ARAMIS does not prove DAPT is superior to alteplase. It does not apply to patients with disabling neurological deficits, where alteplase retains standard-of-care status. The benefit may be partly driven by avoiding alteplase-associated sICH in a population with otherwise-favorable prognosis.',
       cautions: 'Open-label design. The enrolled population had NIHSS ≤5 with nondisabling deficits (not the typical thrombolysis candidate). ARAMIS complements but does not replace alteplase for patients with disabling stroke. Results require careful patient selection to apply correctly in practice.',
     },
-    bedsidePearl: 'ARAMIS showed DAPT is non-inferior to alteplase for minor nondisabling stroke (NNT context: both arms excellent, 93.8% vs 91.4%). The key bedside application: for clearly minor, nondisabling deficits within 4.5 hours, DAPT is a reasonable alternative that avoids the 0.9% sICH risk of alteplase. Do not apply to disabling stroke.',
+    bedsidePearl: 'ARAMIS showed DAPT is non-inferior to alteplase for minor nondisabling stroke, with excellent outcomes in both arms, 93.8% vs 91.4%. The key bedside application: for clearly minor, nondisabling deficits within 4.5 hours, DAPT is a reasonable alternative that avoids the 0.9% sICH risk of alteplase. Do not apply to disabling stroke.',
     bottomLineSummary: 'In patients with minor nondisabling acute ischemic stroke, DAPT was non-inferior to IV alteplase for excellent 90-day outcome (93.8% vs 91.4%, RD +2.3 pp, NI P<0.001), with lower sICH (0.3% vs 0.9%). ARAMIS supports DAPT as an alternative to thrombolysis for clearly nondisabling deficits but does not displace alteplase for disabling stroke.',
     legend: {
       finding: 'DAPT non-inferior to alteplase for minor nondisabling stroke at 90 d (93.8% vs 91.4%).',
@@ -13611,10 +13613,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'ATTEST-2 Trial',
     subtitle: 'Tenecteplase vs Alteplase Within 4.5 Hours',
     category: 'Neuro Trials',
-    primaryDesign: 'ordinal-shift',
-    primaryResult: 'not-met',
-    secondaryDesign: 'noninferiority',
-    secondaryResult: 'noninferiority-established',
+    primaryDesign: 'noninferiority',
+    primaryResult: 'noninferiority-established',
+    secondaryDesign: 'ordinal-shift',
+    secondaryResult: 'not-met',
     stats: {
       sampleSize: {
         value: '1777',
@@ -13675,11 +13677,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Acute ischemic stroke eligible for IV thrombolysis',
       'Within 4.5 hours of onset',
       'Age 18 or older',
-      'NIHSS 4 or higher, or disabling deficit',
+      'Previously independent before the stroke (modified Rankin Scale 0 to 2)',
     ],
     exclusionCriteria: [
       'Standard thrombolysis contraindications',
-      'Prior thrombolysis within 3 months',
+      'Prior thrombolysis within the past 14 days',
       'Significant anticoagulation',
     ],
     fullEligibility: {
@@ -13741,11 +13743,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
     ],
     mrsDistribution: [
-      { arm: 'Tenecteplase 0.25 mg/kg', n: 889, pct: [15, 30, 24, 12, 9, 3, 8] },
-      { arm: 'Alteplase 0.9 mg/kg', n: 888, pct: [15, 28, 22, 14, 8, 4, 9] },
+      { arm: 'Tenecteplase 0.25 mg/kg', n: 885, pct: [15, 30, 24, 12, 9, 3, 8] },
+      { arm: 'Alteplase 0.9 mg/kg', n: 892, pct: [15, 28, 22, 14, 8, 4, 9] },
     ],
     ordinalStats: { commonOR: 1.07, ciLow: 0.90, ciHigh: 1.27, direction: 'positive' as const },
-    bedsidePearl: 'ATTEST-2 is the largest UK trial confirming that tenecteplase 0.25 mg/kg is noninferior to alteplase 0.9 mg/kg for standard-window IVT (NI p<0.0001). The single-bolus dosing advantage is now validated across three major trials (AcT, TRACE-2, ATTEST-2). Symptomatic ICH and mortality were identical in both arms. For centers transitioning to tenecteplase, ATTEST-2 provides reassurance that this is a direct substitution, not a clinical downgrade.',
+    bedsidePearl: 'ATTEST-2 is the largest UK trial confirming that tenecteplase 0.25 mg/kg is noninferior to alteplase 0.9 mg/kg for standard-window IVT (NI p<0.0001). The single-bolus dosing advantage is now validated across three major trials (AcT, TRACE-2, ATTEST-2). Symptomatic ICH was 2% in both arms (20 vs 15 patients) and mortality was 8% in both (68 vs 75). For centers transitioning to tenecteplase, ATTEST-2 provides reassurance that this is a direct substitution, not a clinical downgrade.',
     bottomLineSummary: 'In 1777 treated patients across 39 UK stroke centres, tenecteplase 0.25 mg/kg was noninferior to alteplase 0.9 mg/kg for 90-day mRS distribution (adjusted OR 1.07, 95% CI 0.90-1.27; NI p<0.0001). Superiority was not demonstrated. mRS 0-1 was achieved in 44% vs 42%. Mortality was approximately 8% in both groups. Together with AcT and TRACE-2, ATTEST-2 firmly establishes tenecteplase 0.25 mg/kg as a noninferior replacement for alteplase in standard-window IVT.',
     legend: {
       finding: 'Tenecteplase 0.25 mg/kg noninferior to alteplase in standard-window IVT (UK).',
@@ -14223,7 +14225,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         frequency: 'Standard alteplase dosing (10% bolus, remainder infused over 60 minutes); oral placebo to maintain double-blind double-placebo masking',
         duration: 'Alteplase infusion over about 60 minutes',
         coInterventions: 'Double-blind, double-placebo design: placebos were identical in appearance to the active study drugs to preserve masking. Treatment initiated within 3 hours of onset.',
-        note: 'Phase 3b, double-blind, double-placebo trial at 75 US stroke-hospital networks; enrolled 313 of a planned 948 patients before the sponsor (Genentech) terminated the trial for slow enrollment, leaving it underpowered. Design and intervention from Khatri JAMA 2018 p.157 (abstract, Study Intervention). ClinicalTrials.gov NCT02072226.',
+        note: 'Phase 3b, double-blind, double-placebo trial designed across 75 US stroke-hospital networks, with actual enrolment at 53 of them; enrolled 313 of a planned 948 patients before the sponsor (Genentech) terminated the trial for slow enrollment, leaving it underpowered. Design and intervention from Khatri JAMA 2018 p.157 (abstract, Study Intervention). ClinicalTrials.gov NCT02072226.',
       },
       {
         arm: 'Oral aspirin plus intravenous placebo',
@@ -15926,7 +15928,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     conclusion: '',
     questionLede: 'In patients with acute basilar artery occlusion within 6 hours, does EVT plus best medical treatment improve 90-day favorable functional outcome (mRS 0-3) compared with best medical treatment alone?',
     /* claimId: basics-outcomes | source: Langezaal et al., NEJM 2021, doi: 10.1056/NEJMoa2030297 */
-    primaryOutcomeProse: 'In 300 patients with CTA- or MRA-confirmed basilar artery occlusion enrolled across 11 countries, EVT plus best medical treatment did not significantly improve favorable functional outcome (mRS 0-3) at 90 days compared with best medical treatment alone. mRS 0-3 was achieved in 44.2% (68 of 154) of the EVT group versus 37.7% (55 of 146) of the medical group (rate ratio 1.18, 95% CI 0.92 to 1.50, P=0.19). The confidence interval was wide and included a potential 50% relative increase in favorable outcomes with EVT, meaning the trial did not exclude a clinically meaningful benefit. Mortality was numerically lower in the EVT arm (38.3% vs 43.2%), though not statistically significant.',
+    primaryOutcomeProse: 'In 300 patients with CTA- or MRA-confirmed basilar artery occlusion enrolled across 11 countries, EVT plus best medical treatment did not significantly improve favorable functional outcome (mRS 0-3) at 90 days compared with best medical treatment alone. mRS 0-3 was achieved in 44.2% (68 of 154) of the EVT group versus 37.7% (55 of 146) of the medical group (risk ratio 1.18, 95% CI 0.92 to 1.50, P=0.19). The confidence interval was wide and included a potential 50% relative increase in favorable outcomes with EVT, meaning the trial did not exclude a clinically meaningful benefit. Mortality was numerically lower in the EVT arm (38.3% vs 43.2%), though not statistically significant.',
     /* claimId: basics-design | source: Langezaal et al., NEJM 2021 */
     trialDesignNarrative: 'BASICS was an international open-label RCT enrolling patients with acute basilar artery occlusion at centers in Europe and Asia. Patients within 6 hours of onset (or last known well) with CTA- or MRA-confirmed basilar occlusion were randomized to EVT plus best medical treatment or best medical treatment alone. Best medical treatment included IV alteplase (0.9 mg/kg) if eligible; 79.5% of the medical arm received IV thrombolysis (78.6% in the endovascular arm), so the control arm was not undertreated. EVT could use any approved thrombectomy technique. The trial was designed to detect a 10-percentage-point difference in mRS 0-3 but the enrolled population had higher baseline severity than anticipated, limiting statistical power.',
     safetyBrief: 'Symptomatic intracranial hemorrhage occurred in 4.5% of the EVT group versus 0.7% of the medical group (P=0.07). Mortality at 90 days was 38.3% EVT versus 43.2% medical, a non-significant difference. The sICH difference trended toward significance, consistent with reperfusion hemorrhage risk in the basilar territory.',
