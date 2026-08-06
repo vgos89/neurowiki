@@ -641,13 +641,13 @@ Following the poor outcomes of intracranial stenting in SAMMPRIS (14.7% event ra
     *   Age 22-80, mRS <= 3.
     *   **>8 days** from most recent stroke (to avoid reperfusion hemorrhage).
 *   **Intervention:** Angioplasty and Stenting with Wingspan Stent System.
-*   **Primary Outcome:** Stroke or death within 72 hours.
+*   **Primary Outcome:** Stroke, bleed, or death within 72 hours.
 *   **Results:**
-    *   **Periprocedural Stroke/Death:** **2.6%** (4/152 patients).
+    *   **Periprocedural Stroke, Bleed, or Death:** **2.6%** (4/152 patients).
     *   **Benchmark:** Met. The observed 2.6% (95% CI 0.7% to 6.6%) fell below the FDA pre-specified 4% threshold, though the upper confidence bound crosses it.
 
 ## Clinical PEARLS
-*   **Patient Selection:** This trial demonstrated that intracranial stenting *can* be performed safely (2.6% risk vs 14.7% in SAMMPRIS) if strict selection criteria are followed, particularly waiting >8 days after stroke and requiring demonstrated failure of medical therapy (2 recurrent strokes).
+*   **Patient Selection:** This trial demonstrated that intracranial stenting *can* be performed safely (2.6% at 72 hours vs the 14.7% 30-day rate in SAMMPRIS) if strict selection criteria are followed, particularly waiting >8 days after stroke and requiring demonstrated failure of medical therapy (2 recurrent strokes).
 *   **Experience Matters:** The trial utilized experienced interventionalists, which likely contributed to the lower complication rate.
 *   **Role of Stenting:** While WEAVE assessed safety (not efficacy vs medical therapy), it supports stenting as a salvage option for highly selected patients who fail medical therapy.
 
@@ -664,7 +664,7 @@ Ticagrelor is a potent antiplatelet agent used in cardiology. SOCRATES aimed to 
 
 ## Trial Summary
 *   **Design:** Randomized, double-blind trial.
-*   **Population:** 13,199 patients with acute mild-to-moderate ischemic stroke ([NIHSS](/calculators/nihss) ≤ 5) or high-risk TIA.
+*   **Population:** 13,199 patients with acute nonsevere ischemic stroke ([NIHSS](/calculators/nihss) ≤ 5) or high-risk TIA.
 *   **Intervention:**
     *   **Ticagrelor:** 180mg load, then 90mg BID.
     *   **Aspirin:** 300mg load, then 100mg daily.
@@ -747,11 +747,10 @@ For patients with ischemic stroke and Atrial Fibrillation, the optimal timing to
 *   **Population:** 2,013 patients with acute ischemic stroke and Atrial Fibrillation.
 *   **Intervention:**
     *   **Early Treatment:**
-        *   Minor/TIA: < 48 hours.
-        *   Moderate: Day 2.
-        *   Major: Day 6-7.
+        *   Minor or moderate stroke: within 48 hours.
+        *   Major stroke: Day 6 or 7.
     *   **Later Treatment:**
-        *   Minor/TIA: Day 3-4.
+        *   Minor stroke: Day 3 or 4.
         *   Moderate: Day 6-7.
         *   Major: Day 12-14.
 *   **Primary Outcome:** Composite of recurrent ischemic stroke, symptomatic intracranial hemorrhage (sICH), extracranial bleeding, systemic embolism, or vascular death at 30 days.
@@ -763,7 +762,7 @@ For patients with ischemic stroke and Atrial Fibrillation, the optimal timing to
 ## Clinical PEARLS
 *   **Safety Confirmed:** Early initiation of DOACs did not increase the risk of symptomatic intracranial hemorrhage compared to later initiation.
 *   **Efficacy Signal:** While designed to estimate range (not superiority), the data suggests early initiation prevents more ischemic strokes.
-*   **Practice Change:** Supports starting DOACs earlier than historical guidelines (e.g., day 2 for moderate, day 6-7 for major) provided imaging excludes hemorrhagic transformation.
+*   **Practice Change:** Supports starting DOACs earlier than historical guidelines (within 48 hours for minor or moderate stroke, day 6 or 7 for major) provided imaging excludes hemorrhagic transformation.
 
 *Source: [Fischer et al. (NEJM 2023)](https://www.nejm.org/doi/full/10.1056/NEJMoa2303048)*
 `
@@ -1098,7 +1097,7 @@ THALES tested whether ticagrelor (a more potent, direct-acting P2Y12 inhibitor) 
 *   **Results:**
     *   **Stroke/death:** 5.5% (ticagrelor+ASA) vs 6.6% (ASA alone); HR 0.83, **p=0.02**
     *   **Absolute reduction:** 1.1%; **NNT = 91**
-    *   **Severe hemorrhage:** 0.5% vs 0.1%; **5× higher**, p<0.001
+    *   **Severe hemorrhage:** 0.5% vs 0.1%; **5× higher**, P=0.001
 
 ## Why AHA/ASA 2026 Rates This COR 2b Rather Than Higher
 The trial is statistically significant. But net clinical benefit is unfavorable:

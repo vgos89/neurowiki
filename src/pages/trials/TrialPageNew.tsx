@@ -2571,7 +2571,7 @@ const TrialPageNew: React.FC = () => {
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
-          {renderTrialDesign(trialMetadata, '3,020 patients enrolled 2003 to 2011; planned enrollment was completed. Antiplatelet arm terminated early by the DSMB in July 2011 for futility with excess mortality and major hemorrhage.')}
+          {renderTrialDesign(trialMetadata, '3,020 patients enrolled 2003 to 2011; planned enrollment was completed. Antiplatelet arm terminated early by the DSMB in August 2011 for futility with excess mortality and major hemorrhage.')}
           {trialMetadata.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>
@@ -7719,9 +7719,9 @@ const TrialPageNew: React.FC = () => {
       'MISTIE III',
       'Primary Outcome: mRS 0-3 at 1 Year',
       '506 patients; image-guided catheter + alteplase vs standard medical management; supratentorial ICH ≥30 mL',
-      'OR (mRS 0-3 at 1 year)',
-      '1.20',
-      '0.81 to 1.81',
+      'Adjusted risk difference (mRS 0-3 at 1 year)',
+      '+4 pp',
+      '-4 to 12',
       'Not significant (P=0.33)',
     );
   }
@@ -9237,7 +9237,7 @@ const TrialPageNew: React.FC = () => {
               />
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Noninferiority established: lower bound of CI (−5.8 pp) is above the prespecified −10 pp NI margin. Sequential superiority on rapid INR reduction MET: INR ≤1.3 at 30 minutes 62.2% vs 9.6% (+52.6 pp, 95% CI 39.4–65.9, P&lt;0.001). Median infusion volume 99 mL (4F-PCC) vs 814 mL (FFP); fluid overload 2.9% vs 11.9%. Mortality (5.1% vs 4.8%) and thromboembolic events (7.8% vs 6.4%) comparable. Both arms received vitamin K 5–10 mg IV; never give one without the other.
+                  Noninferiority established: lower bound of CI (−5.8 pp) is above the prespecified −10 pp NI margin. Sequential superiority on rapid INR reduction MET: INR ≤1.3 at 30 minutes 62.2% vs 9.6% (+52.6 pp, 95% CI 39.4–65.9; superiority declared from the CI lower bound, no p-value reported). Median infusion volume 99 mL (4F-PCC) vs 814 mL (FFP); fluid overload or similar cardiac events 4.9% vs 12.8%. Deaths through day 45 10 of 103 (9.7%) vs 5 of 109 (4.6%) and thromboembolic events 7.8% vs 6.4%; the publication reports a similar overall safety profile and was not powered for mortality. Both arms received vitamin K 5–10 mg IV; never give one without the other.
                 </p>
               </div>
             </div>
@@ -9246,7 +9246,7 @@ const TrialPageNew: React.FC = () => {
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
-          {renderTrialDesign(trialMetadata, '202 patients in ITT efficacy population (98 4F-PCC / 104 FFP); 212 randomized. 36 sites in North America and Europe. Enrolled 2008 to 2012. Phase IIIb multicenter open-label noninferiority RCT with prospective randomization stratified by baseline INR and bleeding type. NI margin −10 pp on lower bound of 95% CI; coprimary sequential superiority on rapid INR reduction. Independent blinded endpoint adjudication committee. 45-day follow-up. Sponsor: CSL Behring. Published Circulation 2013.')}
+          {renderTrialDesign(trialMetadata, '202 patients in ITT efficacy population (98 4F-PCC / 104 FFP); 216 randomized, 212 received study product. 36 sites in the United States and Europe. Enrolled 2008 to 2012. Phase IIIb multicenter open-label noninferiority RCT with prospective randomization stratified by baseline INR and bleeding type. NI margin −10 pp on lower bound of 95% CI; coprimary sequential superiority on rapid INR reduction. Independent blinded endpoint adjudication committee. 45-day follow-up. Sponsor: CSL Behring. Published Circulation 2013.')}
           {trialMetadata.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>

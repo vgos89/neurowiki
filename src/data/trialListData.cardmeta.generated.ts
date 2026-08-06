@@ -250,10 +250,10 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     },
     "subtitle": "Basilar Artery Occlusion: Endovascular Intervention vs Standard Medical Treatment",
     "source": "Liu et al. (Lancet Neurol 2020)",
-    "timeline": "Terminated early: 131 of 240 planned patients enrolled",
+    "timeline": "Terminated early: 131 of 344 planned patients enrolled",
     "listCategory": "thrombectomy",
     "listDescription": "First RCT of EVT for basilar artery occlusion. ITT primary (mRS 0-3 at 90 days): 42% vs 32% (OR 1.74, CI 0.81–3.74, p=0.23). Terminated early for crossover and low enrollment. Preceded ATTENTION (2022).",
-    "bottomLineSummary": "BEST was the first RCT for basilar EVT and was terminated early (131/240 patients) due to crossover and slow enrollment. ITT primary (mRS 0-3 at 90 days): 42% EVT vs 32% medical (OR 1.74, 95% CI 0.81–3.74, P=0.23), not significant. Per-protocol: OR 2.90 (1.20–7.03, P=0.016), nominally significant but requires cautious interpretation. ATTENTION (2022) provided definitive evidence for basilar EVT.",
+    "bottomLineSummary": "BEST was the first RCT for basilar EVT and was terminated early (131 of 344 planned patients) due to crossover and slow enrollment. ITT primary (mRS 0-3 at 90 days): 42% EVT vs 32% medical (OR 1.74, 95% CI 0.81–3.74, P=0.23), not significant. Per-protocol: OR 2.90 (1.20–7.03, P=0.016), nominally significant but requires cautious interpretation. ATTENTION (2022) provided definitive evidence for basilar EVT.",
     "doi": "10.1016/S1474-4422(19)30395-3"
   },
   "bp-target-trial": {
@@ -681,7 +681,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     },
     "subtitle": "EVT for Medium Vessel Occlusions",
     "source": "Goyal et al. (NEJM 2025)",
-    "timeline": "Enrolled 2019-2024",
+    "timeline": "Enrolled April 2022 – June 2024",
     "listCategory": "thrombectomy",
     "listDescription": "EVT for medium vessel occlusion (MeVO); no functional benefit, higher sICH and mortality (NEJM 2025).",
     "bottomLineSummary": "ESCAPE-MeVO showed that EVT for medium vessel occlusion (M2, M3, ACA, PCA branches) did not improve the rate of excellent functional outcome (mRS 0-1) at 90 days compared with best medical management, and was associated with higher rates of symptomatic hemorrhage and 90-day mortality. Routine EVT for MeVO is not supported by this evidence."
@@ -883,13 +883,13 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "legend": {
       "finding": "Catheter-based clot lysis for ICH ≥30 mL did not improve mRS 0–3 at 1 year vs standard care.",
       "bottomLineTag": "Neutral",
-      "keyStat": "OR 1.20"
+      "keyStat": "RD +4 pp"
     },
     "subtitle": "Minimally Invasive Surgery Plus rt-PA for ICH Evacuation",
     "source": "Hanley et al. (Lancet 2019)",
     "timeline": "506 patients; completed as planned; 1-year follow-up",
-    "listDescription": "Image-guided catheter plus alteplase vs conservative management for ICH 30 mL or larger: no primary benefit (mRS 0-3 at 1 year 45% vs 41%, OR 1.20, CI 0.81–1.81, P=0.33). Pre-specified end-of-treatment hematoma ≤15 mL subgroup showed benefit. Preceded ENRICH (2024).",
-    "bottomLineSummary": "MISTIE III enrolled 506 patients with ICH 30 mL or larger and tested catheter-based clot lysis vs standard care. Primary negative: mRS 0-3 at 1 year 45% vs 41% (OR 1.20, CI 0.81–1.81, P=0.33). Pre-specified end-of-treatment hematoma ≤15 mL subgroup showed benefit (OR ~1.79, CI 1.03–3.12). Established that greater hematoma reduction correlates with better outcomes. ENRICH (2024) achieved this more reliably with trans-sulcal surgical access.",
+    "listDescription": "Image-guided catheter plus alteplase vs conservative management for ICH 30 mL or larger: no primary benefit (mRS 0-3 at 1 year 45% vs 41%, adjusted risk difference 4 percentage points, 95% CI -4 to 12, P=0.33). An as-treated analysis of patients reaching end-of-treatment hematoma 15 mL or less showed benefit. Preceded ENRICH (2024).",
+    "bottomLineSummary": "MISTIE III enrolled 506 patients with ICH 30 mL or larger and tested catheter-based clot lysis vs standard care. Primary negative: mRS 0-3 at 1 year 45% vs 41% (adjusted risk difference 4 percentage points, 95% CI -4 to 12, P=0.33). An as-treated analysis of patients reaching end-of-treatment hematoma ≤15 mL showed benefit (risk difference +10.5 pp, 95% CI 1.0 to 20.0, P=0.03; exploratory). Established that greater hematoma reduction correlates with better outcomes. ENRICH (2024) achieved this more reliably with trans-sulcal surgical access.",
     "doi": "10.1016/S0140-6736(19)30195-3"
   },
   "mr-asap-trial": {
@@ -1376,7 +1376,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Enrolled 2008 to 2012; assessment at 24 hours and through day 45",
     "listCategory": "acute",
     "listDescription": "Phase IIIb open-label RCT in 202 VKA-treated adults with major bleeding. 4F-PCC noninferior to FFP for hemostatic efficacy (+7.1 pp, 95% CI -5.8 to +19.9) and superior for INR target time (+52.6 pp, 95% CI 39.4-65.9). FDA approval of Kcentra.",
-    "bottomLineSummary": "Sarode 2013 was the phase IIIb open-label noninferiority RCT that established 4-factor PCC (Kcentra/Beriplex P/N) as noninferior to fresh frozen plasma for hemostatic efficacy at 24 h AND superior for rapid INR reduction in 202 VKA-treated adults with acute major bleeding. Hemostatic efficacy 72.4% vs 65.4% (+7.1 pp, 95% CI -5.8 to +19.9; NI margin -10 pp). INR ≤1.3 at 30 min: 62.2% vs 9.6% (+52.6 pp, 95% CI 39.4-65.9). Mortality and thromboembolic events comparable; fluid overload less with 4F-PCC (2.9% vs 11.9%); median infusion volume 99 mL vs 814 mL. Population was general major bleeding (GI, intracranial, visible). Underwrote FDA approval of Kcentra (April 2013) and AHA/ASA 2022 Class 1, Level B-R for 4F-PCC > FFP in VKA-associated ICH. ICH-specific confirmation: INCH 2016 (Steiner Lancet Neurol).",
+    "bottomLineSummary": "Sarode 2013 was the phase IIIb open-label noninferiority RCT that established 4-factor PCC (Kcentra/Beriplex P/N) as noninferior to fresh frozen plasma for hemostatic efficacy at 24 h AND superior for rapid INR reduction in 202 VKA-treated adults with acute major bleeding. Hemostatic efficacy 72.4% vs 65.4% (+7.1 pp, 95% CI -5.8 to +19.9; NI margin -10 pp). INR ≤1.3 at 30 min: 62.2% vs 9.6% (+52.6 pp, 95% CI 39.4-65.9). Mortality and thromboembolic events comparable; fluid overload or similar cardiac events less with 4F-PCC (4.9% vs 12.8%); median infusion volume 99 mL vs 814 mL. Population was general major bleeding (GI, intracranial, visible). Underwrote FDA approval of Kcentra (April 2013) and AHA/ASA 2022 Class 1, Level B-R for 4F-PCC > FFP in VKA-associated ICH. ICH-specific confirmation: INCH 2016 (Steiner Lancet Neurol).",
     "doi": "10.1161/CIRCULATIONAHA.113.002283"
   },
   "select2-trial": {
@@ -1427,15 +1427,15 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "title": "SPARCL Trial",
     "legend": {
       "finding": "Atorvastatin 80 mg after non-cardioembolic stroke/TIA reduces recurrent stroke; hemorrhagic-stroke signal HR 1.66.",
-      "bottomLineTag": "NNT 53",
-      "keyStat": "ARR 1.9%"
+      "bottomLineTag": "NNT 46",
+      "keyStat": "ARR 2.2% at 5 y"
     },
     "subtitle": "Statins in Stroke",
     "source": "Amarenco et al. (NEJM 2006)",
     "timeline": "Enrolled 2001-2005",
     "listCategory": "antiplatelets",
-    "listDescription": "High-intensity statin (atorvastatin 80mg) for secondary stroke prevention; NNT=53.",
-    "bottomLineSummary": "In patients with recent ischemic stroke or TIA and LDL 100 to 190 mg/dL without known coronary heart disease, atorvastatin 80 mg reduced recurrent stroke by 16% relative (NNT=53 over 4.9 years) but significantly increased hemorrhagic stroke risk (HR 1.66, 2.3% vs 1.4%). High-intensity statin therapy is now standard secondary prevention for ischemic stroke; caution is warranted in patients with prior hemorrhagic stroke."
+    "listDescription": "High-intensity statin (atorvastatin 80mg) for secondary stroke prevention; NNT=46 over 5 years.",
+    "bottomLineSummary": "In patients with recent ischemic stroke or TIA and LDL 100 to 190 mg/dL without known coronary heart disease, atorvastatin 80 mg reduced recurrent stroke by 16% relative (5-year absolute risk reduction 2.2%, NNT=46) but significantly increased hemorrhagic stroke risk (HR 1.66, 2.3% vs 1.4%). High-intensity statin therapy is now standard secondary prevention for ischemic stroke; caution is warranted in patients with prior hemorrhagic stroke."
   },
   "sps3-trial": {
     "title": "SPS3 Trial",
@@ -1714,7 +1714,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
   "weave-trial": {
     "title": "WEAVE Trial",
     "legend": {
-      "finding": "Wingspan stenting met FDA safety threshold (2.6% periprocedural stroke/death) in highly selected ICAS failures.",
+      "finding": "Wingspan stenting met FDA safety threshold (2.6% periprocedural stroke, bleed, or death) in highly selected ICAS failures.",
       "bottomLineTag": "Safety met",
       "keyStat": "2.6% (target <4%)"
     },
@@ -1723,7 +1723,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Enrolled 2014 to 2017",
     "listCategory": "carotid",
     "listDescription": "FDA-mandated post-market surveillance: on-label Wingspan stenting met the 4% periprocedural safety benchmark.",
-    "bottomLineSummary": "In 152 consecutive patients with symptomatic intracranial atherosclerotic stenosis undergoing Wingspan stenting under strict on-label criteria at experienced centers, the 72-hour periprocedural stroke or death rate was 2.6% (4 events; 95% CI 0.7 to 6.6%), meeting the FDA pre-specified safety benchmark of below 4%. WEAVE does not assess efficacy versus medical therapy; it provides regulatory safety evidence for stenting in a highly selected, refractory population only.",
+    "bottomLineSummary": "In 152 consecutive patients with symptomatic intracranial atherosclerotic stenosis undergoing Wingspan stenting under strict on-label criteria at experienced centers, the 72-hour periprocedural stroke, bleed, or death rate was 2.6% (4 events; 95% CI 0.7 to 6.6%), meeting the FDA pre-specified safety benchmark of below 4%. WEAVE does not assess efficacy versus medical therapy; it provides regulatory safety evidence for stenting in a highly selected, refractory population only.",
     "doi": "10.1161/STROKEAHA.118.023996"
   },
   "woven-trial": {
