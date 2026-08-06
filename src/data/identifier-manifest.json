@@ -1,0 +1,361 @@
+{
+  "_readme": "Verified trial identifiers. Each entry was resolved through PubMed and its DOI compared against the DOI in src/data/trialData.ts. check:identifiers fails if a record's pmid/doi pair drifts from this file, or if a record gains an identifier that has never been resolved. Re-verify with the PubMed MCP tools and update this file; do NOT hand-edit an entry to silence the check.",
+  "_verifiedOn": "2026-08-06",
+  "_note": "IST and CAST (both Lancet 1997) have no DOI in PubMed; resolvedDoi is null and the title was checked by hand instead.",
+  "trials": {
+    "annexa-4-trial": {
+      "pmid": "30730782",
+      "doi": "10.1056/NEJMoa1814051",
+      "resolvedDoi": "10.1056/NEJMoa1814051",
+      "title": "Full Study Report of Andexanet Alfa for Bleeding Associated with Factor Xa Inhibitors."
+    },
+    "annexa-i-trial": {
+      "pmid": "38749032",
+      "doi": "10.1056/NEJMoa2313040",
+      "resolvedDoi": "10.1056/NEJMoa2313040",
+      "title": "Andexanet for Factor Xa Inhibitor-Associated Acute Intracerebral Hemorrhage."
+    },
+    "attention-trial": {
+      "pmid": "36239644",
+      "doi": "10.1056/NEJMoa2206317",
+      "resolvedDoi": "10.1056/NEJMoa2206317",
+      "title": "Trial of Endovascular Treatment of Acute Basilar-Artery Occlusion."
+    },
+    "b-proud-trial": {
+      "pmid": "33528537",
+      "doi": "10.1001/jama.2020.26345",
+      "resolvedDoi": "10.1001/jama.2020.26345",
+      "title": "Association Between Dispatch of Mobile Stroke Units and Functional Outcomes Among Patients With Acute Ischemic"
+    },
+    "baoche-trial": {
+      "pmid": "36239645",
+      "doi": "10.1056/NEJMoa2207576",
+      "resolvedDoi": "10.1056/NEJMoa2207576",
+      "title": "Trial of Thrombectomy 6 to 24 Hours after Stroke Due to Basilar-Artery Occlusion."
+    },
+    "basis-trial": {
+      "pmid": "39235816",
+      "doi": "10.1001/jama.2024.12829",
+      "resolvedDoi": "10.1001/jama.2024.12829",
+      "title": "Balloon Angioplasty vs Medical Management for Intracranial Artery Stenosis: The BASIS Randomized Clinical Tria"
+    },
+    "cassiss-trial": {
+      "pmid": "35943472",
+      "doi": "10.1001/jama.2022.12000",
+      "resolvedDoi": "10.1001/jama.2022.12000",
+      "title": "Effect of Stenting Plus Medical Therapy vs Medical Therapy Alone on Risk of Stroke and Death in Patients With "
+    },
+    "cast-trial": {
+      "pmid": "9186381",
+      "doi": "10.1016/S0140-6736(97)04010-5",
+      "resolvedDoi": null,
+      "title": "CAST: randomised placebo-controlled trial of early aspirin use in 20,000 patients with acute ischaemic stroke. CAST (Chi"
+    },
+    "chance-2-trial": {
+      "pmid": "34708996",
+      "doi": "10.1056/NEJMoa2111749",
+      "resolvedDoi": "10.1056/NEJMoa2111749",
+      "title": "Ticagrelor versus Clopidogrel inLoss-of-Function Carriers with Stroke or TIA."
+    },
+    "chance-trial": {
+      "pmid": "23803136",
+      "doi": "10.1056/NEJMoa1215340",
+      "resolvedDoi": "10.1056/NEJMoa1215340",
+      "title": "Clopidogrel with aspirin in acute minor stroke or transient ischemic attack."
+    },
+    "charisma-trial": {
+      "pmid": "16531616",
+      "doi": "10.1056/NEJMoa060989",
+      "resolvedDoi": "10.1056/NEJMoa060989",
+      "title": "Clopidogrel and aspirin versus aspirin alone for the prevention of atherothrombotic events."
+    },
+    "close-trial": {
+      "pmid": "28902593",
+      "doi": "10.1056/NEJMoa1705915",
+      "resolvedDoi": "10.1056/NEJMoa1705915",
+      "title": "Patent Foramen Ovale Closure or Anticoagulation vs. Antiplatelets after Stroke."
+    },
+    "closure-i-trial": {
+      "pmid": "22417252",
+      "doi": "10.1056/NEJMoa1009639",
+      "resolvedDoi": "10.1056/NEJMoa1009639",
+      "title": "Closure or medical therapy for cryptogenic stroke with patent foramen ovale."
+    },
+    "crest-2-trial": {
+      "pmid": "41269206",
+      "doi": "10.1056/NEJMoa2508800",
+      "resolvedDoi": "10.1056/NEJMoa2508800",
+      "title": "Medical Management and Revascularization for Asymptomatic Carotid Stenosis."
+    },
+    "crest-trial": {
+      "pmid": "20505173",
+      "doi": "10.1056/NEJMoa0912321",
+      "resolvedDoi": "10.1056/NEJMoa0912321",
+      "title": "Stenting versus endarterectomy for treatment of carotid-artery stenosis."
+    },
+    "dawn-trial": {
+      "pmid": "29129157",
+      "doi": "10.1056/NEJMoa1706442",
+      "resolvedDoi": "10.1056/NEJMoa1706442",
+      "title": "Thrombectomy 6 to 24 Hours after Stroke with a Mismatch between Deficit and Infarct."
+    },
+    "defense-pfo-trial": {
+      "pmid": "29544871",
+      "doi": "10.1016/j.jacc.2018.02.046",
+      "resolvedDoi": "10.1016/j.jacc.2018.02.046",
+      "title": "Cryptogenic Stroke and High-Risk Patent Foramen Ovale: The DEFENSE-PFO Trial."
+    },
+    "defuse-3-trial": {
+      "pmid": "29364767",
+      "doi": "10.1056/NEJMoa1713973",
+      "resolvedDoi": "10.1056/NEJMoa1713973",
+      "title": "Thrombectomy for Stroke at 6 to 16 Hours with Selection by Perfusion Imaging."
+    },
+    "direct-mt-trial": {
+      "pmid": "32374959",
+      "doi": "10.1056/NEJMoa2001123",
+      "resolvedDoi": "10.1056/NEJMoa2001123",
+      "title": "Endovascular Thrombectomy with or without Intravenous Alteplase in Acute Stroke."
+    },
+    "ecass3-trial": {
+      "pmid": "18815396",
+      "doi": "10.1056/NEJMoa0804656",
+      "resolvedDoi": "10.1056/NEJMoa0804656",
+      "title": "Thrombolysis with alteplase 3 to 4.5 hours after acute ischemic stroke."
+    },
+    "enrich-trial": {
+      "pmid": "38598795",
+      "doi": "10.1056/NEJMoa2308440",
+      "resolvedDoi": "10.1056/NEJMoa2308440",
+      "title": "Trial of Early Minimally Invasive Removal of Intracerebral Hemorrhage."
+    },
+    "escape-trial": {
+      "pmid": "25671798",
+      "doi": "10.1056/NEJMoa1414905",
+      "resolvedDoi": "10.1056/NEJMoa1414905",
+      "title": "Randomized assessment of rapid endovascular treatment of ischemic stroke."
+    },
+    "extend-ia-tnk-trial": {
+      "pmid": "29694815",
+      "doi": "10.1056/NEJMoa1716405",
+      "resolvedDoi": "10.1056/NEJMoa1716405",
+      "title": "Tenecteplase versus Alteplase before Thrombectomy for Ischemic Stroke."
+    },
+    "extend-ia-trial": {
+      "pmid": "25671797",
+      "doi": "10.1056/NEJMoa1414792",
+      "resolvedDoi": "10.1056/NEJMoa1414792",
+      "title": "Endovascular therapy for ischemic stroke with perfusion-imaging selection."
+    },
+    "ims-iii-trial": {
+      "pmid": "23390923",
+      "doi": "10.1056/NEJMoa1214300",
+      "resolvedDoi": "10.1056/NEJMoa1214300",
+      "title": "Endovascular therapy after intravenous t-PA versus t-PA alone for stroke."
+    },
+    "inspires-trial": {
+      "pmid": "38157499",
+      "doi": "10.1056/NEJMoa2309137",
+      "resolvedDoi": "10.1056/NEJMoa2309137",
+      "title": "Dual Antiplatelet Treatment up to 72 Hours after Ischemic Stroke."
+    },
+    "interact4-trial": {
+      "pmid": "38752650",
+      "doi": "10.1056/NEJMoa2314741",
+      "resolvedDoi": "10.1056/NEJMoa2314741",
+      "title": "Intensive Ambulance-Delivered Blood-Pressure Reduction in Hyperacute Stroke."
+    },
+    "ist-trial": {
+      "pmid": "9174558",
+      "doi": "10.1016/S0140-6736(97)04011-7",
+      "resolvedDoi": null,
+      "title": "The International Stroke Trial (IST): a randomised trial of aspirin, subcutaneous heparin, both, or neither among 19435 "
+    },
+    "match-trial": {
+      "pmid": "15276392",
+      "doi": "10.1016/S0140-6736(04)16721-4",
+      "resolvedDoi": "10.1016/S0140-6736(04)16721-4",
+      "title": "Aspirin and clopidogrel compared with clopidogrel alone after recent ischaemic stroke or transient ischaemic a"
+    },
+    "mist-trial": {
+      "pmid": "18316488",
+      "doi": "10.1161/CIRCULATIONAHA.107.727271",
+      "resolvedDoi": "10.1161/CIRCULATIONAHA.107.727271",
+      "title": "Migraine Intervention With STARFlex Technology (MIST) trial: a prospective, multicenter, double-blind, sham-controlled t"
+    },
+    "mr-clean-trial": {
+      "pmid": "25517348",
+      "doi": "10.1056/NEJMoa1411587",
+      "resolvedDoi": "10.1056/NEJMoa1411587",
+      "title": "A randomized trial of intraarterial treatment for acute ischemic stroke."
+    },
+    "mr-rescue-trial": {
+      "pmid": "23394476",
+      "doi": "10.1056/NEJMoa1212793",
+      "resolvedDoi": "10.1056/NEJMoa1212793",
+      "title": "A trial of imaging selection and endovascular treatment for ischemic stroke."
+    },
+    "navigate-esus-trial": {
+      "pmid": "30274772",
+      "doi": "10.1016/S1474-4422(18)30319-3",
+      "resolvedDoi": "10.1016/S1474-4422(18)30319-3",
+      "title": "Rivaroxaban or aspirin for patent foramen ovale and embolic stroke of undetermined source: a prespecified subgroup analy"
+    },
+    "ninds-trial": {
+      "pmid": "7477192",
+      "doi": "10.1056/NEJM199512143332401",
+      "resolvedDoi": "10.1056/NEJM199512143332401",
+      "title": "Tissue plasminogen activator for acute ischemic stroke."
+    },
+    "patch-trial": {
+      "pmid": "27178479",
+      "doi": "10.1016/S0140-6736(16)30392-0",
+      "resolvedDoi": "10.1016/S0140-6736(16)30392-0",
+      "title": "Platelet transfusion versus standard care after acute stroke due to spontaneous cerebral haemorrhage associated with ant"
+    },
+    "pc-trial": {
+      "pmid": "23514285",
+      "doi": "10.1056/NEJMoa1211716",
+      "resolvedDoi": "10.1056/NEJMoa1211716",
+      "title": "Percutaneous closure of patent foramen ovale in cryptogenic embolism."
+    },
+    "picss-trial": {
+      "pmid": "12045168",
+      "doi": "10.1161/01.CIR.0000017498.88393.44",
+      "resolvedDoi": "10.1161/01.cir.0000017498.88393.44",
+      "title": "Effect of medical treatment in stroke patients with patent foramen ovale: patent foramen ovale in Cryptogenic Stroke Stu"
+    },
+    "point-trial": {
+      "pmid": "29766750",
+      "doi": "10.1056/NEJMoa1800410",
+      "resolvedDoi": "10.1056/NEJMoa1800410",
+      "title": "Clopidogrel and Aspirin in Acute Ischemic Stroke and High-Risk TIA."
+    },
+    "premium-trial": {
+      "pmid": "29191325",
+      "doi": "10.1016/j.jacc.2017.09.1105",
+      "resolvedDoi": "10.1016/j.jacc.2017.09.1105",
+      "title": "Percutaneous Closure of Patent Foramen Ovale in Patients With Migraine: The PREMIUM Trial."
+    },
+    "prima-trial": {
+      "pmid": "26908949",
+      "doi": "10.1093/eurheartj/ehw027",
+      "resolvedDoi": "10.1093/eurheartj/ehw027",
+      "title": "Percutaneous closure of patent foramen ovale in migraine with aura, a randomized controlled trial."
+    },
+    "profess-trial": {
+      "pmid": "18753638",
+      "doi": "10.1056/NEJMoa0805002",
+      "resolvedDoi": "10.1056/NEJMoa0805002",
+      "title": "Aspirin and extended-release dipyridamole versus clopidogrel for recurrent stroke."
+    },
+    "prost-trial": {
+      "pmid": "37490291",
+      "doi": "10.1001/jamanetworkopen.2023.25415",
+      "resolvedDoi": "10.1001/jamanetworkopen.2023.25415",
+      "title": "Efficacy and Safety of Recombinant Human Prourokinase in the Treatment of Acute Ischemic Stroke Within 4.5 Hours of Stro"
+    },
+    "racecat-trial": {
+      "pmid": "35510397",
+      "doi": "10.1001/jama.2022.4404",
+      "resolvedDoi": "10.1001/jama.2022.4404",
+      "title": "Effect of Direct Transportation to Thrombectomy-Capable Center vs Local Stroke Center on Neurological Outcomes"
+    },
+    "reduce-trial": {
+      "pmid": "28902580",
+      "doi": "10.1056/NEJMoa1707404",
+      "resolvedDoi": "10.1056/NEJMoa1707404",
+      "title": "Patent Foramen Ovale Closure or Antiplatelet Therapy for Cryptogenic Stroke."
+    },
+    "rescue-japan-limit-trial": {
+      "pmid": "35138767",
+      "doi": "10.1056/NEJMoa2118191",
+      "resolvedDoi": "10.1056/NEJMoa2118191",
+      "title": "Endovascular Therapy for Acute Stroke with a Large Ischemic Region."
+    },
+    "respect-esus-trial": {
+      "pmid": "33504190",
+      "doi": "10.1161/STROKEAHA.120.031237",
+      "resolvedDoi": "10.1161/STROKEAHA.120.031237",
+      "title": "Dabigatran or Aspirin After Embolic Stroke of Undetermined Source in Patients With Patent Foramen Ovale: Results From RE"
+    },
+    "respect-original-trial": {
+      "pmid": "23514286",
+      "doi": "10.1056/NEJMoa1301440",
+      "resolvedDoi": "10.1056/NEJMoa1301440",
+      "title": "Closure of patent foramen ovale versus medical therapy after cryptogenic stroke."
+    },
+    "respect-trial": {
+      "pmid": "28902590",
+      "doi": "10.1056/NEJMoa1610057",
+      "resolvedDoi": "10.1056/NEJMoa1610057",
+      "title": "Long-Term Outcomes of Patent Foramen Ovale Closure or Medical Therapy after Stroke."
+    },
+    "revascat-trial": {
+      "pmid": "25882510",
+      "doi": "10.1056/NEJMoa1503780",
+      "resolvedDoi": "10.1056/NEJMoa1503780",
+      "title": "Thrombectomy within 8 hours after symptom onset in ischemic stroke."
+    },
+    "sammpris-trial": {
+      "pmid": "21899409",
+      "doi": "10.1056/NEJMoa1105335",
+      "resolvedDoi": "10.1056/NEJMoa1105335",
+      "title": "Stenting versus aggressive medical therapy for intracranial arterial stenosis."
+    },
+    "sarode-2013-trial": {
+      "pmid": "23935011",
+      "doi": "10.1161/CIRCULATIONAHA.113.002283",
+      "resolvedDoi": "10.1161/CIRCULATIONAHA.113.002283",
+      "title": "Efficacy and safety of a 4-factor prothrombin complex concentrate in patients on vitamin K antagonists presenting with m"
+    },
+    "swift-prime-trial": {
+      "pmid": "25882376",
+      "doi": "10.1056/NEJMoa1415061",
+      "resolvedDoi": "10.1056/NEJMoa1415061",
+      "title": "Stent-retriever thrombectomy after intravenous t-PA vs. t-PA alone in stroke."
+    },
+    "synthesis-expansion-trial": {
+      "pmid": "23387822",
+      "doi": "10.1056/NEJMoa1213701",
+      "resolvedDoi": "10.1056/NEJMoa1213701",
+      "title": "Endovascular treatment for acute ischemic stroke."
+    },
+    "tension-trial": {
+      "pmid": "37837989",
+      "doi": "10.1016/S0140-6736(23)02032-9",
+      "resolvedDoi": "10.1016/S0140-6736(23)02032-9",
+      "title": "Endovascular thrombectomy for acute ischaemic stroke with established large infarct: multicentre, op"
+    },
+    "thales-trial": {
+      "pmid": "32668111",
+      "doi": "10.1056/NEJMoa1916870",
+      "resolvedDoi": "10.1056/NEJMoa1916870",
+      "title": "Ticagrelor and Aspirin or Aspirin Alone in Acute Ischemic Stroke or TIA."
+    },
+    "theia-trial": {
+      "pmid": "41109232",
+      "doi": "10.1016/S1474-4422(25)00308-4",
+      "resolvedDoi": "10.1016/S1474-4422(25)00308-4",
+      "title": "Intravenous alteplase versus oral aspirin for acute central retinal artery occlusion within 4&#xb7;5 h of severe vision "
+    },
+    "thrace-trial": {
+      "pmid": "27567239",
+      "doi": "10.1016/S1474-4422(16)30177-6",
+      "resolvedDoi": "10.1016/S1474-4422(16)30177-6",
+      "title": "Mechanical thrombectomy after intravenous alteplase versus alteplase alone after stroke (THRACE): a "
+    },
+    "triage-stroke-trial": {
+      "pmid": "37800374",
+      "doi": "10.1161/STROKEAHA.123.043875",
+      "resolvedDoi": "10.1161/STROKEAHA.123.043875",
+      "title": "Transport Strategy in Patients With Suspected Acute Large Vessel Occlusion Stroke: TRIAGE-STROKE, a Randomized"
+    },
+    "woven-trial": {
+      "pmid": "32561658",
+      "doi": "10.1136/neurintsurg-2020-016208",
+      "resolvedDoi": "10.1136/neurintsurg-2020-016208",
+      "title": "The WOVEN trial: Wingspan One-year Vascular Events and Neurologic Outcomes."
+    }
+  }
+}

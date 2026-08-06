@@ -1,0 +1,12 @@
+{
+  "_readme": "Ratchet baselines for check:coverage. These numbers may only go DOWN. They record how many trial records still ship without a source, so the debt can shrink but never grow. Lower them with UPDATE_BASELINE=1 npm run check:coverage after tying more statistics to publications.",
+  "_establishedOn": "2026-08-06",
+  "noProvenanceMax": 62,
+  "noPmidMax": 58,
+  "subgroupChartsReviewed": {
+    "picss-trial": "Charts a 98-patient non-prespecified cryptogenic-stroke-with-PFO cell. Reviewed 2026-08-06: the trial's own published comparison (HR 1.29, 95% CI 0.63 to 2.64, 16.5% vs 13.2%, favouring aspirin) was absent from the repo entirely and is now in both stats.effectSize.info and bottomLineSummary, with an explicit sentence that the chart shows the subgroup and not that result. Arm labels name the subgroup; band and NNT suppressed; 'Subgroup only' badge.",
+    "triage-stroke-trial": "Charts a post-hoc exploratory mRS 0-3 comparison (83% vs 64%). Reviewed 2026-08-06: bottomLineSummary states the main-population result and that it was NOT significant (ordinal OR 1.42, 95% CI 0.72 to 2.82, p=0.31). Both halves present.",
+    "respect-esus-trial": "Chart is an explicit labelled placeholder (0/0). Reviewed 2026-08-06: per-arm event rates were never published for the PFO subgroup, the labels say so, and bottomLineSummary gives the null interaction (p=0.8290) and the HR with its interval. Nothing is implied that the publication does not support.",
+    "angel-aspect-trial": "Chart label references the secondary dichotomised endpoint. Reviewed 2026-08-06: bottomLineSummary leads with the ordinal primary (gOR 1.37, 95% CI 1.11 to 1.69, P=0.004) and marks the mRS 0-2 figure as secondary."
+  }
+}
