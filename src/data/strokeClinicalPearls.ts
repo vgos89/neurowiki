@@ -202,9 +202,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         content: 'Age >80 (IST-3: similar benefit, higher mortality from comorbidities). Mild stroke NIHSS <6 (20-30% still disabled at 3mo). Severe stroke NIHSS >25 (still benefits; no severity-specific NNT established). Recent MI <3mo (risk myocardial rupture). Recent surgery <14d. Seizure at onset (91% of neurologists would treat). Unruptured aneurysm <7mm (appears safe, no ruptures reported).',
         type: 'pearl',
         section: 'step-1',
-        evidence: 'Fugate & Rabinstein, Neurohospitalist 2015',
-        evidenceClass: 'IIa',
-        evidenceLevel: 'B',
+        evidence: 'Fugate and Rabinstein, Neurohospitalist 2015 (narrative review). AHA/ASA 2026 addresses relative contraindications to thrombolysis in Table 8, which is explicitly ungraded, so no class of recommendation applies to these items.',
       },
       {
         id: 'doac-management-2026',
@@ -257,9 +255,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'trial',
         section: 'step-1',
         link: '/trials/ist-3',
-        evidence: 'Lancet 2012',
-        evidenceClass: 'IIa',
-        evidenceLevel: 'B',
+        evidence: 'IST-3 Collaborative Group, Lancet 2012. Trial evidence, not a graded recommendation.',
       },
       {
         id: 'trace-iii-trial',
@@ -696,9 +692,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         content: 'Dabigatran (direct thrombin inhibitor): Check TT (most sensitive), aPTT, PT. If all normal AND last dose >48h, may consider. Rivaroxaban/Apixaban (Factor Xa inhibitors): Check anti-Xa level if available. Limited data - only case reports. Generally avoid unless part of research protocol.',
         type: 'pearl',
         section: 'step-3',
-        evidence: 'Fugate & Rabinstein, Neurohospitalist 2015',
-        evidenceClass: 'III',
-        evidenceLevel: 'C',
+        evidence: 'Fugate and Rabinstein, Neurohospitalist 2015 (narrative review). AHA/ASA 2026 addresses recent DOAC exposure in Table 8 as ungraded relative-contraindication guidance and lists it under Knowledge Gaps in §4.6.5; no class of recommendation applies.',
       },
       {
         id: 'anticoag-lmwh',
@@ -706,9 +700,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         content: 'Therapeutic dose LMWH within 24h = absolute contraindication. Evidence: 21 patients (18 within 24h), 38% ICH rate, 3 sICH (OR 8.4 for sICH vs controls), 29% mortality. Prophylactic-dose LMWH may be safer but data limited.',
         type: 'pearl',
         section: 'step-3',
-        evidence: 'Matute et al, Cerebrovasc Dis 2012',
-        evidenceClass: 'III',
-        evidenceLevel: 'B',
+        evidence: 'Matute et al, Cerebrovasc Dis 2012. AHA/ASA 2026 addresses anticoagulant exposure before thrombolysis in Table 8, which is ungraded; no class of recommendation applies.',
       },
       {
         id: 'cardiac-workup',
