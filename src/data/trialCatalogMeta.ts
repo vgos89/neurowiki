@@ -226,7 +226,7 @@ export const LEGACY_TRIAL_CATALOG_META: Record<string, LegacyTrialCatalogMeta> =
   },
   'inspires-trial': {
     name: 'INSPIRES',
-    year: 2024,
+    year: 2023,
     doi: '10.1056/NEJMoa2309137',
     description: 'Atherosclerotic minor stroke and TIA trial extending the DAPT initiation window out to 72 hours.',
     clinicalContext: 'Atherosclerotic minor stroke and TIA trial extending the DAPT initiation window out to 72 hours.',

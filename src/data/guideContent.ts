@@ -1158,10 +1158,10 @@ CHANCE established DAPT within 24 hours. INSPIRES extends the evidence to two im
 *   **The 72-hour window is the main clinical advance**, for patients who miss the 24h CHANCE window
 *   **Must confirm atherosclerotic etiology on vascular imaging**: NOT applicable to cardioembolic, lacunar, or other etiologies
 *   Same regimen as CHANCE: clopidogrel 300mg load → 75mg + aspirin × 21 days → clopidogrel alone to day 90
-*   2×2 factorial statin arm (atorvastatin 40mg vs 20mg) showed neutral effect in separate analysis
+*   2×2 factorial statin arm compared immediate with delayed statin treatment, reported in a separate analysis
 *   Critical use case: patient presents 36–72h post-TIA with confirmed carotid stenosis on CTA → INSPIRES protocol applies
 
-*Source: [Zhao J, et al. N Engl J Med. 2024;390(3):203–213](https://www.nejm.org/doi/full/10.1056/NEJMoa2309137). DOI: 10.1056/NEJMoa2309137*
+*Source: [Gao Y, et al. N Engl J Med. 2023;389(26):2413–2424](https://www.nejm.org/doi/full/10.1056/NEJMoa2309137). DOI: 10.1056/NEJMoa2309137*
 `
   },
 
@@ -1308,7 +1308,7 @@ Mobile stroke units (MSUs) consistently shorten time to imaging and thrombolysis
 *   MSU dispatch improved imaging and treatment speed without an obvious hemorrhage penalty
 *   Because the study was **not randomized**, some residual confounding is unavoidable even after adjustment
 
-*Source: [Ebinger M, et al. JAMA. 2020](https://doi.org/10.1001/jama.2020.26345). DOI: 10.1001/jama.2020.26345*
+*Source: [Ebinger M, et al. JAMA. 2021;325(5):454–466](https://doi.org/10.1001/jama.2020.26345). DOI: 10.1001/jama.2020.26345*
 `
   },
   'best-msu-trial': {
@@ -1325,16 +1325,16 @@ BEST-MSU tested whether the advantages of mobile stroke units in the United Stat
 *   **Intervention:** MSU care vs standard EMS transport and in-hospital treatment.
 *   **Primary Outcome:** **Utility-weighted mRS at 90 days** in tPA-eligible patients.
 *   **Results:**
-    *   **Mean utility-weighted mRS:** **0.73 vs 0.67**
-    *   **Adjusted OR for excellent outcome:** **2.14 (95% CI, 1.55-2.95; P<0.001)**
-    *   **mRS 0-1 at 90 days:** **53.5% vs 45.5%**
+    *   **Mean utility-weighted mRS:** **0.72 vs 0.66** (t-PA-eligible patients)
+    *   **Adjusted OR for excellent outcome:** **2.43 (95% CI, 1.75-3.36; P<0.001)**
+    *   **mRS 0-1 at 90 days:** **55.0% vs 44.4%** (t-PA-eligible patients)
     *   **Median onset-to-tPA time:** **72 vs 108 minutes**
     *   **Received tPA among eligible patients:** **97.1% vs 79.5%**
 
 ## Clinical PEARLS
 *   BEST-MSU provides some of the clearest US evidence that MSUs improve **patient-centered outcomes**
 *   The time gain was clinically meaningful: a **36-minute** median reduction to thrombolysis
-*   Roughly **one extra excellent outcome for every 12 to 13 patients** managed by MSU instead of standard EMS
+*   A 10.6 percentage point absolute difference in excellent outcome (55.0% vs 44.4%). BEST-MSU allocated by alternating week rather than by patient, so this difference must not be restated as a per-patient number needed to treat
 *   Symptomatic intracerebral hemorrhage remained about **2%** in both groups
 
 *Source: [Grotta JC, et al. N Engl J Med. 2021;385:971-981](https://doi.org/10.1056/NEJMoa2103879). DOI: 10.1056/NEJMoa2103879*

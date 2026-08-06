@@ -2848,15 +2848,15 @@ const TrialPageNew: React.FC = () => {
                 </p>
               </div>
               <DeltaBandChart
-                treatmentPct={53.5}
-                controlPct={45.5}
+                treatmentPct={55}
+                controlPct={44.4}
                 treatmentLabel={trialMetadata.efficacyResults.treatment.name}
                 controlLabel={trialMetadata.efficacyResults.control.name}
                 endpoint="mRS 0-1 at 90 Days (tPA-eligible); the primary outcome was the utility-weighted mRS at 90 days"
                 effectLabel="Adjusted OR"
-                riskRatio="2.14"
-                ciLow="1.55"
-                ciHigh="2.95"
+                riskRatio="2.43"
+                ciLow="1.75"
+                ciHigh="3.36"
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="treatment"
                 // Alternating-week cluster allocation, not patient-level randomization, and the charted endpoint is a tPA-eligible subgroup dichotomization rather than the utility-weighted primary.
@@ -3951,7 +3951,7 @@ const TrialPageNew: React.FC = () => {
             </div>
           )}
           {renderStudyArms(tm)}
-          {renderTrialDesign(tm, 'Randomized April 2018 to February 2021 in the Netherlands. Phase 3, ambulance-based, open-label, blinded-endpoint trial. Stopped after 380 of planned 1200 randomizations due to a safety signal in ICH patients.')}
+          {renderTrialDesign(tm, 'Randomized April 2018 to February 2021 in the Netherlands. Phase 3, ambulance-based, open-label, blinded-endpoint trial. Stopped after 380 of a planned 1400 randomizations due to a safety signal in ICH patients.')}
           {tm.bedsidePearl && (
             <div className="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>

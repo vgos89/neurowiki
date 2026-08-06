@@ -788,7 +788,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     bedsidePearl: 'For acute ischemic stroke within 4.5 hours, tenecteplase 0.25 mg/kg (single IV bolus) is noninferior to alteplase 0.9 mg/kg (1-hour infusion). AHA/ASA 2026 §4.6.2: either agent is recommended (COR 1). Single-bolus TNK simplifies drip-and-ship workflow.',
     bottomLineSummary: 'ORIGINAL: TNK 0.25 mg/kg noninferior to alteplase 0.9 mg/kg in 1,465 Chinese patients with AIS within 4.5h. mRS 0–1 at 90 days 72.7% vs 70.3% (RR 1.03, 95% CI 0.97–1.09; NI margin 0.937 met). Identical sICH 1.2% in both arms. AHA/ASA 2026 §4.6.2 COR 1 equivalent alternatives.',
     applicability: {
-      geography: 'China (domestic rhTNK-tPA formulation. Not equivalent to international tenecteplase brands)',
+      geography: 'China only (55 neurology clinics and stroke centers). Chinese adults; applicability to other populations is not tested by this trial',
       populationExclusions: [
         'Direct comparison to international tenecteplase products (different formulation)',
         'Chinese cohort only. Lower baseline severity (median NIHSS 6) than AcT (Canada, median ~9–10); ~41% NIHSS <6 (mild predominance)',
@@ -12404,7 +12404,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         label: 'Statistically Sig.'
       },
       effectSize: {
-        value: 'OR 2.14',
+        value: 'OR 2.43',
         label: 'Adjusted Odds of Excellent Outcome'
       }
     },
@@ -12418,12 +12418,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     efficacyResults: {
       treatment: {
-        percentage: 53.5,
+        percentage: 55,
         label: 'mRS 0-1 at 90 days in tPA-eligible patients',
         name: 'MSU Care'
       },
       control: {
-        percentage: 45.5,
+        percentage: 44.4,
         label: 'mRS 0-1 at 90 days in tPA-eligible patients',
         name: 'Standard EMS'
       }
@@ -12436,13 +12436,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     // NNT REMOVED by V decision 2026-07-31. Allocation was by alternating week,
     // not at patient level, so an absolute per-patient benefit cannot be derived
     // from this comparison. The page was declining to draw that difference on the
-    // chart and then stating it as an NNT. The 53.5% vs 45.5% rates and the
-    // adjusted OR 2.14 (1.55 to 2.95) remain. See TASKS.md
+    // chart and then stating it as an NNT. The 55.0% vs 44.4% rates and the
+    // adjusted OR 2.43 (1.75 to 3.36) remain. See TASKS.md
     // best-msu-nnt-vs-band-contradiction.
     pearls: [
       'Median onset-to-tPA time was reduced from 108 minutes to 72 minutes with MSU care',
       'Among tPA-eligible patients, 97.1% received thrombolysis with MSU vs 79.5% with standard EMS',
-      'Excellent 90-day outcome improved from 45.5% to 53.5%, with adjusted OR 2.14 for utility-weighted excellent outcome',
+      'Excellent 90-day outcome improved from 44.4% to 55.0%, with adjusted OR 2.43 for utility-weighted excellent outcome',
       'About one-third of MSU-treated patients received thrombolysis within 60 minutes of onset, compared with 2.6% in standard EMS',
       'Symptomatic intracerebral hemorrhage remained about 2% in both groups despite faster reperfusion'
     ],
@@ -12520,11 +12520,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does this chart show?',
-        answer: 'mRS 0-1 (excellent functional outcome) at 90 days in patients adjudicated as tPA-eligible. MSU care reached 53.5 per 100; standard EMS reached 45.5 per 100, an 8 percentage point absolute difference driven by a 36-minute reduction in onset-to-treatment time.',
+        answer: 'mRS 0-1 (excellent functional outcome) at 90 days in patients adjudicated as tPA-eligible. MSU care reached 55.0 per 100; standard EMS reached 44.4 per 100, a 10.6 percentage point absolute difference driven by a 36-minute reduction in onset-to-treatment time.',
       },
       {
         question: 'Why is AOR used instead of a standard risk ratio?',
-        answer: 'The primary endpoint was utility-weighted mRS. A composite ordinal score. The AOR 2.14 reflects adjusted odds of excellent outcome across all mRS categories. The 53.5% vs 45.5% shown here is the secondary dichotomized mRS 0-1 rate, presented for visual clarity.',
+        answer: 'The primary endpoint was utility-weighted mRS. A composite ordinal score. The AOR 2.43 reflects adjusted odds of excellent outcome across all mRS categories. The 55.0% vs 44.4% shown here is the secondary dichotomized mRS 0-1 rate, presented for visual clarity.',
       },
       {
         question: 'Why is there no NNT?',
@@ -12532,16 +12532,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
     ],
     howToInterpret: {
-      proves: 'In tPA-eligible patients with acute ischemic stroke at seven US urban centers, MSU-based prehospital care improved excellent functional outcome at 90 days compared with standard EMS transport (53.5% vs 45.5%, AOR 2.14, P<0.001), with median onset-to-treatment time 36 minutes shorter than EMS.',
+      proves: 'In tPA-eligible patients with acute ischemic stroke at seven US urban centers, MSU-based prehospital care improved excellent functional outcome at 90 days compared with standard EMS transport (55.0% vs 44.4%, AOR 2.43, P<0.001), with median onset-to-treatment time 36 minutes shorter than EMS.',
       doesNotProve: 'BEST-MSU does not prove benefit for non-tPA-eligible patients or those with hemorrhagic stroke. The seven-city US urban setting, weighted toward high-volume metropolitan EMS systems, may not generalize to different health systems, hospital proximity patterns, or rural EMS infrastructure. The benefit is not separable from other concurrent quality improvements during the study period.',
       cautions: 'Design quality: BEST-MSU used alternating-week allocation rather than individual randomization, making it a quasi-experimental controlled study. Secular trends, seasonal variation, or unmeasured confounders across alternating weeks could bias results. The infrastructure cost of MSU deployment is high, limiting generalizability to resource-limited settings.',
     },
     bedsidePearl: 'BEST-MSU showed that prehospital MSU care saved 36 minutes and improved outcomes in tPA-eligible patients. The mechanism is faster treatment, not better treatment. For hospitals without MSU access, the equivalent message is: every minute saved on door-to-needle time translates to measurable benefit.',
-    bottomLineSummary: 'In a quasi-experimental alternating-week study across seven US urban centers, mobile stroke unit care reduced onset-to-treatment time by 36 minutes and improved excellent functional outcome at 90 days in tPA-eligible patients (53.5% vs 45.5%, AOR 2.14, P<0.001). The benefit is time-mediated; the non-randomized design limits causal certainty.',
+    bottomLineSummary: 'In a quasi-experimental alternating-week study across seven US urban centers, mobile stroke unit care reduced onset-to-treatment time by 36 minutes and improved excellent functional outcome at 90 days in tPA-eligible patients (55.0% vs 44.4%, AOR 2.43, P<0.001). The benefit is time-mediated; the non-randomized design limits causal certainty.',
     legend: {
       finding: 'Prehospital MSU care saves 36 min and improves outcomes in tPA-eligible stroke.',
       bottomLineTag: 'MSU faster',
-      keyStat: 'uw-mRS OR 2.14',
+      keyStat: 'uw-mRS OR 2.43',
     },
   },
   'interact4-trial': {
@@ -12855,7 +12855,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     mrsDistribution: [
       { arm: 'Glyceryl Trinitrate', n: 170, pct: [6, 19, 26, 13, 12, 8, 15] },
-      { arm: 'Standard Care', n: 148, pct: [13, 17, 22, 18, 11, 6, 14] },
+      { arm: 'Standard Care', n: 155, pct: [13, 17, 22, 18, 11, 6, 14] },
     ],
     ordinalStats: { commonOR: 0.97, ciLow: 0.65, ciHigh: 1.47, direction: 'neutral' as const },
     bedsidePearl: 'MR ASAP and RIGHT-2 together make the strongest case against prehospital GTN for undifferentiated stroke: no functional benefit in either trial, and an early harm signal in ICH patients treated before imaging. Early 7-day mortality was numerically higher with GTN in the ICH subgroup. Do not administer prehospital nitrates for presumed stroke before CT excludes hemorrhage.',
@@ -15331,7 +15331,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     inclusionCriteria: [
       'Wake-up stroke or stroke with unwitnessed onset',
       'Treatable within 4.5 hours of awakening or recognition',
-      'Age 18 to 80',
+      'Age 18 years or older',
     ],
     exclusionCriteria: [
       'Known time of symptom onset (wake-up criterion not met)',
