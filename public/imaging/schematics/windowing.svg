@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 470" role="img" aria-labelledby="wt wd" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <title id="wt">CT windowing: Hounsfield density to grayscale</title>
+  <desc id="wd">A Hounsfield-unit density scale from air through fat, CSF, brain and acute blood to bone, with brackets showing how the brain, stroke, subdural and bone windows each map a chosen density range across the full black-to-white grayscale. Density axis is compressed above about 100 Hounsfield units and is not to scale.</desc>
+
+  <defs>
+    <linearGradient id="grey" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0b0b0b"/>
+      <stop offset="1" stop-color="#fafafa"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="1" y="1" width="718" height="468" rx="16" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="360" y="40" text-anchor="middle" fill="#0f172a" font-size="20" font-weight="700">CT windowing: density to grayscale</text>
+
+  <!-- grayscale density bar -->
+  <rect x="70" y="66" width="580" height="34" rx="6" fill="url(#grey)" stroke="#334155" stroke-width="1.5"/>
+  <text x="70" y="120" text-anchor="middle" fill="#334155" font-size="12">low density (dark)</text>
+  <text x="650" y="120" text-anchor="middle" fill="#334155" font-size="12">high density (bright)</text>
+
+  <!-- density ticks (positions are schematic, axis compressed above +100 HU) -->
+  <g stroke="#94a3b8" stroke-width="1.5">
+    <line x1="96" y1="66" x2="96" y2="140"/>
+    <line x1="250" y1="66" x2="250" y2="140"/>
+    <line x1="300" y1="66" x2="300" y2="140"/>
+    <line x1="340" y1="66" x2="340" y2="140"/>
+    <line x1="392" y1="66" x2="392" y2="140"/>
+    <line x1="600" y1="66" x2="600" y2="140"/>
+  </g>
+  <g fill="#0f172a" font-size="12.5" text-anchor="middle">
+    <text x="96" y="156">air</text><text x="96" y="171" fill="#64748b" font-size="11">-1000</text>
+    <text x="250" y="156">fat</text><text x="250" y="171" fill="#64748b" font-size="11">-50</text>
+    <text x="300" y="156">CSF</text><text x="300" y="171" fill="#64748b" font-size="11">0</text>
+    <text x="340" y="156">brain</text><text x="340" y="171" fill="#64748b" font-size="11">25 to 40</text>
+    <text x="392" y="156">acute blood</text><text x="392" y="171" fill="#64748b" font-size="11">50 to 70</text>
+    <text x="600" y="156">bone</text><text x="600" y="171" fill="#64748b" font-size="11">1000+</text>
+  </g>
+
+  <!-- break mark for compressed axis -->
+  <g stroke="#cbd5e1" stroke-width="2">
+    <line x1="470" y1="60" x2="482" y2="106"/>
+    <line x1="482" y1="60" x2="494" y2="106"/>
+  </g>
+
+  <!-- window brackets -->
+  <g font-size="13.5">
+    <!-- brain -->
+    <line x1="300" y1="210" x2="414" y2="210" stroke="#2563eb" stroke-width="4"/>
+    <line x1="300" y1="203" x2="300" y2="217" stroke="#2563eb" stroke-width="4"/>
+    <line x1="414" y1="203" x2="414" y2="217" stroke="#2563eb" stroke-width="4"/>
+    <text x="424" y="215" fill="#1e3a8a" font-weight="700">Brain window</text>
+    <text x="590" y="215" fill="#64748b">WW 80 / WL 40</text>
+
+    <!-- stroke -->
+    <line x1="322" y1="258" x2="378" y2="258" stroke="#0d9488" stroke-width="4"/>
+    <line x1="322" y1="251" x2="322" y2="265" stroke="#0d9488" stroke-width="4"/>
+    <line x1="378" y1="251" x2="378" y2="265" stroke="#0d9488" stroke-width="4"/>
+    <text x="424" y="263" fill="#0f766e" font-weight="700">Stroke window</text>
+    <text x="590" y="263" fill="#64748b">WW 40 / WL 40</text>
+
+    <!-- subdural -->
+    <line x1="300" y1="306" x2="470" y2="306" stroke="#7c3aed" stroke-width="4"/>
+    <line x1="300" y1="299" x2="300" y2="313" stroke="#7c3aed" stroke-width="4"/>
+    <line x1="470" y1="299" x2="470" y2="313" stroke="#7c3aed" stroke-width="4"/>
+    <text x="424" y="330" fill="#5b21b6" font-weight="700">Subdural window</text>
+    <text x="560" y="330" fill="#64748b">wider (about WW 150 to 200)</text>
+
+    <!-- bone -->
+    <line x1="300" y1="354" x2="630" y2="354" stroke="#b45309" stroke-width="4"/>
+    <line x1="300" y1="347" x2="300" y2="361" stroke="#b45309" stroke-width="4"/>
+    <line x1="630" y1="347" x2="630" y2="361" stroke="#b45309" stroke-width="4"/>
+    <text x="360" y="378" fill="#92400e" font-weight="700">Bone window</text>
+    <text x="500" y="378" fill="#64748b">very wide (about WW 2000)</text>
+  </g>
+
+  <text x="360" y="428" text-anchor="middle" fill="#334155" font-size="13">A narrow window (small width) raises contrast within a tight density band.</text>
+  <text x="360" y="448" text-anchor="middle" fill="#64748b" font-size="12">Schematic: density axis is compressed above about 100 HU and is not to scale.</text>
+</svg>

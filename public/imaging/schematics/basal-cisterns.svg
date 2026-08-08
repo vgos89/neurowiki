@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 520" role="img" aria-labelledby="ct dt" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <title id="ct">Basal cisterns on an axial CT section</title>
+  <desc id="dt">Schematic axial section at the level of the midbrain showing the star-shaped suprasellar cistern anteriorly, the interpeduncular cistern, the paired ambient cisterns lateral to the midbrain, the quadrigeminal cistern posteriorly, and the prepontine cistern. Effacement of these cerebrospinal-fluid spaces is a sign of raised intracranial pressure.</desc>
+
+  <rect x="1" y="1" width="618" height="518" rx="16" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="310" y="38" text-anchor="middle" fill="#0f172a" font-size="19" font-weight="700">Basal cisterns (axial, midbrain level)</text>
+  <text x="310" y="60" text-anchor="middle" fill="#64748b" font-size="12.5">anterior at top; CSF spaces shown in blue</text>
+
+  <!-- head -->
+  <ellipse cx="310" cy="290" rx="230" ry="195" fill="#e2e8f0" stroke="#334155" stroke-width="8"/>
+  <!-- brain parenchyma -->
+  <ellipse cx="310" cy="290" rx="205" ry="172" fill="#dbe3ec"/>
+
+  <!-- midbrain (heart / Mickey shape) -->
+  <path d="M310 250 C280 224 236 236 244 282 C250 320 300 344 310 352 C320 344 370 320 376 282 C384 236 340 224 310 250 Z"
+        fill="#c7d0db" stroke="#94a3b8" stroke-width="2"/>
+
+  <!-- CSF cisterns (blue) -->
+  <!-- suprasellar star -->
+  <path d="M310 120 L322 156 L360 156 L330 178 L342 214 L310 192 L278 214 L290 178 L260 156 L298 156 Z"
+        fill="#3b82f6" stroke="#1d4ed8" stroke-width="1.5"/>
+  <!-- interpeduncular -->
+  <path d="M310 220 L296 250 L324 250 Z" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1.5"/>
+  <!-- ambient (paired, lateral to midbrain) -->
+  <path d="M236 262 Q214 292 244 322 Q236 292 246 268 Z" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1.5"/>
+  <path d="M384 262 Q406 292 376 322 Q384 292 374 268 Z" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1.5"/>
+  <!-- quadrigeminal (posterior smile) -->
+  <path d="M266 360 Q310 392 354 360 Q310 376 266 360 Z" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1.5"/>
+  <!-- prepontine (anterior band, below suprasellar toward pons) -->
+  <ellipse cx="310" cy="236" rx="8" ry="6" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1"/>
+
+  <!-- labels with leaders -->
+  <g stroke="#64748b" stroke-width="1.3" fill="none">
+    <path d="M360 165 L470 150"/>
+    <path d="M324 240 L470 214"/>
+    <path d="M400 292 L500 300"/>
+    <path d="M354 372 L470 400"/>
+    <path d="M244 300 L120 300"/>
+  </g>
+  <g fill="#0f172a" font-size="13">
+    <text x="474" y="154">Suprasellar (circle of Willis)</text>
+    <text x="474" y="218">Interpeduncular</text>
+    <text x="504" y="304">Ambient</text>
+    <text x="474" y="404">Quadrigeminal</text>
+    <text x="116" y="304" text-anchor="end">Ambient</text>
+  </g>
+  <text x="310" y="504" text-anchor="middle" fill="#334155" font-size="12.5">Loss of these spaces (effacement) suggests raised intracranial pressure or herniation.</text>
+</svg>

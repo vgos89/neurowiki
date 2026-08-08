@@ -136,6 +136,29 @@ export const MEDICAL_GLOSSARY: Record<string, string> = {
   'thrombectomy': 'Mechanical removal of blood clot from brain artery using catheter-based devices.',
   'evt': 'Endovascular Thrombectomy: Mechanical removal of blood clot from brain artery using catheter-based devices.',
   'endovascular thrombectomy': 'Mechanical removal of blood clot from brain artery using catheter-based devices.',
+
+  // Radiology: CT density and windowing (Read the Scan · CT head)
+  'hyperdense': 'Brighter (denser) than normal brain on CT. Acute blood, calcification, and bone are hyperdense.',
+  'hypodense': 'Darker (less dense) than normal brain on CT. CSF, edema, and an established infarct are hypodense.',
+  'isodense': 'The same density as adjacent brain, which can make a subacute collection hard to see.',
+  'hounsfield-unit': 'The CT density scale. Water is 0, air is about -1000, and dense bone is several hundred to over a thousand.',
+  'windowing': 'Adjusting how CT densities map to gray shades so a chosen tissue stands out. Set by window width and window level.',
+  'window-width': 'The range of Hounsfield units shown as shades of gray. A wide window shows many densities; a narrow window increases contrast between similar tissues.',
+  'window-level': 'The center of the displayed density range. Set high for bone and near soft tissue for brain.',
+  'gray-white-differentiation': 'The normal density contrast between gray and white matter. Loss of it is an early sign of ischemia.',
+  'insular-ribbon-sign': 'Loss of the normal gray-white margin at the insular cortex, an early CT sign of middle cerebral artery infarction.',
+  'effacement': 'Loss of a normally visible CSF space (sulcus, cistern, or ventricle) from swelling or mass effect.',
+  'transependymal-flow': 'Periventricular low attenuation from CSF forced across the ependyma in acute or decompensated hydrocephalus.',
+  'evans-index': 'Ratio of the maximal frontal-horn width to the maximal inner-skull width. Above 0.30 indicates ventricular enlargement.',
+  'cytotoxic-edema': 'Cellular swelling from early ischemia that effaces the gray-white junction and sulci.',
+  'vasogenic-edema': 'Fluid from blood-brain-barrier breakdown (tumor or later injury) that is finger-like and spares overlying cortex.',
+  'pneumocephalus': 'Air inside the cranium, which implies a breach of the skull, sinuses, or dura.',
+  'hyperdense-mca-sign': 'A dense middle cerebral artery caused by acute thrombus within the vessel. A specific but relatively insensitive early sign of large-vessel occlusion.',
+  'basal-cisterns': 'CSF spaces at the skull base surrounding the midbrain and brainstem (suprasellar, interpeduncular, ambient, quadrigeminal, prepontine). Effacement signals raised pressure or herniation.',
+  'subfalcine-herniation': 'Displacement of the cingulate gyrus under the falx, the most common herniation pattern. Can compress the anterior cerebral artery.',
+  'uncal-herniation': 'Medial displacement of the uncus into the suprasellar cistern (descending transtentorial). Can compress the third cranial nerve and posterior cerebral artery.',
+  'central-herniation': 'Downward displacement of the diencephalon through the tentorial notch.',
+  'tonsillar-herniation': 'Displacement of the cerebellar tonsils more than 5 mm through the foramen magnum, effacing the cisterns around the medulla.',
 };
 
 /**

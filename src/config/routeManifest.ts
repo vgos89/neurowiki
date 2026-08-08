@@ -58,7 +58,9 @@ export type StaticRouteKey =
   | 'my-cases'
   | 'import-cases'
   | 'my-favorites'
-  | 'post-stroke-lipid';
+  | 'post-stroke-lipid'
+  | 'imaging-hub'
+  | 'imaging-ct-head';
 
 export interface RouteDefinition {
   key: StaticRouteKey;
@@ -733,6 +735,40 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
       title: 'Post-Stroke Lipid Management: LDL-C Targets & Escalation | NeuroWiki',
       description: 'Adaptive lipid management pathway after ischaemic stroke or ICH. VHR vs standard ASCVD targets, ezetimibe and PCSK9 mAb escalation, bempedoic acid, inclisiran, and ICH statin decision. 2026 ACC/AHA.',
       keywords: 'post-stroke lipid management, LDL-C target after stroke, PCSK9 inhibitor stroke, ezetimibe after stroke, statin after ICH, bempedoic acid stroke, very high ASCVD risk, secondary prevention stroke lipids, 2026 ACC AHA dyslipidemia guideline stroke',
+      image: DEFAULT_IMAGE,
+    },
+  },
+  {
+    key: 'imaging-hub',
+    path: '/guide/read-the-scan',
+    publishGate: true,
+    published: true,
+    includeInSitemap: true,
+    comingSoonMessage: 'Read the Scan guide',
+    zone: 'reference',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
+    meta: {
+      title: 'Read the Scan: How to Read Neuro Imaging | NeuroWiki',
+      description: 'A repeatable way to read neuro imaging for residents and attendings. Fixed search patterns with a bedside checklist and a teaching layer. CT head available now; CTA and MRI next.',
+      keywords: 'how to read neuroimaging, neuroimaging for residents, CT head interpretation, read the scan, neuroradiology checklist, CT brain systematic approach, how to read a CT head',
+      image: DEFAULT_IMAGE,
+    },
+  },
+  {
+    key: 'imaging-ct-head',
+    path: '/guide/read-the-scan/ct-head',
+    publishGate: true,
+    published: true,
+    includeInSitemap: true,
+    comingSoonMessage: 'CT head reading guide',
+    zone: 'reading',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
+    meta: {
+      title: 'How to Read a CT Head: Systematic Checklist | NeuroWiki',
+      description: 'Read a non-contrast CT head systematically with the Blood Can Be Very Bad pattern: blood, cisterns, brain, ventricles, bone. Bedside checklist plus anatomy, terminology, windows, and normal vs abnormal.',
+      keywords: 'how to read a CT head, CT head interpretation, Blood Can Be Very Bad, non-contrast CT head, CT brain windows, stroke window, subdural window, insular ribbon sign, CT head checklist for residents',
       image: DEFAULT_IMAGE,
     },
   },

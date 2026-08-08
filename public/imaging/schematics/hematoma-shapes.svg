@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 460" role="img" aria-labelledby="title desc" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <title id="title">Extra-axial haemorrhage shapes on CT</title>
+  <desc id="desc">Cross-section of the skull showing an epidural haematoma as a biconvex lens that does not cross suture lines, contrasted with a subdural haematoma as a crescent that follows the brain surface and crosses sutures but not the midline.</desc>
+
+  <!-- figure panel -->
+  <rect x="1" y="1" width="718" height="458" rx="16" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+
+  <!-- skull (bone) -->
+  <ellipse cx="360" cy="220" rx="300" ry="180" fill="none" stroke="#334155" stroke-width="10"/>
+  <!-- inner table gap -->
+  <ellipse cx="360" cy="220" rx="288" ry="170" fill="#e2e8f0"/>
+  <!-- brain -->
+  <ellipse cx="360" cy="220" rx="255" ry="142" fill="#dbe3ec" stroke="#94a3b8" stroke-width="2"/>
+  <!-- falx / midline -->
+  <line x1="360" y1="82" x2="360" y2="358" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4 5"/>
+
+  <!-- suture tick marks on skull -->
+  <g stroke="#64748b" stroke-width="3">
+    <line x1="212" y1="70" x2="222" y2="92"/>
+    <line x1="360" y1="40" x2="360" y2="62"/>
+    <line x1="508" y1="70" x2="498" y2="92"/>
+  </g>
+
+  <!-- LEFT: epidural, biconvex lens, localized, stops at suture -->
+  <path d="M175 128 Q120 200 175 272 Q235 200 175 128 Z" fill="#dc2626" stroke="#991b1b" stroke-width="2"/>
+
+  <!-- RIGHT: subdural, crescent following brain surface, spans a wide arc -->
+  <path d="M578 108
+           A250 155 0 0 1 578 332
+           Q548 220 578 108 Z" fill="#b91c1c" stroke="#7f1d1d" stroke-width="2"/>
+
+  <!-- labels -->
+  <g fill="#0f172a" font-size="19" font-weight="700">
+    <text x="120" y="410" text-anchor="middle">Epidural</text>
+    <text x="600" y="410" text-anchor="middle">Subdural</text>
+  </g>
+  <g fill="#334155" font-size="13.5">
+    <text x="120" y="431" text-anchor="middle">biconvex lens, localized</text>
+    <text x="120" y="448" text-anchor="middle">does not cross sutures</text>
+    <text x="600" y="431" text-anchor="middle">crescent, follows the surface</text>
+    <text x="600" y="448" text-anchor="middle">crosses sutures, not the midline</text>
+  </g>
+
+  <!-- pointer lines -->
+  <g stroke="#64748b" stroke-width="1.5" fill="none">
+    <path d="M175 260 L150 320 L150 392"/>
+    <path d="M588 300 L610 340 L610 392"/>
+  </g>
+</svg>
