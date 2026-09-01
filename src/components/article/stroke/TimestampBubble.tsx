@@ -358,6 +358,28 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
     }
     setEditError(false);
   };
+  /**
+   * Refill the edit field with the current time.
+   *
+   * Recovery path for a stamp that captured the wrong moment: several events
+   * here are auto-stamped (Neurology Evaluation fires on first interaction), so
+   * a clinician who opened the page early finds a time that is minutes off.
+   * Retyping it is fiddly on a phone mid-code.
+   *
+   * Deliberately fills the field rather than saving directly. Only
+   * handleEditSave writes a timestamp, so there stays exactly one write path,
+   * the clinician sees the value before committing it, and Cancel remains a
+   * real escape hatch. A one-tap Now that saved and closed would leave Cancel
+   * with nothing to undo. V direction 2026-09-01.
+   */
+  const handleEditNow = () => {
+    const now = new Date();
+    const h12 = now.getHours() % 12 || 12;
+    setEditValue(`${String(h12).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`);
+    setEditPeriod(now.getHours() >= 12 ? 1 : 0);
+    setEditError(false);
+    editInputRef.current?.focus();
+  };
   const handleEditCancel = () => {
     setEditingEvent(null);
     setEditValue('');
@@ -577,6 +599,14 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
                                 })}
                               </div>
                             )}
+                            <button
+                              type="button"
+                              onClick={handleEditNow}
+                              aria-label={`Set ${event} to the current time`}
+                              className="px-3 py-1.5 text-xs font-semibold text-neuro-700 bg-neuro-50 hover:bg-neuro-100 border border-neuro-200 rounded-lg transition-colors whitespace-nowrap"
+                            >
+                              Now
+                            </button>
                             <button
                               onClick={() => handleEditSave(event)}
                               className="px-3 py-1.5 text-xs font-semibold bg-neuro-500 hover:bg-neuro-600 text-white rounded-lg transition-colors whitespace-nowrap"
