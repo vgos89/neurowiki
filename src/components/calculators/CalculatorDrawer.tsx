@@ -107,7 +107,18 @@ export const CalculatorDrawer: React.FC<CalculatorDrawerProps> = ({
    */
   const mount = (node: React.ReactNode) =>
     inline ? (
-      <div className="mt-6 rounded-xl overflow-hidden border border-slate-100">{node}</div>
+      // Sticky, not static. The portalled version is fixed to the viewport
+      // bottom and therefore always visible while the clinician works the
+      // pathway. A static block at the end of the modal's scroll would put the
+      // verdict below the dosing card and the New Patient button, so it is
+      // present but has to be hunted for. Sticky to the scroll container's
+      // bottom edge reproduces the pinned behaviour inside the modal card.
+      <div
+        className="sticky bottom-0 z-10 mt-6 rounded-xl overflow-hidden border border-slate-200 bg-white"
+        style={{ boxShadow: DRAWER_EXPANDED_SHADOW }}
+      >
+        {node}
+      </div>
     ) : (
       createPortal(
         <div
