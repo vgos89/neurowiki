@@ -1181,7 +1181,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                       />
                     </div>
                     {cPenumbra !== null && (
-                      <PathwayLearningPearl title="Path C Trials" content="TRACE-III (NEJM 2024, Xiong et al.) supports the 2026 AHA/ASA §4.6.3 Rec 3 Class 2b recommendation: in AIS due to LVO with salvageable penumbra, 4.5–24h from onset, who cannot receive EVT, IVT directed by clinicians with thrombolytic expertise may be beneficial. TRACE-III's inclusion was restricted to ICA/M1/M2; this pathway uses that trial population as its evidence base, though the guideline is broader (any LVO). TIMELESS (NEJM 2024) was negative when rapid EVT was available, supporting the redirect away from extended-window IVT in EVT-feasible patients." />
+                      <PathwayLearningPearl title="Path C Trials" content="TRACE-III (NEJM 2024, Xiong et al.) supports the 2026 AHA/ASA §4.6.3 Rec 3 Class 2b recommendation: in AIS due to LVO with salvageable penumbra, 4.5–24h from onset, who cannot receive EVT, IVT directed by clinicians with thrombolytic expertise may be beneficial. TRACE-III's inclusion was restricted to internal carotid or middle cerebral artery occlusion; this pathway uses that trial population as its evidence base, though the guideline is broader (any LVO). The published abstract specifies no M1 or M2 segment, so this pathway does not assert one. TIMELESS (NEJM 2024) did not demonstrate benefit when rapid EVT was available, supporting the redirect away from extended-window IVT in EVT-feasible patients." />
                     )}
                   </div>
                 )}
