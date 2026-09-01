@@ -1425,71 +1425,83 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
         }}
       />
 
-      {/* Next steps — contextual navigation after eligibility decision. Surfaces before FAQ so CTA gets visual priority.
-          GA4 baseline: /pathways/late-window-ivt 80% exit rate despite 14.7s avg engagement — clinicians get their
-          answer then leave. This card gives them a natural continuation path. V approval 2026-05-22. */}
-      <NextStepsCard
-        heading="Continue with this patient"
-        items={[
-          {
-            label: "Walk through the IV tPA protocol",
-            description: "Dosing, contraindications, and monitoring for alteplase and tenecteplase",
-            to: "/guide/iv-tpa"
-          },
-          {
-            label: "Check EVT eligibility for this patient",
-            description: "Large-vessel occlusion thrombectomy decision tool",
-            to: "/pathways/evt"
-          },
-          {
-            label: "Review the trials behind late-window IVT",
-            description: "WAKE-UP, EXTEND, TIMELESS, TRACE-3 evidence summaries",
-            to: "/trials/q/late-window-selection"
-          },
-        ]}
-      />
+      {/* Discovery + SEO tail: continuation CTAs, trial links, FAQ.
+          Hidden inside the modal (V 2026-09-01). These exist to give a public
+          page visitor somewhere to go next and to feed the FAQ schema; in a
+          bedside modal they are bloat between the clinician and the verdict,
+          and the "Continue with this patient" CTAs would navigate away from the
+          calculator the modal is hosted in. The standalone route renders them
+          unchanged, and JSON-LD comes from getSchemaForRoute rather than from
+          this markup, so indexing is unaffected either way. */}
+      {!isInModal && (
+        <>
+        {/* Next steps — contextual navigation after eligibility decision. Surfaces before FAQ so CTA gets visual priority.
+            GA4 baseline: /pathways/late-window-ivt 80% exit rate despite 14.7s avg engagement — clinicians get their
+            answer then leave. This card gives them a natural continuation path. V approval 2026-05-22. */}
+        <NextStepsCard
+          heading="Continue with this patient"
+          items={[
+            {
+              label: "Walk through the IV tPA protocol",
+              description: "Dosing, contraindications, and monitoring for alteplase and tenecteplase",
+              to: "/guide/iv-tpa"
+            },
+            {
+              label: "Check EVT eligibility for this patient",
+              description: "Large-vessel occlusion thrombectomy decision tool",
+              to: "/pathways/evt"
+            },
+            {
+              label: "Review the trials behind late-window IVT",
+              description: "WAKE-UP, EXTEND, TIMELESS, TRACE-3 evidence summaries",
+              to: "/trials/q/late-window-selection"
+            },
+          ]}
+        />
 
-      {/* Trials NextStepsCard — V directive 2026-05-22: surface trial links for further reading.
-          Option A chosen: separate card keeps clinical-continuation CTA (above) clean and the
-          trial set distinct. 6 trials — all route targets exist in /trials/*. */}
-      <NextStepsCard
-        heading="Trials informing this pathway"
-        items={[
-          {
-            label: "WAKE-UP",
-            description: "DWI-FLAIR mismatch in unknown-onset stroke",
-            to: "/trials/wake-up-trial"
-          },
-          {
-            label: "EXTEND",
-            description: "Perfusion-selected 4.5–9h IV alteplase",
-            to: "/trials/extend-trial"
-          },
-          {
-            label: "TIMELESS",
-            description: "Late-window tenecteplase with EVT (neutral)",
-            to: "/trials/timeless-trial"
-          },
-          {
-            label: "TRACE-III",
-            description: "Late-window tenecteplase without EVT",
-            to: "/trials/trace-iii-trial"
-          },
-          {
-            label: "EXTEND-IA TNK",
-            description: "TNK 0.25 mg/kg vs alteplase before thrombectomy",
-            to: "/trials/extend-ia-tnk-trial"
-          },
-          {
-            label: "THAWS",
-            description: "Alteplase in wake-up stroke",
-            to: "/trials/thaws-trial"
-          },
-        ]}
-      />
+        {/* Trials NextStepsCard — V directive 2026-05-22: surface trial links for further reading.
+            Option A chosen: separate card keeps clinical-continuation CTA (above) clean and the
+            trial set distinct. 6 trials — all route targets exist in /trials/*. */}
+        <NextStepsCard
+          heading="Trials informing this pathway"
+          items={[
+            {
+              label: "WAKE-UP",
+              description: "DWI-FLAIR mismatch in unknown-onset stroke",
+              to: "/trials/wake-up-trial"
+            },
+            {
+              label: "EXTEND",
+              description: "Perfusion-selected 4.5–9h IV alteplase",
+              to: "/trials/extend-trial"
+            },
+            {
+              label: "TIMELESS",
+              description: "Late-window tenecteplase with EVT (neutral)",
+              to: "/trials/timeless-trial"
+            },
+            {
+              label: "TRACE-III",
+              description: "Late-window tenecteplase without EVT",
+              to: "/trials/trace-iii-trial"
+            },
+            {
+              label: "EXTEND-IA TNK",
+              description: "TNK 0.25 mg/kg vs alteplase before thrombectomy",
+              to: "/trials/extend-ia-tnk-trial"
+            },
+            {
+              label: "THAWS",
+              description: "Alteplase in wake-up stroke",
+              to: "/trials/thaws-trial"
+            },
+          ]}
+        />
 
-      {/* Discrete FAQ — V approval 2026-05-21 Option A. Same data feeds JSON-LD FAQPage schema via getSchemaForRoute. */}
-      <DiscreteFAQ items={getFAQsForPath('/pathways/late-window-ivt')} />
+        {/* Discrete FAQ — V approval 2026-05-21 Option A. Same data feeds JSON-LD FAQPage schema via getSchemaForRoute. */}
+        <DiscreteFAQ items={getFAQsForPath('/pathways/late-window-ivt')} />
+        </>
+      )}
 
       {/* CalculatorDrawer — States A (pending) + C (verdict). No State B — result is null
           until path-specific criteria complete, so there is no provisional-verdict surface.

@@ -1778,8 +1778,11 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
               </ul>
           </div>
       )}
-      {/* Discrete FAQ — V approval 2026-05-21 Option A. Same data feeds JSON-LD FAQPage schema via getSchemaForRoute. */}
-      <DiscreteFAQ items={getFAQsForPath('/pathways/evt')} />
+      {/* Discrete FAQ — V approval 2026-05-21 Option A. Same data feeds JSON-LD FAQPage schema via getSchemaForRoute.
+          Hidden inside the modal (V 2026-09-01): it sits between the clinician
+          and the verdict drawer for no bedside benefit. The standalone route is
+          unchanged, and the schema comes from getSchemaForRoute, not this markup. */}
+      {!isInModal && <DiscreteFAQ items={getFAQsForPath('/pathways/evt')} />}
 
       {showFavToast && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60]">
