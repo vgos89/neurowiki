@@ -46,8 +46,13 @@ import {
   type PatientContextValues,
   type Anticoag,
 } from '../components/shared/PatientContextPanel';
-import { ExtendedIVTPathwayModal } from '../components/article/stroke/ExtendedIVTPathwayModal';
-import { ThrombectomyPathwayModal } from '../components/article/stroke/ThrombectomyPathwayModal';
+import type { PathwayVerdict } from '../lib/pathwayVerdict';
+const ExtendedIVTPathwayModal = React.lazy(() =>
+  import('../components/article/stroke/ExtendedIVTPathwayModal').then((m) => ({ default: m.ExtendedIVTPathwayModal })),
+);
+const ThrombectomyPathwayModal = React.lazy(() =>
+  import('../components/article/stroke/ThrombectomyPathwayModal').then((m) => ({ default: m.ThrombectomyPathwayModal })),
+);
 import { formatClinicalDateTime } from '../utils/clinicalDateTime';
 import { copyToClipboard } from '../utils/clipboard';
 import type { SavedCaseData } from '../lib/cases/types';
@@ -176,6 +181,15 @@ const NihssCalculator: React.FC = () => {
   // exist and carry their own focus trap and Escape handling, so this is wiring
   // rather than new UI. One at a time: opening either closes the other.
   const [activePathwayModal, setActivePathwayModal] = useState<'ivt' | 'evt' | null>(null);
+  // Latest determination from each pathway, kept so a clinician who closed the
+  // modal can still see where it landed. REFERENCE ONLY: these must never be
+  // read by buildText or reach the copy/share template (V direction 2026-09-01).
+  // Locked by src/__tests__/nihssExportGuards.test.ts.
+  const [ivtVerdict, setIvtVerdict] = useState<PathwayVerdict | null>(null);
+  const [evtVerdict, setEvtVerdict] = useState<PathwayVerdict | null>(null);
+  // Mount a pathway only once its shortcut has been tapped; keepMounted then
+  // preserves the clinician's answers across close/reopen.
+  const [pathwayEverOpened, setPathwayEverOpened] = useState<{ ivt: boolean; evt: boolean }>({ ivt: false, evt: false });
 
   const nihssHeaderRef = useRef<HTMLDivElement>(null);
   const wasCompleteRef = useRef(false);
@@ -460,23 +474,29 @@ const NihssCalculator: React.FC = () => {
     // the exported summary — that interpretation tier lives in the in-app
     // drawer for clinical guidance. The export string carries the number and
     // the documentation block only. (V direction 2026-05-20.)
-    const itemLines = [
-      `1a. LOC: ${nihssValues['1a'] ?? 0}`,
-      `1b. LOC Questions: ${nihssValues['1b'] ?? 0}`,
-      `1c. LOC Commands: ${nihssValues['1c'] ?? 0}`,
-      `2. Best Gaze: ${nihssValues['2'] ?? 0}`,
-      `3. Visual Fields: ${nihssValues['3'] ?? 0}`,
-      `4. Facial Palsy: ${nihssValues['4'] ?? 0}`,
-      `5a. Motor L Arm: ${nihssValues['5a'] ?? 0}`,
-      `5b. Motor R Arm: ${nihssValues['5b'] ?? 0}`,
-      `6a. Motor L Leg: ${nihssValues['6a'] ?? 0}`,
-      `6b. Motor R Leg: ${nihssValues['6b'] ?? 0}`,
-      `7. Limb Ataxia: ${nihssValues['7'] ?? 0}`,
-      `8. Sensory: ${nihssValues['8'] ?? 0}`,
-      `9. Best Language: ${nihssValues['9'] ?? 0}`,
-      `10. Dysarthria: ${nihssValues['10'] === 9 ? 'UN' : (nihssValues['10'] ?? 0)}`,
-      `11. Extinction/Neglect: ${nihssValues['11'] ?? 0}`,
+    // UN (untestable, internal value 9) is now available on 5a, 5b, 6a, 6b, 7 and
+    // 10, matching the published scale. It must print as "UN" rather than the
+    // internal 9, on every item that offers it.
+    const EXPORT_ITEM_LABELS: ReadonlyArray<[string, string]> = [
+      ['1a', '1a. LOC'],
+      ['1b', '1b. LOC Questions'],
+      ['1c', '1c. LOC Commands'],
+      ['2', '2. Best Gaze'],
+      ['3', '3. Visual Fields'],
+      ['4', '4. Facial Palsy'],
+      ['5a', '5a. Motor L Arm'],
+      ['5b', '5b. Motor R Arm'],
+      ['6a', '6a. Motor L Leg'],
+      ['6b', '6b. Motor R Leg'],
+      ['7', '7. Limb Ataxia'],
+      ['8', '8. Sensory'],
+      ['9', '9. Best Language'],
+      ['10', '10. Dysarthria'],
+      ['11', '11. Extinction/Neglect'],
     ];
+    const itemLines = EXPORT_ITEM_LABELS.map(([id, label]) =>
+      `${label}: ${nihssValues[id] === 9 ? 'UN' : (nihssValues[id] ?? 0)}`,
+    );
 
     // ── Patient-context lines — always emit so the EMR record is complete.
     //    Empty value → "Not entered" (timestamps, BP, glucose) or "None"
@@ -680,6 +700,10 @@ const NihssCalculator: React.FC = () => {
     setConfirmedNoDisabling(false);
     // New patient / new exam → next save should create a fresh row.
     setCurrentCaseId(null);
+    // New patient means the previous patient's pathway determinations must go.
+    setIvtVerdict(null);
+    setEvtVerdict(null);
+    setPathwayEverOpened({ ivt: false, evt: false });
     resetTracking();
     reset();
     showToast('Reset', 1500);
@@ -938,8 +962,22 @@ const NihssCalculator: React.FC = () => {
             }}
             showThrombolysisTiming
             pathwayActions={[
-              { id: 'ext-ivt', label: 'Late IVT pathway', onClick: () => setActivePathwayModal('ivt') },
-              { id: 'evt', label: 'LVO / thrombectomy pathway', onClick: () => setActivePathwayModal('evt') },
+              {
+                id: 'ext-ivt',
+                label: 'Late IVT pathway',
+                onClick: () => { setPathwayEverOpened((p) => ({ ...p, ivt: true })); setActivePathwayModal('ivt'); },
+                status: ivtVerdict
+                  ? { label: ivtVerdict.status, tone: ivtVerdict.variant ?? 'neutral' }
+                  : undefined,
+              },
+              {
+                id: 'evt',
+                label: 'LVO / thrombectomy pathway',
+                onClick: () => { setPathwayEverOpened((p) => ({ ...p, evt: true })); setActivePathwayModal('evt'); },
+                status: evtVerdict
+                  ? { label: evtVerdict.status, tone: evtVerdict.variant ?? 'neutral' }
+                  : undefined,
+              },
             ]}
           />
         </div>
@@ -1158,14 +1196,24 @@ const NihssCalculator: React.FC = () => {
           pathway page with hideHeader + isInModal and bring their own focus
           trap, so the clinician works the decision tree without losing the
           NIHSS scoring underneath. */}
-      <ExtendedIVTPathwayModal
-        isOpen={activePathwayModal === 'ivt'}
-        onClose={() => setActivePathwayModal(null)}
-      />
-      <ThrombectomyPathwayModal
-        isOpen={activePathwayModal === 'evt'}
-        onClose={() => setActivePathwayModal(null)}
-      />
+      <React.Suspense fallback={null}>
+        {pathwayEverOpened.ivt && (
+          <ExtendedIVTPathwayModal
+            isOpen={activePathwayModal === 'ivt'}
+            onClose={() => setActivePathwayModal(null)}
+            onVerdictChange={setIvtVerdict}
+            keepMounted
+          />
+        )}
+        {pathwayEverOpened.evt && (
+          <ThrombectomyPathwayModal
+            isOpen={activePathwayModal === 'evt'}
+            onClose={() => setActivePathwayModal(null)}
+            onVerdictChange={setEvtVerdict}
+            keepMounted
+          />
+        )}
+      </React.Suspense>
 
       {/* ── Toast ─────────────────────────────────────────────────────────── */}
       <CalculatorToast message={toast} tone={toastTone} />

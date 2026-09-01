@@ -6,6 +6,7 @@ import {
   AlertTriangle, Clock,
 } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
+import type { PathwayVerdict } from '../lib/pathwayVerdict';
 import { PathwayRailStep } from '../components/pathways/PathwayRail';
 import { PathwayCategoryRow } from '../components/pathways/PathwayCategoryRow';
 import { PathwayLearningPearl } from '../components/pathways/PathwayLearningPearl';
@@ -27,6 +28,13 @@ export interface ExtendedIVTPathwayProps {
   hideHeader?: boolean;
   isInModal?: boolean;
   onResultChange?: (result: IVTResult | null) => void;
+  /**
+   * Opt-in channel reporting ANY completed determination, eligible or not.
+   * `onResultChange` above reports only eligible outcomes (Stroke Code relies on
+   * that), so a host that needs to display "Not Eligible" uses this instead.
+   * Added 2026-09-01 for the NIHSS calculator's pathway shortcuts.
+   */
+  onVerdictChange?: (verdict: PathwayVerdict | null) => void;
 }
 
 export interface IVTResult {
@@ -210,6 +218,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
   hideHeader = false,
   isInModal = false,
   onResultChange,
+  onVerdictChange,
 }) => {
   const { recordView } = useRecents();
   useEffect(() => {
@@ -529,6 +538,23 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
       onResultChange(null);
     }
   }, [result, onResultChange]);
+
+  /* ── onVerdictChange callback ── */
+  // Fires for every completed determination so a host surface can display it.
+  // Reference only: this value must not enter any EMR export.
+  useEffect(() => {
+    if (!onVerdictChange) return;
+    if (result && isDecisionComplete) {
+      onVerdictChange({
+        status: result.status,
+        reason: result.reason,
+        eligible: result.eligible,
+        variant: result.variant,
+      });
+    } else {
+      onVerdictChange(null);
+    }
+  }, [result, isDecisionComplete, onVerdictChange]);
 
   /* ── Auto-advance: Setup → Criteria (or skip to Decision) ── */
   useEffect(() => {

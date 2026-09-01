@@ -119,3 +119,21 @@ describe('formatSavedCaseAsEmrText — entered values still render', () => {
     expect(wake).toContain('LKW: Unknown / wake-up');
   });
 });
+
+describe('formatSavedCaseAsEmrText — untestable items', () => {
+  it('prints UN rather than the internal 9, on every item that offers it', () => {
+    const c = makeCase();
+    c.data.nihss = {
+      score: 2,
+      values: { '5a': 9, '6a': 9, '7': 9, '10': 9, '1a': 2 },
+      mode: 'rapid',
+      severity: 'minor',
+    };
+    const text = formatSavedCaseAsEmrText(c);
+    expect(text).toContain('5a. Motor L Arm: UN');
+    expect(text).toContain('6a. Motor L Leg: UN');
+    expect(text).toContain('7. Limb Ataxia: UN');
+    expect(text).toContain('10. Dysarthria: UN');
+    expect(text).not.toContain(': 9');
+  });
+});

@@ -136,16 +136,18 @@ export const NIHSS_ITEMS: NihssItemDef[] = [
       { value: 1, label: '1: Drift' },
       { value: 2, label: '2: Can\'t Hold' },
       { value: 3, label: '3: No Gravity' },
-      { value: 4, label: '4: No Move' }
+      { value: 4, label: '4: No Move' },
+      { value: 9, label: 'UN: Amputation' }
     ],
     plainOptions: [
       { value: 0, label: '0: Holds arm up the full 10 seconds' },
       { value: 1, label: '1: Drifts down but does not hit bed' },
       { value: 2, label: '2: Falls to bed, some effort against gravity' },
       { value: 3, label: '3: Cannot lift, only moves along the bed' },
-      { value: 4, label: '4: No movement at all' }
+      { value: 4, label: '4: No movement at all' },
+      { value: 9, label: 'UN: Cannot test (amputation or fused joint)' }
     ],
-    detailedInfo: 'Hold 10 seconds.\n• 0: Holds 10s.\n• 1: Drifts before 10s but does not hit bed.\n• 2: Falls to bed before 10s (some effort).\n• 3: No effort against gravity (shrugs/movements on bed).\n• 4: No movement.',
+    detailedInfo: 'Hold 10 seconds.\n• 0: Holds 10s.\n• 1: Drifts before 10s but does not hit bed.\n• 2: Falls to bed before 10s (some effort).\n• 3: No effort against gravity (shrugs/movements on bed).\n• 4: No movement.\n• UN: Amputation or joint fusion at the shoulder or elbow.',
     pearl: 'Must hold for full 10 seconds. Count out loud.',
     plainEnglish: "**Can they hold arm up for 10 seconds?**\n\n**How to test:**\n• YOU can help lift arm to position (90° sitting, 45° lying)\n• Test is holding, not lifting\n• Count out loud with fingers: \"10...9...8...7...\"\n\n**If arm falls immediately:**\n• Ask to wiggle fingers or shrug shoulder\n• Helps distinguish score 3 (some movement) vs 4 (no movement)\n\n**Key point:** Score what you see - pain/arthritis doesn't get \"extra credit\""
   },
@@ -158,16 +160,18 @@ export const NIHSS_ITEMS: NihssItemDef[] = [
       { value: 1, label: '1: Drift' },
       { value: 2, label: '2: Can\'t Hold' },
       { value: 3, label: '3: No Gravity' },
-      { value: 4, label: '4: No Move' }
+      { value: 4, label: '4: No Move' },
+      { value: 9, label: 'UN: Amputation' }
     ],
     plainOptions: [
       { value: 0, label: '0: Holds arm up the full 10 seconds' },
       { value: 1, label: '1: Drifts down but does not hit bed' },
       { value: 2, label: '2: Falls to bed, some effort against gravity' },
       { value: 3, label: '3: Cannot lift, only moves along the bed' },
-      { value: 4, label: '4: No movement at all' }
+      { value: 4, label: '4: No movement at all' },
+      { value: 9, label: 'UN: Cannot test (amputation or fused joint)' }
     ],
-    detailedInfo: 'Hold 10 seconds.\n• 0: Holds 10s.\n• 1: Drifts before 10s but does not hit bed.\n• 2: Falls to bed before 10s (some effort).\n• 3: No effort against gravity (shrugs/movements on bed).\n• 4: No movement.',
+    detailedInfo: 'Hold 10 seconds.\n• 0: Holds 10s.\n• 1: Drifts before 10s but does not hit bed.\n• 2: Falls to bed before 10s (some effort).\n• 3: No effort against gravity (shrugs/movements on bed).\n• 4: No movement.\n• UN: Amputation or joint fusion at the shoulder or elbow.',
     pearl: '',
     plainEnglish: "**Can they hold arm up for 10 seconds?**\n\n**How to test:**\n• YOU can help lift arm to position (90° sitting, 45° lying)\n• Test is holding, not lifting\n• Count out loud with fingers: \"10...9...8...7...\"\n\n**If arm falls immediately:**\n• Ask to wiggle fingers or shrug shoulder\n• Helps distinguish score 3 (some movement) vs 4 (no movement)\n\n**Key point:** Score what you see - pain/arthritis doesn't get \"extra credit\""
   },
@@ -180,16 +184,18 @@ export const NIHSS_ITEMS: NihssItemDef[] = [
       { value: 1, label: '1: Drift' },
       { value: 2, label: '2: Can\'t Hold' },
       { value: 3, label: '3: No Gravity' },
-      { value: 4, label: '4: No Move' }
+      { value: 4, label: '4: No Move' },
+      { value: 9, label: 'UN: Amputation' }
     ],
     plainOptions: [
       { value: 0, label: '0: Holds leg up the full 5 seconds' },
       { value: 1, label: '1: Drifts down but does not hit bed' },
       { value: 2, label: '2: Falls to bed, some effort against gravity' },
       { value: 3, label: '3: Cannot lift, only moves along the bed' },
-      { value: 4, label: '4: No movement at all' }
+      { value: 4, label: '4: No movement at all' },
+      { value: 9, label: 'UN: Cannot test (amputation or fused joint)' }
     ],
-    detailedInfo: 'Hold 5 seconds.\n• 0: Holds 5s.\n• 1: Drifts before 5s but does not hit bed.\n• 2: Falls to bed before 5s.\n• 3: No effort against gravity.\n• 4: No movement.',
+    detailedInfo: 'Hold 5 seconds.\n• 0: Holds 5s.\n• 1: Drifts before 5s but does not hit bed.\n• 2: Falls to bed before 5s.\n• 3: No effort against gravity.\n• 4: No movement.\n• UN: Amputation or joint fusion at the hip or knee.',
     pearl: 'Leg hold is only 5 seconds.',
     plainEnglish: "**Can they hold leg up for 5 seconds?**\n\n**How to test:**\n• Position: 30° from bed if lying (straight out if sitting)\n• Count out loud: \"5...4...3...2...1\"\n• Only 5 seconds (not 10 like arms!)\n\n**If leg falls immediately:**\n• Ask to wiggle toes\n• Helps distinguish score 3 vs 4"
   },
@@ -202,16 +208,18 @@ export const NIHSS_ITEMS: NihssItemDef[] = [
       { value: 1, label: '1: Drift' },
       { value: 2, label: '2: Can\'t Hold' },
       { value: 3, label: '3: No Gravity' },
-      { value: 4, label: '4: No Move' }
+      { value: 4, label: '4: No Move' },
+      { value: 9, label: 'UN: Amputation' }
     ],
     plainOptions: [
       { value: 0, label: '0: Holds leg up the full 5 seconds' },
       { value: 1, label: '1: Drifts down but does not hit bed' },
       { value: 2, label: '2: Falls to bed, some effort against gravity' },
       { value: 3, label: '3: Cannot lift, only moves along the bed' },
-      { value: 4, label: '4: No movement at all' }
+      { value: 4, label: '4: No movement at all' },
+      { value: 9, label: 'UN: Cannot test (amputation or fused joint)' }
     ],
-    detailedInfo: 'Hold 5 seconds.\n• 0: Holds 5s.\n• 1: Drifts before 5s but does not hit bed.\n• 2: Falls to bed before 5s.\n• 3: No effort against gravity.\n• 4: No movement.',
+    detailedInfo: 'Hold 5 seconds.\n• 0: Holds 5s.\n• 1: Drifts before 5s but does not hit bed.\n• 2: Falls to bed before 5s.\n• 3: No effort against gravity.\n• 4: No movement.\n• UN: Amputation or joint fusion at the hip or knee.',
     pearl: '',
     plainEnglish: "**Can they hold leg up for 5 seconds?**\n\n**How to test:**\n• Position: 30° from bed if lying (straight out if sitting)\n• Count out loud: \"5...4...3...2...1\"\n• Only 5 seconds (not 10 like arms!)\n\n**If leg falls immediately:**\n• Ask to wiggle toes\n• Helps distinguish score 3 vs 4"
   },
@@ -222,14 +230,16 @@ export const NIHSS_ITEMS: NihssItemDef[] = [
     rapidOptions: [
       { value: 0, label: '0: Absent' },
       { value: 1, label: '1: Present (1 limb)' },
-      { value: 2, label: '2: Present (2+)' }
+      { value: 2, label: '2: Present (2+)' },
+      { value: 9, label: 'UN: Amputation' }
     ],
     plainOptions: [
       { value: 0, label: '0: Movements look smooth' },
       { value: 1, label: '1: Clumsy in one limb' },
-      { value: 2, label: '2: Clumsy in two or more limbs' }
+      { value: 2, label: '2: Clumsy in two or more limbs' },
+      { value: 9, label: 'UN: Cannot test (amputation or fused joint)' }
     ],
-    detailedInfo: '• 0: Absent.\n• 1: Present in one limb.\n• 2: Present in two or more limbs.\n• Finger-nose-finger and Heel-shin.\n• Score ONLY if present out of proportion to weakness.\n• Score 0 if paralyzed or cannot understand.',
+    detailedInfo: '• 0: Absent.\n• 1: Present in one limb.\n• 2: Present in two or more limbs.\n• Finger-nose-finger and Heel-shin.\n• Score ONLY if present out of proportion to weakness.\n• Score 0 if paralyzed or cannot understand.\n• UN: Amputation or joint fusion.',
     pearl: 'If paralyzed (Motor=4) or unable to understand, score 0. It must be out of proportion to weakness.',
     plainEnglish: "**Are movements clumsy/uncoordinated beyond weakness?**\n\n**How to test:**\n• Arms: Finger-to-nose test\n• Legs: Heel-to-shin test\n\n**Key rules:**\n• ONLY score if out of proportion to weakness\n• If paralyzed (Motor=4) → automatically score 0\n• If can't understand → automatically score 0\n\n**Remember:** Ataxia usually bilateral (posterior circulation), weakness usually unilateral (anterior circulation)"
   },

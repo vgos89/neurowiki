@@ -1,24 +1,37 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { X, ArrowLeft } from 'lucide-react';
 import EvtPathway from '../../../pages/EvtPathway';
 import { useModalFocusTrap } from '../../../hooks/useModalFocusTrap';
+import type { PathwayVerdict } from '../../../lib/pathwayVerdict';
 
 interface EvtResult {
+  eligible: boolean;
   status: string;
   criteriaName?: string;
   reason: string;
+  variant?: 'success' | 'warning' | 'danger' | 'neutral';
 }
 
 interface ThrombectomyPathwayModalProps {
   isOpen: boolean;
   onClose: () => void;
   onRecommendation?: (recommendation: string) => void;
+  /** Reports ANY completed determination, eligible or not. Reference only. */
+  onVerdictChange?: (verdict: PathwayVerdict | null) => void;
+  /**
+   * When true the pathway stays MOUNTED after the first open and is hidden
+   * rather than unmounted, preserving the clinician's answers across a close.
+   * Default false preserves existing Stroke Code behaviour.
+   */
+  keepMounted?: boolean;
 }
 
 export const ThrombectomyPathwayModal: React.FC<ThrombectomyPathwayModalProps> = ({
   isOpen,
   onClose,
   onRecommendation,
+  onVerdictChange,
+  keepMounted = false,
 }) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -47,12 +60,31 @@ export const ThrombectomyPathwayModal: React.FC<ThrombectomyPathwayModalProps> =
       const recommendation = `${result.status}${result.criteriaName ? ` (${result.criteriaName})` : ''}: ${result.reason}`;
       onRecommendation(recommendation);
     }
+    // Reference channel for host surfaces. Unlike onRecommendation this also
+    // reports non-eligible determinations, and clears when the pathway is reset.
+    if (onVerdictChange) {
+      onVerdictChange(
+        result && result.status !== 'Incomplete'
+          ? {
+              status: result.status,
+              reason: result.reason,
+              eligible: result.eligible,
+              variant: result.variant,
+            }
+          : null,
+      );
+    }
   };
 
-  if (!isOpen) return null;
+  const [hasOpened, setHasOpened] = useState(false);
+  useEffect(() => { if (isOpen) setHasOpened(true); }, [isOpen]);
+  if (!isOpen && !(keepMounted && hasOpened)) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div
+      className={`fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm${isOpen ? '' : ' hidden'}`}
+      aria-hidden={!isOpen}
+    >
       <div
         ref={dialogRef}
         className="relative w-full max-w-6xl max-h-[95dvh] bg-white rounded-xl shadow-lg border border-slate-100 flex flex-col overflow-hidden"

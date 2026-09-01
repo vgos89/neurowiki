@@ -14,10 +14,11 @@
  * shared hook used by ProtocolModal / ThrombectomyPathwayModal /
  * inline NIHSS modal). Closes WCAG 2.4.3 + 4.1.2 by construction.
  */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { X, ArrowLeft } from 'lucide-react';
 import ExtendedIVTPathway, { type IVTResult } from '../../../pages/ExtendedIVTPathway';
 import { useModalFocusTrap } from '../../../hooks/useModalFocusTrap';
+import type { PathwayVerdict } from '../../../lib/pathwayVerdict';
 
 interface ExtendedIVTPathwayModalProps {
   isOpen: boolean;
@@ -28,12 +29,24 @@ interface ExtendedIVTPathwayModalProps {
    *  summary + EMR copy text. Optional — standalone /pathways/extended-ivt
    *  usage doesn't need this. Added 2026-05-17 per V direction. */
   onResultChange?: (result: IVTResult | null) => void;
+  /** Reports ANY completed determination, eligible or not. Reference only. */
+  onVerdictChange?: (verdict: PathwayVerdict | null) => void;
+  /**
+   * When true the pathway stays MOUNTED after the first open and is hidden
+   * rather than unmounted, so a clinician who closes it and reopens it finds
+   * their answers and verdict intact. Default false preserves the existing
+   * Stroke Code behaviour, where each open is a fresh assessment.
+   * V direction 2026-09-01 (NIHSS pathway shortcuts).
+   */
+  keepMounted?: boolean;
 }
 
 export const ExtendedIVTPathwayModal: React.FC<ExtendedIVTPathwayModalProps> = ({
   isOpen,
   onClose,
   onResultChange,
+  onVerdictChange,
+  keepMounted = false,
 }) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -53,10 +66,17 @@ export const ExtendedIVTPathwayModal: React.FC<ExtendedIVTPathwayModalProps> = (
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  // Mount on first open; thereafter keepMounted decides whether closing unmounts
+  // (losing the clinician's answers) or merely hides.
+  const [hasOpened, setHasOpened] = useState(false);
+  useEffect(() => { if (isOpen) setHasOpened(true); }, [isOpen]);
+  if (!isOpen && !(keepMounted && hasOpened)) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div
+      className={`fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm${isOpen ? '' : ' hidden'}`}
+      aria-hidden={!isOpen}
+    >
       <div
         ref={dialogRef}
         className="relative w-full max-w-6xl max-h-[95dvh] bg-white rounded-xl shadow-lg border border-slate-100 flex flex-col overflow-hidden"
@@ -95,6 +115,7 @@ export const ExtendedIVTPathwayModal: React.FC<ExtendedIVTPathwayModalProps> = (
               hideHeader={true}
               isInModal={true}
               onResultChange={onResultChange}
+              onVerdictChange={onVerdictChange}
             />
           </div>
         </div>

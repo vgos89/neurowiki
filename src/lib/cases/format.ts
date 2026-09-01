@@ -243,7 +243,9 @@ export function formatSavedCaseAsEmrText(c: SavedCase): string {
     const values = data.nihss.values;
     const itemLines = NIHSS_ITEM_LABELS.map(({ id, label }) => {
       const v = values[id];
-      if (id === '10' && v === 9) return `${label}: UN`;
+      // UN (untestable, internal value 9) is offered on 5a, 5b, 6a, 6b, 7 and 10
+      // per the published scale, so the check is by value rather than by item.
+      if (v === 9) return `${label}: UN`;
       return `${label}: ${v ?? 0}`;
     });
     blocks.push(itemLines.join('\n'));

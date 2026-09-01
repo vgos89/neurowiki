@@ -138,6 +138,12 @@ export interface PatientContextAction {
   /** Button text. Kept short, these sit two-across on a 375px phone. */
   label: string;
   onClick: () => void;
+  /**
+   * Current determination from the surface this action opens, shown inline so a
+   * clinician who has closed the pathway can still see where it landed.
+   * Reference only: never exported. V direction 2026-09-01.
+   */
+  status?: { label: string; tone: 'success' | 'warning' | 'danger' | 'neutral' };
 }
 
 interface PatientContextPanelProps {
@@ -494,17 +500,31 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
               beside the score without competing with it. */}
           {showThrombolysisTiming && pathwayActions && pathwayActions.length > 0 && (
             <div className="px-4 pb-2.5 -mt-0.5 flex items-center gap-2 flex-wrap">
-              {pathwayActions.map((action) => (
-                <button
-                  key={action.id}
-                  type="button"
-                  onClick={action.onClick}
-                  className={`${CHIP_BASE} ${CHIP_OFF} gap-1`}
-                >
-                  {action.label}
-                  <ChevronRight className="w-3 h-3" aria-hidden />
-                </button>
-              ))}
+              {pathwayActions.map((action) => {
+                const tone = action.status?.tone;
+                const statusCls =
+                  tone === 'success' ? 'text-emerald-700'
+                  : tone === 'warning' ? 'text-amber-700'
+                  : tone === 'danger' ? 'text-red-700'
+                  : 'text-slate-600';
+                return (
+                  <button
+                    key={action.id}
+                    type="button"
+                    onClick={action.onClick}
+                    className={`${CHIP_BASE} ${action.status ? 'bg-white border-slate-300 text-slate-700' : CHIP_OFF} gap-1`}
+                  >
+                    {action.label}
+                    {action.status && (
+                      <>
+                        <span className="text-slate-300" aria-hidden>|</span>
+                        <span className={`font-semibold ${statusCls}`}>{action.status.label}</span>
+                      </>
+                    )}
+                    <ChevronRight className="w-3 h-3" aria-hidden />
+                  </button>
+                );
+              })}
             </div>
           )}
 

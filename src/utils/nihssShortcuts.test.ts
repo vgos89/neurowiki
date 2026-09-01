@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateTotal, getItemWarning } from './nihssShortcuts';
+import { calculateTotal, getItemWarning, NIHSS_ITEMS } from './nihssShortcuts';
 
 // ── calculateTotal ──────────────────────────────────────────────────────────
 
@@ -107,5 +107,51 @@ describe('getItemWarning', () => {
     expect(getItemWarning('1a', 3, {})).toBeNull();
     expect(getItemWarning('8', 2, {})).toBeNull();
     expect(getItemWarning('3', 3, {})).toBeNull();
+  });
+});
+
+// ── UN (untestable) coverage ────────────────────────────────────────────────
+//
+// The published NIH Stroke Scale offers "UN" on the motor arm items (5a, 5b),
+// the motor leg items (6a, 6b) and limb ataxia (7) for amputation or joint
+// fusion, and on dysarthria (10) for intubation or another physical barrier.
+// Before 2026-09-01 only item 10 had it, so an amputee could not be scored.
+// UN is represented internally as 9 and is excluded from the total.
+
+const UN_ITEMS = ['5a', '5b', '6a', '6b', '7', '10'];
+const NO_UN_ITEMS = ['1a', '1b', '1c', '2', '3', '4', '8', '9', '11'];
+
+describe('UN (untestable) options', () => {
+  it.each(UN_ITEMS)('item %s offers UN in both rapid and detailed modes', (id) => {
+    const item = NIHSS_ITEMS.find((i) => i.id === id);
+    expect(item, `item ${id} missing`).toBeTruthy();
+    expect(item!.rapidOptions.some((o) => o.value === 9)).toBe(true);
+    expect(item!.plainOptions.some((o) => o.value === 9)).toBe(true);
+  });
+
+  it.each(NO_UN_ITEMS)('item %s does not offer UN', (id) => {
+    const item = NIHSS_ITEMS.find((i) => i.id === id);
+    expect(item!.rapidOptions.some((o) => o.value === 9)).toBe(false);
+  });
+
+  it('documents UN in the detailed rubric for every item that offers it', () => {
+    for (const id of UN_ITEMS) {
+      const item = NIHSS_ITEMS.find((i) => i.id === id)!;
+      expect(item.detailedInfo, `item ${id} rubric`).toContain('UN');
+    }
+  });
+
+  it('excludes UN limbs from the total rather than scoring them', () => {
+    // Amputee: left arm and left leg untestable, everything else normal.
+    expect(calculateTotal({ '5a': 9, '6a': 9, '5b': 0, '6b': 0, '1a': 2 })).toBe(2);
+    // UN on every eligible item at once still totals only the scored items.
+    expect(calculateTotal({ '5a': 9, '5b': 9, '6a': 9, '6b': 9, '7': 9, '10': 9, '9': 3 })).toBe(3);
+  });
+
+  it('a UN limb does not read as paralysed for the ataxia cross-check', () => {
+    // Motor 4 means paralysed, so ataxia must be 0. An amputated limb is not
+    // paralysed, so scoring ataxia elsewhere must not raise that warning.
+    expect(getItemWarning('7', 1, { '5a': 4 })).toBeTruthy();
+    expect(getItemWarning('7', 1, { '5a': 9 })).toBeNull();
   });
 });
