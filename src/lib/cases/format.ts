@@ -143,6 +143,12 @@ export function formatSavedCaseAsEmrText(c: SavedCase): string {
         ? `Glucose: ${pc.glucose} mg/dL`
         : `Glucose: Not entered`
     );
+    // Weight only. Computed thrombolytic doses are never persisted or exported.
+    contextLines.push(
+      pc.weightValue && pc.weightValue > 0
+        ? `Weight: ${pc.weightValue} ${pc.weightUnit ?? 'kg'}`
+        : `Weight: Not entered`
+    );
     const anticoagList = (pc.anticoag ?? []).filter((k) => k !== 'none');
     if (anticoagList.length > 0) {
       const list = anticoagList.map((k) => ANTICOAG_LABELS[k] ?? k).join(', ');

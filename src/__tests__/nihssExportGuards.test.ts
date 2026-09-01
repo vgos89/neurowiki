@@ -52,6 +52,19 @@ describe('NIHSS export guards', () => {
     },
   );
 
+  it('buildText emits no computed thrombolytic dose', () => {
+    // Weight is exported (it documents the basis of a dose). The doses are not:
+    // a dose line in a chart note reads as an order, and this calculator does
+    // not prescribe. Same principle as the pathway verdicts.
+    for (const symbol of ['getTNKDose', 'getTpaDoses', 'getTNKVolumeMl', 'Tenecteplase', 'Alteplase']) {
+      expect(buildText).not.toContain(symbol);
+    }
+  });
+
+  it('buildText does export the weight it was given', () => {
+    expect(buildText).toContain('Weight:');
+  });
+
   it('buildText emits no pathway verdict wording', () => {
     for (const phrase of ['Path C', 'Path A', 'Path B', 'EVT Preferred', 'Outside Path C Scope']) {
       expect(buildText).not.toContain(phrase);

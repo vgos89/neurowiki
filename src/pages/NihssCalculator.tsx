@@ -139,8 +139,29 @@ const DISABLING_CHECK_SHORT = [
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
+/**
+ * Every item starts at 0 rather than unanswered.
+ *
+ * V direction 2026-09-01: most stroke exams score 0 on most items, so requiring
+ * fifteen deliberate taps to record a normal exam is fatigue for no information
+ * gain. The clinician now changes only what is abnormal.
+ *
+ * Consequence accepted with that decision: the tool can no longer distinguish
+ * "assessed and normal" from "not assessed". That distinction was already
+ * unreliable, because an unanswered item was exported as 0 and counted as 0 in
+ * the total, so a partially-scored exam already produced a confident wrong
+ * number. Defaulting makes the behaviour honest rather than changing it.
+ */
+const ALL_ZERO_NIHSS: Record<string, number> = Object.fromEntries(
+  NIHSS_ITEMS.map((item) => [item.id, 0]),
+);
+
 const NihssCalculator: React.FC = () => {
-  const [nihssValues, setNihssValues] = useState<Record<string, number>>({});
+  const [nihssValues, setNihssValues] = useState<Record<string, number>>({ ...ALL_ZERO_NIHSS });
+  // True once the clinician has actually touched a score. Distinct from
+  // isComplete, which is now true from mount and therefore no longer a usable
+  // signal for "the clinician produced a result".
+  const [hasScored, setHasScored] = useState(false);
   const [nihssMode, setNihssMode] = useState<'rapid' | 'detailed'>('rapid');
   const [userMode] = useState<'resident' | 'attending'>('resident');
   const [activePearl, setActivePearl] = useState<string | null>(null);
@@ -192,7 +213,10 @@ const NihssCalculator: React.FC = () => {
   const [pathwayEverOpened, setPathwayEverOpened] = useState<{ ivt: boolean; evt: boolean }>({ ivt: false, evt: false });
 
   const nihssHeaderRef = useRef<HTMLDivElement>(null);
-  const wasCompleteRef = useRef(false);
+  // Starts true: with every item defaulting to 0 the exam is complete from
+  // mount, and neither the discovery animation nor the analytics event should
+  // fire merely because someone opened the page.
+  const wasCompleteRef = useRef(true);
   // Bug-1 fix (2026-07-01 audit): the case-load useEffect can complete
   // AFTER the clinician has started scoring on the freshly-mounted
   // (still-empty) calculator, wholesale-overwriting the tapped values
@@ -254,7 +278,7 @@ const NihssCalculator: React.FC = () => {
         }
         // Restore NIHSS scoring
         if (saved.data.nihss) {
-          setNihssValues({ ...saved.data.nihss.values });
+          setNihssValues({ ...ALL_ZERO_NIHSS, ...saved.data.nihss.values });
           setNihssMode(saved.data.nihss.mode);
           if (saved.data.nihss.performedAt) {
             setPerformedAt(new Date(saved.data.nihss.performedAt));
@@ -286,6 +310,8 @@ const NihssCalculator: React.FC = () => {
             doacDrug: pc.doacDrug,
             warfarinInr: pc.warfarinInr,
             heparinAptt: pc.heparinAptt,
+            weightValue: pc.weightValue,
+            weightUnit: pc.weightUnit ?? 'kg',
             prestrokeMrs: pc.prestrokeMrs,
           });
         }
@@ -377,7 +403,11 @@ const NihssCalculator: React.FC = () => {
 
   const { state: drawerState, drawerOpen, setDrawerOpen, reset, toast, toastTone, showToast } = useDrawerState({
     mode: 'partial-complete',
-    selectedCount: answeredCount,
+    // Not answeredCount: every item defaults to 0, so that is always 15 and the
+    // drawer would present "No symptoms, NIHSS 0" before anyone had looked at
+    // the patient. Gate on real interaction instead. State B is unreachable by
+    // design now, since defaulting removes the partial-exam state entirely.
+    selectedCount: hasScored ? totalItems : 0,
     totalRequired: totalItems,
   });
 
@@ -392,20 +422,17 @@ const NihssCalculator: React.FC = () => {
 
   const isFav = isFavorite('nihss');
 
-  // Discovery animation fires once per completion (§5.4)
+  // Usage analytics. Previously fired when the 15th item was scored; with every
+  // item defaulting to 0 there is no completion event, so it fires on the first
+  // real interaction instead. useCalculatorAnalytics dedupes to once per
+  // session. Without this move, opening the page would log a score of 0 as a
+  // completed use on every single view.
   useEffect(() => {
-    if (isComplete && !wasCompleteRef.current) {
-      wasCompleteRef.current = true;
-      trackResult(total);
-      setJustCompleted(true);
-      const t = setTimeout(() => setJustCompleted(false), 1800);
-      return () => clearTimeout(t);
-    }
-    if (!isComplete && wasCompleteRef.current) {
-      wasCompleteRef.current = false;
-      setJustCompleted(false);
-    }
-  }, [isComplete, total, trackResult]);
+    if (hasScored) trackResult(total);
+    // total is deliberately omitted: this must fire on the first score, not on
+    // every subsequent one. The hook dedupes, but re-running is pointless work.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasScored, trackResult]);
 
   // ── Handlers ───────────────────────────────────────────────────────────────
 
@@ -413,6 +440,7 @@ const NihssCalculator: React.FC = () => {
     // Bug-1 fix: mark this session as user-interacted so a pending
     // case-load can't wholesale-overwrite the values below.
     userHasInteractedRef.current = true;
+    setHasScored(true);
     // Capture "Performed" timestamp on first input — clinical convention is
     // that NIHSS time = when the exam started, not when the page opened.
     // 2026-05-23 fix per V: keep performedAt and strokeTimestamps['Neurology
@@ -574,6 +602,13 @@ const NihssCalculator: React.FC = () => {
       patientContext.glucose
         ? `Glucose: ${patientContext.glucose} mg/dL`
         : `Glucose: Not entered`,
+      // Weight documents the basis of any dose given. The computed doses are
+      // deliberately NOT exported: a dose line in a chart note reads as an
+      // order, and this calculator does not prescribe. Same principle as the
+      // pathway verdicts (V direction 2026-09-01).
+      patientContext.weightValue && patientContext.weightValue > 0
+        ? `Weight: ${patientContext.weightValue} ${patientContext.weightUnit ?? 'kg'}`
+        : `Weight: Not entered`,
       // Nothing selected means nobody recorded an answer, not a confirmed
       // negative. "None" asserted in an exported note that the patient is on
       // no anticoagulant when the question may never have been asked.
@@ -692,7 +727,8 @@ const NihssCalculator: React.FC = () => {
     // navigates back with a new one.
     userHasInteractedRef.current = true;
     hydratedCaseIdRef.current = null;
-    setNihssValues({});
+    setNihssValues({ ...ALL_ZERO_NIHSS });
+    setHasScored(false);
     setPerformedAt(null);
     setPatientContext({ ...EMPTY_PATIENT_CONTEXT, anticoag: new Set() });
     setStrokeTimestamps({ ...EMPTY_STROKE_TIMESTAMPS });
@@ -712,13 +748,13 @@ const NihssCalculator: React.FC = () => {
   /** Normal exam shortcut — Phase 7E §3.5: set all 15 items to 0, open drawer */
   const handleNormalExam = () => {
     userHasInteractedRef.current = true; // Bug-1 fix
-    const allZero = Object.fromEntries(NIHSS_ITEMS.map(item => [item.id, 0]));
+    const allZero = { ...ALL_ZERO_NIHSS };
     // Capture Performed timestamp on shortcut too — the exam was just done.
     if (performedAt === null) {
       setPerformedAt(new Date());
     }
     setNihssValues(allZero);
-    trackResult(0);
+    setHasScored(true);
     setDrawerOpen(true);
   };
 
@@ -896,6 +932,8 @@ const NihssCalculator: React.FC = () => {
                 doacDrug: patientContext.doacDrug || undefined,
                 warfarinInr: patientContext.warfarinInr,
                 heparinAptt: patientContext.heparinAptt,
+                weightValue: patientContext.weightValue,
+                weightUnit: patientContext.weightUnit,
                 prestrokeMrs: patientContext.prestrokeMrs,
               },
               strokeTimestamps: hasAnyStamp ? stamps : undefined,
@@ -996,7 +1034,9 @@ const NihssCalculator: React.FC = () => {
           {NIHSS_ITEMS.map((item) => {
             const warning = userMode === 'resident' ? getItemWarning(item.id, nihssValues[item.id] ?? 0, nihssValues) : null;
             const showPearl = userMode === 'resident' || activePearl === item.id;
-            const isRequired = item.id === '1a';
+            // No item is "required" now that all default to 0; the badge would
+            // mark an item that already holds a value. Removed 2026-09-01.
+            const isRequired = false;
 
             if (item.id === '5a') {
               return (

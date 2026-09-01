@@ -18,6 +18,7 @@ type BrowserWindow = Window & {
   webkitSpeechRecognition?: SpeechRecognitionCtor;
 };
 import { formatClinicalDateShort } from '../../utils/clinicalDateTime';
+import { getTNKDose, getTpaDoses, getTNKVolumeMl, isLowWeightBandCaveat, toKg } from '../../utils/strokeDosing';
 import { LKWTimePicker } from '../article/stroke/LKWTimePicker';
 import { MrsPickerModal } from '../calculators/MrsPickerModal';
 
@@ -93,6 +94,13 @@ export interface PatientContextValues {
   warfarinInr?: 'le1_7' | 'gt1_7';
   /** Heparin/LMWH aPTT bucket relative to the 40s threshold. */
   heparinAptt?: 'le40s' | 'gt40s';
+  /**
+   * Body weight as entered, in `weightUnit`. Drives the thrombolytic dose
+   * reference. Stored as entered rather than normalised so the clinician sees
+   * back exactly what they typed; conversion happens at the point of use.
+   */
+  weightValue?: number;
+  weightUnit?: 'kg' | 'lbs';
 }
 
 export const EMPTY_PATIENT_CONTEXT: PatientContextValues = {
@@ -108,6 +116,8 @@ export const EMPTY_PATIENT_CONTEXT: PatientContextValues = {
   doacDrug: undefined,
   warfarinInr: undefined,
   heparinAptt: undefined,
+  weightValue: undefined,
+  weightUnit: 'kg',
 };
 
 /**
@@ -493,6 +503,80 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
                 Wake-up or unknown onset, so time since onset is not shown.
               </span>
             </div>
+          )}
+
+          {/* Weight + thrombolytic dose reference (NIHSS surface only).
+              Deliberately NOT gated on the time window. Tying a dose readout to
+              a window chip makes the dose read as permission to give the drug,
+              and the 4.5 to 9 hour band in particular is perfusion-selected
+              rather than automatically eligible. Weight is a measurement; what
+              it unlocks is arithmetic, not an indication. Eligibility lives in
+              the pathway, one tap away above. */}
+          {showThrombolysisTiming && (
+            <>
+              <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3">
+                <label htmlFor="pc-weight" className="text-xs font-medium text-slate-600 flex-shrink-0">Weight</label>
+                <div className="flex items-center gap-1.5">
+                  <input
+                    id="pc-weight"
+                    type="text"
+                    inputMode="decimal"
+                    value={values.weightValue ?? ''}
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/[^0-9.]/g, '').slice(0, 5);
+                      onChange({ ...values, weightValue: raw === '' ? undefined : Number(raw) });
+                    }}
+                    placeholder="0"
+                    className="w-[64px] text-right text-sm text-slate-900 bg-transparent border-b border-slate-200 focus:border-neuro-500 focus:outline-none px-1 py-1 placeholder:text-slate-300"
+                    aria-label="Patient weight"
+                  />
+                  <select
+                    value={values.weightUnit ?? 'kg'}
+                    onChange={(e) => onChange({ ...values, weightUnit: e.target.value as 'kg' | 'lbs' })}
+                    className="text-xs text-slate-600 bg-transparent border-b border-slate-200 focus:border-neuro-500 focus:outline-none py-1"
+                    aria-label="Weight unit"
+                  >
+                    <option value="kg">kg</option>
+                    <option value="lbs">lbs</option>
+                  </select>
+                </div>
+              </div>
+              {(() => {
+                const raw = values.weightValue;
+                if (!raw || raw <= 0) return null;
+                const kg = toKg(raw, values.weightUnit ?? 'kg');
+                if (kg <= 0) return null;
+                const tnk = getTNKDose(kg);
+                const tnkMl = getTNKVolumeMl(kg);
+                const tpa = getTpaDoses(kg);
+                return (
+                  <div className="px-4 pb-3 -mt-1 space-y-1.5">
+                    {(values.weightUnit ?? 'kg') === 'lbs' && (
+                      <p className="text-[11px] text-slate-400">{kg} kg</p>
+                    )}
+                    <div className="rounded-lg border border-slate-100 bg-slate-50/60 px-3 py-2 space-y-1.5">
+                      <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                        Thrombolytic dose reference
+                      </div>
+                      <p className="text-xs text-slate-700">
+                        <span className="font-semibold">Tenecteplase</span> {tnk} mg ({tnkMl} mL) single IV bolus over 5 to 10 seconds
+                      </p>
+                      <p className="text-xs text-slate-700">
+                        <span className="font-semibold">Alteplase</span> {tpa.total} mg total: {tpa.bolus} mg bolus over 1 minute, then {tpa.infusion} mg over 60 minutes
+                      </p>
+                      {isLowWeightBandCaveat(kg) && (
+                        <p className="text-[11px] text-amber-700 leading-relaxed">
+                          Under 50 kg with an accurate known weight, tenecteplase dosing per 1 kg band may be used instead of the 10 kg band shown. Do not delay thrombolysis to obtain an exact weight.
+                        </p>
+                      )}
+                      <p className="text-[11px] text-slate-400 leading-relaxed">
+                        Weight-band dosing per AHA/ASA 2026 Table 7. Dose reference only: whether to treat, and with which agent, is decided in the thrombolysis pathway.
+                      </p>
+                    </div>
+                  </div>
+                );
+              })()}
+            </>
           )}
 
           {/* Pathway shortcuts — open the full decision trees in a modal without

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getTNKDose, getTpaDoses, toKg } from './strokeDosing';
+import { getTNKDose, getTpaDoses, toKg, getTNKVolumeMl, isLowWeightBandCaveat } from './strokeDosing';
 
 // ── getTNKDose ───────────────────────────────────────────────────────────────
 
@@ -110,5 +110,37 @@ describe('toKg', () => {
 
   it('rounds kg to 1 decimal place', () => {
     expect(toKg(70.12345, 'kg')).toBe(70.1);
+  });
+});
+
+// ── Table 7 volume column ───────────────────────────────────────────────────
+describe('getTNKVolumeMl', () => {
+  it('matches the 2026 AHA/ASA Table 7 mL column at every band', () => {
+    expect(getTNKVolumeMl(45)).toBe(3);
+    expect(getTNKVolumeMl(59.9)).toBe(3);
+    expect(getTNKVolumeMl(60)).toBe(3.5);
+    expect(getTNKVolumeMl(69.9)).toBe(3.5);
+    expect(getTNKVolumeMl(70)).toBe(4);
+    expect(getTNKVolumeMl(80)).toBe(4.5);
+    expect(getTNKVolumeMl(90)).toBe(5);
+    expect(getTNKVolumeMl(140)).toBe(5);
+  });
+
+  it('stays consistent with the mg column across every band boundary', () => {
+    for (const w of [40, 59.9, 60, 69.9, 70, 79.9, 80, 89.9, 90, 120]) {
+      expect(getTNKVolumeMl(w) * 5).toBeCloseTo(getTNKDose(w), 5);
+    }
+  });
+});
+
+describe('isLowWeightBandCaveat', () => {
+  it('fires below 50 kg, where the flat 15 mg band overshoots 0.25 mg/kg', () => {
+    expect(isLowWeightBandCaveat(45)).toBe(true);
+    expect(isLowWeightBandCaveat(49.9)).toBe(true);
+  });
+  it('does not fire at or above 50 kg, or on an unentered weight', () => {
+    expect(isLowWeightBandCaveat(50)).toBe(false);
+    expect(isLowWeightBandCaveat(70)).toBe(false);
+    expect(isLowWeightBandCaveat(0)).toBe(false);
   });
 });

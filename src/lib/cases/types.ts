@@ -89,6 +89,11 @@ export interface SavedCaseData {
     doacDrug?: string;
     warfarinInr?: 'le1_7' | 'gt1_7';
     heparinAptt?: 'le40s' | 'gt40s';
+    /** Body weight as entered, with its unit. Documents the dose basis.
+     *  The computed doses themselves are deliberately NOT persisted or
+     *  exported: a dose in a chart note reads as an order. */
+    weightValue?: number;
+    weightUnit?: 'kg' | 'lbs';
     /** Pre-stroke baseline mRS grade (0-5). */
     prestrokeMrs?: 0 | 1 | 2 | 3 | 4 | 5;
   };

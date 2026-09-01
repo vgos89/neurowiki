@@ -137,3 +137,25 @@ describe('formatSavedCaseAsEmrText — untestable items', () => {
     expect(text).not.toContain(': 9');
   });
 });
+
+describe('formatSavedCaseAsEmrText — weight', () => {
+  it('reads "Not entered" when no weight was recorded', () => {
+    expect(formatSavedCaseAsEmrText(makeCase())).toContain('Weight: Not entered');
+  });
+
+  it('records the weight as entered, with its unit', () => {
+    expect(formatSavedCaseAsEmrText(makeCase({ weightValue: 72, weightUnit: 'kg' })))
+      .toContain('Weight: 72 kg');
+    expect(formatSavedCaseAsEmrText(makeCase({ weightValue: 160, weightUnit: 'lbs' })))
+      .toContain('Weight: 160 lbs');
+  });
+
+  it('never exports a computed thrombolytic dose', () => {
+    // The weight documents the basis of a dose. The dose itself is a
+    // recommendation, and a dose line in a chart note reads as an order.
+    const text = formatSavedCaseAsEmrText(makeCase({ weightValue: 72, weightUnit: 'kg' }));
+    for (const phrase of ['Tenecteplase', 'Alteplase', 'mg bolus', 'mL', 'dose reference']) {
+      expect(text).not.toContain(phrase);
+    }
+  });
+});
