@@ -1501,6 +1501,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
         onToggle={() => setDrawerExpanded(v => !v)}
         ariaContentId="extivt-drawer-content"
         ariaLabel="Extended IVT eligibility drawer"
+        inline={isInModal}
         stateAText={{ label: 'Eligibility', hint: 'Complete steps to see verdict' }}
         collapsedLabel="Eligibility"
         colorCollapsed={drawerState === 'C'}

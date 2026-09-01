@@ -1854,6 +1854,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
             isExpanded={drawerExpanded}
             onToggle={() => setDrawerExpanded((open) => !open)}
             ariaContentId="evt-drawer-content"
+            inline={isInModal}
             ariaLabel="EVT eligibility drawer"
             collapsedLabel="Eligibility"
             collapsedStat={drawerCollapsedStat}

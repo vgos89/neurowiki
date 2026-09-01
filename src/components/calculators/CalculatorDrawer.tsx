@@ -6,8 +6,9 @@ import { DRAWER_COLLAPSED_SHADOW, DRAWER_EXPANDED_SHADOW } from '../../lib/calcu
 
 /**
  * Persistent bottom drawer for calculator pages per CALCULATOR_SPEC.md §5.
- * Always renders via createPortal into document.body with fixed positioning
- * above mobile nav (z-[55]).
+ * Renders via createPortal into document.body with fixed positioning above
+ * mobile nav (z-[55]) by default, or in place when `inline` is set (used when
+ * a pathway is hosted inside a modal, whose overlay sits above z-[55]).
  *
  * Renders State A (muted, non-interactive) / State B (partial, muted by
  * default) / State C (complete, tappable) based on `state`.
@@ -51,6 +52,16 @@ export interface CalculatorDrawerProps {
   stateAText: { label: string; hint: string };
   /** State B text: left count label, right hint. Used when state === 'B' and !stateBTappable. */
   stateBText?: { label: string; hint: string };
+  /**
+   * Render in place instead of portalling to document.body.
+   *
+   * The portal is fixed at z-[55], which is BELOW a modal overlay at z-[100],
+   * so a pathway rendered inside a modal had its verdict drawer painted behind
+   * the backdrop and invisible. Rendering inline keeps the verdict inside the
+   * modal card, inside its focus trap, and scrolling with the content, rather
+   * than fighting the overlay for z-index. V bug report 2026-09-01.
+   */
+  inline?: boolean;
   /** State C collapsed label (e.g. "Interpretation"). Also used as State B label when stateBTappable. */
   collapsedLabel?: string;
   /** State C collapsed stat text (e.g. "Moderate · 2-day risk 4.1%"). */
@@ -86,8 +97,32 @@ export const CalculatorDrawer: React.FC<CalculatorDrawerProps> = ({
   collapsedStat,
   justCompleted = false,
   colorCollapsed = false,
+  inline = false,
   children,
 }) => {
+  /**
+   * Portal to document.body with viewport-bottom fixed positioning (the default,
+   * used by all nine calculator pages), or render in place when `inline`.
+   * See the `inline` prop docs for why in-place exists.
+   */
+  const mount = (node: React.ReactNode) =>
+    inline ? (
+      <div className="mt-6 rounded-xl overflow-hidden border border-slate-100">{node}</div>
+    ) : (
+      createPortal(
+        <div
+          className="fixed right-0 z-[55] bg-white"
+          style={{
+            bottom: 'calc(var(--tab-bar-height) + env(safe-area-inset-bottom, 0px))',
+            left: 'var(--nav-rail-width, 0px)',
+          }}
+        >
+          {node}
+        </div>,
+        document.body,
+      )
+    );
+
   // State A: muted bar, non-interactive
   if (state === 'A') {
     const drawer = (
@@ -108,18 +143,7 @@ export const CalculatorDrawer: React.FC<CalculatorDrawerProps> = ({
       </div>
     );
 
-    return createPortal(
-      <div
-        className="fixed right-0 z-[55] bg-white"
-        style={{
-          bottom: 'calc(var(--tab-bar-height) + env(safe-area-inset-bottom, 0px))',
-          left: 'var(--nav-rail-width, 0px)',
-        }}
-      >
-        {drawer}
-      </div>,
-      document.body,
-    );
+    return mount(drawer);
   }
 
   // State B non-tappable: muted bar, non-interactive (like State A but with progress count)
@@ -143,18 +167,7 @@ export const CalculatorDrawer: React.FC<CalculatorDrawerProps> = ({
       </div>
     );
 
-    return createPortal(
-      <div
-        className="fixed right-0 z-[55] bg-white"
-        style={{
-          bottom: 'calc(var(--tab-bar-height) + env(safe-area-inset-bottom, 0px))',
-          left: 'var(--nav-rail-width, 0px)',
-        }}
-      >
-        {drawer}
-      </div>,
-      document.body,
-    );
+    return mount(drawer);
   }
 
   // State C (or State B with stateBTappable): tappable header + content above button
@@ -211,18 +224,7 @@ export const CalculatorDrawer: React.FC<CalculatorDrawerProps> = ({
     </div>
   );
 
-  return createPortal(
-    <div
-      className="fixed right-0 z-[55] bg-white"
-      style={{
-        bottom: 'calc(var(--tab-bar-height) + env(safe-area-inset-bottom, 0px))',
-        left: 'var(--nav-rail-width, 0px)',
-      }}
-    >
-      {drawer}
-    </div>,
-    document.body,
-  );
+  return mount(drawer);
 };
 
 export default CalculatorDrawer;
