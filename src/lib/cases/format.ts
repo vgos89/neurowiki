@@ -3,8 +3,9 @@
  * `buildText` logic in NihssCalculator so a saved case round-trips with
  * a stable, documentation-ready format.
  *
- * Stable header → patient-context block (always emitted with "Not entered"
- * / "None" fallbacks) → timestamps block (only filled stamps) → item lines
+ * Stable header → patient-context block (every field always emitted; a field
+ * the clinician left blank reads "Not entered") → timestamps block (only
+ * filled stamps) → item lines
  * (NIHSS only) → generic payload (when present).
  *
  * V direction 2026-05-19: opening a saved case must show + copy the same
@@ -41,6 +42,25 @@ const ANTICOAG_LABELS: Record<string, string> = {
   antiplatelet: 'Antiplatelet',
   heparin: 'Heparin/LMWH',
 };
+
+/**
+ * Blood-pressure line for the patient-context block.
+ *
+ * A number the clinician actually entered is never reported as missing: a
+ * half-entered BP prints the captured value and names only the empty half.
+ * Both empty is the only case that reads "Not entered".
+ *
+ * Exported so the live NIHSS `buildText` and this saved-case formatter
+ * cannot drift apart on the same line.
+ */
+export function formatBpLine(systolic?: string, diastolic?: string): string {
+  const sys = (systolic ?? '').trim();
+  const dia = (diastolic ?? '').trim();
+  if (sys && dia) return `BP: ${sys}/${dia}`;
+  if (sys) return `BP: ${sys} systolic (diastolic not entered)`;
+  if (dia) return `BP: ${dia} diastolic (systolic not entered)`;
+  return 'BP: Not entered';
+}
 
 const TIMESTAMP_EVENTS = [
   'Code Activation',
@@ -117,11 +137,7 @@ export function formatSavedCaseAsEmrText(c: SavedCase): string {
         ? `LKW: ${fmtDateTime(pc.lkw)}`
         : `LKW: Not entered`
     );
-    contextLines.push(
-      pc.systolic && pc.diastolic
-        ? `BP: ${pc.systolic}/${pc.diastolic}`
-        : `BP: Not entered`
-    );
+    contextLines.push(formatBpLine(pc.systolic, pc.diastolic));
     contextLines.push(
       pc.glucose
         ? `Glucose: ${pc.glucose} mg/dL`
@@ -132,7 +148,10 @@ export function formatSavedCaseAsEmrText(c: SavedCase): string {
       const list = anticoagList.map((k) => ANTICOAG_LABELS[k] ?? k).join(', ');
       contextLines.push(`Anti-Coag/Antiplatelet: ${list}`);
     } else {
-      contextLines.push(`Anti-Coag/Antiplatelet: None`);
+      // Nothing selected means nobody recorded an answer, not a confirmed
+      // negative. "None" asserted in an exported note that the patient is on
+      // no anticoagulant when the question may never have been asked.
+      contextLines.push(`Anti-Coag/Antiplatelet: Not entered`);
     }
     // Per-drug IV-thrombolysis eligibility detail (mirrors the on-screen inputs).
     if (anticoagList.includes('doac')) {
@@ -140,20 +159,28 @@ export function formatSavedCaseAsEmrText(c: SavedCase): string {
         pc.doacDrug || undefined,
         pc.doacTiming === 'lt48h' ? 'last dose <48 h' : pc.doacTiming === 'gte48h' ? 'last dose ≥48 h' : undefined,
       ].filter(Boolean);
-      if (doacParts.length) contextLines.push(`DOAC: ${doacParts.join(', ')}`);
+      contextLines.push(`DOAC: ${doacParts.length ? doacParts.join(', ') : 'Not entered'}`);
     }
-    if (anticoagList.includes('warfarin') && pc.warfarinInr) {
-      contextLines.push(`Warfarin INR: ${pc.warfarinInr === 'gt1_7' ? '>1.7' : '≤1.7'}`);
+    if (anticoagList.includes('warfarin')) {
+      contextLines.push(
+        `Warfarin INR: ${
+          pc.warfarinInr === undefined ? 'Not entered' : pc.warfarinInr === 'gt1_7' ? '>1.7' : '≤1.7'
+        }`,
+      );
     }
-    if (anticoagList.includes('heparin') && pc.heparinAptt) {
-      contextLines.push(`Heparin/LMWH aPTT: ${pc.heparinAptt === 'gt40s' ? '>40 s' : '≤40 s'}`);
+    if (anticoagList.includes('heparin')) {
+      contextLines.push(
+        `Heparin/LMWH aPTT: ${
+          pc.heparinAptt === undefined ? 'Not entered' : pc.heparinAptt === 'gt40s' ? '>40 s' : '≤40 s'
+        }`,
+      );
     }
-    if (pc.prestrokeMrs !== undefined) {
-      contextLines.push(`Pre-stroke mRS: ${pc.prestrokeMrs}`);
-    }
-    if (pc.preExistingDeficits) {
-      contextLines.push(`Pre-existing deficits: ${pc.preExistingDeficits}`);
-    }
+    contextLines.push(
+      `Pre-stroke mRS: ${pc.prestrokeMrs !== undefined ? pc.prestrokeMrs : 'Not entered'}`,
+    );
+    contextLines.push(
+      `Pre-existing deficits: ${pc.preExistingDeficits ? pc.preExistingDeficits : 'Not entered'}`,
+    );
   }
   if (contextLines.length > 0) blocks.push(contextLines.join('\n'));
 

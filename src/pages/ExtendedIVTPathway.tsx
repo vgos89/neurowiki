@@ -266,6 +266,27 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
   /* ── Path C state ── */
   const [cPenumbra, setCPenumbra] = useState<YesNo>(null);
   const [cLvo, setCLvo] = useState<YesNo>(null);
+  // Occlusion territory, asked only once an LVO is confirmed. Path C's evidence
+  // base (TRACE-III) enrolled internal carotid or middle cerebral artery only,
+  // while AHA/ASA 2026 §4.6.3 rec 3 is written for "AIS due to LVO" with no vessel
+  // and no circulation named. A posterior-circulation LVO is therefore inside the
+  // guideline recommendation and outside the trial evidence, so it can be neither
+  // affirmed nor refused. Splitting territory lets that case reach an honest
+  // scope-limited verdict instead of a red Not Eligible or a green Eligible whose
+  // supporting text describes an artery the patient does not have.
+  // Added 2026-09-01 per clinical-reviewer condition 6.
+  //
+  // ENCODING (architect condition A2): this is deliberately a SECOND field rather
+  // than widening cLvo to a tri-state union. A union admits no member to write on
+  // row 1 when the answer is "yes, territory not yet asked", so it would need a
+  // fifth member like 'yes-pending-territory' plus a collapse function mapping
+  // three members back to 'yes' for the row's value prop. Same count of
+  // meaningless-but-representable states, worse readability. The illegal pair
+  // (cLvo=false, territory='anterior') is ruled out instead by cLvo===false being
+  // the FIRST gate in both isCriteriaComplete and the result memo. That ordering
+  // must stay symmetric across both memos; see condition A1 guard below. Do not
+  // "tidy" this into a union without re-reading that trade-off.
+  const [cLvoTerritory, setCLvoTerritory] = useState<'anterior' | 'other' | null>(null);
   const [cLvoEvt, setCLvoEvt] = useState<YesNo>(null);
   const [cLvoBarrier, setCLvoBarrier] = useState<EVTBarrierId | null>(null);
   const [cExpertise, setCExpertise] = useState<YesNo>(null);
@@ -351,6 +372,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
     }
     if (pathStage === 'C') {
       if (cLvo === false) return true;
+      if (cLvo === true && cLvoTerritory === null) return false;
+      if (cLvoTerritory === 'other') return true; // scope-limited terminal verdict
       if (cLvo === null || cPenumbra === null) return false;
       if (cPenumbra === false) return true;
       if (cLvoEvt === true) return true; // redirect to EVT
@@ -363,7 +386,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
     pathStage, imagingModality,
     aRecognition, aDwiSmall, aFlair,
     bCtpCore, bCtpMismatch, bMriPwi, bMriMismatch, bEvt,
-    cPenumbra, cLvo, cLvoEvt, cLvoBarrier, cExpertise,
+    cPenumbra, cLvo, cLvoTerritory, cLvoEvt, cLvoBarrier, cExpertise,
   ]);
 
   /* ── Result computation ── */
@@ -439,8 +462,22 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
     if (pathStage === 'C') {
       if (cLvo === false) return {
         eligible: false, status: 'Not Eligible', variant: 'danger',
-        reason: 'Path C requires an ICA or MCA (M1/M2) occlusion',
-        details: 'Patients presenting beyond 9 hours from last known well without a qualifying large-vessel occlusion are not eligible for Path C IVT. Current 2026 AHA/ASA late-window thrombolysis support is limited to ICA or MCA (M1/M2) occlusions, based on TRACE-III. A qualifying occlusion alone is not sufficient: salvageable penumbra on perfusion imaging is also required.',
+        reason: 'Path C requires a large-vessel occlusion',
+        details: 'Patients presenting beyond 9 hours from last known well without a large-vessel occlusion are not eligible for Path C IVT. The 2026 AHA/ASA §4.6.3 recommendation is written for acute ischemic stroke due to large-vessel occlusion, so an occlusion is a stated criterion. A qualifying occlusion alone is not sufficient: salvageable penumbra on perfusion imaging is also required.',
+      };
+      // Guard symmetry with isCriteriaComplete (architect condition A1). That memo
+      // returns false while territory is unanswered; without the mirror here the
+      // two chains diverge, and onResultChange + copySummary read `result`, not
+      // completeness, so an affirmative verdict could reach the Stroke Code Step 3
+      // summary and the EMR copy text while the pathway shows a locked step.
+      if (cLvo === true && cLvoTerritory === null) return null;
+      // Posterior-circulation and other non-ICA/MCA occlusions. The guideline
+      // recommendation covers any LVO; the trial evidence does not reach here. This
+      // verdict states both and refuses to invent an answer in either direction.
+      if (cLvo === true && cLvoTerritory === 'other') return {
+        eligible: false, status: 'Outside Path C Scope', variant: 'neutral',
+        reason: 'Guideline covers any LVO; this pathway follows anterior-circulation trial evidence',
+        details: 'The 2026 AHA/ASA §4.6.3 recommendation is written for acute ischemic stroke due to large-vessel occlusion and names no vessel and no circulation, so it does not exclude this patient. This pathway follows TRACE-III, which enrolled internal carotid or middle cerebral artery occlusion only, so it cannot affirm late-window thrombolysis here either. HOPE (2025) enrolled posterior-circulation patients in this window and met its primary endpoint, but published no posterior-specific result. Note that basilar occlusion carries a separate Class 1 thrombectomy recommendation within 24 hours under §4.7.3: assess EVT or transfer first. Decide with expert stroke-thrombolysis input.',
       };
       if (cLvo === null || cPenumbra === null) return null;
       if (cPenumbra === false) return { eligible: false, status: 'Not Eligible', variant: 'danger', reason: 'No salvageable penumbra', details: 'Extended-window IVT (Path C) requires confirmed target mismatch on perfusion imaging. Without evidence of viable ischemic penumbra, thrombolytic risk outweighs benefit.' };
@@ -467,8 +504,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
             ? 'Path C: 9–24h LVO with no feasible EVT (wake-up extrapolation)'
             : 'Path C: 9–24h LVO with no feasible EVT',
           details: isWakeUpC
-            ? 'IVT with tenecteplase may be considered for acute ischemic stroke caused by an ICA or MCA (M1/M2) occlusion 9 to 24 hours from last known well. Wake-up application is an extrapolation from TRACE-III, which enrolled witnessed-onset patients only; expert oversight and individualized risk discussion are warranted. Requires salvageable penumbra, no feasible rapid EVT pathway, and treatment directed by clinicians with expertise in thrombolytic stroke care.'
-            : 'IVT with tenecteplase may be considered for acute ischemic stroke caused by an ICA or MCA (M1/M2) occlusion 9 to 24 hours from last known well. This requires salvageable penumbra, no feasible rapid EVT pathway, and treatment directed by clinicians with expertise in thrombolytic stroke care.',
+            ? 'IVT with tenecteplase may be considered for acute ischemic stroke caused by an internal carotid or middle cerebral artery occlusion 9 to 24 hours from last known well. The guideline recommendation covers any large-vessel occlusion and names no agent; the vessel list and the agent both come from TRACE-III enrolment. Wake-up application is a further extrapolation from TRACE-III, which enrolled witnessed-onset patients only; expert oversight and individualized risk discussion are warranted. Requires salvageable penumbra, no feasible rapid EVT pathway, and treatment directed by clinicians with expertise in thrombolytic stroke care.'
+            : 'IVT with tenecteplase may be considered for acute ischemic stroke caused by an internal carotid or middle cerebral artery occlusion 9 to 24 hours from last known well. The guideline recommendation covers any large-vessel occlusion and names no agent; the vessel list and the agent both come from TRACE-III enrolment. The guideline window is 4.5 to 24 hours, and this pathway operates from 9 hours because 4.5 to 9 hours routes to Path B at the stronger COR 2a. Requires salvageable penumbra, no feasible rapid EVT pathway, and treatment directed by clinicians with expertise in thrombolytic stroke care.',
         };
       }
     }
@@ -478,7 +515,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
     isSetupComplete, pathStage, imagingModality,
     aRecognition, aDwiSmall, aFlair,
     bCtpCore, bCtpMismatch, bMriPwi, bMriMismatch, bEvt,
-    cPenumbra, cLvo, cLvoEvt, cLvoBarrier, cExpertise,
+    cPenumbra, cLvo, cLvoTerritory, cLvoEvt, cLvoBarrier, cExpertise,
   ]);
 
   const isDecisionComplete = !!result && result.status !== 'Incomplete';
@@ -523,15 +560,15 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
     if (!isCriteriaComplete) return 'Criteria';
     if (pathStage === 'A') return 'Path A · DWI-FLAIR';
     if (pathStage === 'B') return `Path B · ${imagingModality === 'ctp' ? 'CTP' : 'MRI PWI'}`;
-    if (pathStage === 'C') return 'Path C · Late LVO';
+    if (pathStage === 'C') return cLvoTerritory === 'other' ? 'Path C · Outside scope' : 'Path C · Late LVO';
     return pathStage ?? 'Criteria';
-  }, [isCriteriaComplete, pathStage, imagingModality]);
+  }, [isCriteriaComplete, pathStage, imagingModality, cLvoTerritory]);
 
   /* ── Handlers ── */
   const clearCriteriaAnswers = () => {
     setARecognition(null); setADwiSmall(null); setAFlair(null);
     setBCtpCore(null); setBCtpMismatch(null); setBMriPwi(null); setBMriMismatch(null); setBEvt(null);
-    setCPenumbra(null); setCLvo(null); setCLvoEvt(null); setCLvoBarrier(null); setCExpertise(null);
+    setCPenumbra(null); setCLvo(null); setCLvoTerritory(null); setCLvoEvt(null); setCLvoBarrier(null); setCExpertise(null);
   };
 
   const handleReset = () => {
@@ -1093,12 +1130,12 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
 
                 <div>
                   <h3 className="text-sm font-semibold text-slate-700 mb-1">LVO (large vessel occlusion) confirmed on CTA / MRA?</h3>
-                  <p className="text-xs text-slate-500 mb-2">Asked first: beyond 9 hours from last known well, a qualifying large-vessel occlusion (internal carotid or MCA M1/M2) is required for late-window thrombolysis.</p>
+                  <p className="text-xs text-slate-500 mb-2">Asked first: beyond 9 hours from last known well, a large-vessel occlusion is required for late-window thrombolysis. The 2026 AHA/ASA recommendation names no vessel and no circulation.</p>
                   <div className="bg-white border border-slate-100 rounded-xl p-4">
                     <PathwayCategoryRow
                       label="LVO status"
                       options={[
-                        { value: 'yes', label: 'Yes, LVO confirmed', description: 'ICA or MCA (M1/M2) occlusion' },
+                        { value: 'yes', label: 'Yes, LVO confirmed', description: 'Large-vessel occlusion on CTA or MRA' },
                         { value: 'no', label: 'No, Non-LVO', description: 'Late Path C does not apply' },
                       ]}
                       value={cLvo === null ? null : cLvo ? 'yes' : 'no'}
@@ -1109,6 +1146,25 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                 </div>
 
                 {cLvo === true && (
+                  <div className="animate-in slide-in-from-top-2">
+                    <h3 className="text-sm font-semibold text-slate-700 mb-1">Which territory is the occlusion in?</h3>
+                    <p className="text-xs text-slate-500 mb-2">TRACE-III, the trial behind this pathway, enrolled internal carotid and middle cerebral artery occlusion only. The guideline recommendation itself names no vessel and no circulation.</p>
+                    <div className="bg-white border border-slate-100 rounded-xl p-4">
+                      <PathwayCategoryRow
+                        label="Occlusion territory"
+                        options={[
+                          { value: 'anterior', label: 'Internal carotid or middle cerebral artery', description: 'Matches the TRACE-III enrolment population' },
+                          { value: 'other', label: 'Basilar, vertebral, posterior cerebral, or other', description: 'Inside the guideline wording, outside the trial evidence' },
+                        ]}
+                        value={cLvoTerritory}
+                        defaultOpen={cLvoTerritory === null}
+                        onChange={(val) => setCLvoTerritory(val as 'anterior' | 'other')}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {cLvo === true && cLvoTerritory === 'anterior' && (
                   <div className="animate-in slide-in-from-top-2">
                     <h3 className="text-sm font-semibold text-slate-700 mb-1">Salvageable penumbra / target mismatch on perfusion imaging?</h3>
                     <p className="text-xs text-slate-500 mb-2">CT-P or MRI-PWI showing ischemic core with surrounding hypoperfused but viable tissue</p>
@@ -1131,7 +1187,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                 )}
 
                 {/* C-LVO branch */}
-                {cPenumbra === true && cLvo === true && (
+                {cPenumbra === true && cLvo === true && cLvoTerritory === 'anterior' && (
                   <div className="space-y-4 pl-4 border-l-2 border-slate-200 animate-in slide-in-from-top-2">
                     <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">PATH C-LVO · TRACE-III late-window pathway</p>
                     <div>

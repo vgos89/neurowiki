@@ -114,8 +114,27 @@ export const CITATION_REGISTRY: CitationRegistry = {
     year: 2024,
     url: 'https://www.nejm.org/doi/full/10.1056/NEJMoa2402980',
     pmid: '38884324',
-    last_reviewed: '2026-05-19',
-    quoted_text: 'In this trial involving Chinese patients with ischemic stroke due to large-vessel occlusion, most of whom did not undergo endovascular thrombectomy, treatment with tenecteplase administered within 4.5 to 24 hours after stroke onset resulted in less disability and similar survival as compared with standard medical treatment, and the incidence of symptomatic intracranial hemorrhage appeared to be higher. Reported symptomatic intracranial hemorrhage incidence was approximately 3.0% with tenecteplase versus 0.8% with standard medical treatment (secondary-source figure per evidence packet 2026-07-19; primary NEJM full text not yet retrieved due to access restriction; Medium confidence; exact sICH definition label unverified). This numeric figure substantiates the claim trace-iii-late-tnk-sich.',
+    last_reviewed: '2026-09-01',
+    // CORRECTED 2026-09-01 (F6). The previous quoted_text carried EDITORIAL TEXT
+    // inside the quote ("secondary-source figure per evidence packet 2026-07-19;
+    // primary NEJM full text not yet retrieved...; Medium confidence; exact sICH
+    // definition label unverified. This numeric figure substantiates the claim
+    // trace-iii-late-tnk-sich"). None of that is in NEJM. quoted_text is what every
+    // other check treats as ground truth, so annotation belongs here, not there.
+    //
+    // The Medium-confidence hedge is now CLOSED. The NEJM abstract (PMID 38884324,
+    // open access) supplies both figures and the definition window verbatim:
+    // "the incidence of symptomatic intracranial hemorrhage within 36 hours after
+    // treatment was 3.0% and 0.8%, respectively." This substantiates the claim
+    // trace-iii-late-tnk-sich, which may now state the exact figures and the 36-hour
+    // window rather than "about 3%" / "under 1%".
+    //
+    // SCOPE NOTE for co-citation: TRACE-III enrolled ICA or MCA occlusion only. That
+    // vessel restriction is a TRIAL ENROLMENT CRITERION and must never be rendered
+    // as a guideline restriction (see aha-asa-2026-4.6.3; correction C5, 2026-09-01).
+    // TRACE-III and HOPE share a 36-hour sICH definition window, which makes their
+    // co-citation under extended-ivt-sich-caution cleaner than usual.
+    quoted_text: 'In this trial involving Chinese patients with ischemic stroke due to large-vessel occlusion, most of whom did not undergo endovascular thrombectomy, treatment with tenecteplase administered within 4.5 to 24 hours after stroke onset resulted in less disability and similar survival as compared with standard medical treatment, and the incidence of symptomatic intracranial hemorrhage appeared to be higher. The incidence of symptomatic intracranial hemorrhage within 36 hours after treatment was 3.0% and 0.8%, respectively.',
   },
   'timeless-trial-2024': {
     id: 'timeless-trial-2024',
@@ -662,17 +681,61 @@ export const CITATION_REGISTRY: CitationRegistry = {
   'aha-asa-2026-4.6.3': {
     id: 'aha-asa-2026-4.6.3',
     source: 'guideline',
-    title: '2026 AHA/ASA Guideline, §4.6.3 (Late-window tenecteplase for LVO without thrombectomy access)',
+    title: '2026 AHA/ASA Guideline · §4.6.3 (Extended Time Windows for Intravenous Thrombolysis)',
     year: 2026,
-    section: '§4.6.3',
+    section: '§4.6.3 Extended Time Windows for Intravenous Thrombolysis',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
-    last_reviewed: '2026-05-19',
-    // §13.7 rapidly-evolving / emerging-therapy override: late-window tenecteplase
-    // for LVO is an emerging indication with pending updating evidence (HOPE, JAMA
-    // 2025). Re-review at 3 months (next due 2026-08-19) rather than the 6-month
-    // guideline default. Set 2026-07-19 per clinical-review condition.
+    pmid: '41582814',
+    last_reviewed: '2026-09-01',
+    // §13.7 rapidly-evolving / emerging-therapy override: rec 3 (4.5 to 24 h) is an
+    // emerging indication with active updating evidence. Re-review at 3 months
+    // (next due 2026-12-01) rather than the 6-month guideline default. Recs 1 and 2
+    // are stable (WAKE-UP 2018, EXTEND 2019) and re-read on the same cadence at
+    // negligible cost; splitting rec 3 into its own id was considered and rejected.
     review_window_months: 3,
-    quoted_text: 'In selected patients with anterior-circulation large vessel occlusion in the 4.5–24 hour window who cannot receive endovascular thrombectomy and have salvageable tissue on perfusion imaging, tenecteplase may be considered (Class IIb, Level B-R).',
+    //
+    // CORRECTED 2026-09-01. The previous quoted_text was a PARAPHRASE carrying one
+    // of the section's three recommendations while the id and title named the whole
+    // section, with three material deviations:
+    //   1. "tenecteplase" for "treatment with IVT". The recommendation is
+    //      agent-agnostic; the narrowing came from TRACE-III, which used TNK.
+    //   2. "anterior-circulation large vessel occlusion" for "AIS due to LVO". The
+    //      guideline writes "anterior circulation proximal LVO of the ICA or M1" in
+    //      every §4.7.2 row when it means to restrict by circulation, names basilar
+    //      separately in §4.7.3, and uses bare "LVO" in §4.7.4 for a recommendation
+    //      covering basilar technique. It does not restrict here.
+    //   3. The care-delivery condition "directed by individuals with expertise in
+    //      thrombolytic stroke care" was dropped entirely.
+    // Grade (rec 3 COR 2b / LOE B-R) was CORRECT and is unchanged. Rec 2's COR 2a is
+    // independently corroborated by the "What Is New and of High Impact" table,
+    // which reproduces it verbatim. Re-extracted in reading order from the §4.6.3
+    // table per §13.9.1 rule 2, and verified independently by medical-scientist and
+    // clinical-reviewer 2026-09-01.
+    //
+    // PROVENANCE NOTE: src/data/aha2026StrokeGuideline.ts does NOT contain §4.6.3 at
+    // all, so unlike the §4.7.1 / §4.7.2 defects this text CANNOT have come from the
+    // mirror. This was unattributed free-hand paraphrase, a distinct failure mode
+    // that the "stop verifying against the mirror" corrective would not have caught.
+    //
+    // §13.6 step 5, newer evidence CONSIDERED AND NOT INCORPORATED into any grade:
+    // HOPE (JAMA 2025;334(9):788-797, PMID 40773205, full text held) tested alteplase
+    // 4.5 to 24 h in perfusion-selected patients enrolled REGARDLESS of LVO. It falls
+    // OUTSIDE the guideline evidence base (literature search September to December
+    // 2024, high-impact additions through March 2025; HOPE published 2025-09-02) and
+    // CANNOT change the COR. It does NOT post-date the guideline by publication date
+    // (final version Stroke 2026;57(8), August 2026); it post-dates the EVIDENCE BASE.
+    // HOPE enrolled without restriction by vessel or circulation and included 29
+    // posterior-circulation patients, but reported no posterior-specific effect
+    // estimate and never analyzed by circulation. It therefore does not bear on
+    // whether rec 3's bare "LVO" extends to posterior circulation, and must not be
+    // cited as though it does.
+    //
+    // §13.6 step 2 CAVEAT, not a clean pass: the held governing PDF is the FIRST
+    // PROOF (footer "Stroke. 2026;57:e00-e00", "TBD 2026"). The final published
+    // version is Stroke 2026;57(8):e316-e436 (PMID 41582814) and is not held. No
+    // guideline PDF is checked into this repo. RE-VERIFY all §4.6.3 quoted_text
+    // against the final published version when pagination replaces e00-e00.
+    quoted_text: 'In patients with AIS who (a) have unknown time of onset and are within 4.5 hours from symptom recognition and (b) have an MRI-DWI lesion smaller than one-third of the MCA territory and no marked signal change on FLAIR, IVT administered within 4.5 hours of stroke symptom recognition can be beneficial to improve functional outcomes (COR 2a, LOE B-R). In patients with AIS who have salvageable ischemic penumbra detected on automated perfusion imaging and who (a) awake with stroke symptoms within 9 hours from the midpoint of sleep or (b) are 4.5–9 hours from last known well, IV thrombolysis may be reasonable to improve functional outcomes (COR 2a, LOE B-R). In patients with AIS due to LVO with salvageable ischemic penumbra, presenting within 4.5 to 24 hours from symptom onset or last known well, and who cannot receive EVT, treatment with IVT directed by individuals with expertise in thrombolytic stroke care may be beneficial to improve functional outcomes (COR 2b, LOE B-R).',
   },
   'aha-asa-2026-4.7.2': {
     id: 'aha-asa-2026-4.7.2',

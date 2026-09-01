@@ -102,13 +102,13 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     id: 'trace-iii-late-window-tnk',
     citation_ids: ['trace-iii-trial-2024', 'aha-asa-2026-4.6.3'],
     surfaces: [DATA_SURFACE],
-    description: 'TRACE-III trial: TNK 4.5–24h in LVO patients without EVT access; Class IIb, Level B-R per AHA/ASA 2026 §4.6.3.',
+    description: 'TRACE-III trial: tenecteplase 4.5 to 24 hours in patients with large-vessel occlusion who could not access EVT. The governing recommendation, AHA/ASA 2026 §4.6.3 rec 3 at COR 2b / LOE B-R, is written for IVT and names no agent, no vessel and no circulation. Tenecteplase and the ICA/MCA vessel list are TRACE-III enrolment facts, not guideline criteria.',
   },
   'timeless-late-window-negative': {
     id: 'timeless-late-window-negative',
     citation_ids: ['timeless-trial-2024', 'aha-asa-2026-4.6.3'],
     surfaces: [DATA_SURFACE],
-    description: 'TIMELESS trial: negative/limiting trial — late-window TNK does not benefit when EVT is available; constrains TRACE-III recommendation to no-EVT-access populations.',
+    description: 'TIMELESS trial: limiting trial. Late-window TNK did not demonstrate a functional-outcome benefit when rapid EVT was available, which constrains the TRACE-III recommendation to no-EVT-access populations. Absence of demonstrated benefit is not demonstrated absence of benefit. AHA/ASA 2026 cites TIMELESS in the §4.6.3 recommendation-specific supportive text as limiting evidence for rec 3.',
   },
   'act-tnk-class-i': {
     id: 'act-tnk-class-i',
@@ -192,7 +192,7 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     id: 'late-window-tnk-quick-claim',
     citation_ids: ['trace-iii-trial-2024', 'timeless-trial-2024', 'aha-asa-2026-4.6.3'],
     surfaces: [DATA_SURFACE],
-    description: 'Quick-pearl mirror combining TRACE-III + TIMELESS: late-window TNK benefits only when EVT is not available.',
+    description: 'Quick-pearl mirror combining TRACE-III and TIMELESS. TRACE-III showed benefit from late-window tenecteplase in patients who could not access EVT; TIMELESS, in the same 4.5 to 24 hour window with rapid EVT available, did not demonstrate benefit. The AHA/ASA 2026 §4.6.3 rec 3 gate is cannot-receive-EVT at COR 2b / LOE B-R, and the recommendation names IVT rather than tenecteplase. The ICA/MCA vessel scope is TRACE-III enrolment, not a guideline restriction.',
   },
   'large-core-evt-quick-claim': {
     id: 'large-core-evt-quick-claim',

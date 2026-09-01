@@ -25,3 +25,8 @@ service-account*.json
 token.json
 .oauth-token.json
 .gsc_*
+
+# Android TWA build output and signing material. Added 2026-09-01: both were
+# untracked AND unignored, so a single `git add -A` would have committed them.
+android/
+.android-secrets/

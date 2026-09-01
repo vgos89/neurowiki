@@ -44,9 +44,12 @@ import {
   type PatientContextValues,
   type Anticoag,
 } from '../components/shared/PatientContextPanel';
+import { ExtendedIVTPathwayModal } from '../components/article/stroke/ExtendedIVTPathwayModal';
+import { ThrombectomyPathwayModal } from '../components/article/stroke/ThrombectomyPathwayModal';
 import { formatClinicalDateTime } from '../utils/clinicalDateTime';
 import { copyToClipboard } from '../utils/clipboard';
 import type { SavedCaseData } from '../lib/cases/types';
+import { formatBpLine } from '../lib/cases/format';
 import {
   TimestampBubble,
   STROKE_TIMESTAMP_EVENTS,
@@ -171,6 +174,11 @@ const NihssCalculator: React.FC = () => {
   // + RACE score. Placed next to the Copy button so it's discoverable at the
   // moment of export. 2026-05-23.
   const [includeLvoInEmr, setIncludeLvoInEmr] = useState(false);
+
+  // Pathway shortcuts surfaced in the Patient Context panel. Both modals already
+  // exist and carry their own focus trap and Escape handling, so this is wiring
+  // rather than new UI. One at a time: opening either closes the other.
+  const [activePathwayModal, setActivePathwayModal] = useState<'ivt' | 'evt' | null>(null);
 
   const nihssHeaderRef = useRef<HTMLDivElement>(null);
   const wasCompleteRef = useRef(false);
@@ -497,7 +505,9 @@ const NihssCalculator: React.FC = () => {
     };
     // Per-drug IV-thrombolysis eligibility detail for the copy export. Mirrors
     // the on-screen inputs (DOAC last-dose timing + drug name, warfarin INR,
-    // heparin/LMWH aPTT); emitted only for a selected drug with a value entered.
+    // heparin/LMWH aPTT). Emitted for every selected drug class; a class the
+    // clinician selected but never answered reads "Not entered" rather than
+    // vanishing, so the note distinguishes "asked and normal" from "not asked".
     const eligibilityLines: string[] = [];
     if (patientContext.anticoag.has('doac')) {
       const doacParts = [
@@ -508,13 +518,29 @@ const NihssCalculator: React.FC = () => {
           ? 'last dose ≥48 h'
           : undefined,
       ].filter(Boolean);
-      if (doacParts.length) eligibilityLines.push(`DOAC: ${doacParts.join(', ')}`);
+      eligibilityLines.push(`DOAC: ${doacParts.length ? doacParts.join(', ') : 'Not entered'}`);
     }
-    if (patientContext.anticoag.has('warfarin') && patientContext.warfarinInr) {
-      eligibilityLines.push(`Warfarin INR: ${patientContext.warfarinInr === 'gt1_7' ? '>1.7' : '≤1.7'}`);
+    if (patientContext.anticoag.has('warfarin')) {
+      eligibilityLines.push(
+        `Warfarin INR: ${
+          patientContext.warfarinInr === undefined
+            ? 'Not entered'
+            : patientContext.warfarinInr === 'gt1_7'
+            ? '>1.7'
+            : '≤1.7'
+        }`,
+      );
     }
-    if (patientContext.anticoag.has('heparin') && patientContext.heparinAptt) {
-      eligibilityLines.push(`Heparin/LMWH aPTT: ${patientContext.heparinAptt === 'gt40s' ? '>40 s' : '≤40 s'}`);
+    if (patientContext.anticoag.has('heparin')) {
+      eligibilityLines.push(
+        `Heparin/LMWH aPTT: ${
+          patientContext.heparinAptt === undefined
+            ? 'Not entered'
+            : patientContext.heparinAptt === 'gt40s'
+            ? '>40 s'
+            : '≤40 s'
+        }`,
+      );
     }
     const contextLines: string[] = [
       performedAt
@@ -528,15 +554,16 @@ const NihssCalculator: React.FC = () => {
       patientContext.lkw instanceof Date
         ? `~${elapsedSinceOnset(patientContext.lkw)} since onset`
         : null,
-      patientContext.systolic && patientContext.diastolic
-        ? `BP: ${patientContext.systolic}/${patientContext.diastolic}`
-        : `BP: Not entered`,
+      formatBpLine(patientContext.systolic, patientContext.diastolic),
       patientContext.glucose
         ? `Glucose: ${patientContext.glucose} mg/dL`
         : `Glucose: Not entered`,
+      // Nothing selected means nobody recorded an answer, not a confirmed
+      // negative. "None" asserted in an exported note that the patient is on
+      // no anticoagulant when the question may never have been asked.
       patientContext.anticoag.size > 0
         ? `Anti-Coag/Antiplatelet: ${Array.from(patientContext.anticoag).map((k) => ANTICOAG_LABELS[k]).join(', ')}`
-        : `Anti-Coag/Antiplatelet: None`,
+        : `Anti-Coag/Antiplatelet: Not entered`,
       // Per-drug eligibility detail (DOAC timing/drug, warfarin INR, heparin aPTT).
       ...eligibilityLines,
       // Legacy last-dose line: only fires for cases saved before the per-drug
@@ -547,12 +574,12 @@ const NihssCalculator: React.FC = () => {
           ? 'Last anticoag dose: Unknown'
           : `Last anticoag dose: ${formatClinicalDateTime(patientContext.lastAnticoagDose)}`
         : null,
-      patientContext.prestrokeMrs !== undefined
-        ? `Pre-stroke mRS: ${patientContext.prestrokeMrs}`
-        : null,
-      patientContext.preExistingDeficits
-        ? `Pre-existing deficits: ${patientContext.preExistingDeficits}`
-        : null,
+      `Pre-stroke mRS: ${
+        patientContext.prestrokeMrs !== undefined ? patientContext.prestrokeMrs : 'Not entered'
+      }`,
+      `Pre-existing deficits: ${
+        patientContext.preExistingDeficits ? patientContext.preExistingDeficits : 'Not entered'
+      }`,
     ].filter((line): line is string => line !== null);
 
     // ── Stroke timestamps block — only emit stamps that have actually been
@@ -748,87 +775,6 @@ const NihssCalculator: React.FC = () => {
           </p>
         </div>
 
-        {/* Disabling features checklist — minor stroke only (total 1–4).
-            Shows inline in the drawer so the clinician can check off items
-            before copying. Three verdict states drive the banner text.
-            data-claim tags the clinical content for the claim registry.
-            Approved text: docs/reviews/clinical-PR-nihss-low-score-checklist.md */}
-        {total >= 1 && total <= 4 && (
-          <div
-            data-claim="nihss-minor-disabling-check"
-            className="pt-3 border-t border-slate-100 mb-4"
-          >
-            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
-              Disabling features
-            </div>
-
-            {/* Verdict banner */}
-            <div className={`rounded-lg px-3 py-2.5 mb-3 text-xs leading-relaxed ${
-              disablingVerdict === 'yes'
-                ? 'bg-emerald-50 text-emerald-800'
-                : disablingVerdict === 'no'
-                  ? 'bg-amber-50 text-amber-800'
-                  : 'bg-slate-50 text-slate-500'
-            }`}>
-              {disablingVerdict === 'yes' && (
-                'Disabling features present. Per AHA/ASA 2026, IVT is recommended for disabling deficits regardless of NIHSS, provided the time window and eligibility criteria are met (Class I, Level A).'
-              )}
-              {disablingVerdict === 'no' && (
-                'No disabling features identified. AHA/ASA 2026 does not recommend IVT routinely for mild non-disabling stroke (Class 3 No Benefit, Level B-R). PRISMS trial (alteplase vs aspirin, stopped early, n=313) showed no functional benefit and higher sICH (3.2% vs 0%). Clinical judgment may still favor IVT in selected patients.'
-              )}
-              {disablingVerdict === 'unanswered' && (
-                'Minor stroke. Check for disabling features below.'
-              )}
-            </div>
-
-            {/* Checklist items */}
-            <div className="space-y-1">
-              {DISABLING_CHECK_ITEMS.map((item, idx) => (
-                <label
-                  key={idx}
-                  className="flex items-start gap-3 cursor-pointer rounded-lg px-2.5 py-2 hover:bg-slate-50 transition-colors"
-                >
-                  <input
-                    type="checkbox"
-                    checked={disablingChecks.has(idx)}
-                    onChange={(e) => {
-                      userHasInteractedRef.current = true; // Bug-1 fix
-                      setDisablingChecks((prev) => {
-                        const next = new Set(prev);
-                        if (e.target.checked) {
-                          next.add(idx);
-                        } else {
-                          next.delete(idx);
-                        }
-                        return next;
-                      });
-                      if (e.target.checked) setConfirmedNoDisabling(false);
-                    }}
-                    className="mt-0.5 w-4 h-4 rounded border-slate-300 text-neuro-600 focus-visible:ring-2 focus-visible:ring-neuro-500 flex-shrink-0"
-                    aria-label={item}
-                  />
-                  <span className="text-xs text-slate-700 leading-snug">{item}</span>
-                </label>
-              ))}
-            </div>
-
-            {/* "None of the above apply" — visible only while nothing is checked
-                and the clinician hasn't yet confirmed. Tapping advances to the
-                All-No verdict. */}
-            {!hasAnyDisabling && !confirmedNoDisabling && (
-              <button
-                type="button"
-                onClick={() => {
-                  userHasInteractedRef.current = true; // Bug-1 fix
-                  setConfirmedNoDisabling(true);
-                }}
-                className="mt-2 text-xs text-slate-400 hover:text-slate-600 transition-colors underline-offset-2 hover:underline"
-              >
-                None of the above apply
-              </button>
-            )}
-          </div>
-        )}
 
         {/* LVO probability divider */}
         <div className="pt-3 border-t border-slate-100 mb-3">
@@ -1046,6 +992,10 @@ const NihssCalculator: React.FC = () => {
               setPatientContext(next);
             }}
             showThrombolysisTiming
+            pathwayActions={[
+              { id: 'ext-ivt', label: 'Late IVT pathway', onClick: () => setActivePathwayModal('ivt') },
+              { id: 'evt', label: 'LVO / thrombectomy pathway', onClick: () => setActivePathwayModal('evt') },
+            ]}
           />
         </div>
 
@@ -1110,6 +1060,92 @@ const NihssCalculator: React.FC = () => {
           })}
         </div>
 
+        {/* Disabling features checklist — minor stroke only (total 1–4).
+            Moved out of the pull-up drawer into the main flow 2026-09-01 (V):
+            for a NIHSS 1–4 patient this is the decision that determines IVT vs
+            DAPT, and it was reachable only by opening the drawer. Gated on a
+            COMPLETE exam so it cannot appear while the running total is still
+            climbing through 1–4 on its way to a higher score.
+            Three verdict states drive the banner text.
+            data-claim tags the clinical content for the claim registry.
+            Approved text: docs/reviews/clinical-PR-nihss-low-score-checklist.md */}
+        {isComplete && total >= 1 && total <= 4 && (
+          <div
+            data-claim="nihss-minor-disabling-check"
+            className="bg-white rounded-xl border border-slate-100 p-5 mb-4"
+          >
+            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
+              Disabling features
+            </div>
+
+            {/* Verdict banner */}
+            <div className={`rounded-lg px-3 py-2.5 mb-3 text-xs leading-relaxed ${
+              disablingVerdict === 'yes'
+                ? 'bg-emerald-50 text-emerald-800'
+                : disablingVerdict === 'no'
+                  ? 'bg-amber-50 text-amber-800'
+                  : 'bg-slate-50 text-slate-500'
+            }`}>
+              {disablingVerdict === 'yes' && (
+                'Disabling features present. Per AHA/ASA 2026, IVT is recommended for disabling deficits regardless of NIHSS, provided the time window and eligibility criteria are met (Class I, Level A).'
+              )}
+              {disablingVerdict === 'no' && (
+                'No disabling features identified. AHA/ASA 2026 does not recommend IVT routinely for mild non-disabling stroke (Class 3 No Benefit, Level B-R). PRISMS trial (alteplase vs aspirin, stopped early, n=313) showed no functional benefit and higher sICH (3.2% vs 0%). Clinical judgment may still favor IVT in selected patients.'
+              )}
+              {disablingVerdict === 'unanswered' && (
+                'Minor stroke. Check for disabling features below.'
+              )}
+            </div>
+
+            {/* Checklist items */}
+            <div className="space-y-1">
+              {DISABLING_CHECK_ITEMS.map((item, idx) => (
+                <label
+                  key={idx}
+                  className="flex items-start gap-3 cursor-pointer rounded-lg px-2.5 py-2 hover:bg-slate-50 transition-colors"
+                >
+                  <input
+                    type="checkbox"
+                    checked={disablingChecks.has(idx)}
+                    onChange={(e) => {
+                      userHasInteractedRef.current = true; // Bug-1 fix
+                      setDisablingChecks((prev) => {
+                        const next = new Set(prev);
+                        if (e.target.checked) {
+                          next.add(idx);
+                        } else {
+                          next.delete(idx);
+                        }
+                        return next;
+                      });
+                      if (e.target.checked) setConfirmedNoDisabling(false);
+                    }}
+                    className="mt-0.5 w-4 h-4 rounded border-slate-300 text-neuro-600 focus-visible:ring-2 focus-visible:ring-neuro-500 flex-shrink-0"
+                    aria-label={item}
+                  />
+                  <span className="text-xs text-slate-700 leading-snug">{item}</span>
+                </label>
+              ))}
+            </div>
+
+            {/* "None of the above apply" — visible only while nothing is checked
+                and the clinician hasn't yet confirmed. Tapping advances to the
+                All-No verdict. */}
+            {!hasAnyDisabling && !confirmedNoDisabling && (
+              <button
+                type="button"
+                onClick={() => {
+                  userHasInteractedRef.current = true; // Bug-1 fix
+                  setConfirmedNoDisabling(true);
+                }}
+                className="mt-2 text-xs text-slate-400 hover:text-slate-600 transition-colors underline-offset-2 hover:underline"
+              >
+                None of the above apply
+              </button>
+            )}
+          </div>
+        )}
+
         {/* Trials informing thresholds — STRONG-confidence per
             calculatorTrialMap (V approval 2026-05-21). Renders nothing
             if confidence is not STRONG. */}
@@ -1170,6 +1206,20 @@ const NihssCalculator: React.FC = () => {
           setStrokeTimestamps(next);
         }}
         autoStampNeuroEvalOnFirstInteraction
+      />
+
+      {/* ── Pathway modals ───────────────────────────────────────────────── */}
+      {/* Opened from the Patient Context panel shortcuts. Both wrap their full
+          pathway page with hideHeader + isInModal and bring their own focus
+          trap, so the clinician works the decision tree without losing the
+          NIHSS scoring underneath. */}
+      <ExtendedIVTPathwayModal
+        isOpen={activePathwayModal === 'ivt'}
+        onClose={() => setActivePathwayModal(null)}
+      />
+      <ThrombectomyPathwayModal
+        isOpen={activePathwayModal === 'evt'}
+        onClose={() => setActivePathwayModal(null)}
       />
 
       {/* ── Toast ─────────────────────────────────────────────────────────── */}

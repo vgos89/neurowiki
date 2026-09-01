@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { ChevronDown, Mic, MicOff } from 'lucide-react';
+import { ChevronDown, ChevronRight, Mic, MicOff } from 'lucide-react';
 
 // Web Speech API — not yet in lib.dom.d.ts for all runtimes. Narrow cast here
 // rather than adding a global augmentation that would spill into other files.
@@ -126,6 +126,20 @@ export interface PatientContextRow {
   helpText?: string;
 }
 
+/**
+ * A compact pathway shortcut rendered under the thrombolysis-timing row. The
+ * panel owns presentation (quiet chip styling, 44px row, wrap behaviour); the
+ * consumer owns behaviour, so the stroke-pathway modals stay out of this shared
+ * component and Stroke Code / the mRS picker pull in nothing new.
+ */
+export interface PatientContextAction {
+  /** Stable React key. */
+  id: string;
+  /** Button text. Kept short, these sit two-across on a 375px phone. */
+  label: string;
+  onClick: () => void;
+}
+
 interface PatientContextPanelProps {
   values: PatientContextValues;
   onChange: (next: PatientContextValues) => void;
@@ -168,6 +182,14 @@ interface PatientContextPanelProps {
    * unchanged.
    */
   showThrombolysisTiming?: boolean;
+  /**
+   * Optional pathway shortcuts rendered beneath the thrombolysis-timing row.
+   * Gated on showThrombolysisTiming so only the NIHSS surface shows them.
+   * Deliberately NOT gated on the window tier: a patient beyond 9 hours is
+   * exactly when the late-window pathway matters, and a wake-up patient has no
+   * clock at all, so hiding these on either would remove them when most needed.
+   */
+  pathwayActions?: PatientContextAction[];
 }
 
 const ANTICOAG_LABELS: Record<Anticoag, string> = {
@@ -202,6 +224,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
   lockExpanded = false,
   extraRows,
   showThrombolysisTiming = false,
+  pathwayActions,
 }) => {
   const [expanded, setExpanded] = useState(lockExpanded || defaultExpanded);
   const [lkwModalOpen, setLkwModalOpen] = useState(false);
@@ -463,6 +486,25 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
               <span className="text-xs text-slate-400">
                 Wake-up or unknown onset, so time since onset is not shown.
               </span>
+            </div>
+          )}
+
+          {/* Pathway shortcuts — open the full decision trees in a modal without
+              leaving the calculator. Low-contrast and text-only so they sit
+              beside the score without competing with it. */}
+          {showThrombolysisTiming && pathwayActions && pathwayActions.length > 0 && (
+            <div className="px-4 pb-2.5 -mt-0.5 flex items-center gap-2 flex-wrap">
+              {pathwayActions.map((action) => (
+                <button
+                  key={action.id}
+                  type="button"
+                  onClick={action.onClick}
+                  className={`${CHIP_BASE} ${CHIP_OFF} gap-1`}
+                >
+                  {action.label}
+                  <ChevronRight className="w-3 h-3" aria-hidden />
+                </button>
+              ))}
             </div>
           )}
 
