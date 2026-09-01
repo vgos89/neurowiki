@@ -1,8 +1,8 @@
-import React, { useState, useRef, useMemo } from 'react';
-import { Info, Copy, RefreshCw, Check, X, AlertTriangle } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Copy, RefreshCw, Check, AlertTriangle } from 'lucide-react';
 import { copyToClipboard, type CopyState } from '../../../utils/clipboard';
 import { LiveAnnouncer } from '../../a11y/LiveAnnouncer';
-import { NIHSS_ITEMS, calculateTotal, getItemWarning, calculateLvoProbability } from '../../../utils/nihssShortcuts';
+import { NIHSS_ITEMS, calculateTotal, getItemWarning } from '../../../utils/nihssShortcuts';
 import NihssItemCard from '../../NihssItemCard';
 
 export interface NihssCalculatorEmbedProps {
@@ -16,7 +16,6 @@ export interface NihssCalculatorEmbedProps {
  * Embeddable NIHSS calculator for stroke workflow modal.
  * Full feature parity with standalone NihssCalculator:
  * - Rapid / Detailed mode toggle
- * - LVO probability (RACE Scale) with tooltip breakdown
  * - Clinical warnings (getItemWarning)
  * - Clinical pearls toggle
  * - Auto-scroll to next item after scoring
@@ -31,14 +30,11 @@ export const NihssCalculatorEmbed: React.FC<NihssCalculatorEmbedProps> = ({
   const [nihssValues, setNihssValues] = useState<Record<string, number>>({});
   const [nihssMode, setNihssMode] = useState<'rapid' | 'detailed'>('rapid');
   const [activePearl, setActivePearl] = useState<string | null>(null);
-  const [showLvoTooltip, setShowLvoTooltip] = useState(false);
   const [copied, setCopied] = useState<CopyState>('idle');
 
-  const lvoTooltipRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const total = calculateTotal(nihssValues);
-  const lvoData = useMemo(() => calculateLvoProbability(nihssValues), [nihssValues]);
 
   const handleNihssChange = (id: string, val: number) => {
     setNihssValues((prev) => ({ ...prev, [id]: val }));
@@ -74,13 +70,6 @@ export const NihssCalculatorEmbed: React.FC<NihssCalculatorEmbedProps> = ({
     );
   };
 
-  const lvoColorClass =
-    lvoData.label === 'High'
-      ? 'text-red-600'
-      : lvoData.label === 'Moderate'
-      ? 'text-blue-600'
-      : 'text-green-600';
-
   return (
     <div className="flex flex-col h-full min-h-0">
       {/* ── Sticky control bar ─────────────────────────────────────────── */}
@@ -101,63 +90,6 @@ export const NihssCalculatorEmbed: React.FC<NihssCalculatorEmbedProps> = ({
             </span>
             <span className="text-sm text-slate-400">/ 42</span>
           </div>
-        </div>
-
-        {/* LVO Probability */}
-        <div className="flex-shrink-0" ref={lvoTooltipRef}>
-          <div className="flex items-center gap-1 mb-0.5">
-            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">LVO</span>
-            <button
-              onClick={() => setShowLvoTooltip((v) => !v)}
-              className="p-0.5 rounded-full hover:bg-slate-100 transition-colors"
-              aria-label="LVO probability info"
-            >
-              <Info className="w-3 h-3 text-slate-400 cursor-help" />
-            </button>
-          </div>
-          <div className={`text-sm font-semibold leading-none ${lvoColorClass}`}>
-            {lvoData.label}{' '}
-            <span className="text-slate-500 font-normal">{lvoData.probability}%</span>
-          </div>
-
-          {/* LVO Tooltip */}
-          {showLvoTooltip && (
-            <div className="absolute left-4 right-4 mt-2 p-4 bg-white rounded-xl shadow-xl border border-slate-200 z-50">
-              <button
-                onClick={() => setShowLvoTooltip(false)}
-                className="absolute top-2 right-3 w-6 h-6 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors"
-                aria-label="Close"
-              >
-                <X className="w-3 h-3 text-slate-500" />
-              </button>
-              <p className="text-sm font-bold text-slate-900 mb-3">LVO Probability (RACE Scale)</p>
-              <div className="mb-3 p-2 bg-slate-50 rounded-lg">
-                <p className="text-xs font-bold text-slate-700 mb-1">RACE Score: {lvoData.raceScore}/9</p>
-                <div className="text-[10px] text-slate-600 space-y-0.5">
-                  <div>Facial Palsy: {lvoData.breakdown.facial}/2</div>
-                  <div>Arm Motor (worst): {lvoData.breakdown.arm}/2</div>
-                  <div>Leg Motor (worst): {lvoData.breakdown.leg}/2</div>
-                  <div>Gaze Deviation: {lvoData.breakdown.gaze}/1</div>
-                  <div>Aphasia: {lvoData.breakdown.aphasia}/2</div>
-                  <div>Agnosia/Neglect: {lvoData.breakdown.agnosia}/1</div>
-                </div>
-              </div>
-              <div className="text-xs text-slate-600 space-y-1 mb-3">
-                <p className="font-semibold text-slate-700">Interpretation:</p>
-                <ul className="list-disc list-inside space-y-0.5 ml-2">
-                  <li><strong>0–4:</strong> Low (20%) – Unlikely LVO</li>
-                  <li><strong>5–6:</strong> Moderate (55%) – Probable LVO</li>
-                  <li><strong>7–9:</strong> High (85%) – Very likely LVO</li>
-                </ul>
-                <p className="text-[11px] mt-1.5">
-                  <strong>Pearl:</strong> RACE ≥5 has 85% sensitivity for LVO; prompt urgent CTA/CTP.
-                </p>
-              </div>
-              <p className="text-[9px] text-slate-400 border-t border-slate-100 pt-2">
-                Pérez de la Ossa N et al. Stroke. 2014.
-              </p>
-            </div>
-          )}
         </div>
 
         {/* Right controls: Rapid/Detailed + Copy + Reset */}

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateTotal, getItemWarning, calculateLvoProbability } from './nihssShortcuts';
+import { calculateTotal, getItemWarning } from './nihssShortcuts';
 
 // ── calculateTotal ──────────────────────────────────────────────────────────
 
@@ -107,70 +107,5 @@ describe('getItemWarning', () => {
     expect(getItemWarning('1a', 3, {})).toBeNull();
     expect(getItemWarning('8', 2, {})).toBeNull();
     expect(getItemWarning('3', 3, {})).toBeNull();
-  });
-});
-
-// ── calculateLvoProbability ─────────────────────────────────────────────────
-
-describe('calculateLvoProbability', () => {
-  it('returns Low / 20% for empty scores', () => {
-    const r = calculateLvoProbability({});
-    expect(r.label).toBe('Low');
-    expect(r.raceScore).toBe(0);
-    expect(r.probability).toBe(20);
-  });
-
-  it('returns High / 85% for severe stroke pattern', () => {
-    const r = calculateLvoProbability({
-      '4': 3, '5a': 4, '5b': 4, '6a': 4, '6b': 4, '2': 2, '9': 3, '11': 2,
-    });
-    expect(r.label).toBe('High');
-    expect(r.raceScore).toBeGreaterThanOrEqual(7);
-    expect(r.probability).toBe(85);
-  });
-
-  it('returns Moderate / 55% for RACE 5-6', () => {
-    // facial=2, arm=2, gaze=1 = 5
-    const r = calculateLvoProbability({ '4': 3, '5a': 4, '5b': 4, '2': 2 });
-    expect(r.label).toBe('Moderate');
-    expect(r.probability).toBe(55);
-  });
-
-  it('gaze maps NIHSS 0 → 0, NIHSS 1-2 → 1 (not 2)', () => {
-    expect(calculateLvoProbability({ '2': 0 }).breakdown.gaze).toBe(0);
-    expect(calculateLvoProbability({ '2': 1 }).breakdown.gaze).toBe(1);
-    expect(calculateLvoProbability({ '2': 2 }).breakdown.gaze).toBe(1);
-  });
-
-  it('agnosia maps NIHSS 0 → 0, NIHSS 1-2 → 1', () => {
-    expect(calculateLvoProbability({ '11': 0 }).breakdown.agnosia).toBe(0);
-    expect(calculateLvoProbability({ '11': 1 }).breakdown.agnosia).toBe(1);
-    expect(calculateLvoProbability({ '11': 2 }).breakdown.agnosia).toBe(1);
-  });
-
-  it('arm score uses worst of 5a and 5b', () => {
-    expect(calculateLvoProbability({ '5a': 4, '5b': 0 }).breakdown.arm).toBe(2);
-    expect(calculateLvoProbability({ '5a': 0, '5b': 4 }).breakdown.arm).toBe(2);
-  });
-
-  it('leg score uses worst of 6a and 6b', () => {
-    expect(calculateLvoProbability({ '6a': 4, '6b': 0 }).breakdown.leg).toBe(2);
-    expect(calculateLvoProbability({ '6a': 0, '6b': 4 }).breakdown.leg).toBe(2);
-  });
-
-  it('raceScore is always 0–10 (facial+arm+leg+gaze+aphasia+agnosia max)', () => {
-    // facial(2)+arm(2)+leg(2)+gaze(1)+aphasia(2)+agnosia(1) = 10
-    const r = calculateLvoProbability({
-      '4': 3, '5a': 4, '5b': 4, '6a': 4, '6b': 4, '2': 2, '9': 3, '11': 2,
-    });
-    expect(r.raceScore).toBeGreaterThanOrEqual(0);
-    expect(r.raceScore).toBeLessThanOrEqual(10);
-  });
-
-  it('aphasia maps NIHSS 0 → 0, 1 → 1, 2-3 → 2', () => {
-    expect(calculateLvoProbability({ '9': 0 }).breakdown.aphasia).toBe(0);
-    expect(calculateLvoProbability({ '9': 1 }).breakdown.aphasia).toBe(1);
-    expect(calculateLvoProbability({ '9': 2 }).breakdown.aphasia).toBe(2);
-    expect(calculateLvoProbability({ '9': 3 }).breakdown.aphasia).toBe(2);
   });
 });
