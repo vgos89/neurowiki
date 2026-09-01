@@ -505,113 +505,6 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
             </div>
           )}
 
-          {/* Weight + thrombolytic dose reference (NIHSS surface only).
-              Deliberately NOT gated on the time window. Tying a dose readout to
-              a window chip makes the dose read as permission to give the drug,
-              and the 4.5 to 9 hour band in particular is perfusion-selected
-              rather than automatically eligible. Weight is a measurement; what
-              it unlocks is arithmetic, not an indication. Eligibility lives in
-              the pathway, one tap away above. */}
-          {showThrombolysisTiming && (
-            <>
-              <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3">
-                <label htmlFor="pc-weight" className="text-xs font-medium text-slate-600 flex-shrink-0">Weight</label>
-                <div className="flex items-center gap-1.5">
-                  <input
-                    id="pc-weight"
-                    type="text"
-                    inputMode="decimal"
-                    value={values.weightValue ?? ''}
-                    onChange={(e) => {
-                      const raw = e.target.value.replace(/[^0-9.]/g, '').slice(0, 5);
-                      onChange({ ...values, weightValue: raw === '' ? undefined : Number(raw) });
-                    }}
-                    placeholder="0"
-                    className="w-[64px] text-right text-sm text-slate-900 bg-transparent border-b border-slate-200 focus:border-neuro-500 focus:outline-none px-1 py-1 placeholder:text-slate-300"
-                    aria-label="Patient weight"
-                  />
-                  <select
-                    value={values.weightUnit ?? 'kg'}
-                    onChange={(e) => onChange({ ...values, weightUnit: e.target.value as 'kg' | 'lbs' })}
-                    className="text-xs text-slate-600 bg-transparent border-b border-slate-200 focus:border-neuro-500 focus:outline-none py-1"
-                    aria-label="Weight unit"
-                  >
-                    <option value="kg">kg</option>
-                    <option value="lbs">lbs</option>
-                  </select>
-                </div>
-              </div>
-              {(() => {
-                const raw = values.weightValue;
-                if (!raw || raw <= 0) return null;
-                const kg = toKg(raw, values.weightUnit ?? 'kg');
-                if (kg <= 0) return null;
-                const tnk = getTNKDose(kg);
-                const tnkMl = getTNKVolumeMl(kg);
-                const tpa = getTpaDoses(kg);
-                return (
-                  <div className="px-4 pb-3 -mt-1 space-y-1.5">
-                    {(values.weightUnit ?? 'kg') === 'lbs' && (
-                      <p className="text-[11px] text-slate-400">{kg} kg</p>
-                    )}
-                    <div className="rounded-lg border border-slate-100 bg-slate-50/60 px-3 py-2 space-y-1.5">
-                      <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                        Thrombolytic dose reference
-                      </div>
-                      <p className="text-xs text-slate-700">
-                        <span className="font-semibold">Tenecteplase</span> {tnk} mg ({tnkMl} mL) single IV bolus over 5 to 10 seconds
-                      </p>
-                      <p className="text-xs text-slate-700">
-                        <span className="font-semibold">Alteplase</span> {tpa.total} mg total: {tpa.bolus} mg bolus over 1 minute, then {tpa.infusion} mg over 60 minutes
-                      </p>
-                      {isLowWeightBandCaveat(kg) && (
-                        <p className="text-[11px] text-amber-700 leading-relaxed">
-                          Under 50 kg with an accurate known weight, tenecteplase dosing per 1 kg band may be used instead of the 10 kg band shown. Do not delay thrombolysis to obtain an exact weight.
-                        </p>
-                      )}
-                      <p className="text-[11px] text-slate-400 leading-relaxed">
-                        Weight-band dosing per AHA/ASA 2026 Table 7. Dose reference only: whether to treat, and with which agent, is decided in the thrombolysis pathway.
-                      </p>
-                    </div>
-                  </div>
-                );
-              })()}
-            </>
-          )}
-
-          {/* Pathway shortcuts — open the full decision trees in a modal without
-              leaving the calculator. Low-contrast and text-only so they sit
-              beside the score without competing with it. */}
-          {showThrombolysisTiming && pathwayActions && pathwayActions.length > 0 && (
-            <div className="px-4 pb-2.5 -mt-0.5 flex items-center gap-2 flex-wrap">
-              {pathwayActions.map((action) => {
-                const tone = action.status?.tone;
-                const statusCls =
-                  tone === 'success' ? 'text-emerald-700'
-                  : tone === 'warning' ? 'text-amber-700'
-                  : tone === 'danger' ? 'text-red-700'
-                  : 'text-slate-600';
-                return (
-                  <button
-                    key={action.id}
-                    type="button"
-                    onClick={action.onClick}
-                    className={`${CHIP_BASE} ${action.status ? 'bg-white border-slate-300 text-slate-700' : CHIP_OFF} gap-1`}
-                  >
-                    {action.label}
-                    {action.status && (
-                      <>
-                        <span className="text-slate-300" aria-hidden>|</span>
-                        <span className={`font-semibold ${statusCls}`}>{action.status.label}</span>
-                      </>
-                    )}
-                    <ChevronRight className="w-3 h-3" aria-hidden />
-                  </button>
-                );
-              })}
-            </div>
-          )}
-
           {/* BP row */}
           <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3">
             <label className="text-xs font-medium text-slate-600 flex-shrink-0">Blood pressure</label>
@@ -950,6 +843,131 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
               </p>
             )}
           </div>
+
+          {/* Weight + thrombolytic dose reference (NIHSS surface only).
+              Deliberately NOT gated on the time window. Tying a dose readout to
+              a window chip makes the dose read as permission to give the drug,
+              and the 4.5 to 9 hour band in particular is perfusion-selected
+              rather than automatically eligible. Weight is a measurement; what
+              it unlocks is arithmetic, not an indication. Eligibility lives in
+              the pathway, one tap away above. */}
+          {showThrombolysisTiming && (
+            <>
+              <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3">
+                <label htmlFor="pc-weight" className="text-xs font-medium text-slate-600 flex-shrink-0">Weight</label>
+                <div className="flex items-center gap-1.5">
+                  <input
+                    id="pc-weight"
+                    type="text"
+                    inputMode="decimal"
+                    value={values.weightValue ?? ''}
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/[^0-9.]/g, '').slice(0, 5);
+                      onChange({ ...values, weightValue: raw === '' ? undefined : Number(raw) });
+                    }}
+                    placeholder="0"
+                    className="w-[64px] text-right text-sm text-slate-900 bg-transparent border-b border-slate-200 focus:border-neuro-500 focus:outline-none px-1 py-1 placeholder:text-slate-300"
+                    aria-label="Patient weight"
+                  />
+                  {/* Segmented toggle rather than a select: a native select opens a
+                      full-screen picker on iOS, which is heavy friction for a
+                      two-option choice at the bedside (V feedback 2026-09-01).
+                      Matches the Rapid/Detailed toggle vocabulary, with the group
+                      label and pressed state that pattern is missing. */}
+                  <div
+                    role="group"
+                    aria-label="Weight unit"
+                    className="flex items-center gap-0.5 bg-slate-100 rounded-full p-0.5"
+                  >
+                    {(['kg', 'lbs'] as const).map((unit) => {
+                      const active = (values.weightUnit ?? 'kg') === unit;
+                      return (
+                        <button
+                          key={unit}
+                          type="button"
+                          aria-pressed={active}
+                          onClick={() => onChange({ ...values, weightUnit: unit })}
+                          className={`px-3 py-1 rounded-full text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
+                            active ? 'bg-white text-slate-900' : 'text-slate-500 hover:text-slate-900'
+                          }`}
+                        >
+                          {unit}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+              {(() => {
+                const raw = values.weightValue;
+                if (!raw || raw <= 0) return null;
+                const kg = toKg(raw, values.weightUnit ?? 'kg');
+                if (kg <= 0) return null;
+                const tnk = getTNKDose(kg);
+                const tnkMl = getTNKVolumeMl(kg);
+                const tpa = getTpaDoses(kg);
+                return (
+                  <div className="px-4 pb-3 -mt-1 space-y-1.5">
+                    {(values.weightUnit ?? 'kg') === 'lbs' && (
+                      <p className="text-[11px] text-slate-400">{kg} kg</p>
+                    )}
+                    <div className="rounded-lg border border-slate-100 bg-slate-50/60 px-3 py-2 space-y-1.5">
+                      <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                        Thrombolytic dose reference
+                      </div>
+                      <p className="text-xs text-slate-700">
+                        <span className="font-semibold">Tenecteplase</span> {tnk} mg ({tnkMl} mL) single IV bolus over 5 to 10 seconds
+                      </p>
+                      <p className="text-xs text-slate-700">
+                        <span className="font-semibold">Alteplase</span> {tpa.total} mg total: {tpa.bolus} mg bolus over 1 minute, then {tpa.infusion} mg over 60 minutes
+                      </p>
+                      {isLowWeightBandCaveat(kg) && (
+                        <p className="text-[11px] text-amber-700 leading-relaxed">
+                          Under 50 kg with an accurate known weight, tenecteplase dosing per 1 kg band may be used instead of the 10 kg band shown. Do not delay thrombolysis to obtain an exact weight.
+                        </p>
+                      )}
+                      <p className="text-[11px] text-slate-400 leading-relaxed">
+                        Weight-band dosing per AHA/ASA 2026 Table 7. Dose reference only: whether to treat, and with which agent, is decided in the thrombolysis pathway.
+                      </p>
+                    </div>
+                  </div>
+                );
+              })()}
+            </>
+          )}
+
+          {/* Pathway shortcuts — open the full decision trees in a modal without
+              leaving the calculator. Low-contrast and text-only so they sit
+              beside the score without competing with it. */}
+          {showThrombolysisTiming && pathwayActions && pathwayActions.length > 0 && (
+            <div className="px-4 pb-2.5 -mt-0.5 flex items-center gap-2 flex-wrap">
+              {pathwayActions.map((action) => {
+                const tone = action.status?.tone;
+                const statusCls =
+                  tone === 'success' ? 'text-emerald-700'
+                  : tone === 'warning' ? 'text-amber-700'
+                  : tone === 'danger' ? 'text-red-700'
+                  : 'text-slate-600';
+                return (
+                  <button
+                    key={action.id}
+                    type="button"
+                    onClick={action.onClick}
+                    className={`${CHIP_BASE} ${action.status ? 'bg-white border-slate-300 text-slate-700' : CHIP_OFF} gap-1`}
+                  >
+                    {action.label}
+                    {action.status && (
+                      <>
+                        <span className="text-slate-300" aria-hidden>|</span>
+                        <span className={`font-semibold ${statusCls}`}>{action.status.label}</span>
+                      </>
+                    )}
+                    <ChevronRight className="w-3 h-3" aria-hidden />
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
           {/* Pathway-specific extra rows — typed slot per
               arch-PR-stroke-code-patient-context.md. Each row renders in
