@@ -56,6 +56,7 @@ const ThrombectomyPathwayModal = React.lazy(() =>
 import { formatClinicalDateTime } from '../utils/clinicalDateTime';
 import { copyToClipboard } from '../utils/clipboard';
 import type { SavedCaseData } from '../lib/cases/types';
+import { saveNihssDraft, loadNihssDraft, clearNihssDraft, draftHasContent } from '../lib/nihssDraft';
 import { formatBpLine } from '../lib/cases/format';
 import {
   TimestampBubble,
@@ -211,6 +212,10 @@ const NihssCalculator: React.FC = () => {
   // Mount a pathway only once its shortcut has been tapped; keepMounted then
   // preserves the clinician's answers across close/reopen.
   const [pathwayEverOpened, setPathwayEverOpened] = useState<{ ivt: boolean; evt: boolean }>({ ivt: false, evt: false });
+  // Draft restore/autosave. `draftHydrated` gates the autosave effect: on a cold
+  // mount the calculator holds pristine defaults, and writing those before the
+  // restore attempt would clobber the very draft being restored.
+  const [draftHydrated, setDraftHydrated] = useState(false);
 
   const nihssHeaderRef = useRef<HTMLDivElement>(null);
   // Starts true: with every item defaulting to 0 the exam is complete from
@@ -364,6 +369,106 @@ const NihssCalculator: React.FC = () => {
     // only fire when caseId changes (i.e. once on navigation).
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
+
+  // ── Draft restore (in-progress exam survives a reload) ─────────────────────
+  //
+  // The service worker reloads every open tab when a deploy activates, and iOS
+  // evicts backgrounded tabs. Neither asks first, and nothing here was persisted,
+  // so an exam in progress simply vanished. See src/lib/nihssDraft.ts.
+  //
+  // An explicit ?caseId= load wins: the clinician asked for that specific case,
+  // so it must not be shadowed by whatever draft the tab happened to hold.
+  useEffect(() => {
+    if (draftHydrated) return;
+    setDraftHydrated(true);
+    if (searchParams.get('caseId')) return;
+    const d = loadNihssDraft();
+    if (!d || !draftHasContent(d)) return;
+    setNihssValues({ ...ALL_ZERO_NIHSS, ...d.nihssValues });
+    setNihssMode(d.nihssMode);
+    setHasScored(d.hasScored);
+    setPerformedAt(d.performedAt === null ? null : new Date(d.performedAt));
+    const pc = d.patientContext;
+    setPatientContext({
+      lkw: pc.lkw === undefined ? undefined : pc.lkw === null ? null : new Date(pc.lkw),
+      systolic: pc.systolic ?? '',
+      diastolic: pc.diastolic ?? '',
+      glucose: pc.glucose ?? '',
+      anticoag: new Set((pc.anticoag ?? []) as Anticoag[]),
+      lastAnticoagDose:
+        pc.lastAnticoagDose === undefined ? undefined : pc.lastAnticoagDose === null ? null : new Date(pc.lastAnticoagDose),
+      prestrokeMrs: pc.prestrokeMrs as PatientContextValues['prestrokeMrs'],
+      preExistingDeficits: pc.preExistingDeficits ?? '',
+      doacTiming: pc.doacTiming as PatientContextValues['doacTiming'],
+      doacDrug: pc.doacDrug,
+      warfarinInr: pc.warfarinInr as PatientContextValues['warfarinInr'],
+      heparinAptt: pc.heparinAptt as PatientContextValues['heparinAptt'],
+      weightValue: pc.weightValue,
+      weightUnit: pc.weightUnit ?? 'kg',
+    });
+    const restoredStamps: StrokeTimestamps = { ...EMPTY_STROKE_TIMESTAMPS };
+    for (const event of STROKE_TIMESTAMP_EVENTS) {
+      const t = d.strokeTimestamps?.[event];
+      if (typeof t === 'number') restoredStamps[event] = new Date(t);
+    }
+    setStrokeTimestamps(restoredStamps);
+    setDisablingChecks(new Set(d.disablingChecks ?? []));
+    setConfirmedNoDisabling(Boolean(d.confirmedNoDisabling));
+    setCurrentCaseId(d.currentCaseId ?? null);
+    // Restored work is in-flight work: a late ?caseId= hydration must ask before
+    // overwriting it, exactly as it would for values typed by hand.
+    userHasInteractedRef.current = true;
+    showToast('Restored your in-progress exam', 3500);
+    // Mount-only. searchParams is read once here on purpose.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ── Draft autosave ─────────────────────────────────────────────────────────
+  // Debounced so typing in the free-text deficits field does not write on every
+  // keystroke. sessionStorage writes are synchronous.
+  useEffect(() => {
+    if (!draftHydrated) return;
+    const t = setTimeout(() => {
+      saveNihssDraft({
+        nihssValues,
+        nihssMode,
+        hasScored,
+        performedAt: performedAt ? performedAt.getTime() : null,
+        patientContext: {
+          lkw:
+            patientContext.lkw === undefined ? undefined : patientContext.lkw === null ? null : patientContext.lkw.getTime(),
+          systolic: patientContext.systolic,
+          diastolic: patientContext.diastolic,
+          glucose: patientContext.glucose,
+          anticoag: Array.from(patientContext.anticoag),
+          lastAnticoagDose:
+            patientContext.lastAnticoagDose === undefined
+              ? undefined
+              : patientContext.lastAnticoagDose === null
+              ? null
+              : patientContext.lastAnticoagDose.getTime(),
+          prestrokeMrs: patientContext.prestrokeMrs,
+          preExistingDeficits: patientContext.preExistingDeficits,
+          doacTiming: patientContext.doacTiming,
+          doacDrug: patientContext.doacDrug,
+          warfarinInr: patientContext.warfarinInr,
+          heparinAptt: patientContext.heparinAptt,
+          weightValue: patientContext.weightValue,
+          weightUnit: patientContext.weightUnit,
+        },
+        strokeTimestamps: Object.fromEntries(
+          STROKE_TIMESTAMP_EVENTS.map((e) => [e, strokeTimestamps[e] ? strokeTimestamps[e]!.getTime() : null]),
+        ),
+        disablingChecks: Array.from(disablingChecks),
+        confirmedNoDisabling,
+        currentCaseId,
+      });
+    }, 400);
+    return () => clearTimeout(t);
+  }, [
+    draftHydrated, nihssValues, nihssMode, hasScored, performedAt, patientContext,
+    strokeTimestamps, disablingChecks, confirmedNoDisabling, currentCaseId,
+  ]);
 
   // ── Side effects ───────────────────────────────────────────────────────────
 
@@ -736,6 +841,9 @@ const NihssCalculator: React.FC = () => {
     setConfirmedNoDisabling(false);
     // New patient / new exam → next save should create a fresh row.
     setCurrentCaseId(null);
+    // New patient: drop the persisted draft too, or a reload would resurrect the
+    // previous patient's exam after an explicit Reset.
+    clearNihssDraft();
     // New patient means the previous patient's pathway determinations must go.
     setIvtVerdict(null);
     setEvtVerdict(null);
