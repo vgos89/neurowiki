@@ -66,8 +66,27 @@ export default defineConfig(({ mode }) => {
             // localStorage and persist across any SW update).
             skipWaiting: true,
             clientsClaim: true,
-            // Cache: HTML network-first (so updates land fast); JS/CSS/images
-            // cache-first with short stale-while-revalidate window.
+            // CACHING, described accurately (corrected 2026-09-01; the previous
+            // comment claimed "HTML network-first (so updates land fast)" and a
+            // "short stale-while-revalidate window" for JS/CSS, and neither
+            // exists in runtimeCaching below):
+            //
+            //   HTML, JS, CSS, images, fonts matched by globPatterns are
+            //   PRECACHED, which is cache-first and revision-based. Navigations
+            //   resolve through navigateFallback to the precached index.html,
+            //   so a returning tab renders the previously cached shell until a
+            //   new service worker activates.
+            //
+            //   runtimeCaching covers only four things: Google Fonts CSS
+            //   (stale-while-revalidate), Google Fonts files (cache-first),
+            //   the lazy trial bundles (cache-first, 1-day expiry), and /api/
+            //   (network-only). There is no HTML or navigation handler.
+            //
+            // Updates therefore land through SW activation, not through a
+            // network-first fetch: skipWaiting + clientsClaim below activate the
+            // new worker immediately, and index.tsx supplies onNeedReload to
+            // control WHEN the resulting reload happens (it defers until the tab
+            // is hidden, so a clinician is never yanked out mid-scoring).
             globPatterns: ['**/*.{js,css,html,png,svg,ico,woff2}'],
             // Don't precache the giant trial data chunks — they're route-lazy.
             // Also exclude og-image.png: it's for external link-preview

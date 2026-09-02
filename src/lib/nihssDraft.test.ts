@@ -13,12 +13,11 @@ const base: Omit<NihssDraft, 'v' | 'savedAt'> = {
   hasScored: false,
   performedAt: null,
   patientContext: {
-    systolic: '', diastolic: '', glucose: '', anticoag: [], preExistingDeficits: '',
+    systolic: '', diastolic: '', glucose: '', anticoag: [],
   },
   strokeTimestamps: { 'Code Activation': null },
   disablingChecks: [],
   confirmedNoDisabling: false,
-  currentCaseId: null,
 };
 
 beforeEach(() => { try { sessionStorage.clear(); } catch { /* jsdom */ } });
@@ -81,7 +80,6 @@ describe('draftHasContent', () => {
     ['glucose', { patientContext: { ...base.patientContext, glucose: '90' } }],
     ['weight', { patientContext: { ...base.patientContext, weightValue: 70 } }],
     ['anticoag', { patientContext: { ...base.patientContext, anticoag: ['doac'] } }],
-    ['deficits', { patientContext: { ...base.patientContext, preExistingDeficits: 'foot drop' } }],
     ['disabling checks', { disablingChecks: [0] }],
     ['no-disabling confirmation', { confirmedNoDisabling: true }],
     ['a timestamp', { strokeTimestamps: { 'Code Activation': 1_700_000_000_000 } }],
@@ -91,5 +89,58 @@ describe('draftHasContent', () => {
 
   it('treats an explicit wake-up LKW (null) as content', () => {
     expect(draftHasContent(full({ patientContext: { ...base.patientContext, lkw: null } }))).toBe(true);
+  });
+});
+
+// ── Compliance-review fixes, 2026-09-01 ─────────────────────────────────────
+
+describe('cross-patient safety', () => {
+  it('never persists a saved-case id', () => {
+    // The draft used to carry currentCaseId. Restoring it onto a new patient
+    // silently re-targeted the next Save at the PREVIOUS patient's stored
+    // record, overwriting it. A restored draft must always be detached.
+    saveNihssDraft({ ...base, hasScored: true });
+    const raw = sessionStorage.getItem('neurowiki:nihss-draft:v1')!;
+    expect(raw).not.toMatch(/caseId/i);
+    expect(Object.keys(JSON.parse(raw))).not.toContain('currentCaseId');
+  });
+
+  it('never persists the free-text deficits field', () => {
+    // Unconstrained, dictation-enabled, no identifier warning, and this app
+    // already removed a free-text Note field in May 2026 for the same reason.
+    saveNihssDraft({
+      ...base,
+      // @ts-expect-error deliberately attempting to smuggle the field in
+      patientContext: { ...base.patientContext, preExistingDeficits: 'John Smith, room 4' },
+    });
+    const raw = sessionStorage.getItem('neurowiki:nihss-draft:v1')!;
+    expect(raw).not.toMatch(/John Smith/);
+    expect(raw).not.toMatch(/preExistingDeficits/);
+  });
+});
+
+describe('draft expiry', () => {
+  it('discards a draft older than the 4 hour ceiling', () => {
+    saveNihssDraft({ ...base, hasScored: true });
+    const raw = JSON.parse(sessionStorage.getItem('neurowiki:nihss-draft:v1')!);
+    raw.savedAt = Date.now() - (4 * 60 * 60 * 1000 + 1000);
+    sessionStorage.setItem('neurowiki:nihss-draft:v1', JSON.stringify(raw));
+    expect(loadNihssDraft()).toBeNull();
+  });
+
+  it('keeps a draft inside the ceiling', () => {
+    saveNihssDraft({ ...base, hasScored: true });
+    const raw = JSON.parse(sessionStorage.getItem('neurowiki:nihss-draft:v1')!);
+    raw.savedAt = Date.now() - 60 * 60 * 1000; // an hour old
+    sessionStorage.setItem('neurowiki:nihss-draft:v1', JSON.stringify(raw));
+    expect(loadNihssDraft()).not.toBeNull();
+  });
+
+  it('discards a draft with no savedAt at all', () => {
+    saveNihssDraft(base);
+    const raw = JSON.parse(sessionStorage.getItem('neurowiki:nihss-draft:v1')!);
+    delete raw.savedAt;
+    sessionStorage.setItem('neurowiki:nihss-draft:v1', JSON.stringify(raw));
+    expect(loadNihssDraft()).toBeNull();
   });
 });

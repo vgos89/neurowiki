@@ -5,11 +5,22 @@ import { getStorageItem, setStorageItem } from '../../../utils/storage';
 const STORAGE_KEY = 'stroke-quick-ref-collapsed';
 
 export const QuickReferenceCard: React.FC = () => {
-  const [collapsed, setCollapsed] = useState(() => {
-    const stored = getStorageItem(STORAGE_KEY);
-    if (stored !== null) return stored === 'true';
-    return typeof window !== 'undefined' ? window.innerWidth < 640 : false;
-  });
+  // Stored preference only. Deliberately NOT window.innerWidth: a lazy useState
+  // initialiser runs during render, and this value gates whether the body block
+  // renders at all. The 182 routes are prerendered in headless Chrome at desktop
+  // width, so a phone would render different markup than the prerendered HTML
+  // and React throws #418, discarding the server HTML.
+  // Fixed 2026-09-01 (QA hydration investigation, finding 2).
+  const [collapsed, setCollapsed] = useState(() => getStorageItem(STORAGE_KEY) === 'true');
+
+  // First-visit default: collapse on a narrow screen. Gated on there being no
+  // stored preference, so an explicit choice by the clinician is never
+  // overridden. Declared BEFORE the persist effect below so it still sees null.
+  useEffect(() => {
+    if (getStorageItem(STORAGE_KEY) === null && window.innerWidth < 640) {
+      setCollapsed(true);
+    }
+  }, []);
 
   useEffect(() => {
     setStorageItem(STORAGE_KEY, String(collapsed));

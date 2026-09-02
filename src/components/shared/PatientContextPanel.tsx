@@ -247,10 +247,21 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
   const [mrsModalOpen, setMrsModalOpen] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [interimText, setInterimText] = useState('');
-  const [speechSupported] = useState(() =>
-    typeof window !== 'undefined' &&
-    ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)
-  );
+  // Initialised to false and set in an effect, NOT read during render.
+  //
+  // A lazy useState initialiser runs during render, and this value gates the
+  // whole mic button subtree. The 182 routes are prerendered in headless Chrome,
+  // which reports webkitSpeechRecognition as available, so the prerendered HTML
+  // contains the button. A browser without the API then renders without it, the
+  // markup disagrees, and React throws #418 and discards the server HTML.
+  //
+  // Starting false means the first client render always matches the prerender;
+  // the effect fills in the real capability after hydration.
+  // Fixed 2026-09-01 (QA hydration investigation, finding 1).
+  const [speechSupported, setSpeechSupported] = useState(false);
+  useEffect(() => {
+    setSpeechSupported('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
+  }, []);
   const recognitionRef = useRef<InstanceType<SpeechRecognitionCtor> | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const mrsHelpRef = useRef<HTMLButtonElement>(null);

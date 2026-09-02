@@ -310,7 +310,10 @@ const NihssCalculator: React.FC = () => {
                 : pc.lastAnticoagDose === null
                 ? null
                 : undefined,
-            preExistingDeficits: pc.preExistingDeficits ?? '',
+            // Deliberately NOT restored: the free-text deficits field is excluded from
+      // the draft entirely (compliance review 2026-09-01, F4). A fresh mount
+      // starts empty, so '' is the correct value here.
+      preExistingDeficits: '',
             doacTiming: pc.doacTiming,
             doacDrug: pc.doacDrug,
             warfarinInr: pc.warfarinInr,
@@ -398,7 +401,10 @@ const NihssCalculator: React.FC = () => {
       lastAnticoagDose:
         pc.lastAnticoagDose === undefined ? undefined : pc.lastAnticoagDose === null ? null : new Date(pc.lastAnticoagDose),
       prestrokeMrs: pc.prestrokeMrs as PatientContextValues['prestrokeMrs'],
-      preExistingDeficits: pc.preExistingDeficits ?? '',
+      // Deliberately NOT restored: the free-text deficits field is excluded from
+      // the draft entirely (compliance review 2026-09-01, F4). A fresh mount
+      // starts empty, so '' is the correct value here.
+      preExistingDeficits: '',
       doacTiming: pc.doacTiming as PatientContextValues['doacTiming'],
       doacDrug: pc.doacDrug,
       warfarinInr: pc.warfarinInr as PatientContextValues['warfarinInr'],
@@ -414,11 +420,13 @@ const NihssCalculator: React.FC = () => {
     setStrokeTimestamps(restoredStamps);
     setDisablingChecks(new Set(d.disablingChecks ?? []));
     setConfirmedNoDisabling(Boolean(d.confirmedNoDisabling));
-    setCurrentCaseId(d.currentCaseId ?? null);
+    // currentCaseId is deliberately NOT restored. A restored draft is always a
+    // DETACHED exam: saving it creates a new case rather than updating whatever
+    // case the previous patient was saved under. See nihssDraft.ts omission 1.
     // Restored work is in-flight work: a late ?caseId= hydration must ask before
     // overwriting it, exactly as it would for values typed by hand.
     userHasInteractedRef.current = true;
-    showToast('Restored your in-progress exam', 3500);
+    showToast('Restored your in-progress exam. Saving will create a new case.', 4500);
     // Mount-only. searchParams is read once here on purpose.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -448,7 +456,6 @@ const NihssCalculator: React.FC = () => {
               ? null
               : patientContext.lastAnticoagDose.getTime(),
           prestrokeMrs: patientContext.prestrokeMrs,
-          preExistingDeficits: patientContext.preExistingDeficits,
           doacTiming: patientContext.doacTiming,
           doacDrug: patientContext.doacDrug,
           warfarinInr: patientContext.warfarinInr,
@@ -461,13 +468,12 @@ const NihssCalculator: React.FC = () => {
         ),
         disablingChecks: Array.from(disablingChecks),
         confirmedNoDisabling,
-        currentCaseId,
       });
     }, 400);
     return () => clearTimeout(t);
   }, [
     draftHydrated, nihssValues, nihssMode, hasScored, performedAt, patientContext,
-    strokeTimestamps, disablingChecks, confirmedNoDisabling, currentCaseId,
+    strokeTimestamps, disablingChecks, confirmedNoDisabling,
   ]);
 
   // ── Side effects ───────────────────────────────────────────────────────────
