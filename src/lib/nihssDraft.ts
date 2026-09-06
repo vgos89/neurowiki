@@ -39,6 +39,26 @@
  * Every read and write is wrapped: sessionStorage throws outright in some
  * privacy modes, and a storage failure must never break the calculator.
  *
+ * TIMESTAMPS ARE ABSOLUTE HERE, AND THAT IS A DECIDED POSITION, NOT AN OVERSIGHT.
+ *
+ * A SavedCase stores stroke timestamps as elapsed offsets by default, with an
+ * opt-in for absolute times, because a saved case can be TRANSFERRED to another
+ * device and exact times alongside vitals are re-identifying. The compliance
+ * review of 2026-09-01 flagged the absence of that same option here as a
+ * regression behind an existing mitigation.
+ *
+ * V decided 2026-09-02 to keep absolute times in the draft. The reasoning, so a
+ * later reviewer finds it rather than re-opening the question:
+ *   - The draft never leaves the tab that wrote it. It is not transferable, and
+ *     it dies with the tab, so the threat model that produced the SavedCase
+ *     toggle (data in transit between devices) does not apply.
+ *   - Elapsed offsets would defeat the feature. The point of the draft is that a
+ *     clinician who reloads gets their screen back, and "Code Activation 3:14 PM"
+ *     IS the thing they need back. Restoring "+18 min" against no anchor would
+ *     hand them a recovered exam with the times missing.
+ * If the draft ever becomes transferable, or gains a longer lifetime than the
+ * tab, this decision must be revisited before that ships.
+ *
  * TWO DELIBERATE OMISSIONS, both from the compliance review of 2026-09-01.
  *
  * 1. NO SAVED-CASE ID. An earlier version persisted `currentCaseId`, which

@@ -38,6 +38,7 @@ import type { SeverityTokens } from '../lib/calculators/severityTokens';
 import { NIHSS_ITEMS, calculateTotal, getItemWarning } from '../utils/nihssShortcuts';
 import { getMainScrollElement, scrollWithinMainOrWindow } from '../utils/mainScroll';
 import NihssItemCard from '../components/NihssItemCard';
+import { NihssEvalTimeRow } from '../components/calculators/NihssEvalTimeRow';
 import DiscreteFAQ from '../components/seo/DiscreteFAQ';
 import { getFAQsForPath } from '../seo/schema';
 import {
@@ -564,16 +565,19 @@ const NihssCalculator: React.FC = () => {
       const now = new Date();
       const existingNeuro = strokeTimestamps['Neurology Evaluation'];
       // "Earlier wins" reconciliation across both fields:
-      //   - If Neuro Eval is already set and earlier than `now` (because
-      //     autoStampNeuroEvalOnFirstInteraction fired on a prior document
-      //     click), adopt that earlier value as performedAt. Leave Neuro
-      //     Eval unchanged.
-      //   - If Neuro Eval is null OR later than `now`, performedAt = now AND
-      //     update Neuro Eval to `now` (the NIHSS-tap event IS the earlier
-      //     value).
-      // Net invariant: performedAt and Neuro Eval are always equal to the
-      // earlier of the two underlying timestamps. V instruction
-      // 'should be the same. or whichever one comes first.'
+      //   - If Neuro Eval is already set and earlier than `now`, adopt it as
+      //     performedAt and leave Neuro Eval unchanged.
+      //   - Otherwise performedAt = now AND Neuro Eval = now.
+      // Net invariant: both equal the earlier of the two underlying timestamps.
+      // V instruction 'should be the same. or whichever one comes first.'
+      //
+      // This rule only became correct on 2026-09-02. Until then a document-wide
+      // first-interaction listener stamped Neuro Eval the moment the clinician
+      // touched ANYTHING, so "an earlier Neuro Eval" was usually just the time
+      // they began typing the patient's blood pressure, and this branch adopted
+      // it as the exam time. The listener is gone from this surface, so an
+      // earlier Neuro Eval now only exists when a clinician set it deliberately,
+      // which is exactly when it should win.
       if (existingNeuro !== null && existingNeuro < now) {
         setPerformedAt(existingNeuro);
       } else {
@@ -815,7 +819,29 @@ const NihssCalculator: React.FC = () => {
   // while the clipboard still held the previous patient's note (field report
   // 2026-07-27, iPhone). On failure we point at Send, which uses the native
   // share sheet and still works in the in-app browsers that block clipboard.
+  /**
+   * Backstop for the exam that is scored entirely at zero and never touched.
+   *
+   * Tapping any option fires handleNihssChange even when the value does not
+   * change, so a clinician confirming zeros down the list is already stamped on
+   * their first tap. This covers only the case where nothing at all was touched.
+   * It tells the clinician rather than stamping silently: this value feeds
+   * quality metrics, and a Copy-time stamp is not an exam-time stamp.
+   * Returns the time to use so callers do not race React state.
+   */
+  const ensureEvalTimeStamped = (): Date => {
+    if (performedAt) return performedAt;
+    const now = new Date();
+    setPerformedAt(now);
+    setStrokeTimestamps((prev) =>
+      prev['Neurology Evaluation'] === null ? { ...prev, 'Neurology Evaluation': now } : prev,
+    );
+    showToast('Evaluation time was not set, so it is recorded as now. Edit it above if the exam was earlier.', 6000);
+    return now;
+  };
+
   const copyNihss = () => {
+    ensureEvalTimeStamped();
     copyToClipboard(
       buildText(),
       () => showToast('Copied to clipboard', 2000),
@@ -1025,7 +1051,9 @@ const NihssCalculator: React.FC = () => {
                 values: nihssValues,
                 mode: nihssMode,
                 severity: SEVERITY_LABEL[severity],
-                performedAt: performedAt ? performedAt.getTime() : undefined,
+                // Same backstop as Copy: a saved case must not carry a blank
+                // evaluation time when it feeds the same quality metrics.
+                performedAt: ensureEvalTimeStamped().getTime(),
               },
               patientContext: {
                 lkw: patientContext.lkw instanceof Date
@@ -1093,14 +1121,6 @@ const NihssCalculator: React.FC = () => {
 
       {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}
       <main className="max-w-2xl mx-auto px-5 pt-6 pb-4">
-        {/* Auto-captured Performed timestamp — single muted line, appears
-            as soon as any NIHSS item is scored. */}
-        {performedAt && (
-          <p className="text-[11px] font-medium uppercase tracking-[0.04em] text-slate-400 mb-3">
-            Exam Performed · {formatClinicalDateTime(performedAt)}
-          </p>
-        )}
-
         {/* Optional patient-context panel — collapsible accordion above items.
             Captures LKW + BP + glucose + anticoagulant for inclusion in the
             EMR copy/share output. Skinny settings-panel style. */}
@@ -1133,6 +1153,26 @@ const NihssCalculator: React.FC = () => {
             ]}
           />
         </div>
+
+        {/* NIHSS evaluation time. Sits under patient context and above scoring
+            because that is the boundary it marks: everything above is handover
+            and history, everything below is the exam this timestamp dates.
+            V direction 2026-09-02, from field feedback that the stamp was firing
+            during patient-info entry. */}
+        <NihssEvalTimeRow
+          value={performedAt}
+          onChange={(next) => {
+            userHasInteractedRef.current = true;
+            setPerformedAt(next);
+            // Keep Neurology Evaluation aligned when it is unset or later, the
+            // same earlier-wins rule handleNihssChange uses. A deliberately
+            // earlier Neuro Eval stamp is left alone.
+            setStrokeTimestamps((prev) => {
+              const neuro = prev['Neurology Evaluation'];
+              return neuro === null || neuro > next ? { ...prev, 'Neurology Evaluation': next } : prev;
+            });
+          }}
+        />
 
         {/* Normal exam shortcut — Phase 7E §3.5 */}
         <div className="flex justify-start mb-2">
@@ -1342,7 +1382,6 @@ const NihssCalculator: React.FC = () => {
           }
           setStrokeTimestamps(next);
         }}
-        autoStampNeuroEvalOnFirstInteraction
       />
 
       {/* ── Pathway modals ───────────────────────────────────────────────── */}
