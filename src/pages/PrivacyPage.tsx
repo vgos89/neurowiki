@@ -83,6 +83,7 @@ export default function PrivacyPage() {
                 ['Feedback submissions', 'Resend (email relay) → operator inbox', 'Delivers your feedback to the team', 'Email provider retention policy'],
                 ['NPI proxy results', 'Not stored (session only)', 'Displays a doctor name from NPI lookup', 'Never written to storage'],
                 ['Saved cases (My Cases)', 'Your browser (IndexedDB on this device)', 'Lets you reopen a calculator result later. Stores initials (2-4 letters), scores, vitals you entered, anti-coag class, and stroke timestamps. Timestamps save as elapsed offsets by default for de-identification; opt-in toggle preserves absolute times for door-to-needle documentation.', 'Until you delete the case or clear browser storage'],
+                ['In-progress exam autosave (NIHSS)', 'Your browser (session storage, this tab only)', 'Recovers a NIHSS exam in progress if the page reloads or the tab is discarded. Stores item scores, vitals you entered, weight, anti-coag class and per-drug detail, pre-stroke mRS, and stroke timestamps. Never stores initials or your free-text deficits note. Timestamps are always absolute here, unlike Saved Cases, because this autosave never leaves the tab.', 'Cleared when you tap Reset, when you close the tab, or 4 hours after it was written'],
                 ['Cross-device transfer (Send to another device)', 'Supabase relay server (encrypted blob) → auto-purged after 15 min or on first read', 'Lets you move saved cases between your own devices via a short code. Encryption is client-side; the server only ever sees opaque ciphertext.', '15 minutes maximum, or deleted on first read. Daily cleanup cron sweeps any orphaned rows.'],
               ].map(([data, where, purpose, retention]) => (
                 <tr key={data} className="hover:bg-slate-50">
@@ -176,6 +177,25 @@ export default function PrivacyPage() {
           tap the trash icon on a row, or tap "Clear all" to wipe everything. You can also clear
           your browser's site data for neurowiki.ai. This removes all saved cases plus every
           other local-storage item NeuroWiki uses.
+        </p>
+      </Section>
+
+      <Section title="In-progress exam autosave">
+        <p>
+          NIHSS autosaves your work as you go, so a page reload or a backgrounded tab does not
+          erase an exam you are part-way through scoring. This autosave stays in your browser, on
+          this device, in storage tied to the single tab you are working in.
+        </p>
+        <p className="mt-3">
+          It holds the same kinds of clinical detail as a saved case: item scores, blood pressure,
+          glucose, weight, anticoagulant class and the per-drug values, pre-stroke mRS, and
+          stroke-code timestamps. It does not hold your patient's initials, and it does not hold
+          anything you typed in the pre-existing deficits box.
+        </p>
+        <p className="mt-3">
+          It clears when you tap Reset, when you close the tab, and automatically four hours after
+          it was written. It does not clear when you simply move to another page. Restoring an
+          autosave always starts a new case: it will never overwrite a case you saved earlier.
         </p>
       </Section>
 

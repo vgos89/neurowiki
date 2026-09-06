@@ -200,7 +200,17 @@ interface TimestampBubbleProps {
    *  the stroke pathway per V direction 2026-05-20: the moment a clinician
    *  starts interacting with the calculator or pathway IS the neurology-
    *  evaluation time. One-shot — listener detaches after first fire. */
-  autoStampNeuroEvalOnFirstInteraction?: boolean;
+  /**
+   * Epoch ms. When this changes to a truthy value, stamp the NIH evaluation time
+   * if it is not already set.
+   *
+   * Exists because the host, not this component, knows when the exam actually
+   * began. autoStampNeuroEvalOnFirstInteraction fired on the first click or
+   * keystroke anywhere in the document, which on a workflow whose first step is
+   * patient information reliably recorded the handover instead of the exam.
+   * Added 2026-09-02.
+   */
+  neuroEvalSignal?: number | null;
 }
 
 // Shared left-pointing thought bubble — arrow uses SVG, no inline styles (MED-03 fix)
@@ -229,7 +239,7 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
   ctReadExternalTime,
   value,
   onChange,
-  autoStampNeuroEvalOnFirstInteraction = false,
+  neuroEvalSignal = null,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showClockThought, setShowClockThought] = useState(true);
@@ -259,7 +269,6 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
   }, [editingEvent]);
   // One-shot guard for the auto-stamp listener — survives across renders
   // without re-firing.
-  const hasAutoStampedRef = useRef<boolean>(false);
   // Controlled mode: caller owns the state. Uncontrolled mode: we own it.
   const isControlled = value !== undefined && onChange !== undefined;
   const timestamps = isControlled ? value : internalTimestamps;
@@ -329,34 +338,26 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
     setTimestamps(prev => ({ ...prev, [event]: null }));
   };
 
-  // One-shot listener: auto-stamps Neurology Evaluation on first user click
-  // or keydown anywhere in the document. Detaches after firing or after the
-  // event is already stamped via other means.
+  // (Removed 2026-09-02) A one-shot document-wide click/keydown listener used to
+  // stamp the NIH evaluation time on the first interaction anywhere on the page.
+  // On both surfaces that used it, the first interaction was patient-information
+  // entry, so it recorded the EMS handover rather than the exam, and that value
+  // feeds door-to-stroke-team. Hosts now report the exam start explicitly via
+  // neuroEvalSignal. Do not reintroduce a global listener for this.
+
+  // Host-driven stamp: fires when the host reports the exam has begun.
   useEffect(() => {
-    if (!autoStampNeuroEvalOnFirstInteraction) return;
-    if (hasAutoStampedRef.current) return;
-    if (timestamps['Neurology Evaluation']) {
-      hasAutoStampedRef.current = true;
-      return;
-    }
-    const handler = () => {
-      if (hasAutoStampedRef.current) return;
-      hasAutoStampedRef.current = true;
-      const now = new Date();
-      setTimestamps(prev => {
-        if (prev['Neurology Evaluation']) return prev;
-        const updated = { ...prev, 'Neurology Evaluation': now };
-        onStamp?.('Neurology Evaluation', now);
-        return updated;
-      });
-    };
-    document.addEventListener('click', handler, { once: true, capture: true });
-    document.addEventListener('keydown', handler, { once: true, capture: true });
-    return () => {
-      document.removeEventListener('click', handler, { capture: true } as EventListenerOptions);
-      document.removeEventListener('keydown', handler, { capture: true } as EventListenerOptions);
-    };
-  }, [autoStampNeuroEvalOnFirstInteraction, timestamps, setTimestamps, onStamp]);
+    if (!neuroEvalSignal) return;
+    setTimestamps((prev) => {
+      if (prev['Neurology Evaluation']) return prev;
+      const d = new Date(neuroEvalSignal);
+      onStamp?.('Neurology Evaluation', d);
+      return { ...prev, 'Neurology Evaluation': d };
+    });
+    // Intentionally keyed on the signal alone: re-running on timestamps change
+    // would re-stamp after a clinician cleared the row by hand.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [neuroEvalSignal]);
 
   // ── Inline edit handlers — digits-only input + AM/PM toggle.
   // Per V feedback 2026-05-20 (follow-up): match the LKW picker

@@ -226,6 +226,27 @@ const MainContent: React.FC = () => {
   const [step2ModalOpen, setStep2ModalOpen] = useState(false);
   const [step3ModalOpen, setStep3ModalOpen] = useState(false);
   const [nihssModalOpen, setNihssModalOpen] = useState(false);
+
+  /**
+   * Stamp the NIH evaluation time, once, when the exam actually begins.
+   *
+   * Replaces autoStampNeuroEvalOnFirstInteraction, which stamped on the first
+   * click or keystroke anywhere on the page. Step 1 of this workflow IS patient
+   * information, so that reliably recorded the moment a clinician started typing
+   * EMS handover details instead of the moment they examined the patient. It
+   * feeds neurologistEvaluationTime and therefore door-to-stroke-team, which is
+   * audited. Field report and fix 2026-09-02; same defect fixed on the NIHSS
+   * calculator in ca36778.
+   *
+   * Never overwrites an existing stamp: a clinician who set it by hand meant it.
+   */
+  const [neuroEvalSignal, setNeuroEvalSignal] = useState<number | null>(null);
+  const stampNihEvaluationTime = useCallback(() => {
+    // The bubble owns the timestamp state and ignores this if already stamped,
+    // and its onStamp handler is what writes neurologistEvaluationTime into the
+    // GWTG milestones, so setting the signal is the whole job.
+    setNeuroEvalSignal((prev) => prev ?? Date.now());
+  }, []);
   const [nihssFromModal, setNihssFromModal] = useState<number | null>(null);
 
   // a11y: NIHSS inline modal focus + keyboard wiring per useModalFocusTrap.
@@ -356,7 +377,7 @@ const MainContent: React.FC = () => {
           onTpaReversal={() => setTpaReversalModalOpen(true)}
           onOrolingualEdema={() => setOrolingualEdemaModalOpen(true)}
           ctReadExternalTime={ctReadExternalTime}
-          autoStampNeuroEvalOnFirstInteraction
+          neuroEvalSignal={neuroEvalSignal}
           onStamp={(event, date) => {
             // BUG-02 fix: wire stamps to GWTGMilestones
             if (event === 'Code Activation') setMilestones(p => ({ ...p, doorTime: date }));
@@ -978,7 +999,14 @@ const MainContent: React.FC = () => {
                 <Suspense fallback={<div className="p-6 text-slate-500 animate-pulse">Loading NIHSS calculator…</div>}>
                   <NihssCalculatorEmbed
                     initialScore={step1Data?.nihssScore ?? 0}
-                    onApply={(score) => { setNihssFromModal(score); setNihssModalOpen(false); }}
+                    onApply={(score) => {
+                      // Backstop for an exam scored entirely at zero and never
+                      // touched: applying is still an explicit "I did the exam".
+                      stampNihEvaluationTime();
+                      setNihssFromModal(score);
+                      setNihssModalOpen(false);
+                    }}
+                    onScoringStarted={stampNihEvaluationTime}
                     onBack={() => setNihssModalOpen(false)}
                   />
                 </Suspense>

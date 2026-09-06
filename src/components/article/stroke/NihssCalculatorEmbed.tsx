@@ -10,6 +10,17 @@ export interface NihssCalculatorEmbedProps {
   initialScore?: number;
   onApply: (score: number) => void;
   onBack: () => void;
+  /**
+   * Fired once, on the first scoring interaction.
+   *
+   * The host uses this to stamp the NIH evaluation time. It has to come from
+   * here rather than from a page-level listener: Stroke Code's Step 1 is patient
+   * information, and a first-interaction listener stamped the moment a clinician
+   * began typing EMS handover details rather than when they examined the
+   * patient. That timestamp feeds door-to-stroke-team, so it gets audited.
+   * Added 2026-09-02.
+   */
+  onScoringStarted?: () => void;
 }
 
 /**
@@ -26,17 +37,26 @@ export const NihssCalculatorEmbed: React.FC<NihssCalculatorEmbedProps> = ({
   initialScore = 0,
   onApply,
   onBack,
+  onScoringStarted,
 }) => {
   const [nihssValues, setNihssValues] = useState<Record<string, number>>({});
   const [nihssMode, setNihssMode] = useState<'rapid' | 'detailed'>('rapid');
   const [activePearl, setActivePearl] = useState<string | null>(null);
   const [copied, setCopied] = useState<CopyState>('idle');
+  // One-shot guard for onScoringStarted.
+  const hasStartedScoringRef = useRef(false);
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const total = calculateTotal(nihssValues);
 
   const handleNihssChange = (id: string, val: number) => {
+    // Fires even when the tapped value equals the current one: confirming a zero
+    // down the list is still the clinician starting the exam.
+    if (!hasStartedScoringRef.current) {
+      hasStartedScoringRef.current = true;
+      onScoringStarted?.();
+    }
     setNihssValues((prev) => ({ ...prev, [id]: val }));
 
     // Auto-scroll to next item
