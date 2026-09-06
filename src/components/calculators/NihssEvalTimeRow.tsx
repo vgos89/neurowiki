@@ -3,7 +3,7 @@ import { Clock } from 'lucide-react';
 import { parseTimeDigits } from '../article/stroke/TimestampBubble';
 
 /**
- * The NIHSS evaluation time, shown and editable directly above the scoring items.
+ * The NIH evaluation time, shown and editable directly above the scoring items.
  *
  * WHY THIS IS ITS OWN VISIBLE FIELD
  * ---------------------------------
@@ -76,7 +76,7 @@ export const NihssEvalTimeRow: React.FC<NihssEvalTimeRowProps> = ({ value, onCha
       <div className="min-h-[44px] flex items-center justify-between gap-3 flex-wrap">
         <span className="text-xs font-medium text-slate-600 flex items-center gap-1.5 flex-shrink-0">
           <Clock className="w-3.5 h-3.5 text-slate-400" aria-hidden />
-          NIHSS evaluation time
+          NIH evaluation time
         </span>
 
         {!editing ? (
@@ -87,7 +87,7 @@ export const NihssEvalTimeRow: React.FC<NihssEvalTimeRowProps> = ({ value, onCha
               className={`text-sm tabular-nums px-2 py-1 rounded-md transition-colors hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
                 value ? 'text-slate-900 font-medium' : 'text-slate-400 italic'
               }`}
-              aria-label={value ? `NIHSS evaluation time ${fmt(value)}. Tap to edit.` : 'NIHSS evaluation time not set. Tap to set.'}
+              aria-label={value ? `NIH evaluation time ${fmt(value)}. Tap to edit.` : 'NIH evaluation time not set. Tap to set.'}
             >
               {value ? fmt(value) : 'Not set'}
             </button>
@@ -113,7 +113,7 @@ export const NihssEvalTimeRow: React.FC<NihssEvalTimeRowProps> = ({ value, onCha
                 if (e.key === 'Escape') setEditing(false);
               }}
               placeholder="11:25"
-              aria-label="Edit NIHSS evaluation time. Type 12-hour digits and use the AM PM toggle, or type 24-hour military."
+              aria-label="Edit NIH evaluation time. Type 12-hour digits and use the AM PM toggle, or type 24-hour military."
               aria-invalid={error}
               className={`w-[84px] px-2 py-1.5 rounded-md border text-sm tabular-nums focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
                 error ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-white'

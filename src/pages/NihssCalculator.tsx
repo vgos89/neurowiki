@@ -65,6 +65,7 @@ import {
   EMPTY_STROKE_TIMESTAMPS,
   type StrokeTimestamps,
   type StrokeTimestampEvent,
+  STROKE_TIMESTAMP_LABELS,
 } from '../components/article/stroke/TimestampBubble';
 
 // ─── Severity helpers ─────────────────────────────────────────────────────────
@@ -702,9 +703,19 @@ const NihssCalculator: React.FC = () => {
       );
     }
     const contextLines: string[] = [
+      // "NIH evaluation time" is the single name for this moment (V 2026-09-02).
+      // It was previously printed as "Exam Performed" here and again as
+      // "Neurology Evaluation" in the timestamps block, which is one event under
+      // two names. Quality metrics ask for the NIH evaluation time, so that is
+      // the term. The door-to-evaluation offset rides on this line when a Code
+      // Activation anchor exists, and the timestamps block omits its duplicate.
       performedAt
-        ? `Exam Performed: ${formatClinicalDateTime(performedAt)}`
-        : `Exam Performed: Not entered`,
+        ? `NIH evaluation time: ${formatClinicalDateTime(performedAt)}${
+            strokeTimestamps['Code Activation']
+              ? ` (+${Math.max(0, Math.floor((performedAt.getTime() - strokeTimestamps['Code Activation']!.getTime()) / 60000))}m from code activation)`
+              : ''
+          }`
+        : `NIH evaluation time: Not entered`,
       patientContext.lkw === null
         ? `LKW: Unknown / wake-up`
         : patientContext.lkw instanceof Date
@@ -759,30 +770,26 @@ const NihssCalculator: React.FC = () => {
     for (const event of STROKE_TIMESTAMP_EVENTS) {
       const stamp = strokeTimestamps[event];
       if (!stamp) continue;
-      // Dedup vs the "Exam Performed" context line. "Neurology Evaluation" and
-      // performedAt are kept in sync (see handleNihssChange) because they are
-      // the same workflow event. With no Code Activation anchor the stamp shows
-      // no elapsed offset, so printing it here just repeats "Exam Performed".
-      // Skip it in that case so the EMR paste does not show the time twice.
-      // (V flag 2026-06-10: "Neurology Evaluation" and "Exam Performed" both
-      // read 7:31 AM.) When a Code Activation anchor exists the line carries a
-      // useful "+Xm" door-to-eval offset, so it is kept.
+      // Always drop this row when it duplicates the context line. Both now read
+      // "NIH evaluation time", so printing both would show the same event twice
+      // under the same name. The offset that used to justify keeping it here now
+      // rides on the context line instead.
       if (
         event === 'Neurology Evaluation' &&
-        anchorMs === null &&
         performedAt !== null &&
         stamp.getTime() === performedAt.getTime()
       ) {
         continue;
       }
+      const label = STROKE_TIMESTAMP_LABELS[event];
       if (event === 'Code Activation' || anchorMs === null) {
-        stampLines.push(`${event}: ${fmtTime(stamp)}`);
+        stampLines.push(`${label}: ${fmtTime(stamp)}`);
       } else {
         const diffMin = Math.max(0, Math.floor((stamp.getTime() - anchorMs) / 60000));
         const hh = Math.floor(diffMin / 60);
         const mm = diffMin % 60;
         const elapsed = hh > 0 ? `+${hh}h ${mm}m` : `+${mm}m`;
-        stampLines.push(`${event}: ${fmtTime(stamp)} (${elapsed})`);
+        stampLines.push(`${label}: ${fmtTime(stamp)} (${elapsed})`);
       }
     }
 
@@ -1369,7 +1376,8 @@ const NihssCalculator: React.FC = () => {
       <TimestampBubble
         value={strokeTimestamps}
         onChange={(next) => {
-          // Sync Exam Performed (performedAt) with Neurology Evaluation —
+          // Sync the NIH evaluation time (performedAt) with its stroke-timestamp
+    // twin, stored under the legacy 'Neurology Evaluation' key —
           // they represent the same workflow event (neurologist's first
           // exam action). When Neuro Eval is set/edited via the bubble and
           // performedAt is null OR later than the new Neuro Eval value,

@@ -51,7 +51,7 @@ describe('formatSavedCaseAsEmrText — empty patient context', () => {
   const text = formatSavedCaseAsEmrText(makeCase());
 
   it('emits every patient-context field as "Not entered"', () => {
-    expect(text).toContain('Exam Performed: Not entered');
+    expect(text).toContain('NIH evaluation time: Not entered');
     expect(text).toContain('LKW: Not entered');
     expect(text).toContain('BP: Not entered');
     expect(text).toContain('Glucose: Not entered');
@@ -157,5 +157,41 @@ describe('formatSavedCaseAsEmrText — weight', () => {
     for (const phrase of ['Tenecteplase', 'Alteplase', 'mg bolus', 'mL', 'dose reference']) {
       expect(text).not.toContain(phrase);
     }
+  });
+});
+
+describe('NIH evaluation time terminology', () => {
+  const withStamps = (performedAt: number, neuro: number) => {
+    const c = makeCase();
+    c.data.nihss = { score: 4, values: { '1a': 4 }, mode: 'rapid', severity: 'minor', performedAt };
+    c.data.strokeTimestamps = { 'Code Activation': performedAt - 18 * 60_000, 'Neurology Evaluation': neuro };
+    c.data.strokeTimestampsMode = 'absolute';
+    return c;
+  };
+
+  it('names the context line "NIH evaluation time", not "Exam Performed"', () => {
+    const text = formatSavedCaseAsEmrText(withStamps(1_700_000_000_000, 1_700_000_000_000));
+    expect(text).toContain('NIH evaluation time:');
+    expect(text).not.toContain('Exam Performed');
+  });
+
+  it('does not print the same evaluation time twice when the stamp matches', () => {
+    // The stroke timestamp and the exam-performed time are one event. They used
+    // to appear under two different names; now they share one, so a duplicate
+    // would be visibly wrong in a chart note.
+    const t = 1_700_000_000_000;
+    const text = formatSavedCaseAsEmrText(withStamps(t, t));
+    expect(text.match(/NIH evaluation time/g) ?? []).toHaveLength(1);
+  });
+
+  it('still prints the stamp when it genuinely differs from the exam time', () => {
+    const t = 1_700_000_000_000;
+    const text = formatSavedCaseAsEmrText(withStamps(t, t + 5 * 60_000));
+    expect(text.match(/NIH evaluation time/g) ?? []).toHaveLength(2);
+  });
+
+  it('leaves the other timestamp events named as they were', () => {
+    const text = formatSavedCaseAsEmrText(withStamps(1_700_000_000_000, 1_700_000_000_000));
+    expect(text).toContain('Code Activation:');
   });
 });

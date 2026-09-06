@@ -62,6 +62,21 @@ export function formatBpLine(systolic?: string, diastolic?: string): string {
   return 'BP: Not entered';
 }
 
+/**
+ * Display names. The KEYS are persisted in SavedCaseData.strokeTimestamps, so
+ * they cannot be renamed without orphaning stamps on already-saved cases.
+ * 'Neurology Evaluation' is shown as "NIH evaluation time" (V 2026-09-02), the
+ * same single term the live calculator now uses.
+ */
+const TIMESTAMP_LABELS: Record<string, string> = {
+  'Code Activation': 'Code Activation',
+  'Neurology Evaluation': 'NIH evaluation time',
+  'CT Read Time': 'CT Read Time',
+  'Thrombolytic Administered': 'Thrombolytic Administered',
+  'Neuro IR Contacted': 'Neuro IR Contacted',
+  'NCC/ICU Sign-out': 'NCC/ICU Sign-out',
+};
+
 const TIMESTAMP_EVENTS = [
   'Code Activation',
   'Neurology Evaluation',
@@ -122,10 +137,10 @@ export function formatSavedCaseAsEmrText(c: SavedCase): string {
   // ── Patient context block — always emitted with fallbacks ─────────
   const contextLines: string[] = [];
   if (data.nihss?.performedAt) {
-    contextLines.push(`Exam Performed: ${fmtDateTime(data.nihss.performedAt)}`);
+    contextLines.push(`NIH evaluation time: ${fmtDateTime(data.nihss.performedAt)}`);
   } else if (data.nihss) {
     // NIHSS case but no performedAt captured
-    contextLines.push(`Exam Performed: Not entered`);
+    contextLines.push(`NIH evaluation time: Not entered`);
   }
 
   const pc = data.patientContext;
@@ -208,14 +223,19 @@ export function formatSavedCaseAsEmrText(c: SavedCase): string {
       for (const event of TIMESTAMP_EVENTS) {
         const t = stamps[event];
         if (!t) continue;
+        // Same dedup as the live exporter: this stamp and the NIH evaluation
+        // time in the context block are one event, and both now carry the same
+        // name, so printing both would show it twice.
+        if (event === 'Neurology Evaluation' && data.nihss?.performedAt === t) continue;
+        const label = TIMESTAMP_LABELS[event] ?? event;
         if (event === 'Code Activation' || !anchor) {
-          stampLines.push(`${event}: ${fmtTime(t)}`);
+          stampLines.push(`${label}: ${fmtTime(t)}`);
         } else {
           const diffMin = Math.max(0, Math.floor((t - anchor) / 60000));
           const hh = Math.floor(diffMin / 60);
           const mm = diffMin % 60;
           const elapsed = hh > 0 ? `+${hh}h ${mm}m` : `+${mm}m`;
-          stampLines.push(`${event}: ${fmtTime(t)} (${elapsed})`);
+          stampLines.push(`${label}: ${fmtTime(t)} (${elapsed})`);
         }
       }
     } else {
@@ -228,14 +248,15 @@ export function formatSavedCaseAsEmrText(c: SavedCase): string {
       const anchorEntry = filled.find(([, offset]) => offset === 0);
       const anchorEvent = anchorEntry?.[0];
       for (const [event, offset] of filled) {
+        const label = TIMESTAMP_LABELS[event] ?? event;
         if (event === anchorEvent) {
-          stampLines.push(`${event}: anchor (relative-only storage)`);
+          stampLines.push(`${label}: anchor (relative-only storage)`);
         } else {
           const diffMin = Math.max(0, Math.floor(offset / 60000));
           const hh = Math.floor(diffMin / 60);
           const mm = diffMin % 60;
           const elapsed = hh > 0 ? `+${hh}h ${mm}m` : `+${mm}m`;
-          stampLines.push(`${event}: ${elapsed}`);
+          stampLines.push(`${label}: ${elapsed}`);
         }
       }
     }

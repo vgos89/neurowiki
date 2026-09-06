@@ -57,6 +57,27 @@ type EventName = StrokeTimestampEvent;
 
 export type StrokeTimestamps = Record<StrokeTimestampEvent, Date | null>;
 
+/**
+ * What each event is CALLED on screen and in exports.
+ *
+ * Separate from the event keys above because those keys are persisted inside
+ * SavedCaseData.strokeTimestamps. Renaming a key would orphan that stamp on
+ * every case a clinician has already saved, so display and storage are split.
+ *
+ * 'Neurology Evaluation' is shown as "NIH evaluation time" (V 2026-09-02): it
+ * and the calculator's exam-performed time were always the same workflow event
+ * recorded twice under two names, and quality metrics ask for the NIH
+ * evaluation time specifically.
+ */
+export const STROKE_TIMESTAMP_LABELS: Record<StrokeTimestampEvent, string> = {
+  'Code Activation': 'Code Activation',
+  'Neurology Evaluation': 'NIH evaluation time',
+  'CT Read Time': 'CT Read Time',
+  'Thrombolytic Administered': 'Thrombolytic Administered',
+  'Neuro IR Contacted': 'Neuro IR Contacted',
+  'NCC/ICU Sign-out': 'NCC/ICU Sign-out',
+};
+
 export const EMPTY_STROKE_TIMESTAMPS: StrokeTimestamps = {
   'Code Activation': null,
   'Neurology Evaluation': null,
@@ -553,7 +574,7 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
                       return (
                         <div>
                           <div className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">
-                            {event}
+                            {STROKE_TIMESTAMP_LABELS[event]}
                           </div>
                           <div className="flex items-center gap-2 flex-wrap">
                             <input
@@ -568,7 +589,7 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
                                 if (e.key === 'Escape') handleEditCancel();
                               }}
                               placeholder="11:25"
-                              aria-label={`Edit ${event} time. Type 12-hour digits and use the AM PM toggle, or type 24-hour military.`}
+                              aria-label={`Edit ${STROKE_TIMESTAMP_LABELS[event]}. Type 12-hour digits and use the AM PM toggle, or type 24-hour military.`}
                               aria-invalid={editError}
                               className={`flex-1 min-w-[88px] px-2.5 py-1.5 rounded-md border text-sm tabular-nums focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
                                 editError ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-white'
@@ -602,7 +623,7 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
                             <button
                               type="button"
                               onClick={handleEditNow}
-                              aria-label={`Set ${event} to the current time`}
+                              aria-label={`Set ${STROKE_TIMESTAMP_LABELS[event]} to the current time`}
                               className="px-3 py-1.5 text-xs font-semibold text-neuro-700 bg-neuro-50 hover:bg-neuro-100 border border-neuro-200 rounded-lg transition-colors whitespace-nowrap"
                             >
                               Now
@@ -631,7 +652,7 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
                       <div className="flex items-center justify-between gap-2">
                         <div className="flex-1 min-w-0">
                           <div className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-0.5">
-                            {event}
+                            {STROKE_TIMESTAMP_LABELS[event]}
                           </div>
                           {stamped ? (
                             <div className="flex items-center gap-2">
@@ -673,7 +694,7 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
                             <button
                               onClick={(e) => handleEditOpen(event, e)}
                               className="p-1.5 text-slate-400 hover:text-neuro-600 hover:bg-slate-100 transition-colors rounded"
-                              aria-label={`Edit ${event} time`}
+                              aria-label={`Edit ${STROKE_TIMESTAMP_LABELS[event]}`}
                               title="Edit time"
                             >
                               <Pencil className="w-3.5 h-3.5" />
@@ -691,7 +712,7 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
                             <button
                               onClick={(e) => handleEditOpen(event, e)}
                               className="p-1.5 text-slate-400 hover:text-neuro-600 hover:bg-slate-100 transition-colors rounded"
-                              aria-label={`Type ${event} time`}
+                              aria-label={`Type ${STROKE_TIMESTAMP_LABELS[event]}`}
                               title="Type time"
                             >
                               <Pencil className="w-3.5 h-3.5" />
