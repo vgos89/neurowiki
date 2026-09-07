@@ -43,7 +43,14 @@
 
 ## ACTIVE
 
-(none)
+### SEO-DAILY-PORT — Port the Tidbit daily SEO routine to neurowiki.ai, report-only — Class D
+- **Status:** planned — awaiting V approval of `docs/seo/PORT_PLAN_neurowiki.md` (plan written + architect-reviewed 2026-09-07; no code before approval per §19)
+- **User-visible goal:** V opens one dashboard page each morning and reads, in under a minute, whether NeuroWiki's search traffic is healthy, what the overnight job suggests improving, and what needs a decision. The site itself is never edited unattended.
+- **Non-goals:** no site edits by the job (suggest-only, V's 2026-09-07 decision); no push ever from the job; no Google Ads work (no account); no competitor scan or Gemini loop in v1; no rewrite of the existing `seo:weekly` scripts; no second site until three consecutive clean mornings.
+- **Files likely touched:** `scripts/seo/` (config.mjs, _auth.mjs shim, ported analysis scripts, site-pages.ts adapter, page-refresh.mjs, crawl-links.mjs, clinical-guard.mjs, daily-run.sh, build-dashboard.mjs), `.claude/commands/seo-daily.md`, `.claude/rules/seo-daily-governance.md`, `docs/adrs/2026-09-07-seo-daily-routine.md`, `docs/seo/**` (reports), `package.json` (seo:daily), one-line amendments to CLAUDE.md §16 (scope `seo`) and §22 (/seo-daily), scheduled-task wrapper outside the repo at `~/.claude/scheduled-tasks/neurowiki-seo-daily/`.
+- **Acceptance checks:** `bash scripts/seo/daily-run.sh` yields a manifest with both core feeds `ok`; morning job produces a briefing under 400 words in C-suite English, a local commit touching only `docs/seo*` with all pre-commit hooks passing, and a dashboard at NeuroWiki's own artifact URL (never Tidbit's); `clinical-guard` green on every run; `git log origin/main..main` shows only report commits until V's next supervised push; governance file names exactly what the job may change without V.
+- **Clinical impact:** none. Report-only; every clinical surface in `.claude/rules/clinical-surfaces.md` is outside the job's write allowlist and enforced by clinical-guard + scoped `git add`.
+- **Rollback plan:** delete the scheduled task and `git revert` the port commit. The job never pushes, so nothing user-facing ever changes; rollback is invisible to clinicians.
 
 ### AHA-4.6.3-RECHECK-VESSEL — §4.6.3 freshness re-review + vessel-attribution correction — Class E-clinical
 - **Status:** ready_for_merge
