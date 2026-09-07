@@ -3,41 +3,40 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './src/App';
 import { registerSW } from 'virtual:pwa-register';
+import { handleUpdateReady } from './src/lib/swUpdate';
 
-// Service worker — registered with autoUpdate. When a new build deploys,
-// the SW activates in the background and the next navigation picks it up.
+// Service worker update policy.
 //
-// Bug-2 fix (2026-07-01 audit): previously we passed only `{immediate: true}`
-// with no `onNeedReload` handler. vite-plugin-pwa's default fallback in
-// that state is to call `window.location.reload()` UNCONDITIONALLY the
-// moment a new SW activates — which yanks clinicians out of active
-// NIHSS / ASPECTS / ICH / GCS / stroke-code sessions mid-scoring,
-// wiping every in-memory value they had entered. Because we ship 3–5
-// deploys/day, this fired often enough for V to notice ("sometimes
-// glitches and resets").
+// The decision of WHEN a new build may take over lives in src/lib/swUpdate.ts,
+// not here, because it depends on whether a clinician has an exam open. In
+// short: reload immediately when nothing is in progress, hold and prompt when
+// something is, and fall back to reloading once the tab is hidden either way.
 //
-// Fix: provide an `onNeedReload` handler that DEFERS the reload until
-// the tab is next hidden (background). Clinicians still get the new
-// build on their next attention flip, but never lose in-flight
-// scoring. The reload is still guaranteed — the tab just has to be
-// backgrounded once first (foregrounding a new tab, switching apps,
-// locking the phone, PWA going to home screen). If the tab is already
-// hidden when the SW activates, we reload immediately.
+// Previously this file deferred unconditionally until the tab was hidden. That
+// never interrupted anyone, but it meant the whole first session after a deploy
+// ran the old build, which for a clinically meaningful fix is one more patient
+// handled on the old behaviour.
 if (typeof window !== 'undefined') {
   registerSW({
     immediate: true,
-    onNeedReload() {
-      const reloadIfHidden = () => {
-        if (document.visibilityState === 'hidden') {
-          document.removeEventListener('visibilitychange', reloadIfHidden);
-          window.location.reload();
+    onRegisteredSW(_swUrl, registration) {
+      if (!registration) return;
+      // Check for a new build whenever the app is brought to the foreground.
+      // An installed PWA left open can go a long time without a navigation, and
+      // without a navigation the browser has no reason to look. Foregrounding is
+      // the moment a clinician picks the phone back up, so it is both the most
+      // likely time for a deploy to have happened since they last looked and the
+      // cheapest moment to find out.
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          registration.update().catch(() => {
+            // Offline or transient. The next foreground tries again.
+          });
         }
-      };
-      if (document.visibilityState === 'hidden') {
-        window.location.reload();
-      } else {
-        document.addEventListener('visibilitychange', reloadIfHidden);
-      }
+      });
+    },
+    onNeedReload() {
+      handleUpdateReady();
     },
   });
 }

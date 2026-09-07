@@ -58,6 +58,7 @@ import { formatClinicalDateTime } from '../utils/clinicalDateTime';
 import { copyToClipboard } from '../utils/clipboard';
 import type { SavedCaseData } from '../lib/cases/types';
 import { saveNihssDraft, loadNihssDraft, clearNihssDraft, draftHasContent } from '../lib/nihssDraft';
+import { registerWorkInProgressCheck } from '../lib/swUpdate';
 import { formatBpLine } from '../lib/cases/format';
 import {
   TimestampBubble,
@@ -374,6 +375,35 @@ const NihssCalculator: React.FC = () => {
     // only fire when caseId changes (i.e. once on navigation).
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
+
+  // ── Tell the update policy when this page holds live work ──────────────────
+  //
+  // A new build reloads the page. With nothing in progress that is free and
+  // happens silently; mid-exam it must not happen without the clinician's say
+  // so. This is the signal that distinguishes the two. See src/lib/swUpdate.ts.
+  //
+  // Reads refs rather than state so the predicate never goes stale between
+  // renders: it is called by the service worker path, not by React.
+  const workSignalRef = useRef({ hasScored: false, patientContext, performedAt });
+  workSignalRef.current = { hasScored, patientContext, performedAt };
+  useEffect(
+    () =>
+      registerWorkInProgressCheck(() => {
+        const { hasScored: scored, patientContext: pc, performedAt: perf } = workSignalRef.current;
+        if (scored || perf !== null) return true;
+        return Boolean(
+          pc.lkw !== undefined ||
+            pc.systolic ||
+            pc.diastolic ||
+            pc.glucose ||
+            pc.anticoag.size > 0 ||
+            pc.prestrokeMrs !== undefined ||
+            pc.preExistingDeficits ||
+            pc.weightValue,
+        );
+      }),
+    [],
+  );
 
   // ── Draft restore (in-progress exam survives a reload) ─────────────────────
   //

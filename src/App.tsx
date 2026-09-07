@@ -1,4 +1,5 @@
 import React, { lazy, Suspense, useEffect } from 'react';
+import { ServiceWorkerUpdatePrompt } from './components/ServiceWorkerUpdatePrompt';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -193,6 +194,9 @@ const App: React.FC = () => {
                 </div>
               </div>
             }>
+            {/* Shown only when a new build is waiting AND an exam is in
+                progress; otherwise the app updates itself silently. */}
+            <ServiceWorkerUpdatePrompt />
             <Routes>
           {STATIC_ROUTE_DEFINITIONS.map((route) => (
             <Route
