@@ -44,6 +44,12 @@ export interface HeadacheQuestion {
   options: AnswerOption[];
   /** Optional faint teach-mode pearl. */
   teach?: string;
+  /**
+   * §13.4 Phase-1 structured-data claim tag for the teach string (adjacent
+   * claimId field, scanned by scripts/check-claims.ts). Required whenever
+   * `teach` makes a clinical statement (clinical review round 2, BI-4).
+   */
+  claimId?: string;
 }
 
 export interface ConditionalBranch {
@@ -137,6 +143,19 @@ export const CORE_QUESTIONS: HeadacheQuestion[] = [
       { id: 'qual-throb', label: 'Throbbing or pulsating', chips: ['qual-pulsating'] },
       { id: 'qual-press', label: 'Pressing or tightening', chips: ['qual-pressing-tightening'] },
       { id: 'qual-sharp', label: 'Sharp, stabbing, or shooting', chips: ['qual-sharp-stabbing'] },
+      // Electric-shock quality was previously obtainable ONLY inside the
+      // trigeminal-neuralgia branch, which itself only opened after picking
+      // "sharp". A clinician whose patient described textbook TN jolts could not
+      // say so until they had first mislabeled the pain. Both chips contribute so
+      // every criterion that accepts either quality still evaluates.
+      // Added 2026-09-07 (headache pathway user review, finding 3). Label is
+      // quality-only: duration is asked twice elsewhere (q-duration, tn-brief),
+      // and a duration qualifier here discouraged the 90-second-paroxysm and
+      // shooting-pain-inside-a-long-attack presentations (medical review, B1).
+      // The shared qual-sharp-stabbing chip also opens b-occipital and
+      // b-stabbing. INTENDED: occipital neuralgia and primary stabbing headache
+      // are the standing differentials for shooting pain (architect rec 10).
+      { id: 'qual-shock', label: 'Electric shock-like or shooting', chips: ['qual-electric-shock-shooting', 'qual-sharp-stabbing'] },
     ],
   },
 
@@ -153,6 +172,18 @@ export const CORE_QUESTIONS: HeadacheQuestion[] = [
       // [PAIR — preserve both] orbital answer must add unilateral + orbital-temporal,
       // or cluster-B / ph-B / sunct-B never fire (clinical gate Q4).
       { id: 'loc-orbital', label: 'Around or behind one eye, or the temple', chips: ['loc-unilateral', 'loc-orbital-temporal'] },
+      // A facial-pain chief complaint previously had no answer on this screen:
+      // the options were one side / both sides / around the eye, and a cheek or
+      // jaw presentation had to be filed under "one side" with the facial nature
+      // lost. ICHD-3 keeps facial pain in Part 3; this routes the §13.1 screen.
+      // [PAIR] unilateral + facial-region, mirroring the orbital pattern above.
+      // [PAIR - label constraint] This label must NOT mention the eye or orbit:
+      // q-location is single-select, and cluster-B / ph-B demote-gates require
+      // loc-orbital-temporal, which only the orbital answer above contributes.
+      // An "around the eye" phrasing here siphoned periorbital patients off that
+      // chip and silently capped cluster and paroxysmal hemicrania at Probable
+      // (clinical review 2026-09-07, BC-6; drift guard in the reachability tests).
+      { id: 'loc-face', label: 'In the face: cheek, jaw, or upper lip', chips: ['loc-unilateral', 'loc-facial-region'] },
     ],
   },
   {
@@ -204,6 +235,8 @@ export const CORE_QUESTIONS: HeadacheQuestion[] = [
       { id: 'as-autonomic-other', label: 'Other autonomic feature on the painful side (runny or blocked nose, droopy or swollen lid, forehead sweating)', chips: ['sym-other-cranial-autonomic'] },
       // Vertigo trigger → the vestibular branch fires on this chip.
       { id: 'as-vertigo', label: 'Vertigo or dizziness with the headache', chips: ['vest-vertigo-migrainous'] },
+      // Aura-screen trigger (routing flag; contributes to no criterion).
+      { id: 'as-reversible-neuro', label: 'Visual disturbance or other reversible neurologic symptoms around the headache (zig-zags, blind spot, one-eye vision loss, tingling, speech trouble)', chips: ['sym-reversible-neuro-reported'] },
     ],
   },
 ];
@@ -215,6 +248,13 @@ const anyAutonomic = (s: ReadonlySet<ChipId>) => has(s, 'sym-autonomic-ipsilater
 const migraineSuggestive = (s: ReadonlySet<ChipId>) =>
   has(s, 'qual-pulsating') || has(s, 'sym-nausea-mild') || has(s, 'sym-nausea-moderate-severe') ||
   has(s, 'sym-vomiting') || has(s, 'sym-photophobia');
+
+// ONE clinical concept (the §3.1 cluster attack picture) deliberately split
+// across two screens by clinical review BC-9. The two branches must fire and
+// stop firing together forever: a widening applied to one and not the other
+// reproduces the orphaned-criterion defect this batch fixed (architect review
+// 2026-09-08, condition 2).
+const clusterPictureFires = (s: ReadonlySet<ChipId>) => has(s, 'dur-15-to-180-min') && has(s, 'loc-unilateral');
 
 export const CONDITIONAL_BRANCHES: ConditionalBranch[] = [
   // TAC short-attack detail — surfaces paroxysmal hemicrania (§3.2) and SUNCT/SUNA (§3.3).
@@ -241,12 +281,35 @@ export const CONDITIONAL_BRANCHES: ConditionalBranch[] = [
   // resolves §3.1.1 episodic vs §3.1.2 chronic (ADR-2026-07-06 subtype pass).
   {
     id: 'b-cluster-detail',
-    fires: (s) => has(s, 'dur-15-to-180-min') && has(s, 'loc-unilateral'),
+    fires: clusterPictureFires,
     question: {
       id: 'q-cluster-detail',
       screen: 8,
       eyebrow: 'Cluster pattern',
-      prompt: 'If these are cluster-type attacks, what is the bout-and-remission pattern?',
+      prompt: 'If these are cluster-type attacks, how often do they come during a bout?',
+      // Criterion D's chip (freq-cluster-bout) was defined in the engine with its
+      // own teach text but NO question option anywhere contributed it, so cluster
+      // could never reach a full 3.1 match through the flow; it capped at
+      // probable (3.5) for every user. Found by the reachability harness on its
+      // first run (2026-09-07). Bout frequency and the episodic/chronic subtype
+      // are SEPARATE single-select questions: the subtype pair is mutually
+      // exclusive by ICHD-3 definition (3.1.1 vs 3.1.2), and a shared
+      // multi-select let both be asserted at once, which the resolver silently
+      // read as episodic (clinical review BC-9).
+      select: 'single',
+      options: [
+        { id: 'cluster-bout-freq', label: 'During bouts, attacks come from one every other day up to 8 a day', chips: ['freq-cluster-bout'] },
+      ],
+    },
+  },
+  {
+    id: 'b-cluster-subtype',
+    fires: clusterPictureFires,
+    question: {
+      id: 'q-cluster-subtype',
+      screen: 8,
+      eyebrow: 'Bout and remission pattern',
+      prompt: 'What is the bout-and-remission pattern?',
       select: 'single',
       options: [
         { id: 'cluster-episodic', label: 'Attacks come in bouts separated by pain-free remissions of 3 months or more', chips: ['cluster-remission-ge-3mo'] },
@@ -297,13 +360,29 @@ export const CONDITIONAL_BRANCHES: ConditionalBranch[] = [
   // Aura detail — fires when migraine is in contention (clinical gate Q3, option b).
   {
     id: 'b-aura',
-    fires: (s) => migraineSuggestive(s),
+    // migraineSuggestive alone gated this screen behind pulsating quality or
+    // migraine-associated symptoms, which ICHD-3 1.2 does not require: aura is
+    // diagnosed on the aura, and 1.2.4 retinal migraine in particular often
+    // rides on a non-migrainous headache. A monocular-visual-loss presentation
+    // with a mild pressing headache never saw this screen, so retinal migraine
+    // AND its amaurosis-fugax caution were unreachable (user review, finding 2).
+    fires: (s) => migraineSuggestive(s) || has(s, 'sym-reversible-neuro-reported'),
     question: {
       id: 'q-aura',
       screen: 7,
       eyebrow: 'Aura',
       prompt: 'Are there reversible neurologic symptoms before or with the headache? Select all that apply.',
       select: 'multi',
+      // BC-7 vascular-mimic caution — this teach string is its ONLY live
+      // surface (HeadacheQuestion.tsx renders question.teach; the chip-level
+      // teachWhenSelected surface is dormant in V4, see clinical review round 2
+      // BI-3). Wording is the round-2 reviewer's own trim (BI-1 resolution 2):
+      // the 1.2 C characteristics are verbatim ichd3-2018; "exclude TIA and
+      // seizure" is a workup instruction bounded by do-snnoop10-2019
+      // ("N: Neurologic deficit"), not a claim about those diseases' behaviour;
+      // the monocular sentence restates the reviewed retinal subtype steer.
+      claimId: 'clinic-headache-ichd3-aura-subtypes',
+      teach: 'Reversible neurologic symptoms are not specific to migraine aura. ICHD-3 1.2 C characteristics include gradual spread over 5 minutes or more and a symptom duration of 5 to 60 minutes. Exclude TIA and seizure before calling this aura. Monocular visual loss needs amaurosis fugax, retinal artery occlusion, and optic neuropathy excluded before it is called 1.2.4 retinal migraine.',
       options: [
         { id: 'aura-visual', label: 'Visual (zig-zags, blind spot, flashes)', chips: ['aura-visual'] },
         { id: 'aura-sensory', label: 'Sensory (tingling, numbness)', chips: ['aura-sensory'] },
@@ -398,7 +477,10 @@ export const CONDITIONAL_BRANCHES: ConditionalBranch[] = [
   // Facial pain detail — fires on sharp/stabbing quality; screens for §13.1 trigeminal neuralgia.
   {
     id: 'b-trigeminal',
-    fires: (s) => has(s, 'qual-sharp-stabbing'),
+    // Previously sharp-stabbing quality was the ONLY key to this screen. A face
+    // presentation with any other quality answer, or the new electric-shock
+    // option, must open it too (user review, findings 1 and 3).
+    fires: (s) => has(s, 'qual-sharp-stabbing') || has(s, 'qual-electric-shock-shooting') || has(s, 'loc-facial-region'),
     question: {
       id: 'q-trigeminal',
       screen: 8,

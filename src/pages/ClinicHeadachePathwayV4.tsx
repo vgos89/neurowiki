@@ -51,8 +51,6 @@ const QUESTION_BY_ID: Map<string, HeadacheQuestionConfig> = new Map();
 for (const q of CORE_QUESTIONS) QUESTION_BY_ID.set(q.id, q);
 for (const b of CONDITIONAL_BRANCHES) QUESTION_BY_ID.set(b.question.id, b.question);
 
-const CORE_SCREEN_COUNT = new Set(CORE_QUESTIONS.map(q => q.screen)).size; // 6
-
 type Phase = 'safety' | 'questions' | 'result';
 
 const ClinicHeadachePathwayV4: React.FC = () => {
@@ -104,7 +102,6 @@ const ClinicHeadachePathwayV4: React.FC = () => {
   // Clamp the index if the active-question list shrank (a branch un-fired).
   const safeIndex = Math.min(questionIndex, Math.max(0, activeQuestions.length - 1));
   const currentQuestion = activeQuestions[safeIndex];
-  const totalScreens = Math.max(CORE_SCREEN_COUNT, ...activeQuestions.map(q => q.screen));
 
   // ── Mutators ──────────────────────────────────────────────────────────────
   const setAnswer = (qid: string, optIds: string[]) =>
@@ -194,8 +191,15 @@ const ClinicHeadachePathwayV4: React.FC = () => {
             <HeadacheQuestion
               question={currentQuestion}
               selectedOptionIds={new Set(answers[currentQuestion.id] ?? [])}
-              position={currentQuestion.screen}
-              total={totalScreens}
+              // Position in the LIVE sequence, not the config's screen number.
+              // Branch questions carry hardcoded screen attributes and several
+              // share one (three branches say 8, one says 7), so the eyebrow
+              // read 8 of 8 three screens in a row and then went BACKWARDS to 7.
+              // safeIndex is monotonic by construction; the total still grows as
+              // branches fire, which is what the tilde is for.
+              // Fixed 2026-09-07 (headache pathway user review).
+              position={safeIndex + 1}
+              total={activeQuestions.length}
               onSelectSingle={opt => {
                 setAnswer(currentQuestion.id, [opt.id]);
                 advance();
@@ -242,13 +246,14 @@ const ClinicHeadachePathwayV4: React.FC = () => {
               <ChevronLeft className="w-[18px] h-[18px]" aria-hidden="true" />
               Back
             </button>
-            <div className="flex items-center gap-2" aria-label={`Screen ${currentQuestion?.screen ?? 1} of ${totalScreens}`}>
-              {Array.from({ length: totalScreens }).map((_, i) => (
-                <span
-                  key={i}
-                  className={`w-2 h-2 rounded-full ${i < (currentQuestion?.screen ?? 1) ? 'bg-neuro-500' : 'bg-slate-200'}`}
-                />
-              ))}
+            {/* Position counter driven by the SAME source as the question's own
+                "Question X of ~Y" line (activeQuestions/safeIndex). The old dot
+                row rendered totalScreens filled by screen index — a different,
+                non-monotonic quantity than the aria-label announced (medical
+                review U4; architect obs 12). aria-hidden: the question eyebrow
+                carries position semantically; announcing it twice is noise. */}
+            <div className="text-[12px] text-slate-400 tabular-nums" aria-hidden="true">
+              {safeIndex + 1} / ~{activeQuestions.length}
             </div>
             <button
               type="button"

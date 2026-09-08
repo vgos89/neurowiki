@@ -38,6 +38,25 @@ import { HeadacheDotMeter } from './HeadacheDotMeter';
 import { CriteriaList } from './CriteriaList';
 import { HeadacheManagement, hasHeadacheManagement } from './HeadacheManagement';
 
+// The appendix entity is special-cased in three places below; one constant so
+// a rename cannot half-apply (architect review 2026-09-08, condition 3).
+const VESTIBULAR_MIGRAINE_ID = 'vestibular-migraine';
+
+/**
+ * Leading-gap note gate. True only when the top-ranked candidate has no
+ * management module AND a management block from a lower slot is about to
+ * render (manageable nonempty, so the note can never point at an absent
+ * block), AND the top-ranked candidate is not vestibular migraine (VM
+ * legitimately steers to the migraine block, so "do not apply" would be
+ * wrong there). Wording constraints from clinical review BC-8 live at the
+ * render site. Exported for headacheResultV4.invariants.test.tsx.
+ */
+export function showLeadingGapNote(top2: BandedMatch[], manageable: BandedMatch[]): boolean {
+  return manageable.length > 0
+    && !hasHeadacheManagement(top2[0].match.phenotypeId)
+    && top2[0].match.phenotypeId !== VESTIBULAR_MIGRAINE_ID;
+}
+
 // Per-flag workup guidance, relocated verbatim from the prior pathway
 // (ClinicHeadachePathway.tsx workupNotesForFlags) so the reviewed content carries.
 // B-4: each red flag names its must-not-miss suspect + first investigation,
@@ -120,7 +139,7 @@ const SafetyStrip: React.FC = () => (
     </div>
     <p className="text-sm text-slate-700 leading-relaxed mt-1">
       Rule out secondary causes first: SAH, GCA, CVT, or mass. ICHD-3 criteria apply only after these are excluded.{' '}
-      <a href="/pathways/headache-workup" className="text-neuro-600 font-medium hover:underline whitespace-nowrap">Review red flags →</a>
+      <a href="/guide/headache-workup" className="text-neuro-600 font-medium hover:underline whitespace-nowrap">Review red flags →</a>
     </p>
   </div>
 );
@@ -325,7 +344,7 @@ export const HeadacheResultV4: React.FC<HeadacheResultV4Props> = ({
   const manageable = top2.filter(bm => hasHeadacheManagement(bm.match.phenotypeId));
   // M2: Vestibular migraine is an ICHD-3 appendix entity with no dedicated dosing —
   // it steers to migraine management rather than mounting a destination-less block.
-  const hasVM = top2.some(bm => bm.match.phenotypeId === 'vestibular-migraine');
+  const hasVM = top2.some(bm => bm.match.phenotypeId === VESTIBULAR_MIGRAINE_ID);
 
   return (
     <div className="rounded-xl border border-slate-100 shadow-sm bg-white overflow-hidden">
@@ -375,6 +394,18 @@ export const HeadacheResultV4: React.FC<HeadacheResultV4Props> = ({
         {(manageable.length > 0 || hasVM) && (
           <div className="mt-5 pt-4 border-t border-slate-100">
             <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Management</div>
+            {/* Leading-gap note (user review 2026-09-07, finding 1: a leading
+                trigeminal neuralgia rendered only the runner-up's migraine block).
+                Gate semantics live on showLeadingGapNote(). Wording constraints
+                (clinical review BC-8): name the phenotypes, give an instruction,
+                never say "lower-ranked" or "leading" — both can be false, since
+                equal-strength candidates tie-break on absolute criteria count and
+                top2 can come from the Possible band when Leading is empty. */}
+            {showLeadingGapNote(top2, manageable) && (
+              <p className="mb-2 text-[12px] text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 leading-relaxed">
+                No management module for {top2[0].match.name} yet. The guidance below is for {manageable[0].match.name}. Do not apply it to {top2[0].match.name}.
+              </p>
+            )}
             {manageable.map(bm => (
               <ManagementDisclosure key={bm.match.phenotypeId} m={bm.match} />
             ))}

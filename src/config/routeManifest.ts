@@ -411,9 +411,13 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'pathways',
     railItem: 'pathways',
     meta: {
-      title: 'Clinic Headache Pathway: Outpatient Migraine Preventive | NeuroWiki',
-      description: 'Outpatient migraine management pathway. MIDAS-driven preventive threshold, comorbidity-guided agent selection, CGRP mAb escalation, and MOH prevention.',
-      keywords: 'outpatient migraine pathway, migraine preventive therapy, CGRP mAb selection, MIDAS score, medication overuse headache, migraine clinic pathway',
+      // Rewritten 2026-09-07: this metadata still described the RETIRED
+      // MIDAS/CGRP preventive pathway. The live page is the V4 ICHD-3 pattern
+      // finder, so the tab title, search snippet, and page promised a different
+      // tool than the one that loads.
+      title: 'Headache Pattern Finder: ICHD-3 Differential Tool | NeuroWiki',
+      description: 'ICHD-3 pattern finder for headache: live differential across migraine, tension-type, cluster and the TACs, and trigeminal neuralgia. Not a diagnosis.',
+      keywords: 'ICHD-3 criteria tool, headache differential diagnosis, headache pattern finder, migraine vs tension-type headache, trigeminal neuralgia criteria, cluster headache criteria, medication overuse headache',
     },
   },
   {

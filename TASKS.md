@@ -261,6 +261,35 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 
 ## PENDING
 
+### Headache clinic v4 — review follow-ups (2026-09-07/08, consolidated from docs/reviews/clinical-PR-headache-v4-routing-2026-09-07.md)
+
+Shipped batch: routing + TN/ON management fixes, triple-gated (clinical rounds 1-3 -> approve; architect approve-with-conditions, all addressed; seo ready). None of these blocked the ship.
+
+- [ ] L4/P1 **headache TN red-flag text remediation (teachPearl + criteria claim)** — Class E, blocked:awaiting-clinical-review. The unsupported secondary-TN red-flag list (incl. "onset before age 40") still ships on clinicHeadacheData.ts teachPearl and the criteria-claim description; removed from the new card by BC-4. Candidate sources: EAN 2019 TN guideline (Bendtsen, DOI 10.1111/ene.13950 — V to supply PDF) or AAN 2008 clinician summary (read 2026-09-07).
+- [ ] L4/P1 **encode ICHD-3 4.7 criterion E on primary-stabbing-headache** — Class E. PSH must stand down when a competing full match (notably TN) exists; BC-8 mitigates at UI layer only.
+- [ ] L4/P1 **ichd3-2018 quoted_text: add verbatim 1.2.4 A-C, full §13.6 refresh** — Class E. Owner: medical-scientist (named per round-3 instruction; parked three rounds is enough). Resolves the retinal-subtype-on-non-migrainous-headache residual.
+- [ ] L4/P1 **sev-very-severe consistency: migraineCharacterCount + hc-B** — Class E. tn-B/on-B fixed in the shipped batch (U1); these two remain.
+- [ ] L4/P2 **BC-7 optional: citation for TIA/seizure aura discriminators** — Class E, open (downgraded from blocked by round 3). Restores the fuller caution sentence if a source is registered.
+- [ ] L4/P2 **A1 Part-Two clause sourcing** — Class E, optional. GCA half available from do-snnoop10-2019; dental/sinus/TMJ need a new citation. Must not return unsourced.
+- [ ] L4/P2 **SUNCT/SUNA referral row provenance audit** — Class C-clinical. Row not in burish-2024 quoted_text (U7).
+- [ ] L3/P2 **HEADACHE_CHIP_GROUPS: live surface or dormant — wire-and-tag or retire** — Class C-clinical. Pre-existing teachWhenSelected corpus is unreviewed clinical text reaching no user; hoist the dormancy note to the declaration/file header.
+- [ ] L3/P2 **tag q-quality / q-indomethacin teach strings with claimId** — Class C-clinical. Cheap now: BI-4 added the interface field and proved the scanner path.
+- [ ] L3/P2 **U6: separate routing flags from scoring chip groups** — Class C.
+- [ ] L3/P2 **reconcile as-reversible-neuro answer with rf-neuro-deficit red flag** — Class C-clinical. Same clinical content on two screens, no cross-check.
+- [ ] L3/P2 **headache reachability walks follow-up** — Class C. Add walks for the 8 UNWALKED_DEBT phenotypes (priority: paroxysmal-hemicrania, hemicrania-continua, sunct-suna — the indomethacin/autonomic-gated shapes that hid the original defects). Referenced by name in headachePhenotypeReachability.test.ts; derive WALKED from a WALKS table + it.each while there (architect rec 9).
+- [ ] L3/P2 **accessibility-specialist: confirm question eyebrow as the announced position** — closes U4 (dot row removed 2026-09-08, counter shares the label's source).
+- [ ] L2/P2 **review_window_months rationale comments (nahas-2024, burish-2024)** — Class B, §13.7.
+- [ ] L2/P2 **do-snnoop10-2019 next §13.6 refresh must include clinic-headache-ichd3-aura-subtypes in step 3** — Class B, note-only (new dependent as of 2026-09-08).
+- [ ] L2/P2 **routeManifest description tidy: "cluster and the other TACs"** — Class B, optional, metadata only.
+- [ ] L3/P2 **sitemap/manifest reconciliation check** — Class C. /pathways/headache-clinic had includeInSitemap:true but no sitemap.xml entry, so it was never prerendered (prerender.mjs reads sitemap.xml). Fixed in-batch; add a check so the class cannot recur on pathway/guide routes (check:trials covers trials only).
+- [ ] L3/P2 **librarian: docs/link-graph.json pathway/headache-clinic unresolved references** (data/clinic-headache-engine, component/pathway-header) — define nodes or retarget edges (seo sign-off 2026-09-08).
+
+### Headache clinic — ICHD-3 facial-pain expansion — Class E [PLANNED NEXT — V approved direction 2026-09-08 ("Expand")]
+- **Status:** planned — full plan to V before any code (§19).
+- **User-visible goal:** a face-pain patient who is not trigeminal neuralgia can still land somewhere honest: persistent idiopathic facial pain (13.12) and glossopharyngeal neuralgia (13.2) become findable patterns with criteria and management.
+- **Scope sketch:** ichd3-2018 quoted_text expansion (13.2, 13.12 verbatim criteria) via evidence-verifier; nahas-2024 already holds glossopharyngeal management verbatim incl. the airway caution; new phenotypes + branches + walks; clinical-reviewer pre- and post-gates.
+
+
 ### From the 2026-09-01 §4.6.3 recheck (architect + clinical follow-ups)
 - [ ] [P1] **C4 — register HOPE (PMID 40773205) and map to `extended-ivt-sich-caution` only.** Class E, own evidence packet. Full text held. Binding display rule from medical-scientist: NO NNT without co-located NNH, since HOPE's published ARD makes an NNT computable (~7) and a bare 7 beside a COR 2b recommendation reads as an endorsement.
 - [ ] [P1] **C6 — Path C entry floor 9 h vs the source's 4.5 to 24 h.** Control-flow change in `getPathStage` creating a Path B/C overlap. Architect A6: `ExtendedIVTPathway.tsx` Path C Eligible details hard-codes "9 to 24 hours" and the "operates from 9 hours because 4.5 to 9 hours routes to Path B" clause; both become false when this lands. Prefer extracting `evaluatePathC(state): { complete, verdict }` as one pure function consumed by both memos BEFORE widening, per architect recommendation.

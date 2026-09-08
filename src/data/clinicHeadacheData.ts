@@ -47,6 +47,7 @@ export type ChipId =
   | 'onset-only-during-sleep-waking' | 'freq-ge-10-per-month' | 'dur-15min-to-4h'
   // Pain location
   | 'loc-unilateral' | 'loc-bilateral' | 'loc-orbital-temporal'
+  | 'loc-facial-region'                       // face as presenting site; routes the §13.1 screen
   // Pain quality
   | 'qual-pulsating' | 'qual-pressing-tightening' | 'qual-sharp-stabbing'
   // Pain severity
@@ -61,6 +62,7 @@ export type ChipId =
   | 'sym-photophobia' | 'sym-phonophobia'
   | 'sym-restlessness' | 'sym-autonomic-ipsilateral'
   | 'sym-conjunctival-injection' | 'sym-lacrimation' | 'sym-other-cranial-autonomic'  // §3.3 SUNCT/SUNA itemized autonomic
+  | 'sym-reversible-neuro-reported'  // ROUTING FLAG: opens the aura screen; contributes to no criterion
   // Chronic migraine — ICHD-3 §1.3 criterion C disjunction
   | 'migraine-features-ge-8-per-month' | 'triptan-response-positive'
   // Aura features
@@ -351,6 +353,14 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
       { id: 'loc-unilateral', label: 'Unilateral location', teachWhenSelected: '1.1 C feature 1 (migraine) and 3.1 (cluster). 3.4 Hemicrania continua is strictly unilateral.' },
       { id: 'loc-bilateral', label: 'Bilateral location', teachWhenSelected: '2.2 C feature 1 (TTH).' },
       { id: 'loc-orbital-temporal', label: 'Orbital, supraorbital, or temporal location', teachWhenSelected: '3.1 Cluster criterion B location.' },
+      // ROUTING FLAG, not a criterion contributor. Label must not mention the
+      // eye or orbit: see the [PAIR - label constraint] note on the loc-face
+      // answer in headacheQuestions.ts (clinical review 2026-09-07, BC-6).
+      // NO teachWhenSelected: HEADACHE_CHIP_GROUPS teach texts are DORMANT in
+      // the V4 pathway (no component mounts ChipGroup; getChip() serves label
+      // lookups only), so clinical prose authored here reaches no user while
+      // reading as if reviewed (clinical review round 2, BI-3).
+      { id: 'loc-facial-region', label: 'Facial location (cheek, jaw, or upper lip)' },
 
       { id: 'qual-pulsating', label: 'Throbbing or pulsating quality', teachWhenSelected: '1.1 C feature 2 (migraine).' },
       { id: 'qual-pressing-tightening', label: 'Pressing or tightening (non-pulsating)', teachWhenSelected: '2.2 C feature 2 (TTH).' },
@@ -416,6 +426,12 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
       { id: 'aura-motor', label: 'Motor aura (weakness)', teachWhenSelected: 'Motor aura indicates 1.2.3 Hemiplegic migraine. Refer for genetic evaluation.' },
       { id: 'aura-brainstem', label: 'Two or more brainstem symptoms (dysarthria, vertigo, tinnitus, diplopia, ataxia)', teachWhenSelected: 'ICHD-3 1.2.2 Migraine with brainstem aura requires at least two brainstem symptoms; a single brainstem symptom does not qualify.' },
       { id: 'aura-retinal', label: 'Retinal aura (monocular visual symptoms)' },
+      // ROUTING FLAG, not a criterion contributor. The BC-7 vascular-mimic
+      // caution lives on q-aura's teach string in headacheQuestions.ts — the
+      // one surface that renders. NO teachWhenSelected here: this surface is
+      // dormant in V4 and an earlier draft misstated the 1.2 C three-of-six
+      // gate on it (clinical review round 2, BI-2/BI-3).
+      { id: 'sym-reversible-neuro-reported', label: 'Reversible visual or neurologic symptoms reported' },
       { id: 'aura-fully-reversible', label: 'Aura is fully reversible' },
       { id: 'aura-spread-ge-5min', label: 'Aura spreads gradually over ≥5 minutes' },
       { id: 'aura-each-5-to-60min', label: 'Each aura symptom lasts 5 to 60 minutes' },
@@ -856,7 +872,12 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
       { id: 'tn-A', label: 'Unilateral pain in one or more trigeminal divisions, no radiation beyond', description: 'ICHD-3 13.1.1 A: recurrent paroxysms of unilateral facial pain in the distribution(s) of one or more divisions of the trigeminal nerve, with no radiation beyond.', evaluate: s => has(s, 'loc-unilateral') && has(s, 'loc-trigeminal-distribution'), contributingChips: ['loc-unilateral', 'loc-trigeminal-distribution'], role: 'suppress-gate' },
       // tn-B: suppress-gate (DROP). ALL of: <=2 min, severe, shock/shooting/stabbing/
       // sharp. No Probable-TN section, so a feature miss cannot demote — suppress.
-      { id: 'tn-B', label: 'Brief (up to 2 min), severe, electric-shock / shooting / stabbing pain', description: 'ICHD-3 13.1.1 B: pain has all of: 1) lasting a fraction of a second to 2 minutes, 2) severe intensity, 3) electric shock-like, shooting, stabbing or sharp in quality.', evaluate: s => has(s, 'dur-fraction-sec-to-2min') && has(s, 'sev-severe') && (has(s, 'qual-electric-shock-shooting') || has(s, 'qual-sharp-stabbing')), contributingChips: ['dur-fraction-sec-to-2min', 'sev-severe', 'qual-electric-shock-shooting', 'qual-sharp-stabbing'], role: 'suppress-gate' },
+      // 13.1.1 B.2 says "severe intensity": EITHER severity answer satisfies it
+      // (q-severity is single-select, and TN is routinely described as among the
+      // most severe pains known, so "very severe" is the expected answer; with
+      // sev-severe alone the whole phenotype silently dropped). Mirrors
+      // cluster-B. Medical review 2026-09-07, U1.
+      { id: 'tn-B', label: 'Brief (up to 2 min), severe, electric-shock / shooting / stabbing pain', description: 'ICHD-3 13.1.1 B: pain has all of: 1) lasting a fraction of a second to 2 minutes, 2) severe intensity, 3) electric shock-like, shooting, stabbing or sharp in quality.', evaluate: s => has(s, 'dur-fraction-sec-to-2min') && (has(s, 'sev-severe') || has(s, 'sev-very-severe')) && (has(s, 'qual-electric-shock-shooting') || has(s, 'qual-sharp-stabbing')), contributingChips: ['dur-fraction-sec-to-2min', 'sev-severe', 'sev-very-severe', 'qual-electric-shock-shooting', 'qual-sharp-stabbing'], role: 'suppress-gate' },
       // tn-C: suppress-gate (DROP). The pathognomonic trigger (§13.1.1 C / Note 4).
       { id: 'tn-C', label: 'Precipitated by innocuous stimuli in the affected area', description: 'ICHD-3 13.1.1 C: precipitated by innocuous stimuli within the affected trigeminal distribution. Required even when some attacks appear spontaneous (Note 4).', evaluate: s => has(s, 'trigger-innocuous-stimulus'), contributingChips: ['trigger-innocuous-stimulus'], role: 'suppress-gate' },
     ],
@@ -882,7 +903,7 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
       // home, so a <2-of-3 shortfall hides, not demotes (full-or-nothing).
       // B.3 quality is "shooting, stabbing OR sharp" — count it as ONE characteristic
       // satisfied by either qual-sharp-stabbing or qual-electric-shock-shooting (no double-count).
-      { id: 'on-B', label: 'At least 2 of: seconds-to-minutes paroxysms, severe, shooting/stabbing/sharp', description: 'ICHD-3 13.4 B: at least two of: 1) recurring in paroxysmal attacks lasting a few seconds to minutes, 2) severe intensity, 3) shooting, stabbing or sharp in quality.', evaluate: s => (countOf(s, ['dur-seconds-to-minutes', 'sev-severe']) + ((has(s, 'qual-sharp-stabbing') || has(s, 'qual-electric-shock-shooting')) ? 1 : 0)) >= 2, contributingChips: ['dur-seconds-to-minutes', 'sev-severe', 'qual-sharp-stabbing', 'qual-electric-shock-shooting'], role: 'suppress-gate' },
+      { id: 'on-B', label: 'At least 2 of: seconds-to-minutes paroxysms, severe, shooting/stabbing/sharp', description: 'ICHD-3 13.4 B: at least two of: 1) recurring in paroxysmal attacks lasting a few seconds to minutes, 2) severe intensity, 3) shooting, stabbing or sharp in quality.', evaluate: s => ((has(s, 'dur-seconds-to-minutes') ? 1 : 0) + ((has(s, 'sev-severe') || has(s, 'sev-very-severe')) ? 1 : 0) + ((has(s, 'qual-sharp-stabbing') || has(s, 'qual-electric-shock-shooting')) ? 1 : 0)) >= 2, contributingChips: ['dur-seconds-to-minutes', 'sev-severe', 'sev-very-severe', 'qual-sharp-stabbing', 'qual-electric-shock-shooting'], role: 'suppress-gate' },
       // on-C: suppress-gate (DROP). Both associations required: C.1 AND (C.2a OR C.2b).
       { id: 'on-C', label: 'Scalp dysaesthesia/allodynia AND nerve tenderness or trigger point', description: 'ICHD-3 13.4 C: both of: 1) dysaesthesia and/or allodynia during innocuous scalp/hair stimulation; 2) tenderness over the affected nerve branches, or trigger points at the greater occipital nerve emergence or in the C2 distribution.', evaluate: s => has(s, 'scalp-dysaesthesia-allodynia') && has(s, 'occipital-nerve-tenderness-or-trigger'), contributingChips: ['scalp-dysaesthesia-allodynia', 'occipital-nerve-tenderness-or-trigger'], role: 'suppress-gate' },
       // on-D: suppress-gate (DROP) + hiddenUntilTrial. Mandatory local-anaesthetic block relief.
@@ -1144,12 +1165,18 @@ const SUBTYPE_RESOLVERS: Partial<Record<PhenotypeId, (s: Set<ChipId>) => Subtype
         : undefined,
   // §3.1.1 Episodic (bouts separated by remissions ≥3 mo) vs §3.1.2 Chronic (≥1 yr
   // without remission, or remissions <3 mo).
+  // Contradictory answers (both patterns asserted) resolve to NO subtype: the
+  // §3.1 parent shows unqualified rather than silently defaulting to episodic
+  // (clinical review 2026-09-07, BC-9). The subtype question is single-select,
+  // so this guard is defence in depth against restored or merged state.
   'cluster-headache': (s) =>
-    has(s, 'cluster-remission-ge-3mo')
-      ? { id: 'cluster-episodic', label: 'Episodic cluster headache', section: 'ICHD-3 §3.1.1' }
-      : has(s, 'cluster-no-remission-or-lt-3mo')
-        ? { id: 'cluster-chronic', label: 'Chronic cluster headache', section: 'ICHD-3 §3.1.2' }
-        : undefined,
+    has(s, 'cluster-remission-ge-3mo') && has(s, 'cluster-no-remission-or-lt-3mo')
+      ? undefined
+      : has(s, 'cluster-remission-ge-3mo')
+        ? { id: 'cluster-episodic', label: 'Episodic cluster headache', section: 'ICHD-3 §3.1.1' }
+        : has(s, 'cluster-no-remission-or-lt-3mo')
+          ? { id: 'cluster-chronic', label: 'Chronic cluster headache', section: 'ICHD-3 §3.1.2' }
+          : undefined,
   // §13.1.1.1/.2/.3 trigeminal-neuralgia aetiology (investigation-determined).
   // Precedence: an underlying disease demonstrated → secondary (regardless of NVC);
   // else NVC with morphological change → classical; else adequate workup negative →

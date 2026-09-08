@@ -153,7 +153,18 @@ export const PathwayHeader: React.FC<PathwayHeaderProps> = ({
             }`}
             aria-label="Copy summary"
           >
-            {copyConfirm === 'failed' ? 'Copy failed' : copyConfirm ? 'Copied ✓' : 'Copy'}
+            {/* Explicit comparisons, not truthiness: copyConfirm is
+                boolean | CopyState, and the CopyState 'idle' is a truthy STRING.
+                The bare `copyConfirm ?` branch rendered "Copied ✓" on a fresh
+                page load for any consumer passing 'idle', which the clinic
+                headache pathway does. The aria-live branch above always compared
+                explicitly, so screen readers heard the truth while the visible
+                label lied. Fixed 2026-09-07 (headache pathway user review). */}
+            {copyConfirm === 'failed'
+              ? 'Copy failed'
+              : copyConfirm === 'copied' || copyConfirm === true
+              ? 'Copied ✓'
+              : 'Copy'}
           </button>
           {shareText && (
             <ShareButton

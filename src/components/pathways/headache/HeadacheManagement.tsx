@@ -1,4 +1,5 @@
 import React from 'react';
+import type { PhenotypeId } from '../../../data/clinicHeadacheData';
 
 /**
  * HeadacheManagement — per-phenotype treatment/management cards for the clinic
@@ -10,11 +11,15 @@ import React from 'react';
  * renderer. If a second pathway needs per-phenotype management cards, revisit
  * for a shared shape (mirrors the HeadacheResultList fork note).
  *
- * Stage One-b scope: every dosing card below is relocated BYTE-FOR-BYTE from
- * ClinicHeadachePathway.tsx (the former inline treatment block). No dosing,
- * threshold, grade, drug, or qualifier text is changed; verbatim relocation is
- * a hard requirement of the clinical-review gate
- * (docs/reviews/clinical-headache-treatment-onrow-expander.md). The ICHD-3
+ * Stage One-b scope: the original ten dosing cards below are relocated
+ * BYTE-FOR-BYTE from ClinicHeadachePathway.tsx (the former inline treatment
+ * block). For those ten, no dosing, threshold, grade, drug, or qualifier text
+ * is changed; verbatim relocation is a hard requirement of the clinical-review
+ * gate (docs/reviews/clinical-headache-treatment-onrow-expander.md).
+ * EXCEPTION: the trigeminal-neuralgia and occipital-neuralgia cards are NEWLY
+ * AUTHORED (2026-09-07), not relocations, and are gated by their own review,
+ * docs/reviews/clinical-PR-headache-v4-routing-2026-09-07.md. Verify those two
+ * against their cited sources, never against the former page block (BC-12). The ICHD-3
  * criteria cards are intentionally NOT here: criteria render once in the row
  * above; the 7 pure-criteria claims are carried as hidden literal markers in
  * HeadacheResultList, and the ndph criteria claim (which bundled a management
@@ -43,17 +48,24 @@ const Row: React.FC<{ label: string; value: React.ReactNode }> = ({ label, value
 const CARD = 'bg-white border border-slate-100 rounded-xl divide-y divide-slate-50';
 const DL = 'm-0 divide-y divide-slate-50';
 
-// Phenotypes that carry a management block (the 10 that had inline treatment in
-// the former page block). The 11th engine phenotype had no treatment card and
-// gets no "Show management" disclosure (preserves prior behaviour).
-const MANAGED = new Set<string>([
+// Phenotypes that carry a management block: the ten relocated cards plus the
+// TN and occipital cards authored 2026-09-07 (12 of the 16 engine phenotypes).
+// The remaining phenotypes have no treatment card and get no "Show management"
+// disclosure (preserves prior behaviour).
+const MANAGED = new Set<PhenotypeId>([
   'migraine-without-aura', 'migraine-with-aura',
   'episodic-tth', 'chronic-tth',
   'cluster-headache', 'hemicrania-continua', 'ndph',
   'chronic-migraine', 'paroxysmal-hemicrania', 'sunct-suna',
+  // Added 2026-09-07 (user review, finding 1). A TN persona reached LEADING and
+  // the only management on the page was the runner-up's migraine block: a
+  // correct diagnosis wearing the wrong disease's plan. Content bounded by the
+  // nahas-2024-continuum-cranial-neuralgias quoted_text plus the ICHD-3 13.1.1
+  // aetiology framework already reviewed with the phenotype.
+  'trigeminal-neuralgia', 'occipital-neuralgia',
 ]);
 
-export const hasHeadacheManagement = (phenotypeId: string): boolean => MANAGED.has(phenotypeId);
+export const hasHeadacheManagement = (phenotypeId: string): boolean => MANAGED.has(phenotypeId as PhenotypeId);
 
 export const HeadacheManagement: React.FC<{ phenotypeId: string }> = ({ phenotypeId }) => {
   switch (phenotypeId) {
@@ -202,6 +214,38 @@ export const HeadacheManagement: React.FC<{ phenotypeId: string }> = ({ phenotyp
               <Row label="Titration" value="Increase to 75 to 150 mg/day if incomplete response (max 150 mg/day per Goadsby 2024 quoted text)" />
               <Row label="GI protection" value="PPI co-prescription is mandatory" />
               <Row label="Diagnostic confirmation" value="Complete response within 1 to 2 weeks confirms the paroxysmal hemicrania phenotype" />
+            </dl>
+          </div>
+        </div>
+      );
+
+    case 'trigeminal-neuralgia':
+      return (
+        <div className="space-y-3">
+          <div data-claim="clinic-headache-tn-workup" className={CARD}>
+            <SectionHeader>Aetiology subtypes (ICHD-3 13.1.1, imaging-determined)</SectionHeader>
+            <dl className={DL}>
+              <Row label="MRI + electrophysiology" value="Classify: classical (neurovascular compression WITH morphological change), secondary (MS, cerebellopontine-angle tumour, AVM), or idiopathic (adequate MRI and electrophysiology negative; a vessel-nerve contact without morphological change is still idiopathic)" />
+            </dl>
+          </div>
+          <div data-claim="clinic-headache-tn-management" className={CARD}>
+            <SectionHeader>Treatment (Nahas Continuum 2024)</SectionHeader>
+            <dl className={DL}>
+              <Row label="First-line" value="Carbamazepine (Level A) or oxcarbazepine (Level B)" />
+              <Row label="Note" value="Treatment response is not an ICHD-3 13.1.1 criterion. Do not use it to confirm or exclude the diagnosis." />
+            </dl>
+          </div>
+        </div>
+      );
+
+    case 'occipital-neuralgia':
+      return (
+        <div className="space-y-3">
+          <div data-claim="clinic-headache-on-management" className={CARD}>
+            <SectionHeader>Treatment (Nahas Continuum 2024)</SectionHeader>
+            <dl className={DL}>
+              <Row label="First-line" value="Greater and/or lesser occipital nerve block" />
+              <Row label="Diagnostic criterion" value="ICHD-3 13.4 criterion D requires that the pain is eased temporarily by local anaesthetic block of the affected nerve(s)." />
             </dl>
           </div>
         </div>

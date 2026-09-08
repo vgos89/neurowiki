@@ -1,0 +1,906 @@
+diff --git a/public/sitemap.xml b/public/sitemap.xml
+index 68c9539..8df50d3 100644
+--- a/public/sitemap.xml
++++ b/public/sitemap.xml
+@@ -80,6 +80,12 @@
+     <changefreq>monthly</changefreq>
+     <priority>0.8</priority>
+   </url>
++  <url>
++    <loc>https://www.neurowiki.ai/pathways/headache-clinic</loc>
++    <lastmod>2026-09-08</lastmod>
++    <changefreq>monthly</changefreq>
++    <priority>0.8</priority>
++  </url>
+ 
+   <!-- GCA pathway retired 2026-05-15 (tool was not validated). -->
+ 
+diff --git a/src/components/pathways/PathwayHeader.tsx b/src/components/pathways/PathwayHeader.tsx
+index ac5e920..da03261 100644
+--- a/src/components/pathways/PathwayHeader.tsx
++++ b/src/components/pathways/PathwayHeader.tsx
+@@ -153,7 +153,18 @@ export const PathwayHeader: React.FC<PathwayHeaderProps> = ({
+             }`}
+             aria-label="Copy summary"
+           >
+-            {copyConfirm === 'failed' ? 'Copy failed' : copyConfirm ? 'Copied ✓' : 'Copy'}
++            {/* Explicit comparisons, not truthiness: copyConfirm is
++                boolean | CopyState, and the CopyState 'idle' is a truthy STRING.
++                The bare `copyConfirm ?` branch rendered "Copied ✓" on a fresh
++                page load for any consumer passing 'idle', which the clinic
++                headache pathway does. The aria-live branch above always compared
++                explicitly, so screen readers heard the truth while the visible
++                label lied. Fixed 2026-09-07 (headache pathway user review). */}
++            {copyConfirm === 'failed'
++              ? 'Copy failed'
++              : copyConfirm === 'copied' || copyConfirm === true
++              ? 'Copied ✓'
++              : 'Copy'}
+           </button>
+           {shareText && (
+             <ShareButton
+diff --git a/src/components/pathways/headache/HeadacheManagement.tsx b/src/components/pathways/headache/HeadacheManagement.tsx
+index b322d1c..490c167 100644
+--- a/src/components/pathways/headache/HeadacheManagement.tsx
++++ b/src/components/pathways/headache/HeadacheManagement.tsx
+@@ -1,4 +1,5 @@
+ import React from 'react';
++import type { PhenotypeId } from '../../../data/clinicHeadacheData';
+ 
+ /**
+  * HeadacheManagement — per-phenotype treatment/management cards for the clinic
+@@ -10,11 +11,15 @@ import React from 'react';
+  * renderer. If a second pathway needs per-phenotype management cards, revisit
+  * for a shared shape (mirrors the HeadacheResultList fork note).
+  *
+- * Stage One-b scope: every dosing card below is relocated BYTE-FOR-BYTE from
+- * ClinicHeadachePathway.tsx (the former inline treatment block). No dosing,
+- * threshold, grade, drug, or qualifier text is changed; verbatim relocation is
+- * a hard requirement of the clinical-review gate
+- * (docs/reviews/clinical-headache-treatment-onrow-expander.md). The ICHD-3
++ * Stage One-b scope: the original ten dosing cards below are relocated
++ * BYTE-FOR-BYTE from ClinicHeadachePathway.tsx (the former inline treatment
++ * block). For those ten, no dosing, threshold, grade, drug, or qualifier text
++ * is changed; verbatim relocation is a hard requirement of the clinical-review
++ * gate (docs/reviews/clinical-headache-treatment-onrow-expander.md).
++ * EXCEPTION: the trigeminal-neuralgia and occipital-neuralgia cards are NEWLY
++ * AUTHORED (2026-09-07), not relocations, and are gated by their own review,
++ * docs/reviews/clinical-PR-headache-v4-routing-2026-09-07.md. Verify those two
++ * against their cited sources, never against the former page block (BC-12). The ICHD-3
+  * criteria cards are intentionally NOT here: criteria render once in the row
+  * above; the 7 pure-criteria claims are carried as hidden literal markers in
+  * HeadacheResultList, and the ndph criteria claim (which bundled a management
+@@ -43,17 +48,24 @@ const Row: React.FC<{ label: string; value: React.ReactNode }> = ({ label, value
+ const CARD = 'bg-white border border-slate-100 rounded-xl divide-y divide-slate-50';
+ const DL = 'm-0 divide-y divide-slate-50';
+ 
+-// Phenotypes that carry a management block (the 10 that had inline treatment in
+-// the former page block). The 11th engine phenotype had no treatment card and
+-// gets no "Show management" disclosure (preserves prior behaviour).
+-const MANAGED = new Set<string>([
++// Phenotypes that carry a management block: the ten relocated cards plus the
++// TN and occipital cards authored 2026-09-07 (12 of the 16 engine phenotypes).
++// The remaining phenotypes have no treatment card and get no "Show management"
++// disclosure (preserves prior behaviour).
++const MANAGED = new Set<PhenotypeId>([
+   'migraine-without-aura', 'migraine-with-aura',
+   'episodic-tth', 'chronic-tth',
+   'cluster-headache', 'hemicrania-continua', 'ndph',
+   'chronic-migraine', 'paroxysmal-hemicrania', 'sunct-suna',
++  // Added 2026-09-07 (user review, finding 1). A TN persona reached LEADING and
++  // the only management on the page was the runner-up's migraine block: a
++  // correct diagnosis wearing the wrong disease's plan. Content bounded by the
++  // nahas-2024-continuum-cranial-neuralgias quoted_text plus the ICHD-3 13.1.1
++  // aetiology framework already reviewed with the phenotype.
++  'trigeminal-neuralgia', 'occipital-neuralgia',
+ ]);
+ 
+-export const hasHeadacheManagement = (phenotypeId: string): boolean => MANAGED.has(phenotypeId);
++export const hasHeadacheManagement = (phenotypeId: string): boolean => MANAGED.has(phenotypeId as PhenotypeId);
+ 
+ export const HeadacheManagement: React.FC<{ phenotypeId: string }> = ({ phenotypeId }) => {
+   switch (phenotypeId) {
+@@ -207,6 +219,38 @@ export const HeadacheManagement: React.FC<{ phenotypeId: string }> = ({ phenotyp
+         </div>
+       );
+ 
++    case 'trigeminal-neuralgia':
++      return (
++        <div className="space-y-3">
++          <div data-claim="clinic-headache-tn-workup" className={CARD}>
++            <SectionHeader>Aetiology subtypes (ICHD-3 13.1.1, imaging-determined)</SectionHeader>
++            <dl className={DL}>
++              <Row label="MRI + electrophysiology" value="Classify: classical (neurovascular compression WITH morphological change), secondary (MS, cerebellopontine-angle tumour, AVM), or idiopathic (adequate MRI and electrophysiology negative; a vessel-nerve contact without morphological change is still idiopathic)" />
++            </dl>
++          </div>
++          <div data-claim="clinic-headache-tn-management" className={CARD}>
++            <SectionHeader>Treatment (Nahas Continuum 2024)</SectionHeader>
++            <dl className={DL}>
++              <Row label="First-line" value="Carbamazepine (Level A) or oxcarbazepine (Level B)" />
++              <Row label="Note" value="Treatment response is not an ICHD-3 13.1.1 criterion. Do not use it to confirm or exclude the diagnosis." />
++            </dl>
++          </div>
++        </div>
++      );
++
++    case 'occipital-neuralgia':
++      return (
++        <div className="space-y-3">
++          <div data-claim="clinic-headache-on-management" className={CARD}>
++            <SectionHeader>Treatment (Nahas Continuum 2024)</SectionHeader>
++            <dl className={DL}>
++              <Row label="First-line" value="Greater and/or lesser occipital nerve block" />
++              <Row label="Diagnostic criterion" value="ICHD-3 13.4 criterion D requires that the pain is eased temporarily by local anaesthetic block of the affected nerve(s)." />
++            </dl>
++          </div>
++        </div>
++      );
++
+     case 'sunct-suna':
+       return (
+         <div className="space-y-3">
+diff --git a/src/components/pathways/headache/HeadacheResultV4.tsx b/src/components/pathways/headache/HeadacheResultV4.tsx
+index 42d9e8f..d9a033a 100644
+--- a/src/components/pathways/headache/HeadacheResultV4.tsx
++++ b/src/components/pathways/headache/HeadacheResultV4.tsx
+@@ -38,6 +38,25 @@ import { HeadacheDotMeter } from './HeadacheDotMeter';
+ import { CriteriaList } from './CriteriaList';
+ import { HeadacheManagement, hasHeadacheManagement } from './HeadacheManagement';
+ 
++// The appendix entity is special-cased in three places below; one constant so
++// a rename cannot half-apply (architect review 2026-09-08, condition 3).
++const VESTIBULAR_MIGRAINE_ID = 'vestibular-migraine';
++
++/**
++ * Leading-gap note gate. True only when the top-ranked candidate has no
++ * management module AND a management block from a lower slot is about to
++ * render (manageable nonempty, so the note can never point at an absent
++ * block), AND the top-ranked candidate is not vestibular migraine (VM
++ * legitimately steers to the migraine block, so "do not apply" would be
++ * wrong there). Wording constraints from clinical review BC-8 live at the
++ * render site. Exported for headacheResultV4.invariants.test.tsx.
++ */
++export function showLeadingGapNote(top2: BandedMatch[], manageable: BandedMatch[]): boolean {
++  return manageable.length > 0
++    && !hasHeadacheManagement(top2[0].match.phenotypeId)
++    && top2[0].match.phenotypeId !== VESTIBULAR_MIGRAINE_ID;
++}
++
+ // Per-flag workup guidance, relocated verbatim from the prior pathway
+ // (ClinicHeadachePathway.tsx workupNotesForFlags) so the reviewed content carries.
+ // B-4: each red flag names its must-not-miss suspect + first investigation,
+@@ -120,7 +139,7 @@ const SafetyStrip: React.FC = () => (
+     </div>
+     <p className="text-sm text-slate-700 leading-relaxed mt-1">
+       Rule out secondary causes first: SAH, GCA, CVT, or mass. ICHD-3 criteria apply only after these are excluded.{' '}
+-      <a href="/pathways/headache-workup" className="text-neuro-600 font-medium hover:underline whitespace-nowrap">Review red flags →</a>
++      <a href="/guide/headache-workup" className="text-neuro-600 font-medium hover:underline whitespace-nowrap">Review red flags →</a>
+     </p>
+   </div>
+ );
+@@ -325,7 +344,7 @@ export const HeadacheResultV4: React.FC<HeadacheResultV4Props> = ({
+   const manageable = top2.filter(bm => hasHeadacheManagement(bm.match.phenotypeId));
+   // M2: Vestibular migraine is an ICHD-3 appendix entity with no dedicated dosing —
+   // it steers to migraine management rather than mounting a destination-less block.
+-  const hasVM = top2.some(bm => bm.match.phenotypeId === 'vestibular-migraine');
++  const hasVM = top2.some(bm => bm.match.phenotypeId === VESTIBULAR_MIGRAINE_ID);
+ 
+   return (
+     <div className="rounded-xl border border-slate-100 shadow-sm bg-white overflow-hidden">
+@@ -375,6 +394,18 @@ export const HeadacheResultV4: React.FC<HeadacheResultV4Props> = ({
+         {(manageable.length > 0 || hasVM) && (
+           <div className="mt-5 pt-4 border-t border-slate-100">
+             <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Management</div>
++            {/* Leading-gap note (user review 2026-09-07, finding 1: a leading
++                trigeminal neuralgia rendered only the runner-up's migraine block).
++                Gate semantics live on showLeadingGapNote(). Wording constraints
++                (clinical review BC-8): name the phenotypes, give an instruction,
++                never say "lower-ranked" or "leading" — both can be false, since
++                equal-strength candidates tie-break on absolute criteria count and
++                top2 can come from the Possible band when Leading is empty. */}
++            {showLeadingGapNote(top2, manageable) && (
++              <p className="mb-2 text-[12px] text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 leading-relaxed">
++                No management module for {top2[0].match.name} yet. The guidance below is for {manageable[0].match.name}. Do not apply it to {top2[0].match.name}.
++              </p>
++            )}
+             {manageable.map(bm => (
+               <ManagementDisclosure key={bm.match.phenotypeId} m={bm.match} />
+             ))}
+diff --git a/src/components/pathways/headache/headacheResultV4.invariants.test.tsx b/src/components/pathways/headache/headacheResultV4.invariants.test.tsx
+index e4805e5..63742b9 100644
+--- a/src/components/pathways/headache/headacheResultV4.invariants.test.tsx
++++ b/src/components/pathways/headache/headacheResultV4.invariants.test.tsx
+@@ -2,8 +2,10 @@ import { describe, it, expect } from 'vitest';
+ import { readFileSync } from 'node:fs';
+ import React from 'react';
+ import { renderToStaticMarkup } from 'react-dom/server';
+-import { HeadacheResultV4 } from './HeadacheResultV4';
++import { HeadacheResultV4, showLeadingGapNote } from './HeadacheResultV4';
++import { hasHeadacheManagement } from './HeadacheManagement';
+ import { bandPhenotypes } from '../../../data/headacheBanding';
++import type { BandedMatch } from '../../../data/headacheBanding';
+ import { evaluateHeadachePhenotypes, type ChipId } from '../../../data/clinicHeadacheData';
+ 
+ const SAFETY_STRIP_MARKER = 'Before accepting any pattern';
+@@ -83,3 +85,37 @@ describe('v4 source carries no displayed-percentage or percentage math', () => {
+     }
+   });
+ });
++
++describe('HeadacheResultV4 — leading-gap note (BC-8 / architect condition 3)', () => {
++  // Hypnic headache (no management module) leads; episodic TTH (has a module)
++  // is the runner-up. Chip set verified against the live engine 2026-09-08.
++  const GAP_CHIPS: Set<ChipId> = new Set<ChipId>([
++    'onset-only-during-sleep-waking', 'freq-ge-10-per-month', 'pattern-ge-3-months', 'dur-15min-to-4h',
++    'freq-ge-15-per-month', 'loc-bilateral', 'qual-pressing-tightening', 'sev-mild', 'act-not-aggravated',
++  ]);
++
++  it('top-ranked pattern without a module: the note renders, names both phenotypes, and instructs', () => {
++    const banded = bandPhenotypes(evaluateHeadachePhenotypes(GAP_CHIPS));
++    const candidates = [...banded.leading, ...banded.possible, ...banded.lessLikely];
++    // Self-checking premises: a data change that hollows this scenario must
++    // fail here, not silently pass an empty render.
++    expect(candidates[0]?.match.phenotypeId).toBe('hypnic-headache');
++    expect(hasHeadacheManagement(candidates[0].match.phenotypeId)).toBe(false);
++    expect(candidates.slice(0, 2).some(bm => hasHeadacheManagement(bm.match.phenotypeId))).toBe(true);
++    const html = render({ banded });
++    expect(html).toContain('No management module for Hypnic headache yet.');
++    expect(html).toContain('Do not apply it to Hypnic headache.');
++  });
++
++  it('predicate: silent when nothing manageable renders, and when vestibular migraine leads', () => {
++    const fake = (id: string, name: string) => ({ match: { phenotypeId: id, name } }) as unknown as BandedMatch;
++    // No manageable block below → the note must not point at nothing (BC-8 gate).
++    expect(showLeadingGapNote([fake('hypnic-headache', 'Hypnic headache')], [])).toBe(false);
++    // VM leads → VM deliberately steers to the migraine block; "do not apply"
++    // would contradict the M2 steering paragraph.
++    expect(showLeadingGapNote(
++      [fake('vestibular-migraine', 'Vestibular migraine'), fake('migraine-without-aura', 'Migraine without aura')],
++      [fake('migraine-without-aura', 'Migraine without aura')],
++    )).toBe(false);
++  });
++});
+diff --git a/src/config/routeManifest.ts b/src/config/routeManifest.ts
+index 9551fd4..1110d87 100644
+--- a/src/config/routeManifest.ts
++++ b/src/config/routeManifest.ts
+@@ -411,9 +411,13 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
+     bottomNavTab: 'pathways',
+     railItem: 'pathways',
+     meta: {
+-      title: 'Clinic Headache Pathway: Outpatient Migraine Preventive | NeuroWiki',
+-      description: 'Outpatient migraine management pathway. MIDAS-driven preventive threshold, comorbidity-guided agent selection, CGRP mAb escalation, and MOH prevention.',
+-      keywords: 'outpatient migraine pathway, migraine preventive therapy, CGRP mAb selection, MIDAS score, medication overuse headache, migraine clinic pathway',
++      // Rewritten 2026-09-07: this metadata still described the RETIRED
++      // MIDAS/CGRP preventive pathway. The live page is the V4 ICHD-3 pattern
++      // finder, so the tab title, search snippet, and page promised a different
++      // tool than the one that loads.
++      title: 'Headache Pattern Finder: ICHD-3 Differential Tool | NeuroWiki',
++      description: 'ICHD-3 pattern finder for headache: live differential across migraine, tension-type, cluster and the TACs, and trigeminal neuralgia. Not a diagnosis.',
++      keywords: 'ICHD-3 criteria tool, headache differential diagnosis, headache pattern finder, migraine vs tension-type headache, trigeminal neuralgia criteria, cluster headache criteria, medication overuse headache',
+     },
+   },
+   {
+diff --git a/src/data/clinicHeadacheData.ts b/src/data/clinicHeadacheData.ts
+index 791e110..bc9f2e0 100644
+--- a/src/data/clinicHeadacheData.ts
++++ b/src/data/clinicHeadacheData.ts
+@@ -47,6 +47,7 @@ export type ChipId =
+   | 'onset-only-during-sleep-waking' | 'freq-ge-10-per-month' | 'dur-15min-to-4h'
+   // Pain location
+   | 'loc-unilateral' | 'loc-bilateral' | 'loc-orbital-temporal'
++  | 'loc-facial-region'                       // face as presenting site; routes the §13.1 screen
+   // Pain quality
+   | 'qual-pulsating' | 'qual-pressing-tightening' | 'qual-sharp-stabbing'
+   // Pain severity
+@@ -61,6 +62,7 @@ export type ChipId =
+   | 'sym-photophobia' | 'sym-phonophobia'
+   | 'sym-restlessness' | 'sym-autonomic-ipsilateral'
+   | 'sym-conjunctival-injection' | 'sym-lacrimation' | 'sym-other-cranial-autonomic'  // §3.3 SUNCT/SUNA itemized autonomic
++  | 'sym-reversible-neuro-reported'  // ROUTING FLAG: opens the aura screen; contributes to no criterion
+   // Chronic migraine — ICHD-3 §1.3 criterion C disjunction
+   | 'migraine-features-ge-8-per-month' | 'triptan-response-positive'
+   // Aura features
+@@ -351,6 +353,14 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
+       { id: 'loc-unilateral', label: 'Unilateral location', teachWhenSelected: '1.1 C feature 1 (migraine) and 3.1 (cluster). 3.4 Hemicrania continua is strictly unilateral.' },
+       { id: 'loc-bilateral', label: 'Bilateral location', teachWhenSelected: '2.2 C feature 1 (TTH).' },
+       { id: 'loc-orbital-temporal', label: 'Orbital, supraorbital, or temporal location', teachWhenSelected: '3.1 Cluster criterion B location.' },
++      // ROUTING FLAG, not a criterion contributor. Label must not mention the
++      // eye or orbit: see the [PAIR - label constraint] note on the loc-face
++      // answer in headacheQuestions.ts (clinical review 2026-09-07, BC-6).
++      // NO teachWhenSelected: HEADACHE_CHIP_GROUPS teach texts are DORMANT in
++      // the V4 pathway (no component mounts ChipGroup; getChip() serves label
++      // lookups only), so clinical prose authored here reaches no user while
++      // reading as if reviewed (clinical review round 2, BI-3).
++      { id: 'loc-facial-region', label: 'Facial location (cheek, jaw, or upper lip)' },
+ 
+       { id: 'qual-pulsating', label: 'Throbbing or pulsating quality', teachWhenSelected: '1.1 C feature 2 (migraine).' },
+       { id: 'qual-pressing-tightening', label: 'Pressing or tightening (non-pulsating)', teachWhenSelected: '2.2 C feature 2 (TTH).' },
+@@ -416,6 +426,12 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
+       { id: 'aura-motor', label: 'Motor aura (weakness)', teachWhenSelected: 'Motor aura indicates 1.2.3 Hemiplegic migraine. Refer for genetic evaluation.' },
+       { id: 'aura-brainstem', label: 'Two or more brainstem symptoms (dysarthria, vertigo, tinnitus, diplopia, ataxia)', teachWhenSelected: 'ICHD-3 1.2.2 Migraine with brainstem aura requires at least two brainstem symptoms; a single brainstem symptom does not qualify.' },
+       { id: 'aura-retinal', label: 'Retinal aura (monocular visual symptoms)' },
++      // ROUTING FLAG, not a criterion contributor. The BC-7 vascular-mimic
++      // caution lives on q-aura's teach string in headacheQuestions.ts — the
++      // one surface that renders. NO teachWhenSelected here: this surface is
++      // dormant in V4 and an earlier draft misstated the 1.2 C three-of-six
++      // gate on it (clinical review round 2, BI-2/BI-3).
++      { id: 'sym-reversible-neuro-reported', label: 'Reversible visual or neurologic symptoms reported' },
+       { id: 'aura-fully-reversible', label: 'Aura is fully reversible' },
+       { id: 'aura-spread-ge-5min', label: 'Aura spreads gradually over ≥5 minutes' },
+       { id: 'aura-each-5-to-60min', label: 'Each aura symptom lasts 5 to 60 minutes' },
+@@ -856,7 +872,12 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
+       { id: 'tn-A', label: 'Unilateral pain in one or more trigeminal divisions, no radiation beyond', description: 'ICHD-3 13.1.1 A: recurrent paroxysms of unilateral facial pain in the distribution(s) of one or more divisions of the trigeminal nerve, with no radiation beyond.', evaluate: s => has(s, 'loc-unilateral') && has(s, 'loc-trigeminal-distribution'), contributingChips: ['loc-unilateral', 'loc-trigeminal-distribution'], role: 'suppress-gate' },
+       // tn-B: suppress-gate (DROP). ALL of: <=2 min, severe, shock/shooting/stabbing/
+       // sharp. No Probable-TN section, so a feature miss cannot demote — suppress.
+-      { id: 'tn-B', label: 'Brief (up to 2 min), severe, electric-shock / shooting / stabbing pain', description: 'ICHD-3 13.1.1 B: pain has all of: 1) lasting a fraction of a second to 2 minutes, 2) severe intensity, 3) electric shock-like, shooting, stabbing or sharp in quality.', evaluate: s => has(s, 'dur-fraction-sec-to-2min') && has(s, 'sev-severe') && (has(s, 'qual-electric-shock-shooting') || has(s, 'qual-sharp-stabbing')), contributingChips: ['dur-fraction-sec-to-2min', 'sev-severe', 'qual-electric-shock-shooting', 'qual-sharp-stabbing'], role: 'suppress-gate' },
++      // 13.1.1 B.2 says "severe intensity": EITHER severity answer satisfies it
++      // (q-severity is single-select, and TN is routinely described as among the
++      // most severe pains known, so "very severe" is the expected answer; with
++      // sev-severe alone the whole phenotype silently dropped). Mirrors
++      // cluster-B. Medical review 2026-09-07, U1.
++      { id: 'tn-B', label: 'Brief (up to 2 min), severe, electric-shock / shooting / stabbing pain', description: 'ICHD-3 13.1.1 B: pain has all of: 1) lasting a fraction of a second to 2 minutes, 2) severe intensity, 3) electric shock-like, shooting, stabbing or sharp in quality.', evaluate: s => has(s, 'dur-fraction-sec-to-2min') && (has(s, 'sev-severe') || has(s, 'sev-very-severe')) && (has(s, 'qual-electric-shock-shooting') || has(s, 'qual-sharp-stabbing')), contributingChips: ['dur-fraction-sec-to-2min', 'sev-severe', 'sev-very-severe', 'qual-electric-shock-shooting', 'qual-sharp-stabbing'], role: 'suppress-gate' },
+       // tn-C: suppress-gate (DROP). The pathognomonic trigger (§13.1.1 C / Note 4).
+       { id: 'tn-C', label: 'Precipitated by innocuous stimuli in the affected area', description: 'ICHD-3 13.1.1 C: precipitated by innocuous stimuli within the affected trigeminal distribution. Required even when some attacks appear spontaneous (Note 4).', evaluate: s => has(s, 'trigger-innocuous-stimulus'), contributingChips: ['trigger-innocuous-stimulus'], role: 'suppress-gate' },
+     ],
+@@ -882,7 +903,7 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
+       // home, so a <2-of-3 shortfall hides, not demotes (full-or-nothing).
+       // B.3 quality is "shooting, stabbing OR sharp" — count it as ONE characteristic
+       // satisfied by either qual-sharp-stabbing or qual-electric-shock-shooting (no double-count).
+-      { id: 'on-B', label: 'At least 2 of: seconds-to-minutes paroxysms, severe, shooting/stabbing/sharp', description: 'ICHD-3 13.4 B: at least two of: 1) recurring in paroxysmal attacks lasting a few seconds to minutes, 2) severe intensity, 3) shooting, stabbing or sharp in quality.', evaluate: s => (countOf(s, ['dur-seconds-to-minutes', 'sev-severe']) + ((has(s, 'qual-sharp-stabbing') || has(s, 'qual-electric-shock-shooting')) ? 1 : 0)) >= 2, contributingChips: ['dur-seconds-to-minutes', 'sev-severe', 'qual-sharp-stabbing', 'qual-electric-shock-shooting'], role: 'suppress-gate' },
++      { id: 'on-B', label: 'At least 2 of: seconds-to-minutes paroxysms, severe, shooting/stabbing/sharp', description: 'ICHD-3 13.4 B: at least two of: 1) recurring in paroxysmal attacks lasting a few seconds to minutes, 2) severe intensity, 3) shooting, stabbing or sharp in quality.', evaluate: s => ((has(s, 'dur-seconds-to-minutes') ? 1 : 0) + ((has(s, 'sev-severe') || has(s, 'sev-very-severe')) ? 1 : 0) + ((has(s, 'qual-sharp-stabbing') || has(s, 'qual-electric-shock-shooting')) ? 1 : 0)) >= 2, contributingChips: ['dur-seconds-to-minutes', 'sev-severe', 'sev-very-severe', 'qual-sharp-stabbing', 'qual-electric-shock-shooting'], role: 'suppress-gate' },
+       // on-C: suppress-gate (DROP). Both associations required: C.1 AND (C.2a OR C.2b).
+       { id: 'on-C', label: 'Scalp dysaesthesia/allodynia AND nerve tenderness or trigger point', description: 'ICHD-3 13.4 C: both of: 1) dysaesthesia and/or allodynia during innocuous scalp/hair stimulation; 2) tenderness over the affected nerve branches, or trigger points at the greater occipital nerve emergence or in the C2 distribution.', evaluate: s => has(s, 'scalp-dysaesthesia-allodynia') && has(s, 'occipital-nerve-tenderness-or-trigger'), contributingChips: ['scalp-dysaesthesia-allodynia', 'occipital-nerve-tenderness-or-trigger'], role: 'suppress-gate' },
+       // on-D: suppress-gate (DROP) + hiddenUntilTrial. Mandatory local-anaesthetic block relief.
+@@ -1144,12 +1165,18 @@ const SUBTYPE_RESOLVERS: Partial<Record<PhenotypeId, (s: Set<ChipId>) => Subtype
+         : undefined,
+   // §3.1.1 Episodic (bouts separated by remissions ≥3 mo) vs §3.1.2 Chronic (≥1 yr
+   // without remission, or remissions <3 mo).
++  // Contradictory answers (both patterns asserted) resolve to NO subtype: the
++  // §3.1 parent shows unqualified rather than silently defaulting to episodic
++  // (clinical review 2026-09-07, BC-9). The subtype question is single-select,
++  // so this guard is defence in depth against restored or merged state.
+   'cluster-headache': (s) =>
+-    has(s, 'cluster-remission-ge-3mo')
+-      ? { id: 'cluster-episodic', label: 'Episodic cluster headache', section: 'ICHD-3 §3.1.1' }
+-      : has(s, 'cluster-no-remission-or-lt-3mo')
+-        ? { id: 'cluster-chronic', label: 'Chronic cluster headache', section: 'ICHD-3 §3.1.2' }
+-        : undefined,
++    has(s, 'cluster-remission-ge-3mo') && has(s, 'cluster-no-remission-or-lt-3mo')
++      ? undefined
++      : has(s, 'cluster-remission-ge-3mo')
++        ? { id: 'cluster-episodic', label: 'Episodic cluster headache', section: 'ICHD-3 §3.1.1' }
++        : has(s, 'cluster-no-remission-or-lt-3mo')
++          ? { id: 'cluster-chronic', label: 'Chronic cluster headache', section: 'ICHD-3 §3.1.2' }
++          : undefined,
+   // §13.1.1.1/.2/.3 trigeminal-neuralgia aetiology (investigation-determined).
+   // Precedence: an underlying disease demonstrated → secondary (regardless of NVC);
+   // else NVC with morphological change → classical; else adequate workup negative →
+diff --git a/src/data/headachePhenotypeReachability.test.ts b/src/data/headachePhenotypeReachability.test.ts
+new file mode 100644
+index 0000000..d7e0f50
+--- /dev/null
++++ b/src/data/headachePhenotypeReachability.test.ts
+@@ -0,0 +1,252 @@
++import { describe, it, expect } from 'vitest';
++import { CORE_QUESTIONS, CONDITIONAL_BRANCHES, getActiveQuestions } from './headacheQuestions';
++import { evaluateHeadachePhenotypes, HEADACHE_PHENOTYPES, type ChipId } from './clinicHeadacheData';
++
++/**
++ * Reachability: an answer path THROUGH THE QUESTION FLOW reaches a strong
++ * match. Coverage today: 8 of the 16 engine phenotypes have walks; the
++ * inventory guard at the bottom tracks the other 8 as explicit debt
++ * (TASKS.md, headache reachability walks follow-up) and fails when a new
++ * phenotype is added without being walked or listed.
++ *
++ * The older reachability tests injected chips directly, which proves the
++ * criteria evaluate correctly but not that a clinician can produce those chips
++ * by answering questions. That distinction is exactly how the 2026-09-07 review
++ * findings survived: trigeminal neuralgia was fully diagnosable in the data and
++ * unreachable behind a single quality answer, and retinal migraine sat behind
++ * an aura screen that a retinal presentation never opened.
++ *
++ * walk() simulates the UI contract: at each step the question must be OFFERED
++ * given everything selected so far (core spine, or a branch whose `fires`
++ * predicate passes). An option answered on a screen the clinician would never
++ * have seen fails the walk, which is the property that matters.
++ */
++function walk(path: ReadonlyArray<readonly [string, string]>): Set<ChipId> {
++  const selected = new Set<ChipId>();
++  const answeredSingle = new Map<string, string>();
++  for (const [qid, optId] of path) {
++    const active = getActiveQuestions(selected);
++    const q = active.find((x) => x.id === qid);
++    expect(q, `question "${qid}" was not offered at this point in the flow`).toBeTruthy();
++    const opt = q!.options.find((o) => o.id === optId);
++    expect(opt, `option "${optId}" does not exist on "${qid}"`).toBeTruthy();
++    // Single-select fidelity (architect review 2026-09-08, condition 6): the
++    // UI replaces a single-select answer, it never stacks two. A walk that
++    // answers one twice asserts an unproducible chip set. State that is not
++    // producible through the UI (restored or merged drafts) is modelled by
++    // direct chip injection AFTER the walk, never by double-answering.
++    if (q!.select === 'single') {
++      expect(
++        answeredSingle.has(qid),
++        `single-select "${qid}" answered twice ("${answeredSingle.get(qid)}" then "${optId}") — not producible in the UI; inject chips directly instead`,
++      ).toBe(false);
++      answeredSingle.set(qid, optId);
++    }
++    opt!.chips.forEach((c) => selected.add(c));
++  }
++  return selected;
++}
++
++function strengthOf(selected: Set<ChipId>, phenotypeId: string) {
++  return evaluateHeadachePhenotypes(selected).find((m) => m.phenotypeId === phenotypeId)?.matchStrength;
++}
++
++// A migraine-without-aura spine, reused as the substrate several branches need.
++const MIGRAINE_SPINE: ReadonlyArray<readonly [string, string]> = [
++  ['q-onset', 'recurrent'], ['q-frequency', 'f-1-4'], ['q-duration', 'd-4-72h'],
++  ['q-attack-count', 'c-gt10'], ['q-chronicity', 'ch-ge3'], ['q-quality', 'qual-throb'],
++  ['q-location', 'loc-one'], ['q-severity', 'sev-mod'], ['q-activity', 'act-worse'],
++  ['q-associated', 'as-nausea-modsev'],
++];
++
++describe('phenotype reachability walks through the question flow', () => {
++  it('sanity: the walk itself enforces offering (a branch option cannot be answered cold)', () => {
++    // q-trigeminal must NOT be offered before any quality/location answer.
++    const offered = getActiveQuestions(new Set()).some((q) => q.id === 'q-trigeminal');
++    expect(offered).toBe(false);
++  });
++
++  it('migraine without aura — full, spine only', () => {
++    expect(strengthOf(walk(MIGRAINE_SPINE), 'migraine-without-aura')).toBe('full');
++  });
++
++  it('migraine with aura — full, aura branch opens on migraine features', () => {
++    const s = walk([...MIGRAINE_SPINE,
++      ['q-aura', 'aura-visual'], ['q-aura', 'aura-reversible'], ['q-aura', 'aura-onesided'],
++      ['q-aura', 'aura-spread'], ['q-aura', 'aura-5-60'], ['q-aura', 'aura-then-ha'],
++    ]);
++    expect(strengthOf(s, 'migraine-with-aura')).toBe('full');
++  });
++
++  it('REGRESSION (finding 2): the aura branch opens on reported neuro symptoms alone, with a non-migrainous headache', () => {
++    // Reversible-neuro presentation with monocular visual aura: mild pressing
++    // bilateral headache, no nausea, no photophobia. Before 2026-09-07 the aura
++    // screen never fired here and the patient exited as probable tension-type.
++    // The full 1.2 match rests on ICHD-3 1.2 C requiring only "headache", not a
++    // 1.1-meeting headache. This walk is the amaurosis-fugax-SHAPED presentation,
++    // so the retinal subtype's exclusion steer MUST ride along (clinical review
++    // BC-11): asserting the match without the steer would bless false reassurance.
++    const s = walk([
++      ['q-onset', 'recurrent'], ['q-frequency', 'f-1-4'], ['q-duration', 'd-4-72h'],
++      ['q-attack-count', 'c-gt10'], ['q-chronicity', 'ch-ge3'], ['q-quality', 'qual-press'],
++      ['q-location', 'loc-both'], ['q-severity', 'sev-mild'], ['q-activity', 'act-none'],
++      ['q-associated', 'as-reversible-neuro'],
++      ['q-aura', 'aura-retinal'], ['q-aura', 'aura-reversible'], ['q-aura', 'aura-onesided'],
++      ['q-aura', 'aura-spread'], ['q-aura', 'aura-5-60'], ['q-aura', 'aura-then-ha'],
++    ]);
++    const m = evaluateHeadachePhenotypes(s).find((x) => x.phenotypeId === 'migraine-with-aura');
++    expect(m?.matchStrength).toBe('full');
++    expect(m?.subtype?.id).toBe('retinal-migraine');
++    expect(m?.subtype?.note).toContain('amaurosis fugax');
++  });
++
++  it('REGRESSION (finding 3): trigeminal neuralgia — full, via the facial location answer with a NON-sharp quality', () => {
++    // The premise this walk needs is only that the TN screen opens WITHOUT the
++    // sharp-quality answer; a pressing quality establishes that without the
++    // internal contradiction of one pain described as both throbbing and
++    // shock-like (clinical review BC-11). Before 2026-09-07 the TN screen only
++    // opened on the sharp-stabbing answer, so this walk failed at q-trigeminal.
++    const s = walk([
++      ['q-onset', 'recurrent'], ['q-frequency', 'f-ge15'], ['q-duration', 'd-lt15'],
++      ['q-attack-count', 'c-gt10'], ['q-chronicity', 'ch-ge3'], ['q-quality', 'qual-press'],
++      ['q-location', 'loc-face'], ['q-severity', 'sev-sev'], ['q-activity', 'act-none'],
++      ['q-trigeminal', 'tn-distribution'], ['q-trigeminal', 'tn-shock'],
++      ['q-trigeminal', 'tn-brief'], ['q-trigeminal', 'tn-trigger'],
++    ]);
++    expect(strengthOf(s, 'trigeminal-neuralgia')).toBe('full');
++  });
++
++  it('trigeminal neuralgia — full, via the new electric-shock quality answer', () => {
++    const s = walk([
++      ['q-onset', 'recurrent'], ['q-frequency', 'f-ge15'], ['q-duration', 'd-lt15'],
++      ['q-attack-count', 'c-gt10'], ['q-chronicity', 'ch-ge3'], ['q-quality', 'qual-shock'],
++      ['q-location', 'loc-one'], ['q-severity', 'sev-sev'], ['q-activity', 'act-none'],
++      ['q-trigeminal', 'tn-distribution'], ['q-trigeminal', 'tn-brief'], ['q-trigeminal', 'tn-trigger'],
++    ]);
++    expect(strengthOf(s, 'trigeminal-neuralgia')).toBe('full');
++  });
++
++  it('REGRESSION (U1): trigeminal neuralgia — full, when severity is answered "very severe"', () => {
++    // TN is routinely described as among the most severe pains known, so "very
++    // severe" is the EXPECTED answer. Before 2026-09-07 tn-B accepted only
++    // sev-severe: this walk completed the whole TN screen and matched nothing.
++    const s = walk([
++      ['q-onset', 'recurrent'], ['q-frequency', 'f-ge15'], ['q-duration', 'd-lt15'],
++      ['q-attack-count', 'c-gt10'], ['q-chronicity', 'ch-ge3'], ['q-quality', 'qual-shock'],
++      ['q-location', 'loc-one'], ['q-severity', 'sev-vsev'], ['q-activity', 'act-none'],
++      ['q-trigeminal', 'tn-distribution'], ['q-trigeminal', 'tn-brief'], ['q-trigeminal', 'tn-trigger'],
++    ]);
++    expect(strengthOf(s, 'trigeminal-neuralgia')).toBe('full');
++  });
++
++  it('drift guard (BC-6): only the orbital option on q-location may mention the eye', () => {
++    // q-location is single-select, and cluster-B / ph-B demote-gates require
++    // loc-orbital-temporal, which only the orbital option contributes. A second
++    // option whose label mentions the eye siphons periorbital patients off that
++    // chip and silently caps cluster and paroxysmal hemicrania at Probable.
++    const q = CORE_QUESTIONS.find((x) => x.id === 'q-location')!;
++    const eyeMentions = q.options.filter((o) => /\beye\b|orbit/i.test(o.label));
++    expect(eyeMentions.map((o) => o.id)).toEqual(['loc-orbital']);
++  });
++
++  it('episodic tension-type — full, spine only', () => {
++    const s = walk([
++      ['q-onset', 'recurrent'], ['q-frequency', 'f-1-4'], ['q-duration', 'd-30min-7d'],
++      ['q-attack-count', 'c-gt10'], ['q-chronicity', 'ch-ge3'], ['q-quality', 'qual-press'],
++      ['q-location', 'loc-both'], ['q-severity', 'sev-mild'], ['q-activity', 'act-none'],
++    ]);
++    expect(strengthOf(s, 'episodic-tth')).toBe('full');
++  });
++
++  it('cluster headache — full via the ORBITAL answer (BC-6: periorbital patients must keep this path)', () => {
++    const s = walk([
++      ['q-onset', 'recurrent'], ['q-frequency', 'f-ge15'], ['q-duration', 'd-15-180'],
++      ['q-attack-count', 'c-gt10'], ['q-chronicity', 'ch-ge3'], ['q-quality', 'qual-sharp'],
++      ['q-location', 'loc-orbital'], ['q-severity', 'sev-vsev'], ['q-activity', 'act-none'],
++      ['q-associated', 'as-lacrimation'], ['q-associated', 'as-restless'],
++      ['q-cluster-detail', 'cluster-bout-freq'], ['q-cluster-subtype', 'cluster-episodic'],
++    ]);
++    const m = evaluateHeadachePhenotypes(s).find((x) => x.phenotypeId === 'cluster-headache');
++    expect(m?.matchStrength).toBe('full');
++    expect(m?.subtype?.id).toBe('cluster-episodic');
++  });
++
++  it('REGRESSION (BC-9): contradictory episodic + chronic cluster answers assert NO subtype', () => {
++    // The subtype question is single-select in the UI, but restored or merged
++    // state can still carry both chips; the resolver must not silently pick
++    // episodic. The parent 3.1 match stands, unqualified.
++    const s = walk([
++      ['q-onset', 'recurrent'], ['q-frequency', 'f-ge15'], ['q-duration', 'd-15-180'],
++      ['q-attack-count', 'c-gt10'], ['q-chronicity', 'ch-ge3'], ['q-quality', 'qual-sharp'],
++      ['q-location', 'loc-orbital'], ['q-severity', 'sev-vsev'], ['q-activity', 'act-none'],
++      ['q-associated', 'as-lacrimation'], ['q-associated', 'as-restless'],
++      ['q-cluster-detail', 'cluster-bout-freq'],
++      ['q-cluster-subtype', 'cluster-episodic'],
++    ]);
++    // Direct chip injection: the contradictory pair is NOT producible through
++    // the UI (q-cluster-subtype is single-select and walk() rejects a second
++    // answer). It models restored or merged draft state — the exact input the
++    // resolver guard exists for.
++    s.add('cluster-no-remission-or-lt-3mo');
++    const m = evaluateHeadachePhenotypes(s).find((x) => x.phenotypeId === 'cluster-headache');
++    expect(m?.matchStrength).toBe('full');
++    expect(m?.subtype).toBeUndefined();
++  });
++
++  it('occipital neuralgia — full via the sharp-quality branch (binary full-or-hidden: all criteria are suppress-gates)', () => {
++    const s = walk([
++      ['q-onset', 'recurrent'], ['q-frequency', 'f-ge15'], ['q-duration', 'd-lt15'],
++      ['q-attack-count', 'c-gt10'], ['q-chronicity', 'ch-ge3'], ['q-quality', 'qual-sharp'],
++      ['q-location', 'loc-one'], ['q-severity', 'sev-sev'], ['q-activity', 'act-none'],
++      ['q-occipital', 'on-loc'], ['q-occipital', 'on-dur'], ['q-occipital', 'on-dysaes'], ['q-occipital', 'on-tender'], ['q-occipital', 'on-block'],
++    ]);
++    expect(strengthOf(s, 'occipital-neuralgia')).toBe('full');
++  });
++
++  it('vestibular migraine — full once vertigo is reported (binary full-or-hidden)', () => {
++    const s = walk([...MIGRAINE_SPINE,
++      ['q-associated', 'as-vertigo'],
++      ['q-vestibular', 'vest-ge5'], ['q-vestibular', 'vest-intensity'], ['q-vestibular', 'vest-duration'],
++      ['q-vestibular', 'vest-migr-half'], ['q-vestibular', 'vest-history'],
++    ]);
++    expect(strengthOf(s, 'vestibular-migraine')).toBe('full');
++  });
++
++  it('hypnic headache — reachable from the sleep-only onset answer', () => {
++    const s = walk([
++      ['q-onset', 'sleep-only'], ['q-frequency', 'f-ge15'], ['q-duration', 'd-lt15'],
++      ['q-attack-count', 'c-gt10'], ['q-chronicity', 'ch-ge3'], ['q-quality', 'qual-press'],
++      ['q-location', 'loc-both'], ['q-severity', 'sev-mild'], ['q-activity', 'act-none'],
++      ['q-hypnic', 'hypnic-freq'], ['q-hypnic', 'hypnic-3mo'], ['q-hypnic', 'hypnic-dur'],
++    ]);
++    expect(['full', 'probable']).toContain(strengthOf(s, 'hypnic-headache'));
++  });
++
++  it('inventory guard: every engine phenotype is either walked above or explicitly tracked as debt', () => {
++    // Iterates HEADACHE_PHENOTYPES, the source of truth. The previous guard
++    // iterated evaluateHeadachePhenotypes(new Set()), which returns [] (no
++    // positive evidence), so its loop body never ran and it could never fail
++    // (clinical review BC-10). When a phenotype is added, this now fails until
++    // it is walked here or listed as debt. Debt walks are tracked in TASKS.md
++    // (headache reachability walks follow-up, 2026-09-07), prioritising the
++    // indomethacin- and autonomic-gated shapes that hid the original defects.
++    const WALKED = new Set([
++      'migraine-without-aura', 'migraine-with-aura', 'episodic-tth',
++      'cluster-headache', 'trigeminal-neuralgia', 'occipital-neuralgia',
++      'vestibular-migraine', 'hypnic-headache',
++    ]);
++    const UNWALKED_DEBT = new Set([
++      'chronic-tth', 'chronic-migraine', 'status-migrainosus', 'hemicrania-continua',
++      'paroxysmal-hemicrania', 'sunct-suna', 'ndph', 'primary-stabbing-headache',
++    ]);
++    const all = HEADACHE_PHENOTYPES.map((p) => p.id);
++    expect(all).toHaveLength(16);
++    for (const id of all) {
++      expect(WALKED.has(id) || UNWALKED_DEBT.has(id), `phenotype "${id}" is neither walked nor tracked as debt`).toBe(true);
++    }
++    for (const id of [...WALKED, ...UNWALKED_DEBT]) {
++      expect(all, `"${id}" is listed in this guard but no longer exists in the engine`).toContain(id);
++      expect(WALKED.has(id) && UNWALKED_DEBT.has(id), `"${id}" cannot be both walked and debt`).toBe(false);
++    }
++  });
++});
+diff --git a/src/data/headacheQuestions.ts b/src/data/headacheQuestions.ts
+index ce99813..f0fce9f 100644
+--- a/src/data/headacheQuestions.ts
++++ b/src/data/headacheQuestions.ts
+@@ -44,6 +44,12 @@ export interface HeadacheQuestion {
+   options: AnswerOption[];
+   /** Optional faint teach-mode pearl. */
+   teach?: string;
++  /**
++   * §13.4 Phase-1 structured-data claim tag for the teach string (adjacent
++   * claimId field, scanned by scripts/check-claims.ts). Required whenever
++   * `teach` makes a clinical statement (clinical review round 2, BI-4).
++   */
++  claimId?: string;
+ }
+ 
+ export interface ConditionalBranch {
+@@ -137,6 +143,19 @@ export const CORE_QUESTIONS: HeadacheQuestion[] = [
+       { id: 'qual-throb', label: 'Throbbing or pulsating', chips: ['qual-pulsating'] },
+       { id: 'qual-press', label: 'Pressing or tightening', chips: ['qual-pressing-tightening'] },
+       { id: 'qual-sharp', label: 'Sharp, stabbing, or shooting', chips: ['qual-sharp-stabbing'] },
++      // Electric-shock quality was previously obtainable ONLY inside the
++      // trigeminal-neuralgia branch, which itself only opened after picking
++      // "sharp". A clinician whose patient described textbook TN jolts could not
++      // say so until they had first mislabeled the pain. Both chips contribute so
++      // every criterion that accepts either quality still evaluates.
++      // Added 2026-09-07 (headache pathway user review, finding 3). Label is
++      // quality-only: duration is asked twice elsewhere (q-duration, tn-brief),
++      // and a duration qualifier here discouraged the 90-second-paroxysm and
++      // shooting-pain-inside-a-long-attack presentations (medical review, B1).
++      // The shared qual-sharp-stabbing chip also opens b-occipital and
++      // b-stabbing. INTENDED: occipital neuralgia and primary stabbing headache
++      // are the standing differentials for shooting pain (architect rec 10).
++      { id: 'qual-shock', label: 'Electric shock-like or shooting', chips: ['qual-electric-shock-shooting', 'qual-sharp-stabbing'] },
+     ],
+   },
+ 
+@@ -153,6 +172,18 @@ export const CORE_QUESTIONS: HeadacheQuestion[] = [
+       // [PAIR — preserve both] orbital answer must add unilateral + orbital-temporal,
+       // or cluster-B / ph-B / sunct-B never fire (clinical gate Q4).
+       { id: 'loc-orbital', label: 'Around or behind one eye, or the temple', chips: ['loc-unilateral', 'loc-orbital-temporal'] },
++      // A facial-pain chief complaint previously had no answer on this screen:
++      // the options were one side / both sides / around the eye, and a cheek or
++      // jaw presentation had to be filed under "one side" with the facial nature
++      // lost. ICHD-3 keeps facial pain in Part 3; this routes the §13.1 screen.
++      // [PAIR] unilateral + facial-region, mirroring the orbital pattern above.
++      // [PAIR - label constraint] This label must NOT mention the eye or orbit:
++      // q-location is single-select, and cluster-B / ph-B demote-gates require
++      // loc-orbital-temporal, which only the orbital answer above contributes.
++      // An "around the eye" phrasing here siphoned periorbital patients off that
++      // chip and silently capped cluster and paroxysmal hemicrania at Probable
++      // (clinical review 2026-09-07, BC-6; drift guard in the reachability tests).
++      { id: 'loc-face', label: 'In the face: cheek, jaw, or upper lip', chips: ['loc-unilateral', 'loc-facial-region'] },
+     ],
+   },
+   {
+@@ -204,6 +235,8 @@ export const CORE_QUESTIONS: HeadacheQuestion[] = [
+       { id: 'as-autonomic-other', label: 'Other autonomic feature on the painful side (runny or blocked nose, droopy or swollen lid, forehead sweating)', chips: ['sym-other-cranial-autonomic'] },
+       // Vertigo trigger → the vestibular branch fires on this chip.
+       { id: 'as-vertigo', label: 'Vertigo or dizziness with the headache', chips: ['vest-vertigo-migrainous'] },
++      // Aura-screen trigger (routing flag; contributes to no criterion).
++      { id: 'as-reversible-neuro', label: 'Visual disturbance or other reversible neurologic symptoms around the headache (zig-zags, blind spot, one-eye vision loss, tingling, speech trouble)', chips: ['sym-reversible-neuro-reported'] },
+     ],
+   },
+ ];
+@@ -216,6 +249,13 @@ const migraineSuggestive = (s: ReadonlySet<ChipId>) =>
+   has(s, 'qual-pulsating') || has(s, 'sym-nausea-mild') || has(s, 'sym-nausea-moderate-severe') ||
+   has(s, 'sym-vomiting') || has(s, 'sym-photophobia');
+ 
++// ONE clinical concept (the §3.1 cluster attack picture) deliberately split
++// across two screens by clinical review BC-9. The two branches must fire and
++// stop firing together forever: a widening applied to one and not the other
++// reproduces the orphaned-criterion defect this batch fixed (architect review
++// 2026-09-08, condition 2).
++const clusterPictureFires = (s: ReadonlySet<ChipId>) => has(s, 'dur-15-to-180-min') && has(s, 'loc-unilateral');
++
+ export const CONDITIONAL_BRANCHES: ConditionalBranch[] = [
+   // TAC short-attack detail — surfaces paroxysmal hemicrania (§3.2) and SUNCT/SUNA (§3.3).
+   {
+@@ -241,12 +281,35 @@ export const CONDITIONAL_BRANCHES: ConditionalBranch[] = [
+   // resolves §3.1.1 episodic vs §3.1.2 chronic (ADR-2026-07-06 subtype pass).
+   {
+     id: 'b-cluster-detail',
+-    fires: (s) => has(s, 'dur-15-to-180-min') && has(s, 'loc-unilateral'),
++    fires: clusterPictureFires,
+     question: {
+       id: 'q-cluster-detail',
+       screen: 8,
+       eyebrow: 'Cluster pattern',
+-      prompt: 'If these are cluster-type attacks, what is the bout-and-remission pattern?',
++      prompt: 'If these are cluster-type attacks, how often do they come during a bout?',
++      // Criterion D's chip (freq-cluster-bout) was defined in the engine with its
++      // own teach text but NO question option anywhere contributed it, so cluster
++      // could never reach a full 3.1 match through the flow; it capped at
++      // probable (3.5) for every user. Found by the reachability harness on its
++      // first run (2026-09-07). Bout frequency and the episodic/chronic subtype
++      // are SEPARATE single-select questions: the subtype pair is mutually
++      // exclusive by ICHD-3 definition (3.1.1 vs 3.1.2), and a shared
++      // multi-select let both be asserted at once, which the resolver silently
++      // read as episodic (clinical review BC-9).
++      select: 'single',
++      options: [
++        { id: 'cluster-bout-freq', label: 'During bouts, attacks come from one every other day up to 8 a day', chips: ['freq-cluster-bout'] },
++      ],
++    },
++  },
++  {
++    id: 'b-cluster-subtype',
++    fires: clusterPictureFires,
++    question: {
++      id: 'q-cluster-subtype',
++      screen: 8,
++      eyebrow: 'Bout and remission pattern',
++      prompt: 'What is the bout-and-remission pattern?',
+       select: 'single',
+       options: [
+         { id: 'cluster-episodic', label: 'Attacks come in bouts separated by pain-free remissions of 3 months or more', chips: ['cluster-remission-ge-3mo'] },
+@@ -297,13 +360,29 @@ export const CONDITIONAL_BRANCHES: ConditionalBranch[] = [
+   // Aura detail — fires when migraine is in contention (clinical gate Q3, option b).
+   {
+     id: 'b-aura',
+-    fires: (s) => migraineSuggestive(s),
++    // migraineSuggestive alone gated this screen behind pulsating quality or
++    // migraine-associated symptoms, which ICHD-3 1.2 does not require: aura is
++    // diagnosed on the aura, and 1.2.4 retinal migraine in particular often
++    // rides on a non-migrainous headache. A monocular-visual-loss presentation
++    // with a mild pressing headache never saw this screen, so retinal migraine
++    // AND its amaurosis-fugax caution were unreachable (user review, finding 2).
++    fires: (s) => migraineSuggestive(s) || has(s, 'sym-reversible-neuro-reported'),
+     question: {
+       id: 'q-aura',
+       screen: 7,
+       eyebrow: 'Aura',
+       prompt: 'Are there reversible neurologic symptoms before or with the headache? Select all that apply.',
+       select: 'multi',
++      // BC-7 vascular-mimic caution — this teach string is its ONLY live
++      // surface (HeadacheQuestion.tsx renders question.teach; the chip-level
++      // teachWhenSelected surface is dormant in V4, see clinical review round 2
++      // BI-3). Wording is the round-2 reviewer's own trim (BI-1 resolution 2):
++      // the 1.2 C characteristics are verbatim ichd3-2018; "exclude TIA and
++      // seizure" is a workup instruction bounded by do-snnoop10-2019
++      // ("N: Neurologic deficit"), not a claim about those diseases' behaviour;
++      // the monocular sentence restates the reviewed retinal subtype steer.
++      claimId: 'clinic-headache-ichd3-aura-subtypes',
++      teach: 'Reversible neurologic symptoms are not specific to migraine aura. ICHD-3 1.2 C characteristics include gradual spread over 5 minutes or more and a symptom duration of 5 to 60 minutes. Exclude TIA and seizure before calling this aura. Monocular visual loss needs amaurosis fugax, retinal artery occlusion, and optic neuropathy excluded before it is called 1.2.4 retinal migraine.',
+       options: [
+         { id: 'aura-visual', label: 'Visual (zig-zags, blind spot, flashes)', chips: ['aura-visual'] },
+         { id: 'aura-sensory', label: 'Sensory (tingling, numbness)', chips: ['aura-sensory'] },
+@@ -398,7 +477,10 @@ export const CONDITIONAL_BRANCHES: ConditionalBranch[] = [
+   // Facial pain detail — fires on sharp/stabbing quality; screens for §13.1 trigeminal neuralgia.
+   {
+     id: 'b-trigeminal',
+-    fires: (s) => has(s, 'qual-sharp-stabbing'),
++    // Previously sharp-stabbing quality was the ONLY key to this screen. A face
++    // presentation with any other quality answer, or the new electric-shock
++    // option, must open it too (user review, findings 1 and 3).
++    fires: (s) => has(s, 'qual-sharp-stabbing') || has(s, 'qual-electric-shock-shooting') || has(s, 'loc-facial-region'),
+     question: {
+       id: 'q-trigeminal',
+       screen: 8,
+diff --git a/src/lib/citations/claims.ts b/src/lib/citations/claims.ts
+index 8ae3331..095420b 100644
+--- a/src/lib/citations/claims.ts
++++ b/src/lib/citations/claims.ts
+@@ -1242,9 +1242,13 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
+ 
+   'clinic-headache-ichd3-aura-subtypes': {
+     id: 'clinic-headache-ichd3-aura-subtypes',
+-    citation_ids: ['ichd3-2018'],
+-    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
++    citation_ids: ['ichd3-2018', 'do-snnoop10-2019'],
++    surfaces: [{ type: 'jsx', attribute: 'data-claim' }, DATA_SURFACE],
+     // ICHD-3 migraine-with-aura subtypes (ADR-2026-07-06 Stage 3) added 2026-07-06.
++    // 2026-09-08 (clinical review round 2, BI-1/BI-4): also carries the q-aura
++    // teach caution in headacheQuestions.ts (structured-data claimId surface).
++    // do-snnoop10-2019 bounds the "exclude TIA and seizure" workup instruction
++    // ("N: Neurologic deficit (focal, altered mental status, seizures)").
+     description: 'ICHD-3 migraine-with-aura subtypes: 1.2.1 typical aura (visual/sensory/speech, fully reversible, no motor/brainstem/retinal); 1.2.2 brainstem aura (at least two brainstem symptoms, no motor or retinal); 1.2.3 hemiplegic migraine (fully reversible motor weakness; exclude stroke or structural cause and refer for genetic evaluation, familial hemiplegic migraine); 1.2.4 retinal migraine (repeated monocular visual disturbance; exclude other causes of transient monocular visual loss such as amaurosis fugax or retinal artery occlusion).',
+   },
+ 
+@@ -1306,6 +1310,28 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
+   },
+ 
+   // ─── Cluster + HC management surfaces (clinical-reviewer §17.2 condition 2) ──
++  // ── TN + occipital management blocks (2026-09-07 user review, finding 1:
++  //    a LEADING trigeminal neuralgia result rendered only the runner-up's
++  //    migraine management). Prose bounded by the Nahas Continuum 2024
++  //    quoted_text and the ICHD-3 13.1.1 / 13.4 frameworks. ─────────────────
++  'clinic-headache-tn-workup': {
++    id: 'clinic-headache-tn-workup',
++    citation_ids: ['ichd3-2018'],
++    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
++    description: 'TN aetiology card: ICHD-3 13.1.1.1-3 classification (classical = neurovascular compression WITH morphological change; secondary = MS, CPA tumour, or AVM; idiopathic = adequate MRI and electrophysiology negative, including a vessel-nerve contact without morphological change). The secondary-TN red-flag row was removed 2026-09-07 (clinical review BC-4: the list, including the age-40 threshold, appears in no held quoted_text; remediation of the same text on the teach pearl is tracked in TASKS.md).',
++  },
++  'clinic-headache-tn-management': {
++    id: 'clinic-headache-tn-management',
++    citation_ids: ['nahas-2024-continuum-cranial-neuralgias', 'ichd3-2018'],
++    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
++    description: 'TN treatment card: carbamazepine Level A or oxcarbazepine Level B first-line, verbatim from the nahas-2024 quoted_text. The treatment-response note asserts only the negative (response is not an ICHD-3 13.1.1 criterion; do not use it to confirm or exclude), grounded in ichd3-2018. The IV fosphenytoin/lidocaine row was removed 2026-09-07 (clinical review BC-1/BC-2: the source gates it on REFRACTORY TN, and the AAN parameter grades IV medication Level U).',
++  },
++  'clinic-headache-on-management': {
++    id: 'clinic-headache-on-management',
++    citation_ids: ['nahas-2024-continuum-cranial-neuralgias', 'ichd3-2018'],
++    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
++    description: 'Occipital neuralgia card, two rows (clinical review BC-3): treatment row = greater and/or lesser occipital nerve block first-line, per the nahas-2024 quoted_text; diagnostic row = ICHD-3 13.4 criterion D stated at full mandatory strength (pain eased TEMPORARILY by local anaesthetic block of the affected nerve(s)).',
++  },
+   'clinic-headache-cluster-acute-management': {
+     id: 'clinic-headache-cluster-acute-management',
+     citation_ids: ['sumatriptan-cluster-1991', 'cohen-oxygen-cluster-2009', 'burish-2024-continuum-cluster'],
+diff --git a/src/pages/ClinicHeadachePathwayV4.tsx b/src/pages/ClinicHeadachePathwayV4.tsx
+index 09c52e0..06d876e 100644
+--- a/src/pages/ClinicHeadachePathwayV4.tsx
++++ b/src/pages/ClinicHeadachePathwayV4.tsx
+@@ -51,8 +51,6 @@ const QUESTION_BY_ID: Map<string, HeadacheQuestionConfig> = new Map();
+ for (const q of CORE_QUESTIONS) QUESTION_BY_ID.set(q.id, q);
+ for (const b of CONDITIONAL_BRANCHES) QUESTION_BY_ID.set(b.question.id, b.question);
+ 
+-const CORE_SCREEN_COUNT = new Set(CORE_QUESTIONS.map(q => q.screen)).size; // 6
+-
+ type Phase = 'safety' | 'questions' | 'result';
+ 
+ const ClinicHeadachePathwayV4: React.FC = () => {
+@@ -104,7 +102,6 @@ const ClinicHeadachePathwayV4: React.FC = () => {
+   // Clamp the index if the active-question list shrank (a branch un-fired).
+   const safeIndex = Math.min(questionIndex, Math.max(0, activeQuestions.length - 1));
+   const currentQuestion = activeQuestions[safeIndex];
+-  const totalScreens = Math.max(CORE_SCREEN_COUNT, ...activeQuestions.map(q => q.screen));
+ 
+   // ── Mutators ──────────────────────────────────────────────────────────────
+   const setAnswer = (qid: string, optIds: string[]) =>
+@@ -194,8 +191,15 @@ const ClinicHeadachePathwayV4: React.FC = () => {
+             <HeadacheQuestion
+               question={currentQuestion}
+               selectedOptionIds={new Set(answers[currentQuestion.id] ?? [])}
+-              position={currentQuestion.screen}
+-              total={totalScreens}
++              // Position in the LIVE sequence, not the config's screen number.
++              // Branch questions carry hardcoded screen attributes and several
++              // share one (three branches say 8, one says 7), so the eyebrow
++              // read 8 of 8 three screens in a row and then went BACKWARDS to 7.
++              // safeIndex is monotonic by construction; the total still grows as
++              // branches fire, which is what the tilde is for.
++              // Fixed 2026-09-07 (headache pathway user review).
++              position={safeIndex + 1}
++              total={activeQuestions.length}
+               onSelectSingle={opt => {
+                 setAnswer(currentQuestion.id, [opt.id]);
+                 advance();
+@@ -242,13 +246,14 @@ const ClinicHeadachePathwayV4: React.FC = () => {
+               <ChevronLeft className="w-[18px] h-[18px]" aria-hidden="true" />
+               Back
+             </button>
+-            <div className="flex items-center gap-2" aria-label={`Screen ${currentQuestion?.screen ?? 1} of ${totalScreens}`}>
+-              {Array.from({ length: totalScreens }).map((_, i) => (
+-                <span
+-                  key={i}
+-                  className={`w-2 h-2 rounded-full ${i < (currentQuestion?.screen ?? 1) ? 'bg-neuro-500' : 'bg-slate-200'}`}
+-                />
+-              ))}
++            {/* Position counter driven by the SAME source as the question's own
++                "Question X of ~Y" line (activeQuestions/safeIndex). The old dot
++                row rendered totalScreens filled by screen index — a different,
++                non-monotonic quantity than the aria-label announced (medical
++                review U4; architect obs 12). aria-hidden: the question eyebrow
++                carries position semantically; announcing it twice is noise. */}
++            <div className="text-[12px] text-slate-400 tabular-nums" aria-hidden="true">
++              {safeIndex + 1} / ~{activeQuestions.length}
+             </div>
+             <button
+               type="button"

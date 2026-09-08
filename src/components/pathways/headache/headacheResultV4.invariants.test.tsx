@@ -2,8 +2,10 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { HeadacheResultV4 } from './HeadacheResultV4';
+import { HeadacheResultV4, showLeadingGapNote } from './HeadacheResultV4';
+import { hasHeadacheManagement } from './HeadacheManagement';
 import { bandPhenotypes } from '../../../data/headacheBanding';
+import type { BandedMatch } from '../../../data/headacheBanding';
 import { evaluateHeadachePhenotypes, type ChipId } from '../../../data/clinicHeadacheData';
 
 const SAFETY_STRIP_MARKER = 'Before accepting any pattern';
@@ -81,5 +83,39 @@ describe('v4 source carries no displayed-percentage or percentage math', () => {
       expect(src, `${f} uses toFixed`).not.toMatch(/toFixed/);
       expect(src, `${f} computes * 100`).not.toMatch(/\*\s*100\b/);
     }
+  });
+});
+
+describe('HeadacheResultV4 — leading-gap note (BC-8 / architect condition 3)', () => {
+  // Hypnic headache (no management module) leads; episodic TTH (has a module)
+  // is the runner-up. Chip set verified against the live engine 2026-09-08.
+  const GAP_CHIPS: Set<ChipId> = new Set<ChipId>([
+    'onset-only-during-sleep-waking', 'freq-ge-10-per-month', 'pattern-ge-3-months', 'dur-15min-to-4h',
+    'freq-ge-15-per-month', 'loc-bilateral', 'qual-pressing-tightening', 'sev-mild', 'act-not-aggravated',
+  ]);
+
+  it('top-ranked pattern without a module: the note renders, names both phenotypes, and instructs', () => {
+    const banded = bandPhenotypes(evaluateHeadachePhenotypes(GAP_CHIPS));
+    const candidates = [...banded.leading, ...banded.possible, ...banded.lessLikely];
+    // Self-checking premises: a data change that hollows this scenario must
+    // fail here, not silently pass an empty render.
+    expect(candidates[0]?.match.phenotypeId).toBe('hypnic-headache');
+    expect(hasHeadacheManagement(candidates[0].match.phenotypeId)).toBe(false);
+    expect(candidates.slice(0, 2).some(bm => hasHeadacheManagement(bm.match.phenotypeId))).toBe(true);
+    const html = render({ banded });
+    expect(html).toContain('No management module for Hypnic headache yet.');
+    expect(html).toContain('Do not apply it to Hypnic headache.');
+  });
+
+  it('predicate: silent when nothing manageable renders, and when vestibular migraine leads', () => {
+    const fake = (id: string, name: string) => ({ match: { phenotypeId: id, name } }) as unknown as BandedMatch;
+    // No manageable block below → the note must not point at nothing (BC-8 gate).
+    expect(showLeadingGapNote([fake('hypnic-headache', 'Hypnic headache')], [])).toBe(false);
+    // VM leads → VM deliberately steers to the migraine block; "do not apply"
+    // would contradict the M2 steering paragraph.
+    expect(showLeadingGapNote(
+      [fake('vestibular-migraine', 'Vestibular migraine'), fake('migraine-without-aura', 'Migraine without aura')],
+      [fake('migraine-without-aura', 'Migraine without aura')],
+    )).toBe(false);
   });
 });

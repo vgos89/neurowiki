@@ -1242,9 +1242,13 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
 
   'clinic-headache-ichd3-aura-subtypes': {
     id: 'clinic-headache-ichd3-aura-subtypes',
-    citation_ids: ['ichd3-2018'],
-    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    citation_ids: ['ichd3-2018', 'do-snnoop10-2019'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }, DATA_SURFACE],
     // ICHD-3 migraine-with-aura subtypes (ADR-2026-07-06 Stage 3) added 2026-07-06.
+    // 2026-09-08 (clinical review round 2, BI-1/BI-4): also carries the q-aura
+    // teach caution in headacheQuestions.ts (structured-data claimId surface).
+    // do-snnoop10-2019 bounds the "exclude TIA and seizure" workup instruction
+    // ("N: Neurologic deficit (focal, altered mental status, seizures)").
     description: 'ICHD-3 migraine-with-aura subtypes: 1.2.1 typical aura (visual/sensory/speech, fully reversible, no motor/brainstem/retinal); 1.2.2 brainstem aura (at least two brainstem symptoms, no motor or retinal); 1.2.3 hemiplegic migraine (fully reversible motor weakness; exclude stroke or structural cause and refer for genetic evaluation, familial hemiplegic migraine); 1.2.4 retinal migraine (repeated monocular visual disturbance; exclude other causes of transient monocular visual loss such as amaurosis fugax or retinal artery occlusion).',
   },
 
@@ -1306,6 +1310,28 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   },
 
   // ─── Cluster + HC management surfaces (clinical-reviewer §17.2 condition 2) ──
+  // ── TN + occipital management blocks (2026-09-07 user review, finding 1:
+  //    a LEADING trigeminal neuralgia result rendered only the runner-up's
+  //    migraine management). Prose bounded by the Nahas Continuum 2024
+  //    quoted_text and the ICHD-3 13.1.1 / 13.4 frameworks. ─────────────────
+  'clinic-headache-tn-workup': {
+    id: 'clinic-headache-tn-workup',
+    citation_ids: ['ichd3-2018'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'TN aetiology card: ICHD-3 13.1.1.1-3 classification (classical = neurovascular compression WITH morphological change; secondary = MS, CPA tumour, or AVM; idiopathic = adequate MRI and electrophysiology negative, including a vessel-nerve contact without morphological change). The secondary-TN red-flag row was removed 2026-09-07 (clinical review BC-4: the list, including the age-40 threshold, appears in no held quoted_text; remediation of the same text on the teach pearl is tracked in TASKS.md).',
+  },
+  'clinic-headache-tn-management': {
+    id: 'clinic-headache-tn-management',
+    citation_ids: ['nahas-2024-continuum-cranial-neuralgias', 'ichd3-2018'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'TN treatment card: carbamazepine Level A or oxcarbazepine Level B first-line, verbatim from the nahas-2024 quoted_text. The treatment-response note asserts only the negative (response is not an ICHD-3 13.1.1 criterion; do not use it to confirm or exclude), grounded in ichd3-2018. The IV fosphenytoin/lidocaine row was removed 2026-09-07 (clinical review BC-1/BC-2: the source gates it on REFRACTORY TN, and the AAN parameter grades IV medication Level U).',
+  },
+  'clinic-headache-on-management': {
+    id: 'clinic-headache-on-management',
+    citation_ids: ['nahas-2024-continuum-cranial-neuralgias', 'ichd3-2018'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Occipital neuralgia card, two rows (clinical review BC-3): treatment row = greater and/or lesser occipital nerve block first-line, per the nahas-2024 quoted_text; diagnostic row = ICHD-3 13.4 criterion D stated at full mandatory strength (pain eased TEMPORARILY by local anaesthetic block of the affected nerve(s)).',
+  },
   'clinic-headache-cluster-acute-management': {
     id: 'clinic-headache-cluster-acute-management',
     citation_ids: ['sumatriptan-cluster-1991', 'cohen-oxygen-cluster-2009', 'burish-2024-continuum-cluster'],
