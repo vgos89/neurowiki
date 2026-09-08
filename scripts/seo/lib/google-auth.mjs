@@ -18,6 +18,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { google } from 'googleapis';
+import { SITE } from '../config.mjs';
 
 export const SCOPES = [
   'https://www.googleapis.com/auth/analytics.readonly',
@@ -90,19 +91,10 @@ export async function getGoogleAuthClient() {
 }
 
 /**
- * Read env-config values. Throws clear errors if missing.
+ * Site config values. Single-sourced from scripts/seo/config.mjs (2026-09-07,
+ * SEO-DAILY-PORT architect condition 4): env vars still override, but the
+ * defaults live in one place and a missing .env.local no longer kills a run.
  */
 export function getSeoConfig() {
-  const ga4PropertyId = process.env.GA4_PROPERTY_ID;
-  const gscSiteUrl = process.env.GSC_SITE_URL || 'https://neurowiki.ai/';
-
-  if (!ga4PropertyId) {
-    throw new Error(
-      'GA4_PROPERTY_ID env var is required. ' +
-      'Find it in GA4 → Admin → Property Settings (numeric ID). ' +
-      'Add to .env.local: GA4_PROPERTY_ID=123456789'
-    );
-  }
-
-  return { ga4PropertyId, gscSiteUrl };
+  return { ga4PropertyId: SITE.ga4PropertyId, gscSiteUrl: SITE.gscSiteUrl };
 }

@@ -30,6 +30,7 @@
     "seo:audit": "node scripts/seo/audit.mjs",
     "seo:report": "node --env-file=.env.local scripts/seo/generate-weekly-report.mjs",
     "seo:weekly": "npm run seo:fetch-ga4 && npm run seo:fetch-gsc && npm run seo:fetch-gsc-inspections && npm run seo:audit && npm run seo:report",
+    "seo:daily": "bash scripts/seo/daily-run.sh",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

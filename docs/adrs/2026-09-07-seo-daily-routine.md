@@ -1,0 +1,32 @@
+# ADR: Unattended daily SEO routine (port of the Tidbit pipeline), report-only
+
+**Date:** 2026-09-07
+**Status:** accepted (V approved the plan 2026-09-07; architect review approve-with-conditions, all 14 conditions adopted)
+**Task:** SEO-DAILY-PORT (Class D) · Plan: `docs/seo/PORT_PLAN_neurowiki.md` · Architect artifact: `docs/reviews/arch-PR-seo-daily-port.md` · Governance: `.claude/rules/seo-daily-governance.md`
+
+## Decision
+
+Port the Tidbit Health unattended daily SEO job to NeuroWiki as a **report-only** routine: a scheduled 07:50 session runs `bash scripts/seo/daily-run.sh` (tiered daily/Monday/first-Monday, manifest-driven), reads the reports, drafts up to 3 snippet proposals and 3 link suggestions, writes a sub-400-word briefing, rebuilds V's dashboard artifact, and commits reports locally. The job never edits site files, never pushes, and its write scope is hook-enforced.
+
+## Key choices and their reasons
+
+1. **Reuse NeuroWiki's data layer, port Tidbit's judgment layer.** The OAuth stack (`scripts/seo/lib/google-auth.mjs`), raw fetchers (`fetch-gsc.mjs`, `fetch-ga4.mjs`, `fetch-gsc-inspections.mjs`) and `docs/seo-data/` conventions predate the port and are kept. Tidbit contributes the orchestrator, analysis scripts, alarm, ledger, briefing format, dashboard, and scheduled-task pattern.
+2. **Single config source.** `scripts/seo/config.mjs` holds every site-specific value (hosts, property IDs, thresholds, URL lists, event names, seed keywords, dashboard URL, `kindOf` classifier). `getSeoConfig()` in `lib/google-auth.mjs` now reads from it, eliminating the second default set. `daily-run.sh` sources `.env.local` when present and calls plain `node`, so a missing `.env.local` no longer kills a run; the `--env-file` npm scripts remain for interactive use only.
+3. **Adapter consumes, never re-derives** (architect condition 3). `scripts/seo/lib/site-pages.ts` (tsx) gets titles/descriptions from `src/seo/routeMeta.ts#getRouteMeta` — the exact strings the site serves — and the path universe from `SITEMAP_ROUTES` + `public/sitemap.xml`; snapshots land in `docs/seo/runs/<date>/pages-snapshot.json` + a `-latest` copy. All joins are on path via the shared apex/www normalizer. Enabling change: a `typeof import.meta.env` guard in `src/data/trialListData.ts` (mechanical, no content or behavior change in Vite builds; needed because the module now also loads under plain node/tsx).
+4. **Report-only is hook tier** (conditions 1-2). `.husky/commit-msg` rejects any `docs(seo): daily report` commit whose staged paths escape `docs/seo/**` + `docs/seo-data/**` (`clinical-guard.mjs --staged`). In-run early warning: `--baseline` at run start snapshots `git status` so overnight work by V is never blamed on the job; `--check` at run end fails red on any out-of-allowlist change made during the run. `--no-verify` cannot be blocked; mitigation is the briefing recording each commit's SHA and file list.
+5. **External writes enumerated** (condition 10). The OAuth grant includes GSC write scope; the job's only permitted outbound writes are the Monday sitemap resubmission and ≤2 browser request-indexing clicks per morning. Everything else is read-only.
+6. **Never-push exception to golden rule 8**, scoped strictly to commits matching `docs(seo): daily report ...`. Publishing stays a human decision (V's port-prompt non-negotiable); V's next supervised session pushes the report commits. All other work in the repo keeps rule 8 unchanged.
+7. **Suggest-only autonomy** (V's interview decision). The Tidbit job's autonomous snippet rewrites and link insertions become drafted proposals in `docs/seo/proposals/<date>.md`; the rewrite ledger stays, with roles split: supervised sessions apply and record, the morning job settles verdicts and recommends reverts. Autonomy changes are a Class D amendment to the governance file (its §10).
+8. **Humanizer tier split, stated plainly** (condition 14): `docs/seo/proposals/` is outside `check:humanizer`'s scan directories, so the humanizer rule is convention tier for drafts and becomes hook tier when V applies wording into `src/config/routeManifest.ts`. The governance file's clinical-escalation clause (§3) was put to clinical-reviewer for a one-time ratification before shipping.
+9. **Replacements instead of ports** where Tidbit was blog-coupled: `blog-refresh` → `page-refresh.mjs` (inventory-wide, plus cannibalization and inventory-drift sections); `deadlinks` + `internal-links` → `crawl-links.mjs` (one weekly crawl of the prerendered live site producing dead links, orphans, and link opportunities); `compliance-sweep` → dropped (NeuroWiki's own hook-enforced scanners cover voice; `clinical-guard.mjs` covers scope); `indexation-check` → bucketing layer only, over the existing inspections fetcher (condition 5), which also had its www/apex mismatch fixed (condition 6).
+10. **Dropped:** `leads-check` (Tidbit-specific, personal data), the Monday paid-terms pull and Ads advisor loop (no Ads account), the Gemini sidebar loop and competitor scan (revisit once the routine is boring; a watchlist file would be the trigger for the latter). **Deferred, deviation from plan §4:** `audit-config.mjs` was planned "ported but unwired" but is deeply Tidbit/Next-specific; deferred until a need appears. **Kept:** monthly AI-reputation browser check with NeuroWiki questions.
+11. **`seo:weekly` end state** (condition 9): superseded as the primary read immediately; after three consecutive clean mornings, rename to `seo:weekly:legacy` with a banner and retire `generate-weekly-report.mjs` + `audit.mjs` in a follow-up commit.
+12. **Fail-closed scheduling** (condition 11): the wrapper at `~/.claude/scheduled-tasks/neurowiki-seo-daily/SKILL.md` aborts if the procedure or governance file is missing, so reverting the port in git also disables the job even though the scheduler lives outside git.
+
+## Rollback
+
+Delete the scheduled task (`~/.claude/scheduled-tasks/neurowiki-seo-daily/` + the registered schedule) and `git revert` the port commit(s) recorded below. The job never pushes, so no production behavior ever depended on it; the wrapper's fail-closed check covers the window between revert and schedule deletion. The `trialListData.ts` guard is inert in Vite builds and may be kept or reverted with the rest.
+
+## Commit range
+
+The port lands as a single commit on main following the planning commit `5b3cd8b`; the exact SHA is recorded in `TASKS.md` (SEO-DAILY-PORT entry) at merge time.

@@ -42,7 +42,7 @@ Files in this repo can drift. When sources conflict, apply this order — higher
 1. **Most recent ADR** (`docs/adrs/`, dated) — architecture truth
 2. **PRD.md** — product intent. Beats task-level notes for product questions.
 3. **Most recent `TASKS.md` entry** — execution state. Does *not* override an ADR or PRD without an explicit update to that higher source first.
-4. **CLAUDE.md** (this file) and **`.claude/rules/` files** — governs process, not product or architecture truth. Rule files extracted from CLAUDE.md (`.claude/rules/clinical-surfaces.md`, `.claude/rules/clinical-review-templates.md`) are at the same tier as CLAUDE.md. @-references in CLAUDE.md point to them — they are not a lower tier.
+4. **CLAUDE.md** (this file) and **`.claude/rules/` files** — governs process, not product or architecture truth. Rule files extracted from CLAUDE.md (`.claude/rules/clinical-surfaces.md`, `.claude/rules/clinical-review-templates.md`, `.claude/rules/seo-daily-governance.md`) are at the same tier as CLAUDE.md. @-references in CLAUDE.md point to them — they are not a lower tier.
 5. **In-session conversation / chat context** — transient. Never overrides any committed file.
 
 **Same-level conflict — when two sources at the same tier disagree:**
@@ -584,7 +584,7 @@ What must exist after work is done, beyond the code itself:
 Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
 ```
 `type`: feat · fix · docs · refactor · test · chore · clinical  
-`scope`: trials · calculator · pathway · guide · ui · data · ci
+`scope`: trials · calculator · pathway · guide · ui · data · ci · seo
 
 Claude writes and executes the commit and push. V is never asked to do this (§5 Rule 7).
 
@@ -795,6 +795,7 @@ Every command has defined happy path *and* failure behavior. Commands defined in
 | `/pr-ready` | Run gates, prepare bilingual PR description | Partial artifacts → list exactly what's missing, refuse to open PR |
 | `/rollback <commit>` | Revert, flag-disable, post-mortem | Revert not clean → stop, escalate to V, no feature-flag action without explicit confirmation |
 | `/incident <symptom>` | Triage a post-merge production issue: reproduce → locate cause in recent commits → decide revert vs hotfix → ship fix → live-verify → post-mortem if SEV1/2 | Cannot reproduce server-side and V is dark → log attempt and defer; never blind-revert |
+| `/seo-daily` | Unattended morning SEO run: pull data, brief, draft ≤3 proposals, rebuild dashboard, commit reports locally. **Report-only, never pushes** — governed by `.claude/rules/seo-daily-governance.md` (CLAUDE.md tier) | Core Google feeds fail → briefing leads with the failure and skips analysis; report-only guard trips → no commit, briefing leads with it |
 
 ---
 

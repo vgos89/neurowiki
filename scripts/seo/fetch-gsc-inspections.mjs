@@ -32,6 +32,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { google } from 'googleapis';
 import { getGoogleAuthClient, getSeoConfig } from './lib/google-auth.mjs';
+import { normalizePath, inspectionUrlFor } from './config.mjs';
 
 const PROJECT_ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
 const SITEMAP_PATH = path.join(PROJECT_ROOT, 'public/sitemap.xml');
@@ -53,7 +54,14 @@ function parseArgs() {
 function loadSitemapUrls() {
   const xml = fs.readFileSync(SITEMAP_PATH, 'utf8');
   const locs = [...xml.matchAll(/<loc>\s*([^<]+?)\s*<\/loc>/g)].map((m) => m[1]);
-  return [...new Set(locs)];
+  // Normalize to the property's host (2026-09-07, SEO-DAILY-PORT architect
+  // condition 6): the sitemap file lists www URLs but the URL Inspection API
+  // rejects URLs outside the property (today an apex URL-prefix property).
+  // Inspecting www URLs against it returns per-URL errors, which is what the
+  // May snapshot silently hit. inspectionUrlFor() also handles the future
+  // sc-domain: property without another edit here.
+  const inProperty = locs.map((u) => inspectionUrlFor(normalizePath(u)));
+  return [...new Set(inProperty)];
 }
 
 async function inspectUrl(searchconsole, siteUrl, inspectionUrl) {

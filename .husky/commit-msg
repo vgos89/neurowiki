@@ -1,0 +1,13 @@
+set -e
+
+# SEO daily-job allowlist wall (SEO-DAILY-PORT, 2026-09-07, architect
+# condition 1). Hook tier per CLAUDE.md §2: a commit that identifies itself
+# as the unattended morning job's report commit may stage NOTHING outside
+# docs/seo/ and docs/seo-data/. The commit message is only available at the
+# commit-msg stage, which is why this lives here and not in pre-commit.
+first_line=$(head -1 "$1")
+case "$first_line" in
+  "docs(seo): daily report"*)
+    node scripts/seo/clinical-guard.mjs --staged
+    ;;
+esac

@@ -604,7 +604,11 @@ const manualTrialIds = new Set(manualTrials.map((trial) => trial.id));
 const restoredLegacyTrials: TrialItem[] = Object.entries(LEGACY_TRIAL_CATALOG_META)
   .filter(([id]) => !manualTrialIds.has(id))
   .map(([id, metadata]) => {
-    if (import.meta.env.DEV && !legacyTrialCategories[id]) {
+    // typeof guard: this module is also imported outside Vite (tsx-run SEO
+    // inventory scripts), where import.meta.env does not exist. Vite still
+    // statically replaces both tokens in browser builds, so dev/prod
+    // behavior is unchanged.
+    if (typeof import.meta.env !== 'undefined' && import.meta.env.DEV && !legacyTrialCategories[id]) {
       console.warn(`[trialListData] Legacy trial "${id}" has no category mapping, defaulting to 'ivt'. Add it to legacyTrialCategories.`);
     }
     return {

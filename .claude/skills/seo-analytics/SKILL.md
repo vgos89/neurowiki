@@ -31,17 +31,29 @@ Do NOT load this skill for:
 
 ## Where the data lives
 
+**Since 2026-09-07 (SEO-DAILY-PORT) the primary read is the DAILY briefing, not the weekly report.** An unattended 07:50 job (governed by `.claude/rules/seo-daily-governance.md`, procedure in `.claude/commands/seo-daily.md`) writes:
+
 ```
-docs/seo-data/
-├── ga4/
-│   └── YYYY-MM-DD.json        # raw GA4 snapshot (28d default window)
-├── gsc/
-│   └── YYYY-MM-DD.json        # raw Search Console snapshot (28d default)
-└── weekly/
-    └── YYYY-MM-DD-report.md   # synthesized markdown report (read this first)
+docs/seo/
+├── briefings/YYYY-MM-DD.md      # the morning briefing (read this first)
+├── briefing-latest.md           # same, stable path
+├── page-refresh-latest.md       # ranked snippet/depth work queue
+├── keyword-opportunities-latest.md
+├── indexation-latest.md         # Monday: what Google lists vs refuses
+├── deadlinks-latest.md ·  internal-links-latest.md   # Monday crawl
+├── anomaly-latest.md            # ALARMS — outranks everything
+├── proposals/YYYY-MM-DD.md      # drafted rewordings awaiting V
+├── rewrite-ledger.json          # 14-day snippet experiments
+├── dashboard.html               # V's morning page (artifact republish)
+└── runs/YYYY-MM-DD/manifest.json
+
+docs/seo-data/                   # raw snapshots (pre-existing convention)
+├── ga4/YYYY-MM-DD.json
+├── gsc/YYYY-MM-DD.json
+└── gsc/inspections/YYYY-MM-DD.json
 ```
 
-The weekly markdown report is the primary read. Raw JSON is for drill-down or programmatic re-analysis.
+`npm run seo:weekly` and `docs/seo-data/weekly/` are legacy (kept runnable; retirement after three clean mornings per the ADR `docs/adrs/2026-09-07-seo-daily-routine.md`). The 6-step read pattern below still applies — run it against the daily briefing set.
 
 GA4 snapshot fields: `topPages`, `sessionsBySource`, `events`, `dateRange`, `propertyId`.
 GSC snapshot fields: `topQueries`, `topPages`, `sitemaps`, `siteUrl`, `dateRange`.
