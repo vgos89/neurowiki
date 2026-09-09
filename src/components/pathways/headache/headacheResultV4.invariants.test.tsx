@@ -2,8 +2,9 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { HeadacheResultV4, showLeadingGapNote } from './HeadacheResultV4';
-import { hasHeadacheManagement } from './HeadacheManagement';
+import { HeadacheResultV4, showLeadingGapNote, ALL_CLAIM_MARKERS } from './HeadacheResultV4';
+import { HeadacheManagement, hasHeadacheManagement } from './HeadacheManagement';
+import { HEADACHE_PHENOTYPES } from '../../../data/clinicHeadacheData';
 import { bandPhenotypes } from '../../../data/headacheBanding';
 import type { BandedMatch } from '../../../data/headacheBanding';
 import { evaluateHeadachePhenotypes, type ChipId } from '../../../data/clinicHeadacheData';
@@ -117,5 +118,39 @@ describe('HeadacheResultV4 — leading-gap note (BC-8 / architect condition 3)',
       [fake('vestibular-migraine', 'Vestibular migraine'), fake('migraine-without-aura', 'Migraine without aura')],
       [fake('migraine-without-aura', 'Migraine without aura')],
     )).toBe(false);
+  });
+});
+
+describe('MANAGED / switch sync + claim-marker pin (architect 2026-09-08, condition 7)', () => {
+  it('every phenotype renders a management body if and only if it is MANAGED', () => {
+    // Both directions: a MANAGED id whose switch arm is missing renders nothing
+    // (false amber note + silent card loss); a switch arm outside MANAGED never
+    // renders (dead clinical prose). One new phenotype sits on each side of the
+    // boundary by design (GPN managed, PIFP deliberately not), which is exactly
+    // when this drift becomes likely.
+    for (const p of HEADACHE_PHENOTYPES) {
+      const html = renderToStaticMarkup(<HeadacheManagement phenotypeId={p.id} />);
+      const hasBody = html.trim().length > 0;
+      expect(hasBody, `${p.id}: rendered=${hasBody} but MANAGED=${hasHeadacheManagement(p.id)}`)
+        .toBe(hasHeadacheManagement(p.id));
+    }
+  });
+
+  it('the literal HiddenClaimMarkers spans render exactly ALL_CLAIM_MARKERS', () => {
+    // The spans must stay LITERAL (scripts/check-claims.ts reads source
+    // statically), so the typed Record cannot render them. This pin makes an
+    // omitted or stray literal span a test failure in both directions.
+    const html = render({ banded: bandPhenotypes([]), redFlagActive: true, redFlags: new Set<ChipId>(['rf-onset-sudden']) });
+    const rendered = Array.from(html.matchAll(/data-claim="([^"]+)"/g)).map((m) => m[1]);
+    const hidden = rendered.filter((id) => ALL_CLAIM_MARKERS.includes(id));
+    expect([...new Set(hidden)].sort()).toEqual([...ALL_CLAIM_MARKERS].sort());
+  });
+
+  it('PIFP top-ranked with a manageable runner-up: the leading-gap note names both (architect rec 12)', () => {
+    // PIFP is deliberately outside MANAGED (no held treatment source), so a
+    // leading PIFP with a managed runner-up MUST fire the note.
+    const fake = (id: string, name: string) => ({ match: { phenotypeId: id, name } }) as unknown as BandedMatch;
+    const top2 = [fake('persistent-idiopathic-facial-pain', 'Persistent idiopathic facial pain'), fake('migraine-without-aura', 'Migraine without aura')];
+    expect(showLeadingGapNote(top2, [top2[1]])).toBe(true);
   });
 });

@@ -1,5 +1,6 @@
+import { HEADACHE_PHENOTYPES } from './clinicHeadacheData';
 import { describe, it, expect } from 'vitest';
-import { bandPhenotypes, bandStrengthLabel } from './headacheBanding';
+import { bandPhenotypes, bandStrengthLabel, CHAPTER_ORDER } from './headacheBanding';
 import type { PhenotypeMatch } from './clinicHeadacheData';
 
 // Minimal PhenotypeMatch fixture — only the fields bandPhenotypes/bandStrengthLabel read
@@ -157,5 +158,17 @@ describe('bandStrengthLabel — B2 (never "Probable Chronic migraine")', () => {
 
   it('a partial reads "Partial match for"', () => {
     expect(bandStrengthLabel(mk('cluster-headache', 'partial', 2, 4))).toBe('Partial match for');
+  });
+});
+
+describe('CHAPTER_ORDER inventory guard (architect 2026-09-08, condition 7a)', () => {
+  it('is a permutation of HEADACHE_PHENOTYPES ids', () => {
+    // The chapterIndex fallback silently returns CHAPTER_ORDER.length on a miss,
+    // so an omitted id produces a silent tie-break ordering defect, not a crash.
+    // This test is the guard the type alone cannot be.
+    const order = [...CHAPTER_ORDER];
+    const ids = HEADACHE_PHENOTYPES.map((p) => p.id);
+    expect(new Set(order).size).toBe(order.length);
+    expect([...order].sort()).toEqual([...ids].sort());
   });
 });

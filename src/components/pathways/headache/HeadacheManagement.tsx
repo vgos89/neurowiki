@@ -40,18 +40,21 @@ const SectionHeader: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
 const Row: React.FC<{ label: string; value: React.ReactNode }> = ({ label, value }) => (
   <div className="min-h-[44px] flex items-start justify-between gap-3 px-4 py-2.5">
-    <dt className="text-xs font-medium text-slate-600 flex-shrink-0 max-w-[40%]">{label}</dt>
-    <dd className="text-sm text-slate-900 text-left flex-1 m-0">{value}</dd>
+    <dt className="text-xs font-medium text-slate-600 flex-shrink-0 max-w-[40%] break-words">{label}</dt>
+    <dd className="text-sm text-slate-900 text-left flex-1 min-w-0 break-words m-0">{value}</dd>
   </div>
 );
 
 const CARD = 'bg-white border border-slate-100 rounded-xl divide-y divide-slate-50';
 const DL = 'm-0 divide-y divide-slate-50';
 
-// Phenotypes that carry a management block: the ten relocated cards plus the
-// TN and occipital cards authored 2026-09-07 (12 of the 16 engine phenotypes).
-// The remaining phenotypes have no treatment card and get no "Show management"
-// disclosure (preserves prior behaviour).
+// Phenotypes that carry a management block: the ten relocated cards, the TN and
+// occipital cards authored 2026-09-07, and the GPN cards authored 2026-09-08
+// (13 of the 18 engine phenotypes). The remaining phenotypes have no treatment
+// card and get no "Show management" disclosure. persistent-idiopathic-facial-pain
+// is DELIBERATELY absent: no held source covers PIFP treatment (evidence packet
+// 2026-09-08 §4.4, a verified negative), so it ships criteria-only and the
+// leading-gap note (showLeadingGapNote) covers the case where it leads.
 const MANAGED = new Set<PhenotypeId>([
   'migraine-without-aura', 'migraine-with-aura',
   'episodic-tth', 'chronic-tth',
@@ -63,6 +66,8 @@ const MANAGED = new Set<PhenotypeId>([
   // nahas-2024-continuum-cranial-neuralgias quoted_text plus the ICHD-3 13.1.1
   // aetiology framework already reviewed with the phenotype.
   'trigeminal-neuralgia', 'occipital-neuralgia',
+  // Added 2026-09-08 (facial-pain expansion, clinical pre-gate approve-with-conditions).
+  'glossopharyngeal-neuralgia',
 ]);
 
 export const hasHeadacheManagement = (phenotypeId: string): boolean => MANAGED.has(phenotypeId as PhenotypeId);
@@ -228,11 +233,50 @@ export const HeadacheManagement: React.FC<{ phenotypeId: string }> = ({ phenotyp
               <Row label="MRI + electrophysiology" value="Classify: classical (neurovascular compression WITH morphological change), secondary (MS, cerebellopontine-angle tumour, AVM), or idiopathic (adequate MRI and electrophysiology negative; a vessel-nerve contact without morphological change is still idiopathic)" />
             </dl>
           </div>
+          {/* Corrected 2026-09-08: the Level A/B grades belong to the AAN/EFNS
+              2008 practice parameter, NOT to the Continuum review previously
+              named in the header (evidence packet 2026-09-08 §9.1.D). All drug
+              grades are scoped to CLASSIC TN as the source scopes them; secondary
+              TN is graded Level U separately (pre-gate C2). No dose range is
+              rendered: the two held sources give different target ranges and the
+              conflict is tracked, not synthesized (pre-gate C16a). */}
           <div data-claim="clinic-headache-tn-management" className={CARD}>
-            <SectionHeader>Treatment (Nahas Continuum 2024)</SectionHeader>
+            <SectionHeader>Treatment</SectionHeader>
             <dl className={DL}>
-              <Row label="First-line" value="Carbamazepine (Level A) or oxcarbazepine (Level B)" />
+              <Row label="First-line (AAN 2008, classic TN)" value="Carbamazepine should be offered (Level A). Oxcarbazepine should be considered (Level B). The evidence for carbamazepine is stronger; oxcarbazepine may pose fewer safety concerns." />
+              <Row label="Second-line (AAN 2008, classic TN)" value="Baclofen, lamotrigine, or pimozide may be considered (Level C; the source notes pimozide is no longer in use). Evidence to guide treatment after first-line failure is limited; some evidence supports adding lamotrigine or switching to baclofen." />
+              <Row label="Secondary TN (AAN 2008)" value="There is insufficient evidence to support or refute the effectiveness of any medication in treating pain in secondary trigeminal neuralgia (Level U)." />
               <Row label="Note" value="Treatment response is not an ICHD-3 13.1.1 criterion. Do not use it to confirm or exclude the diagnosis." />
+            </dl>
+          </div>
+        </div>
+      );
+
+    case 'glossopharyngeal-neuralgia':
+      return (
+        <div className="space-y-3">
+          {/* Authored 2026-09-08 (facial-pain expansion). NO grade is rendered:
+              no major-society guideline has assigned one for GPN (packet §8c).
+              The airway directive previously in the registry is removed and must
+              not be reinstated or paraphrased (packet §0.3): no held document
+              carries it. */}
+          <div data-claim="clinic-headache-gpn-management" className={CARD}>
+            <SectionHeader>Treatment</SectionHeader>
+            <dl className={DL}>
+              <Row label="Evidence" value="No class or level of evidence is shown: no major-society guideline has assigned one for glossopharyngeal neuralgia. ICHD-3 states the drug option below as a comment, and the Continuum cranial-neuralgia review cites only a narrative review." />
+              <Row label="Pharmacotherapy (ICHD-3 13.2.1)" value="Usually responsive, at least initially, to pharmacotherapy, especially carbamazepine or oxcarbazepine." />
+              <Row label="Local anaesthetic (ICHD-3 13.2.1)" value="Application of local anaesthetic to the tonsil and pharyngeal wall has been suggested to prevent attacks for a few hours. This is a comment in the classification, not a diagnostic test: unlike occipital neuralgia, block response is not a criterion here." />
+              <Row label="Relation to trigeminal neuralgia (Nahas 2024)" value="Treatment overlaps substantially with trigeminal neuralgia." />
+            </dl>
+          </div>
+          <div data-claim="clinic-headache-gpn-vagal-safety" className={CARD}>
+            <SectionHeader>Safety and workup</SectionHeader>
+            <dl className={DL}>
+              <Row label="Vagal features" value="In rare cases attacks are accompanied by vagal symptoms such as cough, hoarseness, syncope, or bradycardia. Some authors have suggested the term vagoglossopharyngeal neuralgia for pain accompanied by asystole, convulsions, and syncope. Ask about blackouts with attacks." />
+              <Row label="Nutrition" value="Pain can be severe enough for patients to lose weight. Check weight when swallowing is a trigger." />
+              <Row label="Examination" value="Clinical examination usually shows no sensory change in the nerve distribution. Mild sensory deficits do not invalidate the diagnosis, but major changes or a reduced or missing gag reflex should prompt aetiological investigations." />
+              <Row label="Secondary causes (Nahas 2024)" value="Even without red flags, neuroimaging is usually warranted and may need repeating with dedicated techniques before an underlying problem is found. Pain can be referred into a cranial-nerve territory by soft-tissue or bony pathology of the head and neck." />
+              <Row label="Aetiology (ICHD-3 13.2.1.1 to 13.2.1.3)" value="Classical: MRI or surgery shows neurovascular compression of the glossopharyngeal nerve root. Secondary: an underlying disease is demonstrated; single reports describe neck trauma, multiple sclerosis, tonsillar or regional tumours, cerebellopontine-angle tumours, and Arnold-Chiari malformation. Idiopathic: investigations find neither." />
             </dl>
           </div>
         </div>
@@ -241,10 +285,15 @@ export const HeadacheManagement: React.FC<{ phenotypeId: string }> = ({ phenotyp
     case 'occipital-neuralgia':
       return (
         <div className="space-y-3">
+          {/* Corrected 2026-09-08: "First-line" was never the source framing
+              (evidence packet 2026-09-08 §9.1.D; Nahas p. 483 carried verbatim
+              instead). The prior row was approved against a registry quoted_text
+              that itself overstated the source - §13.1 demonstrated live. */}
           <div data-claim="clinic-headache-on-management" className={CARD}>
             <SectionHeader>Treatment (Nahas Continuum 2024)</SectionHeader>
             <dl className={DL}>
-              <Row label="First-line" value="Greater and/or lesser occipital nerve block" />
+              <Row label="Evidence base" value="Very little high-quality evidence guides treatment, and selection remains largely empiric." />
+              <Row label="Options" value="Nerve blockade, medications typically used for neuralgiform or neuropathic pain, and physical therapy to reduce muscular tension." />
               <Row label="Diagnostic criterion" value="ICHD-3 13.4 criterion D requires that the pain is eased temporarily by local anaesthetic block of the affected nerve(s)." />
             </dl>
           </div>

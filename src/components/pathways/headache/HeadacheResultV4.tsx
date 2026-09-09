@@ -30,7 +30,7 @@
  */
 import React from 'react';
 import { AlertTriangle, RotateCcw, Check, ChevronDown } from 'lucide-react';
-import type { ChipId, PhenotypeMatch, Overlay } from '../../../data/clinicHeadacheData';
+import type { ChipId, PhenotypeMatch, Overlay, PhenotypeId } from '../../../data/clinicHeadacheData';
 import type { BandedResult, BandedMatch } from '../../../data/headacheBanding';
 import { bandStrengthLabel } from '../../../data/headacheBanding';
 import { deriveHeadacheConflict } from '../../../data/headacheConflict';
@@ -106,6 +106,56 @@ const FLAG_LABELS: Record<string, string> = {
 // the prior HeadacheResultList hidden-marker precedent). ndph's criteria claim ALSO
 // renders inside HeadacheManagement when ndph surfaces (it bundles a management note),
 // but is carried here too so it is always-on like the other seven.
+// Per-phenotype criteria-claim bindings. Typed Record over PhenotypeId
+// (architect 2026-09-08, condition 7c): adding a phenotype without deciding its
+// claim binding is now a tsc failure, not a clinical-reviewer catch. Values may
+// repeat (both migraine phenotypes share one criteria claim; both TTH phenotypes
+// share one); an empty array is a DELIBERATE no-binding statement
+// (vestibular-migraine has no standalone criteria claim; its criteria ride the
+// A1.6.6 text in the registry record).
+const PHENOTYPE_CRITERIA_CLAIMS: Record<PhenotypeId, readonly string[]> = {
+  'migraine-without-aura': ['clinic-headache-ichd3-migraine-criteria'],
+  'migraine-with-aura': ['clinic-headache-ichd3-migraine-criteria'],
+  'chronic-migraine': ['clinic-headache-ichd3-chronic-migraine-criteria'],
+  'status-migrainosus': ['clinic-headache-ichd3-status-migrainosus-criteria'],
+  'episodic-tth': ['clinic-headache-ichd3-tension-criteria'],
+  'chronic-tth': ['clinic-headache-ichd3-tension-criteria'],
+  'cluster-headache': ['clinic-headache-ichd3-cluster-criteria'],
+  'paroxysmal-hemicrania': ['clinic-headache-ichd3-paroxysmal-criteria'],
+  'sunct-suna': ['clinic-headache-ichd3-sunct-criteria'],
+  'hemicrania-continua': ['clinic-headache-ichd3-hemicrania-criteria'],
+  'primary-stabbing-headache': ['clinic-headache-ichd3-primary-stabbing-criteria'],
+  'hypnic-headache': ['clinic-headache-ichd3-hypnic-criteria'],
+  'ndph': ['clinic-headache-ichd3-ndph-criteria'],
+  'trigeminal-neuralgia': ['clinic-headache-ichd3-trigeminal-neuralgia-criteria'],
+  'glossopharyngeal-neuralgia': ['clinic-headache-ichd3-glossopharyngeal-neuralgia-criteria'],
+  'occipital-neuralgia': ['clinic-headache-ichd3-occipital-neuralgia-criteria'],
+  'persistent-idiopathic-facial-pain': ['clinic-headache-ichd3-pifp-criteria'],
+  'vestibular-migraine': [],
+};
+
+// Non-phenotype claims carried as always-on markers (subtype passes, red-flag
+// workup, MOH overlay, the migraine-vs-TTH pitfall).
+const SHARED_CLAIM_MARKERS: readonly string[] = [
+  'clinic-headache-ichd3-tac-subtypes',
+  'clinic-headache-ichd3-aura-subtypes',
+  'clinic-headache-ichd3-tn-subtypes',
+  'clinic-headache-redflag-workup',
+  'clinic-headache-ichd3-moh',
+  'clinic-headache-pitfall-mig-vs-tth',
+];
+
+// Exported for the invariants test, which asserts the LITERAL span list below
+// renders exactly this set. The spans must stay literal: scripts/check-claims.ts
+// matches only literal data-claim="..." strings in source, so a dynamic
+// {markers.map(...)} render would blind the scanner to every claim here.
+// Guard design (architect 2026-09-08, condition 7c): an omitted Record entry is
+// a tsc failure; an omitted or stray literal span is an invariants-test failure.
+export const ALL_CLAIM_MARKERS: readonly string[] = Array.from(new Set([
+  ...Object.values(PHENOTYPE_CRITERIA_CLAIMS).flat(),
+  ...SHARED_CLAIM_MARKERS,
+]));
+
 const HiddenClaimMarkers: React.FC = () => (
   <div className="hidden" aria-hidden="true">
     <span data-claim="clinic-headache-ichd3-migraine-criteria" />
@@ -119,7 +169,9 @@ const HiddenClaimMarkers: React.FC = () => (
     <span data-claim="clinic-headache-ichd3-primary-stabbing-criteria" />
     <span data-claim="clinic-headache-ichd3-status-migrainosus-criteria" />
     <span data-claim="clinic-headache-ichd3-trigeminal-neuralgia-criteria" />
+    <span data-claim="clinic-headache-ichd3-glossopharyngeal-neuralgia-criteria" />
     <span data-claim="clinic-headache-ichd3-occipital-neuralgia-criteria" />
+    <span data-claim="clinic-headache-ichd3-pifp-criteria" />
     <span data-claim="clinic-headache-ichd3-hypnic-criteria" />
     <span data-claim="clinic-headache-ichd3-tac-subtypes" />
     <span data-claim="clinic-headache-ichd3-aura-subtypes" />

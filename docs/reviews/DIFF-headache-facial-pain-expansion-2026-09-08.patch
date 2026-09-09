@@ -1,0 +1,1080 @@
+diff --git a/src/components/pathways/headache/HeadacheManagement.tsx b/src/components/pathways/headache/HeadacheManagement.tsx
+index 490c167..bc6faff 100644
+--- a/src/components/pathways/headache/HeadacheManagement.tsx
++++ b/src/components/pathways/headache/HeadacheManagement.tsx
+@@ -40,18 +40,21 @@ const SectionHeader: React.FC<{ children: React.ReactNode }> = ({ children }) =>
+ 
+ const Row: React.FC<{ label: string; value: React.ReactNode }> = ({ label, value }) => (
+   <div className="min-h-[44px] flex items-start justify-between gap-3 px-4 py-2.5">
+-    <dt className="text-xs font-medium text-slate-600 flex-shrink-0 max-w-[40%]">{label}</dt>
+-    <dd className="text-sm text-slate-900 text-left flex-1 m-0">{value}</dd>
++    <dt className="text-xs font-medium text-slate-600 flex-shrink-0 max-w-[40%] break-words">{label}</dt>
++    <dd className="text-sm text-slate-900 text-left flex-1 min-w-0 break-words m-0">{value}</dd>
+   </div>
+ );
+ 
+ const CARD = 'bg-white border border-slate-100 rounded-xl divide-y divide-slate-50';
+ const DL = 'm-0 divide-y divide-slate-50';
+ 
+-// Phenotypes that carry a management block: the ten relocated cards plus the
+-// TN and occipital cards authored 2026-09-07 (12 of the 16 engine phenotypes).
+-// The remaining phenotypes have no treatment card and get no "Show management"
+-// disclosure (preserves prior behaviour).
++// Phenotypes that carry a management block: the ten relocated cards, the TN and
++// occipital cards authored 2026-09-07, and the GPN cards authored 2026-09-08
++// (13 of the 18 engine phenotypes). The remaining phenotypes have no treatment
++// card and get no "Show management" disclosure. persistent-idiopathic-facial-pain
++// is DELIBERATELY absent: no held source covers PIFP treatment (evidence packet
++// 2026-09-08 §4.4, a verified negative), so it ships criteria-only and the
++// leading-gap note (showLeadingGapNote) covers the case where it leads.
+ const MANAGED = new Set<PhenotypeId>([
+   'migraine-without-aura', 'migraine-with-aura',
+   'episodic-tth', 'chronic-tth',
+@@ -63,6 +66,8 @@ const MANAGED = new Set<PhenotypeId>([
+   // nahas-2024-continuum-cranial-neuralgias quoted_text plus the ICHD-3 13.1.1
+   // aetiology framework already reviewed with the phenotype.
+   'trigeminal-neuralgia', 'occipital-neuralgia',
++  // Added 2026-09-08 (facial-pain expansion, clinical pre-gate approve-with-conditions).
++  'glossopharyngeal-neuralgia',
+ ]);
+ 
+ export const hasHeadacheManagement = (phenotypeId: string): boolean => MANAGED.has(phenotypeId as PhenotypeId);
+@@ -228,23 +233,67 @@ export const HeadacheManagement: React.FC<{ phenotypeId: string }> = ({ phenotyp
+               <Row label="MRI + electrophysiology" value="Classify: classical (neurovascular compression WITH morphological change), secondary (MS, cerebellopontine-angle tumour, AVM), or idiopathic (adequate MRI and electrophysiology negative; a vessel-nerve contact without morphological change is still idiopathic)" />
+             </dl>
+           </div>
++          {/* Corrected 2026-09-08: the Level A/B grades belong to the AAN/EFNS
++              2008 practice parameter, NOT to the Continuum review previously
++              named in the header (evidence packet 2026-09-08 §9.1.D). All drug
++              grades are scoped to CLASSIC TN as the source scopes them; secondary
++              TN is graded Level U separately (pre-gate C2). No dose range is
++              rendered: the two held sources give different target ranges and the
++              conflict is tracked, not synthesized (pre-gate C16a). */}
+           <div data-claim="clinic-headache-tn-management" className={CARD}>
+-            <SectionHeader>Treatment (Nahas Continuum 2024)</SectionHeader>
++            <SectionHeader>Treatment</SectionHeader>
+             <dl className={DL}>
+-              <Row label="First-line" value="Carbamazepine (Level A) or oxcarbazepine (Level B)" />
++              <Row label="First-line (AAN 2008, classic TN)" value="Carbamazepine should be offered (Level A). Oxcarbazepine should be considered (Level B). The evidence for carbamazepine is stronger; oxcarbazepine may pose fewer safety concerns." />
++              <Row label="Second-line (AAN 2008, classic TN)" value="Baclofen, lamotrigine, or pimozide may be considered (Level C; the source notes pimozide is no longer in use). Evidence to guide treatment after first-line failure is limited; some evidence supports adding lamotrigine or switching to baclofen." />
++              <Row label="Secondary TN (AAN 2008)" value="There is insufficient evidence to support or refute the effectiveness of any medication in treating pain in secondary trigeminal neuralgia (Level U)." />
+               <Row label="Note" value="Treatment response is not an ICHD-3 13.1.1 criterion. Do not use it to confirm or exclude the diagnosis." />
+             </dl>
+           </div>
+         </div>
+       );
+ 
++    case 'glossopharyngeal-neuralgia':
++      return (
++        <div className="space-y-3">
++          {/* Authored 2026-09-08 (facial-pain expansion). NO grade is rendered:
++              no major-society guideline has assigned one for GPN (packet §8c).
++              The airway directive previously in the registry is removed and must
++              not be reinstated or paraphrased (packet §0.3): no held document
++              carries it. */}
++          <div data-claim="clinic-headache-gpn-management" className={CARD}>
++            <SectionHeader>Treatment</SectionHeader>
++            <dl className={DL}>
++              <Row label="Evidence" value="No class or level of evidence is shown: no major-society guideline has assigned one for glossopharyngeal neuralgia. ICHD-3 states the drug option below as a comment, and the Continuum cranial-neuralgia review cites only a narrative review." />
++              <Row label="Pharmacotherapy (ICHD-3 13.2.1)" value="Usually responsive, at least initially, to pharmacotherapy, especially carbamazepine or oxcarbazepine." />
++              <Row label="Local anaesthetic (ICHD-3 13.2.1)" value="Application of local anaesthetic to the tonsil and pharyngeal wall has been suggested to prevent attacks for a few hours. This is a comment in the classification, not a diagnostic test: unlike occipital neuralgia, block response is not a criterion here." />
++              <Row label="Relation to trigeminal neuralgia (Nahas 2024)" value="Treatment overlaps substantially with trigeminal neuralgia." />
++            </dl>
++          </div>
++          <div data-claim="clinic-headache-gpn-vagal-safety" className={CARD}>
++            <SectionHeader>Safety and workup</SectionHeader>
++            <dl className={DL}>
++              <Row label="Vagal features" value="In rare cases attacks are accompanied by vagal symptoms such as cough, hoarseness, syncope, or bradycardia. Some authors have suggested the term vagoglossopharyngeal neuralgia for pain accompanied by asystole, convulsions, and syncope. Ask about blackouts with attacks." />
++              <Row label="Nutrition" value="Pain can be severe enough for patients to lose weight. Check weight when swallowing is a trigger." />
++              <Row label="Examination" value="Clinical examination usually shows no sensory change in the nerve distribution. Mild sensory deficits do not invalidate the diagnosis, but major changes or a reduced or missing gag reflex should prompt aetiological investigations." />
++              <Row label="Secondary causes (Nahas 2024)" value="Even without red flags, neuroimaging is usually warranted and may need repeating with dedicated techniques before an underlying problem is found. Pain can be referred into a cranial-nerve territory by soft-tissue or bony pathology of the head and neck." />
++              <Row label="Aetiology (ICHD-3 13.2.1.1 to 13.2.1.3)" value="Classical: MRI or surgery shows neurovascular compression of the glossopharyngeal nerve root. Secondary: an underlying disease is demonstrated; single reports describe neck trauma, multiple sclerosis, tonsillar or regional tumours, cerebellopontine-angle tumours, and Arnold-Chiari malformation. Idiopathic: investigations find neither." />
++            </dl>
++          </div>
++        </div>
++      );
++
+     case 'occipital-neuralgia':
+       return (
+         <div className="space-y-3">
++          {/* Corrected 2026-09-08: "First-line" was never the source framing
++              (evidence packet 2026-09-08 §9.1.D; Nahas p. 483 carried verbatim
++              instead). The prior row was approved against a registry quoted_text
++              that itself overstated the source - §13.1 demonstrated live. */}
+           <div data-claim="clinic-headache-on-management" className={CARD}>
+             <SectionHeader>Treatment (Nahas Continuum 2024)</SectionHeader>
+             <dl className={DL}>
+-              <Row label="First-line" value="Greater and/or lesser occipital nerve block" />
++              <Row label="Evidence base" value="Very little high-quality evidence guides treatment, and selection remains largely empiric." />
++              <Row label="Options" value="Nerve blockade, medications typically used for neuralgiform or neuropathic pain, and physical therapy to reduce muscular tension." />
+               <Row label="Diagnostic criterion" value="ICHD-3 13.4 criterion D requires that the pain is eased temporarily by local anaesthetic block of the affected nerve(s)." />
+             </dl>
+           </div>
+diff --git a/src/components/pathways/headache/HeadacheResultV4.tsx b/src/components/pathways/headache/HeadacheResultV4.tsx
+index d9a033a..74e225d 100644
+--- a/src/components/pathways/headache/HeadacheResultV4.tsx
++++ b/src/components/pathways/headache/HeadacheResultV4.tsx
+@@ -30,7 +30,7 @@
+  */
+ import React from 'react';
+ import { AlertTriangle, RotateCcw, Check, ChevronDown } from 'lucide-react';
+-import type { ChipId, PhenotypeMatch, Overlay } from '../../../data/clinicHeadacheData';
++import type { ChipId, PhenotypeMatch, Overlay, PhenotypeId } from '../../../data/clinicHeadacheData';
+ import type { BandedResult, BandedMatch } from '../../../data/headacheBanding';
+ import { bandStrengthLabel } from '../../../data/headacheBanding';
+ import { deriveHeadacheConflict } from '../../../data/headacheConflict';
+@@ -106,6 +106,56 @@ const FLAG_LABELS: Record<string, string> = {
+ // the prior HeadacheResultList hidden-marker precedent). ndph's criteria claim ALSO
+ // renders inside HeadacheManagement when ndph surfaces (it bundles a management note),
+ // but is carried here too so it is always-on like the other seven.
++// Per-phenotype criteria-claim bindings. Typed Record over PhenotypeId
++// (architect 2026-09-08, condition 7c): adding a phenotype without deciding its
++// claim binding is now a tsc failure, not a clinical-reviewer catch. Values may
++// repeat (both migraine phenotypes share one criteria claim; both TTH phenotypes
++// share one); an empty array is a DELIBERATE no-binding statement
++// (vestibular-migraine has no standalone criteria claim; its criteria ride the
++// A1.6.6 text in the registry record).
++const PHENOTYPE_CRITERIA_CLAIMS: Record<PhenotypeId, readonly string[]> = {
++  'migraine-without-aura': ['clinic-headache-ichd3-migraine-criteria'],
++  'migraine-with-aura': ['clinic-headache-ichd3-migraine-criteria'],
++  'chronic-migraine': ['clinic-headache-ichd3-chronic-migraine-criteria'],
++  'status-migrainosus': ['clinic-headache-ichd3-status-migrainosus-criteria'],
++  'episodic-tth': ['clinic-headache-ichd3-tension-criteria'],
++  'chronic-tth': ['clinic-headache-ichd3-tension-criteria'],
++  'cluster-headache': ['clinic-headache-ichd3-cluster-criteria'],
++  'paroxysmal-hemicrania': ['clinic-headache-ichd3-paroxysmal-criteria'],
++  'sunct-suna': ['clinic-headache-ichd3-sunct-criteria'],
++  'hemicrania-continua': ['clinic-headache-ichd3-hemicrania-criteria'],
++  'primary-stabbing-headache': ['clinic-headache-ichd3-primary-stabbing-criteria'],
++  'hypnic-headache': ['clinic-headache-ichd3-hypnic-criteria'],
++  'ndph': ['clinic-headache-ichd3-ndph-criteria'],
++  'trigeminal-neuralgia': ['clinic-headache-ichd3-trigeminal-neuralgia-criteria'],
++  'glossopharyngeal-neuralgia': ['clinic-headache-ichd3-glossopharyngeal-neuralgia-criteria'],
++  'occipital-neuralgia': ['clinic-headache-ichd3-occipital-neuralgia-criteria'],
++  'persistent-idiopathic-facial-pain': ['clinic-headache-ichd3-pifp-criteria'],
++  'vestibular-migraine': [],
++};
++
++// Non-phenotype claims carried as always-on markers (subtype passes, red-flag
++// workup, MOH overlay, the migraine-vs-TTH pitfall).
++const SHARED_CLAIM_MARKERS: readonly string[] = [
++  'clinic-headache-ichd3-tac-subtypes',
++  'clinic-headache-ichd3-aura-subtypes',
++  'clinic-headache-ichd3-tn-subtypes',
++  'clinic-headache-redflag-workup',
++  'clinic-headache-ichd3-moh',
++  'clinic-headache-pitfall-mig-vs-tth',
++];
++
++// Exported for the invariants test, which asserts the LITERAL span list below
++// renders exactly this set. The spans must stay literal: scripts/check-claims.ts
++// matches only literal data-claim="..." strings in source, so a dynamic
++// {markers.map(...)} render would blind the scanner to every claim here.
++// Guard design (architect 2026-09-08, condition 7c): an omitted Record entry is
++// a tsc failure; an omitted or stray literal span is an invariants-test failure.
++export const ALL_CLAIM_MARKERS: readonly string[] = Array.from(new Set([
++  ...Object.values(PHENOTYPE_CRITERIA_CLAIMS).flat(),
++  ...SHARED_CLAIM_MARKERS,
++]));
++
+ const HiddenClaimMarkers: React.FC = () => (
+   <div className="hidden" aria-hidden="true">
+     <span data-claim="clinic-headache-ichd3-migraine-criteria" />
+@@ -119,7 +169,9 @@ const HiddenClaimMarkers: React.FC = () => (
+     <span data-claim="clinic-headache-ichd3-primary-stabbing-criteria" />
+     <span data-claim="clinic-headache-ichd3-status-migrainosus-criteria" />
+     <span data-claim="clinic-headache-ichd3-trigeminal-neuralgia-criteria" />
++    <span data-claim="clinic-headache-ichd3-glossopharyngeal-neuralgia-criteria" />
+     <span data-claim="clinic-headache-ichd3-occipital-neuralgia-criteria" />
++    <span data-claim="clinic-headache-ichd3-pifp-criteria" />
+     <span data-claim="clinic-headache-ichd3-hypnic-criteria" />
+     <span data-claim="clinic-headache-ichd3-tac-subtypes" />
+     <span data-claim="clinic-headache-ichd3-aura-subtypes" />
+diff --git a/src/components/pathways/headache/headacheResultV4.invariants.test.tsx b/src/components/pathways/headache/headacheResultV4.invariants.test.tsx
+index 63742b9..38dac25 100644
+--- a/src/components/pathways/headache/headacheResultV4.invariants.test.tsx
++++ b/src/components/pathways/headache/headacheResultV4.invariants.test.tsx
+@@ -2,8 +2,9 @@ import { describe, it, expect } from 'vitest';
+ import { readFileSync } from 'node:fs';
+ import React from 'react';
+ import { renderToStaticMarkup } from 'react-dom/server';
+-import { HeadacheResultV4, showLeadingGapNote } from './HeadacheResultV4';
+-import { hasHeadacheManagement } from './HeadacheManagement';
++import { HeadacheResultV4, showLeadingGapNote, ALL_CLAIM_MARKERS } from './HeadacheResultV4';
++import { HeadacheManagement, hasHeadacheManagement } from './HeadacheManagement';
++import { HEADACHE_PHENOTYPES } from '../../../data/clinicHeadacheData';
+ import { bandPhenotypes } from '../../../data/headacheBanding';
+ import type { BandedMatch } from '../../../data/headacheBanding';
+ import { evaluateHeadachePhenotypes, type ChipId } from '../../../data/clinicHeadacheData';
+@@ -119,3 +120,37 @@ describe('HeadacheResultV4 — leading-gap note (BC-8 / architect condition 3)',
+     )).toBe(false);
+   });
+ });
++
++describe('MANAGED / switch sync + claim-marker pin (architect 2026-09-08, condition 7)', () => {
++  it('every phenotype renders a management body if and only if it is MANAGED', () => {
++    // Both directions: a MANAGED id whose switch arm is missing renders nothing
++    // (false amber note + silent card loss); a switch arm outside MANAGED never
++    // renders (dead clinical prose). One new phenotype sits on each side of the
++    // boundary by design (GPN managed, PIFP deliberately not), which is exactly
++    // when this drift becomes likely.
++    for (const p of HEADACHE_PHENOTYPES) {
++      const html = renderToStaticMarkup(<HeadacheManagement phenotypeId={p.id} />);
++      const hasBody = html.trim().length > 0;
++      expect(hasBody, `${p.id}: rendered=${hasBody} but MANAGED=${hasHeadacheManagement(p.id)}`)
++        .toBe(hasHeadacheManagement(p.id));
++    }
++  });
++
++  it('the literal HiddenClaimMarkers spans render exactly ALL_CLAIM_MARKERS', () => {
++    // The spans must stay LITERAL (scripts/check-claims.ts reads source
++    // statically), so the typed Record cannot render them. This pin makes an
++    // omitted or stray literal span a test failure in both directions.
++    const html = render({ banded: bandPhenotypes([]), redFlagActive: true, redFlags: new Set<ChipId>(['rf-onset-sudden']) });
++    const rendered = Array.from(html.matchAll(/data-claim="([^"]+)"/g)).map((m) => m[1]);
++    const hidden = rendered.filter((id) => ALL_CLAIM_MARKERS.includes(id));
++    expect([...new Set(hidden)].sort()).toEqual([...ALL_CLAIM_MARKERS].sort());
++  });
++
++  it('PIFP top-ranked with a manageable runner-up: the leading-gap note names both (architect rec 12)', () => {
++    // PIFP is deliberately outside MANAGED (no held treatment source), so a
++    // leading PIFP with a managed runner-up MUST fire the note.
++    const fake = (id: string, name: string) => ({ match: { phenotypeId: id, name } }) as unknown as BandedMatch;
++    const top2 = [fake('persistent-idiopathic-facial-pain', 'Persistent idiopathic facial pain'), fake('migraine-without-aura', 'Migraine without aura')];
++    expect(showLeadingGapNote(top2, [top2[1]])).toBe(true);
++  });
++});
+diff --git a/src/data/clinicHeadacheData.ts b/src/data/clinicHeadacheData.ts
+index bc9f2e0..4fc4d5e 100644
+--- a/src/data/clinicHeadacheData.ts
++++ b/src/data/clinicHeadacheData.ts
+@@ -20,6 +20,15 @@
+ 
+ // ─── Chip ID union (the entire feature vocabulary) ────────────────────────
+ 
++// CHIP-REUSE RULE (architect 2026-09-08, condition 5 - do not re-litigate).
++// Reuse a chip only when the chip's LABEL, which is the thing the clinician
++// actually affirms, is logically equivalent to the criterion's requirement. A
++// label WIDER than the criterion manufactures false positives; a label NARROWER
++// than the criterion manufactures false negatives (the sev-very-severe defect,
++// medical review 2026-09-07 U1). Where no single chip is equivalent, use a
++// disjunction of chips that jointly cover the criterion, or mint. Minting a
++// duration chip per criterion window is the established convention here, not the
++// exception: eight overlapping dur-* chips already coexist.
+ export type ChipId =
+   // Pattern: lifetime attacks
+   | 'attacks-lt-5' | 'attacks-ge-2' | 'attacks-5-to-10' | 'attacks-gt-10' | 'attacks-ge-20'
+@@ -63,6 +72,11 @@ export type ChipId =
+   | 'sym-restlessness' | 'sym-autonomic-ipsilateral'
+   | 'sym-conjunctival-injection' | 'sym-lacrimation' | 'sym-other-cranial-autonomic'  // §3.3 SUNCT/SUNA itemized autonomic
+   | 'sym-reversible-neuro-reported'  // ROUTING FLAG: opens the aura screen; contributes to no criterion
++  // §13.2.1 Glossopharyngeal neuralgia — added 2026-09-08
++  | 'loc-glossopharyngeal-territory' | 'dur-few-sec-to-2min' | 'trigger-swallow-cough-talk-yawn'
++  // §13.12 Persistent idiopathic facial pain — added 2026-09-08
++  | 'pifp-daily-gt2h-gt3mo' | 'pifp-poorly-localized-non-nerve' | 'qual-dull-aching-nagging'
++  | 'exam-neuro-normal' | 'pifp-dental-cause-excluded'
+   // Chronic migraine — ICHD-3 §1.3 criterion C disjunction
+   | 'migraine-features-ge-8-per-month' | 'triptan-response-positive'
+   // Aura features
+@@ -116,21 +130,24 @@ export type PhenotypeId =
+   | 'migraine-with-aura'
+   | 'chronic-migraine'              // §1.3 — added 2026-05-25 per medsci audit
+   | 'status-migrainosus'            // §1.4.1 — added 2026-07-06
+-  | 'probable-migraine'
+   | 'episodic-tth'
+   | 'chronic-tth'
+-  | 'probable-tth'
+   | 'cluster-headache'
+   | 'paroxysmal-hemicrania'         // §3.2 — added 2026-05-25
+   | 'sunct-suna'                    // §3.3 — added 2026-05-25
+   | 'hemicrania-continua'
+-  | 'probable-tac'
+   | 'primary-stabbing-headache'     // §4.7 — added 2026-07-06
+   | 'hypnic-headache'               // §4.9 — added 2026-07-06
+   | 'trigeminal-neuralgia'          // §13.1.1 — added 2026-07-06
++  | 'glossopharyngeal-neuralgia'    // §13.2.1 — added 2026-09-08
+   | 'occipital-neuralgia'           // §13.4 — added 2026-07-06
++  | 'persistent-idiopathic-facial-pain'  // §13.12 — added 2026-09-08
+   | 'ndph'
+   | 'vestibular-migraine';
++// 2026-09-08: the vestigial members 'probable-migraine', 'probable-tth' and
++// 'probable-tac' were removed (declared since the v1 sketch, referenced nowhere;
++// architect rec 14). Their removal makes Record<PhenotypeId, T> an exhaustive
++// map over real phenotypes, which the claim-marker and banding guards rely on.
+ 
+ // ─── ICHD-3 subtypes (ADR-2026-07-06 subtype pass) ────────────────────────
+ // A resolved leaf of a matched parent phenotype. Attached to PhenotypeMatch by
+@@ -514,6 +531,27 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
+       { id: 'freq-ge-1-per-day', label: '1 or more attacks per day', teachWhenSelected: '§3.3 SUNCT/SUNA frequency criterion D.' },
+     ],
+   },
++  {
++    // §13.2.1 GPN + §13.12 PIFP chips — added 2026-09-08 (architect rec 10:
++    // their own group rather than growing pain-character). Labels ONLY, no
++    // teachWhenSelected: chip teach texts are DORMANT in the V4 pathway
++    // (clinical review round 2, BI-3) and clinical prose authored there reaches
++    // no user while reading as reviewed.
++    id: 'facial-pain-detail',
++    label: 'Facial and cranial-neuralgia detail',
++    eyebrow: 'ICHD-3 chapter 13 separates facial pain by nerve territory, attack length, trigger, and quality.',
++    defaultCollapsed: true,
++    chips: [
++      { id: 'loc-glossopharyngeal-territory', label: 'Pain in the throat, back of the tongue, tonsil area, ear, or under the angle of the jaw' },
++      { id: 'dur-few-sec-to-2min', label: 'Each attack lasts from a few seconds up to 2 minutes' },
++      { id: 'trigger-swallow-cough-talk-yawn', label: 'Attacks triggered by swallowing, coughing, talking, or yawning' },
++      { id: 'pifp-daily-gt2h-gt3mo', label: 'Facial or mouth pain daily, more than 2 hours a day, for more than 3 months' },
++      { id: 'pifp-poorly-localized-non-nerve', label: 'Pain is poorly localized and does not follow the territory of a peripheral nerve' },
++      { id: 'qual-dull-aching-nagging', label: 'Dull, aching, or nagging quality' },
++      { id: 'exam-neuro-normal', label: 'Clinical neurological examination is normal' },
++      { id: 'pifp-dental-cause-excluded', label: 'A dental cause has been excluded by appropriate investigations' },
++    ],
++  },
+   {
+     // Chronic migraine §1.3 — features-day frequency + triptan-response gate
+     id: 'chronic-migraine-detail',
+@@ -883,6 +921,67 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
+     ],
+   },
+ 
++  // ─── 13.2.1 Glossopharyngeal neuralgia ────────────────────────────────────
++  // ICHD-3 §13.2.1 parent, encoded 2026-09-08 from the source-verified evidence
++  // packet (docs/evidence-packets/2026-09-08-ichd3-13-2-13-12-facial-pain.md;
++  // ICHD-3 PDF pp. 171-172). NOTE THE NUMBERING: 13.2 is a parent HEADING with no
++  // criteria of its own (structurally identical to 13.1); the entity with
++  // criteria is 13.2.1. Never ship "ICHD-3 13.2" against these criteria. 13.2.2
++  // Painful glossopharyngeal neuropathy is a SIBLING entity, not a subform, and
++  // is out of scope on the same reasoning that excluded 13.1.2 from the TN
++  // encoding.
++  // Aetiology subtyping (§13.2.1.1 classical / §13.2.1.2 secondary / §13.2.1.3
++  // idiopathic) is decided by MRI or surgery and is DEFERRED to the subtype-
++  // hierarchy layer, exactly as TN's is (ADR-2026-07-06; packet §9.2 flag 3).
++  // Do NOT build a second, divergent solution for GPN, and do NOT reuse the tn-*
++  // aetiology chips, whose ids would then lie about which phenotype they resolve.
++  // ENCODING TRAP: 13.2.1.1 criterion B has NO "morphological change" and NO
++  // "not simply contact" qualifier, unlike 13.1.1.1 (ICHD-3 p. 172 vs p. 167).
++  // The classical/idiopathic split for GPN turns on whether compression is
++  // demonstrated at all.
++  // §13 has NO Probable-GPN section, so both criteria are suppress-gates (binary
++  // full or hidden): a feature miss is unclassified, NOT "probable GPN". No
++  // attack-count criterion. Drug response and local-anaesthetic response are
++  // Comments (p. 172), NOT criteria, and are not gates. Criterion C ("not better
++  // accounted for by another ICHD-3 diagnosis") is NOT encoded: no phenotype in
++  // this engine encodes it, it has no chip-answerable substrate, and encoding it
++  // would inflate the criteriaTotal denominator inconsistently in the shared
++  // "N of M" display (architect 2026-09-08, condition 6).
++  // NOT in episodicPhenotypes: GPN "can occur together with 13.1.1 Trigeminal
++  // neuralgia" (p. 172), and a coexisting continuous headache answered as
++  // dur-continuous must not silently delete the GPN paroxysms from the
++  // differential. No EMIT entries: both criteria DROP silently, like TN and ON.
++  {
++    id: 'glossopharyngeal-neuralgia',
++    name: 'Glossopharyngeal neuralgia',
++    ichd3Section: 'ICHD-3 §13.2.1',
++    teachPearl:
++      'Glossopharyngeal neuralgia is recurrent, brief (a few seconds up to 2 minutes), severe, electric-shock-like, shooting, stabbing, or sharp unilateral pain in the posterior part of the tongue, tonsillar fossa, pharynx, or angle of the lower jaw, and/or in the ear, precipitated by swallowing, coughing, talking, or yawning. Unlike 13.1.1 trigeminal neuralgia, radiation beyond the nerve is permitted: the pain may involve the eye, nose, chin, or shoulder. It can occur together with 13.1.1 trigeminal neuralgia. In rare cases attacks are accompanied by vagal symptoms such as cough, hoarseness, syncope, or bradycardia, and some authors have suggested the term vagoglossopharyngeal neuralgia for pain accompanied by asystole, convulsions, and syncope. Pain can be severe enough for patients to lose weight. Clinical examination usually shows no sensory change in the nerve distribution; mild sensory deficits do not invalidate the diagnosis, but major changes or a reduced or missing gag reflex should prompt aetiological investigations.',
++    criteria: [
++      // gpn-A: suppress-gate (DROP). Anatomical substrate. Unilateral pain in the
++      // glossopharyngeal distribution (§13.2.1 A + Note 1: posterior part of the
++      // tongue, tonsillar fossa, pharynx or angle of the lower jaw and/or in the
++      // ear). Do NOT reuse loc-trigeminal-distribution: its label encodes "not
++      // spreading beyond", which 13.2.1 explicitly permits (packet §6.1 trap 2).
++      { id: 'gpn-A', label: 'Unilateral pain in the glossopharyngeal distribution (throat, tongue base, tonsil area, angle of the jaw, or ear)', description: 'ICHD-3 13.2.1 A: recurring paroxysmal attacks of unilateral pain in the distribution of the glossopharyngeal nerve. Note 1: within the posterior part of the tongue, tonsillar fossa, pharynx or angle of the lower jaw and/or in the ear.', evaluate: s => has(s, 'loc-unilateral') && has(s, 'loc-glossopharyngeal-territory'), contributingChips: ['loc-unilateral', 'loc-glossopharyngeal-territory'], role: 'suppress-gate' },
++      // gpn-B: suppress-gate (DROP). ONE composite criterion carrying all four
++      // sub-items B.1-B.4, faithful to the ICHD lettering: unlike TN, whose
++      // trigger is a SEPARATE lettered criterion C, GPN's trigger is B.4 and sits
++      // inside B. Splitting it would make the "N of M" denominator inconsistent
++      // with the source. Severity: 13.2.1 B.2 "severe intensity" is satisfied by
++      // EITHER severity answer (U1 lesson; mirrors tn-B). Quality: B.3 is
++      // word-identical to TN B.3; the OR-pair counts once (on-B idiom).
++      // Duration: dur-few-sec-to-2min is MINTED - dur-seconds-to-minutes
++      // (occipital) is wider at the upper bound and dur-fraction-sec-to-2min (TN)
++      // is wider at the lower bound; either would admit patients this criterion
++      // excludes. Trigger: trigger-swallow-cough-talk-yawn is MINTED and must NOT
++      // feed tn-C; TN's trigger is innocuous cutaneous stimuli, GPN's is
++      // deglutitive/mechanical, and collapsing them makes the two phenotypes
++      // indistinguishable at the chip layer (packet §6.1 trap 1).
++      { id: 'gpn-B', label: 'Brief (a few seconds up to 2 min), severe, shock-like or sharp pain triggered by swallowing, coughing, talking, or yawning', description: 'ICHD-3 13.2.1 B: pain has all of: 1) lasting from a few seconds to two minutes, 2) severe intensity, 3) electric shock-like, shooting, stabbing or sharp in quality, 4) precipitated by swallowing, coughing, talking or yawning.', evaluate: s => has(s, 'dur-few-sec-to-2min') && (has(s, 'sev-severe') || has(s, 'sev-very-severe')) && (has(s, 'qual-electric-shock-shooting') || has(s, 'qual-sharp-stabbing')) && has(s, 'trigger-swallow-cough-talk-yawn'), contributingChips: ['dur-few-sec-to-2min', 'sev-severe', 'sev-very-severe', 'qual-electric-shock-shooting', 'qual-sharp-stabbing', 'trigger-swallow-cough-talk-yawn'], role: 'suppress-gate' },
++    ],
++  },
++
+   // ─── 13.4 Occipital neuralgia ─────────────────────────────────────────────
+   // ICHD-3 §13.4. Flat additive phenotype, encoded 2026-07-06 from the source-
+   // verified evidence packet (ICHD-3 PDF p. 176). No aetiological subtypes and no
+@@ -911,6 +1010,84 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
+     ],
+   },
+ 
++  // ─── 13.12 Persistent idiopathic facial pain ──────────────────────────────
++  // ICHD-3 §13.12 (previously used term: atypical facial pain). Encoded
++  // 2026-09-08 from the source-verified evidence packet (ICHD-3 PDF pp. 178-179,
++  // read in reading order). §13.12 carries NO Notes and no superscript note
++  // markers on any criterion; this is a verified absence, not an extraction gap.
++  // The criteria run A-F. Criterion F ("not better accounted for by another
++  // ICHD-3 diagnosis") is NOT encoded, per the engine-wide rule (architect
++  // condition 6). There is NO §13.12.5 Probable tier and no subform: the
++  // atypical-odontalgia Comment explicitly says the candidate subtypes "have not
++  // been sufficiently studied to propose diagnostic criteria", so the engine must
++  // not invent one. All five encoded criteria are suppress-gates (binary full or
++  // hidden).
++  // THERE IS NO "INVESTIGATIONS UNREMARKABLE" CRITERION. The only investigation
++  // criterion is E (dental cause excluded); the only normal-findings criterion is
++  // D (CLINICAL neurological examination). The Comments state the opposite of a
++  // blanket normal-investigations requirement: "psychophysical or
++  // neurophysiological tests may demonstrate sensory abnormalities."
++  // NOT in episodicPhenotypes - safety-critical, not cosmetic: PIFP is a daily
++  // entity, and membership would let a dur-continuous answer suppress the
++  // phenotype from the very patient it describes. Criterion B is NOT routed
++  // through dur-continuous or split across pattern-ge-3-months (see pifp-B).
++  // No management card (MANAGED excludes this id): no held source covers PIFP
++  // treatment. Nahas 2024 does not cover PIFP at all, a verified negative
++  // corroborated by the article's own scope enumeration on p. 474. Criteria D and
++  // E carry the workup message on the criteria surface, and the q-pifp option
++  // labels carry it during the question flow.
++  {
++    id: 'persistent-idiopathic-facial-pain',
++    name: 'Persistent idiopathic facial pain',
++    ichd3Section: 'ICHD-3 §13.12',
++    teachPearl:
++      'Persistent idiopathic facial pain, previously called atypical facial pain, is facial or oral pain recurring daily for more than 2 hours a day for more than 3 months, poorly localized and not following the distribution of a peripheral nerve, dull, aching, or nagging in quality, with a normal clinical neurological examination and a dental cause excluded by appropriate investigations. Sharp exacerbations are allowed, the pain is aggravated by stress, and over time it may spread to a wider area of the craniocervical region. Psychophysical or neurophysiological tests may demonstrate sensory abnormalities, so an abnormal sensory test does not exclude it: the clinical neurological examination is the only normal-findings criterion. It may originate from a minor operation or injury to the face, maxillae, teeth, or gums and persist after healing without any demonstrable local cause. Patients are predominantly female, and levels of psychiatric comorbidity and psychosocial disability are high.',
++    criteria: [
++      // pifp-A: suppress-gate (DROP). Site substrate. 13.12 A is "facial and/or
++      // oral pain": satisfied by EITHER site chip, because either alone is
++      // narrower than the criterion (a narrower label manufactures false
++      // negatives - the U1 defect class). loc-orbital-temporal is deliberately
++      // NOT included: it would let a cluster or PH chip satisfy PIFP's substrate.
++      // ACCEPTED OVER-WIDTH (clinical post-gate 2026-09-09): the territory chip's
++      // label includes "ear", and an ear-only presentation is neither facial nor
++      // oral. Accepted because restricting to loc-facial-region would create a
++      // U1-class false negative for tongue-base and tonsillar (genuinely ORAL)
++      // presentations that criterion A covers and loc-face's label does not.
++      // Also defensive: branch answers persist in page state after a branch stops
++      // firing, so a site criterion prevents a stale q-pifp answer set from
++      // matching after the location answer changes.
++      { id: 'pifp-A', label: 'Facial and/or oral pain', description: 'ICHD-3 13.12 A: facial and/or oral pain fulfilling criteria B and C.', evaluate: s => has(s, 'loc-facial-region') || has(s, 'loc-glossopharyngeal-territory'), contributingChips: ['loc-facial-region', 'loc-glossopharyngeal-territory'], role: 'suppress-gate' },
++      // pifp-B: suppress-gate (DROP). ONE minted chip carrying the FULL
++      // conjunction (>2 h/day AND >3 months). Deliberately NOT split across
++      // pattern-ge-3-months: (a) a half-satisfied conjunction would read as
++      // satisfied (packet §9.2); (b) referent mismatch - pattern-ge-3-months is
++      // answered on the CORE q-chronicity screen about the headache pattern in
++      // general, not this facial pain's daily duration. Also NOT routed through
++      // dur-continuous (episodicPhenotypes suppression: would silently drop
++      // migraine, TTH, cluster, PH and SUNCT from a facial-pain patient's
++      // differential) and NOT through freq-ge-1-per-day (an attack-count chip
++      // that does not mean "daily for more than two hours").
++      { id: 'pifp-B', label: 'Recurring daily for >2 hours/day for >3 months', description: 'ICHD-3 13.12 B: recurring daily for >2 hours/day for >3 months.', evaluate: s => has(s, 'pifp-daily-gt2h-gt3mo'), contributingChips: ['pifp-daily-gt2h-gt3mo'], role: 'suppress-gate' },
++      // pifp-C: suppress-gate (DROP). BOTH sub-items required (C.1 AND C.2), one
++      // composite criterion mirroring the on-C idiom and the ICHD lettering.
++      { id: 'pifp-C', label: 'Poorly localized, not following a peripheral nerve, and dull, aching, or nagging', description: 'ICHD-3 13.12 C: pain has both of: 1) poorly localized, and not following the distribution of a peripheral nerve, 2) dull, aching or nagging quality.', evaluate: s => has(s, 'pifp-poorly-localized-non-nerve') && has(s, 'qual-dull-aching-nagging'), contributingChips: ['pifp-poorly-localized-non-nerve', 'qual-dull-aching-nagging'], role: 'suppress-gate' },
++      // pifp-D: suppress-gate (DROP). Workup gate, not a symptom. A genuinely
++      // ABNORMAL examination never reaches banding: rf-neuro-deficit
++      // short-circuits the pathway to secondary workup at the SNNOOP10 gate.
++      // Absence of this chip means "not established": a DROP, not an EMIT
++      // (EMIT would render the bare criterion label as an exclusionReason,
++      // asserting the opposite of what is meant).
++      { id: 'pifp-D', label: 'Clinical neurological examination is normal', description: 'ICHD-3 13.12 D: clinical neurological examination is normal. Psychophysical or neurophysiological sensory testing may be abnormal without invalidating the diagnosis (Comment, p. 179); the clinical examination is the only normal-findings criterion.', evaluate: s => has(s, 'exam-neuro-normal'), contributingChips: ['exam-neuro-normal'], role: 'suppress-gate' },
++      // pifp-E: suppress-gate (DROP). Workup gate, deliberately hard: surfacing
++      // 13.12 before a dental cause is excluded is the failure mode this
++      // criterion exists to prevent (premature labelling in BOTH directions:
++      // missed treatable dental disease, or irreversible dental procedures for
++      // non-dental pain). The requirement still reaches the clinician when the
++      // phenotype is hidden, via the q-pifp option label.
++      { id: 'pifp-E', label: 'A dental cause has been excluded by appropriate investigations', description: 'ICHD-3 13.12 E: a dental cause has been excluded by appropriate investigations.', evaluate: s => has(s, 'pifp-dental-cause-excluded'), contributingChips: ['pifp-dental-cause-excluded'], role: 'suppress-gate' },
++    ],
++  },
++
+   // ─── 1.4.1 Status migrainosus ────────────────────────────────────────────
+   // ICHD-3 §1.4.1 (complication of migraine). Flat additive phenotype, encoded
+   // 2026-07-06 from the source-verified evidence packet (ICHD-3 PDF p. 24-25).
+diff --git a/src/data/headacheBanding.test.ts b/src/data/headacheBanding.test.ts
+index 266ad71..bbaae97 100644
+--- a/src/data/headacheBanding.test.ts
++++ b/src/data/headacheBanding.test.ts
+@@ -1,5 +1,6 @@
++import { HEADACHE_PHENOTYPES } from './clinicHeadacheData';
+ import { describe, it, expect } from 'vitest';
+-import { bandPhenotypes, bandStrengthLabel } from './headacheBanding';
++import { bandPhenotypes, bandStrengthLabel, CHAPTER_ORDER } from './headacheBanding';
+ import type { PhenotypeMatch } from './clinicHeadacheData';
+ 
+ // Minimal PhenotypeMatch fixture — only the fields bandPhenotypes/bandStrengthLabel read
+@@ -159,3 +160,15 @@ describe('bandStrengthLabel — B2 (never "Probable Chronic migraine")', () => {
+     expect(bandStrengthLabel(mk('cluster-headache', 'partial', 2, 4))).toBe('Partial match for');
+   });
+ });
++
++describe('CHAPTER_ORDER inventory guard (architect 2026-09-08, condition 7a)', () => {
++  it('is a permutation of HEADACHE_PHENOTYPES ids', () => {
++    // The chapterIndex fallback silently returns CHAPTER_ORDER.length on a miss,
++    // so an omitted id produces a silent tie-break ordering defect, not a crash.
++    // This test is the guard the type alone cannot be.
++    const order = [...CHAPTER_ORDER];
++    const ids = HEADACHE_PHENOTYPES.map((p) => p.id);
++    expect(new Set(order).size).toBe(order.length);
++    expect([...order].sort()).toEqual([...ids].sort());
++  });
++});
+diff --git a/src/data/headacheBanding.ts b/src/data/headacheBanding.ts
+index b984135..0e5aaaa 100644
+--- a/src/data/headacheBanding.ts
++++ b/src/data/headacheBanding.ts
+@@ -19,7 +19,7 @@
+  * "Probable Chronic migraine"), B3 (promoted probable shows its §X.5 label), B4
+  * (no invented Leading) are encoded and unit-tested here.
+  */
+-import type { PhenotypeMatch } from './clinicHeadacheData';
++import type { PhenotypeMatch, PhenotypeId } from './clinicHeadacheData';
+ 
+ export type Band = 'leading' | 'possible' | 'less-likely' | 'set-aside';
+ 
+@@ -43,7 +43,12 @@ export interface BandedResult {
+ // (spec §1.4 step 3): §1 < §2 < §3 < §4 < appendix; within a chapter by section
+ // ascending. Removes any dependence on HEADACHE_PHENOTYPES declaration order,
+ // which is an implementation detail, not a clinical ranking.
+-const CHAPTER_ORDER: readonly string[] = [
++// Typed and exported 2026-09-08 (architect condition 7a): readonly PhenotypeId[]
++// so a typo fails tsc, and exported so headacheBanding.test.ts can assert it is a
++// permutation of HEADACHE_PHENOTYPES ids. The chapterIndex fallback below still
++// silently returns CHAPTER_ORDER.length on a miss, which is why the TEST is the
++// guard against omission, not the type.
++export const CHAPTER_ORDER: readonly PhenotypeId[] = [
+   'migraine-without-aura',   // §1.1
+   'migraine-with-aura',      // §1.2
+   'chronic-migraine',        // §1.3
+@@ -58,7 +63,9 @@ const CHAPTER_ORDER: readonly string[] = [
+   'hypnic-headache',         // §4.9
+   'ndph',                    // §4.10
+   'trigeminal-neuralgia',    // §13.1.1
++  'glossopharyngeal-neuralgia', // §13.2.1 — added 2026-09-08
+   'occipital-neuralgia',     // §13.4
++  'persistent-idiopathic-facial-pain', // §13.12 — added 2026-09-08
+   'vestibular-migraine',     // §A1.6.6
+ ];
+ 
+diff --git a/src/data/headachePhenotypeReachability.test.ts b/src/data/headachePhenotypeReachability.test.ts
+index d7e0f50..d4b7278 100644
+--- a/src/data/headachePhenotypeReachability.test.ts
++++ b/src/data/headachePhenotypeReachability.test.ts
+@@ -4,7 +4,7 @@ import { evaluateHeadachePhenotypes, HEADACHE_PHENOTYPES, type ChipId } from './
+ 
+ /**
+  * Reachability: an answer path THROUGH THE QUESTION FLOW reaches a strong
+- * match. Coverage today: 8 of the 16 engine phenotypes have walks; the
++ * match. Coverage today: 10 of the 18 engine phenotypes have walks; the
+  * inventory guard at the bottom tracks the other 8 as explicit debt
+  * (TASKS.md, headache reachability walks follow-up) and fails when a new
+  * phenotype is added without being walked or listed.
+@@ -139,6 +139,110 @@ describe('phenotype reachability walks through the question flow', () => {
+     expect(strengthOf(s, 'trigeminal-neuralgia')).toBe('full');
+   });
+ 
++  it('W1 (facial-pain expansion): glossopharyngeal presentation reaches full GPN and NEVER a TN match', () => {
++    // Persona: pain under the angle of the jaw radiating to the ear, brought on
++    // by talking and swallowing, severe, shock-like, each jab under two minutes.
++    // The chip whose absence keeps TN out is loc-trigeminal-distribution,
++    // contributed from exactly one place (the tn-distribution option) - and this
++    // walk never answers it.
++    const s = walk([
++      ['q-onset', 'recurrent'], ['q-frequency', 'f-ge15'], ['q-duration', 'd-lt15'],
++      ['q-attack-count', 'c-gt10'], ['q-chronicity', 'ch-ge3'], ['q-quality', 'qual-shock'],
++      ['q-location', 'loc-throat-ear'], ['q-severity', 'sev-sev'], ['q-activity', 'act-none'],
++      ['q-glossopharyngeal', 'gpn-brief'], ['q-glossopharyngeal', 'gpn-trigger'],
++    ]);
++    const out = evaluateHeadachePhenotypes(s);
++    const gpn = out.find((x) => x.phenotypeId === 'glossopharyngeal-neuralgia');
++    expect(gpn?.matchStrength).toBe('full');
++    expect(gpn?.criteriaMet).toBe(2);
++    // TN, occipital, primary stabbing and PIFP must be ABSENT from the output
++    // entirely (suppress-gates fail), not merely non-full.
++    for (const id of ['trigeminal-neuralgia', 'occipital-neuralgia', 'primary-stabbing-headache', 'persistent-idiopathic-facial-pain']) {
++      expect(out.find((x) => x.phenotypeId === id), `${id} must be absent`).toBeUndefined();
++    }
++  });
++
++  it('W8 (pre-gate C1): the loc-face route still reaches GPN via the territory-confirm option, and TN stays out', () => {
++    // An angle-of-jaw presentation plausibly files under "In the face: cheek,
++    // jaw, or upper lip". Before C1, that patient reached ONLY the TN screen and
++    // could collect a confident full TN match while GPN stayed invisible.
++    const s = walk([
++      ['q-onset', 'recurrent'], ['q-frequency', 'f-ge15'], ['q-duration', 'd-lt15'],
++      ['q-attack-count', 'c-gt10'], ['q-chronicity', 'ch-ge3'], ['q-quality', 'qual-shock'],
++      ['q-location', 'loc-face'], ['q-severity', 'sev-vsev'], ['q-activity', 'act-none'],
++      ['q-glossopharyngeal', 'gpn-territory'], ['q-glossopharyngeal', 'gpn-brief'], ['q-glossopharyngeal', 'gpn-trigger'],
++    ]);
++    const out = evaluateHeadachePhenotypes(s);
++    expect(out.find((x) => x.phenotypeId === 'glossopharyngeal-neuralgia')?.matchStrength).toBe('full');
++    expect(out.find((x) => x.phenotypeId === 'trigeminal-neuralgia')).toBeUndefined();
++  });
++
++  it('W9: a GPN near-miss (no trigger answered) is silently unclassified, with the safety teach still offered', () => {
++    // gpn-B is a composite suppress-gate: 3 of its 4 sub-items met means the
++    // phenotype is hidden, not "probable" (no §13.2.1.5 exists). The accepted
++    // consequence is tested so it cannot drift silently; the vagal-safety teach
++    // string rides the QUESTION, which fired regardless.
++    const s = walk([
++      ['q-onset', 'recurrent'], ['q-frequency', 'f-ge15'], ['q-duration', 'd-lt15'],
++      ['q-attack-count', 'c-gt10'], ['q-chronicity', 'ch-ge3'], ['q-quality', 'qual-shock'],
++      ['q-location', 'loc-throat-ear'], ['q-severity', 'sev-sev'], ['q-activity', 'act-none'],
++      ['q-glossopharyngeal', 'gpn-brief'],
++    ]);
++    expect(strengthOf(s, 'glossopharyngeal-neuralgia')).toBeUndefined();
++    const q = getActiveQuestions(s).find((x) => x.id === 'q-glossopharyngeal');
++    expect(q?.teach).toBeTruthy();
++    expect(q?.claimId).toBe('clinic-headache-gpn-vagal-safety');
++  });
++
++  it('W3 (facial-pain expansion): PIFP reaches full DESPITE a continuous-headache answer', () => {
++    // Persona: constant dull ache across the cheek for a year, hours daily,
++    // normal exam, dental workup negative. dur-continuous suppresses the
++    // episodic phenotypes; PIFP is deliberately NOT in that suppression list,
++    // because it is the daily entity the answer describes.
++    const s = walk([
++      ['q-onset', 'continuous'], ['q-frequency', 'f-ge15'], ['q-chronicity', 'ch-ge3'],
++      ['q-quality', 'qual-press'], ['q-location', 'loc-face'], ['q-severity', 'sev-mod'],
++      ['q-activity', 'act-none'],
++      ['q-pifp', 'pifp-daily'], ['q-pifp', 'pifp-poorly-loc'], ['q-pifp', 'pifp-quality'],
++      ['q-pifp', 'pifp-exam'], ['q-pifp', 'pifp-dental'],
++    ]);
++    const out = evaluateHeadachePhenotypes(s);
++    const pifp = out.find((x) => x.phenotypeId === 'persistent-idiopathic-facial-pain');
++    expect(pifp?.matchStrength).toBe('full');
++    expect(pifp?.criteriaMet).toBe(5);
++    expect(out.find((x) => x.phenotypeId === 'trigeminal-neuralgia')).toBeUndefined();
++  });
++
++  it('W10: PIFP without the dental-exclusion answer is silently unclassified, with the workup teach still offered', () => {
++    // pifp-E is a deliberate hard gate: surfacing 13.12 before a dental cause is
++    // excluded is the failure mode the criterion exists to prevent. The workup
++    // requirement reaches the clinician via the q-pifp option label and teach,
++    // which fired regardless.
++    const s = walk([
++      ['q-onset', 'continuous'], ['q-frequency', 'f-ge15'], ['q-chronicity', 'ch-ge3'],
++      ['q-quality', 'qual-press'], ['q-location', 'loc-face'], ['q-severity', 'sev-mod'],
++      ['q-activity', 'act-none'],
++      ['q-pifp', 'pifp-daily'], ['q-pifp', 'pifp-poorly-loc'], ['q-pifp', 'pifp-quality'],
++      ['q-pifp', 'pifp-exam'],
++    ]);
++    expect(strengthOf(s, 'persistent-idiopathic-facial-pain')).toBeUndefined();
++    const q = getActiveQuestions(s).find((x) => x.id === 'q-pifp');
++    expect(q?.teach).toBeTruthy();
++    expect(q?.claimId).toBe('clinic-headache-ichd3-pifp-criteria');
++  });
++
++  it('config invariant (W1 premise guard): loc-trigeminal-distribution is contributed ONLY by tn-distribution', () => {
++    // W1/W8's safety rests on nothing outside the TN screen contributing the TN
++    // territory chip. A persona walk alone would not survive future option edits;
++    // this does.
++    const contributors: string[] = [];
++    const allQuestions = [...CORE_QUESTIONS, ...CONDITIONAL_BRANCHES.map((b) => b.question)];
++    for (const q of allQuestions) for (const o of q.options) {
++      if (o.chips.includes('loc-trigeminal-distribution')) contributors.push(o.id);
++    }
++    expect(contributors).toEqual(['tn-distribution']);
++  });
++
+   it('drift guard (BC-6): only the orbital option on q-location may mention the eye', () => {
+     // q-location is single-select, and cluster-B / ph-B demote-gates require
+     // loc-orbital-temporal, which only the orbital option contributes. A second
+@@ -149,6 +253,30 @@ describe('phenotype reachability walks through the question flow', () => {
+     expect(eyeMentions.map((o) => o.id)).toEqual(['loc-orbital']);
+   });
+ 
++  it('drift guard (W5): q-location stays an anatomically disjoint partition by keyword ownership', () => {
++    // "jaw" legitimately appears in BOTH loc-face (cheek/jaw surface, §13.1) and
++    // loc-throat-ear (ANGLE of the jaw, §13.2.1 Note 1), so the guard asserts
++    // ownership of the unambiguous anchors instead: loc-face owns cheek and
++    // upper lip; loc-throat-ear owns throat, tongue, tonsil and ear. Word
++    // boundaries matter: /ear/ without them matches "area" and "near".
++    const q = CORE_QUESTIONS.find((x) => x.id === 'q-location')!;
++    const label = (id: string) => q.options.find((o) => o.id === id)!.label;
++    const face = label('loc-face');
++    const throat = label('loc-throat-ear');
++    expect(face).toMatch(/cheek/i);
++    expect(face).toMatch(/upper lip/i);
++    for (const kw of [/\bthroat\b/i, /\btongue\b/i, /\btonsil\b/i, /\bear\b/i]) {
++      expect(face).not.toMatch(kw);
++      expect(throat).toMatch(kw);
++    }
++    expect(throat).not.toMatch(/cheek/i);
++    expect(throat).not.toMatch(/upper lip/i);
++    // Chip pairing: every territory answer also contributes loc-unilateral.
++    for (const id of ['loc-orbital', 'loc-face', 'loc-throat-ear']) {
++      expect(q.options.find((o) => o.id === id)!.chips).toContain('loc-unilateral');
++    }
++  });
++
+   it('episodic tension-type — full, spine only', () => {
+     const s = walk([
+       ['q-onset', 'recurrent'], ['q-frequency', 'f-1-4'], ['q-duration', 'd-30min-7d'],
+@@ -234,13 +362,15 @@ describe('phenotype reachability walks through the question flow', () => {
+       'migraine-without-aura', 'migraine-with-aura', 'episodic-tth',
+       'cluster-headache', 'trigeminal-neuralgia', 'occipital-neuralgia',
+       'vestibular-migraine', 'hypnic-headache',
++      // Added 2026-09-08 (facial-pain expansion, walks W1/W8 and W3 above).
++      'glossopharyngeal-neuralgia', 'persistent-idiopathic-facial-pain',
+     ]);
+     const UNWALKED_DEBT = new Set([
+       'chronic-tth', 'chronic-migraine', 'status-migrainosus', 'hemicrania-continua',
+       'paroxysmal-hemicrania', 'sunct-suna', 'ndph', 'primary-stabbing-headache',
+     ]);
+     const all = HEADACHE_PHENOTYPES.map((p) => p.id);
+-    expect(all).toHaveLength(16);
++    expect(all).toHaveLength(18);
+     for (const id of all) {
+       expect(WALKED.has(id) || UNWALKED_DEBT.has(id), `phenotype "${id}" is neither walked nor tracked as debt`).toBe(true);
+     }
+diff --git a/src/data/headacheQuestions.ts b/src/data/headacheQuestions.ts
+index f0fce9f..f3e7599 100644
+--- a/src/data/headacheQuestions.ts
++++ b/src/data/headacheQuestions.ts
+@@ -184,6 +184,24 @@ export const CORE_QUESTIONS: HeadacheQuestion[] = [
+       // chip and silently capped cluster and paroxysmal hemicrania at Probable
+       // (clinical review 2026-09-07, BC-6; drift guard in the reachability tests).
+       { id: 'loc-face', label: 'In the face: cheek, jaw, or upper lip', chips: ['loc-unilateral', 'loc-facial-region'] },
++      // A glossopharyngeal presentation previously had no answer on this screen:
++      // throat, tongue-base and ear pain had to be filed under "one side" or "in
++      // the face", and 13.2.1 was undiagnosable - the reachability defect fixed
++      // for facial pain on 2026-09-07, reproduced one chapter over.
++      // [PAIR - preserve both] 13.2.1 criterion A requires unilaterality, so this
++      // answer contributes loc-unilateral alongside the territory chip, mirroring
++      // loc-orbital and loc-face (architect 2026-09-08, condition 3).
++      // [PAIR - label constraint] q-location is a clinically DISJOINT single-select
++      // partition. ICHD-3 13.2.1 Note 1 puts the ANGLE of the lower jaw in
++      // glossopharyngeal territory while 13.1.1 covers the cheek and jaw surface,
++      // so "jaw" appears in BOTH this label and loc-face. The drift guard asserts
++      // the partition by anatomical keyword, NOT by the word "jaw": this label
++      // owns throat / tongue / tonsil / ear; loc-face owns cheek / upper lip;
++      // neither may mention the eye or orbit (BC-6 protects loc-orbital-temporal).
++      // This answer must NOT contribute loc-facial-region: that chip's label reads
++      // "cheek, jaw, or upper lip", and contributing it from a throat-and-ear
++      // answer would make the chip label lie about what the clinician affirmed.
++      { id: 'loc-throat-ear', label: 'In the throat, back of the tongue, tonsil area, or ear, including under the angle of the jaw', chips: ['loc-unilateral', 'loc-glossopharyngeal-territory'] },
+     ],
+   },
+   {
+@@ -499,6 +517,87 @@ export const CONDITIONAL_BRANCHES: ConditionalBranch[] = [
+       ],
+     },
+   },
++  // Glossopharyngeal detail — screens for §13.2.1. SIBLING of b-trigeminal and
++  // b-pifp, not a co-tenant: share a screen ONLY when two phenotypes have
++  // identical fires() (the q-tac-detail precedent); otherwise siblings (the
++  // b-occipital / b-stabbing / b-trigeminal precedent). Architect 2026-09-08,
++  // condition 2. Do NOT widen b-trigeminal's predicate and do NOT add GPN
++  // options to q-trigeminal: a throat-territory patient ticking honestly on a
++  // co-tenanted screen can satisfy tn-A, tn-B and tn-C together, because
++  // loc-trigeminal-distribution's label says "jaw", tn-trigger's label says
++  // "talking", and 13.2.1's own territory note says "angle of the lower jaw"
++  // while its trigger criterion says "talking".
++  // fires() includes loc-facial-region (clinical pre-gate C1): an angle-of-jaw
++  // presentation plausibly files under "In the face: cheek, jaw, or upper lip",
++  // and on that route the patient must still reach this screen - otherwise they
++  // reach ONLY the TN screen and can collect a confident full TN match while
++  // GPN stays invisible. The territory-confirm option below exists for exactly
++  // that route: q-location is single-select, so a loc-face answer cannot also
++  // contribute the territory chip gpn-A requires.
++  {
++    id: 'b-glossopharyngeal',
++    fires: (s) => has(s, 'loc-glossopharyngeal-territory') || has(s, 'loc-facial-region'),
++    question: {
++      id: 'q-glossopharyngeal',
++      screen: 8,
++      eyebrow: 'Throat and ear pain detail',
++      prompt: 'If this is brief, shock-like pain in the throat, tongue base, or ear, answer these (glossopharyngeal neuralgia screen):',
++      select: 'multi',
++      // BC-7-class caution: this teach string is the PRIMARY live surface of the
++      // GPN vagal-safety content (clinical pre-gate condition on S5; the card is
++      // secondary and opt-in). Attribution "some authors have suggested" is the
++      // source's own (pre-gate C7).
++      claimId: 'clinic-headache-gpn-vagal-safety',
++      teach: 'ICHD-3 13.2.1 permits radiation to the eye, nose, chin, or shoulder, so spread beyond the nerve does not rule it out; 13.1.1 trigeminal neuralgia does not permit it. In rare cases attacks are accompanied by vagal symptoms such as cough, hoarseness, syncope, or bradycardia, and some authors have suggested the term vagoglossopharyngeal neuralgia when pain is accompanied by asystole, convulsions, and syncope, so ask about blackouts with attacks. Pain can be severe enough for patients to lose weight. Major sensory changes or a reduced or missing gag reflex should prompt aetiological investigations; mild sensory deficits do not invalidate the diagnosis.',
++      options: [
++        // Territory confirm (pre-gate C1): on the loc-face route the territory
++        // chip is otherwise unobtainable and gpn-A can never be satisfied. On the
++        // loc-throat-ear route this option is redundant but harmless (the chip is
++        // already present). Mirrors the gpn-shock idiom for working around a
++        // single-select core screen.
++        { id: 'gpn-territory', label: 'The pain sits in the throat, back of the tongue, tonsil area, or ear, including under the angle of the jaw', chips: ['loc-glossopharyngeal-territory'] },
++        // Mirrors tn-shock: the core q-quality screen is single-select, so a
++        // patient who answered "throbbing" or "pressing" has no other route to
++        // gpn-B.3. Contributes ONLY qual-electric-shock-shooting, exactly as
++        // tn-shock does, so it does not additionally open b-occipital and
++        // b-stabbing.
++        { id: 'gpn-shock', label: 'The pain is electric-shock-like or shooting', chips: ['qual-electric-shock-shooting'] },
++        { id: 'gpn-brief', label: 'Each attack lasts from a few seconds up to 2 minutes', chips: ['dur-few-sec-to-2min'] },
++        { id: 'gpn-trigger', label: 'Attacks are triggered by swallowing, coughing, talking, or yawning', chips: ['trigger-swallow-cough-talk-yawn'] },
++      ],
++    },
++  },
++  // Persistent facial pain detail — screens for §13.12. Fires on either site
++  // chip, matching ICHD-3 13.12 A ("facial and/or oral pain") exactly. SIBLING
++  // of b-trigeminal and b-glossopharyngeal (architect condition 2). Deliberately
++  // does NOT fire on a quality chip: 13.12's quality is dull, aching or nagging,
++  // and the core q-quality screen's nearest answer (pressing or tightening)
++  // belongs to §2 TTH; using it as a trigger would be a wider-label
++  // false-positive path. The minted qual-dull-aching-nagging chip lives on this
++  // screen, so the core single-select partition is untouched.
++  {
++    id: 'b-pifp',
++    fires: (s) => has(s, 'loc-facial-region') || has(s, 'loc-glossopharyngeal-territory'),
++    question: {
++      id: 'q-pifp',
++      screen: 8,
++      eyebrow: 'Persistent facial pain detail',
++      prompt: 'If this is constant, dull facial or mouth pain rather than brief shocks, answer these (persistent idiopathic facial pain screen):',
++      select: 'multi',
++      // Discriminators are framed as pointers, not identifications (pre-gate C6):
++      // the engine returns match strengths and never declares a diagnosis, and
++      // 13.11 / 13.1.1.1.2 have criteria this tool does not collect.
++      claimId: 'clinic-headache-ichd3-pifp-criteria',
++      teach: 'ICHD-3 13.12 requires a normal clinical neurological examination and a dental cause excluded by appropriate investigations. Sharp exacerbations are allowed, and over time the pain may spread to a wider area of the craniocervical region. Psychophysical or neurophysiological tests may demonstrate sensory abnormalities; the clinical examination is the only normal-findings criterion. Burning pain felt superficially in the oral mucosa points away from 13.12 and toward 13.11 burning mouth syndrome, which shares the same daily-pattern criterion word for word. Triggered shock-like paroxysms on a background ache within a nerve territory point toward trigeminal neuralgia with concomitant continuous pain (13.1.1.1.2 or 13.1.1.3.2), which requires the paroxysms.',
++      options: [
++        { id: 'pifp-daily', label: 'The pain recurs daily, more than 2 hours a day, for more than 3 months', chips: ['pifp-daily-gt2h-gt3mo'] },
++        { id: 'pifp-poorly-loc', label: 'The pain is poorly localized and does not follow the territory of a peripheral nerve', chips: ['pifp-poorly-localized-non-nerve'] },
++        { id: 'pifp-quality', label: 'The pain is dull, aching, or nagging', chips: ['qual-dull-aching-nagging'] },
++        { id: 'pifp-exam', label: 'The clinical neurological examination is normal', chips: ['exam-neuro-normal'] },
++        { id: 'pifp-dental', label: 'A dental cause has been excluded by appropriate investigations', chips: ['pifp-dental-cause-excluded'] },
++      ],
++    },
++  },
+   // Prolonged attack (>72 h) — fires when the duration is >72 h (§1.4.1 status migrainosus).
+   {
+     id: 'b-status-migrainosus',
+diff --git a/src/lib/citations/claims.ts b/src/lib/citations/claims.ts
+index 095420b..bd74574 100644
+--- a/src/lib/citations/claims.ts
++++ b/src/lib/citations/claims.ts
+@@ -1322,15 +1322,47 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
+   },
+   'clinic-headache-tn-management': {
+     id: 'clinic-headache-tn-management',
+-    citation_ids: ['nahas-2024-continuum-cranial-neuralgias', 'ichd3-2018'],
++    citation_ids: ['gronseth-aan-efns-tn-2008', 'ichd3-2018'],
+     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+-    description: 'TN treatment card: carbamazepine Level A or oxcarbazepine Level B first-line, verbatim from the nahas-2024 quoted_text. The treatment-response note asserts only the negative (response is not an ICHD-3 13.1.1 criterion; do not use it to confirm or exclude), grounded in ichd3-2018. The IV fosphenytoin/lidocaine row was removed 2026-09-07 (clinical review BC-1/BC-2: the source gates it on REFRACTORY TN, and the AAN parameter grades IV medication Level U).',
++    description: 'TN treatment card, corrected 2026-09-08. Rows 1-3 carry the AAN/EFNS 2008 practice-parameter grades VERBATIM from the AAN clinician summary, each scoped to CLASSIC TN as the source scopes them (pre-gate C2): carbamazepine should be offered (Level A); oxcarbazepine should be considered (Level B); baclofen, lamotrigine, or pimozide may be considered (Level C), with the source note that pimozide is no longer in use carried (pre-gate C3); evidence after first-line failure is limited, with some support for adding lamotrigine or switching to baclofen; and for SECONDARY TN, insufficient evidence to support or refute the effectiveness of any medication (Level U). These grades were previously attributed to nahas-2024-continuum-cranial-neuralgias, where they DO NOT APPEAR (evidence packet 2026-09-08 §9.1.D); nahas is removed from citation_ids because no row on this card now rests on it. NO dose range is rendered: AAN 2008 gives CBZ 200-1200 mg/day and OXC 600-1800 mg/day while Nahas Table 10-2 gives 300-800 and 600-1200; the conflict is not synthesized and is tracked in TASKS.md. The treatment-response note asserts only the negative (response is not an ICHD-3 13.1.1 criterion; do not use it to confirm or exclude), grounded in ichd3-2018. The IV fosphenytoin/lidocaine row remains removed (BC-1/BC-2); the AAN parameter grades IV medication in TN Level U, now held verbatim in gronseth-aan-efns-tn-2008.',
+   },
+   'clinic-headache-on-management': {
+     id: 'clinic-headache-on-management',
+     citation_ids: ['nahas-2024-continuum-cranial-neuralgias', 'ichd3-2018'],
+     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+-    description: 'Occipital neuralgia card, two rows (clinical review BC-3): treatment row = greater and/or lesser occipital nerve block first-line, per the nahas-2024 quoted_text; diagnostic row = ICHD-3 13.4 criterion D stated at full mandatory strength (pain eased TEMPORARILY by local anaesthetic block of the affected nerve(s)).',
++    description: 'Occipital neuralgia card, corrected 2026-09-08. The prior "First-line: greater and/or lesser occipital nerve block" row is removed: "first-line" was never the source framing (evidence packet 2026-09-08 §9.1.D; the round-3 reviewer of the prior batch approved that row against a registry quoted_text that itself overstated the source - §13.1 demonstrated live). Nahas p. 483 verbatim: very little high-quality evidence guides treatment, selection remains largely empiric; besides nerve blockade, medications typically used for neuralgiform or neuropathic pain are utilized along with physical therapy to reduce muscular tension. The diagnostic row is unchanged and states ICHD-3 13.4 criterion D at full mandatory strength (pain eased TEMPORARILY by local anaesthetic block of the affected nerve(s)).',
++  },
++
++  // ─── ICHD-3 §13.2.1 Glossopharyngeal neuralgia — added 2026-09-08 ─────────
++  // Evidence packet docs/evidence-packets/2026-09-08-ichd3-13-2-13-12-facial-pain.md.
++  // NUMBERING: 13.2.1, never bare 13.2 (13.2 is a heading with no criteria).
++  'clinic-headache-ichd3-glossopharyngeal-neuralgia-criteria': {
++    id: 'clinic-headache-ichd3-glossopharyngeal-neuralgia-criteria',
++    citation_ids: ['ichd3-2018'],
++    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
++    description: 'ICHD-3 13.2.1 Glossopharyngeal neuralgia: recurring paroxysms of unilateral pain in the glossopharyngeal distribution (posterior part of the tongue, tonsillar fossa, pharynx or angle of the lower jaw and/or the ear, Note 1), with ALL of: a few seconds to 2 minutes, severe intensity, electric shock-like / shooting / stabbing / sharp quality, and precipitation by swallowing, coughing, talking or yawning. Unlike 13.1.1, radiation beyond the nerve is PERMITTED (the pain may involve the eye, nose, chin or shoulder), so a no-radiation gate must not be applied. It can occur together with 13.1.1 Trigeminal neuralgia. Aetiology (13.2.1.1 classical: neurovascular compression of the nerve root demonstrated on MRI or at surgery, with NO morphological-change qualifier, unlike 13.1.1.1; 13.2.1.2 secondary; 13.2.1.3 idiopathic) is investigation-determined and is deferred to the subtype-hierarchy layer. Neither pharmacotherapy response nor local-anaesthetic response is an ICHD-3 criterion; both are Comments (p. 172). 13.2.2 Painful glossopharyngeal neuropathy is a separate sibling entity and is out of scope.',
++  },
++
++  'clinic-headache-gpn-management': {
++    id: 'clinic-headache-gpn-management',
++    citation_ids: ['ichd3-2018', 'nahas-2024-continuum-cranial-neuralgias'],
++    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
++    description: 'GPN treatment card, three sourced rows plus an evidence-framing row. Evidence row states the searched negative at its true width (pre-gate C12a): no major-society guideline has assigned a class or level of evidence for glossopharyngeal neuralgia treatment (evidence packet 2026-09-08 §8c: AAN, EAN/EFNS and AHS outputs searched; Nahas cites only a narrative review for GPN, Park and Ahn, J Korean Neurosurg Soc 2023;66(1):12-23; §8d: no RCT, meta-analysis or Cochrane review). Pharmacotherapy row is the ICHD-3 13.2.1 Comment (p. 172): usually responsive, at least initially, to pharmacotherapy, especially carbamazepine or oxcarbazepine. Local-anaesthetic row is the same Comment: application to the tonsil and pharyngeal wall has been SUGGESTED to prevent attacks for a few hours; the card states explicitly that this is not a diagnostic test, because block response IS criterion D in 13.4 and only a Comment in 13.2.1. Overlap row is Nahas p. 480 verbatim ("Treatment overlaps substantially with trigeminal neuralgia"), which is the ENTIRE GPN treatment content of that article. Explicitly NOT carried: the previously registered "Glossopharyngeal neuralgia: carbamazepine; airway protection mandatory if swallowing affected" text, neither half of which appears anywhere in the Nahas article; the airway directive has no source in any held document and must not be reinstated or paraphrased.',
++  },
++
++  'clinic-headache-gpn-vagal-safety': {
++    id: 'clinic-headache-gpn-vagal-safety',
++    citation_ids: ['ichd3-2018', 'nahas-2024-continuum-cranial-neuralgias'],
++    surfaces: [{ type: 'jsx', attribute: 'data-claim' }, DATA_SURFACE],
++    description: 'GPN safety-and-workup content, rendered on two surfaces: the q-glossopharyngeal teach string (structured-data claimId; renders unconditionally when the branch fires) and the "Safety and workup" management card. Teach-string content (pre-gate C10): sentence 1 is the radiation discriminator (13.2.1 Comment p. 172 permits radiation to the eye, nose, chin or shoulder; 13.1.1 A forbids radiation beyond the trigeminal divisions); sentence 2 carries the vagal associations as the OPEN list the source gives (in rare cases attacks are associated with vagal symptoms SUCH AS cough, hoarseness, syncope and/or bradycardia; SOME AUTHORS have suggested the term vagoglossopharyngeal neuralgia for pain accompanied by asystole, convulsions and syncope - pre-gate C7) plus the bounded history-taking instruction "ask about blackouts with attacks"; sentence 3 is the weight-loss consequence; sentence 4 is the examination guidance (mild sensory deficits do NOT invalidate; major changes or a reduced or missing gag reflex SHOULD PROMPT aetiological investigations, source strength preserved). Card rows: the same vagal, weight (bounded to weight only, pre-gate C8: the oral-intake/dehydration content at Nahas p. 478 is trigeminal-scoped and is not imported), examination, secondary-cause (Nahas p. 486 Conclusion verbatim) and aetiology (13.2.1.1-.3 criteria; single reports describe the secondary causes, per the source, pre-gate C11c) content. NO monitoring, telemetry, admission, pacing or referral recommendation is made: no held source supports one. NO airway or aspiration content appears anywhere.',
++  },
++
++  // ─── ICHD-3 §13.12 Persistent idiopathic facial pain — added 2026-09-08 ───
++  'clinic-headache-ichd3-pifp-criteria': {
++    id: 'clinic-headache-ichd3-pifp-criteria',
++    citation_ids: ['ichd3-2018'],
++    surfaces: [{ type: 'jsx', attribute: 'data-claim' }, DATA_SURFACE],
++    description: 'ICHD-3 13.12 Persistent idiopathic facial pain (previously used term: atypical facial pain): facial and/or oral pain (A) recurring daily for >2 hours/day for >3 months (B), BOTH poorly localized and not following the distribution of a peripheral nerve AND dull, aching or nagging in quality (C), with a normal CLINICAL neurological examination (D) and a dental cause excluded by appropriate investigations (E). Criteria run A-F; F is the standard closing exclusion and is not encoded. There is NO "investigations unremarkable" criterion: the only investigation criterion is E, and the Comments (p. 179) state that psychophysical or neurophysiological tests MAY demonstrate sensory abnormalities. Sharp exacerbations are allowed, the pain is aggravated by stress, and it may spread to a wider area of the craniocervical region over time. No subforms exist: the atypical-odontalgia Comment states the candidate subtypes have not been sufficiently studied to propose criteria, so none may be invented. Discriminators on the q-pifp teach string are framed as pointers, not identifications (pre-gate C6): burning quality felt superficially in the oral mucosa points toward 13.11 Burning mouth syndrome, which shares criterion B word for word and separates on quality plus depth; triggered shock-like paroxysms on a background nerve-territorial ache point toward 13.1.1.1.2 / 13.1.1.3.2 Trigeminal neuralgia with concomitant continuous pain, which requires the paroxysms. Facial pain within six months of a stroke routes to 13.13.2 Central post-stroke pain (criterion D and the rf-neuro-deficit gate cover most such presentations). No management card: Nahas 2024 does not cover PIFP at all (verified negative, packet §4.4) and no PIFP-specific source is held.',
+   },
+   'clinic-headache-cluster-acute-management': {
+     id: 'clinic-headache-cluster-acute-management',
+diff --git a/src/lib/citations/registry.ts b/src/lib/citations/registry.ts
+index 8e20036..2bc7d70 100644
+--- a/src/lib/citations/registry.ts
++++ b/src/lib/citations/registry.ts
+@@ -2361,16 +2361,90 @@ export const CITATION_REGISTRY: CitationRegistry = {
+     quoted_text: 'Cluster headache acute treatment: high-flow O₂ 100% (12–15 L/min via non-rebreather, 15–20 min) and SC sumatriptan 6 mg are Level A. Greater occipital nerve (GON) block with corticosteroid is effective bridging therapy (AHS Grade A) during cluster bouts. Transitional therapy with suboccipital steroid injection recommended at bout onset. Verapamil is first-line prophylaxis. SUNCT/SUNA: lamotrigine first-line prevention; carbamazepine second-line.',
+   },
+ 
++  // ─── 2026-09-08 CORRECTION (evidence packet
++  // docs/evidence-packets/2026-09-08-ichd3-13-2-13-12-facial-pain.md §0.3, §4.1,
++  // §9.1.D). All 15 printed pages (473-487) of the held PDF were rendered and read.
++  // Four metadata fields were wrong: authorship ("& Sanguinetti" - the article has
++  // ONE author), page range (was 510-536), DOI (was ...1414, which resolves to Orr,
++  // Headache in Children and Adolescents, 30(2):438-472), and a missing PMID.
++  // NOTE: the corrected DOI ...1415 is ALSO carried by
++  // goadsby-2024-continuum-indomethacin, which is one of the three Continuum
++  // records with drifted DOIs (packet §9.1.E; TASKS.md citation-metadata sweep).
++  // Do NOT "fix" this record back to ...1414: ...1415 is verified three ways for
++  // Cranial Neuralgias; it is the goadsby record that needs re-verification.
++  // quoted_text rewritten. Removed and NOT to be reinstated:
++  //   - "Glossopharyngeal neuralgia: carbamazepine; airway protection mandatory if
++  //     swallowing affected." NEITHER HALF APPEARS IN THE ARTICLE. The words
++  //     "airway", "aspiration" and "swallowing precaution" appear on none of the 15
++  //     pages. The carbamazepine provenance for GPN is ICHD-3 p. 172 (a Comment),
++  //     re-pointed there. The airway directive has no source in any held document.
++  //   - "NVAF TN variant: phenytoin/carbamazepine." "NVAF" appears nowhere in the
++  //     article and has no cranial-neuralgia referent.
++  //   - The TN "(Level A)"/"(Level B)" grades, which are NOT Nahas's. They belong
++  //     to the 2008 AAN/EFNS practice parameter and now live on
++  //     gronseth-aan-efns-tn-2008.
++  //   - "Occipital neuralgia: greater and/or lesser GON blocks first-line."
++  //     Overstated: "first-line" is not the article's framing; p. 483 is carried
++  //     verbatim instead.
++  // Neither ICHD-3 nor this article assigns a class or level of evidence to any
++  // glossopharyngeal neuralgia treatment; the article cites only a narrative
++  // review for GPN (ref 31, p. 487: Park JS, Ahn YH, J Korean Neurosurg Soc
++  // 2023;66(1):12-23). Packet §8c: no major-society guideline addresses GPN.
++  // last_reviewed refreshed to 2026-09-08: the full article was read this session
++  // and every dependent claim on this record was re-verified and corrected in the
++  // same batch - a genuine §13.6 six-step pass (unlike ichd3-2018, which holds).
+   'nahas-2024-continuum-cranial-neuralgias': {
+     id: 'nahas-2024-continuum-cranial-neuralgias',
+     source: 'review',
+-    title: 'Cranial Neuralgias (Nahas & Sanguinetti, Continuum 2024;30(2):510–536)',
++    title: 'Cranial Neuralgias (Nahas, Continuum 2024;30(2):473–487)',
+     year: 2024,
+-    section: 'Continuum 2024;30(2):510–536',
+-    url: 'https://doi.org/10.1212/CON.0000000000001414',
+-    last_reviewed: '2026-05-25',
++    section: 'Continuum 2024;30(2):473–487',
++    url: 'https://doi.org/10.1212/CON.0000000000001415',
++    pmid: '38568494',
++    last_reviewed: '2026-09-08',
++    review_window_months: 12,
++    quoted_text: 'Trigeminal neuralgia, p. 477: "First-line medications for trigeminal neuralgia include carbamazepine and oxcarbazepine, which are closely related in chemical structure and mechanism of action. Other agents to consider are gabapentin, baclofen, lamotrigine, and onabotulinumtoxinA, among others." "Carbamazepine is the only medication specifically approved by the US Food and Drug Administration (FDA) for this indication. No devices or procedures have been cleared by the FDA for trigeminal neuralgia." TABLE 10-2, "Pharmacologic Options for Trigeminal Neuralgia", p. 476, typical target dose range: carbamazepine 300-800 mg/day; oxcarbazepine 600-1200 mg/day. Table footnote b: "The initial doses are typically 10% to 25% of the target dose, with incremental titration as tolerated. The total daily dose is usually divided for administration 2 to 4 times per day." Laboratory monitoring, p. 477: titration proceeds "along with any recommended laboratory monitoring (such as complete blood count and serum sodium)". Acute exacerbation, p. 478: "Acute exacerbations may require additional treatment. If trigeminal neuralgia pain results in poor oral intake and dehydration, IV fluid resuscitation may be necessary. In addition, infusions of fosphenytoin and lidocaine are also reported to be useful. Opioids should be avoided." Occipital neuralgia, p. 483: "There is very little high-quality evidence available to guide treatment options, and treatment selection remains largely empiric at this time. Besides nerve blockade, medications typically used for neuralgiform or neuropathic pain are utilized, along with physical therapy to reduce muscular tension." Glossopharyngeal neuralgia, p. 480: "Treatment overlaps substantially with trigeminal neuralgia." "Due to proximity and interconnectedness with other structures, particularly the vagus nerve, symptoms such as cough, hoarseness, bradycardia, and syncope can be present." Secondary causes, all cranial neuralgias, Conclusion p. 486: "A careful and thorough history and examination may yield early clues to certain secondary causes, but even in the absence of red flags or other signs and symptoms suggesting that this is the case, investigation with neuroimaging is usually warranted and may need to be repeated with dedicated techniques before an underlying problem is discovered. It should be remembered that pain may be referred to the distribution of a nerve in the cranium by secondary etiologies of the soft tissues and bony structures in the head and neck."',
++  },
++
++  // ─── AAN / EFNS 2008 — trigeminal neuralgia practice parameter ───────────
++  // Gronseth G, Cruccu G, Alksne J, et al. Practice parameter: the diagnostic
++  // evaluation and treatment of trigeminal neuralgia (an evidence-based review):
++  // report of the Quality Standards Subcommittee of the American Academy of
++  // Neurology and the European Federation of Neurological Societies. Neurology
++  // 2008;71(15):1183-1190. PMID 18716236. Companion publication: Cruccu G, et al.
++  // AAN-EFNS guidelines on trigeminal neuralgia management. Eur J Neurol
++  // 2008;15(10):1013-1028, PMID 18721143 (NOT read; do not quote from it).
++  // PMID CHECK 2026-09-08 via NCBI E-utilities: 18716236 is the Neurology practice
++  // parameter and 18721143 is the Eur J Neurol guideline. The record is named for
++  // the Neurology first author because that is the PMID and the document family
++  // this quoted_text derives from (naming it cruccu- would reproduce the
++  // DOI-drift defect class this batch corrects).
++  // quoted_text is transcribed from the AAN's own free clinician summary of this
++  // guideline (open access at the url below; read in full 2026-09-07 and
++  // 2026-09-08; provenance addendum at
++  // docs/evidence-packets/2026-09-08-addendum-aan-tn-2008-clinician-summary.md).
++  // This record exists because the Level A / Level B carbamazepine and
++  // oxcarbazepine grades were previously attributed to
++  // nahas-2024-continuum-cranial-neuralgias, where they do not appear.
++  // ALL DRUG GRADES ARE SCOPED TO CTN (CLASSIC TN); secondary TN is graded Level U
++  // separately. Rendered surfaces must carry the CTN scope (clinical pre-gate C2).
++  // review_window_months: 12. Override rationale (§13.7): the quoted text is from
++  // a closed 2008 document and cannot drift, so the 6-month current-guideline
++  // default buys nothing; but a NEWER society guideline on the same question
++  // exists and is NOT held (Bendtsen L, et al., EAN, Eur J Neurol
++  // 2019;26(6):831-849, doi 10.1111/ene.13950), so this record is re-examined
++  // annually until that source is acquired. Acquisition tracked in TASKS.md.
++  'gronseth-aan-efns-tn-2008': {
++    id: 'gronseth-aan-efns-tn-2008',
++    source: 'guideline',
++    title: 'Practice parameter: the diagnostic evaluation and treatment of trigeminal neuralgia (an evidence-based review) (Gronseth et al., Neurology 2008;71(15):1183–1190; AAN/EFNS)',
++    year: 2008,
++    section: 'Pharmacological treatment; quoted_text transcribed from the AAN clinician summary (the AAN derivative of the Neurology practice parameter), not from the journal text',
++    url: 'https://www.aan.com/Guidelines/home/GetGuidelineContent/303',
++    pmid: '18716236',
++    last_reviewed: '2026-09-08',
+     review_window_months: 12,
+-    quoted_text: 'Trigeminal neuralgia (TN): carbamazepine (Level A) or oxcarbazepine (Level B) first-line. For refractory TN in acute exacerbation: IV fosphenytoin or IV lidocaine (short-term stabilisation). NVAF TN variant: phenytoin/carbamazepine. Occipital neuralgia: greater and/or lesser GON blocks first-line. Glossopharyngeal neuralgia: carbamazepine; airway protection mandatory if swallowing affected.',
++    quoted_text: 'Which drugs effectively treat CTN pain? Strong evidence: "Strong evidence supports that carbamazepine should be offered to treat CTN pain (Level A)." Good evidence: "Good evidence supports that oxcarbazepine should be considered to treat CTN pain (Level B)." Clinical context: "The two drugs to consider as first-line therapy in TN are CBZ (200-1200 mg/day) and OXC (600-1800 mg/day). Although the evidence for CBZ is stronger than for OXC, the latter may pose fewer safety concerns." Weak evidence: "Weak evidence supports that baclofen, lamotrigine, and pimozide may be considered to treat CTN pain (Level C)." Good evidence: "Good evidence supports that topical ophthalmic anesthesia should not be considered to treat CTN pain (Level B)." Clinical context: "There is little evidence to guide the clinician on the treatment of TN patients who fail first-line therapy. Some evidence supports add-on therapy with lamotrigine or a switch to baclofen (pimozide being no longer in use)." Which drugs effectively treat STN pain? Insufficient evidence: "There is insufficient evidence to support or refute the effectiveness of any medication in treating pain in STN (Level U)." Is there evidence of efficacy of intravenous administration of drugs in acute exacerbations of TN? Insufficient evidence: "There is insufficient evidence to support or refute the efficacy of intravenous medications for the treatment of pain from TN (Level U)." Surgical treatment: "There is insufficient evidence to allow conclusions as to when surgery should be offered (Level U)." Clinical context: "Referral for a surgical consultation seems reasonable in TN patients refractory to medical therapy." "For patients with TN refractory to medical therapy, Gasserian ganglion percutaneous techniques, gamma knife, and microvascular decompression may be considered (Level C)." Diagnostic: "Good evidence indicates that measuring trigeminal reflexes in a qualified electrophysiological laboratory should be considered useful for distinguishing STN from classic trigeminal neuralgia (CTN) (Level B)." "There is insufficient evidence to support or refute the usefulness of MRI to identify vascular contact in CTN or to indicate the most reliable MRI technique (Level U)." AAN classification of recommendations: "A = Established as effective, ineffective, or harmful ... B = Probably effective, ineffective, or harmful ... C = Possibly effective, ineffective, or harmful ... U = Data inadequate or conflicting; given current knowledge, treatment (test, predictor) is unproven."',
+   },
+ 
+   // ─── Do 2019 — SNNOOP10 red flags for headache (Neurology) ───────────────
+@@ -2443,7 +2517,7 @@ export const CITATION_REGISTRY: CitationRegistry = {
+     source: 'guideline',
+     title: 'Headache Classification Committee of the International Headache Society (IHS). The International Classification of Headache Disorders, 3rd edition',
+     year: 2018,
+-    section: '1.1, 1.2, 1.2.1, 1.2.2, 1.2.3, 1.2.4, 1.3, 1.4.1, 2.2, 2.3, 3.1, 3.1.1, 3.1.2, 3.2, 3.3, 3.3.1, 3.3.2, 3.4, 4.7, 4.9, 4.10, 8.2, 13.1.1, 13.1.1.1, 13.1.1.2, 13.1.1.3, 13.4, A1.6.6',
++    section: '1.1, 1.2, 1.2.1, 1.2.2, 1.2.3, 1.2.4, 1.3, 1.4.1, 2.2, 2.3, 3.1, 3.1.1, 3.1.2, 3.2, 3.3, 3.3.1, 3.3.2, 3.4, 4.7, 4.9, 4.10, 8.2, 13.1.1, 13.1.1.1, 13.1.1.2, 13.1.1.3, 13.2.1, 13.2.1.1, 13.2.1.2, 13.2.1.3, 13.4, 13.12, A1.6.6',
+     url: 'https://ichd-3.org',
+     pmid: '29368949',
+     // Expanded 2026-05-25 per clinical-reviewer §17.2 Conditions 5+6: verbatim
+@@ -2462,9 +2536,30 @@ export const CITATION_REGISTRY: CitationRegistry = {
+     // Also refreshed the stale §A1.6.6 vestibular-migraine text to the full A-E criteria
+     // now encoded (fix A-M1). last_reviewed unchanged — same ICHD-3 2018 edition, both
+     // sections read verbatim from the source this session, within the 24-month window.
++    // 2026-09-08: added §13.2.1 Glossopharyngeal neuralgia (+ aetiology subforms
++    // 13.2.1.1/.2/.3) and §13.12 Persistent idiopathic facial pain verbatim to
++    // quoted_text and the section list (evidence packet
++    // docs/evidence-packets/2026-09-08-ichd3-13-2-13-12-facial-pain.md; ICHD-3 PDF
++    // pp. 171-172 and pp. 178-179, read in reading order with printed folios).
++    // NUMBERING: the entity with criteria is 13.2.1, NOT 13.2 (13.2 is a parent
++    // heading with no criteria, structurally identical to 13.1). 13.2.2 Painful
++    // glossopharyngeal neuropathy is a SIBLING entity and is out of scope, on the
++    // same reasoning that excluded 13.1.2 in the 2026-07-06 TN packet.
++    // §13.12 has NO Notes and runs A-F (six criteria); criterion E is a dental-cause
++    // workup gate. It has NO "investigations unremarkable" criterion: the Comments
++    // state the opposite ("psychophysical or neurophysiological tests may
++    // demonstrate sensory abnormalities").
++    // last_reviewed unchanged: same ICHD-3 2018 edition, both new sections read
++    // verbatim from the source, within the 24-month window; refreshing would
++    // restart the clock on every dependent claim without a full §13.6 step-3 pass.
++    // Dependent claims at 2026-09-08: 22 before this batch (mechanical count of
++    // claims.ts references; supersedes the stale "all 12 mapped claim IDs" figure
++    // above). §13.6 step-3 this batch verified 19 of them by direct read
++    // (docs/2026_09_08/spec-headache-facial-pain-expansion.md S1.a lists them);
++    // the remainder were not re-opened, which is why the date holds.
+     last_reviewed: '2026-05-25',
+     review_window_months: 24,
+-    quoted_text: '1.1 Migraine without aura: At least five attacks fulfilling criteria B-D: B) Headache attacks lasting 4-72 hours (untreated or unsuccessfully treated). C) Headache has at least two of the following four characteristics: 1) unilateral location, 2) pulsating quality, 3) moderate or severe pain intensity, 4) aggravation by or causing avoidance of routine physical activity. D) During headache at least one of the following: 1) nausea and/or vomiting, 2) photophobia and phonophobia. E) Not better accounted for by another ICHD-3 diagnosis. 1.2 Migraine with aura: At least two attacks fulfilling criteria B and C: B) One or more of the following fully reversible aura symptoms: visual, sensory, speech and/or language, motor, brainstem, retinal. C) At least three of the following six characteristics: 1) at least one aura symptom spreads gradually over ≥5 minutes, 2) two or more aura symptoms occur in succession, 3) each individual aura symptom lasts 5-60 minutes, 4) at least one aura symptom is unilateral, 5) at least one aura symptom is positive, 6) the aura is accompanied, or followed within 60 minutes, by headache. 1.2.1 Migraine with typical aura: aura consisting of visual and/or sensory and/or speech-language symptoms, each fully reversible, but no motor, brainstem, or retinal symptoms. 1.2.2 Migraine with brainstem aura: aura with at least two fully reversible brainstem symptoms (dysarthria, vertigo, tinnitus, hypacusis, diplopia, ataxia not attributable to sensory deficit, decreased level of consciousness), but no motor or retinal symptoms. 1.2.3 Hemiplegic migraine: migraine with aura including fully reversible motor weakness (1.2.3.1 familial hemiplegic migraine; 1.2.3.2 sporadic hemiplegic migraine). 1.2.4 Retinal migraine: repeated attacks of monocular visual disturbance (scintillations, scotoma, or blindness) associated with migraine headache. 1.3 Chronic migraine: A) Headache (tension-type-like and/or migraine-like) on ≥15 days per month for more than 3 months and fulfilling criteria B and C. B) Occurring in a patient who has had at least five attacks fulfilling criteria B-D for 1.1 Migraine without aura and/or criteria B and C for 1.2 Migraine with aura. C) On ≥8 days per month for >3 months, fulfilling any of the following: C.1 criteria C and D for 1.1 Migraine without aura, C.2 criteria B and C for 1.2 Migraine with aura, C.3 believed by the patient to be migraine at onset and relieved by a triptan or ergot derivative. §1.3 Note: when criteria for both 1.3 Chronic migraine and 2.3 Chronic tension-type headache are met, code only 1.3 Chronic migraine. 1.4.1 Status migrainosus: A) A headache attack fulfilling criteria B and C. B) Occurring in a patient with 1.1 Migraine without aura and/or 1.2 Migraine with aura, and typical of previous attacks except for its duration and severity. C) Both of the following: 1) unremitting for >72 hours, 2) pain and/or associated symptoms are debilitating. D) Not better accounted for by another ICHD-3 diagnosis. Note 1: remissions of up to 12 hours due to medication or sleep are accepted. Note 2: milder cases, not meeting criterion C2, are coded 1.5.1 Probable migraine without aura. Comment: when the headache meets criteria for 8.2 Medication-overuse headache, code for MOH and the relevant migraine type but not for 1.4.1 Status migrainosus. 2.2 Frequent episodic tension-type headache: At least 10 episodes of headache occurring on 1-14 days per month on average for >3 months (≥12 and <180 days per year) fulfilling criteria B-D: B) Lasting 30 minutes to 7 days. C) At least two of the following four: 1) bilateral location, 2) pressing or tightening (non-pulsating) quality, 3) mild or moderate intensity, 4) not aggravated by routine physical activity. D) Both of the following: 1) no nausea or vomiting, 2) no more than one of photophobia or phonophobia. 2.3 Chronic tension-type headache: A) Headache occurring on ≥15 days per month on average for more than 3 months (≥180 days per year). B-C) Lasting hours to days, or unremitting, fulfilling at least two of the following four: 1) bilateral location, 2) pressing or tightening (non-pulsating) quality, 3) mild or moderate intensity, 4) not aggravated by routine physical activity. D) Both of the following: 1) no more than one of photophobia, phonophobia or mild nausea, 2) neither moderate or severe nausea nor vomiting. 3.1 Cluster headache: At least five attacks fulfilling criteria B-D: B) Severe or very severe unilateral orbital, supraorbital and/or temporal pain lasting 15-180 minutes (when untreated). C) Either or both of: 1) at least one ipsilateral cranial autonomic symptom (conjunctival injection and/or lacrimation, nasal congestion and/or rhinorrhoea, eyelid oedema, forehead and facial sweating, miosis and/or ptosis); 2) a sense of restlessness or agitation. D) Attacks have a frequency from 1 every other day to 8 per day. 3.2 Paroxysmal hemicrania: At least 20 attacks fulfilling criteria B-E: B) Severe unilateral orbital, supraorbital and/or temporal pain lasting 2-30 minutes. C) Either or both of: 1) at least one ipsilateral cranial autonomic symptom; 2) a sense of restlessness or agitation. D) Attacks have a frequency of more than 5 per day for more than half of the time when the disorder is active. E) Prevented absolutely by therapeutic doses of indomethacin. 3.3 Short-lasting unilateral neuralgiform headache attacks (SUNCT/SUNA): At least 20 attacks fulfilling criteria B-D: B) Moderate or severe unilateral head pain, with orbital, supraorbital, temporal and/or other trigeminal-distribution location, lasting for 1-600 seconds and occurring as single stabs, series of stabs or in a saw-tooth pattern. C) Accompanied by at least one of the following ipsilateral cranial autonomic symptoms: conjunctival injection and/or lacrimation, nasal congestion and/or rhinorrhoea, eyelid oedema, forehead and facial sweating, miosis and/or ptosis. D) Attacks have a frequency of at least one a day for more than half of the time when the disorder is active. 3.1.1 Episodic cluster headache: cluster attacks occurring in bouts (cluster periods) lasting 7 days to 1 year, separated by pain-free remission periods of 3 months or more. 3.1.2 Chronic cluster headache: cluster attacks occurring for 1 year or more without remission, or with remission periods lasting less than 3 months. 3.3.1 SUNCT: fulfilling criteria for 3.3, with both conjunctival injection AND lacrimation. 3.3.2 SUNA: fulfilling criteria for 3.3, with only one or neither of conjunctival injection and lacrimation, plus other cranial autonomic features. 3.4 Hemicrania continua: Unilateral headache fulfilling criteria B-D: B) Present for >3 months, with exacerbations of moderate or greater intensity. C) Either or both of: 1) at least one ipsilateral cranial autonomic symptom, 2) a sense of restlessness or aggravation of the pain by movement. D) Responds absolutely to therapeutic doses of indomethacin. 4.7 Primary stabbing headache: A) Head pain occurring spontaneously as a single stab or series of stabs and fulfilling criteria B and C. B) Each stab lasts for up to a few seconds. C) Stabs recur with irregular frequency, from one to many per day. D) No cranial autonomic symptoms. E) Not better accounted for by another ICHD-3 diagnosis. Note 1: 80% of stabs last three seconds or less; rarely 10-120 seconds. Note 2: attack frequency is generally low, one or a few per day. 4.7.1 Probable primary stabbing headache: A) Head pain occurring spontaneously as a single stab or series of stabs. B) Two only of: 1) each stab lasts up to a few seconds, 2) stabs recur with irregular frequency from one to many per day, 3) no cranial autonomic symptoms. C) Not fulfilling ICHD-3 criteria for any other headache disorder. D) Not better accounted for by another ICHD-3 diagnosis. 4.9 Hypnic headache: A) Recurrent headache attacks fulfilling criteria B-E. B) Developing only during sleep, and causing wakening. C) Occurring on >=10 days/month for >3 months. D) Lasting from 15 minutes up to four hours after waking. E) No cranial autonomic symptoms or restlessness. F) Not better accounted for by another ICHD-3 diagnosis. Note 1: distinction from the trigeminal autonomic cephalalgias, especially 3.1 Cluster headache, is necessary for effective management. Note 2: rule out sleep apnoea, nocturnal hypertension, hypoglycaemia and medication overuse; intracranial disorders must also be excluded. 4.9.1 Probable hypnic headache: A) attacks fulfilling B; B) developing only during sleep, causing wakening; C) two only of: 1) occurring on >=10 days/month for >3 months, 2) lasting 15 minutes up to four hours after waking, 3) no cranial autonomic symptoms or restlessness; D) not fulfilling ICHD-3 criteria for any other headache disorder; E) not better accounted for by another ICHD-3 diagnosis. 4.10 New daily persistent headache (NDPH): Persistent headache fulfilling criteria B and C: B) Distinct and clearly-remembered onset, with pain becoming continuous and unremitting within 24 hours. C) Present for >3 months. 8.2 Medication-overuse headache: A) Headache occurring on 15 or more days per month in a patient with a pre-existing headache disorder. B) Regular overuse for more than 3 months of one or more drugs that can be taken for acute and/or symptomatic treatment of headache. C) Not better accounted for by another ICHD-3 diagnosis. Overuse thresholds: simple analgesics 15 or more days/month (8.2.3); ergotamine, triptans, opioids, combination analgesics, or multiple drug classes 10 or more days/month (8.2.1/.2/.4/.5/.6). Comment: code 8.2 alongside the pre-existing headache type and its complication. 13.1.1 Trigeminal neuralgia: A) Recurrent paroxysms of unilateral facial pain in the distribution(s) of one or more divisions of the trigeminal nerve, with no radiation beyond, and fulfilling criteria B and C. B) Pain has all of the following characteristics: 1) lasting from a fraction of a second to two minutes, 2) severe intensity, 3) electric shock-like, shooting, stabbing or sharp in quality. C) Precipitated by innocuous stimuli within the affected trigeminal distribution. D) Not better accounted for by another ICHD-3 diagnosis. Note 4: some attacks may be, or appear to be, spontaneous, but there must be a history or finding of pain provoked by innocuous stimuli. Aetiological subtypes (imaging-determined): 13.1.1.1 Classical (neurovascular compression with morphological change), 13.1.1.2 Secondary (underlying disease: MS, cerebellopontine-angle tumour, AVM), 13.1.1.3 Idiopathic (adequate MRI and electrophysiology negative; a vessel-nerve contact without morphological change is still idiopathic). 13.4 Occipital neuralgia: A) Unilateral or bilateral pain in the distribution(s) of the greater, lesser and/or third occipital nerves, fulfilling criteria B-D. B) Pain has at least two of the following three characteristics: 1) recurring in paroxysmal attacks lasting from a few seconds to minutes, 2) severe in intensity, 3) shooting, stabbing or sharp in quality. C) Pain is associated with both of: 1) dysaesthesia and/or allodynia apparent during innocuous stimulation of the scalp and/or hair; 2) either or both of: a) tenderness over the affected nerve branches, b) trigger points at the emergence of the greater occipital nerve or in the distribution of C2. D) Pain is eased temporarily by local anaesthetic block of the affected nerve(s). E) Not better accounted for by another ICHD-3 diagnosis. Comment: must be distinguished from occipital referral of pain arising from the atlantoaxial or upper zygapophyseal joints or from tender trigger points in neck muscles. A1.6.6 Vestibular migraine (ICHD-3 Appendix; Bárány/Lempert 2012, J Vestib Res): A) At least five episodes fulfilling criteria C and D. B) A current or past history of 1.1 Migraine without aura or 1.2 Migraine with aura. C) Vestibular symptoms of moderate or severe intensity, lasting between 5 minutes and 72 hours. D) At least half of episodes are associated with at least one migrainous feature: 1) headache with at least two of (unilateral location, pulsating quality, moderate or severe intensity, aggravation by routine physical activity), 2) photophobia and phonophobia, 3) visual aura. E) Not better accounted for by another ICHD-3 diagnosis or another vestibular disorder.',
++    quoted_text: '1.1 Migraine without aura: At least five attacks fulfilling criteria B-D: B) Headache attacks lasting 4-72 hours (untreated or unsuccessfully treated). C) Headache has at least two of the following four characteristics: 1) unilateral location, 2) pulsating quality, 3) moderate or severe pain intensity, 4) aggravation by or causing avoidance of routine physical activity. D) During headache at least one of the following: 1) nausea and/or vomiting, 2) photophobia and phonophobia. E) Not better accounted for by another ICHD-3 diagnosis. 1.2 Migraine with aura: At least two attacks fulfilling criteria B and C: B) One or more of the following fully reversible aura symptoms: visual, sensory, speech and/or language, motor, brainstem, retinal. C) At least three of the following six characteristics: 1) at least one aura symptom spreads gradually over ≥5 minutes, 2) two or more aura symptoms occur in succession, 3) each individual aura symptom lasts 5-60 minutes, 4) at least one aura symptom is unilateral, 5) at least one aura symptom is positive, 6) the aura is accompanied, or followed within 60 minutes, by headache. 1.2.1 Migraine with typical aura: aura consisting of visual and/or sensory and/or speech-language symptoms, each fully reversible, but no motor, brainstem, or retinal symptoms. 1.2.2 Migraine with brainstem aura: aura with at least two fully reversible brainstem symptoms (dysarthria, vertigo, tinnitus, hypacusis, diplopia, ataxia not attributable to sensory deficit, decreased level of consciousness), but no motor or retinal symptoms. 1.2.3 Hemiplegic migraine: migraine with aura including fully reversible motor weakness (1.2.3.1 familial hemiplegic migraine; 1.2.3.2 sporadic hemiplegic migraine). 1.2.4 Retinal migraine: repeated attacks of monocular visual disturbance (scintillations, scotoma, or blindness) associated with migraine headache. 1.3 Chronic migraine: A) Headache (tension-type-like and/or migraine-like) on ≥15 days per month for more than 3 months and fulfilling criteria B and C. B) Occurring in a patient who has had at least five attacks fulfilling criteria B-D for 1.1 Migraine without aura and/or criteria B and C for 1.2 Migraine with aura. C) On ≥8 days per month for >3 months, fulfilling any of the following: C.1 criteria C and D for 1.1 Migraine without aura, C.2 criteria B and C for 1.2 Migraine with aura, C.3 believed by the patient to be migraine at onset and relieved by a triptan or ergot derivative. §1.3 Note: when criteria for both 1.3 Chronic migraine and 2.3 Chronic tension-type headache are met, code only 1.3 Chronic migraine. 1.4.1 Status migrainosus: A) A headache attack fulfilling criteria B and C. B) Occurring in a patient with 1.1 Migraine without aura and/or 1.2 Migraine with aura, and typical of previous attacks except for its duration and severity. C) Both of the following: 1) unremitting for >72 hours, 2) pain and/or associated symptoms are debilitating. D) Not better accounted for by another ICHD-3 diagnosis. Note 1: remissions of up to 12 hours due to medication or sleep are accepted. Note 2: milder cases, not meeting criterion C2, are coded 1.5.1 Probable migraine without aura. Comment: when the headache meets criteria for 8.2 Medication-overuse headache, code for MOH and the relevant migraine type but not for 1.4.1 Status migrainosus. 2.2 Frequent episodic tension-type headache: At least 10 episodes of headache occurring on 1-14 days per month on average for >3 months (≥12 and <180 days per year) fulfilling criteria B-D: B) Lasting 30 minutes to 7 days. C) At least two of the following four: 1) bilateral location, 2) pressing or tightening (non-pulsating) quality, 3) mild or moderate intensity, 4) not aggravated by routine physical activity. D) Both of the following: 1) no nausea or vomiting, 2) no more than one of photophobia or phonophobia. 2.3 Chronic tension-type headache: A) Headache occurring on ≥15 days per month on average for more than 3 months (≥180 days per year). B-C) Lasting hours to days, or unremitting, fulfilling at least two of the following four: 1) bilateral location, 2) pressing or tightening (non-pulsating) quality, 3) mild or moderate intensity, 4) not aggravated by routine physical activity. D) Both of the following: 1) no more than one of photophobia, phonophobia or mild nausea, 2) neither moderate or severe nausea nor vomiting. 3.1 Cluster headache: At least five attacks fulfilling criteria B-D: B) Severe or very severe unilateral orbital, supraorbital and/or temporal pain lasting 15-180 minutes (when untreated). C) Either or both of: 1) at least one ipsilateral cranial autonomic symptom (conjunctival injection and/or lacrimation, nasal congestion and/or rhinorrhoea, eyelid oedema, forehead and facial sweating, miosis and/or ptosis); 2) a sense of restlessness or agitation. D) Attacks have a frequency from 1 every other day to 8 per day. 3.2 Paroxysmal hemicrania: At least 20 attacks fulfilling criteria B-E: B) Severe unilateral orbital, supraorbital and/or temporal pain lasting 2-30 minutes. C) Either or both of: 1) at least one ipsilateral cranial autonomic symptom; 2) a sense of restlessness or agitation. D) Attacks have a frequency of more than 5 per day for more than half of the time when the disorder is active. E) Prevented absolutely by therapeutic doses of indomethacin. 3.3 Short-lasting unilateral neuralgiform headache attacks (SUNCT/SUNA): At least 20 attacks fulfilling criteria B-D: B) Moderate or severe unilateral head pain, with orbital, supraorbital, temporal and/or other trigeminal-distribution location, lasting for 1-600 seconds and occurring as single stabs, series of stabs or in a saw-tooth pattern. C) Accompanied by at least one of the following ipsilateral cranial autonomic symptoms: conjunctival injection and/or lacrimation, nasal congestion and/or rhinorrhoea, eyelid oedema, forehead and facial sweating, miosis and/or ptosis. D) Attacks have a frequency of at least one a day for more than half of the time when the disorder is active. 3.1.1 Episodic cluster headache: cluster attacks occurring in bouts (cluster periods) lasting 7 days to 1 year, separated by pain-free remission periods of 3 months or more. 3.1.2 Chronic cluster headache: cluster attacks occurring for 1 year or more without remission, or with remission periods lasting less than 3 months. 3.3.1 SUNCT: fulfilling criteria for 3.3, with both conjunctival injection AND lacrimation. 3.3.2 SUNA: fulfilling criteria for 3.3, with only one or neither of conjunctival injection and lacrimation, plus other cranial autonomic features. 3.4 Hemicrania continua: Unilateral headache fulfilling criteria B-D: B) Present for >3 months, with exacerbations of moderate or greater intensity. C) Either or both of: 1) at least one ipsilateral cranial autonomic symptom, 2) a sense of restlessness or aggravation of the pain by movement. D) Responds absolutely to therapeutic doses of indomethacin. 4.7 Primary stabbing headache: A) Head pain occurring spontaneously as a single stab or series of stabs and fulfilling criteria B and C. B) Each stab lasts for up to a few seconds. C) Stabs recur with irregular frequency, from one to many per day. D) No cranial autonomic symptoms. E) Not better accounted for by another ICHD-3 diagnosis. Note 1: 80% of stabs last three seconds or less; rarely 10-120 seconds. Note 2: attack frequency is generally low, one or a few per day. 4.7.1 Probable primary stabbing headache: A) Head pain occurring spontaneously as a single stab or series of stabs. B) Two only of: 1) each stab lasts up to a few seconds, 2) stabs recur with irregular frequency from one to many per day, 3) no cranial autonomic symptoms. C) Not fulfilling ICHD-3 criteria for any other headache disorder. D) Not better accounted for by another ICHD-3 diagnosis. 4.9 Hypnic headache: A) Recurrent headache attacks fulfilling criteria B-E. B) Developing only during sleep, and causing wakening. C) Occurring on >=10 days/month for >3 months. D) Lasting from 15 minutes up to four hours after waking. E) No cranial autonomic symptoms or restlessness. F) Not better accounted for by another ICHD-3 diagnosis. Note 1: distinction from the trigeminal autonomic cephalalgias, especially 3.1 Cluster headache, is necessary for effective management. Note 2: rule out sleep apnoea, nocturnal hypertension, hypoglycaemia and medication overuse; intracranial disorders must also be excluded. 4.9.1 Probable hypnic headache: A) attacks fulfilling B; B) developing only during sleep, causing wakening; C) two only of: 1) occurring on >=10 days/month for >3 months, 2) lasting 15 minutes up to four hours after waking, 3) no cranial autonomic symptoms or restlessness; D) not fulfilling ICHD-3 criteria for any other headache disorder; E) not better accounted for by another ICHD-3 diagnosis. 4.10 New daily persistent headache (NDPH): Persistent headache fulfilling criteria B and C: B) Distinct and clearly-remembered onset, with pain becoming continuous and unremitting within 24 hours. C) Present for >3 months. 8.2 Medication-overuse headache: A) Headache occurring on 15 or more days per month in a patient with a pre-existing headache disorder. B) Regular overuse for more than 3 months of one or more drugs that can be taken for acute and/or symptomatic treatment of headache. C) Not better accounted for by another ICHD-3 diagnosis. Overuse thresholds: simple analgesics 15 or more days/month (8.2.3); ergotamine, triptans, opioids, combination analgesics, or multiple drug classes 10 or more days/month (8.2.1/.2/.4/.5/.6). Comment: code 8.2 alongside the pre-existing headache type and its complication. 13.1.1 Trigeminal neuralgia: A) Recurrent paroxysms of unilateral facial pain in the distribution(s) of one or more divisions of the trigeminal nerve, with no radiation beyond, and fulfilling criteria B and C. B) Pain has all of the following characteristics: 1) lasting from a fraction of a second to two minutes, 2) severe intensity, 3) electric shock-like, shooting, stabbing or sharp in quality. C) Precipitated by innocuous stimuli within the affected trigeminal distribution. D) Not better accounted for by another ICHD-3 diagnosis. Note 4: some attacks may be, or appear to be, spontaneous, but there must be a history or finding of pain provoked by innocuous stimuli. Aetiological subtypes (imaging-determined): 13.1.1.1 Classical (neurovascular compression with morphological change), 13.1.1.2 Secondary (underlying disease: MS, cerebellopontine-angle tumour, AVM), 13.1.1.3 Idiopathic (adequate MRI and electrophysiology negative; a vessel-nerve contact without morphological change is still idiopathic). 13.4 Occipital neuralgia: A) Unilateral or bilateral pain in the distribution(s) of the greater, lesser and/or third occipital nerves, fulfilling criteria B-D. B) Pain has at least two of the following three characteristics: 1) recurring in paroxysmal attacks lasting from a few seconds to minutes, 2) severe in intensity, 3) shooting, stabbing or sharp in quality. C) Pain is associated with both of: 1) dysaesthesia and/or allodynia apparent during innocuous stimulation of the scalp and/or hair; 2) either or both of: a) tenderness over the affected nerve branches, b) trigger points at the emergence of the greater occipital nerve or in the distribution of C2. D) Pain is eased temporarily by local anaesthetic block of the affected nerve(s). E) Not better accounted for by another ICHD-3 diagnosis. Comment: must be distinguished from occipital referral of pain arising from the atlantoaxial or upper zygapophyseal joints or from tender trigger points in neck muscles. A1.6.6 Vestibular migraine (ICHD-3 Appendix; Bárány/Lempert 2012, J Vestib Res): A) At least five episodes fulfilling criteria C and D. B) A current or past history of 1.1 Migraine without aura or 1.2 Migraine with aura. C) Vestibular symptoms of moderate or severe intensity, lasting between 5 minutes and 72 hours. D) At least half of episodes are associated with at least one migrainous feature: 1) headache with at least two of (unilateral location, pulsating quality, moderate or severe intensity, aggravation by routine physical activity), 2) photophobia and phonophobia, 3) visual aura. E) Not better accounted for by another ICHD-3 diagnosis or another vestibular disorder. 13.2.1 Glossopharyngeal neuralgia: A) Recurring paroxysmal attacks of unilateral pain in the distribution of the glossopharyngeal nerve and fulfilling criterion B. B) Pain has all of the following characteristics: 1) lasting from a few seconds to two minutes, 2) severe intensity, 3) electric shock-like, shooting, stabbing or sharp in quality, 4) precipitated by swallowing, coughing, talking or yawning. C) Not better accounted for by another ICHD-3 diagnosis. Note 1: within the posterior part of the tongue, tonsillar fossa, pharynx or angle of the lower jaw and/or in the ear. Comments: 13.2.1 can occur together with 13.1.1 Trigeminal neuralgia. The pain may radiate to involve the eye, nose, chin or shoulder. It can be severe enough for patients to lose weight. In rare cases, attacks of pain are associated with vagal symptoms such as cough, hoarseness, syncope and/or bradycardia; some authors have suggested using the term vagoglossopharyngeal neuralgia when pain is accompanied by asystole, convulsions and syncope. Clinical examination usually fails to show sensory changes in the nerve distribution but, if mild sensory deficits are encountered, they do not invalidate the diagnosis. Major changes or a reduced/missing gag reflex should prompt aetiological investigations. 13.2.1 Glossopharyngeal neuralgia is usually responsive, at least initially, to pharmacotherapy (especially carbamazepine or oxcarbazepine). It has been suggested that application of local anaesthetic to the tonsil and pharyngeal wall can prevent attacks for a few hours. Aetiological subtypes: 13.2.1.1 Classical (demonstration on MRI or during surgery of neurovascular compression of the glossopharyngeal nerve root), 13.2.1.2 Secondary (an underlying disease has been demonstrated known to be able to cause, and explaining, the neuralgia; there are single reports of secondary glossopharyngeal neuralgia caused by neck trauma, multiple sclerosis, tonsillar or regional tumours, cerebellopontine angle tumours and Arnold-Chiari malformation), 13.2.1.3 Idiopathic (investigations have found neither neurovascular compression nor an underlying disease known to be able to cause 13.2.1.2). 13.12 Persistent idiopathic facial pain (PIFP; previously used term: atypical facial pain): A) Facial and/or oral pain fulfilling criteria B and C. B) Recurring daily for >2 hours/day for >3 months. C) Pain has both of the following characteristics: 1) poorly localized, and not following the distribution of a peripheral nerve, 2) dull, aching or nagging quality. D) Clinical neurological examination is normal. E) A dental cause has been excluded by appropriate investigations. F) Not better accounted for by another ICHD-3 diagnosis. Comments: the character is most often depicted as dull, nagging or aching, either deep or superficial; it can have sharp exacerbations, and is aggravated by stress. Over time it may spread to a wider area of the craniocervical region. Patients are predominantly female. It may be comorbid with other pain conditions such as chronic widespread pain and irritable bowel syndrome, and presents with high levels of psychiatric comorbidity and psychosocial disability. It may originate from a minor operation or injury to the face, maxillae, teeth or gums, but persists after healing without any demonstrable local cause; however, psychophysical or neurophysiological tests may demonstrate sensory abnormalities.',
+   },
+ 
+   // ─── Scher 2024 — Tension-Type Headache (Continuum review) ────────────────
+diff --git a/src/pages/MigrainePathway.tsx b/src/pages/MigrainePathway.tsx
+index 01f8197..f11e2b0 100644
+--- a/src/pages/MigrainePathway.tsx
++++ b/src/pages/MigrainePathway.tsx
+@@ -439,8 +439,8 @@ const MigrainePathway: React.FC = () => {
+       }
+       if (differential.trigeminalNeuralgia) {
+           lines.push("TRIGEMINAL NEURALGIA PROTOCOL (Nahas 2024):");
+-          lines.push("- First-line: carbamazepine 300–800 mg/day (Level A, FDA-approved)");
+-          lines.push("- Alternative: oxcarbazepine 600–1200 mg/day (Level B)");
++          lines.push("- First-line: carbamazepine 300–800 mg/day (FDA-approved)");
++          lines.push("- Alternative: oxcarbazepine 600–1200 mg/day");
+           lines.push("- Acute exacerbation: IV fosphenytoin 15–20 mg PE/kg OR IV lidocaine 1.5–2 mg/kg over 10–20 min");
+           lines.push("- Avoid opioids.");
+           return `Trigeminal Neuralgia Protocol: ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}\n\n${lines.join('\n')}`;
+@@ -847,21 +847,24 @@ const MigrainePathway: React.FC = () => {
+                   <div className="space-y-2">
+                     <div className="bg-white p-3 rounded-lg border border-amber-200">
+                       <div className="flex items-center gap-2 mb-0.5">
++                        {/* Evidence badge removed 2026-09-09 (clinical post-gate P1): the
++                            Level A/B grades belong to the AAN/EFNS 2008 practice parameter,
++                            scoped to CLASSIC TN, not to Nahas 2024; re-attribution alongside
++                            the Nahas dose range is the cross-source merge under TASKS.md
++                            "TN dose-conflict adjudication". Doses here ARE Nahas Table 10-2. */}
+                         <div className="font-semibold text-slate-900 text-sm">Carbamazepine 300–800 mg/day</div>
+-                        <EvidenceBadge level="A" />
+                       </div>
+                       <div className="text-xs text-slate-500 mt-1">Only FDA-approved agent for TN. Start low (100 mg BID), titrate q3 days. Monitor CBC and LFTs. Nahas 2024.</div>
+                     </div>
+                     <div className="bg-white p-3 rounded-lg border border-amber-200">
+                       <div className="flex items-center gap-2 mb-0.5">
+                         <div className="font-semibold text-slate-900 text-sm">Oxcarbazepine 600–1200 mg/day</div>
+-                        <EvidenceBadge level="B" />
+                       </div>
+                       <div className="text-xs text-slate-500 mt-1">Better tolerated than carbamazepine. Risk of hyponatremia; monitor electrolytes. Nahas 2024.</div>
+                     </div>
+                     <div className="bg-white p-3 rounded-lg border border-amber-200">
+                       <div className="font-semibold text-slate-900 text-sm mb-0.5">Acute exacerbation rescue</div>
+-                      <div className="text-xs text-slate-500">IV fosphenytoin 15–20 mg PE/kg OR IV lidocaine 1.5–2 mg/kg over 10–20 min (for pain crises when oral intake is not possible). Nahas 2024 p.298.</div>
++                      <div className="text-xs text-slate-500">IV fosphenytoin 15–20 mg PE/kg OR IV lidocaine 1.5–2 mg/kg over 10–20 min (for pain crises when oral intake is not possible). Nahas 2024.</div>
+                     </div>
+                     <div className="bg-red-50 p-3 rounded-lg border border-red-200">
+                       <div className="text-xs font-bold text-red-700">Avoid opioids: not effective and accelerate central sensitization in TN.</div>

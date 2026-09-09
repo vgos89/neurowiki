@@ -184,6 +184,24 @@ export const CORE_QUESTIONS: HeadacheQuestion[] = [
       // chip and silently capped cluster and paroxysmal hemicrania at Probable
       // (clinical review 2026-09-07, BC-6; drift guard in the reachability tests).
       { id: 'loc-face', label: 'In the face: cheek, jaw, or upper lip', chips: ['loc-unilateral', 'loc-facial-region'] },
+      // A glossopharyngeal presentation previously had no answer on this screen:
+      // throat, tongue-base and ear pain had to be filed under "one side" or "in
+      // the face", and 13.2.1 was undiagnosable - the reachability defect fixed
+      // for facial pain on 2026-09-07, reproduced one chapter over.
+      // [PAIR - preserve both] 13.2.1 criterion A requires unilaterality, so this
+      // answer contributes loc-unilateral alongside the territory chip, mirroring
+      // loc-orbital and loc-face (architect 2026-09-08, condition 3).
+      // [PAIR - label constraint] q-location is a clinically DISJOINT single-select
+      // partition. ICHD-3 13.2.1 Note 1 puts the ANGLE of the lower jaw in
+      // glossopharyngeal territory while 13.1.1 covers the cheek and jaw surface,
+      // so "jaw" appears in BOTH this label and loc-face. The drift guard asserts
+      // the partition by anatomical keyword, NOT by the word "jaw": this label
+      // owns throat / tongue / tonsil / ear; loc-face owns cheek / upper lip;
+      // neither may mention the eye or orbit (BC-6 protects loc-orbital-temporal).
+      // This answer must NOT contribute loc-facial-region: that chip's label reads
+      // "cheek, jaw, or upper lip", and contributing it from a throat-and-ear
+      // answer would make the chip label lie about what the clinician affirmed.
+      { id: 'loc-throat-ear', label: 'In the throat, back of the tongue, tonsil area, or ear, including under the angle of the jaw', chips: ['loc-unilateral', 'loc-glossopharyngeal-territory'] },
     ],
   },
   {
@@ -496,6 +514,87 @@ export const CONDITIONAL_BRANCHES: ConditionalBranch[] = [
         { id: 'tn-nvc', label: 'Imaging shows a blood vessel compressing the nerve WITH nerve changes (atrophy/displacement)', chips: ['tn-nvc-morphological-change'] },
         { id: 'tn-secondary-cause', label: 'An underlying cause has been found (MS, a tumour, or AVM)', chips: ['tn-underlying-disease-demonstrated'] },
         { id: 'tn-workup-neg', label: 'MRI and nerve tests were done and were normal (no compression with changes, no underlying cause)', chips: ['tn-adequate-workup-negative'] },
+      ],
+    },
+  },
+  // Glossopharyngeal detail — screens for §13.2.1. SIBLING of b-trigeminal and
+  // b-pifp, not a co-tenant: share a screen ONLY when two phenotypes have
+  // identical fires() (the q-tac-detail precedent); otherwise siblings (the
+  // b-occipital / b-stabbing / b-trigeminal precedent). Architect 2026-09-08,
+  // condition 2. Do NOT widen b-trigeminal's predicate and do NOT add GPN
+  // options to q-trigeminal: a throat-territory patient ticking honestly on a
+  // co-tenanted screen can satisfy tn-A, tn-B and tn-C together, because
+  // loc-trigeminal-distribution's label says "jaw", tn-trigger's label says
+  // "talking", and 13.2.1's own territory note says "angle of the lower jaw"
+  // while its trigger criterion says "talking".
+  // fires() includes loc-facial-region (clinical pre-gate C1): an angle-of-jaw
+  // presentation plausibly files under "In the face: cheek, jaw, or upper lip",
+  // and on that route the patient must still reach this screen - otherwise they
+  // reach ONLY the TN screen and can collect a confident full TN match while
+  // GPN stays invisible. The territory-confirm option below exists for exactly
+  // that route: q-location is single-select, so a loc-face answer cannot also
+  // contribute the territory chip gpn-A requires.
+  {
+    id: 'b-glossopharyngeal',
+    fires: (s) => has(s, 'loc-glossopharyngeal-territory') || has(s, 'loc-facial-region'),
+    question: {
+      id: 'q-glossopharyngeal',
+      screen: 8,
+      eyebrow: 'Throat and ear pain detail',
+      prompt: 'If this is brief, shock-like pain in the throat, tongue base, or ear, answer these (glossopharyngeal neuralgia screen):',
+      select: 'multi',
+      // BC-7-class caution: this teach string is the PRIMARY live surface of the
+      // GPN vagal-safety content (clinical pre-gate condition on S5; the card is
+      // secondary and opt-in). Attribution "some authors have suggested" is the
+      // source's own (pre-gate C7).
+      claimId: 'clinic-headache-gpn-vagal-safety',
+      teach: 'ICHD-3 13.2.1 permits radiation to the eye, nose, chin, or shoulder, so spread beyond the nerve does not rule it out; 13.1.1 trigeminal neuralgia does not permit it. In rare cases attacks are accompanied by vagal symptoms such as cough, hoarseness, syncope, or bradycardia, and some authors have suggested the term vagoglossopharyngeal neuralgia when pain is accompanied by asystole, convulsions, and syncope, so ask about blackouts with attacks. Pain can be severe enough for patients to lose weight. Major sensory changes or a reduced or missing gag reflex should prompt aetiological investigations; mild sensory deficits do not invalidate the diagnosis.',
+      options: [
+        // Territory confirm (pre-gate C1): on the loc-face route the territory
+        // chip is otherwise unobtainable and gpn-A can never be satisfied. On the
+        // loc-throat-ear route this option is redundant but harmless (the chip is
+        // already present). Mirrors the gpn-shock idiom for working around a
+        // single-select core screen.
+        { id: 'gpn-territory', label: 'The pain sits in the throat, back of the tongue, tonsil area, or ear, including under the angle of the jaw', chips: ['loc-glossopharyngeal-territory'] },
+        // Mirrors tn-shock: the core q-quality screen is single-select, so a
+        // patient who answered "throbbing" or "pressing" has no other route to
+        // gpn-B.3. Contributes ONLY qual-electric-shock-shooting, exactly as
+        // tn-shock does, so it does not additionally open b-occipital and
+        // b-stabbing.
+        { id: 'gpn-shock', label: 'The pain is electric-shock-like or shooting', chips: ['qual-electric-shock-shooting'] },
+        { id: 'gpn-brief', label: 'Each attack lasts from a few seconds up to 2 minutes', chips: ['dur-few-sec-to-2min'] },
+        { id: 'gpn-trigger', label: 'Attacks are triggered by swallowing, coughing, talking, or yawning', chips: ['trigger-swallow-cough-talk-yawn'] },
+      ],
+    },
+  },
+  // Persistent facial pain detail — screens for §13.12. Fires on either site
+  // chip, matching ICHD-3 13.12 A ("facial and/or oral pain") exactly. SIBLING
+  // of b-trigeminal and b-glossopharyngeal (architect condition 2). Deliberately
+  // does NOT fire on a quality chip: 13.12's quality is dull, aching or nagging,
+  // and the core q-quality screen's nearest answer (pressing or tightening)
+  // belongs to §2 TTH; using it as a trigger would be a wider-label
+  // false-positive path. The minted qual-dull-aching-nagging chip lives on this
+  // screen, so the core single-select partition is untouched.
+  {
+    id: 'b-pifp',
+    fires: (s) => has(s, 'loc-facial-region') || has(s, 'loc-glossopharyngeal-territory'),
+    question: {
+      id: 'q-pifp',
+      screen: 8,
+      eyebrow: 'Persistent facial pain detail',
+      prompt: 'If this is constant, dull facial or mouth pain rather than brief shocks, answer these (persistent idiopathic facial pain screen):',
+      select: 'multi',
+      // Discriminators are framed as pointers, not identifications (pre-gate C6):
+      // the engine returns match strengths and never declares a diagnosis, and
+      // 13.11 / 13.1.1.1.2 have criteria this tool does not collect.
+      claimId: 'clinic-headache-ichd3-pifp-criteria',
+      teach: 'ICHD-3 13.12 requires a normal clinical neurological examination and a dental cause excluded by appropriate investigations. Sharp exacerbations are allowed, and over time the pain may spread to a wider area of the craniocervical region. Psychophysical or neurophysiological tests may demonstrate sensory abnormalities; the clinical examination is the only normal-findings criterion. Burning pain felt superficially in the oral mucosa points away from 13.12 and toward 13.11 burning mouth syndrome, which shares the same daily-pattern criterion word for word. Triggered shock-like paroxysms on a background ache within a nerve territory point toward trigeminal neuralgia with concomitant continuous pain (13.1.1.1.2 or 13.1.1.3.2), which requires the paroxysms.',
+      options: [
+        { id: 'pifp-daily', label: 'The pain recurs daily, more than 2 hours a day, for more than 3 months', chips: ['pifp-daily-gt2h-gt3mo'] },
+        { id: 'pifp-poorly-loc', label: 'The pain is poorly localized and does not follow the territory of a peripheral nerve', chips: ['pifp-poorly-localized-non-nerve'] },
+        { id: 'pifp-quality', label: 'The pain is dull, aching, or nagging', chips: ['qual-dull-aching-nagging'] },
+        { id: 'pifp-exam', label: 'The clinical neurological examination is normal', chips: ['exam-neuro-normal'] },
+        { id: 'pifp-dental', label: 'A dental cause has been excluded by appropriate investigations', chips: ['pifp-dental-cause-excluded'] },
       ],
     },
   },

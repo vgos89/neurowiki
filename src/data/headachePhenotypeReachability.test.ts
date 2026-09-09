@@ -4,7 +4,7 @@ import { evaluateHeadachePhenotypes, HEADACHE_PHENOTYPES, type ChipId } from './
 
 /**
  * Reachability: an answer path THROUGH THE QUESTION FLOW reaches a strong
- * match. Coverage today: 8 of the 16 engine phenotypes have walks; the
+ * match. Coverage today: 10 of the 18 engine phenotypes have walks; the
  * inventory guard at the bottom tracks the other 8 as explicit debt
  * (TASKS.md, headache reachability walks follow-up) and fails when a new
  * phenotype is added without being walked or listed.
@@ -139,6 +139,110 @@ describe('phenotype reachability walks through the question flow', () => {
     expect(strengthOf(s, 'trigeminal-neuralgia')).toBe('full');
   });
 
+  it('W1 (facial-pain expansion): glossopharyngeal presentation reaches full GPN and NEVER a TN match', () => {
+    // Persona: pain under the angle of the jaw radiating to the ear, brought on
+    // by talking and swallowing, severe, shock-like, each jab under two minutes.
+    // The chip whose absence keeps TN out is loc-trigeminal-distribution,
+    // contributed from exactly one place (the tn-distribution option) - and this
+    // walk never answers it.
+    const s = walk([
+      ['q-onset', 'recurrent'], ['q-frequency', 'f-ge15'], ['q-duration', 'd-lt15'],
+      ['q-attack-count', 'c-gt10'], ['q-chronicity', 'ch-ge3'], ['q-quality', 'qual-shock'],
+      ['q-location', 'loc-throat-ear'], ['q-severity', 'sev-sev'], ['q-activity', 'act-none'],
+      ['q-glossopharyngeal', 'gpn-brief'], ['q-glossopharyngeal', 'gpn-trigger'],
+    ]);
+    const out = evaluateHeadachePhenotypes(s);
+    const gpn = out.find((x) => x.phenotypeId === 'glossopharyngeal-neuralgia');
+    expect(gpn?.matchStrength).toBe('full');
+    expect(gpn?.criteriaMet).toBe(2);
+    // TN, occipital, primary stabbing and PIFP must be ABSENT from the output
+    // entirely (suppress-gates fail), not merely non-full.
+    for (const id of ['trigeminal-neuralgia', 'occipital-neuralgia', 'primary-stabbing-headache', 'persistent-idiopathic-facial-pain']) {
+      expect(out.find((x) => x.phenotypeId === id), `${id} must be absent`).toBeUndefined();
+    }
+  });
+
+  it('W8 (pre-gate C1): the loc-face route still reaches GPN via the territory-confirm option, and TN stays out', () => {
+    // An angle-of-jaw presentation plausibly files under "In the face: cheek,
+    // jaw, or upper lip". Before C1, that patient reached ONLY the TN screen and
+    // could collect a confident full TN match while GPN stayed invisible.
+    const s = walk([
+      ['q-onset', 'recurrent'], ['q-frequency', 'f-ge15'], ['q-duration', 'd-lt15'],
+      ['q-attack-count', 'c-gt10'], ['q-chronicity', 'ch-ge3'], ['q-quality', 'qual-shock'],
+      ['q-location', 'loc-face'], ['q-severity', 'sev-vsev'], ['q-activity', 'act-none'],
+      ['q-glossopharyngeal', 'gpn-territory'], ['q-glossopharyngeal', 'gpn-brief'], ['q-glossopharyngeal', 'gpn-trigger'],
+    ]);
+    const out = evaluateHeadachePhenotypes(s);
+    expect(out.find((x) => x.phenotypeId === 'glossopharyngeal-neuralgia')?.matchStrength).toBe('full');
+    expect(out.find((x) => x.phenotypeId === 'trigeminal-neuralgia')).toBeUndefined();
+  });
+
+  it('W9: a GPN near-miss (no trigger answered) is silently unclassified, with the safety teach still offered', () => {
+    // gpn-B is a composite suppress-gate: 3 of its 4 sub-items met means the
+    // phenotype is hidden, not "probable" (no §13.2.1.5 exists). The accepted
+    // consequence is tested so it cannot drift silently; the vagal-safety teach
+    // string rides the QUESTION, which fired regardless.
+    const s = walk([
+      ['q-onset', 'recurrent'], ['q-frequency', 'f-ge15'], ['q-duration', 'd-lt15'],
+      ['q-attack-count', 'c-gt10'], ['q-chronicity', 'ch-ge3'], ['q-quality', 'qual-shock'],
+      ['q-location', 'loc-throat-ear'], ['q-severity', 'sev-sev'], ['q-activity', 'act-none'],
+      ['q-glossopharyngeal', 'gpn-brief'],
+    ]);
+    expect(strengthOf(s, 'glossopharyngeal-neuralgia')).toBeUndefined();
+    const q = getActiveQuestions(s).find((x) => x.id === 'q-glossopharyngeal');
+    expect(q?.teach).toBeTruthy();
+    expect(q?.claimId).toBe('clinic-headache-gpn-vagal-safety');
+  });
+
+  it('W3 (facial-pain expansion): PIFP reaches full DESPITE a continuous-headache answer', () => {
+    // Persona: constant dull ache across the cheek for a year, hours daily,
+    // normal exam, dental workup negative. dur-continuous suppresses the
+    // episodic phenotypes; PIFP is deliberately NOT in that suppression list,
+    // because it is the daily entity the answer describes.
+    const s = walk([
+      ['q-onset', 'continuous'], ['q-frequency', 'f-ge15'], ['q-chronicity', 'ch-ge3'],
+      ['q-quality', 'qual-press'], ['q-location', 'loc-face'], ['q-severity', 'sev-mod'],
+      ['q-activity', 'act-none'],
+      ['q-pifp', 'pifp-daily'], ['q-pifp', 'pifp-poorly-loc'], ['q-pifp', 'pifp-quality'],
+      ['q-pifp', 'pifp-exam'], ['q-pifp', 'pifp-dental'],
+    ]);
+    const out = evaluateHeadachePhenotypes(s);
+    const pifp = out.find((x) => x.phenotypeId === 'persistent-idiopathic-facial-pain');
+    expect(pifp?.matchStrength).toBe('full');
+    expect(pifp?.criteriaMet).toBe(5);
+    expect(out.find((x) => x.phenotypeId === 'trigeminal-neuralgia')).toBeUndefined();
+  });
+
+  it('W10: PIFP without the dental-exclusion answer is silently unclassified, with the workup teach still offered', () => {
+    // pifp-E is a deliberate hard gate: surfacing 13.12 before a dental cause is
+    // excluded is the failure mode the criterion exists to prevent. The workup
+    // requirement reaches the clinician via the q-pifp option label and teach,
+    // which fired regardless.
+    const s = walk([
+      ['q-onset', 'continuous'], ['q-frequency', 'f-ge15'], ['q-chronicity', 'ch-ge3'],
+      ['q-quality', 'qual-press'], ['q-location', 'loc-face'], ['q-severity', 'sev-mod'],
+      ['q-activity', 'act-none'],
+      ['q-pifp', 'pifp-daily'], ['q-pifp', 'pifp-poorly-loc'], ['q-pifp', 'pifp-quality'],
+      ['q-pifp', 'pifp-exam'],
+    ]);
+    expect(strengthOf(s, 'persistent-idiopathic-facial-pain')).toBeUndefined();
+    const q = getActiveQuestions(s).find((x) => x.id === 'q-pifp');
+    expect(q?.teach).toBeTruthy();
+    expect(q?.claimId).toBe('clinic-headache-ichd3-pifp-criteria');
+  });
+
+  it('config invariant (W1 premise guard): loc-trigeminal-distribution is contributed ONLY by tn-distribution', () => {
+    // W1/W8's safety rests on nothing outside the TN screen contributing the TN
+    // territory chip. A persona walk alone would not survive future option edits;
+    // this does.
+    const contributors: string[] = [];
+    const allQuestions = [...CORE_QUESTIONS, ...CONDITIONAL_BRANCHES.map((b) => b.question)];
+    for (const q of allQuestions) for (const o of q.options) {
+      if (o.chips.includes('loc-trigeminal-distribution')) contributors.push(o.id);
+    }
+    expect(contributors).toEqual(['tn-distribution']);
+  });
+
   it('drift guard (BC-6): only the orbital option on q-location may mention the eye', () => {
     // q-location is single-select, and cluster-B / ph-B demote-gates require
     // loc-orbital-temporal, which only the orbital option contributes. A second
@@ -147,6 +251,30 @@ describe('phenotype reachability walks through the question flow', () => {
     const q = CORE_QUESTIONS.find((x) => x.id === 'q-location')!;
     const eyeMentions = q.options.filter((o) => /\beye\b|orbit/i.test(o.label));
     expect(eyeMentions.map((o) => o.id)).toEqual(['loc-orbital']);
+  });
+
+  it('drift guard (W5): q-location stays an anatomically disjoint partition by keyword ownership', () => {
+    // "jaw" legitimately appears in BOTH loc-face (cheek/jaw surface, §13.1) and
+    // loc-throat-ear (ANGLE of the jaw, §13.2.1 Note 1), so the guard asserts
+    // ownership of the unambiguous anchors instead: loc-face owns cheek and
+    // upper lip; loc-throat-ear owns throat, tongue, tonsil and ear. Word
+    // boundaries matter: /ear/ without them matches "area" and "near".
+    const q = CORE_QUESTIONS.find((x) => x.id === 'q-location')!;
+    const label = (id: string) => q.options.find((o) => o.id === id)!.label;
+    const face = label('loc-face');
+    const throat = label('loc-throat-ear');
+    expect(face).toMatch(/cheek/i);
+    expect(face).toMatch(/upper lip/i);
+    for (const kw of [/\bthroat\b/i, /\btongue\b/i, /\btonsil\b/i, /\bear\b/i]) {
+      expect(face).not.toMatch(kw);
+      expect(throat).toMatch(kw);
+    }
+    expect(throat).not.toMatch(/cheek/i);
+    expect(throat).not.toMatch(/upper lip/i);
+    // Chip pairing: every territory answer also contributes loc-unilateral.
+    for (const id of ['loc-orbital', 'loc-face', 'loc-throat-ear']) {
+      expect(q.options.find((o) => o.id === id)!.chips).toContain('loc-unilateral');
+    }
   });
 
   it('episodic tension-type — full, spine only', () => {
@@ -234,13 +362,15 @@ describe('phenotype reachability walks through the question flow', () => {
       'migraine-without-aura', 'migraine-with-aura', 'episodic-tth',
       'cluster-headache', 'trigeminal-neuralgia', 'occipital-neuralgia',
       'vestibular-migraine', 'hypnic-headache',
+      // Added 2026-09-08 (facial-pain expansion, walks W1/W8 and W3 above).
+      'glossopharyngeal-neuralgia', 'persistent-idiopathic-facial-pain',
     ]);
     const UNWALKED_DEBT = new Set([
       'chronic-tth', 'chronic-migraine', 'status-migrainosus', 'hemicrania-continua',
       'paroxysmal-hemicrania', 'sunct-suna', 'ndph', 'primary-stabbing-headache',
     ]);
     const all = HEADACHE_PHENOTYPES.map((p) => p.id);
-    expect(all).toHaveLength(16);
+    expect(all).toHaveLength(18);
     for (const id of all) {
       expect(WALKED.has(id) || UNWALKED_DEBT.has(id), `phenotype "${id}" is neither walked nor tracked as debt`).toBe(true);
     }

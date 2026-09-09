@@ -19,7 +19,7 @@
  * "Probable Chronic migraine"), B3 (promoted probable shows its §X.5 label), B4
  * (no invented Leading) are encoded and unit-tested here.
  */
-import type { PhenotypeMatch } from './clinicHeadacheData';
+import type { PhenotypeMatch, PhenotypeId } from './clinicHeadacheData';
 
 export type Band = 'leading' | 'possible' | 'less-likely' | 'set-aside';
 
@@ -43,7 +43,12 @@ export interface BandedResult {
 // (spec §1.4 step 3): §1 < §2 < §3 < §4 < appendix; within a chapter by section
 // ascending. Removes any dependence on HEADACHE_PHENOTYPES declaration order,
 // which is an implementation detail, not a clinical ranking.
-const CHAPTER_ORDER: readonly string[] = [
+// Typed and exported 2026-09-08 (architect condition 7a): readonly PhenotypeId[]
+// so a typo fails tsc, and exported so headacheBanding.test.ts can assert it is a
+// permutation of HEADACHE_PHENOTYPES ids. The chapterIndex fallback below still
+// silently returns CHAPTER_ORDER.length on a miss, which is why the TEST is the
+// guard against omission, not the type.
+export const CHAPTER_ORDER: readonly PhenotypeId[] = [
   'migraine-without-aura',   // §1.1
   'migraine-with-aura',      // §1.2
   'chronic-migraine',        // §1.3
@@ -58,7 +63,9 @@ const CHAPTER_ORDER: readonly string[] = [
   'hypnic-headache',         // §4.9
   'ndph',                    // §4.10
   'trigeminal-neuralgia',    // §13.1.1
+  'glossopharyngeal-neuralgia', // §13.2.1 — added 2026-09-08
   'occipital-neuralgia',     // §13.4
+  'persistent-idiopathic-facial-pain', // §13.12 — added 2026-09-08
   'vestibular-migraine',     // §A1.6.6
 ];
 

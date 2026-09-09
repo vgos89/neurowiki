@@ -20,6 +20,15 @@
 
 // ─── Chip ID union (the entire feature vocabulary) ────────────────────────
 
+// CHIP-REUSE RULE (architect 2026-09-08, condition 5 - do not re-litigate).
+// Reuse a chip only when the chip's LABEL, which is the thing the clinician
+// actually affirms, is logically equivalent to the criterion's requirement. A
+// label WIDER than the criterion manufactures false positives; a label NARROWER
+// than the criterion manufactures false negatives (the sev-very-severe defect,
+// medical review 2026-09-07 U1). Where no single chip is equivalent, use a
+// disjunction of chips that jointly cover the criterion, or mint. Minting a
+// duration chip per criterion window is the established convention here, not the
+// exception: eight overlapping dur-* chips already coexist.
 export type ChipId =
   // Pattern: lifetime attacks
   | 'attacks-lt-5' | 'attacks-ge-2' | 'attacks-5-to-10' | 'attacks-gt-10' | 'attacks-ge-20'
@@ -63,6 +72,11 @@ export type ChipId =
   | 'sym-restlessness' | 'sym-autonomic-ipsilateral'
   | 'sym-conjunctival-injection' | 'sym-lacrimation' | 'sym-other-cranial-autonomic'  // §3.3 SUNCT/SUNA itemized autonomic
   | 'sym-reversible-neuro-reported'  // ROUTING FLAG: opens the aura screen; contributes to no criterion
+  // §13.2.1 Glossopharyngeal neuralgia — added 2026-09-08
+  | 'loc-glossopharyngeal-territory' | 'dur-few-sec-to-2min' | 'trigger-swallow-cough-talk-yawn'
+  // §13.12 Persistent idiopathic facial pain — added 2026-09-08
+  | 'pifp-daily-gt2h-gt3mo' | 'pifp-poorly-localized-non-nerve' | 'qual-dull-aching-nagging'
+  | 'exam-neuro-normal' | 'pifp-dental-cause-excluded'
   // Chronic migraine — ICHD-3 §1.3 criterion C disjunction
   | 'migraine-features-ge-8-per-month' | 'triptan-response-positive'
   // Aura features
@@ -116,21 +130,24 @@ export type PhenotypeId =
   | 'migraine-with-aura'
   | 'chronic-migraine'              // §1.3 — added 2026-05-25 per medsci audit
   | 'status-migrainosus'            // §1.4.1 — added 2026-07-06
-  | 'probable-migraine'
   | 'episodic-tth'
   | 'chronic-tth'
-  | 'probable-tth'
   | 'cluster-headache'
   | 'paroxysmal-hemicrania'         // §3.2 — added 2026-05-25
   | 'sunct-suna'                    // §3.3 — added 2026-05-25
   | 'hemicrania-continua'
-  | 'probable-tac'
   | 'primary-stabbing-headache'     // §4.7 — added 2026-07-06
   | 'hypnic-headache'               // §4.9 — added 2026-07-06
   | 'trigeminal-neuralgia'          // §13.1.1 — added 2026-07-06
+  | 'glossopharyngeal-neuralgia'    // §13.2.1 — added 2026-09-08
   | 'occipital-neuralgia'           // §13.4 — added 2026-07-06
+  | 'persistent-idiopathic-facial-pain'  // §13.12 — added 2026-09-08
   | 'ndph'
   | 'vestibular-migraine';
+// 2026-09-08: the vestigial members 'probable-migraine', 'probable-tth' and
+// 'probable-tac' were removed (declared since the v1 sketch, referenced nowhere;
+// architect rec 14). Their removal makes Record<PhenotypeId, T> an exhaustive
+// map over real phenotypes, which the claim-marker and banding guards rely on.
 
 // ─── ICHD-3 subtypes (ADR-2026-07-06 subtype pass) ────────────────────────
 // A resolved leaf of a matched parent phenotype. Attached to PhenotypeMatch by
@@ -515,6 +532,27 @@ export const HEADACHE_CHIP_GROUPS: ChipGroup[] = [
     ],
   },
   {
+    // §13.2.1 GPN + §13.12 PIFP chips — added 2026-09-08 (architect rec 10:
+    // their own group rather than growing pain-character). Labels ONLY, no
+    // teachWhenSelected: chip teach texts are DORMANT in the V4 pathway
+    // (clinical review round 2, BI-3) and clinical prose authored there reaches
+    // no user while reading as reviewed.
+    id: 'facial-pain-detail',
+    label: 'Facial and cranial-neuralgia detail',
+    eyebrow: 'ICHD-3 chapter 13 separates facial pain by nerve territory, attack length, trigger, and quality.',
+    defaultCollapsed: true,
+    chips: [
+      { id: 'loc-glossopharyngeal-territory', label: 'Pain in the throat, back of the tongue, tonsil area, ear, or under the angle of the jaw' },
+      { id: 'dur-few-sec-to-2min', label: 'Each attack lasts from a few seconds up to 2 minutes' },
+      { id: 'trigger-swallow-cough-talk-yawn', label: 'Attacks triggered by swallowing, coughing, talking, or yawning' },
+      { id: 'pifp-daily-gt2h-gt3mo', label: 'Facial or mouth pain daily, more than 2 hours a day, for more than 3 months' },
+      { id: 'pifp-poorly-localized-non-nerve', label: 'Pain is poorly localized and does not follow the territory of a peripheral nerve' },
+      { id: 'qual-dull-aching-nagging', label: 'Dull, aching, or nagging quality' },
+      { id: 'exam-neuro-normal', label: 'Clinical neurological examination is normal' },
+      { id: 'pifp-dental-cause-excluded', label: 'A dental cause has been excluded by appropriate investigations' },
+    ],
+  },
+  {
     // Chronic migraine §1.3 — features-day frequency + triptan-response gate
     id: 'chronic-migraine-detail',
     label: 'Chronic migraine detail',
@@ -883,6 +921,67 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
     ],
   },
 
+  // ─── 13.2.1 Glossopharyngeal neuralgia ────────────────────────────────────
+  // ICHD-3 §13.2.1 parent, encoded 2026-09-08 from the source-verified evidence
+  // packet (docs/evidence-packets/2026-09-08-ichd3-13-2-13-12-facial-pain.md;
+  // ICHD-3 PDF pp. 171-172). NOTE THE NUMBERING: 13.2 is a parent HEADING with no
+  // criteria of its own (structurally identical to 13.1); the entity with
+  // criteria is 13.2.1. Never ship "ICHD-3 13.2" against these criteria. 13.2.2
+  // Painful glossopharyngeal neuropathy is a SIBLING entity, not a subform, and
+  // is out of scope on the same reasoning that excluded 13.1.2 from the TN
+  // encoding.
+  // Aetiology subtyping (§13.2.1.1 classical / §13.2.1.2 secondary / §13.2.1.3
+  // idiopathic) is decided by MRI or surgery and is DEFERRED to the subtype-
+  // hierarchy layer, exactly as TN's is (ADR-2026-07-06; packet §9.2 flag 3).
+  // Do NOT build a second, divergent solution for GPN, and do NOT reuse the tn-*
+  // aetiology chips, whose ids would then lie about which phenotype they resolve.
+  // ENCODING TRAP: 13.2.1.1 criterion B has NO "morphological change" and NO
+  // "not simply contact" qualifier, unlike 13.1.1.1 (ICHD-3 p. 172 vs p. 167).
+  // The classical/idiopathic split for GPN turns on whether compression is
+  // demonstrated at all.
+  // §13 has NO Probable-GPN section, so both criteria are suppress-gates (binary
+  // full or hidden): a feature miss is unclassified, NOT "probable GPN". No
+  // attack-count criterion. Drug response and local-anaesthetic response are
+  // Comments (p. 172), NOT criteria, and are not gates. Criterion C ("not better
+  // accounted for by another ICHD-3 diagnosis") is NOT encoded: no phenotype in
+  // this engine encodes it, it has no chip-answerable substrate, and encoding it
+  // would inflate the criteriaTotal denominator inconsistently in the shared
+  // "N of M" display (architect 2026-09-08, condition 6).
+  // NOT in episodicPhenotypes: GPN "can occur together with 13.1.1 Trigeminal
+  // neuralgia" (p. 172), and a coexisting continuous headache answered as
+  // dur-continuous must not silently delete the GPN paroxysms from the
+  // differential. No EMIT entries: both criteria DROP silently, like TN and ON.
+  {
+    id: 'glossopharyngeal-neuralgia',
+    name: 'Glossopharyngeal neuralgia',
+    ichd3Section: 'ICHD-3 §13.2.1',
+    teachPearl:
+      'Glossopharyngeal neuralgia is recurrent, brief (a few seconds up to 2 minutes), severe, electric-shock-like, shooting, stabbing, or sharp unilateral pain in the posterior part of the tongue, tonsillar fossa, pharynx, or angle of the lower jaw, and/or in the ear, precipitated by swallowing, coughing, talking, or yawning. Unlike 13.1.1 trigeminal neuralgia, radiation beyond the nerve is permitted: the pain may involve the eye, nose, chin, or shoulder. It can occur together with 13.1.1 trigeminal neuralgia. In rare cases attacks are accompanied by vagal symptoms such as cough, hoarseness, syncope, or bradycardia, and some authors have suggested the term vagoglossopharyngeal neuralgia for pain accompanied by asystole, convulsions, and syncope. Pain can be severe enough for patients to lose weight. Clinical examination usually shows no sensory change in the nerve distribution; mild sensory deficits do not invalidate the diagnosis, but major changes or a reduced or missing gag reflex should prompt aetiological investigations.',
+    criteria: [
+      // gpn-A: suppress-gate (DROP). Anatomical substrate. Unilateral pain in the
+      // glossopharyngeal distribution (§13.2.1 A + Note 1: posterior part of the
+      // tongue, tonsillar fossa, pharynx or angle of the lower jaw and/or in the
+      // ear). Do NOT reuse loc-trigeminal-distribution: its label encodes "not
+      // spreading beyond", which 13.2.1 explicitly permits (packet §6.1 trap 2).
+      { id: 'gpn-A', label: 'Unilateral pain in the glossopharyngeal distribution (throat, tongue base, tonsil area, angle of the jaw, or ear)', description: 'ICHD-3 13.2.1 A: recurring paroxysmal attacks of unilateral pain in the distribution of the glossopharyngeal nerve. Note 1: within the posterior part of the tongue, tonsillar fossa, pharynx or angle of the lower jaw and/or in the ear.', evaluate: s => has(s, 'loc-unilateral') && has(s, 'loc-glossopharyngeal-territory'), contributingChips: ['loc-unilateral', 'loc-glossopharyngeal-territory'], role: 'suppress-gate' },
+      // gpn-B: suppress-gate (DROP). ONE composite criterion carrying all four
+      // sub-items B.1-B.4, faithful to the ICHD lettering: unlike TN, whose
+      // trigger is a SEPARATE lettered criterion C, GPN's trigger is B.4 and sits
+      // inside B. Splitting it would make the "N of M" denominator inconsistent
+      // with the source. Severity: 13.2.1 B.2 "severe intensity" is satisfied by
+      // EITHER severity answer (U1 lesson; mirrors tn-B). Quality: B.3 is
+      // word-identical to TN B.3; the OR-pair counts once (on-B idiom).
+      // Duration: dur-few-sec-to-2min is MINTED - dur-seconds-to-minutes
+      // (occipital) is wider at the upper bound and dur-fraction-sec-to-2min (TN)
+      // is wider at the lower bound; either would admit patients this criterion
+      // excludes. Trigger: trigger-swallow-cough-talk-yawn is MINTED and must NOT
+      // feed tn-C; TN's trigger is innocuous cutaneous stimuli, GPN's is
+      // deglutitive/mechanical, and collapsing them makes the two phenotypes
+      // indistinguishable at the chip layer (packet §6.1 trap 1).
+      { id: 'gpn-B', label: 'Brief (a few seconds up to 2 min), severe, shock-like or sharp pain triggered by swallowing, coughing, talking, or yawning', description: 'ICHD-3 13.2.1 B: pain has all of: 1) lasting from a few seconds to two minutes, 2) severe intensity, 3) electric shock-like, shooting, stabbing or sharp in quality, 4) precipitated by swallowing, coughing, talking or yawning.', evaluate: s => has(s, 'dur-few-sec-to-2min') && (has(s, 'sev-severe') || has(s, 'sev-very-severe')) && (has(s, 'qual-electric-shock-shooting') || has(s, 'qual-sharp-stabbing')) && has(s, 'trigger-swallow-cough-talk-yawn'), contributingChips: ['dur-few-sec-to-2min', 'sev-severe', 'sev-very-severe', 'qual-electric-shock-shooting', 'qual-sharp-stabbing', 'trigger-swallow-cough-talk-yawn'], role: 'suppress-gate' },
+    ],
+  },
+
   // ─── 13.4 Occipital neuralgia ─────────────────────────────────────────────
   // ICHD-3 §13.4. Flat additive phenotype, encoded 2026-07-06 from the source-
   // verified evidence packet (ICHD-3 PDF p. 176). No aetiological subtypes and no
@@ -908,6 +1007,84 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
       { id: 'on-C', label: 'Scalp dysaesthesia/allodynia AND nerve tenderness or trigger point', description: 'ICHD-3 13.4 C: both of: 1) dysaesthesia and/or allodynia during innocuous scalp/hair stimulation; 2) tenderness over the affected nerve branches, or trigger points at the greater occipital nerve emergence or in the C2 distribution.', evaluate: s => has(s, 'scalp-dysaesthesia-allodynia') && has(s, 'occipital-nerve-tenderness-or-trigger'), contributingChips: ['scalp-dysaesthesia-allodynia', 'occipital-nerve-tenderness-or-trigger'], role: 'suppress-gate' },
       // on-D: suppress-gate (DROP) + hiddenUntilTrial. Mandatory local-anaesthetic block relief.
       { id: 'on-D', label: 'Pain eased temporarily by local anaesthetic nerve block', description: 'ICHD-3 13.4 D: pain is eased temporarily by local anaesthetic block of the affected nerve(s). Mandatory confirmatory test.', evaluate: s => has(s, 'occipital-block-response-positive'), contributingChips: ['occipital-block-response-positive'], role: 'suppress-gate' },
+    ],
+  },
+
+  // ─── 13.12 Persistent idiopathic facial pain ──────────────────────────────
+  // ICHD-3 §13.12 (previously used term: atypical facial pain). Encoded
+  // 2026-09-08 from the source-verified evidence packet (ICHD-3 PDF pp. 178-179,
+  // read in reading order). §13.12 carries NO Notes and no superscript note
+  // markers on any criterion; this is a verified absence, not an extraction gap.
+  // The criteria run A-F. Criterion F ("not better accounted for by another
+  // ICHD-3 diagnosis") is NOT encoded, per the engine-wide rule (architect
+  // condition 6). There is NO §13.12.5 Probable tier and no subform: the
+  // atypical-odontalgia Comment explicitly says the candidate subtypes "have not
+  // been sufficiently studied to propose diagnostic criteria", so the engine must
+  // not invent one. All five encoded criteria are suppress-gates (binary full or
+  // hidden).
+  // THERE IS NO "INVESTIGATIONS UNREMARKABLE" CRITERION. The only investigation
+  // criterion is E (dental cause excluded); the only normal-findings criterion is
+  // D (CLINICAL neurological examination). The Comments state the opposite of a
+  // blanket normal-investigations requirement: "psychophysical or
+  // neurophysiological tests may demonstrate sensory abnormalities."
+  // NOT in episodicPhenotypes - safety-critical, not cosmetic: PIFP is a daily
+  // entity, and membership would let a dur-continuous answer suppress the
+  // phenotype from the very patient it describes. Criterion B is NOT routed
+  // through dur-continuous or split across pattern-ge-3-months (see pifp-B).
+  // No management card (MANAGED excludes this id): no held source covers PIFP
+  // treatment. Nahas 2024 does not cover PIFP at all, a verified negative
+  // corroborated by the article's own scope enumeration on p. 474. Criteria D and
+  // E carry the workup message on the criteria surface, and the q-pifp option
+  // labels carry it during the question flow.
+  {
+    id: 'persistent-idiopathic-facial-pain',
+    name: 'Persistent idiopathic facial pain',
+    ichd3Section: 'ICHD-3 §13.12',
+    teachPearl:
+      'Persistent idiopathic facial pain, previously called atypical facial pain, is facial or oral pain recurring daily for more than 2 hours a day for more than 3 months, poorly localized and not following the distribution of a peripheral nerve, dull, aching, or nagging in quality, with a normal clinical neurological examination and a dental cause excluded by appropriate investigations. Sharp exacerbations are allowed, the pain is aggravated by stress, and over time it may spread to a wider area of the craniocervical region. Psychophysical or neurophysiological tests may demonstrate sensory abnormalities, so an abnormal sensory test does not exclude it: the clinical neurological examination is the only normal-findings criterion. It may originate from a minor operation or injury to the face, maxillae, teeth, or gums and persist after healing without any demonstrable local cause. Patients are predominantly female, and levels of psychiatric comorbidity and psychosocial disability are high.',
+    criteria: [
+      // pifp-A: suppress-gate (DROP). Site substrate. 13.12 A is "facial and/or
+      // oral pain": satisfied by EITHER site chip, because either alone is
+      // narrower than the criterion (a narrower label manufactures false
+      // negatives - the U1 defect class). loc-orbital-temporal is deliberately
+      // NOT included: it would let a cluster or PH chip satisfy PIFP's substrate.
+      // ACCEPTED OVER-WIDTH (clinical post-gate 2026-09-09): the territory chip's
+      // label includes "ear", and an ear-only presentation is neither facial nor
+      // oral. Accepted because restricting to loc-facial-region would create a
+      // U1-class false negative for tongue-base and tonsillar (genuinely ORAL)
+      // presentations that criterion A covers and loc-face's label does not.
+      // Also defensive: branch answers persist in page state after a branch stops
+      // firing, so a site criterion prevents a stale q-pifp answer set from
+      // matching after the location answer changes.
+      { id: 'pifp-A', label: 'Facial and/or oral pain', description: 'ICHD-3 13.12 A: facial and/or oral pain fulfilling criteria B and C.', evaluate: s => has(s, 'loc-facial-region') || has(s, 'loc-glossopharyngeal-territory'), contributingChips: ['loc-facial-region', 'loc-glossopharyngeal-territory'], role: 'suppress-gate' },
+      // pifp-B: suppress-gate (DROP). ONE minted chip carrying the FULL
+      // conjunction (>2 h/day AND >3 months). Deliberately NOT split across
+      // pattern-ge-3-months: (a) a half-satisfied conjunction would read as
+      // satisfied (packet §9.2); (b) referent mismatch - pattern-ge-3-months is
+      // answered on the CORE q-chronicity screen about the headache pattern in
+      // general, not this facial pain's daily duration. Also NOT routed through
+      // dur-continuous (episodicPhenotypes suppression: would silently drop
+      // migraine, TTH, cluster, PH and SUNCT from a facial-pain patient's
+      // differential) and NOT through freq-ge-1-per-day (an attack-count chip
+      // that does not mean "daily for more than two hours").
+      { id: 'pifp-B', label: 'Recurring daily for >2 hours/day for >3 months', description: 'ICHD-3 13.12 B: recurring daily for >2 hours/day for >3 months.', evaluate: s => has(s, 'pifp-daily-gt2h-gt3mo'), contributingChips: ['pifp-daily-gt2h-gt3mo'], role: 'suppress-gate' },
+      // pifp-C: suppress-gate (DROP). BOTH sub-items required (C.1 AND C.2), one
+      // composite criterion mirroring the on-C idiom and the ICHD lettering.
+      { id: 'pifp-C', label: 'Poorly localized, not following a peripheral nerve, and dull, aching, or nagging', description: 'ICHD-3 13.12 C: pain has both of: 1) poorly localized, and not following the distribution of a peripheral nerve, 2) dull, aching or nagging quality.', evaluate: s => has(s, 'pifp-poorly-localized-non-nerve') && has(s, 'qual-dull-aching-nagging'), contributingChips: ['pifp-poorly-localized-non-nerve', 'qual-dull-aching-nagging'], role: 'suppress-gate' },
+      // pifp-D: suppress-gate (DROP). Workup gate, not a symptom. A genuinely
+      // ABNORMAL examination never reaches banding: rf-neuro-deficit
+      // short-circuits the pathway to secondary workup at the SNNOOP10 gate.
+      // Absence of this chip means "not established": a DROP, not an EMIT
+      // (EMIT would render the bare criterion label as an exclusionReason,
+      // asserting the opposite of what is meant).
+      { id: 'pifp-D', label: 'Clinical neurological examination is normal', description: 'ICHD-3 13.12 D: clinical neurological examination is normal. Psychophysical or neurophysiological sensory testing may be abnormal without invalidating the diagnosis (Comment, p. 179); the clinical examination is the only normal-findings criterion.', evaluate: s => has(s, 'exam-neuro-normal'), contributingChips: ['exam-neuro-normal'], role: 'suppress-gate' },
+      // pifp-E: suppress-gate (DROP). Workup gate, deliberately hard: surfacing
+      // 13.12 before a dental cause is excluded is the failure mode this
+      // criterion exists to prevent (premature labelling in BOTH directions:
+      // missed treatable dental disease, or irreversible dental procedures for
+      // non-dental pain). The requirement still reaches the clinician when the
+      // phenotype is hidden, via the q-pifp option label.
+      { id: 'pifp-E', label: 'A dental cause has been excluded by appropriate investigations', description: 'ICHD-3 13.12 E: a dental cause has been excluded by appropriate investigations.', evaluate: s => has(s, 'pifp-dental-cause-excluded'), contributingChips: ['pifp-dental-cause-excluded'], role: 'suppress-gate' },
     ],
   },
 

@@ -439,8 +439,8 @@ const MigrainePathway: React.FC = () => {
       }
       if (differential.trigeminalNeuralgia) {
           lines.push("TRIGEMINAL NEURALGIA PROTOCOL (Nahas 2024):");
-          lines.push("- First-line: carbamazepine 300–800 mg/day (Level A, FDA-approved)");
-          lines.push("- Alternative: oxcarbazepine 600–1200 mg/day (Level B)");
+          lines.push("- First-line: carbamazepine 300–800 mg/day (FDA-approved)");
+          lines.push("- Alternative: oxcarbazepine 600–1200 mg/day");
           lines.push("- Acute exacerbation: IV fosphenytoin 15–20 mg PE/kg OR IV lidocaine 1.5–2 mg/kg over 10–20 min");
           lines.push("- Avoid opioids.");
           return `Trigeminal Neuralgia Protocol: ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}\n\n${lines.join('\n')}`;
@@ -847,21 +847,24 @@ const MigrainePathway: React.FC = () => {
                   <div className="space-y-2">
                     <div className="bg-white p-3 rounded-lg border border-amber-200">
                       <div className="flex items-center gap-2 mb-0.5">
+                        {/* Evidence badge removed 2026-09-09 (clinical post-gate P1): the
+                            Level A/B grades belong to the AAN/EFNS 2008 practice parameter,
+                            scoped to CLASSIC TN, not to Nahas 2024; re-attribution alongside
+                            the Nahas dose range is the cross-source merge under TASKS.md
+                            "TN dose-conflict adjudication". Doses here ARE Nahas Table 10-2. */}
                         <div className="font-semibold text-slate-900 text-sm">Carbamazepine 300–800 mg/day</div>
-                        <EvidenceBadge level="A" />
                       </div>
                       <div className="text-xs text-slate-500 mt-1">Only FDA-approved agent for TN. Start low (100 mg BID), titrate q3 days. Monitor CBC and LFTs. Nahas 2024.</div>
                     </div>
                     <div className="bg-white p-3 rounded-lg border border-amber-200">
                       <div className="flex items-center gap-2 mb-0.5">
                         <div className="font-semibold text-slate-900 text-sm">Oxcarbazepine 600–1200 mg/day</div>
-                        <EvidenceBadge level="B" />
                       </div>
                       <div className="text-xs text-slate-500 mt-1">Better tolerated than carbamazepine. Risk of hyponatremia; monitor electrolytes. Nahas 2024.</div>
                     </div>
                     <div className="bg-white p-3 rounded-lg border border-amber-200">
                       <div className="font-semibold text-slate-900 text-sm mb-0.5">Acute exacerbation rescue</div>
-                      <div className="text-xs text-slate-500">IV fosphenytoin 15–20 mg PE/kg OR IV lidocaine 1.5–2 mg/kg over 10–20 min (for pain crises when oral intake is not possible). Nahas 2024 p.298.</div>
+                      <div className="text-xs text-slate-500">IV fosphenytoin 15–20 mg PE/kg OR IV lidocaine 1.5–2 mg/kg over 10–20 min (for pain crises when oral intake is not possible). Nahas 2024.</div>
                     </div>
                     <div className="bg-red-50 p-3 rounded-lg border border-red-200">
                       <div className="text-xs font-bold text-red-700">Avoid opioids: not effective and accelerate central sensitization in TN.</div>
