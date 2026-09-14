@@ -1,0 +1,75 @@
+{
+  "date": "2026-09-09",
+  "startedAt": "2026-09-09T13:21:58Z",
+  "steps": [
+    {
+      "name": "guard-baseline",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-09-09/guard.log",
+      "summary": "Summary: baseline entries=29"
+    }    ,
+    {
+      "name": "page-inventory",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-09-09/inventory.log",
+      "summary": "Summary: pages=184 sitemapOnly=39 manifestOnly=1"
+    }    ,
+    {
+      "name": "search-console",
+      "status": "failed",
+      "log": "docs/seo/runs/2026-09-09/gsc.log",
+      "summary": "Fetching GSC data for https://neurowiki.ai/: 2026-08-12 → 2026-09-08 GSC fetch failed: invalid_grant "
+    }    ,
+    {
+      "name": "analytics",
+      "status": "failed",
+      "log": "docs/seo/runs/2026-09-09/ga4.log",
+      "summary": "}  Node.js v24.12.0 "
+    }    ,
+    {
+      "name": "analytics-7day",
+      "status": "failed",
+      "log": "docs/seo/runs/2026-09-09/ga4-7day.log",
+      "summary": "}  Node.js v24.12.0 "
+    }    ,
+    {
+      "name": "rank-deltas",
+      "status": "failed",
+      "log": "docs/seo/runs/2026-09-09/deltas.log",
+      "summary": "}  Node.js v24.12.0 "
+    }    ,
+    {
+      "name": "keyword-gaps",
+      "status": "failed",
+      "log": "docs/seo/runs/2026-09-09/keywords.log",
+      "summary": "}  Node.js v24.12.0 "
+    }    ,
+    {
+      "name": "page-refresh",
+      "status": "failed",
+      "log": "docs/seo/runs/2026-09-09/page-refresh.log",
+      "summary": "}  Node.js v24.12.0 "
+    }    ,
+    {
+      "name": "ai-traffic",
+      "status": "failed",
+      "log": "docs/seo/runs/2026-09-09/ai-traffic.log",
+      "summary": "}  Node.js v24.12.0 "
+    }    ,
+    {
+      "name": "anomaly-alarm",
+      "status": "findings",
+      "log": "docs/seo/runs/2026-09-09/anomaly.log",
+      "summary": ""
+    }    ,
+    {
+      "name": "report-only-check",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-09-09/guard-check.log",
+      "summary": "Summary: violations=0 changed=0"
+    }
+  ],
+  "finishedAt": "2026-09-09T13:22:05Z",
+  "succeeded": 4,
+  "failed": 7
+}

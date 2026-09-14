@@ -1,0 +1,9 @@
+Page inventory: 184 pages (183 in sitemap, 145 in manifest)
+  In sitemap but not the app's route list: /calculators/em-billing, /trials/annexa-i-trial, /trials/basics-trial, /trials/best-trial, /trials/charisma-trial, /trials/extend-ia-tnk-trial, /trials/ims-iii-trial, /trials/match-trial, /trials/mistie-iii-trial, /trials/mr-rescue-trial, /trials/q/anticoagulation, /trials/q/aspiration-vs-stentriever, /trials/q/asymptomatic-carotid, /trials/q/basilar-evt, /trials/q/bp-control, /trials/q/crao-management, /trials/q/dapt, /trials/q/direct-vs-bridging, /trials/q/evt-adjunct-pharmacotherapy, /trials/q/hemicraniectomy, /trials/q/icas-stenting, /trials/q/ich-anticoagulation-reversal, /trials/q/ich-surgery, /trials/q/large-core-evt, /trials/q/late-window-selection, /trials/q/lvo-evt, /trials/q/mevo-distal-evt, /trials/q/minor-stroke-choice, /trials/q/msu-dispatch, /trials/q/pfo-antithrombotic-choice, /trials/q/pfo-closure-cryptogenic, /trials/q/pfo-closure-migraine, /trials/q/post-evt-bp-target, /trials/q/tnk-vs-alteplase, /trials/q/tpa-timing, /trials/rescue-japan-limit-trial, /trials/stich-i-trial, /trials/stich-ii-trial, /trials/synthesis-expansion-trial
+  In the app's route list but missing from sitemap: /guide/post-stroke-lipid-management
+Summary: pages=184 sitemapOnly=39 manifestOnly=1
+npm notice
+npm notice New minor version of npm available! 11.6.2 -> 11.19.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.19.1
+npm notice To update run: npm install -g npm@11.19.1
+npm notice

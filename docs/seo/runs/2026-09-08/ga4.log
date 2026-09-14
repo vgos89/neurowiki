@@ -1,0 +1,217 @@
+/Users/vaibhav/Documents/NeuroWiki/Cursor/Neurowiki/neurowiki/node_modules/gaxios/build/cjs/src/gaxios.js:155
+                throw new common_js_1.GaxiosError(errorInfo?.message, opts, translatedResponse, errorInfo);
+                      ^
+
+GaxiosError: invalid_grant
+    at Gaxios._request (/Users/vaibhav/Documents/NeuroWiki/Cursor/Neurowiki/neurowiki/node_modules/gaxios/build/cjs/src/gaxios.js:155:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async OAuth2Client.refreshTokenNoCache (/Users/vaibhav/Documents/NeuroWiki/Cursor/Neurowiki/neurowiki/node_modules/google-auth-library/build/src/auth/oauth2client.js:259:19)
+    at async OAuth2Client.refreshAccessTokenAsync (/Users/vaibhav/Documents/NeuroWiki/Cursor/Neurowiki/neurowiki/node_modules/google-auth-library/build/src/auth/oauth2client.js:288:19)
+    at async OAuth2Client.getAccessTokenAsync (/Users/vaibhav/Documents/NeuroWiki/Cursor/Neurowiki/neurowiki/node_modules/google-auth-library/build/src/auth/oauth2client.js:317:23)
+    at async file:///Users/vaibhav/Documents/NeuroWiki/Cursor/Neurowiki/neurowiki/scripts/seo/daily-snapshot.mjs:29:22 {
+  config: {
+    retry: true,
+    retryConfig: {
+      httpMethodsToRetry: [ 'GET', 'PUT', 'POST', 'HEAD', 'OPTIONS', 'DELETE' ],
+      currentRetryAttempt: 0,
+      retry: 3,
+      noResponseRetries: 2,
+      retryDelayMultiplier: 2,
+      timeOfFirstRequest: 1788885832924,
+      totalTimeout: 9007199254740991,
+      maxRetryDelay: 9007199254740991,
+      statusCodesToRetry: [ [ 100, 199 ], [ 408, 408 ], [ 429, 429 ], [ 500, 599 ] ]
+    },
+    method: 'POST',
+    url: https://oauth2.googleapis.com/token,
+    data: URLSearchParams {},
+    body: URLSearchParams {},
+    validateStatus: [Function: validateStatus],
+    responseType: 'unknown',
+    errorRedactor: [Function: defaultErrorRedactor],
+    duplex: 'half',
+    headers: Headers {}
+  },
+  response: Response {
+    size: 0,
+    data: { error: 'invalid_grant', error_description: 'Bad Request' },
+    config: {
+      retry: true,
+      retryConfig: {
+        httpMethodsToRetry: [ 'GET', 'PUT', 'POST', 'HEAD', 'OPTIONS', 'DELETE' ]
+      },
+      method: 'POST',
+      url: https://oauth2.googleapis.com/token,
+      data: URLSearchParams {},
+      body: URLSearchParams {},
+      validateStatus: [Function: validateStatus],
+      responseType: 'unknown',
+      errorRedactor: [Function: defaultErrorRedactor],
+      duplex: 'half',
+      headers: Headers {}
+    },
+    Symbol(Body internals): {
+      body: Gunzip {
+        _writeState: Uint32Array(2) [ 16316, 0 ],
+        _events: {
+          close: [
+            [Function (anonymous)],
+            [Function (anonymous)],
+            [Function: onclose]
+          ],
+          error: [ [Function (anonymous)], [Function: onerror] ],
+          prefinish: [Function: prefinish],
+          finish: [Function: onfinish],
+          drain: undefined,
+          data: undefined,
+          end: [Function: onend],
+          readable: [Function: next],
+          unpipe: undefined
+        },
+        _readableState: ReadableState {
+          highWaterMark: 65536,
+          buffer: [],
+          bufferIndex: 0,
+          length: 0,
+          pipes: [],
+          awaitDrainWriters: null,
+          Symbol(kState): 9996156
+        },
+        _writableState: WritableState {
+          highWaterMark: 65536,
+          length: 0,
+          corked: 0,
+          onwrite: [Function: bound onwrite],
+          writelen: 0,
+          bufferedIndex: 0,
+          pendingcb: 0,
+          Symbol(kState): 1091466620,
+          Symbol(kBufferedValue): null,
+          Symbol(kWriteCbValue): null
+        },
+        allowHalfOpen: true,
+        _maxListeners: undefined,
+        _eventsCount: 6,
+        bytesWritten: 79,
+        _handle: null,
+        _outBuffer: Buffer(16384) [Uint8Array] [
+          123,  10,  32,  32,  34, 101, 114, 114, 111, 114,  34,  58,
+           32,  34, 105, 110, 118,  97, 108, 105, 100,  95, 103, 114,
+           97, 110, 116,  34,  44,  10,  32,  32,  34, 101, 114, 114,
+          111, 114,  95, 100, 101, 115,  99, 114, 105, 112, 116, 105,
+          111, 110,  34,  58,  32,  34,  66,  97, 100,  32,  82, 101,
+          113, 117, 101, 115, 116,  34,  10, 125, 191,   6,   0,  49,
+          202, 255, 255,  84,  54, 203, 117, 120,  16,  16, 144,  82,
+          202,   2,  16,  10,  10,   0,   0,  52,  16,  16, 144,  82,
+          202,   2,  16,  10,
+          ... 16284 more items
+        ],
+        _outOffset: 68,
+        _chunkSize: 16384,
+        _defaultFlushFlag: 2,
+        _finishFlushFlag: 2,
+        _defaultFullFlushFlag: 3,
+        _info: undefined,
+        _maxOutputLength: 9007199254740991,
+        _rejectGarbageAfterEnd: false,
+        _level: -1,
+        _strategy: 0,
+        _mode: 4,
+        Symbol(shapeMode): true,
+        Symbol(kCapture): false,
+        Symbol(kCallback): null,
+        Symbol(kError): null
+      },
+      stream: Gunzip {
+        _writeState: Uint32Array(2) [ 16316, 0 ],
+        _events: {
+          close: [
+            [Function (anonymous)],
+            [Function (anonymous)],
+            [Function: onclose]
+          ],
+          error: [ [Function (anonymous)], [Function: onerror] ],
+          prefinish: [Function: prefinish],
+          finish: [Function: onfinish],
+          drain: undefined,
+          data: undefined,
+          end: [Function: onend],
+          readable: [Function: next],
+          unpipe: undefined
+        },
+        _readableState: ReadableState {
+          highWaterMark: 65536,
+          buffer: [],
+          bufferIndex: 0,
+          length: 0,
+          pipes: [],
+          awaitDrainWriters: null,
+          Symbol(kState): 9996156
+        },
+        _writableState: WritableState {
+          highWaterMark: 65536,
+          length: 0,
+          corked: 0,
+          onwrite: [Function: bound onwrite],
+          writelen: 0,
+          bufferedIndex: 0,
+          pendingcb: 0,
+          Symbol(kState): 1091466620,
+          Symbol(kBufferedValue): null,
+          Symbol(kWriteCbValue): null
+        },
+        allowHalfOpen: true,
+        _maxListeners: undefined,
+        _eventsCount: 6,
+        bytesWritten: 79,
+        _handle: null,
+        _outBuffer: Buffer(16384) [Uint8Array] [
+          123,  10,  32,  32,  34, 101, 114, 114, 111, 114,  34,  58,
+           32,  34, 105, 110, 118,  97, 108, 105, 100,  95, 103, 114,
+           97, 110, 116,  34,  44,  10,  32,  32,  34, 101, 114, 114,
+          111, 114,  95, 100, 101, 115,  99, 114, 105, 112, 116, 105,
+          111, 110,  34,  58,  32,  34,  66,  97, 100,  32,  82, 101,
+          113, 117, 101, 115, 116,  34,  10, 125, 191,   6,   0,  49,
+          202, 255, 255,  84,  54, 203, 117, 120,  16,  16, 144,  82,
+          202,   2,  16,  10,  10,   0,   0,  52,  16,  16, 144,  82,
+          202,   2,  16,  10,
+          ... 16284 more items
+        ],
+        _outOffset: 68,
+        _chunkSize: 16384,
+        _defaultFlushFlag: 2,
+        _finishFlushFlag: 2,
+        _defaultFullFlushFlag: 3,
+        _info: undefined,
+        _maxOutputLength: 9007199254740991,
+        _rejectGarbageAfterEnd: false,
+        _level: -1,
+        _strategy: 0,
+        _mode: 4,
+        Symbol(shapeMode): true,
+        Symbol(kCapture): false,
+        Symbol(kCallback): null,
+        Symbol(kError): null
+      },
+      boundary: null,
+      disturbed: true,
+      error: null
+    },
+    Symbol(Response internals): {
+      type: 'default',
+      url: 'https://oauth2.googleapis.com/token',
+      status: 400,
+      statusText: 'Bad Request',
+      headers: Headers {},
+      counter: 0,
+      highWaterMark: 16384
+    }
+  },
+  code: 400,
+  status: 400,
+  error: undefined,
+  Symbol(gaxios-gaxios-error): '7.1.4',
+  [cause]: { message: 'invalid_grant', code: 400, status: 'Bad Request' }
+}
+
+Node.js v24.12.0

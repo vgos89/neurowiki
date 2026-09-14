@@ -1,0 +1,194 @@
+<title>NeuroWiki Growth Monitor</title>
+<style>
+:root{
+  --bg:#F7F9FC; --surface:#FFFFFF; --ink:#16233B; --muted:#5B6B84;
+  --brand:#1746A2; --line:#E1E7F0; --good:#1E7F5C; --good-bg:#E7F2EC;
+  --warn:#8A5A13; --warn-bg:#F7EEDD; --crit:#B3372B; --crit-bg:#F9E9E6;
+  --chip:#EDF1F7;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1420; --surface:#171E2E; --ink:#E7ECF5; --muted:#9AA8BF;
+    --brand:#7FA7E8; --line:#242E42; --good:#6FCBA5; --good-bg:#1B2F26;
+    --warn:#D9A84E; --warn-bg:#33290F; --crit:#E08074; --crit-bg:#39201C;
+    --chip:#202A3D;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1420; --surface:#171E2E; --ink:#E7ECF5; --muted:#9AA8BF;
+  --brand:#7FA7E8; --line:#242E42; --good:#6FCBA5; --good-bg:#1B2F26;
+  --warn:#D9A84E; --warn-bg:#33290F; --crit:#E08074; --crit-bg:#39201C;
+  --chip:#202A3D;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);margin:0;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:880px;margin:0 auto;padding:28px 20px 64px}
+.masthead{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 16px;
+  border-bottom:2px solid var(--brand);padding-bottom:14px}
+.masthead h1{font-family:"New York",ui-serif,Georgia,serif;font-size:1.5rem;
+  font-weight:700;margin:0;color:var(--brand);letter-spacing:.01em}
+.mdate{color:var(--muted);font-size:.95rem}
+.status{margin-left:auto;font-size:.8rem;font-weight:600;letter-spacing:.04em;
+  text-transform:uppercase;padding:4px 12px;border-radius:999px;background:var(--chip)}
+.status.good{background:var(--good-bg);color:var(--good)}
+.status.crit{background:var(--crit-bg);color:var(--crit)}
+.lede{font-family:"New York",ui-serif,Georgia,serif;font-size:1.45rem;
+  line-height:1.4;margin:26px 0 6px;text-wrap:balance;max-width:34em}
+.lede-label{font-size:.75rem;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);margin-top:24px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:12px;margin:26px 0}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:14px 16px}
+.stat .n{font-size:1.9rem;font-weight:700;font-variant-numeric:tabular-nums;
+  color:var(--brand);line-height:1.1}
+.stat .n small{font-size:1rem;color:var(--muted);font-weight:500}
+.stat .l{font-size:.82rem;color:var(--muted);margin-top:4px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.cols{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:18px 20px;margin:14px 0}
+.card h2{font-family:"New York",ui-serif,Georgia,serif;font-size:1.05rem;
+  margin:0 0 10px;color:var(--brand)}
+.card p{margin:0 0 10px;font-size:.95rem}
+.card p:last-child{margin-bottom:0}
+.card ul{margin:0 0 10px;padding-left:20px;font-size:.95rem}
+.card li{margin-bottom:6px}
+.card.alarm{border-left:4px solid var(--crit);background:var(--crit-bg)}
+.card.alarm h2{color:var(--crit)}
+code{background:var(--chip);border-radius:4px;padding:1px 5px;font-size:.85em}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th{text-align:left;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--muted);font-weight:600;padding:6px 10px 6px 0;border-bottom:1px solid var(--line)}
+td{padding:8px 10px 8px 0;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.tablewrap{overflow-x:auto}
+.chip{font-size:.78rem;font-weight:600;padding:2px 10px;border-radius:999px;
+  background:var(--chip);white-space:nowrap}
+.chip.pending{background:var(--warn-bg);color:var(--warn)}
+.chip.kept{background:var(--good-bg);color:var(--good)}
+.chip.reverted{background:var(--crit-bg);color:var(--crit)}
+.empty{color:var(--muted);font-style:italic}
+.prov{display:inline-block;font-size:.7rem;font-weight:600;letter-spacing:.03em;
+  padding:1px 7px;border-radius:999px;background:var(--warn-bg);color:var(--warn);
+  vertical-align:middle}
+.card.todo{border-left:4px solid var(--warn)}
+.task{display:flex;gap:14px;align-items:flex-start;padding:12px 0;
+  border-bottom:1px solid var(--line)}
+.task:last-child{border-bottom:none}
+.tnum{flex:none;width:26px;height:26px;border-radius:50%;background:var(--warn-bg);
+  color:var(--warn);font-weight:700;font-size:.9rem;display:flex;
+  align-items:center;justify-content:center;margin-top:2px}
+.tbody{flex:1;font-size:.95rem}
+.textra{margin-top:6px;color:var(--muted);font-size:.9rem}
+.copybtn{flex:none;background:var(--brand);color:var(--bg);border:none;
+  border-radius:8px;padding:8px 12px;font:inherit;font-size:.82rem;
+  font-weight:600;cursor:pointer;margin-top:2px}
+.copybtn:hover{opacity:.88}
+.copybtn:focus-visible{outline:2px solid var(--warn);outline-offset:2px}
+.copybtn.done{background:var(--good-bg);color:var(--good)}
+.todo-hint{color:var(--muted);font-size:.85rem;margin:2px 0 8px}
+@media(max-width:640px){.task{flex-wrap:wrap}.copybtn{margin-left:40px}}
+.history{list-style:none;padding:0;margin:0;font-size:.92rem}
+.history li{padding:7px 0;border-bottom:1px solid var(--line)}
+.history li:last-child{border-bottom:none}
+.hdate{font-variant-numeric:tabular-nums;color:var(--muted);margin-right:10px;font-size:.85rem}
+.foot{color:var(--muted);font-size:.85rem;margin-top:28px;border-top:1px solid var(--line);
+  padding-top:14px;max-width:60em}
+</style>
+<div class="wrap">
+  <div class="masthead">
+    <h1>NeuroWiki Growth Monitor</h1>
+    <span class="mdate">Briefing of 2026-09-09</span>
+    <span class="status">Status unknown</span>
+  </div>
+
+  
+
+  <div class="lede-label">Today in one line</div>
+  <p class="lede">Second quiet-by-force morning: the Google sign-in that feeds every traffic and ranking report is still expired, so there are again no numbers, and the two-minute renewal is now the only thing standing between you and a normal report.</p>
+
+  <section class="card todo">
+    <h2>Your to-do list (2)</h2>
+    <p class="todo-hint">Press the button, then paste into any NeuroWiki chat with Claude. That is the whole workflow; Claude finds the prepared work and runs it through the safety checks.</p>
+    <div class="task">
+      <span class="tnum">1</span>
+      <div class="tbody"><strong>Sign in to Google again</strong>, <code>npm run seo:auth-login</code>, two minutes in the<div class="textra"><div>browser. Use the Google account that owns the site's Search Console and</div><div>analytics. Until this is done, every morning report will look like this one.</div></div></div>
+      <button class="copybtn" type="button" data-req="Do item 1 from the NeuroWiki dashboard of 2026-09-09: Sign in to Google again">Copy fix request</button>
+    </div><div class="task">
+      <span class="tnum">2</span>
+      <div class="tbody"><strong>Publish the Google project out of testing mode.</strong> Yesterday I said I would<div class="textra"><div>flag this if it recurred within the week. It recurred the very next morning,</div><div>which confirms the cause: while the project is marked in-testing, Google</div><div>throws the sign-in away every few days no matter how often you renew it.</div><div>Publishing it is one click in the Google console and one time only. Doing</div><div>only step 1 buys a few days; doing both ends the problem.</div></div></div>
+      <button class="copybtn" type="button" data-req="Do item 2 from the NeuroWiki dashboard of 2026-09-09: Publish the Google project out of testing mode.">Copy fix request</button>
+    </div>
+  </section>
+
+  <div class="stats">
+    <div class="stat"><div class="n">?</div><div class="l">visitors yesterday </div></div>
+    <div class="stat"><div class="n">?</div><div class="l">visitors this week</div></div>
+    <div class="stat"><div class="n">0</div><div class="l">clinician actions yesterday </div></div>
+    <div class="stat"><div class="n">?<small> of 182</small></div><div class="l">pages Google lists</div></div>
+    <div class="stat"><div class="n">0</div><div class="l">experiments running</div></div>
+  </div>
+
+  
+
+  
+
+  <div class="cols">
+    <section class="card"><h2>What changed</h2><p>Nothing on the site, by design.</p><p>I did file this morning's reports, and yesterday's, into the project history.</p><p>That is the one thing that improved: yesterday a file of yours was sitting</p><p>half-added and I stopped rather than risk sweeping it in. That is now clear, so</p><p>both days are saved and nothing is left dangling.</p><p>I refreshed the one report that does not need Google: the list of pages the site</p><p>publishes. It stands at 184. Of those, 39 appear in the sitemap but not in the</p><p>site's own page list and 1 the other way round. Not urgent, worth a look when</p><p>the numbers are flowing again.</p><p>No wording suggestions today. With no search data there is nothing to argue</p><p>from, and a suggestion I cannot back with numbers is worse than none.</p></section>
+    <section class="card"><h2>The numbers behind it</h2><p>None available for a second day. Every traffic and ranking figure comes from</p><p>Google, and Google is turning us away.</p></section>
+  </div>
+  <section class="card"><h2>Ran into trouble</h2><p>Seven of eleven checks failed, all for the same single reason: the saved Google</p><p>sign-in is no longer accepted.</p><p>One wrinkle worth a working session: the early-warning check reported itself as</p><p>having run when in fact it had stopped on the same sign-in failure. It cannot</p><p>mislead you today because I read its underlying record, but on a busy morning it</p><p>could. Small fix, needs a supervised session because it touches the machinery</p><p>rather than the reports.</p><p>The self-check that confirms this job stayed inside its own reporting folder ran</p><p>at the end of the data pull and came back clean: nothing outside the reporting</p><p>folder was touched. I confirmed that a second time by hand before saving, because</p><p>the check will only compare against the same calendar day it started on, and this</p><p>run straddled a date change. Your headache-pathway work, which was still</p><p>unsaved when the run began, was saved by your own session mid-morning and is</p><p>safely in the project history.</p><p><strong>Footer:</strong> Reports filed this morning as the standard daily-report entry,</p><p>covering both 2026-09-08 and 2026-09-09, and labelled the 9th because that is the</p><p>day the data covers. Reference code in the chat summary.</p></section>
+  <section class="card"><h2>Watching, not acting yet</h2><ul><li>The sitemap and the site's own page list still disagree by 39 pages. Carried</li></ul><p>from yesterday, unchanged, not yet worth acting on.</p><ul><li>The early-warning check that watches for sudden traffic drops has now not run</li></ul><p>for two mornings. Read both as "not checked", not "all clear".</p></section>
+
+  <section class="card">
+    <h2>Headline experiments</h2>
+    <p>Every approved headline change is a measured 14-day test. If it loses clicks, the morning job recommends undoing it.</p>
+    <div class="tablewrap"><table>
+      <tr><th>New title</th><th>Changed</th><th>Search it targets</th><th>Result</th></tr>
+      <tr><td colspan="4" class="empty">No experiments yet.</td></tr>
+    </table></div>
+  </section>
+
+  <section class="card">
+    <h2>The last few mornings</h2>
+    <ul class="history"><li><span class="hdate">2026-09-09</span> Second quiet-by-force morning: the Google sign-in that feeds every traffic and ranking report is still expired, so there are again no numbers, and the two-minute renewal is now the only thing standing between you and a normal report.</li><li><span class="hdate">2026-09-08</span> Two things stopped this morning cold: the Google sign-in that feeds every report has expired, so there are no traffic or ranking numbers, and a file of yours is sitting half-added to the next save, so I have filed nothing into the project history and left your work exactly where you had it.</li></ul>
+  </section>
+
+  <p class="foot">Completed items disappear from the to-do list the next
+  morning and show up under "What changed". If a button will not copy on your
+  device, just tell Claude "do item 2 from the NeuroWiki dashboard" in your own
+  words; it reads the same list.</p>
+  <p class="foot">This page rebuilds itself every morning around 8:00 from the
+  automated run. Bookmark it; the address never changes. Everything that needs
+  a decision from you appears here. The morning job never edits the site
+  itself; it only reports and suggests.</p>
+</div>
+<script>
+document.addEventListener('click', function (ev) {
+  var btn = ev.target.closest('.copybtn')
+  if (!btn) return
+  var req = btn.getAttribute('data-req') || ''
+  function ok () {
+    var old = btn.textContent
+    btn.textContent = 'Copied. Paste it to Claude.'
+    btn.classList.add('done')
+    setTimeout(function () { btn.textContent = old; btn.classList.remove('done') }, 4000)
+  }
+  function fallback () {
+    var ta = document.createElement('textarea')
+    ta.value = req
+    document.body.appendChild(ta)
+    ta.select()
+    try { document.execCommand('copy'); ok() } catch (e) {
+      btn.textContent = 'Could not copy. Just tell Claude the item number.'
+    }
+    document.body.removeChild(ta)
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(req).then(ok, fallback)
+  } else fallback()
+})
+</script>
