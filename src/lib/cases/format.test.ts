@@ -71,6 +71,21 @@ describe('formatSavedCaseAsEmrText — empty patient context', () => {
   });
 });
 
+describe('formatSavedCaseAsEmrText — documented negative anticoag ("none")', () => {
+  it('renders None, distinct from "Not entered", when the clinician selects none', () => {
+    const text = formatSavedCaseAsEmrText(makeCase({ anticoag: ['none'] }));
+    expect(text).toContain('Anti-Coag/Antiplatelet: None');
+    expect(text).not.toContain('Anti-Coag/Antiplatelet: Not entered');
+  });
+
+  it('emits no per-drug lines when none is selected', () => {
+    const text = formatSavedCaseAsEmrText(makeCase({ anticoag: ['none'] }));
+    expect(text).not.toContain('DOAC:');
+    expect(text).not.toContain('Warfarin INR:');
+    expect(text).not.toContain('Heparin/LMWH aPTT:');
+  });
+});
+
 describe('formatSavedCaseAsEmrText — selected drug class, no value entered', () => {
   it('marks a selected DOAC with no detail as "Not entered"', () => {
     const text = formatSavedCaseAsEmrText(makeCase({ anticoag: ['doac'] }));

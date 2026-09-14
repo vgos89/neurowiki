@@ -37,6 +37,7 @@ const NIHSS_ITEM_LABELS: ReadonlyArray<{ id: string; label: string }> = [
 ];
 
 const ANTICOAG_LABELS: Record<string, string> = {
+  none: 'None',
   doac: 'DOAC',
   warfarin: 'Warfarin',
   antiplatelet: 'Antiplatelet',
@@ -164,7 +165,7 @@ export function formatSavedCaseAsEmrText(c: SavedCase): string {
         ? `Weight: ${pc.weightValue} ${pc.weightUnit ?? 'kg'}`
         : `Weight: Not entered`
     );
-    const anticoagList = (pc.anticoag ?? []).filter((k) => k !== 'none');
+    const anticoagList = pc.anticoag ?? [];
     if (anticoagList.length > 0) {
       const list = anticoagList.map((k) => ANTICOAG_LABELS[k] ?? k).join(', ');
       contextLines.push(`Anti-Coag/Antiplatelet: ${list}`);

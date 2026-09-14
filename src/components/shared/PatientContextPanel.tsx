@@ -48,10 +48,12 @@ import { MrsPickerModal } from '../calculators/MrsPickerModal';
  */
 
 /**
- * Anticoagulant / antiplatelet class. 'none' removed: an empty Set is "none".
- * 'heparin' covers the Heparin/LMWH chip (the IVT gate is the aPTT lab value).
+ * Anticoagulant / antiplatelet class. An empty Set means not documented (the
+ * question was never asked or answered); 'none' means documented negative
+ * (the clinician confirmed the patient is on no agent). 'heparin' covers the
+ * Heparin/LMWH chip (the IVT gate is the aPTT lab value).
  */
-export type Anticoag = 'antiplatelet' | 'doac' | 'warfarin' | 'heparin';
+export type Anticoag = 'none' | 'antiplatelet' | 'doac' | 'warfarin' | 'heparin';
 
 /** 0–6 modified Rankin Scale grade. Full scale (MrsPickerModal needs grade 6). */
 export type MRSGrade = 0 | 1 | 2 | 3 | 4 | 5 | 6;
@@ -209,14 +211,17 @@ interface PatientContextPanelProps {
 }
 
 const ANTICOAG_LABELS: Record<Anticoag, string> = {
+  none: 'None',
   antiplatelet: 'Antiplatelet',
   doac: 'DOAC',
   warfarin: 'Warfarin',
   heparin: 'Heparin/LMWH',
 };
 
-/** Display + render order for the anticoag chips and their sub-rows. */
-const ANTICOAG_KEYS: Anticoag[] = ['antiplatelet', 'doac', 'warfarin', 'heparin'];
+/** Display + render order for the anticoag chips and their sub-rows. 'none'
+ *  renders first and is mutually exclusive with the other four; see
+ *  toggleAnticoag. */
+const ANTICOAG_KEYS: Anticoag[] = ['none', 'antiplatelet', 'doac', 'warfarin', 'heparin'];
 
 /**
  * Dense "quiet chip" classes for the eligibility controls (Variation C, V pick
@@ -369,8 +374,20 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
 
   const toggleAnticoag = (key: Anticoag) => {
     const next = new Set(values.anticoag);
-    if (next.has(key)) next.delete(key);
-    else next.add(key);
+    if (key === 'none') {
+      // None and any agent are mutually exclusive documentation of the same
+      // question, so selecting None clears every agent chip.
+      if (next.has('none')) next.delete('none');
+      else {
+        next.clear();
+        next.add('none');
+      }
+    } else {
+      // Selecting an agent clears None, then toggles the agent as before.
+      next.delete('none');
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+    }
     onChange({ ...values, anticoag: next });
   };
 

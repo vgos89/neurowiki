@@ -304,9 +304,10 @@ const NihssCalculator: React.FC = () => {
             systolic: pc.systolic ?? '',
             diastolic: pc.diastolic ?? '',
             glucose: pc.glucose ?? '',
-            // Drop the legacy 'none' value (removed from Anticoag) so cases
-            // saved before this change load cleanly.
-            anticoag: new Set((pc.anticoag ?? []).filter((k) => k !== 'none') as Anticoag[]),
+            // 'none' is a valid Anticoag value (documented negative). A case
+            // saved without it loads unchanged; a case saved with it restores
+            // the clinician's explicit "on no agent" answer.
+            anticoag: new Set((pc.anticoag ?? []) as Anticoag[]),
             lastAnticoagDose:
               typeof pc.lastAnticoagDose === 'number'
                 ? new Date(pc.lastAnticoagDose)
@@ -673,11 +674,14 @@ const NihssCalculator: React.FC = () => {
     );
 
     // ── Patient-context lines — always emit so the EMR record is complete.
-    //    Empty value → "Not entered" (timestamps, BP, glucose) or "None"
-    //    (anticoag/antiplatelet). V direction 2026-05-19: clinicians need
-    //    a complete documentation block even when some fields weren't
+    //    Empty value → "Not entered" (timestamps, BP, glucose, and anticoag/
+    //    antiplatelet when nothing was selected). An explicit anticoag
+    //    selection of 'none' prints "None", a documented negative distinct
+    //    from "Not entered". V direction 2026-05-19: clinicians need a
+    //    complete documentation block even when some fields weren't
     //    captured during the exam.
     const ANTICOAG_LABELS: Record<Anticoag, string> = {
+      none: 'None',
       antiplatelet: 'Antiplatelet',
       doac: 'DOAC',
       warfarin: 'Warfarin',

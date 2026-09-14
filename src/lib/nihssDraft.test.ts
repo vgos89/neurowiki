@@ -34,6 +34,15 @@ describe('nihssDraft round-trip', () => {
     expect(d?.hasScored).toBe(true);
   });
 
+  it('round-trips a documented-negative anticoag selection ("none")', () => {
+    // 'none' is a valid Anticoag value distinct from an empty array: it
+    // records that the clinician confirmed the patient is on no agent,
+    // rather than the question never having been asked.
+    saveNihssDraft({ ...base, patientContext: { ...base.patientContext, anticoag: ['none'] } });
+    const d = loadNihssDraft();
+    expect(d?.patientContext.anticoag).toEqual(['none']);
+  });
+
   it('clear removes it', () => {
     saveNihssDraft(base);
     clearNihssDraft();
@@ -80,6 +89,7 @@ describe('draftHasContent', () => {
     ['glucose', { patientContext: { ...base.patientContext, glucose: '90' } }],
     ['weight', { patientContext: { ...base.patientContext, weightValue: 70 } }],
     ['anticoag', { patientContext: { ...base.patientContext, anticoag: ['doac'] } }],
+    ['anticoag none (documented negative)', { patientContext: { ...base.patientContext, anticoag: ['none'] } }],
     ['disabling checks', { disablingChecks: [0] }],
     ['no-disabling confirmation', { confirmedNoDisabling: true }],
     ['a timestamp', { strokeTimestamps: { 'Code Activation': 1_700_000_000_000 } }],
