@@ -15,6 +15,7 @@ import RecentlyViewed from '../components/home/RecentlyViewed';
 import TrendingTrials from '../components/home/TrendingTrials';
 import FavoritesPreview from '../components/home/FavoritesPreview';
 import { SCENARIOS, VISIBLE_BEFORE_FOLD } from '../data/scenarios';
+import { DEFAULT_META } from '../config/routeManifest';
 import { useShowMore } from '../hooks/useShowMore';
 import { useScenarioExpansion } from '../hooks/useScenarioExpansion';
 import { useRecents } from '../hooks/useRecents';
@@ -66,10 +67,12 @@ const Home: React.FC = () => {
         document.title = `${scenario.title} tools | NeuroWiki`;
       }
     } else {
-      // Aligned 2026-05-21 with the index.html site-shell title (Option A
-      // resident-guide treatment). The shell title and this dynamic title
-      // must remain in sync — any change here also goes in index.html line 6.
-      document.title = 'Neuro Wiki: Neurology Resident & Attending Guide';
+      // Read the one title the rest of the site already agrees on rather than
+      // repeating the string. This line used to hold its own copy and silently
+      // won over Seo.tsx, so the 2026-09-16 brand fix in DEFAULT_META and
+      // index.html did not reach the live homepage until this was pointed at
+      // the same source.
+      document.title = DEFAULT_META.title;
     }
     return () => {
       document.title = 'NeuroWiki';

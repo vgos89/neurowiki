@@ -38,6 +38,9 @@ const ROUTES = [
 // The home shell title. If a non-home route returns this exact string, the
 // prerender step did not run for that route and it fell back to the shell.
 const SHELL_TITLE_SUBSTRINGS = [
+  'NeuroWiki: Neurology Resident',
+  // Pre-2026-09-16 spelling. Kept so a rollback to an older build is still
+  // recognised as the shell rather than passing as a real route title.
   'Neuro Wiki: Neurology Resident',
 ];
 
