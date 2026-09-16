@@ -3,40 +3,49 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>Neuro Wiki: Neurology Resident & Attending Guide</title>
+    <title>NeuroWiki: Neurology Resident & Attending Guide</title>
 
     <!-- Basic Meta Tags -->
-    <meta name="description" content="Your Neuro Wiki resident and attending guide. Score NIHSS and ICH, walk through stroke code, look up landmark trials. Save cases on this device, sync to phone.">
+    <meta name="description" content="NeuroWiki is the bedside guide for neurology residents and attendings. Score NIHSS and ICH, walk through stroke code, look up landmark trials. Save cases on this device, sync to phone.">
 
-    <meta name="keywords" content="neurology resident guide, neurology tools, neurology attending guide, NIHSS calculator, stroke pathway, EVT eligibility, IVT calculator, neurology trials, clinical decision support, Neuro Wiki">
+    <meta name="keywords" content="NeuroWiki, neurology resident guide, neurology tools, neurology attending guide, NIHSS calculator, stroke pathway, EVT eligibility, IVT calculator, neurology trials, clinical decision support">
 
     <!-- Open Graph Meta Tags (for Facebook, LinkedIn) -->
-    <meta property="og:title" content="Neuro Wiki: Neurology Resident & Attending Guide">
-    <meta property="og:description" content="Your Neuro Wiki resident and attending guide. Score NIHSS and ICH, walk through stroke code, look up landmark trials. Save cases on this device, sync to phone.">
-    <meta property="og:url" content="https://neurowiki.ai">
+    <meta property="og:title" content="NeuroWiki: Neurology Resident & Attending Guide">
+    <meta property="og:description" content="NeuroWiki is the bedside guide for neurology residents and attendings. Score NIHSS and ICH, walk through stroke code, look up landmark trials. Save cases on this device, sync to phone.">
+    <meta property="og:url" content="https://www.neurowiki.ai">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="NeuroWiki">
-    <meta property="og:image" content="https://neurowiki.ai/og-image.png?v=4">
+    <meta property="og:image" content="https://www.neurowiki.ai/og-image.png?v=4">
     <meta property="og:image:width" content="2848">
     <meta property="og:image:height" content="1504">
     <meta property="og:image:alt" content="NeuroWiki — Neurology resident and attending guide. Calculators, pathways, and trials at the bedside.">
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Neuro Wiki: Neurology Resident & Attending Guide">
-    <meta name="twitter:description" content="Your Neuro Wiki resident and attending guide. Score NIHSS and ICH, walk through stroke code, look up landmark trials. Save cases on this device, sync to phone.">
-    <meta name="twitter:image" content="https://neurowiki.ai/og-image.png?v=4">
+    <meta name="twitter:title" content="NeuroWiki: Neurology Resident & Attending Guide">
+    <meta name="twitter:description" content="NeuroWiki is the bedside guide for neurology residents and attendings. Score NIHSS and ICH, walk through stroke code, look up landmark trials. Save cases on this device, sync to phone.">
+    <meta name="twitter:image" content="https://www.neurowiki.ai/og-image.png?v=4">
     <meta name="twitter:image:alt" content="NeuroWiki — Neurology resident and attending guide. Calculators, pathways, and trials at the bedside.">
     
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://neurowiki.ai">
-    
+    <!-- Canonical URL. www is the serving host: the apex redirects here, the
+         sitemap lists www, and Seo.tsx emits www canonicals per route. The
+         static fallback below must agree with them, not with the apex. -->
+    <link rel="canonical" href="https://www.neurowiki.ai">
+
     <!-- Additional SEO -->
     <meta name="author" content="NeuroWiki">
     <meta name="robots" content="index, follow">
 
-    <!-- Google Search Console ownership verification (URL-prefix property) -->
+    <!-- Google Search Console ownership verification.
+         First token: the apex URL-prefix property (https://neurowiki.ai/).
+         Second: the www URL-prefix property added 2026-09-16, which is the
+         host Google actually indexes; the apex property was blind to it and
+         recorded 17 clicks in 12 months while Analytics saw 35 Google visits
+         in 28 days. The same token also verifies the pending Domain property
+         once the matching DNS TXT record is added at the registrar. -->
     <meta name="google-site-verification" content="pC_nNZmEQSZ6d6bJXP651aiH0Vc3FqnyKKsWyg4FsO8">
+    <meta name="google-site-verification" content="LIvTMlHTxh8d_NDuBOrDZySJDMBFxyyWTtWkjzhJ11g">
 
     <!-- iOS PWA — when installed to home screen, run full-screen with
          the brand cobalt extending under the status bar. The status bar

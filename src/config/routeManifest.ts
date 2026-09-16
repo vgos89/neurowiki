@@ -78,9 +78,13 @@ export interface RouteDefinition {
 const DEFAULT_IMAGE = 'https://www.neurowiki.ai/og-image.png?v=4';
 
 export const DEFAULT_META: MetaData = {
-  title: 'Neuro Wiki: Neurology Resident & Attending Guide',
-  description: 'Your Neuro Wiki resident and attending guide. Score NIHSS and ICH, walk through stroke code, look up landmark trials. Save cases on this device, sync to phone.',
-  keywords: 'neurology resident guide, neurology tools, neurology attending guide, NIHSS calculator, stroke pathway, EVT eligibility, IVT calculator, neurology trials, clinical decision support, Neuro Wiki',
+  // Brand is one word, "NeuroWiki", everywhere in the product. Until
+  // 2026-09-16 this title said "Neuro Wiki" and Google displayed it that way,
+  // which weakened the match on the one-word brand search that drives almost
+  // all of our search traffic.
+  title: 'NeuroWiki: Neurology Resident & Attending Guide',
+  description: 'NeuroWiki is the bedside guide for neurology residents and attendings. Score NIHSS and ICH, walk through stroke code, look up landmark trials. Save cases on this device, sync to phone.',
+  keywords: 'NeuroWiki, neurology resident guide, neurology tools, neurology attending guide, NIHSS calculator, stroke pathway, EVT eligibility, IVT calculator, neurology trials, clinical decision support',
   image: DEFAULT_IMAGE,
 };
 
