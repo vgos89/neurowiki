@@ -14,19 +14,22 @@
 export const SITE = {
   name: 'NeuroWiki',
 
-  // Hosts, measured 2026-09-07: the site SERVES on www (the apex 307-redirects
-  // to www), the sitemap lists www URLs, but the verified Search Console
-  // property is the APEX URL-prefix property and Google's May snapshot indexed
-  // apex URLs. A 307 is a temporary redirect, so Google's canonical picture is
-  // genuinely split; the durable fix is a domain property
-  // (sc-domain:neurowiki.ai), which is V's 5-minute GSC action and a standing
-  // briefing item until done. Every join in this pipeline is on PATH via
-  // normalizePath(), so the split cannot corrupt the data.
+  // Hosts. The site SERVES on www (the apex redirects there), the sitemap
+  // lists www URLs, and Google indexes www. Until 2026-09-16 the only verified
+  // Search Console property was the APEX URL-prefix property, which by
+  // definition excludes www: it recorded 17 clicks across 12 months while GA4
+  // saw 35 Google sessions in 28 days. A www URL-prefix property was verified
+  // on 2026-09-16 (HTML file at public/google9e46fde7fb501f08.html) and is now
+  // the pipeline's source of truth. A Domain property (sc-domain:neurowiki.ai)
+  // is created but still unverified: it needs a DNS TXT record at the
+  // registrar, which is V's action. Switch gscSiteUrl to 'sc-domain:neurowiki.ai'
+  // once that lands, since it covers apex and www together.
   baseUrl: 'https://www.neurowiki.ai', // the serving host: crawls, schema, pagespeed, anomaly
-  gscSiteUrl: process.env.GSC_SITE_URL || 'https://neurowiki.ai/',
+  gscSiteUrl: process.env.GSC_SITE_URL || 'https://www.neurowiki.ai/',
   ga4PropertyId: process.env.GA4_PROPERTY_ID || '367909578',
-  // Must match the feedpath registered in GSC (apex, submitted 2026-05-22).
-  sitemapUrl: 'https://neurowiki.ai/sitemap.xml',
+  // Must match the feedpath registered in GSC (www, resubmitted 2026-09-16;
+  // Google had last read the old one on 2026-06-05).
+  sitemapUrl: 'https://www.neurowiki.ai/sitemap.xml',
 
   // Anomaly thresholds.
   sitemapUrlFloor: 160, // alarm when <loc> count drops below this (182 on 2026-09-07)
