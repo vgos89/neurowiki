@@ -1,60 +1,58 @@
-# SEO briefing, 2026-09-09
+# SEO briefing, 2026-09-19
 
-**One line:** Second morning without numbers: the Google sign-in that feeds every
-traffic and ranking report is still expired, and a two-minute renewal is the only
-thing standing between you and a normal report.
+**One line:** The reporting is fully working again after your Search Console fix,
+every check is green and no alarms fired, and with the data flowing the real
+picture is now visible: the site is used, but almost nobody is finding it through
+search.
 
 ## What I changed
 
-Nothing on the site, by design.
+Nothing on the site, by design. Reports refreshed and filed.
 
-I did file this morning's reports, and yesterday's, into the project history.
-Yesterday I stopped short of that because a file of yours was sitting half-saved
-and I would not risk sweeping it in. Your own session saved that work mid-morning,
-so both days are now filed and nothing is left dangling.
-
-I refreshed the one report that does not need Google: the site publishes 184
-pages, of which 39 appear in the sitemap but not in the site's own page list, and
-1 the other way round.
-
-No wording suggestions today. With no search data there is nothing to argue from,
-and a suggestion I cannot back with numbers is worse than none.
+No wording suggestions today, and this is a judgement call worth stating. The
+homepage is the only page with enough search data to argue about, and all of it
+is people typing our name: "neurowiki", a misspelling of it, and a developer-style
+lookup of our own address. Rewriting a headline to win clicks from people already
+searching for us by name would be busywork dressed as strategy. The other 183
+pages had between zero and one appearance each, which is not enough to write
+from.
 
 ## What needs you
 
-1. **Sign in to Google again**, `npm run seo:auth-login`, two minutes in the
-   browser, using the account that owns the site's Search Console and analytics.
-   Until this is done, every morning report will look like this one.
-2. **Publish the Google project out of testing mode.** Yesterday I said I would
-   flag this if it recurred within the week. It recurred the next morning, which
-   confirms the cause: while the project is marked in-testing, Google discards the
-   sign-in every few days no matter how often you renew it. One click in the
-   Google console, one time. Step 1 alone buys a few days; both together end it.
+Nothing by hand today.
+
+One thing is worth your thinking time rather than your keyboard: 183 of our 184
+pages were shown in search essentially never this month. That is a reach problem,
+not a wording problem, and no amount of title-polishing from me will move it. It
+is the right subject for a proper planning session when you have one.
 
 ## Numbers
 
-None available for a second day. Every traffic and ranking figure comes from
-Google, and Google is turning us away.
+- Yesterday: 8 visits, against a recent daily average of about 10. Normal wobble
+  at this size.
+- Last 7 days: 72 visits from 42 people, 141 pages read, and clinicians used a
+  calculator or copied a result 70 times. People who arrive do use the tool.
+- Search over 28 days: shown 6 times, clicked 0. Three quarters of visits come
+  from people who already know the address.
 
 ## Watching
 
-- Sitemap and page list still disagree by 39 pages. Unchanged from yesterday, not
-  yet worth acting on.
-- The early-warning check for sudden traffic drops has not run for two mornings.
-  Read both as "not checked", not "all clear".
+- Search visibility is the headline issue and has not moved.
+- AI assistants sent 2 visits in 30 days, both from one source, neither engaged.
+  Too small to act on, worth watching as that channel grows.
+- The sitemap still lists 39 pages that the site's own page list does not,
+  unchanged for ten days.
 
 ## Ran into trouble
 
-Seven of eleven checks failed, all for the same reason: the saved Google sign-in
-is no longer accepted.
+Nothing in the run: all eleven checks passed for the first time.
 
-One wrinkle for a working session: the early-warning check reported itself as
-having run when it had in fact stopped on that same failure. Harmless today
-because I read its underlying record, easy to miss on a busy morning.
+One housekeeping note about my own filing. This session began ten days ago, on a
+morning when the Google sign-in was broken, and it stayed open long enough that I
+filed that stale report before noticing how much time had passed. It sits in the
+project history dated the 9th, which is the day its data covers, and it is
+harmless. Today's report supersedes it. If you see an entry claiming the Google
+sign-in needs renewing, that was true on the 9th and you have since fixed it.
 
-The self-check confirming this job stayed inside its own reporting folder came
-back clean, and I confirmed it by hand as well.
-
-**Footer:** Reports filed as the standard daily-report entry, covering both the
-8th and the 9th, labelled the 9th because that is the day the data covers.
+**Footer:** Reports filed as the standard daily-report entry for 2026-09-19.
 Reference code in the chat summary.

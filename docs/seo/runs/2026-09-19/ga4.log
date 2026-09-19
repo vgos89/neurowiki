@@ -1,0 +1,30 @@
+
+NeuroWiki Daily Traffic Snapshot
+Window: Yesterday (2026-09-18)
+
+Headline:
+  Users: 8 | Sessions: 8 | Page views: 33
+  Engagement: 62.5% | Avg session: 520s
+
+Top sources:
+  Direct / (direct): 7 sessions
+  Organic Search / google: 1 session
+
+Top pages:
+  /calculators/nihss: 9 views (avg 311s)
+  /guide: 8 views (avg 797s)
+  /: 6 views (avg 625s)
+  /guide/iv-tpa: 2 views (avg 16s)
+  /my-cases: 2 views (avg 0s)
+  /pathways: 2 views (avg 25s)
+  /pathways/evt: 2 views (avg 9s)
+  /calculators: 1 view (avg 0s)
+
+Clinician actions (10 total):
+  calculator_used: 7
+  calculator_copied: 3
+
+Numbers are still settling; tomorrow restates this day.
+
+Markdown report: docs/seo/daily-snapshot-latest.md
+Summary: users=8 sessions=8 pageviews=33 actions=10

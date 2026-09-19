@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-09-09T13:21:59.809Z",
+  "generatedAt": "2026-09-19T22:17:44.038Z",
   "site": "https://www.neurowiki.ai",
   "counts": {
     "total": 184,
-    "inSitemap": 183,
+    "inSitemap": 184,
     "inManifest": 145,
     "byKind": {
       "hub": 5,
@@ -55,16 +55,14 @@
     "/trials/stich-ii-trial",
     "/trials/synthesis-expansion-trial"
   ],
-  "manifestOnly": [
-    "/guide/post-stroke-lipid-management"
-  ],
+  "manifestOnly": [],
   "pages": [
     {
       "url": "https://www.neurowiki.ai",
       "path": "/",
       "kind": "hub",
-      "title": "Neuro Wiki: Neurology Resident & Attending Guide",
-      "description": "Your Neuro Wiki resident and attending guide. Score NIHSS and ICH, walk through stroke code, look up landmark trials. Save cases on this device, sync to phone.",
+      "title": "NeuroWiki: Neurology Resident & Attending Guide",
+      "description": "NeuroWiki is the bedside guide for neurology residents and attendings. Score NIHSS and ICH, walk through stroke code, look up landmark trials. Save cases on this device, sync to phone.",
       "lastmod": "2026-05-14",
       "inSitemap": true,
       "inManifest": true
@@ -325,8 +323,8 @@
       "kind": "guide",
       "title": "Post-Stroke Lipid Management: LDL-C Targets & Escalation | NeuroWiki",
       "description": "Adaptive lipid management pathway after ischaemic stroke or ICH. VHR vs standard ASCVD targets, ezetimibe and PCSK9 mAb escalation, bempedoic acid, inclisiran, and ICH statin decision. 2026 ACC/AHA.",
-      "lastmod": null,
-      "inSitemap": false,
+      "lastmod": "2026-09-14",
+      "inSitemap": true,
       "inManifest": true
     },
     {

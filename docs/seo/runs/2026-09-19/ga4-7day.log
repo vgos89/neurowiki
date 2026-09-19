@@ -1,0 +1,32 @@
+
+NeuroWiki Daily Traffic Snapshot
+Window: Last 7 days (2026-09-12 to 2026-09-18)
+
+Headline:
+  Users: 42 | Sessions: 72 | Page views: 141
+  Engagement: 55.6% | Avg session: 273s
+
+Top sources:
+  Direct / (direct): 54 sessions
+  Organic Search / google: 7 sessions
+  Organic Search / bing: 6 sessions
+  Organic Search / malaysia.search.yahoo.com: 2 sessions
+  Unassigned / (not set): 2 sessions
+  Organic Search / yahoo: 1 session
+
+Top pages:
+  /calculators/nihss: 39 views (avg 424s)
+  /guide: 27 views (avg 216s)
+  /: 22 views (avg 196s)
+  /pathways: 8 views (avg 11s)
+  /calculators: 7 views (avg 112s)
+  /trials: 6 views (avg 5s)
+  /my-cases: 4 views (avg 3s)
+  /pathways/evt: 4 views (avg 5s)
+
+Clinician actions (70 total):
+  calculator_used: 36
+  calculator_copied: 34
+
+Markdown report: docs/seo/daily-snapshot-7day-latest.md
+Summary: users=42 sessions=72 pageviews=141 actions=70

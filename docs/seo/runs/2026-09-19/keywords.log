@@ -1,0 +1,31 @@
+
+NeuroWiki Keyword Opportunities, 2026-09-19T22:17:51.308Z
+Window: 2026-08-21 to 2026-09-17 (28 days), vs prior 28 days
+Site: https://www.neurowiki.ai/
+Found: page1Push=0 ctrDrag=0 winners=0 losers=0 nearMiss=3
+
+── Page-1 Push (rank 5-12, decent impressions) ── (none)
+
+── CTR Drag (high impressions, weak click-through) ── (none)
+
+── Winners (impressions up >= 30% vs prior 28d) ── (none)
+
+── Losers (impressions down >= 30% vs prior 28d) ── (none)
+
+── Near-Miss (impressions but zero clicks) (3) ──
+  "site:www.neurowiki.ai"
+    Impressions: 6, CTR: 0%, Avg Pos: 3.5
+    Page: https://www.neurowiki.ai/
+    Hint: 6 impressions but 0 clicks. Title/meta mismatch with query intent, or page got shown but not chosen.
+
+  "neurowiki"
+    Impressions: 3, CTR: 0%, Avg Pos: 3.3
+    Page: https://www.neurowiki.ai/
+    Hint: 3 impressions but 0 clicks. Title/meta mismatch with query intent, or page got shown but not chosen.
+
+  "neurowiki.dk"
+    Impressions: 2, CTR: 0%, Avg Pos: 1.5
+    Page: https://www.neurowiki.ai/
+    Hint: 2 impressions but 0 clicks. Title/meta mismatch with query intent, or page got shown but not chosen.
+
+Markdown report saved: docs/seo/keyword-opportunities-latest.md + docs/seo/keyword-opportunities/2026-09-19.md

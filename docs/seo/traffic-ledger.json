@@ -1,0 +1,15 @@
+[
+  {
+    "date": "2026-09-18",
+    "pulledAt": "2026-09-19T22:17:47.817Z",
+    "settled": false,
+    "numbers": {
+      "totalUsers": 8,
+      "sessions": 8,
+      "pageViews": 33,
+      "engagedSessions": 5,
+      "avgDuration": 519.983271,
+      "conversions": 10
+    }
+  }
+]

@@ -1,0 +1,112 @@
+{
+  "fetchedAt": "2026-09-19T22:17:45.768Z",
+  "siteUrl": "https://www.neurowiki.ai/",
+  "dateRange": {
+    "startDate": "2026-08-22",
+    "endDate": "2026-09-18"
+  },
+  "topQueries": [
+    {
+      "keys": [
+        "neurowiki"
+      ],
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 3.3333333333333335
+    },
+    {
+      "keys": [
+        "neurowiki.dk"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 1.5
+    },
+    {
+      "keys": [
+        "site:www.neurowiki.ai"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 1
+    }
+  ],
+  "topPages": [
+    {
+      "keys": [
+        "https://www.neurowiki.ai/"
+      ],
+      "clicks": 1,
+      "impressions": 7,
+      "ctr": 0.14285714285714285,
+      "position": 2.7142857142857144
+    },
+    {
+      "keys": [
+        "https://www.neurowiki.ai/calculators"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 2
+    },
+    {
+      "keys": [
+        "https://www.neurowiki.ai/calculators/aspects-score"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 4
+    },
+    {
+      "keys": [
+        "https://www.neurowiki.ai/guide/workups"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 3
+    },
+    {
+      "keys": [
+        "https://www.neurowiki.ai/pathways/se-pathway"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 6
+    },
+    {
+      "keys": [
+        "https://www.neurowiki.ai/trials/nascet-trial"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 5
+    }
+  ],
+  "sitemaps": [
+    {
+      "path": "https://www.neurowiki.ai/sitemap.xml",
+      "lastSubmitted": "2026-09-16T18:18:14.101Z",
+      "isPending": false,
+      "isSitemapsIndex": false,
+      "type": "sitemap",
+      "lastDownloaded": "2026-09-19T15:35:23.593Z",
+      "warnings": "0",
+      "errors": "0",
+      "contents": [
+        {
+          "type": "web",
+          "submitted": "184",
+          "indexed": "0"
+        }
+      ]
+    }
+  ]
+}

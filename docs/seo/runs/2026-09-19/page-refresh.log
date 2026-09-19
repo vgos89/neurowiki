@@ -1,0 +1,30 @@
+
+NeuroWiki Page Refresh Planner
+Window: 2026-08-21 to 2026-09-17 (28 days)
+Pages: 184 | Needing work: 184
+
+
+── Propose a title and description rewrite (1) ──
+  / [hub]
+    Shown 6 times at average position 2.3, clicked 0. People see the headline and scroll past it. This is a title and description problem, not a content problem.
+    Top queries: "neurowiki" (3 imp, pos 3); "neurowiki.dk" (2 imp, pos 2); "site:www.neurowiki.ai" (1 imp, pos 1)
+
+── Not earning impressions (183) ──
+  /calculators [hub]
+    Only 1 impressions in 28 days. Too little to rank on, too little to judge.
+    Top queries: "site:www.neurowiki.ai" (1 imp, pos 2)
+  /calculators/abcd2-score [calculator]
+    Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+  /calculators/aspects-score [calculator]
+    Only 1 impressions in 28 days. Too little to rank on, too little to judge.
+    Top queries: "site:www.neurowiki.ai" (1 imp, pos 4)
+  /calculators/boston-criteria-caa [calculator]
+    Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+  /calculators/em-billing [calculator]
+    Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+  /calculators/glasgow-coma-scale [calculator]
+    Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+
+Markdown report: docs/seo/page-refresh-latest.md + docs/seo/page-refresh/2026-09-19.md
+JSON: docs/seo/page-refresh/2026-09-19.json
+Summary: pages=184 actionable=184 rewrite=1 striking=0 stale=0 invisible=183
