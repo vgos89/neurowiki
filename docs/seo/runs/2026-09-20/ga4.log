@@ -1,0 +1,31 @@
+
+NeuroWiki Daily Traffic Snapshot
+Window: Yesterday (2026-09-19)
+
+Headline:
+  Users: 9 | Sessions: 10 | Page views: 34
+  Engagement: 60.0% | Avg session: 154s
+
+Top sources:
+  Direct / (direct): 8 sessions
+  Organic Search / google: 1 session
+  Organic Search / yahoo: 1 session
+
+Top pages:
+  /calculators/nihss: 6 views (avg 263s)
+  /guide: 5 views (avg 26s)
+  /trials: 5 views (avg 12s)
+  /calculators: 4 views (avg 13s)
+  /trials/q/minor-stroke-choice: 3 views (avg 270s)
+  /: 2 views (avg 3s)
+  /trials/q/dapt: 2 views (avg 31s)
+  /calculators/mrs: 1 view (avg 7s)
+
+Clinician actions (5 total):
+  calculator_copied: 3
+  calculator_used: 2
+
+Numbers are still settling; tomorrow restates this day.
+
+Markdown report: docs/seo/daily-snapshot-latest.md
+Summary: users=9 sessions=10 pageviews=34 actions=5

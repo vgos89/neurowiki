@@ -1,58 +1,36 @@
-# SEO briefing, 2026-09-19
+# SEO briefing, 2026-10-04
 
-**One line:** The reporting is fully working again after your Search Console fix,
-every check is green and no alarms fired, and with the data flowing the real
-picture is now visible: the site is used, but almost nobody is finding it through
-search.
+**One line:** Slightly up and quiet: search sent its first real visitors this month (9 clicks, all from people typing our name), no alarms fired, and every check passed.
 
 ## What I changed
 
 Nothing on the site, by design. Reports refreshed and filed.
 
-No wording suggestions today, and this is a judgement call worth stating. The
-homepage is the only page with enough search data to argue about, and all of it
-is people typing our name: "neurowiki", a misspelling of it, and a developer-style
-lookup of our own address. Rewriting a headline to win clicks from people already
-searching for us by name would be busywork dressed as strategy. The other 183
-pages had between zero and one appearance each, which is not enough to write
-from.
+No wording suggestions today. Three pages reached the top of the queue (the status epilepticus pathway, the ASPECTS calculator and the calculators index), but every time they were "shown" it was in response to someone looking up our own web address, which is a housekeeping lookup and not a clinician searching. There is no real search question to write a better headline for yet, so writing one would be guesswork.
+
+No experiments were due for a verdict, and no indexing requests were made: there is no current list of unindexed pages to draw from until the next Monday run produces one.
 
 ## What needs you
 
-Nothing by hand today.
-
-One thing is worth your thinking time rather than your keyboard: 183 of our 184
-pages were shown in search essentially never this month. That is a reach problem,
-not a wording problem, and no amount of title-polishing from me will move it. It
-is the right subject for a proper planning session when you have one.
+Nothing today.
 
 ## Numbers
 
-- Yesterday: 8 visits, against a recent daily average of about 10. Normal wobble
-  at this size.
-- Last 7 days: 72 visits from 42 people, 141 pages read, and clinicians used a
-  calculator or copied a result 70 times. People who arrive do use the tool.
-- Search over 28 days: shown 6 times, clicked 0. Three quarters of visits come
-  from people who already know the address.
+- Yesterday: 3 visits, against a daily average of about 7 this week. Normal for a Saturday at this size, and the figure is still settling.
+- Last 7 days: 49 visits from 26 people, and 43 occasions where a clinician used a calculator or copied a result. The NIHSS calculator alone accounts for about half of all pages read, with visits averaging close to seven minutes.
+- Search over 28 days: the homepage was shown 54 times and clicked 9 times. On 19 September the whole site stood at 6 showings and 0 clicks.
 
 ## Watching
 
-- Search visibility is the headline issue and has not moved.
-- AI assistants sent 2 visits in 30 days, both from one source, neither engaged.
-  Too small to act on, worth watching as that channel grows.
-- The sitemap still lists 39 pages that the site's own page list does not,
-  unchanged for ten days.
+- Search reach is still the real story. The clicks we earn come from people who already know the name. Seven pages appeared in search this month, up from one, which suggests Google is starting to file more of the site, but none is yet shown for a clinical question. This remains a subject for a planning session, not a morning report.
+- Visits are lower than in mid-September (49 this week against 72 then). Too small a base to call a trend; I will flag it if it continues.
+- AI assistants sent 1 visit in 30 days. Nothing to act on.
+- The sitemap still lists 39 pages that the site's own page list does not. Unchanged, not urgent.
 
 ## Ran into trouble
 
-Nothing in the run: all eleven checks passed for the first time.
+Nothing in today's run: all eleven checks passed.
 
-One housekeeping note about my own filing. This session began ten days ago, on a
-morning when the Google sign-in was broken, and it stayed open long enough that I
-filed that stale report before noticing how much time had passed. It sits in the
-project history dated the 9th, which is the day its data covers, and it is
-harmless. Today's report supersedes it. If you see an entry claiming the Google
-sign-in needs renewing, that was true on the 9th and you have since fixed it.
+One filing note. The morning job last filed on 19 September. A run on 20 September produced reports that were never filed, along with a tidied copy of the 19 September briefing, and there were no runs at all between then and today. I have filed those leftover reports together with today's so nothing is lost. If the two-week gap was not intentional, the schedule is worth a glance.
 
-**Footer:** Reports filed as the standard daily-report entry for 2026-09-19.
-Reference code in the chat summary.
+**Footer:** Reports filed as the standard daily-report entry for 2026-10-04. Reference code and file count in the chat summary.

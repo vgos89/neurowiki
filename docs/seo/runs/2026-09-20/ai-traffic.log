@@ -1,0 +1,12 @@
+
+AI Traffic Detector, 2026-09-20T19:23:32.215Z
+Window: 2026-08-21 to 2026-09-19 (30 days)
+Total sessions (all sources): 343
+AI-sourced sessions: 1 (0.29% of total)
+Clinician actions from AI visits: 0
+
+── perplexity.ai ──
+  Sessions: 1 | Engaged: 0 (0%) | Avg dur: 2s | Actions: 0
+    (not set): 1 session
+
+Markdown report saved: docs/seo/ai-traffic-latest.md + docs/seo/ai-traffic/2026-09-20.md

@@ -1,0 +1,66 @@
+{
+  "source": "google-search-console",
+  "siteUrl": "https://www.neurowiki.ai/",
+  "thisWeek": {
+    "startDate": "2026-09-26",
+    "endDate": "2026-10-02"
+  },
+  "lastWeek": {
+    "startDate": "2026-09-19",
+    "endDate": "2026-09-25"
+  },
+  "fetchedAt": "2026-10-04T18:11:26.271Z",
+  "totalDeltas": 4,
+  "topWinners": [
+    {
+      "query": "neurowiki",
+      "page": "https://www.neurowiki.ai/",
+      "positionNow": 1.7,
+      "positionPrev": 2.2,
+      "positionDelta": 0.5,
+      "impressionsNow": 7,
+      "impressionsPrev": 9,
+      "impressionsDelta": -2,
+      "clicksNow": 4,
+      "clicksPrev": 1
+    }
+  ],
+  "topLosers": [
+    {
+      "query": "neuro wiki",
+      "page": "https://www.neurowiki.ai/",
+      "positionNow": 11,
+      "positionPrev": 10,
+      "positionDelta": -1,
+      "impressionsNow": 4,
+      "impressionsPrev": 1,
+      "impressionsDelta": 3,
+      "clicksNow": 0,
+      "clicksPrev": 0
+    },
+    {
+      "query": "site:www.neurowiki.ai",
+      "page": "https://www.neurowiki.ai/pathways/se-pathway",
+      "positionNow": 6,
+      "positionPrev": 5.4,
+      "positionDelta": -0.6,
+      "impressionsNow": 1,
+      "impressionsPrev": 5,
+      "impressionsDelta": -4,
+      "clicksNow": 0,
+      "clicksPrev": 0
+    },
+    {
+      "query": "site:www.neurowiki.ai",
+      "page": "https://www.neurowiki.ai/trials/nascet-trial",
+      "positionNow": 5,
+      "positionPrev": 4.4,
+      "positionDelta": -0.6,
+      "impressionsNow": 1,
+      "impressionsPrev": 5,
+      "impressionsDelta": -4,
+      "clicksNow": 0,
+      "clicksPrev": 0
+    }
+  ]
+}

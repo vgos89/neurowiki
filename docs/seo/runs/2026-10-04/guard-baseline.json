@@ -1,0 +1,24 @@
+{
+  "takenAt": "2026-10-04T18:11:15.729Z",
+  "lines": [
+    " M docs/seo/ai-traffic-latest.md",
+    " M docs/seo/anomaly-latest.md",
+    " M docs/seo/briefings/2026-09-19.md",
+    " M docs/seo/daily-snapshot-7day-latest.md",
+    " M docs/seo/daily-snapshot-latest.md",
+    " M docs/seo/keyword-opportunities-latest.md",
+    " M docs/seo/page-refresh-latest.md",
+    " M docs/seo/pages-snapshot-latest.json",
+    " M docs/seo/traffic-ledger.json",
+    "?? docs/seo-data/gsc/2026-09-19.json",
+    "?? docs/seo/ai-traffic/2026-09-20.md",
+    "?? docs/seo/anomaly/2026-09-20.md",
+    "?? docs/seo/daily-snapshot/2026-09-20-7day.md",
+    "?? docs/seo/daily-snapshot/2026-09-20.md",
+    "?? docs/seo/keyword-opportunities/2026-09-20.md",
+    "?? docs/seo/page-refresh/2026-09-20.json",
+    "?? docs/seo/page-refresh/2026-09-20.md",
+    "?? docs/seo/runs/2026-09-20/",
+    "?? docs/seo/runs/2026-10-04/"
+  ]
+}

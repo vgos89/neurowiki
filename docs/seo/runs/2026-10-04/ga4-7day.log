@@ -1,0 +1,30 @@
+
+NeuroWiki Daily Traffic Snapshot
+Window: Last 7 days (2026-09-27 to 2026-10-03)
+
+Headline:
+  Users: 26 | Sessions: 49 | Page views: 54
+  Engagement: 51.0% | Avg session: 218s
+
+Top sources:
+  Direct / (direct): 37 sessions
+  Organic Search / google: 8 sessions
+  Organic Search / bing: 3 sessions
+  Unassigned / (not set): 1 session
+
+Top pages:
+  /calculators/nihss: 26 views (avg 408s)
+  /: 13 views (avg 32s)
+  /calculators: 3 views (avg 0s)
+  /guide/status-epilepticus: 2 views (avg 874s)
+  /pathways/stroke-code: 2 views (avg 0s)
+  /trials: 2 views (avg 14s)
+  /calculators/boston-criteria-caa: 1 view (avg 3s)
+  /calculators/glasgow-coma-scale: 1 view (avg 6s)
+
+Clinician actions (43 total):
+  calculator_copied: 22
+  calculator_used: 21
+
+Markdown report: docs/seo/daily-snapshot-7day-latest.md
+Summary: users=26 sessions=49 pageviews=54 actions=43

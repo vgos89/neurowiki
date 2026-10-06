@@ -1,0 +1,25 @@
+
+NeuroWiki Page Refresh Planner
+Window: 2026-08-22 to 2026-09-18 (28 days)
+Pages: 184 | Needing work: 183
+
+
+── Not earning impressions (183) ──
+  /calculators [hub]
+    Only 2 impressions in 28 days. Too little to rank on, too little to judge.
+    Top queries: "site:www.neurowiki.ai" (2 imp, pos 2)
+  /calculators/abcd2-score [calculator]
+    Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+  /calculators/aspects-score [calculator]
+    Only 2 impressions in 28 days. Too little to rank on, too little to judge.
+    Top queries: "site:www.neurowiki.ai" (2 imp, pos 4)
+  /calculators/boston-criteria-caa [calculator]
+    Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+  /calculators/em-billing [calculator]
+    Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+  /calculators/glasgow-coma-scale [calculator]
+    Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+
+Markdown report: docs/seo/page-refresh-latest.md + docs/seo/page-refresh/2026-09-20.md
+JSON: docs/seo/page-refresh/2026-09-20.json
+Summary: pages=184 actionable=183 rewrite=0 striking=0 stale=0 invisible=183

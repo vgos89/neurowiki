@@ -2,7 +2,7 @@
   {
     "date": "2026-09-18",
     "pulledAt": "2026-09-19T22:17:47.817Z",
-    "settled": false,
+    "settled": true,
     "numbers": {
       "totalUsers": 8,
       "sessions": 8,
@@ -10,6 +10,34 @@
       "engagedSessions": 5,
       "avgDuration": 519.983271,
       "conversions": 10
+    },
+    "settledOn": "2026-10-04"
+  },
+  {
+    "date": "2026-09-19",
+    "pulledAt": "2026-09-20T19:23:23.015Z",
+    "settled": true,
+    "numbers": {
+      "totalUsers": 9,
+      "sessions": 10,
+      "pageViews": 34,
+      "engagedSessions": 6,
+      "avgDuration": 153.7325679,
+      "conversions": 5
+    },
+    "settledOn": "2026-10-04"
+  },
+  {
+    "date": "2026-10-03",
+    "pulledAt": "2026-10-04T18:11:22.041Z",
+    "settled": false,
+    "numbers": {
+      "totalUsers": 2,
+      "sessions": 3,
+      "pageViews": 4,
+      "engagedSessions": 2,
+      "avgDuration": 4.796642666666666,
+      "conversions": 0
     }
   }
 ]

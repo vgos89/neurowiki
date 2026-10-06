@@ -1,47 +1,45 @@
-# Daily Traffic Snapshot, 2026-09-19
+# Daily Traffic Snapshot, 2026-10-04
 
-**Window:** Last 7 days (2026-09-12 to 2026-09-18)
+**Window:** Last 7 days (2026-09-27 to 2026-10-03)
 **Property:** `367909578`
 
 ## Headline
 
 | Metric | Value |
 |---|---|
-| Total users | 42 |
-| Sessions | 72 |
-| Page views | 141 |
-| Engagement rate | 55.6% |
-| Avg session duration | 273s |
+| Total users | 26 |
+| Sessions | 49 |
+| Page views | 54 |
+| Engagement rate | 51.0% |
+| Avg session duration | 218s |
 
 ## Top sources
 
 | Channel | Source | Sessions |
 |---|---|---|
-| Direct | (direct) | 54 |
-| Organic Search | google | 7 |
-| Organic Search | bing | 6 |
-| Organic Search | malaysia.search.yahoo.com | 2 |
-| Unassigned | (not set) | 2 |
-| Organic Search | yahoo | 1 |
+| Direct | (direct) | 37 |
+| Organic Search | google | 8 |
+| Organic Search | bing | 3 |
+| Unassigned | (not set) | 1 |
 
 ## Top pages
 
 | Page | Views | Avg duration |
 |---|---|---|
-| `/calculators/nihss` | 39 | 424s |
-| `/guide` | 27 | 216s |
-| `/` | 22 | 196s |
-| `/pathways` | 8 | 11s |
-| `/calculators` | 7 | 112s |
-| `/trials` | 6 | 5s |
-| `/my-cases` | 4 | 3s |
-| `/pathways/evt` | 4 | 5s |
-| `/pathways/late-window-ivt` | 4 | 51s |
-| `/calculators/abcd2-score` | 3 | 14s |
+| `/calculators/nihss` | 26 | 408s |
+| `/` | 13 | 32s |
+| `/calculators` | 3 | 0s |
+| `/guide/status-epilepticus` | 2 | 874s |
+| `/pathways/stroke-code` | 2 | 0s |
+| `/trials` | 2 | 14s |
+| `/calculators/boston-criteria-caa` | 1 | 3s |
+| `/calculators/glasgow-coma-scale` | 1 | 6s |
+| `/guide` | 1 | 0s |
+| `/pathways` | 1 | 0s |
 
 ## Clinician actions
 
 | Event | Count |
 |---|---|
-| `calculator_used` | 36 |
-| `calculator_copied` | 34 |
+| `calculator_copied` | 22 |
+| `calculator_used` | 21 |

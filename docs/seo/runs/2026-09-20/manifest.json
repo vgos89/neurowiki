@@ -1,0 +1,75 @@
+{
+  "date": "2026-09-20",
+  "startedAt": "2026-09-20T19:23:09Z",
+  "steps": [
+    {
+      "name": "guard-baseline",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-09-20/guard.log",
+      "summary": "Summary: baseline entries=2"
+    }    ,
+    {
+      "name": "page-inventory",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-09-20/inventory.log",
+      "summary": "Summary: pages=184 sitemapOnly=39 manifestOnly=0"
+    }    ,
+    {
+      "name": "search-console",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-09-20/gsc.log",
+      "summary": ""
+    }    ,
+    {
+      "name": "analytics",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-09-20/ga4.log",
+      "summary": "Summary: users=9 sessions=10 pageviews=34 actions=5"
+    }    ,
+    {
+      "name": "analytics-7day",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-09-20/ga4-7day.log",
+      "summary": "Summary: users=45 sessions=76 pageviews=164 actions=65"
+    }    ,
+    {
+      "name": "rank-deltas",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-09-20/deltas.log",
+      "summary": ""
+    }    ,
+    {
+      "name": "keyword-gaps",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-09-20/keywords.log",
+      "summary": ""
+    }    ,
+    {
+      "name": "page-refresh",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-09-20/page-refresh.log",
+      "summary": "Summary: pages=184 actionable=183 rewrite=0 striking=0 stale=0 invisible=183"
+    }    ,
+    {
+      "name": "ai-traffic",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-09-20/ai-traffic.log",
+      "summary": ""
+    }    ,
+    {
+      "name": "anomaly-alarm",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-09-20/anomaly.log",
+      "summary": "Summary: alarms=0"
+    }    ,
+    {
+      "name": "report-only-check",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-09-20/guard-check.log",
+      "summary": "Summary: violations=0 changed=16"
+    }
+  ],
+  "finishedAt": "2026-09-20T19:23:36Z",
+  "succeeded": 11,
+  "failed": 0
+}

@@ -1,0 +1,16 @@
+{
+  "source": "google-search-console",
+  "siteUrl": "https://www.neurowiki.ai/",
+  "thisWeek": {
+    "startDate": "2026-09-12",
+    "endDate": "2026-09-18"
+  },
+  "lastWeek": {
+    "startDate": "2026-09-05",
+    "endDate": "2026-09-11"
+  },
+  "fetchedAt": "2026-09-20T19:23:28.157Z",
+  "totalDeltas": 0,
+  "topWinners": [],
+  "topLosers": []
+}
