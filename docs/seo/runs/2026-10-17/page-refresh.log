@@ -1,0 +1,39 @@
+
+NeuroWiki Page Refresh Planner
+Window: 2026-09-19 to 2026-10-16 (28 days)
+Pages: 184 | Needing work: 183
+
+
+── Propose a title and description rewrite (3) ──
+  /calculators/aspects-score [calculator]
+    Shown 14 times at average position 4.0, clicked 0. People see the headline and scroll past it. This is a title and description problem, not a content problem.
+    Top queries: "site:www.neurowiki.ai" (14 imp, pos 4)
+  /pathways/se-pathway [pathway]
+    Shown 15 times at average position 6.4, clicked 0. People see the headline and scroll past it. This is a title and description problem, not a content problem.
+    Top queries: "site:www.neurowiki.ai" (15 imp, pos 6)
+  /calculators/ascvd-risk [calculator]
+    Shown 7 times at average position 5.3, clicked 0. People see the headline and scroll past it. This is a title and description problem, not a content problem.
+    Top queries: "site:www.neurowiki.ai" (7 imp, pos 5)
+
+── Add depth, ranking is close (1) ──
+  /calculators [hub]
+    Average position 24.6 across 23 impressions. Close enough that added depth on the queries below can push it onto page one.
+    Top queries: "site:www.neurowiki.ai" (14 imp, pos 2); "func score" (5 imp, pos 57); "p func score /p" (2 imp, pos 55)
+
+── Not earning impressions (179) ──
+  /calculators/abcd2-score [calculator]
+    Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+  /calculators/boston-criteria-caa [calculator]
+    Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+  /calculators/chads-vasc [calculator]
+    Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+  /calculators/em-billing [calculator]
+    Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+  /calculators/glasgow-coma-scale [calculator]
+    Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+  /calculators/has-bled-score [calculator]
+    Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+
+Markdown report: docs/seo/page-refresh-latest.md + docs/seo/page-refresh/2026-10-18.md
+JSON: docs/seo/page-refresh/2026-10-18.json
+Summary: pages=184 actionable=183 rewrite=3 striking=1 stale=0 invisible=179

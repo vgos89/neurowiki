@@ -1,14 +1,14 @@
-# SEO briefing, 2026-10-06
+# SEO briefing, 2026-10-17
 
-**One line:** Flat and quiet: no alarms, every check passed, and the NIHSS calculator is still doing the heavy lifting.
+**One line:** Flat and quiet: no alarms, every check passed, and the calculators are still where clinicians spend their time.
 
 ## What I changed
 
 Nothing on the site, by design. Reports refreshed and filed.
 
-No wording suggestions today. The same three pages top the queue as on Sunday (the ASPECTS calculator, the status epilepticus pathway and the calculators index), and their search showings still come almost entirely from people looking up our own web address rather than clinicians asking a question. Writing new headlines against that would be guesswork.
+No wording suggestions today. The pages at the top of the list are unchanged, and the people seeing them in search are still mostly looking up our own web address, not asking a clinical question. New headlines written against that would be guesswork.
 
-No experiments are running, so none were due for a verdict. No indexing requests were made: the list of unindexed pages comes from the Monday run, and yesterday's Monday run did not happen (see below).
+No experiments are running, so none were due for a verdict. No indexing requests were made: there is no current list of unindexed pages to work from (that check runs on Mondays).
 
 ## What needs you
 
@@ -16,23 +16,22 @@ Nothing today.
 
 ## Numbers
 
-- Yesterday: 5 visits, against a daily average of about 7 this week. Still settling, and normal for this size.
-- Last 7 days: 47 visits from 30 people, with 40 occasions where a clinician used a calculator or copied a result. The NIHSS calculator took 21 of 45 page views, with visits averaging about seven minutes.
-- Search over 28 days: the homepage was shown 50 times and clicked 7 times, all from people typing our name.
+- Last 7 days: 41 visits from 24 people, with 44 occasions where a clinician used a calculator or copied a result. The NIHSS calculator and the calculators page together took 26 of 68 page views, with visits there lasting eight to ten minutes.
+- Search over 28 days: the homepage was shown 106 times and clicked 8 times, almost all from people typing our name.
+- Yesterday's count is too early to read (one visit so far, still settling).
 
 ## Watching
 
-- Search reach for clinical questions is still near zero. Six pages appeared in search this month; none for a real clinical query. A planning-session topic, not a morning one.
-- Search sent 9 of this week's 47 visits (Google and Bing), up from essentially none in mid-September.
+- Wording suggestions for the ASPECTS calculator, status epilepticus pathway and ASCVD calculator: on hold until searches for them come from real clinical questions, not our own address. Unchanged for several mornings.
+- First faint clinical searches are appearing ("secondary ICH score", "FUNC score"), but far down the results. Too small to act on; a sign of where demand may build.
+- Search sent 10 of this week's 41 visits (Google and Bing), steady with last week.
 - AI assistants sent no visits in 30 days. Nothing to act on.
-- The sitemap still lists pages the site's own page list does not. Unchanged, not urgent.
+- The sitemap still lists 39 pages the site's own page list does not. Unchanged, not urgent.
 
 ## Ran into trouble
 
 Nothing in today's run: all eleven checks passed.
 
-One schedule note: the morning job did not run yesterday (Monday), so the weekly extras (indexing check, broken-link scan, internal-link suggestions) were skipped this week. They will run next Monday. Together with the earlier two-week gap, the schedule may be missing mornings when the computer is asleep; worth a glance if that was not intended.
+Schedule note: this is the first run since 6 October, so the morning job missed about ten days, including Monday's weekly extras. That fits the computer being asleep or off at the scheduled time. Worth a glance if daily runs are expected.
 
-Filing note: this morning's run paused partway through and only finished on 14 October, so these figures describe 6 October, not today. Because of the date change, the automatic "nothing outside the reports folder was touched" check could not run in its usual form; I checked the same thing by hand and it was clean. The commit safeguard still ran as normal.
-
-**Footer:** filed as the standard daily-report entry for 2026-10-06; reference code and file count in the chat summary.
+**Footer:** filed as the standard daily-report entry for 2026-10-17; reference code and file count in the chat summary.

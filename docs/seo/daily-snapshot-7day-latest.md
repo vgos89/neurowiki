@@ -1,45 +1,45 @@
-# Daily Traffic Snapshot, 2026-10-06
+# Daily Traffic Snapshot, 2026-10-18
 
-**Window:** Last 7 days (2026-09-29 to 2026-10-05)
+**Window:** Last 7 days (2026-10-11 to 2026-10-17)
 **Property:** `367909578`
 
 ## Headline
 
 | Metric | Value |
 |---|---|
-| Total users | 30 |
-| Sessions | 47 |
-| Page views | 45 |
-| Engagement rate | 46.8% |
-| Avg session duration | 194s |
+| Total users | 24 |
+| Sessions | 41 |
+| Page views | 68 |
+| Engagement rate | 58.5% |
+| Avg session duration | 317s |
 
 ## Top sources
 
 | Channel | Source | Sessions |
 |---|---|---|
-| Direct | (direct) | 37 |
-| Organic Search | google | 7 |
-| Organic Search | bing | 2 |
-| Unassigned | (not set) | 1 |
+| Direct | (direct) | 31 |
+| Organic Search | bing | 5 |
+| Organic Search | google | 4 |
+| Organic Search | cn.bing.com | 1 |
 
 ## Top pages
 
 | Page | Views | Avg duration |
 |---|---|---|
-| `/calculators/nihss` | 21 | 421s |
-| `/` | 11 | 19s |
-| `/calculators` | 3 | 0s |
-| `/guide/status-epilepticus` | 2 | 874s |
-| `/pathways/late-window-ivt` | 2 | 12s |
-| `/calculators/boston-criteria-caa` | 1 | 4s |
-| `/calculators/glasgow-coma-scale` | 1 | 6s |
-| `/guide` | 1 | 0s |
-| `/guide/ich-management` | 1 | 0s |
-| `/pathways` | 1 | 0s |
+| `/calculators/nihss` | 14 | 491s |
+| `/calculators` | 12 | 595s |
+| `/` | 11 | 3s |
+| `/pathways` | 9 | 3s |
+| `/guide` | 5 | 10s |
+| `/trials` | 5 | 6s |
+| `/pathways/migraine-pathway` | 3 | 31s |
+| `/calculators/abcd2-score` | 2 | 0s |
+| `/calculators/aspects-score` | 1 | 6s |
+| `/calculators/boston-criteria-caa` | 1 | 0s |
 
 ## Clinician actions
 
 | Event | Count |
 |---|---|
-| `calculator_copied` | 21 |
-| `calculator_used` | 19 |
+| `calculator_copied` | 28 |
+| `calculator_used` | 16 |

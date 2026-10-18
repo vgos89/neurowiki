@@ -1,0 +1,175 @@
+{
+  "fetchedAt": "2026-10-18T00:49:15.439Z",
+  "siteUrl": "https://www.neurowiki.ai/",
+  "dateRange": {
+    "startDate": "2026-09-20",
+    "endDate": "2026-10-17"
+  },
+  "topQueries": [
+    {
+      "keys": [
+        "neurowiki"
+      ],
+      "clicks": 5,
+      "impressions": 41,
+      "ctr": 0.12195121951219512,
+      "position": 2.6829268292682924
+    },
+    {
+      "keys": [
+        "func score"
+      ],
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 57.4
+    },
+    {
+      "keys": [
+        "neuro wiki"
+      ],
+      "clicks": 0,
+      "impressions": 6,
+      "ctr": 0,
+      "position": 13.833333333333334
+    },
+    {
+      "keys": [
+        "neuro wikipedia"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 22
+    },
+    {
+      "keys": [
+        "neurowiki.dk"
+      ],
+      "clicks": 0,
+      "impressions": 11,
+      "ctr": 0,
+      "position": 2.1818181818181817
+    },
+    {
+      "keys": [
+        "p func score /p"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 55
+    },
+    {
+      "keys": [
+        "secondary ich score"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 70.5
+    },
+    {
+      "keys": [
+        "site:www.neurowiki.ai"
+      ],
+      "clicks": 0,
+      "impressions": 14,
+      "ctr": 0,
+      "position": 1
+    }
+  ],
+  "topPages": [
+    {
+      "keys": [
+        "https://www.neurowiki.ai/"
+      ],
+      "clicks": 8,
+      "impressions": 106,
+      "ctr": 0.07547169811320754,
+      "position": 4.584905660377359
+    },
+    {
+      "keys": [
+        "https://www.neurowiki.ai/calculators"
+      ],
+      "clicks": 0,
+      "impressions": 24,
+      "ctr": 0,
+      "position": 23.666666666666668
+    },
+    {
+      "keys": [
+        "https://www.neurowiki.ai/calculators/ascvd-risk"
+      ],
+      "clicks": 0,
+      "impressions": 8,
+      "ctr": 0,
+      "position": 5.75
+    },
+    {
+      "keys": [
+        "https://www.neurowiki.ai/calculators/aspects-score"
+      ],
+      "clicks": 0,
+      "impressions": 15,
+      "ctr": 0,
+      "position": 3.8666666666666667
+    },
+    {
+      "keys": [
+        "https://www.neurowiki.ai/guide/workups"
+      ],
+      "clicks": 0,
+      "impressions": 14,
+      "ctr": 0,
+      "position": 2.857142857142857
+    },
+    {
+      "keys": [
+        "https://www.neurowiki.ai/pathways/se-pathway"
+      ],
+      "clicks": 0,
+      "impressions": 15,
+      "ctr": 0,
+      "position": 6.266666666666667
+    },
+    {
+      "keys": [
+        "https://www.neurowiki.ai/trials/charisma-trial"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 5
+    },
+    {
+      "keys": [
+        "https://www.neurowiki.ai/trials/nascet-trial"
+      ],
+      "clicks": 0,
+      "impressions": 15,
+      "ctr": 0,
+      "position": 5.2
+    }
+  ],
+  "sitemaps": [
+    {
+      "path": "https://www.neurowiki.ai/sitemap.xml",
+      "lastSubmitted": "2026-09-16T18:18:14.101Z",
+      "isPending": false,
+      "isSitemapsIndex": false,
+      "type": "sitemap",
+      "lastDownloaded": "2026-10-12T07:49:08.757Z",
+      "warnings": "0",
+      "errors": "0",
+      "contents": [
+        {
+          "type": "web",
+          "submitted": "184",
+          "indexed": "0"
+        }
+      ]
+    }
+  ]
+}

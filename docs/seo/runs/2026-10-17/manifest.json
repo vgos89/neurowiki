@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-17",
+  "startedAt": "2026-10-18T00:49:12Z",
+  "steps": [
+    {
+      "name": "guard-baseline",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-10-17/guard.log",
+      "summary": "Summary: baseline entries=2"
+    }    ,
+    {
+      "name": "page-inventory",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-10-17/inventory.log",
+      "summary": "Summary: pages=184 sitemapOnly=39 manifestOnly=0"
+    }    ,
+    {
+      "name": "search-console",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-10-17/gsc.log",
+      "summary": ""
+    }    ,
+    {
+      "name": "analytics",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-10-17/ga4.log",
+      "summary": "Summary: users=1 sessions=1 pageviews=4 actions=1"
+    }    ,
+    {
+      "name": "analytics-7day",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-10-17/ga4-7day.log",
+      "summary": "Summary: users=24 sessions=41 pageviews=68 actions=44"
+    }    ,
+    {
+      "name": "rank-deltas",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-10-17/deltas.log",
+      "summary": ""
+    }    ,
+    {
+      "name": "keyword-gaps",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-10-17/keywords.log",
+      "summary": ""
+    }    ,
+    {
+      "name": "page-refresh",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-10-17/page-refresh.log",
+      "summary": "Summary: pages=184 actionable=183 rewrite=3 striking=1 stale=0 invisible=179"
+    }    ,
+    {
+      "name": "ai-traffic",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-10-17/ai-traffic.log",
+      "summary": ""
+    }    ,
+    {
+      "name": "anomaly-alarm",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-10-17/anomaly.log",
+      "summary": "Summary: alarms=0"
+    }    ,
+    {
+      "name": "report-only-check",
+      "status": "ok",
+      "log": "docs/seo/runs/2026-10-17/guard-check.log",
+      "summary": "Summary: violations=0 changed=17"
+    }
+  ],
+  "finishedAt": "2026-10-18T00:49:26Z",
+  "succeeded": 11,
+  "failed": 0
+}

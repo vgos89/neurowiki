@@ -1,7 +1,7 @@
-# AI Traffic Report, 2026-10-06
+# AI Traffic Report, 2026-10-18
 
-**Window:** 2026-09-06 to 2026-10-05 (30 days)
-**Total sessions:** 258
+**Window:** 2026-09-18 to 2026-10-17 (30 days)
+**Total sessions:** 205
 **AI-sourced sessions:** 0 (0.00% of total)
 **Clinician actions from AI visits:** 0
 

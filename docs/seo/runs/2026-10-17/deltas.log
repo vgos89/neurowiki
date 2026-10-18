@@ -1,0 +1,29 @@
+{
+  "source": "google-search-console",
+  "siteUrl": "https://www.neurowiki.ai/",
+  "thisWeek": {
+    "startDate": "2026-10-10",
+    "endDate": "2026-10-16"
+  },
+  "lastWeek": {
+    "startDate": "2026-10-03",
+    "endDate": "2026-10-09"
+  },
+  "fetchedAt": "2026-10-18T00:49:20.896Z",
+  "totalDeltas": 1,
+  "topWinners": [
+    {
+      "query": "neurowiki.dk",
+      "page": "https://www.neurowiki.ai/",
+      "positionNow": 1.8,
+      "positionPrev": 3,
+      "positionDelta": 1.2,
+      "impressionsNow": 6,
+      "impressionsPrev": 2,
+      "impressionsDelta": 4,
+      "clicksNow": 0,
+      "clicksPrev": 0
+    }
+  ],
+  "topLosers": []
+}

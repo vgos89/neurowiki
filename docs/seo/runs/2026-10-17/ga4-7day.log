@@ -1,0 +1,30 @@
+
+NeuroWiki Daily Traffic Snapshot
+Window: Last 7 days (2026-10-11 to 2026-10-17)
+
+Headline:
+  Users: 24 | Sessions: 41 | Page views: 68
+  Engagement: 58.5% | Avg session: 317s
+
+Top sources:
+  Direct / (direct): 31 sessions
+  Organic Search / bing: 5 sessions
+  Organic Search / google: 4 sessions
+  Organic Search / cn.bing.com: 1 session
+
+Top pages:
+  /calculators/nihss: 14 views (avg 491s)
+  /calculators: 12 views (avg 595s)
+  /: 11 views (avg 3s)
+  /pathways: 9 views (avg 3s)
+  /guide: 5 views (avg 10s)
+  /trials: 5 views (avg 6s)
+  /pathways/migraine-pathway: 3 views (avg 31s)
+  /calculators/abcd2-score: 2 views (avg 0s)
+
+Clinician actions (44 total):
+  calculator_copied: 28
+  calculator_used: 16
+
+Markdown report: docs/seo/daily-snapshot-7day-latest.md
+Summary: users=24 sessions=41 pageviews=68 actions=44

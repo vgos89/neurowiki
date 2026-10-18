@@ -1,6 +1,6 @@
-# Page Refresh Plan, 2026-10-06
+# Page Refresh Plan, 2026-10-18
 
-**Window:** 2026-09-07 to 2026-10-04 (28 days)  
+**Window:** 2026-09-19 to 2026-10-16 (28 days)  
 **Pages analysed:** 184  
 **Needing work:** 183
 
@@ -10,21 +10,21 @@ Ranked by expected value. The top item is the best proposal available today. Not
 
 | # | Page | Kind | What it needs | Impressions | Avg position | CTR | Lastmod age |
 |---|---|---|---|---|---|---|---|
-| 1 | `/calculators/aspects-score` | calculator | Propose a title and description rewrite | 11 | 4.0 | 0.0% | 231d |
-| 2 | `/pathways/se-pathway` | pathway | Propose a title and description rewrite | 12 | 6.0 | 0.0% | 147d |
-| 3 | `/calculators` | hub | Propose a title and description rewrite | 14 | 13.8 | 0.0% | 231d |
-| 4 | `/calculators/abcd2-score` | calculator | Not earning impressions | 0 | n/a | 0.0% | 231d |
-| 5 | `/calculators/boston-criteria-caa` | calculator | Not earning impressions | 0 | n/a | 0.0% | 231d |
-| 6 | `/calculators/em-billing` | calculator | Not earning impressions | 0 | n/a | 0.0% | 231d |
-| 7 | `/calculators/glasgow-coma-scale` | calculator | Not earning impressions | 0 | n/a | 0.0% | 231d |
-| 8 | `/calculators/has-bled-score` | calculator | Not earning impressions | 0 | n/a | 0.0% | 231d |
-| 9 | `/calculators/heidelberg-bleeding-classification` | calculator | Not earning impressions | 0 | n/a | 0.0% | 231d |
-| 10 | `/calculators/ich-score` | calculator | Not earning impressions | 0 | n/a | 0.0% | 231d |
-| 11 | `/calculators/nihss` | calculator | Not earning impressions | 0 | n/a | 0.0% | 231d |
-| 12 | `/calculators/rope-score` | calculator | Not earning impressions | 0 | n/a | 0.0% | 231d |
-| 13 | `/guide` | hub | Not earning impressions | 0 | n/a | 0.0% | 231d |
-| 14 | `/guide/acute-stroke-mgmt` | guide | Not earning impressions | 0 | n/a | 0.0% | 231d |
-| 15 | `/guide/altered-mental-status` | guide | Not earning impressions | 0 | n/a | 0.0% | 231d |
+| 1 | `/calculators/aspects-score` | calculator | Propose a title and description rewrite | 14 | 4.0 | 0.0% | 242d |
+| 2 | `/pathways/se-pathway` | pathway | Propose a title and description rewrite | 15 | 6.4 | 0.0% | 158d |
+| 3 | `/calculators/ascvd-risk` | calculator | Propose a title and description rewrite | 7 | 5.3 | 0.0% | 136d |
+| 4 | `/calculators` | hub | Add depth, ranking is close | 23 | 24.6 | 0.0% | 242d |
+| 5 | `/calculators/abcd2-score` | calculator | Not earning impressions | 0 | n/a | 0.0% | 242d |
+| 6 | `/calculators/boston-criteria-caa` | calculator | Not earning impressions | 0 | n/a | 0.0% | 242d |
+| 7 | `/calculators/chads-vasc` | calculator | Not earning impressions | 0 | n/a | 0.0% | 158d |
+| 8 | `/calculators/em-billing` | calculator | Not earning impressions | 0 | n/a | 0.0% | 242d |
+| 9 | `/calculators/glasgow-coma-scale` | calculator | Not earning impressions | 0 | n/a | 0.0% | 242d |
+| 10 | `/calculators/has-bled-score` | calculator | Not earning impressions | 0 | n/a | 0.0% | 242d |
+| 11 | `/calculators/heidelberg-bleeding-classification` | calculator | Not earning impressions | 0 | n/a | 0.0% | 242d |
+| 12 | `/calculators/ich-score` | calculator | Not earning impressions | 0 | n/a | 0.0% | 242d |
+| 13 | `/calculators/nihss` | calculator | Not earning impressions | 0 | n/a | 0.0% | 242d |
+| 14 | `/calculators/rope-score` | calculator | Not earning impressions | 0 | n/a | 0.0% | 242d |
+| 15 | `/guide` | hub | Not earning impressions | 0 | n/a | 0.0% | 242d |
 
 ## Detail
 
@@ -35,11 +35,11 @@ Ranked by expected value. The top item is the best proposal available today. Not
 **Kind:** calculator | **In sitemap:** yes  
 **Verdict:** Propose a title and description rewrite
 
-Shown 11 times at average position 4.0, clicked 0. People see the headline and scroll past it. This is a title and description problem, not a content problem.
+Shown 14 times at average position 4.0, clicked 0. People see the headline and scroll past it. This is a title and description problem, not a content problem.
 
 | Query | Impressions | Clicks | Position |
 |---|---|---|---|
-| site:www.neurowiki.ai | 11 | 0 | 4.0 |
+| site:www.neurowiki.ai | 14 | 0 | 4.0 |
 
 ### /pathways/se-pathway
 
@@ -48,26 +48,40 @@ Shown 11 times at average position 4.0, clicked 0. People see the headline and s
 **Kind:** pathway | **In sitemap:** yes  
 **Verdict:** Propose a title and description rewrite
 
-Shown 12 times at average position 6.0, clicked 0. People see the headline and scroll past it. This is a title and description problem, not a content problem.
+Shown 15 times at average position 6.4, clicked 0. People see the headline and scroll past it. This is a title and description problem, not a content problem.
 
 | Query | Impressions | Clicks | Position |
 |---|---|---|---|
-| site:www.neurowiki.ai | 12 | 0 | 6.0 |
+| site:www.neurowiki.ai | 15 | 0 | 6.4 |
+
+### /calculators/ascvd-risk
+
+**Current title:** ASCVD 10-year Risk Calculator (Pooled Cohort Equations) | NeuroWiki  
+**Current description:** ACC/AHA Pooled Cohort Equations for 10-year ASCVD risk. Inputs: age, sex, race, total cholesterol, HDL-C, SBP, BP treatment, diabetes, smoker. Risk tiers and statin recommendation per 2019 ACC/AHA Primary Prevention Guideline.  
+**Kind:** calculator | **In sitemap:** yes  
+**Verdict:** Propose a title and description rewrite
+
+Shown 7 times at average position 5.3, clicked 0. People see the headline and scroll past it. This is a title and description problem, not a content problem.
+
+| Query | Impressions | Clicks | Position |
+|---|---|---|---|
+| site:www.neurowiki.ai | 7 | 0 | 5.3 |
 
 ### /calculators
 
 **Current title:** Neurology Calculators: NIHSS, ICH Score, GCS | NeuroWiki  
 **Current description:** Free online neurology calculators: NIHSS, ICH Score, ABCD2, GCS, HAS-BLED, RoPE, Heidelberg, Boston Criteria 2.0. Tools for stroke and neurocritical care.  
 **Kind:** hub | **In sitemap:** yes  
-**Verdict:** Propose a title and description rewrite
+**Verdict:** Add depth, ranking is close
 
-Shown 14 times at average position 13.8, clicked 0. People see the headline and scroll past it. This is a title and description problem, not a content problem.
+Average position 24.6 across 23 impressions. Close enough that added depth on the queries below can push it onto page one.
 
 | Query | Impressions | Clicks | Position |
 |---|---|---|---|
-| site:www.neurowiki.ai | 11 | 0 | 2.0 |
-| func score | 2 | 0 | 58.5 |
-| p func score /p | 1 | 0 | 54.0 |
+| site:www.neurowiki.ai | 14 | 0 | 2.0 |
+| func score | 5 | 0 | 57.4 |
+| p func score /p | 2 | 0 | 55.0 |
+| secondary ich score | 2 | 0 | 70.5 |
 
 ### /calculators/abcd2-score
 
@@ -84,6 +98,17 @@ _No queries recorded in this window._
 
 **Current title:** Boston Criteria 2.0: CAA Diagnosis | NeuroWiki  
 **Current description:** Diagnose CAA using Boston Criteria 2.0. MRI-based classification with anticoagulation risk stratification. Charidimou et al. Lancet Neurology 2022.  
+**Kind:** calculator | **In sitemap:** yes  
+**Verdict:** Not earning impressions
+
+Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+
+_No queries recorded in this window._
+
+### /calculators/chads-vasc
+
+**Current title:** CHA₂DS₂-VASc Score: AF Stroke Risk Calculator | NeuroWiki  
+**Current description:** Calculate stroke risk in non-valvular atrial fibrillation using the CHA₂DS₂-VASc score. Anticoagulation thresholds per 2023 ACC/AHA/ACCP/HRS guidelines.  
 **Kind:** calculator | **In sitemap:** yes  
 **Verdict:** Not earning impressions
 
@@ -179,49 +204,28 @@ Google is not showing this page for anything. Either it is not indexed, or nothi
 
 _No queries recorded in this window._
 
-### /guide/acute-stroke-mgmt
-
-**Current title:** Acute Stroke Management: Inpatient Protocol | NeuroWiki  
-**Current description:** Acute ischemic stroke management: BP targets, glucose control, dysphagia screening, antiplatelet initiation, DVT prophylaxis, and secondary prevention.  
-**Kind:** guide | **In sitemap:** yes  
-**Verdict:** Not earning impressions
-
-Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
-
-_No queries recorded in this window._
-
-### /guide/altered-mental-status
-
-**Current title:** Altered Mental Status Workup: Diagnostic | NeuroWiki  
-**Current description:** Approach to altered mental status (AMS): differential diagnosis, initial workup, delirium vs. encephalopathy, reversible causes, and empiric treatment.  
-**Kind:** guide | **In sitemap:** yes  
-**Verdict:** Not earning impressions
-
-Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
-
-_No queries recorded in this window._
-
 ## Search demand landing on unrecognized paths
 
 Google matched these queries to paths that are not in the page inventory (legacy URLs, redirect sources, or pages missing from the sitemap and route list).
 
 | Path | Impressions | Clicks | Top query |
 |---|---|---|---|
-| `/guide/workups` | 12 | 0 | site:www.neurowiki.ai |
-| `/trials/nascet-trial` | 12 | 0 | site:www.neurowiki.ai |
+| `/guide/workups` | 15 | 0 | site:www.neurowiki.ai |
+| `/trials/nascet-trial` | 15 | 0 | site:www.neurowiki.ai |
 
 ## Cannibalization: our own pages competing for one query
 
 Google usually demotes both pages when this happens. The fix is to make one page clearly THE answer and have the other link to it. Consolidations are supervised work, never unattended.
 
 - **"site:www.neurowiki.ai"**
-  - `/guide/workups` (12 imp, pos 2.8)
-  - `/pathways/se-pathway` (12 imp, pos 6.0)
-  - `/trials/nascet-trial` (12 imp, pos 5.0)
-  - `/` (11 imp, pos 1.0)
-  - `/calculators` (11 imp, pos 2.0)
-  - `/calculators/aspects-score` (11 imp, pos 4.0)
-  - `/calculators/ascvd-risk` (2 imp, pos 5.5)
+  - `/guide/workups` (15 imp, pos 2.9)
+  - `/pathways/se-pathway` (15 imp, pos 6.4)
+  - `/trials/nascet-trial` (15 imp, pos 5.4)
+  - `/` (14 imp, pos 1.0)
+  - `/calculators` (14 imp, pos 2.0)
+  - `/calculators/aspects-score` (14 imp, pos 4.0)
+  - `/calculators/ascvd-risk` (7 imp, pos 5.3)
+  - `/trials/charisma-trial` (2 imp, pos 5.0)
 
 ## Inventory drift
 
