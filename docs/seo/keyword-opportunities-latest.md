@@ -1,9 +1,9 @@
-# Keyword Opportunities, 2026-10-04
+# Keyword Opportunities, 2026-10-06
 
 **Site:** `https://www.neurowiki.ai/`
-**Window:** 2026-09-05 to 2026-10-02 (28 days)
-**Prior window:** 2026-08-08 to 2026-09-04
-**Run at:** 2026-10-04T18:11:26.589Z
+**Window:** 2026-09-07 to 2026-10-04 (28 days)
+**Prior window:** 2026-08-10 to 2026-09-06
+**Run at:** 2026-10-06T14:51:21.299Z
 
 ## Summary
 
@@ -45,8 +45,8 @@ _None in this window._
 
 | Query | Metrics | Page | What to do |
 |---|---|---|---|
-| `site:www.neurowiki.ai` | imp 45 / clk 0 / pos 3.4 | `https://www.neurowiki.ai/guide/workups` | 45 impressions but 0 clicks. Title/meta mismatch with query intent, or page got shown but not chosen. |
-| `neurowiki.dk` | imp 7 / clk 0 / pos 1.9 | `https://www.neurowiki.ai/` | 7 impressions but 0 clicks. Title/meta mismatch with query intent, or page got shown but not chosen. |
+| `site:www.neurowiki.ai` | imp 72 / clk 0 / pos 3.6 | `https://www.neurowiki.ai/guide/workups` | 72 impressions but 0 clicks. Title/meta mismatch with query intent, or page got shown but not chosen. |
+| `neurowiki.dk` | imp 8 / clk 0 / pos 2.0 | `https://www.neurowiki.ai/` | 8 impressions but 0 clicks. Title/meta mismatch with query intent, or page got shown but not chosen. |
 | `neuro wiki` | imp 5 / clk 0 / pos 10.8 | `https://www.neurowiki.ai/` | 5 impressions but 0 clicks. Title/meta mismatch with query intent, or page got shown but not chosen. |
 | `neuro wikipedia` | imp 2 / clk 0 / pos 22.0 | `https://www.neurowiki.ai/` | 2 impressions but 0 clicks. Title/meta mismatch with query intent, or page got shown but not chosen. |
 

@@ -30,7 +30,7 @@
   {
     "date": "2026-10-03",
     "pulledAt": "2026-10-04T18:11:22.041Z",
-    "settled": false,
+    "settled": true,
     "numbers": {
       "totalUsers": 2,
       "sessions": 3,
@@ -38,6 +38,20 @@
       "engagedSessions": 2,
       "avgDuration": 4.796642666666666,
       "conversions": 0
+    },
+    "settledOn": "2026-10-06"
+  },
+  {
+    "date": "2026-10-05",
+    "pulledAt": "2026-10-06T14:51:17.496Z",
+    "settled": false,
+    "numbers": {
+      "totalUsers": 5,
+      "sessions": 5,
+      "pageViews": 1,
+      "engagedSessions": 1,
+      "avgDuration": 124.52861060000001,
+      "conversions": 3
     }
   }
 ]

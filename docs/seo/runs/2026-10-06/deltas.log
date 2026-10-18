@@ -1,0 +1,90 @@
+{
+  "source": "google-search-console",
+  "siteUrl": "https://www.neurowiki.ai/",
+  "thisWeek": {
+    "startDate": "2026-09-28",
+    "endDate": "2026-10-04"
+  },
+  "lastWeek": {
+    "startDate": "2026-09-21",
+    "endDate": "2026-09-27"
+  },
+  "fetchedAt": "2026-10-06T14:51:20.994Z",
+  "totalDeltas": 6,
+  "topWinners": [
+    {
+      "query": "neuro wiki",
+      "page": "https://www.neurowiki.ai/",
+      "positionNow": 10,
+      "positionPrev": 11,
+      "positionDelta": 1,
+      "impressionsNow": 1,
+      "impressionsPrev": 4,
+      "impressionsDelta": -3,
+      "clicksNow": 0,
+      "clicksPrev": 0
+    }
+  ],
+  "topLosers": [
+    {
+      "query": "site:www.neurowiki.ai",
+      "page": "https://www.neurowiki.ai/pathways/se-pathway",
+      "positionNow": 6.6,
+      "positionPrev": 5,
+      "positionDelta": -1.6,
+      "impressionsNow": 5,
+      "impressionsPrev": 3,
+      "impressionsDelta": 2,
+      "clicksNow": 0,
+      "clicksPrev": 0
+    },
+    {
+      "query": "site:www.neurowiki.ai",
+      "page": "https://www.neurowiki.ai/trials/nascet-trial",
+      "positionNow": 5.6,
+      "positionPrev": 4,
+      "positionDelta": -1.6,
+      "impressionsNow": 5,
+      "impressionsPrev": 3,
+      "impressionsDelta": 2,
+      "clicksNow": 0,
+      "clicksPrev": 0
+    },
+    {
+      "query": "neurowiki.dk",
+      "page": "https://www.neurowiki.ai/",
+      "positionNow": 3,
+      "positionPrev": 2,
+      "positionDelta": -1,
+      "impressionsNow": 1,
+      "impressionsPrev": 2,
+      "impressionsDelta": -1,
+      "clicksNow": 0,
+      "clicksPrev": 0
+    },
+    {
+      "query": "neurowiki",
+      "page": "https://www.neurowiki.ai/",
+      "positionNow": 2.7,
+      "positionPrev": 1.9,
+      "positionDelta": -0.8,
+      "impressionsNow": 6,
+      "impressionsPrev": 9,
+      "impressionsDelta": -3,
+      "clicksNow": 2,
+      "clicksPrev": 3
+    },
+    {
+      "query": "site:www.neurowiki.ai",
+      "page": "https://www.neurowiki.ai/guide/workups",
+      "positionNow": 3,
+      "positionPrev": 2.3,
+      "positionDelta": -0.7,
+      "impressionsNow": 5,
+      "impressionsPrev": 3,
+      "impressionsDelta": 2,
+      "clicksNow": 0,
+      "clicksPrev": 0
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+
+NeuroWiki Page Refresh Planner
+Window: 2026-09-07 to 2026-10-04 (28 days)
+Pages: 184 | Needing work: 183
+
+
+── Propose a title and description rewrite (3) ──
+  /calculators/aspects-score [calculator]
+    Shown 11 times at average position 4.0, clicked 0. People see the headline and scroll past it. This is a title and description problem, not a content problem.
+    Top queries: "site:www.neurowiki.ai" (11 imp, pos 4)
+  /pathways/se-pathway [pathway]
+    Shown 12 times at average position 6.0, clicked 0. People see the headline and scroll past it. This is a title and description problem, not a content problem.
+    Top queries: "site:www.neurowiki.ai" (12 imp, pos 6)
+  /calculators [hub]
+    Shown 14 times at average position 13.8, clicked 0. People see the headline and scroll past it. This is a title and description problem, not a content problem.
+    Top queries: "site:www.neurowiki.ai" (11 imp, pos 2); "func score" (2 imp, pos 59); "p func score /p" (1 imp, pos 54)
+
+── Not earning impressions (180) ──
+  /calculators/abcd2-score [calculator]
+    Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+  /calculators/boston-criteria-caa [calculator]
+    Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+  /calculators/em-billing [calculator]
+    Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+  /calculators/glasgow-coma-scale [calculator]
+    Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+  /calculators/has-bled-score [calculator]
+    Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+  /calculators/heidelberg-bleeding-classification [calculator]
+    Google is not showing this page for anything. Either it is not indexed, or nothing on the site points to it.
+
+Markdown report: docs/seo/page-refresh-latest.md + docs/seo/page-refresh/2026-10-06.md
+JSON: docs/seo/page-refresh/2026-10-06.json
+Summary: pages=184 actionable=183 rewrite=3 striking=0 stale=0 invisible=180

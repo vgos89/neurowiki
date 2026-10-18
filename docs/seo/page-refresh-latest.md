@@ -1,6 +1,6 @@
-# Page Refresh Plan, 2026-10-04
+# Page Refresh Plan, 2026-10-06
 
-**Window:** 2026-09-05 to 2026-10-02 (28 days)  
+**Window:** 2026-09-07 to 2026-10-04 (28 days)  
 **Pages analysed:** 184  
 **Needing work:** 183
 
@@ -10,36 +10,23 @@ Ranked by expected value. The top item is the best proposal available today. Not
 
 | # | Page | Kind | What it needs | Impressions | Avg position | CTR | Lastmod age |
 |---|---|---|---|---|---|---|---|
-| 1 | `/pathways/se-pathway` | pathway | Propose a title and description rewrite | 8 | 5.6 | 0.0% | 145d |
-| 2 | `/calculators/aspects-score` | calculator | Propose a title and description rewrite | 7 | 4.0 | 0.0% | 229d |
-| 3 | `/calculators` | hub | Propose a title and description rewrite | 10 | 18.5 | 0.0% | 229d |
-| 4 | `/calculators/abcd2-score` | calculator | Not earning impressions | 0 | n/a | 0.0% | 229d |
-| 5 | `/calculators/boston-criteria-caa` | calculator | Not earning impressions | 0 | n/a | 0.0% | 229d |
-| 6 | `/calculators/em-billing` | calculator | Not earning impressions | 0 | n/a | 0.0% | 229d |
-| 7 | `/calculators/glasgow-coma-scale` | calculator | Not earning impressions | 0 | n/a | 0.0% | 229d |
-| 8 | `/calculators/has-bled-score` | calculator | Not earning impressions | 0 | n/a | 0.0% | 229d |
-| 9 | `/calculators/heidelberg-bleeding-classification` | calculator | Not earning impressions | 0 | n/a | 0.0% | 229d |
-| 10 | `/calculators/ich-score` | calculator | Not earning impressions | 0 | n/a | 0.0% | 229d |
-| 11 | `/calculators/nihss` | calculator | Not earning impressions | 0 | n/a | 0.0% | 229d |
-| 12 | `/calculators/rope-score` | calculator | Not earning impressions | 0 | n/a | 0.0% | 229d |
-| 13 | `/guide` | hub | Not earning impressions | 0 | n/a | 0.0% | 229d |
-| 14 | `/guide/acute-stroke-mgmt` | guide | Not earning impressions | 0 | n/a | 0.0% | 229d |
-| 15 | `/guide/altered-mental-status` | guide | Not earning impressions | 0 | n/a | 0.0% | 229d |
+| 1 | `/calculators/aspects-score` | calculator | Propose a title and description rewrite | 11 | 4.0 | 0.0% | 231d |
+| 2 | `/pathways/se-pathway` | pathway | Propose a title and description rewrite | 12 | 6.0 | 0.0% | 147d |
+| 3 | `/calculators` | hub | Propose a title and description rewrite | 14 | 13.8 | 0.0% | 231d |
+| 4 | `/calculators/abcd2-score` | calculator | Not earning impressions | 0 | n/a | 0.0% | 231d |
+| 5 | `/calculators/boston-criteria-caa` | calculator | Not earning impressions | 0 | n/a | 0.0% | 231d |
+| 6 | `/calculators/em-billing` | calculator | Not earning impressions | 0 | n/a | 0.0% | 231d |
+| 7 | `/calculators/glasgow-coma-scale` | calculator | Not earning impressions | 0 | n/a | 0.0% | 231d |
+| 8 | `/calculators/has-bled-score` | calculator | Not earning impressions | 0 | n/a | 0.0% | 231d |
+| 9 | `/calculators/heidelberg-bleeding-classification` | calculator | Not earning impressions | 0 | n/a | 0.0% | 231d |
+| 10 | `/calculators/ich-score` | calculator | Not earning impressions | 0 | n/a | 0.0% | 231d |
+| 11 | `/calculators/nihss` | calculator | Not earning impressions | 0 | n/a | 0.0% | 231d |
+| 12 | `/calculators/rope-score` | calculator | Not earning impressions | 0 | n/a | 0.0% | 231d |
+| 13 | `/guide` | hub | Not earning impressions | 0 | n/a | 0.0% | 231d |
+| 14 | `/guide/acute-stroke-mgmt` | guide | Not earning impressions | 0 | n/a | 0.0% | 231d |
+| 15 | `/guide/altered-mental-status` | guide | Not earning impressions | 0 | n/a | 0.0% | 231d |
 
 ## Detail
-
-### /pathways/se-pathway
-
-**Current title:** Status Epilepticus: Management Pathway | NeuroWiki  
-**Current description:** Status epilepticus management pathway. Covers early SE, established SE, refractory SE, and super-refractory SE. Based on ESETT trial and NCC guidelines.  
-**Kind:** pathway | **In sitemap:** yes  
-**Verdict:** Propose a title and description rewrite
-
-Shown 8 times at average position 5.6, clicked 0. People see the headline and scroll past it. This is a title and description problem, not a content problem.
-
-| Query | Impressions | Clicks | Position |
-|---|---|---|---|
-| site:www.neurowiki.ai | 8 | 0 | 5.6 |
 
 ### /calculators/aspects-score
 
@@ -48,11 +35,24 @@ Shown 8 times at average position 5.6, clicked 0. People see the headline and sc
 **Kind:** calculator | **In sitemap:** yes  
 **Verdict:** Propose a title and description rewrite
 
-Shown 7 times at average position 4.0, clicked 0. People see the headline and scroll past it. This is a title and description problem, not a content problem.
+Shown 11 times at average position 4.0, clicked 0. People see the headline and scroll past it. This is a title and description problem, not a content problem.
 
 | Query | Impressions | Clicks | Position |
 |---|---|---|---|
-| site:www.neurowiki.ai | 7 | 0 | 4.0 |
+| site:www.neurowiki.ai | 11 | 0 | 4.0 |
+
+### /pathways/se-pathway
+
+**Current title:** Status Epilepticus: Management Pathway | NeuroWiki  
+**Current description:** Status epilepticus management pathway. Covers early SE, established SE, refractory SE, and super-refractory SE. Based on ESETT trial and NCC guidelines.  
+**Kind:** pathway | **In sitemap:** yes  
+**Verdict:** Propose a title and description rewrite
+
+Shown 12 times at average position 6.0, clicked 0. People see the headline and scroll past it. This is a title and description problem, not a content problem.
+
+| Query | Impressions | Clicks | Position |
+|---|---|---|---|
+| site:www.neurowiki.ai | 12 | 0 | 6.0 |
 
 ### /calculators
 
@@ -61,11 +61,11 @@ Shown 7 times at average position 4.0, clicked 0. People see the headline and sc
 **Kind:** hub | **In sitemap:** yes  
 **Verdict:** Propose a title and description rewrite
 
-Shown 10 times at average position 18.5, clicked 0. People see the headline and scroll past it. This is a title and description problem, not a content problem.
+Shown 14 times at average position 13.8, clicked 0. People see the headline and scroll past it. This is a title and description problem, not a content problem.
 
 | Query | Impressions | Clicks | Position |
 |---|---|---|---|
-| site:www.neurowiki.ai | 7 | 0 | 2.0 |
+| site:www.neurowiki.ai | 11 | 0 | 2.0 |
 | func score | 2 | 0 | 58.5 |
 | p func score /p | 1 | 0 | 54.0 |
 
@@ -207,20 +207,21 @@ Google matched these queries to paths that are not in the page inventory (legacy
 
 | Path | Impressions | Clicks | Top query |
 |---|---|---|---|
-| `/guide/workups` | 8 | 0 | site:www.neurowiki.ai |
-| `/trials/nascet-trial` | 8 | 0 | site:www.neurowiki.ai |
+| `/guide/workups` | 12 | 0 | site:www.neurowiki.ai |
+| `/trials/nascet-trial` | 12 | 0 | site:www.neurowiki.ai |
 
 ## Cannibalization: our own pages competing for one query
 
 Google usually demotes both pages when this happens. The fix is to make one page clearly THE answer and have the other link to it. Consolidations are supervised work, never unattended.
 
 - **"site:www.neurowiki.ai"**
-  - `/guide/workups` (8 imp, pos 2.8)
-  - `/pathways/se-pathway` (8 imp, pos 5.6)
-  - `/trials/nascet-trial` (8 imp, pos 4.6)
-  - `/` (7 imp, pos 1.0)
-  - `/calculators` (7 imp, pos 2.0)
-  - `/calculators/aspects-score` (7 imp, pos 4.0)
+  - `/guide/workups` (12 imp, pos 2.8)
+  - `/pathways/se-pathway` (12 imp, pos 6.0)
+  - `/trials/nascet-trial` (12 imp, pos 5.0)
+  - `/` (11 imp, pos 1.0)
+  - `/calculators` (11 imp, pos 2.0)
+  - `/calculators/aspects-score` (11 imp, pos 4.0)
+  - `/calculators/ascvd-risk` (2 imp, pos 5.5)
 
 ## Inventory drift
 
