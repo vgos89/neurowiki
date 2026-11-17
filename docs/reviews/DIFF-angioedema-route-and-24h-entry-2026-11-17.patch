@@ -1,0 +1,145 @@
+diff --git a/src/components/article/stroke/OrolingualEdemaProtocolModal.tsx b/src/components/article/stroke/OrolingualEdemaProtocolModal.tsx
+index 5fe9610..169a9f8 100644
+--- a/src/components/article/stroke/OrolingualEdemaProtocolModal.tsx
++++ b/src/components/article/stroke/OrolingualEdemaProtocolModal.tsx
+@@ -2,9 +2,16 @@
+  * OrolingualEdemaProtocolModal — thin wrapper over ProtocolModal primitive.
+  *
+  * Migrated 2026-05-17 from 152 LOC bespoke modal to 37 LOC data-only
+- * wrapper consuming ProtocolModal. All clinical text (TITLE, STEPS,
+- * references) preserved byte-for-byte from the prior implementation
+- * — verbatim from AHA/ASA 2026, Table 6; Refs 53–54.
++ * wrapper consuming ProtocolModal. Clinical text (TITLE, STEPS,
++ * references) carried over from the prior implementation; source is
++ * AHA/ASA 2026, Table 6; Refs 53–54.
++ *
++ * 2026-11-17: epinephrine route corrected from SC to IM. The publisher
++ * correction (Stroke 2026;57(8):e461-e467, DOI 10.1161/STR.0000000000000530,
++ * item 10) changed Table 6 row 9 from "subcutaneously" to "intramuscularly";
++ * the nebulizer alternative is unchanged. The held guideline PDF is a first
++ * proof and still shows the superseded route, so do not "fix" this back
++ * from that PDF. Icatibant remains subcutaneous (unchanged in the source).
+  */
+ import { ProtocolModal, type ProtocolStep } from './ProtocolModal';
+ 
+@@ -12,7 +19,7 @@ const STEPS: ProtocolStep[] = [
+   { title: 'Maintain airway', body: 'Awake fiberoptic intubation preferred. Nasal-tracheal route carries epistaxis risk. Cricothyroidotomy rarely needed.' },
+   { title: 'Discontinue thrombolytic and hold ACE inhibitors', body: 'Stop IV thrombolytic immediately. Hold ACE inhibitors (ACEi-induced angioedema).' },
+   { title: 'Medications', body: 'Methylprednisolone 125 mg IV, Diphenhydramine 50 mg IV, Ranitidine 50 mg IV OR Famotidine 20 mg IV.' },
+-  { title: 'If progression', body: 'Epinephrine 0.1% (1 mg/mL) 0.3 mL SC, OR 0.5 mg nebulized.' },
++  { title: 'If progression', body: 'Epinephrine 0.1% (1 mg/mL) 0.3 mL IM, OR 0.5 mg nebulized.' },
+   { title: 'Advanced (if available)', body: 'Icatibant 30 mg SC (repeat q6h, max 3 doses/24 h), OR C1 esterase inhibitor 20 IU/kg.' },
+   { title: 'Supportive care', body: 'Continue airway and hemodynamic support as needed.' },
+ ];
+diff --git a/src/components/article/stroke/lkwTime.test.ts b/src/components/article/stroke/lkwTime.test.ts
+index f665356..d988582 100644
+--- a/src/components/article/stroke/lkwTime.test.ts
++++ b/src/components/article/stroke/lkwTime.test.ts
+@@ -8,13 +8,37 @@ import {
+ } from './lkwTime';
+ 
+ describe('parseManualTime', () => {
+-  it('parses 0630 as 6:30 keeping the current period', () => {
++  it('reads 0630 as 24-hour 6:30 in the morning (leading zero)', () => {
+     const p = parseManualTime('0630')!;
+     expect(p.hourIdx).toBe(5);
+     expect(p.minute).toBe(30);
+     expect(p.minuteIdx5).toBe(6);
+-    expect(p.periodIdx).toBe(-1);
+-    expect(p.isMilitary).toBe(false);
++    expect(p.periodIdx).toBe(0);
++    expect(p.isMilitary).toBe(true);
++  });
++
++  it('reads every leading-zero hour form as a 24-hour morning time', () => {
++    // V decision 2026-11-17: with PM selected, "0800" used to become 8:00 PM.
++    expect(parseManualTime('08:02')).toMatchObject({ hourIdx: 7, minute: 2, periodIdx: 0, isMilitary: true });
++    expect(parseManualTime('0800')).toMatchObject({ hourIdx: 7, minute: 0, periodIdx: 0, isMilitary: true });
++    expect(parseManualTime('0130')).toMatchObject({ hourIdx: 0, minute: 30, periodIdx: 0, isMilitary: true });
++    expect(parseManualTime('09')).toMatchObject({ hourIdx: 8, minute: 0, periodIdx: 0, isMilitary: true });
++    expect(parseManualTime('09:59')).toMatchObject({ hourIdx: 8, minute: 59, periodIdx: 0, isMilitary: true });
++  });
++
++  it('keeps the selected AM/PM when there is no leading zero and no suffix', () => {
++    // 630, 8:02 and 7 carry no 24-hour signal. 10, 11 and 12 cannot carry a
++    // leading zero, so 1030 must not be forced to the morning.
++    for (const raw of ['630', '8:02', '7', '1030', '10:30', '11:15', '1200', '12:15']) {
++      const p = parseManualTime(raw)!;
++      expect(p.periodIdx, raw).toBe(-1);
++      expect(p.isMilitary, raw).toBe(false);
++    }
++  });
++
++  it('lets an explicit AM/PM win over a leading zero', () => {
++    expect(parseManualTime('08:30 pm')).toMatchObject({ hourIdx: 7, minute: 30, periodIdx: 1, isMilitary: false });
++    expect(parseManualTime('0630am')).toMatchObject({ hourIdx: 5, minute: 30, periodIdx: 0, isMilitary: false });
+   });
+ 
+   it('parses "6:30 pm"', () => {
+diff --git a/src/components/article/stroke/lkwTime.ts b/src/components/article/stroke/lkwTime.ts
+index 3fac5b7..fe1b998 100644
+--- a/src/components/article/stroke/lkwTime.ts
++++ b/src/components/article/stroke/lkwTime.ts
+@@ -8,14 +8,21 @@ export interface ParsedTime {
+   minuteIdx5: number;    // 0-11 (5-minute snap, matches the Specific Time drum)
+   minute: number;        // 0-59 exact minute as typed
+   periodIdx: number;     // 0 = AM, 1 = PM, -1 = keep the caller's current AM/PM
+-  isMilitary: boolean;   // typed value was unambiguous 24-hour (0 or >= 13)
++  isMilitary: boolean;   // typed value was unambiguous 24-hour (0, >= 13, or a leading-zero hour)
+ }
+ 
+ /**
+  * Accepts: "11:25 PM", "1:25 am", "1125", "23:25", "2325", "0630", "7".
+  * - HH:MM with AM/PM suffix: 12-hour interpretation, AM/PM forced.
+  * - HH >= 13 or HH = 0: military, AM/PM not applicable.
+- * - 1-12 without suffix: periodIdx = -1 (caller keeps its current AM/PM).
++ * - Hour typed with a leading zero and no suffix ("0630", "08:02", "06"):
++ *   24-hour time, so 01-09 are morning hours (V decision 2026-11-17). Before
++ *   this, "0630" kept whichever of AM/PM was selected, so with the default
++ *   bedtime (PM) it silently became 6:30 PM.
++ * - 1-12 without a leading zero and without a suffix ("630", "8:02", "1030",
++ *   "12:15"): periodIdx = -1 (caller keeps its current AM/PM). 10, 11 and 12
++ *   cannot carry a leading zero, so they stay ambiguous on purpose: forcing
++ *   them to AM would flip a typed "1030" bedtime to the morning.
+  * - 3 or 4 digits: the last two are minutes.
+  * Returns null when the text is not a valid time.
+  */
+@@ -30,19 +37,25 @@ export function parseManualTime(raw: string): ParsedTime | null {
+   body = body.replace(/[^0-9:]/g, '');
+   let hh = 0;
+   let mm = 0;
++  let hourText = '';
+   if (body.includes(':')) {
+     const [h, m] = body.split(':');
+     if (h === '' || m === '' || !/^\d{1,2}$/.test(h) || !/^\d{1,2}$/.test(m)) return null;
++    hourText = h;
+     hh = Number(h); mm = Number(m);
+   } else if (/^\d{3,4}$/.test(body)) {
+     // 3 or 4 digits: last two are minutes
+-    hh = Number(body.slice(0, body.length - 2));
++    hourText = body.slice(0, body.length - 2);
++    hh = Number(hourText);
+     mm = Number(body.slice(-2));
+   } else if (/^\d{1,2}$/.test(body)) {
++    hourText = body;
+     hh = Number(body); mm = 0;
+   } else {
+     return null;
+   }
++  // "06", "0630", "08:02": a two-digit hour starting with 0 is 24-hour notation.
++  const leadingZeroHour = hourText.length === 2 && hourText[0] === '0';
+   if (mm < 0 || mm > 59) return null;
+   if (hh < 0 || hh > 23) return null;
+   let isMilitary: boolean;
+@@ -64,6 +77,11 @@ export function parseManualTime(raw: string): ParsedTime | null {
+     isMilitary = true;
+     h12 = 0;
+     periodIdx = 0;
++  } else if (leadingZeroHour) {
++    // 01-09 typed with a leading zero: 24-hour morning hour.
++    isMilitary = true;
++    h12 = hh;
++    periodIdx = 0;
+   } else {
+     // 1–12 without suffix — assume the current AM/PM keeps; not military.
+     isMilitary = false;
