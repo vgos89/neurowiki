@@ -8,13 +8,50 @@ import {
 } from './lkwTime';
 
 describe('parseManualTime', () => {
-  it('parses 0630 as 6:30 keeping the current period', () => {
+  it('reads 0630 as 24-hour 6:30 in the morning (leading zero)', () => {
     const p = parseManualTime('0630')!;
     expect(p.hourIdx).toBe(5);
     expect(p.minute).toBe(30);
     expect(p.minuteIdx5).toBe(6);
-    expect(p.periodIdx).toBe(-1);
-    expect(p.isMilitary).toBe(false);
+    expect(p.periodIdx).toBe(0);
+    expect(p.isMilitary).toBe(true);
+  });
+
+  it('reads every leading-zero hour form as a 24-hour morning time', () => {
+    // V decision 2026-11-17: with PM selected, "0800" used to become 8:00 PM.
+    expect(parseManualTime('08:02')).toMatchObject({ hourIdx: 7, minute: 2, periodIdx: 0, isMilitary: true });
+    expect(parseManualTime('0800')).toMatchObject({ hourIdx: 7, minute: 0, periodIdx: 0, isMilitary: true });
+    expect(parseManualTime('0130')).toMatchObject({ hourIdx: 0, minute: 30, periodIdx: 0, isMilitary: true });
+    expect(parseManualTime('09')).toMatchObject({ hourIdx: 8, minute: 0, periodIdx: 0, isMilitary: true });
+    expect(parseManualTime('09:59')).toMatchObject({ hourIdx: 8, minute: 59, periodIdx: 0, isMilitary: true });
+  });
+
+  it('keeps the selected AM/PM when there is no leading zero and no suffix', () => {
+    // 630, 8:02 and 7 carry no 24-hour signal. 10, 11 and 12 cannot carry a
+    // leading zero, so 1030 must not be forced to the morning.
+    for (const raw of ['630', '8:02', '7', '1030', '10:30', '11:15', '1200', '12:15']) {
+      const p = parseManualTime(raw)!;
+      expect(p.periodIdx, raw).toBe(-1);
+      expect(p.isMilitary, raw).toBe(false);
+    }
+  });
+
+  it('pins the leading-zero boundaries (clinical review 2026-11-17)', () => {
+    // Lowest leading-zero hour.
+    expect(parseManualTime('01')).toMatchObject({ hourIdx: 0, minute: 0, periodIdx: 0, isMilitary: true });
+    expect(parseManualTime('0100')).toMatchObject({ hourIdx: 0, minute: 0, periodIdx: 0, isMilitary: true });
+    // Bare two-digit form named in the docstring.
+    expect(parseManualTime('06')).toMatchObject({ hourIdx: 5, minute: 0, periodIdx: 0, isMilitary: true });
+    // Hour zero stays midnight through its own branch, however it is written.
+    expect(parseManualTime('0:30')).toMatchObject({ hourIdx: 11, minute: 30, periodIdx: 0, isMilitary: true });
+    expect(parseManualTime('00:30')).toMatchObject({ hourIdx: 11, minute: 30, periodIdx: 0, isMilitary: true });
+    // Three digits: the hour text is the single digit "0", so this is 00:12.
+    expect(parseManualTime('012')).toMatchObject({ hourIdx: 11, minute: 12, periodIdx: 0, isMilitary: true });
+  });
+
+  it('lets an explicit AM/PM win over a leading zero', () => {
+    expect(parseManualTime('08:30 pm')).toMatchObject({ hourIdx: 7, minute: 30, periodIdx: 1, isMilitary: false });
+    expect(parseManualTime('0630am')).toMatchObject({ hourIdx: 5, minute: 30, periodIdx: 0, isMilitary: false });
   });
 
   it('parses "6:30 pm"', () => {

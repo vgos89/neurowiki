@@ -8,14 +8,21 @@ export interface ParsedTime {
   minuteIdx5: number;    // 0-11 (5-minute snap, matches the Specific Time drum)
   minute: number;        // 0-59 exact minute as typed
   periodIdx: number;     // 0 = AM, 1 = PM, -1 = keep the caller's current AM/PM
-  isMilitary: boolean;   // typed value was unambiguous 24-hour (0 or >= 13)
+  isMilitary: boolean;   // typed value was unambiguous 24-hour (0, >= 13, or a leading-zero hour)
 }
 
 /**
  * Accepts: "11:25 PM", "1:25 am", "1125", "23:25", "2325", "0630", "7".
  * - HH:MM with AM/PM suffix: 12-hour interpretation, AM/PM forced.
  * - HH >= 13 or HH = 0: military, AM/PM not applicable.
- * - 1-12 without suffix: periodIdx = -1 (caller keeps its current AM/PM).
+ * - Hour typed with a leading zero and no suffix ("0630", "08:02", "06"):
+ *   24-hour time, so 01-09 are morning hours (V decision 2026-11-17). Before
+ *   this, "0630" kept whichever of AM/PM was selected, so with the default
+ *   bedtime (PM) it silently became 6:30 PM.
+ * - 1-12 without a leading zero and without a suffix ("630", "8:02", "1030",
+ *   "12:15"): periodIdx = -1 (caller keeps its current AM/PM). 10, 11 and 12
+ *   cannot carry a leading zero, so they stay ambiguous on purpose: forcing
+ *   them to AM would flip a typed "1030" bedtime to the morning.
  * - 3 or 4 digits: the last two are minutes.
  * Returns null when the text is not a valid time.
  */
@@ -30,19 +37,25 @@ export function parseManualTime(raw: string): ParsedTime | null {
   body = body.replace(/[^0-9:]/g, '');
   let hh = 0;
   let mm = 0;
+  let hourText = '';
   if (body.includes(':')) {
     const [h, m] = body.split(':');
     if (h === '' || m === '' || !/^\d{1,2}$/.test(h) || !/^\d{1,2}$/.test(m)) return null;
+    hourText = h;
     hh = Number(h); mm = Number(m);
   } else if (/^\d{3,4}$/.test(body)) {
     // 3 or 4 digits: last two are minutes
-    hh = Number(body.slice(0, body.length - 2));
+    hourText = body.slice(0, body.length - 2);
+    hh = Number(hourText);
     mm = Number(body.slice(-2));
   } else if (/^\d{1,2}$/.test(body)) {
+    hourText = body;
     hh = Number(body); mm = 0;
   } else {
     return null;
   }
+  // "06", "0630", "08:02": a two-digit hour starting with 0 is 24-hour notation.
+  const leadingZeroHour = hourText.length === 2 && hourText[0] === '0';
   if (mm < 0 || mm > 59) return null;
   if (hh < 0 || hh > 23) return null;
   let isMilitary: boolean;
@@ -63,6 +76,11 @@ export function parseManualTime(raw: string): ParsedTime | null {
     // Military midnight
     isMilitary = true;
     h12 = 0;
+    periodIdx = 0;
+  } else if (leadingZeroHour) {
+    // 01-09 typed with a leading zero: 24-hour morning hour.
+    isMilitary = true;
+    h12 = hh;
     periodIdx = 0;
   } else {
     // 1–12 without suffix — assume the current AM/PM keeps; not military.
