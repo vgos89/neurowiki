@@ -1,6 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Moon, AlarmClock, Clock } from 'lucide-react';
 import { useModalFocusTrap } from '../../../hooks/useModalFocusTrap';
+import {
+  parseManualTime,
+  buildSleepDate,
+  formatSleepField,
+  sleepDayOffset,
+  type ParsedTime,
+} from './lkwTime';
 
 export interface LKWTimePickerProps {
   isOpen: boolean;
@@ -14,6 +21,12 @@ export interface LKWTimePickerProps {
   defaultMode?: 'specific' | 'sleep';
   /** Called when the clinician confirms sleep onset times. */
   onSleepOnset?: (bedtime: Date, wakeTime: Date) => void;
+  /**
+   * Previously confirmed sleep-onset times. When present, the picker opens on
+   * the Sleep Onset tab showing these values so they can be reviewed or edited
+   * instead of silently resetting to the defaults.
+   */
+  initialSleep?: { bedtime: Date; wakeTime: Date };
 }
 
 const MONTHS = [
@@ -287,65 +300,104 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
 };
 
 /* ─────────────────────────────────────────────
-   Sleep Onset — compact time row
-   Used for both bedtime and wake-up pickers
+   Sleep Onset — one column (bedtime or wake-up)
+   Five grid items per column: label, day chips, time field, AM/PM,
+   read-back. Rendered inside a `contents` group so the parent grid
+   aligns the rows across both columns.
 ───────────────────────────────────────────── */
-interface SleepTimeRowProps {
-  label: string;
-  icon: React.ReactNode;
-  dayOffset: number;
-  onDayOffset: (n: number) => void;
-  maxDayOffset: number;
-  hourIdx: number;
-  onHourIdx: (n: number) => void;
-  minuteIdx: number;
-  onMinuteIdx: (n: number) => void;
-  periodIdx: number;
-  onPeriodIdx: (n: number) => void;
-  /** True when the user typed a 24-hour value via the manual input. */
-  isMilitary: boolean;
-  /** Manual-input parsed-time handler — keeps drums + AM/PM in sync with typed text. */
-  onParsedTime: (p: ParsedTime) => void;
-  accentClass: string;
+interface SleepColState {
+  dayOffset: number;     // 0 = today, 1 = yesterday, 2 = two days ago
+  hour12: number;        // 1-12
+  minute: number;        // 0-59 exact
+  periodIdx: number;     // 0 = AM, 1 = PM
+  isMilitary: boolean;   // typed as 24-hour: show "24-hour time" instead of AM/PM
+  invalid: boolean;      // typed text does not parse
 }
 
-const SleepTimeRow: React.FC<SleepTimeRowProps> = ({
-  label, icon, dayOffset, onDayOffset, maxDayOffset,
-  hourIdx, onHourIdx, minuteIdx, onMinuteIdx, periodIdx, onPeriodIdx,
-  isMilitary, onParsedTime,
-  accentClass,
-}) => {
-  const dayLabels = ['Today', 'Yesterday', '2 days ago'];
+const DEFAULT_BED: SleepColState = {
+  dayOffset: 1, hour12: 11, minute: 0, periodIdx: 1, isMilitary: false, invalid: false,
+};
 
-  const hourItems  = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
-  const minuteItems = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'));
-  // AM/PM scroll column replaced with the horizontal AmPmToggle for parity
-  // with the specific-time picker. (V feedback 2026-05-20: Sleep Onset body
-  // "looks so AI" — three stacked scroll columns × 2 pickers was the main
-  // tell. Replacing the period column tightens the visual.)
-  // 2026-05-22: added ManualTimeInput above the drums so clinicians can
-  // free-text bedtime / wake time (parity with the Specific Time tab).
-  // Also bumped itemH 44→48 to clear iOS Safari's effective 44pt tap
-  // target when stacked drums are inside a scrollable modal body.
+/** Wake-up default: today, one hour before now, minutes rounded to the nearest 5. */
+function defaultWakeCol(n: Date): SleepColState {
+  const h24 = Math.max(0, n.getHours() - 1);
+  return {
+    dayOffset: 0,
+    hour12: h24 % 12 || 12,
+    // Clamp so :58 rounds to :55 instead of wrapping to :00.
+    minute: Math.min(55, Math.round(n.getMinutes() / 5) * 5),
+    periodIdx: h24 >= 12 ? 1 : 0,
+    isMilitary: false,
+    invalid: false,
+  };
+}
+
+/** Column state from a previously confirmed Date; out-of-range day falls back. */
+function colFromDate(d: Date, n: Date, maxOffset: number, fallbackOffset: number): SleepColState {
+  const off = sleepDayOffset(n, d);
+  const h24 = d.getHours();
+  return {
+    dayOffset: off >= 0 && off <= maxOffset ? off : fallbackOffset,
+    hour12: h24 % 12 || 12,
+    minute: d.getMinutes(),
+    periodIdx: h24 >= 12 ? 1 : 0,
+    isMilitary: false,
+    invalid: false,
+  };
+}
+
+function applyParsedToCol(c: SleepColState, p: ParsedTime): SleepColState {
+  return {
+    ...c,
+    hour12: p.hourIdx + 1,
+    minute: p.minute,
+    periodIdx: p.periodIdx !== -1 ? p.periodIdx : c.periodIdx,
+    isMilitary: p.isMilitary,
+    invalid: false,
+  };
+}
+
+interface SleepColumnProps {
+  idPrefix: string;
+  label: string;
+  icon: React.ReactNode;
+  accentClass: string;
+  dayLabels: string[];
+  col: SleepColState;
+  setCol: React.Dispatch<React.SetStateAction<SleepColState>>;
+  /** Resolved calendar date/time for the read-back line. */
+  date: Date;
+}
+
+const SleepColumn: React.FC<SleepColumnProps> = ({
+  idPrefix, label, icon, accentClass, dayLabels, col, setCol, date,
+}) => {
+  const labelId = `${idPrefix}-label`;
+  const readbackId = `${idPrefix}-readback`;
+  const formatted = formatSleepField(col.hour12, col.minute, col.periodIdx, col.isMilitary);
+  // The field shows the draft text only while focused; otherwise it mirrors
+  // state, so the visible text and the recorded value cannot disagree.
+  const [draft, setDraft] = useState<string | null>(null);
+  const focusRing = 'focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none';
 
   return (
-    <div className="py-3 px-4">
-      {/* Label row */}
-      <div className={`flex items-center gap-2 mb-2.5 ${accentClass}`}>
-        {icon}
-        <span className="text-sm font-semibold tracking-tight">{label}</span>
+    <div role="group" aria-labelledby={labelId} className="contents">
+      {/* 1. Label */}
+      <div className={`flex items-start gap-1.5 ${accentClass}`}>
+        <span className="mt-0.5 shrink-0">{icon}</span>
+        <span id={labelId} className="text-xs font-semibold tracking-tight leading-snug">{label}</span>
       </div>
 
-      {/* Day toggle pills */}
-      <div className="flex gap-1.5 mb-3 flex-wrap">
-        {dayLabels.slice(0, maxDayOffset + 1).map((d, i) => (
+      {/* 2. Day chips */}
+      <div className="flex flex-wrap content-start gap-1.5">
+        {dayLabels.map((d, i) => (
           <button
-            key={i}
+            key={d}
             type="button"
-            aria-pressed={dayOffset === i}
-            onClick={() => onDayOffset(i)}
-            className={`min-h-[44px] px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
-              dayOffset === i
+            aria-pressed={col.dayOffset === i}
+            onClick={() => setCol(c => ({ ...c, dayOffset: i }))}
+            className={`min-h-[44px] px-2.5 rounded-full text-xs font-semibold transition-colors ${focusRing} ${
+              col.dayOffset === i
                 ? 'bg-amber-500 text-white'
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
@@ -355,35 +407,91 @@ const SleepTimeRow: React.FC<SleepTimeRowProps> = ({
         ))}
       </div>
 
-      {/* Manual time entry (parity with Specific Time tab) — placed above
-          the drums so a clinician who knows the time can type it without
-          fighting iOS scroll momentum. */}
-      <div className="mb-3 -mx-4">
-        <ManualTimeInput
-          hourIdx={hourIdx}
-          minuteIdx={minuteIdx}
-          periodIdx={periodIdx}
-          isMilitary={isMilitary}
-          onParsed={onParsedTime}
-        />
-      </div>
+      {/* 3. Time field */}
+      <input
+        type="text"
+        inputMode="numeric"
+        autoComplete="off"
+        value={draft ?? formatted}
+        onFocus={(e) => {
+          const el = e.currentTarget;
+          setDraft(formatted);
+          // Select all so typing replaces the prefilled value. The deferred
+          // call covers iOS Safari, which drops a synchronous select().
+          el.select();
+          requestAnimationFrame(() => {
+            if (document.activeElement === el && el.value === formatted) el.select();
+          });
+        }}
+        onChange={(e) => {
+          const v = e.target.value;
+          setDraft(v);
+          const p = parseManualTime(v);
+          if (p) setCol(c => applyParsedToCol(c, p));
+          else setCol(c => (c.invalid ? c : { ...c, invalid: true }));
+        }}
+        onBlur={() => {
+          // A valid entry reformats from state. An unparseable one (including
+          // an emptied field) STAYS visible in red and keeps the column invalid,
+          // which blocks "Set Sleep Onset". Silently reverting to the previous
+          // value here could record a time the clinician never entered.
+          if (draft === null || parseManualTime(draft) !== null) setDraft(null);
+        }}
+        placeholder="e.g. 0630"
+        aria-label={`${label} time`}
+        aria-invalid={col.invalid}
+        aria-describedby={readbackId}
+        className={`w-full min-h-[44px] px-3 rounded-lg border text-base tabular-nums ${focusRing} ${
+          col.invalid ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-white'
+        }`}
+      />
 
-      {/* Drum rollers + AM/PM toggle */}
-      <div className="flex items-center justify-center gap-3">
-        <ScrollCol items={hourItems} selectedIdx={hourIdx} onSelect={onHourIdx} itemH={48} colW={56} ariaLabel={`${label} hour`} />
-        <span className="text-2xl font-light text-slate-300 -mt-1">:</span>
-        <ScrollCol items={minuteItems} selectedIdx={minuteIdx} onSelect={onMinuteIdx} itemH={48} colW={56} ariaLabel={`${label} minute`} />
-        <AmPmToggle
-          periodIdx={periodIdx}
-          onSelect={onPeriodIdx}
-          hidden={isMilitary}
-          size="sm"
-          ariaLabel={`${label} AM or PM`}
-        />
-      </div>
+      {/* 4. AM/PM toggle, or a same-height note for typed 24-hour time */}
+      {col.isMilitary ? (
+        <div className="min-h-[44px] flex items-center justify-center text-xs font-medium text-slate-500">
+          24-hour time
+        </div>
+      ) : (
+        <div role="radiogroup" aria-label={`${label} AM or PM`} className="flex gap-1.5 min-h-[44px]">
+          {(['AM', 'PM'] as const).map((p, i) => {
+            const active = col.periodIdx === i;
+            return (
+              <button
+                key={p}
+                type="button"
+                role="radio"
+                aria-checked={active}
+                onClick={() => {
+                  // AM/PM cannot repair an unparseable draft, so that draft
+                  // stays visible (and blocking) while the choice is recorded.
+                  if (!col.invalid) setDraft(null);
+                  setCol(c => ({ ...c, periodIdx: i, isMilitary: false }));
+                }}
+                className={`flex-1 min-h-[44px] rounded-lg text-sm font-bold transition-colors ${focusRing} ${
+                  active ? 'bg-amber-500 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                {p}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {/* 5. Read-back: the clinician's check against AM/PM and day errors */}
+      <p
+        id={readbackId}
+        aria-live="polite"
+        className={`text-xs leading-snug min-h-[16px] ${col.invalid ? 'text-red-600' : 'text-slate-500'}`}
+      >
+        {col.invalid
+          ? 'Try "0630", "6:30 PM" or "23:25".'
+          : `${date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}, ${formatSleepField(col.hour12, col.minute, col.periodIdx, false)}`}
+      </p>
     </div>
   );
 };
+
 
 /* ─────────────────────────────────────────────
    AM/PM toggle — replaces the AM/PM scroll column
@@ -453,69 +561,6 @@ const AmPmToggle: React.FC<AmPmToggleProps> = ({
    - 4 digits "HHMM" interpreted same way.
    Returns parsed { hourIdx, minuteIdx5, periodIdx, isMilitary } or null.
 ───────────────────────────────────────────── */
-interface ParsedTime {
-  hourIdx: number;       // 0–11 (matches drum)
-  minuteIdx5: number;    // 0–11 (5-minute snap, matches drum)
-  periodIdx: number;     // 0 = AM, 1 = PM
-  isMilitary: boolean;   // typed value > 12 → suppress AM/PM toggle
-}
-
-function parseManualTime(raw: string): ParsedTime | null {
-  const s = raw.trim().toLowerCase().replace(/\s+/g, '');
-  if (!s) return null;
-  // Detect explicit am/pm suffix.
-  let suffix: 'am' | 'pm' | null = null;
-  let body = s;
-  if (s.endsWith('am')) { suffix = 'am'; body = s.slice(0, -2); }
-  else if (s.endsWith('pm')) { suffix = 'pm'; body = s.slice(0, -2); }
-  body = body.replace(/[^0-9:]/g, '');
-  let hh = 0;
-  let mm = 0;
-  if (body.includes(':')) {
-    const [h, m] = body.split(':');
-    if (h === '' || m === '' || !/^\d{1,2}$/.test(h) || !/^\d{1,2}$/.test(m)) return null;
-    hh = Number(h); mm = Number(m);
-  } else if (/^\d{3,4}$/.test(body)) {
-    // 3 or 4 digits: last two are minutes
-    hh = Number(body.slice(0, body.length - 2));
-    mm = Number(body.slice(-2));
-  } else if (/^\d{1,2}$/.test(body)) {
-    hh = Number(body); mm = 0;
-  } else {
-    return null;
-  }
-  if (mm < 0 || mm > 59) return null;
-  if (hh < 0 || hh > 23) return null;
-  let isMilitary: boolean;
-  let h12: number;
-  let periodIdx: number;
-  if (suffix) {
-    // AM/PM explicit → 12-hour
-    if (hh < 1 || hh > 12) return null;
-    isMilitary = false;
-    h12 = hh % 12; // 12 → 0
-    periodIdx = suffix === 'pm' ? 1 : 0;
-  } else if (hh >= 13) {
-    // Military
-    isMilitary = true;
-    h12 = (hh - 12) % 12;
-    periodIdx = 1;
-  } else if (hh === 0) {
-    // Military midnight
-    isMilitary = true;
-    h12 = 0;
-    periodIdx = 0;
-  } else {
-    // 1–12 without suffix — assume the current AM/PM keeps; not military.
-    isMilitary = false;
-    h12 = hh % 12;
-    periodIdx = -1; // sentinel: caller keeps existing periodIdx
-  }
-  const hourIdx = (h12 + 11) % 12; // h12=1 → idx 0; h12=12/0 → idx 11
-  const minuteIdx5 = Math.round(mm / 5) % 12;
-  return { hourIdx, minuteIdx5, periodIdx, isMilitary };
-}
-
 interface ManualTimeInputProps {
   hourIdx: number;
   minuteIdx: number;
@@ -599,13 +644,18 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
   showSleepOnset = false,
   defaultMode = 'specific',
   onSleepOnset,
+  initialSleep,
 }) => {
   const nowRef = useRef(new Date());
 
   const getInitVals = (d: Date) => {
     const h24 = d.getHours();
     const h12 = h24 % 12 || 12;
-    const nearestMin5 = Math.round(d.getMinutes() / 5) % 12;
+    // Floor to the 5-minute wheel slot. The old Math.round(...) % 12 wrapped
+    // :58/:59 to :00 of the SAME hour (about 58 minutes early), and rounding up
+    // (9:53 -> 9:55) made "Just now" land in the future and trip the confirm
+    // guard. Flooring always errs toward an earlier LKW, by at most 4 minutes.
+    const nearestMin5 = Math.floor(d.getMinutes() / 5);
     return {
       month: d.getMonth(),
       year: d.getFullYear(),
@@ -657,53 +707,9 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
   useModalFocusTrap(isOpen, onClose, dialogRef);
 
   /* ── Sleep onset state ── */
-  // Bedtime: defaults to yesterday 11 PM
-  const [bdDayOffset, setBdDayOffset] = useState(1);
-  const [bdHourIdx, setBdHourIdx] = useState(10);   // index 10 = 11 (1-indexed)
-  const [bdMinIdx, setBdMinIdx] = useState(0);
-  const [bdPeriodIdx, setBdPeriodIdx] = useState(1); // PM
-  const [bdIsMilitary, setBdIsMilitary] = useState(false);
-  // Wake-up: defaults to today, 1h before now (rounded to nearest 5min)
-  const getDefaultWakeIdx = () => {
-    const n = nowRef.current;
-    const h24 = Math.max(0, n.getHours() - 1);
-    const h12 = h24 % 12 || 12;
-    return {
-      hourIdx: h12 - 1,
-      minuteIdx: Math.round(n.getMinutes() / 5) % 12,
-      periodIdx: h24 >= 12 ? 1 : 0,
-    };
-  };
-  const wakeDefaults = getDefaultWakeIdx();
-  const [wkDayOffset, setWkDayOffset] = useState(0);
-  const [wkHourIdx, setWkHourIdx] = useState(wakeDefaults.hourIdx);
-  const [wkMinIdx, setWkMinIdx] = useState(wakeDefaults.minuteIdx);
-  const [wkPeriodIdx, setWkPeriodIdx] = useState(wakeDefaults.periodIdx);
-  const [wkIsMilitary, setWkIsMilitary] = useState(false);
-
-  // Parsed-time handlers for the Sleep Onset ManualTimeInputs. Mirror the
-  // Specific Time tab's handleParsedTime — keep drums + AM/PM in sync with
-  // the typed value.
-  const handleBedtimeParsed = (p: ParsedTime) => {
-    setBdHourIdx(p.hourIdx);
-    setBdMinIdx(p.minuteIdx5);
-    if (p.periodIdx !== -1) setBdPeriodIdx(p.periodIdx);
-    setBdIsMilitary(p.isMilitary);
-  };
-  const handleWakeParsed = (p: ParsedTime) => {
-    setWkHourIdx(p.hourIdx);
-    setWkMinIdx(p.minuteIdx5);
-    if (p.periodIdx !== -1) setWkPeriodIdx(p.periodIdx);
-    setWkIsMilitary(p.isMilitary);
-  };
-  // Wheel changes always cancel military mode (wheels are 12-hour) —
-  // mirrors the Specific Time tab. Without this, typing "23:25" then
-  // nudging the hour drum leaves the AM/PM toggle hidden while the
-  // drum shows a 12-hour value, which is incoherent.
-  const setBdHourFromWheel = (i: number) => { setBdHourIdx(i); setBdIsMilitary(false); };
-  const setBdMinFromWheel = (i: number) => { setBdMinIdx(i); setBdIsMilitary(false); };
-  const setWkHourFromWheel = (i: number) => { setWkHourIdx(i); setWkIsMilitary(false); };
-  const setWkMinFromWheel = (i: number) => { setWkMinIdx(i); setWkIsMilitary(false); };
+  // Bedtime defaults to yesterday 11 PM; wake-up to today, 1h before now.
+  const [bd, setBd] = useState<SleepColState>(DEFAULT_BED);
+  const [wk, setWk] = useState<SleepColState>(() => defaultWakeCol(nowRef.current));
   const [sleepError, setSleepError] = useState<string | null>(null);
   // Future-time guard for specific-time confirm; mirrors sleepError shape.
   const [specificError, setSpecificError] = useState<string | null>(null);
@@ -718,14 +724,15 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
     setHourIdx(v.hourIdx); setMinuteIdx(v.minuteIdx); setPeriodIdx(v.periodIdx);
     setActivePreset(null); setDateExpanded(false);
     setSpecificError(null); setSleepError(null);
-    // Reset mode to defaultMode on open
-    setMode(defaultMode);
-    // Reset sleep onset state
-    setBdDayOffset(1); setBdHourIdx(10); setBdMinIdx(0); setBdPeriodIdx(1);
-    setBdIsMilitary(false);
-    const wd = getDefaultWakeIdx();
-    setWkDayOffset(0); setWkHourIdx(wd.hourIdx); setWkMinIdx(wd.minuteIdx); setWkPeriodIdx(wd.periodIdx);
-    setWkIsMilitary(false);
+    // Reset mode on open; previously confirmed sleep times reopen on that tab.
+    setMode(initialSleep ? 'sleep' : defaultMode);
+    // Reset sleep onset state (or restore the previously confirmed times)
+    setBd(initialSleep
+      ? colFromDate(initialSleep.bedtime, nowRef.current, 2, DEFAULT_BED.dayOffset)
+      : DEFAULT_BED);
+    setWk(initialSleep
+      ? colFromDate(initialSleep.wakeTime, nowRef.current, 1, 0)
+      : defaultWakeCol(nowRef.current));
     setSleepError(null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
@@ -759,8 +766,7 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
   const hourItems = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
   const minuteItems = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'));
   // periodItems removed — AM/PM now rendered via <AmPmToggle> (V feedback
-  // 2026-05-20). Sleep Onset's SleepTimeRow still uses the scroll-column
-  // AM/PM internally; that secondary view is unchanged in this commit.
+  // 2026-05-20).
 
   // 9 presets covering the tPA-window decision zone (0-4.5 h) with denser
   // coverage. Previous list jumped from "Now" to "3 h ago" — left a clinician
@@ -825,32 +831,32 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
     onConfirm(d); onClose();
   };
 
-  /** Build a Date from day-offset + drum values. dayOffset=0 → today, 1 → yesterday … */
-  const buildDate = (dayOffset: number, hIdx: number, mIdx: number, pIdx: number): Date => {
-    const base = new Date(now);
-    base.setDate(base.getDate() - dayOffset);
-    let h24 = hIdx + 1;
-    if (pIdx === 1 && h24 !== 12) h24 += 12;
-    if (pIdx === 0 && h24 === 12) h24 = 0;
-    base.setHours(h24, mIdx * 5, 0, 0);
-    return base;
-  };
-
   const handleSleepConfirm = () => {
     setSleepError(null);
-    const bedtime  = buildDate(bdDayOffset, bdHourIdx, bdMinIdx, bdPeriodIdx);
-    const wakeTime = buildDate(wkDayOffset, wkHourIdx, wkMinIdx, wkPeriodIdx);
+    if (bd.invalid || wk.invalid) {
+      setSleepError('Enter a valid time in both fields.');
+      return;
+    }
+    const bedtime  = buildSleepDate(now, bd.dayOffset, bd.hour12, bd.minute, bd.periodIdx);
+    const wakeTime = buildSleepDate(now, wk.dayOffset, wk.hour12, wk.minute, wk.periodIdx);
     if (wakeTime <= bedtime) {
       setSleepError('Wake-up time must be after bedtime; check day or time settings.');
       return;
     }
-    if (wakeTime > now) {
+    // Fresh clock (not the open-time `now`), matching the Specific Time tab:
+    // a picker left open must not reject a legitimately recent wake time.
+    if (wakeTime > new Date()) {
       setSleepError('Wake-up time cannot be in the future.');
       return;
     }
     onSleepOnset?.(bedtime, wakeTime);
     onClose();
   };
+
+  // Resolved dates drive the per-column read-back and the "Asleep" summary.
+  const bedDate = buildSleepDate(now, bd.dayOffset, bd.hour12, bd.minute, bd.periodIdx);
+  const wakeDate = buildSleepDate(now, wk.dayOffset, wk.hour12, wk.minute, wk.periodIdx);
+
 
   const selDateObj = new Date(selYear, selMonth, selDay);
   const dateLabelShort = selDateObj.toLocaleDateString('en-US', {
@@ -910,57 +916,59 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
   ) : null;
 
   /* ── Sleep Onset body ── */
+  const sleepAsleepMin = (!bd.invalid && !wk.invalid && wakeDate > bedDate)
+    ? Math.round((wakeDate.getTime() - bedDate.getTime()) / 60_000)
+    : null;
   const sleepBody = (
     <div className="flex-1 overflow-y-auto min-h-0">
       {/* Method note — terse, no bold-callout. Clinicians who use the
           WAKE-UP / THAWS pathway already know the framework; this line
           is a quick refresher, not a tutorial. */}
-      <div className="px-4 pt-3 pb-2">
+      <div className="px-4 pt-2.5 pb-2">
         <p className="text-[11px] text-amber-700 leading-snug">
           WAKE-UP / THAWS · Treatment window runs 4.5 h from awakening.
         </p>
       </div>
 
-      {/* Bedtime picker */}
-      <SleepTimeRow
-        label="Last asleep without symptoms"
-        icon={<Moon size={14} className="text-slate-500" />}
-        dayOffset={bdDayOffset}
-        onDayOffset={setBdDayOffset}
-        maxDayOffset={2}
-        hourIdx={bdHourIdx}
-        onHourIdx={setBdHourFromWheel}
-        minuteIdx={bdMinIdx}
-        onMinuteIdx={setBdMinFromWheel}
-        periodIdx={bdPeriodIdx}
-        onPeriodIdx={setBdPeriodIdx}
-        isMilitary={bdIsMilitary}
-        onParsedTime={handleBedtimeParsed}
-        accentClass="text-slate-700"
-      />
+      {/* Two columns on every viewport. One grid in column flow keeps the
+          five rows (label, day chips, time field, AM/PM, read-back) aligned
+          across columns even when the left day chips wrap. DOM order is the
+          whole left column, then the whole right column (Tab order). */}
+      <div className="relative px-4">
+        <div className="grid grid-flow-col grid-rows-[repeat(5,auto)] grid-cols-2 gap-x-3 gap-y-1.5">
+          <SleepColumn
+            idPrefix="lkw-sleep-bed"
+            label="Last asleep without symptoms"
+            icon={<Moon size={14} className="text-slate-500" aria-hidden="true" />}
+            accentClass="text-slate-700"
+            dayLabels={['Today', 'Yesterday', '2 days ago']}
+            col={bd}
+            setCol={setBd}
+            date={bedDate}
+          />
+          <SleepColumn
+            idPrefix="lkw-sleep-wake"
+            label="Woke with symptoms"
+            icon={<AlarmClock size={14} className="text-amber-600" aria-hidden="true" />}
+            accentClass="text-amber-700"
+            dayLabels={['Today', 'Yesterday']}
+            col={wk}
+            setCol={setWk}
+            date={wakeDate}
+          />
+        </div>
+        {/* Hairline divider centred in the column gap */}
+        <div aria-hidden="true" className="absolute inset-y-0 left-1/2 w-px bg-slate-100" />
+      </div>
 
-      {/* Hairline divider */}
-      <div className="border-t border-slate-100 mx-4" />
-
-      {/* Wake-up picker */}
-      <SleepTimeRow
-        label="Woke with symptoms"
-        icon={<AlarmClock size={14} className="text-amber-600" />}
-        dayOffset={wkDayOffset}
-        onDayOffset={setWkDayOffset}
-        maxDayOffset={1}
-        hourIdx={wkHourIdx}
-        onHourIdx={setWkHourFromWheel}
-        minuteIdx={wkMinIdx}
-        onMinuteIdx={setWkMinFromWheel}
-        periodIdx={wkPeriodIdx}
-        onPeriodIdx={setWkPeriodIdx}
-        isMilitary={wkIsMilitary}
-        onParsedTime={handleWakeParsed}
-        accentClass="text-amber-700"
-      />
+      <p className="px-4 pt-2 pb-2 min-h-[28px] text-center text-xs font-medium text-slate-600">
+        {sleepAsleepMin !== null
+          ? `Asleep ${Math.floor(sleepAsleepMin / 60)} h ${sleepAsleepMin % 60} min`
+          : ''}
+      </p>
     </div>
   );
+
 
   return (
     <div

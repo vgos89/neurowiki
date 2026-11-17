@@ -73,6 +73,17 @@ import {
 
 type NIHSSSeverity = 'none' | 'minor' | 'moderate' | 'moderate-severe' | 'severe';
 
+/** Persisted wake-up times (ms) to Dates; dropped unless both are finite numbers. */
+function toWakeUpDates(w?: { asleepAt: number; wokeAt: number }): { asleepAt: Date; wokeAt: Date } | undefined {
+  return w && Number.isFinite(w.asleepAt) && Number.isFinite(w.wokeAt)
+    ? { asleepAt: new Date(w.asleepAt), wokeAt: new Date(w.wokeAt) }
+    : undefined;
+}
+
+function toWakeUpMs(w?: { asleepAt: Date; wokeAt: Date }): { asleepAt: number; wokeAt: number } | undefined {
+  return w ? { asleepAt: w.asleepAt.getTime(), wokeAt: w.wokeAt.getTime() } : undefined;
+}
+
 function getNihssSeverity(total: number): NIHSSSeverity {
   if (total === 0)       return 'none';
   if (total <= 4)        return 'minor';
@@ -301,6 +312,7 @@ const NihssCalculator: React.FC = () => {
               : pc.lkw === null
               ? null
               : undefined,
+            wakeUp: toWakeUpDates(pc.wakeUp),
             systolic: pc.systolic ?? '',
             diastolic: pc.diastolic ?? '',
             glucose: pc.glucose ?? '',
@@ -427,6 +439,7 @@ const NihssCalculator: React.FC = () => {
     const pc = d.patientContext;
     setPatientContext({
       lkw: pc.lkw === undefined ? undefined : pc.lkw === null ? null : new Date(pc.lkw),
+      wakeUp: toWakeUpDates(pc.wakeUp),
       systolic: pc.systolic ?? '',
       diastolic: pc.diastolic ?? '',
       glucose: pc.glucose ?? '',
@@ -478,6 +491,7 @@ const NihssCalculator: React.FC = () => {
         patientContext: {
           lkw:
             patientContext.lkw === undefined ? undefined : patientContext.lkw === null ? null : patientContext.lkw.getTime(),
+          wakeUp: toWakeUpMs(patientContext.wakeUp),
           systolic: patientContext.systolic,
           diastolic: patientContext.diastolic,
           glucose: patientContext.glucose,
@@ -750,7 +764,9 @@ const NihssCalculator: React.FC = () => {
               : ''
           }`
         : `NIH evaluation time: Not entered`,
-      patientContext.lkw === null
+      patientContext.lkw === null && patientContext.wakeUp
+        ? `LKW: Wake-up onset. Last asleep without symptoms ${formatClinicalDateTime(patientContext.wakeUp.asleepAt)}; woke with symptoms ${formatClinicalDateTime(patientContext.wakeUp.wokeAt)}.`
+        : patientContext.lkw === null
         ? `LKW: Unknown / wake-up`
         : patientContext.lkw instanceof Date
         ? `LKW: ${formatClinicalDateTime(patientContext.lkw)}`
@@ -1100,6 +1116,7 @@ const NihssCalculator: React.FC = () => {
                 lkw: patientContext.lkw instanceof Date
                   ? patientContext.lkw.getTime()
                   : patientContext.lkw,
+                wakeUp: toWakeUpMs(patientContext.wakeUp),
                 systolic: patientContext.systolic || undefined,
                 diastolic: patientContext.diastolic || undefined,
                 glucose: patientContext.glucose || undefined,

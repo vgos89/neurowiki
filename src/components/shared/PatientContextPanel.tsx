@@ -64,6 +64,10 @@ export type PrestrokeMrsGrade = 0 | 1 | 2 | 3 | 4 | 5;
 export interface PatientContextValues {
   /** Last known well — undefined if not set, null if explicitly Unknown / wake-up. */
   lkw: Date | null | undefined;
+  /** Wake-up stroke documentation: when the patient was last asleep without
+   *  symptoms and when they woke with symptoms. Present only when the clinician
+   *  confirmed the Sleep Onset tab; lkw stays null (no onset clock) by design. */
+  wakeUp?: { asleepAt: Date; wokeAt: Date };
   /** Systolic BP — string so the input is fully controlled and can be cleared. */
   systolic: string;
   diastolic: string;
@@ -395,7 +399,9 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
     values.lkw === undefined
       ? 'Add'
       : values.lkw === null
-      ? 'Unknown / wake-up'
+      ? values.wakeUp
+        ? `Wake-up: asleep ${formatClinicalDateShort(values.wakeUp.asleepAt)}, woke ${formatClinicalDateShort(values.wakeUp.wokeAt)}`
+        : 'Unknown / wake-up'
       : formatClinicalDateShort(values.lkw);
 
   // Thrombolysis-timing aid (opt-in via showThrombolysisTiming, currently
@@ -500,8 +506,8 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
             aria-label={`Set last known well time, currently ${lkwDisplay}`}
           >
             <span className="text-xs font-medium text-slate-600 flex-shrink-0">Last known well</span>
-            <span className="flex items-center gap-1">
-              <span className={`text-sm ${values.lkw === undefined ? 'text-slate-400' : 'text-slate-900'}`}>{lkwDisplay}</span>
+            <span className="flex items-center gap-1 min-w-0">
+              <span className={`text-sm text-right break-words min-w-0 ${values.lkw === undefined ? 'text-slate-400' : 'text-slate-900'}`}>{lkwDisplay}</span>
               <ChevronDown className="w-3.5 h-3.5 text-slate-400" aria-hidden />
             </span>
           </button>
@@ -1028,14 +1034,19 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
         isOpen={lkwModalOpen}
         onClose={() => setLkwModalOpen(false)}
         onConfirm={(date) => {
-          onChange({ ...values, lkw: date });
+          onChange({ ...values, lkw: date, wakeUp: undefined });
           setLkwModalOpen(false);
         }}
         onUnknown={() => {
-          onChange({ ...values, lkw: null });
+          onChange({ ...values, lkw: null, wakeUp: undefined });
+          setLkwModalOpen(false);
+        }}
+        onSleepOnset={(bedtime, wakeTime) => {
+          onChange({ ...values, lkw: null, wakeUp: { asleepAt: bedtime, wokeAt: wakeTime } });
           setLkwModalOpen(false);
         }}
         initialDate={values.lkw instanceof Date ? values.lkw : undefined}
+        initialSleep={values.wakeUp ? { bedtime: values.wakeUp.asleepAt, wakeTime: values.wakeUp.wokeAt } : undefined}
         showSleepOnset={true}
       />
 

@@ -132,6 +132,15 @@ describe('formatSavedCaseAsEmrText — entered values still render', () => {
   it('reports a wake-up onset as unknown rather than not entered', () => {
     const wake = formatSavedCaseAsEmrText(makeCase({ lkw: null }));
     expect(wake).toContain('LKW: Unknown / wake-up');
+    expect(wake).not.toContain('Wake-up onset');
+  });
+
+  it('prints both wake-up times when documented', () => {
+    const wake = formatSavedCaseAsEmrText(
+      makeCase({ lkw: null, wakeUp: { asleepAt: Date.UTC(2026, 0, 5, 23, 0), wokeAt: Date.UTC(2026, 0, 6, 6, 30) } }),
+    );
+    expect(wake).toMatch(/LKW: Wake-up onset\. Last asleep without symptoms .+; woke with symptoms .+\./);
+    expect(wake).not.toContain('Unknown / wake-up');
   });
 });
 

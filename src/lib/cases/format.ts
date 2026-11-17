@@ -147,7 +147,9 @@ export function formatSavedCaseAsEmrText(c: SavedCase): string {
   const pc = data.patientContext;
   if (pc) {
     contextLines.push(
-      pc.lkw === null
+      pc.lkw === null && pc.wakeUp
+        ? `LKW: Wake-up onset. Last asleep without symptoms ${fmtDateTime(pc.wakeUp.asleepAt)}; woke with symptoms ${fmtDateTime(pc.wakeUp.wokeAt)}.`
+        : pc.lkw === null
         ? `LKW: Unknown / wake-up`
         : typeof pc.lkw === 'number'
         ? `LKW: ${fmtDateTime(pc.lkw)}`

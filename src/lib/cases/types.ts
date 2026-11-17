@@ -74,6 +74,8 @@ export interface SavedCaseData {
   patientContext?: {
     /** Unix ms; null = "Unknown / wake-up". */
     lkw?: number | null;
+    /** Wake-up stroke times (Unix ms). Only with lkw === null; documentation, not an onset clock. */
+    wakeUp?: { asleepAt: number; wokeAt: number };
     systolic?: string;
     diastolic?: string;
     glucose?: string;

@@ -107,6 +107,7 @@ export interface NihssDraft {
   /** Dates flattened to epoch ms; Sets flattened to arrays. */
   patientContext: {
     lkw?: Millis | null;
+    wakeUp?: { asleepAt: Millis; wokeAt: Millis };
     systolic: string;
     diastolic: string;
     glucose: string;
@@ -145,6 +146,10 @@ export function saveNihssDraft(draft: Omit<NihssDraft, 'v' | 'savedAt'>): void {
       performedAt: draft.performedAt,
       patientContext: {
         lkw: pc.lkw,
+        wakeUp:
+          pc.wakeUp && Number.isFinite(pc.wakeUp.asleepAt) && Number.isFinite(pc.wakeUp.wokeAt)
+            ? { asleepAt: pc.wakeUp.asleepAt, wokeAt: pc.wakeUp.wokeAt }
+            : undefined,
         systolic: pc.systolic,
         diastolic: pc.diastolic,
         glucose: pc.glucose,

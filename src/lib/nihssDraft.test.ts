@@ -70,6 +70,28 @@ describe('nihssDraft round-trip', () => {
   });
 });
 
+describe('nihssDraft wake-up times', () => {
+  const pcWith = (wakeUp: unknown) =>
+    ({ ...base.patientContext, lkw: null, wakeUp }) as unknown as NihssDraft['patientContext'];
+
+  it('round-trips wakeUp', () => {
+    saveNihssDraft({ ...base, patientContext: pcWith({ asleepAt: 1000, wokeAt: 2000 }) });
+    expect(loadNihssDraft()?.patientContext.wakeUp).toEqual({ asleepAt: 1000, wokeAt: 2000 });
+  });
+
+  it('persists only the two time fields', () => {
+    saveNihssDraft({ ...base, patientContext: pcWith({ asleepAt: 1000, wokeAt: 2000, note: 'x' }) });
+    expect(loadNihssDraft()?.patientContext.wakeUp).toEqual({ asleepAt: 1000, wokeAt: 2000 });
+  });
+
+  it('drops wakeUp when a value is not a finite number', () => {
+    saveNihssDraft({ ...base, patientContext: pcWith({ asleepAt: 1000, wokeAt: NaN }) });
+    expect(loadNihssDraft()?.patientContext.wakeUp).toBeUndefined();
+    saveNihssDraft({ ...base, patientContext: pcWith({ asleepAt: 'a', wokeAt: 2000 }) });
+    expect(loadNihssDraft()?.patientContext.wakeUp).toBeUndefined();
+  });
+});
+
 describe('draftHasContent', () => {
   const full = (over: Partial<NihssDraft>): NihssDraft =>
     ({ ...base, v: 1, savedAt: 0, ...over }) as NihssDraft;
