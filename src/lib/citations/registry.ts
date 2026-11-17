@@ -811,6 +811,37 @@ export const CITATION_REGISTRY: CitationRegistry = {
   //   (docs/reviews/clinical-PR-basilar-evt-4-7-3-guideline-mirror.md).
   // review_window_months 3 per §13.7 (thrombectomy indications are a rapidly evolving area);
   // same rationale as aha-asa-2026-4.6.3.
+  // Refreshed 2026-11-16 per §13.6 (window lapsed; no text or grade change to this record).
+  // 1 Source re-read off the held PDF itself, not the packet or the in-repo mirror: page e56,
+  //   "Recommendations for Posterior Circulation Stroke" table, Rec 1, rendered as an image to
+  //   read the cells. COR cell 1, LOE cell A. quoted_text body is character-identical to the page.
+  // 2 Version: the held PDF is the FIRST PROOF (Stroke. 2026;57:e00-e00). Final citation is
+  //   Stroke 2026;57(8):e316-e436, DOI 10.1161/STR.0000000000000513. A published correction
+  //   exists (Stroke 2026;57(8):e461-e467, DOI 10.1161/STR.0000000000000530, PMID 42507797,
+  //   online 2026-07-27). The 2026-07-30 review predated awareness of it. It was read in full
+  //   (34 items) on 2026-11-16 and does not touch §4.7.3, either recommendation, or either
+  //   COR/LOE cell (summary: docs/evidence-packets/2026-11-16-ais-2026-guideline-correction-summary.md).
+  //   PROVENANCE OF THAT READING: by the orchestrator from the publisher's free-access page; medical-scientist
+  //   could not open it (HTTP 403) and clinical-reviewer cannot fetch, so this finding is
+  //   single-reader and not yet independently checked by a clinical agent. Re-check against the
+  //   final corrected PDF once held; a second refresh may not rest on this reading alone.
+  // 3 All four mapped dependents re-read at their tagged surfaces against both strata (grade per
+  //   NIHSS stratum, basilar occlusion, baseline mRS 0-1, PC-ASPECTS ≥6, single 24 h window from
+  //   symptom onset, "is recommended" vs "not well established"): consistent at
+  //   strokeClinicalPearls.ts posterior-circulation-evt-quick-claim, baoche-posterior-evt and
+  //   attention-posterior-evt; trialData.ts BAOCHE bedsidePearl (baoche-posterior-evt); and
+  //   basilar-evt-guideline-summary, which renders this quoted_text directly. Trial enrolment
+  //   windows (ATTENTION ≤12 h, BAOCHE 6-24 h) are labelled as such, not as guideline windows.
+  //   The BAOCHE record's former "is reasonable … COR 1" pairing is gone; it now reads "is
+  //   recommended … COR 1 / LOE A". Untagged surfaces remain outside this attestation.
+  // 4 No wording drift in quoted_text.
+  // 5 Newer evidence searched (AIS 2026 correction/erratum; basilar EVT RCTs 2026; ESO/AHA
+  //   posterior-circulation focused updates; ATTENTION LATE). ATTENTION LATE (JAMA 2026) gave
+  //   EVT to both arms and tested pre-EVT tenecteplase; it does not bear on the EVT indication.
+  //   No 2026 ESO revision (ESO/ESMINT 2024 covers technique). No AHA focused update. Nothing
+  //   changes this recommendation or its grade.
+  // 6 Dual sign-off: medical-scientist authored, clinical-reviewer gate in
+  //   docs/reviews/clinical-PR-4-7-3-citation-refresh-2026-11-16.md.
   'aha-asa-2026-4.7.3': {
     id: 'aha-asa-2026-4.7.3',
     source: 'guideline',
@@ -818,13 +849,35 @@ export const CITATION_REGISTRY: CitationRegistry = {
     year: 2026,
     section: '§4.7.3',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
-    last_reviewed: '2026-07-30',
+    last_reviewed: '2026-11-16',
     review_window_months: 3,
     quoted_text: 'In patients with AIS, with basilar artery occlusion, a baseline mRS score of 0 to 1, NIHSS score ≥10 at presentation, and PC-ASPECTS ≥6 (mild ischemic damage), EVT within 24 hours from onset of symptoms is recommended to achieve better functional outcome and reduce mortality. (COR 1, LOE A.)',
   },
   // Second stratum of the same section, registered separately rather than concatenated: the
   // GuidelineSummaryCard regex reads only the LAST trailing parenthetical, so a concatenation
   // would badge the whole card COR 2b and bury the Class I stratum.
+  // Refreshed 2026-11-16 per §13.6 (window lapsed).
+  // 1 Source re-read off the held PDF itself: page e57, "Recommendations for Posterior
+  //   Circulation Stroke (Continued)" table, Rec 2, rendered as an image to read the cells.
+  //   COR cell 2b, LOE cell B-R.
+  // 2 Version: same as aha-asa-2026-4.7.3 above. The held PDF is the first proof (e00-e00);
+  //   final citation Stroke 2026;57(8):e316-e436. The published correction (DOI
+  //   10.1161/STR.0000000000000530, PMID 42507797, online 2026-07-27), which the 2026-07-30
+  //   review predated, was read in full on 2026-11-16 and does not touch §4.7.3.
+  //   PROVENANCE OF THAT READING: by the orchestrator from the publisher's free-access page; medical-scientist
+  //   could not open it (HTTP 403) and clinical-reviewer cannot fetch, so this finding is
+  //   single-reader and not yet independently checked by a clinical agent. Re-check against the
+  //   final corrected PDF once held; a second refresh may not rest on this reading alone.
+  // 3 Dependents baoche-posterior-evt (strokeClinicalPearls.ts and the trialData.ts BAOCHE
+  //   bedsidePearl) and basilar-evt-guideline-summary state NIHSS 6-9 as COR 2b / LOE B-R,
+  //   "not well established", with the same basilar / mRS 0-1 / PC-ASPECTS ≥6 gates: consistent.
+  // 4 Wording: removed one stray comma after "(mild ischemic damage)" that the page does not
+  //   carry. quoted_text body is now character-identical to page e57. No meaning change.
+  // 5 Newer evidence: same searches as above; nothing on EVT for basilar occlusion with NIHSS
+  //   6-9 since 2026-07-30. ATTENTION LATE (JAMA 2026) enrolled NIHSS ≥10 and tested pre-EVT
+  //   tenecteplase, not the EVT indication.
+  // 6 Dual sign-off: medical-scientist authored, clinical-reviewer gate in
+  //   docs/reviews/clinical-PR-4-7-3-citation-refresh-2026-11-16.md.
   'aha-asa-2026-4.7.3-nihss-6-9': {
     id: 'aha-asa-2026-4.7.3-nihss-6-9',
     source: 'guideline',
@@ -832,9 +885,9 @@ export const CITATION_REGISTRY: CitationRegistry = {
     year: 2026,
     section: '§4.7.3',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
-    last_reviewed: '2026-07-30',
+    last_reviewed: '2026-11-16',
     review_window_months: 3,
-    quoted_text: 'In patients with AIS, with basilar artery occlusion, a baseline mRS score of 0 to 1, NIHSS score 6 to 9 at presentation, and PC-ASPECTS ≥6 (mild ischemic damage), the effectiveness of EVT within 24 hours to improve functional outcomes and reduce mortality is not well established. (COR 2b, LOE B-R.)',
+    quoted_text: 'In patients with AIS, with basilar artery occlusion, a baseline mRS score of 0 to 1, NIHSS score 6 to 9 at presentation, and PC-ASPECTS ≥6 (mild ischemic damage) the effectiveness of EVT within 24 hours to improve functional outcomes and reduce mortality is not well established. (COR 2b, LOE B-R.)',
   },
 
   // ─── AHA/ASA 2026 §4.9 — early oral anticoagulation after AF-related stroke ───
