@@ -72,7 +72,7 @@ export interface SavedCaseData {
 
   /** Patient context (shared between NIHSS and Stroke Code per Q2 in 2026-05-19 design discussion). */
   patientContext?: {
-    /** Unix ms; null = "Unknown / wake-up". */
+    /** Unix ms; null = "Unknown" (unable to determine), or a wake-up entry when `wakeUp` is set. */
     lkw?: number | null;
     /** Wake-up stroke times (Unix ms). Only with lkw === null; documentation, not an onset clock. */
     wakeUp?: { asleepAt: number; wokeAt: number };

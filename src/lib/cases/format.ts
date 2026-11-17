@@ -150,7 +150,7 @@ export function formatSavedCaseAsEmrText(c: SavedCase): string {
       pc.lkw === null && pc.wakeUp
         ? `LKW: Wake-up onset. Last asleep without symptoms ${fmtDateTime(pc.wakeUp.asleepAt)}; woke with symptoms ${fmtDateTime(pc.wakeUp.wokeAt)}.`
         : pc.lkw === null
-        ? `LKW: Unknown / wake-up`
+        ? `LKW: Unknown`
         : typeof pc.lkw === 'number'
         ? `LKW: ${fmtDateTime(pc.lkw)}`
         : `LKW: Not entered`

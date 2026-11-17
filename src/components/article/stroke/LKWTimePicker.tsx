@@ -306,7 +306,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
    aligns the rows across both columns.
 ───────────────────────────────────────────── */
 interface SleepColState {
-  dayOffset: number;     // 0 = today, 1 = yesterday, 2 = two days ago
+  dayOffset: number;     // 0 = today, 1 = yesterday (the "2 days ago" chip was removed per V, 2026-11-16)
   hour12: number;        // 1-12
   minute: number;        // 0-59 exact
   periodIdx: number;     // 0 = AM, 1 = PM
@@ -728,7 +728,7 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
     setMode(initialSleep ? 'sleep' : defaultMode);
     // Reset sleep onset state (or restore the previously confirmed times)
     setBd(initialSleep
-      ? colFromDate(initialSleep.bedtime, nowRef.current, 2, DEFAULT_BED.dayOffset)
+      ? colFromDate(initialSleep.bedtime, nowRef.current, 1, DEFAULT_BED.dayOffset)
       : DEFAULT_BED);
     setWk(initialSleep
       ? colFromDate(initialSleep.wakeTime, nowRef.current, 1, 0)
@@ -941,7 +941,7 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
             label="Last asleep without symptoms"
             icon={<Moon size={14} className="text-slate-500" aria-hidden="true" />}
             accentClass="text-slate-700"
-            dayLabels={['Today', 'Yesterday', '2 days ago']}
+            dayLabels={['Today', 'Yesterday']}
             col={bd}
             setCol={setBd}
             date={bedDate}

@@ -767,7 +767,7 @@ const NihssCalculator: React.FC = () => {
       patientContext.lkw === null && patientContext.wakeUp
         ? `LKW: Wake-up onset. Last asleep without symptoms ${formatClinicalDateTime(patientContext.wakeUp.asleepAt)}; woke with symptoms ${formatClinicalDateTime(patientContext.wakeUp.wokeAt)}.`
         : patientContext.lkw === null
-        ? `LKW: Unknown / wake-up`
+        ? `LKW: Unknown`
         : patientContext.lkw instanceof Date
         ? `LKW: ${formatClinicalDateTime(patientContext.lkw)}`
         : `LKW: Not entered`,

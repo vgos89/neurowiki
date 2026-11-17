@@ -62,7 +62,8 @@ export type MRSGrade = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 export type PrestrokeMrsGrade = 0 | 1 | 2 | 3 | 4 | 5;
 
 export interface PatientContextValues {
-  /** Last known well — undefined if not set, null if explicitly Unknown / wake-up. */
+  /** Last known well — undefined if not set; null if Unknown ("Unable to determine"),
+   *  or for a wake-up entry, in which case `wakeUp` carries the two times. */
   lkw: Date | null | undefined;
   /** Wake-up stroke documentation: when the patient was last asleep without
    *  symptoms and when they woke with symptoms. Present only when the clinician
@@ -401,7 +402,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
       : values.lkw === null
       ? values.wakeUp
         ? `Wake-up: asleep ${formatClinicalDateShort(values.wakeUp.asleepAt)}, woke ${formatClinicalDateShort(values.wakeUp.wokeAt)}`
-        : 'Unknown / wake-up'
+        : 'Unknown'
       : formatClinicalDateShort(values.lkw);
 
   // Thrombolysis-timing aid (opt-in via showThrombolysisTiming, currently

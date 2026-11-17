@@ -129,10 +129,14 @@ describe('formatSavedCaseAsEmrText — entered values still render', () => {
     expect(text).toContain('Pre-existing deficits: chronic left foot drop');
   });
 
-  it('reports a wake-up onset as unknown rather than not entered', () => {
-    const wake = formatSavedCaseAsEmrText(makeCase({ lkw: null }));
-    expect(wake).toContain('LKW: Unknown / wake-up');
-    expect(wake).not.toContain('Wake-up onset');
+  it('reports an undetermined onset as Unknown rather than not entered', () => {
+    // "Unable to determine" stores lkw: null with no wakeUp. The label is plain
+    // "Unknown" (V, 2026-11-16): a wake-up entry has its own line below.
+    const unknown = formatSavedCaseAsEmrText(makeCase({ lkw: null }));
+    expect(unknown).toContain('LKW: Unknown');
+    expect(unknown).not.toContain('Unknown / wake-up');
+    expect(unknown).not.toContain('Wake-up onset');
+    expect(unknown).not.toContain('LKW: Not entered');
   });
 
   it('prints both wake-up times when documented', () => {
@@ -140,7 +144,7 @@ describe('formatSavedCaseAsEmrText — entered values still render', () => {
       makeCase({ lkw: null, wakeUp: { asleepAt: Date.UTC(2026, 0, 5, 23, 0), wokeAt: Date.UTC(2026, 0, 6, 6, 30) } }),
     );
     expect(wake).toMatch(/LKW: Wake-up onset\. Last asleep without symptoms .+; woke with symptoms .+\./);
-    expect(wake).not.toContain('Unknown / wake-up');
+    expect(wake).not.toContain('LKW: Unknown');
   });
 });
 
