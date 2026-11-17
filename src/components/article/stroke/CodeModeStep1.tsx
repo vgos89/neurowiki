@@ -170,6 +170,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   if (systolicBP <= 0 || diastolicBP <= 0) missingFields.push('BP');
   if (glucose <= 0) missingFields.push('Glucose');
   if (weightValue <= 0 && weightRequired) missingFields.push('Weight');
+  if (bpTooHigh && !bpControlled && !gating.bpControlWaived) missingFields.push('BP control');
 
   const handleComplete = () => {
     if (!isComplete) return;
