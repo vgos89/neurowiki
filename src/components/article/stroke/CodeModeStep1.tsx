@@ -1,6 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { ArrowRight, Check, AlertTriangle, XCircle } from 'lucide-react';
+import { ArrowRight, AlertTriangle } from 'lucide-react';
 import { getTNKDose, getTpaDoses, toKg } from '../../../utils/strokeDosing';
+import { classifyIvtWindow } from '../../../utils/ivtWindow';
+import { deriveStep1Gating } from './step1Gating';
 import {
   PatientContextPanel,
   EMPTY_PATIENT_CONTEXT,
@@ -113,17 +115,33 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
 
   const tnkDose = useMemo(() => getTNKDose(weightKg), [weightKg]);
 
-  const withinTPAWindow = lkwEntered && !lkwUnknown && lkwHours <= 4.5;
-  // Outside the thrombolytic window (LKW > 9h). Beyond this point, neither
-  // standard nor extended IVT is supported — weight is no longer required
-  // because no thrombolytic dose will be computed (per V direction 2026-05-17).
-  const outsideThromboWindow = lkwEntered && !lkwUnknown && lkwHours > 9;
-  const showDisablingSymptomsChecklist = withinTPAWindow && nihssScore >= 1 && nihssScore <= 5 && !lkwUnknown;
+  // Window tier comes from the shared classifier (witnessed LKW or a wake-up
+  // entry), the same one the panel chip reads, so the chip and the gates below
+  // cannot disagree. Recomputed per render, like lkwHours.
+  const ivtWindow = classifyIvtWindow(
+    { lkw: patientContext.lkw, wakeUp: patientContext.wakeUp },
+    new Date(),
+  );
   const hasDisablingSymptom = Object.values(disablingSymptoms).some(Boolean);
-
-  const bpTooHigh = withinTPAWindow
-    ? (systolicBP > 185 || diastolicBP > 110)
-    : (systolicBP > 220 || diastolicBP > 120);
+  const gating = deriveStep1Gating({
+    lkw: patientContext.lkw,
+    wakeUp: patientContext.wakeUp,
+    ivtWindow,
+    nihssScore,
+    systolicBP,
+    diastolicBP,
+    hasDisablingSymptom,
+  });
+  // withinTPAWindow: standard tier. outsideThromboWindow: past the 9 h tiers, so
+  // no thrombolytic dose is computed and weight is not required (per V
+  // direction 2026-05-17).
+  const {
+    withinTPAWindow,
+    showDisablingSymptomsChecklist,
+    bpTooHigh,
+    onDaptPath,
+    weightRequired,
+  } = gating;
   // Hypoglycemia treat threshold <60 mg/dL per AHA/ASA 2026 §4.5 (COR 1, LOE
   // C-LD). Corrected from <50 (audit stroke-code-glucose-threshold-60; the
   // citation was fixed earlier but this trigger was missed) per V 2026-06-10.
@@ -132,12 +150,10 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
 
   // H-2 fix (UX audit 2026-05-24): weight is only required when a
   // thrombolytic dose will actually be computed. DAPT-path patients
-  // (NIHSS ≤3 + within tPA window + no disabling symptoms checked)
-  // are headed to aspirin+clopidogrel, not tPA/TNK — forcing a
-  // weight entry is meaningless data tax. Same logic for outside-
-  // thrombolytic-window patients (already accommodated).
-  const onDaptPath = withinTPAWindow && nihssScore >= 1 && nihssScore <= 3 && !hasDisablingSymptom;
-  const weightRequired = !outsideThromboWindow && !onDaptPath;
+  // (NIHSS ≤3 + standard window + no disabling symptoms checked) are headed
+  // to aspirin+clopidogrel, so forcing a weight entry is meaningless data
+  // tax; same for patients outside the thrombolytic windows. Both flags
+  // (onDaptPath, weightRequired) are derived in step1Gating.ts.
 
   const isComplete =
     lkwEntered &&
@@ -146,7 +162,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
     diastolicBP > 0 &&
     glucose > 0 &&
     (!weightRequired || weightValue > 0) &&
-    (!bpTooHigh || bpControlled || lkwUnknown);
+    (!bpTooHigh || bpControlled || gating.bpControlWaived);
 
   const missingFields: string[] = [];
   if (!lkwEntered) missingFields.push('LKW time');
@@ -176,47 +192,6 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   };
 
   const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
-
-  const WindowBadge: React.FC = () => {
-    if (!lkwEntered || lkwUnknown) return null;
-    if (lkwHours <= 4.5) {
-      // M-1 fix (UX audit 2026-05-24): show a countdown when the
-      // remaining tPA window is < 30 min so the resident does not
-      // lose time in EMR and cross the boundary unnoticed.
-      const minutesLeft = Math.max(0, Math.round((4.5 - lkwHours) * 60));
-      const isLastHalfHour = minutesLeft <= 30;
-      return (
-        <span
-          className={`inline-flex items-center gap-1 text-xs font-semibold rounded-full px-2.5 py-0.5 border ${
-            isLastHalfHour
-              ? 'text-amber-700 bg-amber-50 border-amber-200'
-              : 'text-emerald-700 bg-emerald-50 border-emerald-200'
-          }`}
-          aria-label={isLastHalfHour ? `Only ${minutesLeft} minutes left in tPA window` : `Within 4.5 hour tPA window`}
-        >
-          {isLastHalfHour ? (
-            <AlertTriangle size={14} aria-hidden="true" />
-          ) : (
-            <Check size={14} aria-hidden="true" />
-          )}
-          {isLastHalfHour ? `${minutesLeft} min left` : 'Within 4.5h'}
-        </span>
-      );
-    }
-    if (lkwHours <= 9)
-      return (
-        <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-0.5">
-          <AlertTriangle size={14} aria-hidden="true" />
-          Extended window
-        </span>
-      );
-    return (
-      <span className="inline-flex items-center gap-1 text-xs font-semibold text-rose-700 bg-rose-50 border border-rose-200 rounded-full px-2.5 py-0.5">
-        <XCircle size={14} aria-hidden="true" />
-        Outside tPA window
-      </span>
-    );
-  };
 
   // NIHSS + Weight as panel extra-rows. Per V request 2026-05-24:
   // these no longer warrant their own chunky cards; they live inline in
@@ -304,9 +279,9 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
           arch-PR-stroke-code-patient-context.md 2026-05-24 and V
           follow-up 2026-05-24:
           - panel renders pure layout
-          - WindowBadge, BP-too-high alert, glucose callouts, the
-            LKW-Unknown wake-up notice, and the computed-dosing card
-            live as siblings BELOW the panel and read from
+          - BP-too-high alert, glucose callouts, the wake-up / unknown
+            onset notice, and the computed-dosing card live as siblings
+            BELOW the panel and read from
             patientContext / extraRow state (single source of truth)
           - defaultExpanded=true because for Stroke Code the context is
             required input (not optional like in the NIHSS calc)
@@ -320,17 +295,11 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
         defaultExpanded
         lockExpanded
         extraRows={extraRows}
+        showWindowChip
       />
 
-      {/* WindowBadge — sibling, reads patientContext.lkw via derived
-          lkwEntered/lkwHours. Renders the same green/amber/rose chip
-          that used to live inside the LKW card. */}
-      {lkwEntered && !lkwUnknown && (
-        <div className="flex items-center justify-between px-1">
-          <span className="text-xs text-slate-400">~{lkwHours.toFixed(1)}h since LKW</span>
-          <WindowBadge />
-        </div>
-      )}
+      {/* The window chip and elapsed line render inside the panel, directly
+          under the Last known well row (showWindowChip). */}
 
       {/* Sibling alert blocks — all four use the same chassis as the
           PatientContextPanel above: rounded-xl white card with a tinted
@@ -341,7 +310,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
       {/* LKW Unknown — wake-up / unknown-onset notice.
           BL-4 fix: role="alert" so screen readers announce when the
           state changes (e.g., clinician toggles LKW Unknown checkbox). */}
-      {lkwUnknown && (
+      {gating.showWakeUpNotice && (
         <div className="rounded-xl bg-white border border-slate-100 overflow-hidden" role="alert">
           <div className="px-4 py-2 bg-amber-50 border-b border-amber-100">
             <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700">Wake-up / Unknown Onset</p>
@@ -505,13 +474,13 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
       )}
 
       {/* ── Extended IVT cross-link — chassis-aligned 2026-05-24 ──
-          Surfaces when LKW is past the standard 4.5h tPA window OR is
-          unknown (potential wake-up stroke). Routes the clinician to
+          Surfaces when the patient is past the standard 4.5h window (witnessed
+          or wake-up tier) OR onset is unknown (potential wake-up stroke). Routes the clinician to
           the dedicated Extended IVT pathway, which carries the WAKE-UP
           / EXTEND / TRACE-III decision trees for 4.5h–9h windows and
           the DWI-FLAIR mismatch path. Added 2026-05-17 per V direction;
           chassis-aligned per V follow-up 2026-05-24. */}
-      {lkwEntered && (lkwUnknown || lkwHours > 4.5) && (
+      {gating.showExtendedIvtLink && (
         <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
           <div className="px-4 py-2 bg-amber-50 border-b border-amber-100">
             <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700">Extended-Window IVT</p>
@@ -576,8 +545,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
       {/* LKWTimePicker is now owned by the PatientContextPanel above.
           The Stroke-Code-specific sleep-onset cross-link to Extended IVT
           pathway is preserved via the "Extended-window IVT" sibling
-          block earlier in this render (triggers on lkwUnknown ||
-          lkwHours > 4.5). */}
+          block earlier in this render (gating.showExtendedIvtLink). */}
     </div>
   );
 };

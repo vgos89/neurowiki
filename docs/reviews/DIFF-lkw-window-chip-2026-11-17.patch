@@ -1,0 +1,1303 @@
+diff --git a/src/components/article/stroke/CodeModeStep1.tsx b/src/components/article/stroke/CodeModeStep1.tsx
+index e97541e..519ea54 100644
+--- a/src/components/article/stroke/CodeModeStep1.tsx
++++ b/src/components/article/stroke/CodeModeStep1.tsx
+@@ -1,6 +1,8 @@
+ import React, { useState, useMemo, useEffect } from 'react';
+-import { ArrowRight, Check, AlertTriangle, XCircle } from 'lucide-react';
++import { ArrowRight, AlertTriangle } from 'lucide-react';
+ import { getTNKDose, getTpaDoses, toKg } from '../../../utils/strokeDosing';
++import { classifyIvtWindow } from '../../../utils/ivtWindow';
++import { deriveStep1Gating } from './step1Gating';
+ import {
+   PatientContextPanel,
+   EMPTY_PATIENT_CONTEXT,
+@@ -113,17 +115,33 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
+ 
+   const tnkDose = useMemo(() => getTNKDose(weightKg), [weightKg]);
+ 
+-  const withinTPAWindow = lkwEntered && !lkwUnknown && lkwHours <= 4.5;
+-  // Outside the thrombolytic window (LKW > 9h). Beyond this point, neither
+-  // standard nor extended IVT is supported — weight is no longer required
+-  // because no thrombolytic dose will be computed (per V direction 2026-05-17).
+-  const outsideThromboWindow = lkwEntered && !lkwUnknown && lkwHours > 9;
+-  const showDisablingSymptomsChecklist = withinTPAWindow && nihssScore >= 1 && nihssScore <= 5 && !lkwUnknown;
++  // Window tier comes from the shared classifier (witnessed LKW or a wake-up
++  // entry), the same one the panel chip reads, so the chip and the gates below
++  // cannot disagree. Recomputed per render, like lkwHours.
++  const ivtWindow = classifyIvtWindow(
++    { lkw: patientContext.lkw, wakeUp: patientContext.wakeUp },
++    new Date(),
++  );
+   const hasDisablingSymptom = Object.values(disablingSymptoms).some(Boolean);
+-
+-  const bpTooHigh = withinTPAWindow
+-    ? (systolicBP > 185 || diastolicBP > 110)
+-    : (systolicBP > 220 || diastolicBP > 120);
++  const gating = deriveStep1Gating({
++    lkw: patientContext.lkw,
++    wakeUp: patientContext.wakeUp,
++    ivtWindow,
++    nihssScore,
++    systolicBP,
++    diastolicBP,
++    hasDisablingSymptom,
++  });
++  // withinTPAWindow: standard tier. outsideThromboWindow: past the 9 h tiers, so
++  // no thrombolytic dose is computed and weight is not required (per V
++  // direction 2026-05-17).
++  const {
++    withinTPAWindow,
++    showDisablingSymptomsChecklist,
++    bpTooHigh,
++    onDaptPath,
++    weightRequired,
++  } = gating;
+   // Hypoglycemia treat threshold <60 mg/dL per AHA/ASA 2026 §4.5 (COR 1, LOE
+   // C-LD). Corrected from <50 (audit stroke-code-glucose-threshold-60; the
+   // citation was fixed earlier but this trigger was missed) per V 2026-06-10.
+@@ -132,12 +150,10 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
+ 
+   // H-2 fix (UX audit 2026-05-24): weight is only required when a
+   // thrombolytic dose will actually be computed. DAPT-path patients
+-  // (NIHSS ≤3 + within tPA window + no disabling symptoms checked)
+-  // are headed to aspirin+clopidogrel, not tPA/TNK — forcing a
+-  // weight entry is meaningless data tax. Same logic for outside-
+-  // thrombolytic-window patients (already accommodated).
+-  const onDaptPath = withinTPAWindow && nihssScore >= 1 && nihssScore <= 3 && !hasDisablingSymptom;
+-  const weightRequired = !outsideThromboWindow && !onDaptPath;
++  // (NIHSS ≤3 + standard window + no disabling symptoms checked) are headed
++  // to aspirin+clopidogrel, so forcing a weight entry is meaningless data
++  // tax; same for patients outside the thrombolytic windows. Both flags
++  // (onDaptPath, weightRequired) are derived in step1Gating.ts.
+ 
+   const isComplete =
+     lkwEntered &&
+@@ -146,7 +162,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
+     diastolicBP > 0 &&
+     glucose > 0 &&
+     (!weightRequired || weightValue > 0) &&
+-    (!bpTooHigh || bpControlled || lkwUnknown);
++    (!bpTooHigh || bpControlled || gating.bpControlWaived);
+ 
+   const missingFields: string[] = [];
+   if (!lkwEntered) missingFields.push('LKW time');
+@@ -177,47 +193,6 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
+ 
+   const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
+ 
+-  const WindowBadge: React.FC = () => {
+-    if (!lkwEntered || lkwUnknown) return null;
+-    if (lkwHours <= 4.5) {
+-      // M-1 fix (UX audit 2026-05-24): show a countdown when the
+-      // remaining tPA window is < 30 min so the resident does not
+-      // lose time in EMR and cross the boundary unnoticed.
+-      const minutesLeft = Math.max(0, Math.round((4.5 - lkwHours) * 60));
+-      const isLastHalfHour = minutesLeft <= 30;
+-      return (
+-        <span
+-          className={`inline-flex items-center gap-1 text-xs font-semibold rounded-full px-2.5 py-0.5 border ${
+-            isLastHalfHour
+-              ? 'text-amber-700 bg-amber-50 border-amber-200'
+-              : 'text-emerald-700 bg-emerald-50 border-emerald-200'
+-          }`}
+-          aria-label={isLastHalfHour ? `Only ${minutesLeft} minutes left in tPA window` : `Within 4.5 hour tPA window`}
+-        >
+-          {isLastHalfHour ? (
+-            <AlertTriangle size={14} aria-hidden="true" />
+-          ) : (
+-            <Check size={14} aria-hidden="true" />
+-          )}
+-          {isLastHalfHour ? `${minutesLeft} min left` : 'Within 4.5h'}
+-        </span>
+-      );
+-    }
+-    if (lkwHours <= 9)
+-      return (
+-        <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-0.5">
+-          <AlertTriangle size={14} aria-hidden="true" />
+-          Extended window
+-        </span>
+-      );
+-    return (
+-      <span className="inline-flex items-center gap-1 text-xs font-semibold text-rose-700 bg-rose-50 border border-rose-200 rounded-full px-2.5 py-0.5">
+-        <XCircle size={14} aria-hidden="true" />
+-        Outside tPA window
+-      </span>
+-    );
+-  };
+-
+   // NIHSS + Weight as panel extra-rows. Per V request 2026-05-24:
+   // these no longer warrant their own chunky cards; they live inline in
+   // the Patient Info dropdown alongside LKW/BP/Glucose/Anticoag. The
+@@ -304,9 +279,9 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
+           arch-PR-stroke-code-patient-context.md 2026-05-24 and V
+           follow-up 2026-05-24:
+           - panel renders pure layout
+-          - WindowBadge, BP-too-high alert, glucose callouts, the
+-            LKW-Unknown wake-up notice, and the computed-dosing card
+-            live as siblings BELOW the panel and read from
++          - BP-too-high alert, glucose callouts, the wake-up / unknown
++            onset notice, and the computed-dosing card live as siblings
++            BELOW the panel and read from
+             patientContext / extraRow state (single source of truth)
+           - defaultExpanded=true because for Stroke Code the context is
+             required input (not optional like in the NIHSS calc)
+@@ -320,17 +295,11 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
+         defaultExpanded
+         lockExpanded
+         extraRows={extraRows}
++        showWindowChip
+       />
+ 
+-      {/* WindowBadge — sibling, reads patientContext.lkw via derived
+-          lkwEntered/lkwHours. Renders the same green/amber/rose chip
+-          that used to live inside the LKW card. */}
+-      {lkwEntered && !lkwUnknown && (
+-        <div className="flex items-center justify-between px-1">
+-          <span className="text-xs text-slate-400">~{lkwHours.toFixed(1)}h since LKW</span>
+-          <WindowBadge />
+-        </div>
+-      )}
++      {/* The window chip and elapsed line render inside the panel, directly
++          under the Last known well row (showWindowChip). */}
+ 
+       {/* Sibling alert blocks — all four use the same chassis as the
+           PatientContextPanel above: rounded-xl white card with a tinted
+@@ -341,7 +310,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
+       {/* LKW Unknown — wake-up / unknown-onset notice.
+           BL-4 fix: role="alert" so screen readers announce when the
+           state changes (e.g., clinician toggles LKW Unknown checkbox). */}
+-      {lkwUnknown && (
++      {gating.showWakeUpNotice && (
+         <div className="rounded-xl bg-white border border-slate-100 overflow-hidden" role="alert">
+           <div className="px-4 py-2 bg-amber-50 border-b border-amber-100">
+             <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700">Wake-up / Unknown Onset</p>
+@@ -505,13 +474,13 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
+       )}
+ 
+       {/* ── Extended IVT cross-link — chassis-aligned 2026-05-24 ──
+-          Surfaces when LKW is past the standard 4.5h tPA window OR is
+-          unknown (potential wake-up stroke). Routes the clinician to
++          Surfaces when the patient is past the standard 4.5h window (witnessed
++          or wake-up tier) OR onset is unknown (potential wake-up stroke). Routes the clinician to
+           the dedicated Extended IVT pathway, which carries the WAKE-UP
+           / EXTEND / TRACE-III decision trees for 4.5h–9h windows and
+           the DWI-FLAIR mismatch path. Added 2026-05-17 per V direction;
+           chassis-aligned per V follow-up 2026-05-24. */}
+-      {lkwEntered && (lkwUnknown || lkwHours > 4.5) && (
++      {gating.showExtendedIvtLink && (
+         <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+           <div className="px-4 py-2 bg-amber-50 border-b border-amber-100">
+             <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700">Extended-Window IVT</p>
+@@ -576,8 +545,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
+       {/* LKWTimePicker is now owned by the PatientContextPanel above.
+           The Stroke-Code-specific sleep-onset cross-link to Extended IVT
+           pathway is preserved via the "Extended-window IVT" sibling
+-          block earlier in this render (triggers on lkwUnknown ||
+-          lkwHours > 4.5). */}
++          block earlier in this render (gating.showExtendedIvtLink). */}
+     </div>
+   );
+ };
+diff --git a/src/components/shared/PatientContextPanel.tsx b/src/components/shared/PatientContextPanel.tsx
+index 5ed2e8c..4e0a470 100644
+--- a/src/components/shared/PatientContextPanel.tsx
++++ b/src/components/shared/PatientContextPanel.tsx
+@@ -19,6 +19,7 @@ type BrowserWindow = Window & {
+ };
+ import { formatClinicalDateShort } from '../../utils/clinicalDateTime';
+ import { getTNKDose, getTpaDoses, getTNKVolumeMl, isLowWeightBandCaveat, toKg } from '../../utils/strokeDosing';
++import { classifyIvtWindow } from '../../utils/ivtWindow';
+ import { LKWTimePicker } from '../article/stroke/LKWTimePicker';
+ import { MrsPickerModal } from '../calculators/MrsPickerModal';
+ 
+@@ -196,15 +197,26 @@ interface PatientContextPanelProps {
+    */
+   extraRows?: PatientContextRow[];
+   /**
+-   * Opt-in thrombolysis-timing aid (currently NIHSS). When true and a
+-   * witnessed LKW timestamp is set, the panel shows time since onset, a
+-   * within/beyond-4.5h window chip, and reframes the elevated-BP note as a
+-   * "Thrombolytic candidate: BP goal <185/110" prompt while in window. These
+-   * are live bedside aids and are not part of any copy export. Off by default
+-   * so the Stroke Code steps and the mRS picker that share this panel are
+-   * unchanged.
++   * Opt-in thrombolysis-timing aid (currently NIHSS). Turns on the window chip
++   * and elapsed line (see showWindowChip) and adds the thrombolysis-specific
++   * blocks: the elevated-BP note reframed as an "If thrombolysis planned: BP
++   * goal <185/110" prompt while the patient is in the standard tier (a
++   * witnessed LKW, or a wake-up entry measured from last asleep), plus the
++   * glucose, anticoagulant and eligibility aids. These are live bedside aids
++   * and are not part of any copy export. Off by default so the Stroke Code
++   * steps and the mRS picker that share this panel are unchanged.
+    */
+   showThrombolysisTiming?: boolean;
++  /**
++   * Show only the time-window chip and elapsed line directly under the Last
++   * known well row, without any of the other thrombolysis-timing blocks.
++   * Stroke Code Step 1 uses this. Witnessed LKW: green within 4.5h (amber
++   * minutes-left countdown in the final 30 min), orange 4.5 to 9h, rose beyond
++   * 9h. Wake-up entry (asleep and woke times): same standard tier measured from
++   * last asleep, orange extended window, rose past the wake-up windows. The
++   * chip is implied by showThrombolysisTiming, so NIHSS needs only that flag.
++   */
++  showWindowChip?: boolean;
+   /**
+    * Optional pathway shortcuts rendered beneath the thrombolysis-timing row.
+    * Gated on showThrombolysisTiming so only the NIHSS surface shows them.
+@@ -250,6 +262,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
+   lockExpanded = false,
+   extraRows,
+   showThrombolysisTiming = false,
++  showWindowChip = false,
+   pathwayActions,
+ }) => {
+   const [expanded, setExpanded] = useState(lockExpanded || defaultExpanded);
+@@ -405,40 +418,31 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
+         : 'Unknown'
+       : formatClinicalDateShort(values.lkw);
+ 
+-  // Thrombolysis-timing aid (opt-in via showThrombolysisTiming, currently
+-  // NIHSS). Computes time since a witnessed LKW and the IV thrombolysis window
+-  // tier. Recomputed each render so it stays current as the clinician
+-  // interacts. Returns null unless a real LKW Date is set (wake-up / unknown /
+-  // unset have no onset clock). Standard ≤4.5h per AHA/ASA 2026 §4.6.1/§4.6.2;
+-  // perfusion/MRI-selected extended 4.5–9h per EXTEND + WAKE-UP (COR 2a). Note:
+-  // §4.6.3 is the separate late-window TNK-for-LVO recommendation (4.5–24h), not
+-  // this extended IVT window.
+-  const ivt = (() => {
+-    if (!showThrombolysisTiming || !(values.lkw instanceof Date)) return null;
+-    const elapsedMin = Math.max(0, Math.floor((Date.now() - values.lkw.getTime()) / 60000));
+-    const hh = Math.floor(elapsedMin / 60);
+-    const mm = elapsedMin % 60;
+-    const elapsedLabel = hh > 0 ? `${hh} h ${mm} min` : `${mm} min`;
+-    const elapsedHours = elapsedMin / 60;
+-    // Three tiers: standard ≤4.5h, perfusion-selected extended 4.5–9h, outside
+-    // >9h. inWindow stays the ≤4.5h standard window (it gates the BP prompt and
+-    // the countdown; V direction: BP prompt only in the 4.5h window).
+-    const tier = elapsedHours <= 4.5 ? 'standard' : elapsedHours <= 9 ? 'extended' : 'outside';
+-    const inWindow = tier === 'standard';
+-    const minutesLeft = Math.max(0, Math.round((4.5 - elapsedHours) * 60));
+-    const lastHalfHour = inWindow && minutesLeft <= 30;
+-    // Window-chip appearance: green standard, orange extended, red outside.
+-    // The amber countdown sits between green and orange in the final 30 min.
+-    const chip =
+-      tier === 'standard'
+-        ? lastHalfHour
+-          ? { cls: 'text-amber-700 bg-amber-50 border-amber-200', label: `${minutesLeft} min left` }
+-          : { cls: 'text-emerald-700 bg-emerald-50 border-emerald-200', label: 'Within 4.5h' }
+-        : tier === 'extended'
+-        ? { cls: 'text-orange-700 bg-orange-50 border-orange-200', label: '4.5–9h window' }
+-        : { cls: 'text-rose-700 bg-rose-50 border-rose-200', label: 'Beyond 9h' };
+-    return { elapsedLabel, inWindow, minutesLeft, lastHalfHour, tier, chip };
+-  })();
++  // Window chip and elapsed line: on when showWindowChip is set or the
++  // thrombolysis-timing aid is on (NIHSS).
++  const windowChip = showWindowChip || showThrombolysisTiming;
++
++  // Standard ≤4.5 h from LKW per AHA/ASA 2026 §4.6.1/§4.6.2. Extended tiers per
++  // §4.6.3 Rec 1 (wake-up, ≤4.5 h from symptom recognition, MRI DWI-FLAIR
++  // selected) and Rec 2 (≤9 h from sleep midpoint, or 4.5–9 h from LKW,
++  // perfusion selected). The chip states a time category only.
++  // Recomputed each render so it stays current as the clinician interacts.
++  const ivt = windowChip
++    ? classifyIvtWindow({ lkw: values.lkw, wakeUp: values.wakeUp }, new Date())
++    : null;
++  // The in-panel BP note belongs to the thrombolysis-timing surface only. On
++  // Stroke Code (showWindowChip alone) its text and visibility are unchanged.
++  const timingInWindow = showThrombolysisTiming && ivt?.tier === 'standard';
++
++  const formatElapsed = (totalMin: number): string => {
++    const hh = Math.floor(totalMin / 60);
++    const mm = totalMin % 60;
++    return hh > 0 ? `${hh} h ${mm} min` : `${mm} min`;
++  };
++  const CHIP_EMERALD = 'text-emerald-700 bg-emerald-50 border-emerald-200';
++  const CHIP_AMBER = 'text-amber-700 bg-amber-50 border-amber-200';
++  const CHIP_ORANGE = 'text-orange-700 bg-orange-50 border-orange-200';
++  const CHIP_ROSE = 'text-rose-700 bg-rose-50 border-rose-200';
+ 
+   return (
+     <div className="bg-white border border-slate-100 rounded-xl overflow-hidden">
+@@ -502,37 +506,114 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
+           <button
+             type="button"
+             onClick={() => setLkwModalOpen(true)}
+-            className="w-full min-h-[44px] flex items-center justify-between px-4 py-2 gap-3 hover:bg-slate-50 transition-colors text-left focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
++            className={`w-full min-h-[44px] flex items-center justify-between px-4 py-2 ${values.lkw === null && values.wakeUp ? 'flex-wrap gap-x-2 gap-y-0.5' : 'gap-3'} hover:bg-slate-50 transition-colors text-left focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none`}
+             aria-haspopup="dialog"
+             aria-label={`Set last known well time, currently ${lkwDisplay}`}
+           >
+-            <span className="text-xs font-medium text-slate-600 flex-shrink-0">Last known well</span>
+-            <span className="flex items-center gap-1 min-w-0">
+-              <span className={`text-sm text-right break-words min-w-0 ${values.lkw === undefined ? 'text-slate-400' : 'text-slate-900'}`}>{lkwDisplay}</span>
+-              <ChevronDown className="w-3.5 h-3.5 text-slate-400" aria-hidden />
+-            </span>
++            {values.lkw === null && values.wakeUp ? (
++              <>
++                {/* Wake-up entry: two short lines (asleep / woke) so the value
++                    does not wrap raggedly on a phone. Where the panel is too
++                    narrow to hold label and times side by side (Stroke Code
++                    on a phone), the times drop to their own right-aligned
++                    lines under the label. The full sentence stays in the
++                    aria-label. */}
++                <span className="text-xs font-medium text-slate-600 flex-shrink-0">Last known well</span>
++                <span className="flex items-center gap-1 flex-shrink-0 ml-auto">
++                  <span className="text-[13px] leading-snug text-right text-slate-900">
++                    <span className="block whitespace-nowrap">Asleep {formatClinicalDateShort(values.wakeUp.asleepAt)}</span>
++                    <span className="block whitespace-nowrap">Woke {formatClinicalDateShort(values.wakeUp.wokeAt)}</span>
++                  </span>
++                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" aria-hidden />
++                </span>
++              </>
++            ) : (
++              <>
++                <span className="text-xs font-medium text-slate-600 flex-shrink-0">Last known well</span>
++                <span className="flex items-center gap-1 min-w-0">
++                  <span className={`text-sm text-right break-words min-w-0 ${values.lkw === undefined ? 'text-slate-400' : 'text-slate-900'}`}>{lkwDisplay}</span>
++                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" aria-hidden />
++                </span>
++              </>
++            )}
+           </button>
+ 
+-          {/* Thrombolysis timing — opt-in (NIHSS). Time since onset plus a
+-              three-tier window chip (green ≤4.5h, orange 4.5–9h, red >9h).
+-              Live bedside aid; the chip is not part of the copy export (only
+-              the time-since-onset line is). */}
+-          {ivt && (
++          {/* Window chip and elapsed line, directly under the Last known well
++              row (NIHSS via showThrombolysisTiming, Stroke Code via
++              showWindowChip). The chip comes first so the badge sits right
++              under the time; the clocks follow and never break mid-phrase.
++              Two literal branches because the claims scanner only matches
++              literal data-claim attributes. Witnessed LKW: green
++              within 4.5h, amber countdown in the final 30 min, orange 4.5 to
++              9h, rose beyond 9h. Wake-up entry: green within 4.5h of last
++              asleep, orange extended window, rose past the wake-up windows.
++              Live bedside aid, not part of the copy export. */}
++          {ivt?.kind === 'witnessed' && (
+             <div
+               data-claim="ivt-window-4.5h"
+-              className="px-4 pb-2 -mt-0.5 flex items-center gap-2 flex-wrap"
++              className="px-4 pb-2 -mt-0.5 text-xs leading-6 text-slate-500"
+               role="status"
+               aria-live="polite"
+             >
+-              <span className="text-xs text-slate-500">~{ivt.elapsedLabel} since onset</span>
+               <span
+-                className={`inline-flex items-center text-[11px] font-semibold rounded-full px-2 py-0.5 border ${ivt.chip.cls}`}
++                className={`inline-flex items-center align-middle mr-2 text-[11px] leading-4 font-semibold rounded-full px-2 py-0.5 border ${
++                  ivt.tier === 'standard'
++                    ? ivt.lastHalfHour
++                      ? CHIP_AMBER
++                      : CHIP_EMERALD
++                    : ivt.tier === 'extended'
++                    ? CHIP_ORANGE
++                    : CHIP_ROSE
++                }`}
+               >
+-                {ivt.chip.label}
++                {ivt.tier === 'standard'
++                  ? ivt.lastHalfHour
++                    ? `${ivt.minutesLeft} min left`
++                    : 'Within 4.5h'
++                  : ivt.tier === 'extended'
++                  ? '4.5–9h window'
++                  : 'Beyond 9h'}
+               </span>
++              <span className="whitespace-nowrap">~{formatElapsed(ivt.elapsedMin)} since last known well</span>
++            </div>
++          )}
++          {ivt?.kind === 'wake-up' && (
++            <div
++              data-claim="ivt-window-wake-up"
++              className="px-4 pb-2 -mt-0.5 text-xs leading-6 text-slate-500"
++              role="status"
++              aria-live="polite"
++            >
++              <span
++                className={`inline-flex items-center align-middle mr-2 text-[11px] leading-4 font-semibold rounded-full px-2 py-0.5 border ${
++                  ivt.tier === 'standard'
++                    ? ivt.lastHalfHour
++                      ? CHIP_AMBER
++                      : CHIP_EMERALD
++                    : ivt.tier === 'extended'
++                    ? CHIP_ORANGE
++                    : CHIP_ROSE
++                }`}
++              >
++                {ivt.tier === 'standard'
++                  ? ivt.lastHalfHour
++                    ? `${ivt.minutesLeft} min left`
++                    : 'Within 4.5h'
++                  : ivt.tier === 'extended'
++                  ? 'Extended window'
++                  : 'Past wake-up windows'}
++              </span>
++              {ivt.tier === 'standard' ? (
++                <span className="whitespace-nowrap">~{formatElapsed(ivt.aMin)} since last asleep</span>
++              ) : (
++                <>
++                  <span className="whitespace-nowrap">~{formatElapsed(ivt.wMin)} since woke ·</span>{' '}
++                  <span className="whitespace-nowrap">~{formatElapsed(ivt.mMin)} since sleep midpoint</span>
++                </>
++              )}
+             </div>
+           )}
+-          {showThrombolysisTiming && values.lkw === null && (
++          {windowChip && values.lkw === null && !values.wakeUp && (
+             <div className="px-4 pb-2 -mt-0.5">
+               <span className="text-xs text-slate-400">
+                 Wake-up or unknown onset, so time since onset is not shown.
+@@ -584,7 +665,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
+             // of window, or before LKW is entered, the <185/110 pre-thrombolysis
+             // target does not apply, so no BP prompt is shown. Surfaces without
+             // the timing aid keep the generic note. (V direction 2026-06-10.)
+-            if (showThrombolysisTiming && !ivt?.inWindow) return null;
++            if (showThrombolysisTiming && !timingInWindow) return null;
+             return (
+               <div
+                 data-claim="bp-ivt-threshold-185-110"
+@@ -594,7 +675,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
+               >
+                 <span className="text-amber-600 text-xs font-bold flex-shrink-0 leading-snug" aria-hidden="true">!</span>
+                 <p className="text-xs text-amber-700 leading-snug">
+-                  {ivt?.inWindow
++                  {timingInWindow
+                     ? 'If thrombolysis planned: BP goal <185/110'
+                     : 'BP above tPA/TNK threshold. Lower to ≤185/110 before treatment'}
+                 </p>
+diff --git a/src/lib/citations/claims.ts b/src/lib/citations/claims.ts
+index bd74574..79654eb 100644
+--- a/src/lib/citations/claims.ts
++++ b/src/lib/citations/claims.ts
+@@ -1498,13 +1498,19 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
+     id: 'bp-ivt-threshold-185-110',
+     citation_ids: ['aha-asa-ivt-bp-threshold', 'aha-asa-2026-4.6.1', 'aha-asa-2026-4.6.2'],
+     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+-    description: 'Inline BP alert in PatientContextPanel when SBP ≥185 OR DBP ≥110. On the thrombolysis-timing surface (NIHSS opt-in via showThrombolysisTiming) the prompt appears ONLY when the patient is inside the standard 4.5h IV thrombolysis window, where it reads "If thrombolysis planned: BP goal <185/110"; out of window, or before LKW is entered, no BP prompt is shown (the <185/110 pre-thrombolysis target does not apply). On surfaces without the timing aid it reads "BP above tPA/TNK threshold. Lower to ≤185/110 before treatment" whenever BP is elevated. Conditional in-window wording chosen so the chip surfaces the BP target without asserting overall thrombolysis eligibility (clinical-review 2026-06-10); in-window-only gating per V direction 2026-06-10. Threshold per AHA/ASA 2019 Table 5 (PMID 31662037), confirmed unchanged in 2026 guideline. Applies to both alteplase and tenecteplase. Scoped to pre-treatment context only (PatientContextPanel is an initial-assessment surface).',
++    description: 'Inline BP alert in PatientContextPanel when SBP ≥185 OR DBP ≥110. On the thrombolysis-timing surface (NIHSS opt-in via showThrombolysisTiming) the prompt appears ONLY when the patient is inside the standard 4.5h IV thrombolysis window, where it reads "If thrombolysis planned: BP goal <185/110"; out of window, or before LKW is entered, no BP prompt is shown (the <185/110 pre-thrombolysis target does not apply). On surfaces without the timing aid it reads "BP above tPA/TNK threshold. Lower to ≤185/110 before treatment" whenever BP is elevated. Conditional in-window wording chosen so the chip surfaces the BP target without asserting overall thrombolysis eligibility (clinical-review 2026-06-10); in-window-only gating per V direction 2026-06-10. Threshold per AHA/ASA 2019 Table 5 (PMID 31662037), confirmed unchanged in 2026 guideline. Applies to both alteplase and tenecteplase. Scoped to pre-treatment context only (PatientContextPanel is an initial-assessment surface). For a wake-up entry, the standard window is measured from last asleep (the last known well).',
+   },
+   'ivt-window-4.5h': {
+     id: 'ivt-window-4.5h',
+-    citation_ids: ['aha-asa-2026-4.6.1', 'aha-asa-2026-4.6.2', 'extend-trial-2019', 'wake-up-trial-2018'],
++    citation_ids: ['extend-trial-2019', 'aha-asa-2026-4.6.1', 'aha-asa-2026-4.6.2', 'aha-asa-2026-4.6.3'],
+     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+-    description: 'NIHSS thrombolysis-timing chip in PatientContextPanel (opt-in via showThrombolysisTiming). When a witnessed LKW is set, shows time since onset plus a three-tier IV thrombolysis window chip: green "Within 4.5h" (with a minutes-left countdown in the final 30 min) for the standard window per AHA/ASA 2026 §4.6.1 (COR 1) and §4.6.2 (alteplase/tenecteplase equivalence within 4.5h); orange "4.5–9h window" for the perfusion-imaging-selected extended window (COR 2a per AHA/ASA 2026), established by EXTEND (alteplase 4.5–9h, perfusion mismatch) and WAKE-UP (unknown onset, DWI-FLAIR mismatch); red "Beyond 9h" once past the extended IV thrombolysis window. The chip states factual onset-clock time bands, not eligibility determinations (the extended window in particular is imaging-gated). On-screen real-time aid only; the chip is not emitted to the NIHSS copy export (only the time-since-onset line is).',
++    description: 'IV thrombolysis time-window chip for a witnessed last known well, on the patient panel (NIHSS calculator and Stroke Code step 1). States a time category only; never eligibility, imaging selection, grade or recommendation strength. Within 4.5h when ≤4.5 h from last known well, with a minutes-left countdown in the final 30 min (AHA/ASA 2026 §4.6.1, §4.6.2); 4.5–9h window when >4.5 and ≤9 h from last known well, a perfusion-imaging-selected band (§4.6.3 Rec 2b, EXTEND); Beyond 9h otherwise, which does not mean no IV thrombolysis route remains (§4.6.3 Rec 3 runs to 24 h for selected LVO patients). Elapsed line reads "since last known well". Time criteria verified against the held first proof; the published correction (Stroke 2026;57(8):e461-e467) changes Rec 2 population gate and verb only, not its time criteria.',
++  },
++  'ivt-window-wake-up': {
++    id: 'ivt-window-wake-up',
++    citation_ids: ['wake-up-trial-2018', 'extend-trial-2019', 'aha-asa-2026-4.6.1', 'aha-asa-2026-4.6.2', 'aha-asa-2026-4.6.3'],
++    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
++    description: 'IV thrombolysis time-window chip for a wake-up entry (asleep and woke times entered), on the patient panel (NIHSS calculator and Stroke Code step 1). States a time category only; never eligibility, imaging selection, grade or recommendation strength. Within 4.5h when ≤4.5 h from last asleep, taken as the last known well (AHA/ASA 2026 §4.6.1, §4.6.2), with a minutes-left countdown in the final 30 min; Extended window when ≤4.5 h from waking with symptoms (§4.6.3 Rec 1, WAKE-UP; MRI DWI-FLAIR selected) or ≤9 h from the sleep midpoint measured to the current time (§4.6.3 Rec 2a, EXTEND; perfusion selected); Past wake-up windows otherwise. The midpoint anchor rests on §4.6.3 Rec 2a, not on the EXTEND quoted_text. Time criteria verified against the held first proof; the published correction (Stroke 2026;57(8):e461-e467) changes Rec 2 population gate and verb only, not its time criteria.',
+   },
+ 
+   // ─── Anticoagulant IV-thrombolysis eligibility feature (2026-06-10) ────────
+diff --git a/src/pages/NihssCalculator.tsx b/src/pages/NihssCalculator.tsx
+index f5ed2be..c9827e4 100644
+--- a/src/pages/NihssCalculator.tsx
++++ b/src/pages/NihssCalculator.tsx
+@@ -701,10 +701,11 @@ const NihssCalculator: React.FC = () => {
+       warfarin: 'Warfarin',
+       heparin: 'Heparin/LMWH',
+     };
+-    // Time since onset for the copy export. Uses LKW as onset, shown only when
+-    // a witnessed LKW timestamp is set. Computed at copy time. The on-screen
+-    // within/beyond-4.5h chip is intentionally NOT exported (live bedside aid).
+-    // V direction 2026-06-10.
++    // Time since last known well for the copy export, shown only when a
++    // witnessed LKW timestamp is set. Computed at copy time. The line reads
++    // "since last known well" (the clock is LKW, not necessarily onset;
++    // clinical review 2026-11-16). The on-screen window chip is intentionally
++    // NOT exported (live bedside aid). V direction 2026-06-10.
+     const elapsedSinceOnset = (from: Date): string => {
+       const min = Math.max(0, Math.floor((Date.now() - from.getTime()) / 60000));
+       const hh = Math.floor(min / 60);
+@@ -772,7 +773,7 @@ const NihssCalculator: React.FC = () => {
+         ? `LKW: ${formatClinicalDateTime(patientContext.lkw)}`
+         : `LKW: Not entered`,
+       patientContext.lkw instanceof Date
+-        ? `~${elapsedSinceOnset(patientContext.lkw)} since onset`
++        ? `~${elapsedSinceOnset(patientContext.lkw)} since last known well`
+         : null,
+       formatBpLine(patientContext.systolic, patientContext.diastolic),
+       patientContext.glucose
+diff --git a/src/utils/ivtWindow.ts b/src/utils/ivtWindow.ts
+new file mode 100644
+index 0000000..0c9ce4f
+--- /dev/null
++++ b/src/utils/ivtWindow.ts
+@@ -0,0 +1,139 @@
++/**
++ * IV thrombolysis time-window classifier. Pure arithmetic: no user-facing
++ * strings, no Tailwind classes, no JSX. Labels and colours live in the
++ * claim-tagged JSX of PatientContextPanel so the em-dash scanner and the claims
++ * scanner both see them.
++ *
++ * Witnessed last known well (LKW): standard if <= 270 min (4.5 h), extended if
++ * <= 540 min (9 h), outside otherwise. Per AHA/ASA 2026 §4.6.1/§4.6.2 (standard)
++ * and §4.6.3 Rec 2(b) (4.5 to 9 h from LKW).
++ *
++ * Wake-up entry (asleep and woke times both entered):
++ *   aMin = minutes since last asleep (the last known well)
++ *   wMin = minutes since waking with symptoms (symptom recognition)
++ *   mMin = minutes since the sleep midpoint
++ *   standard if aMin <= 270
++ *   else extended if wMin <= 270 (Rec 1) OR mMin <= 540 (Rec 2a)
++ *   else outside
++ *
++ * C1: the midpoint clock is measured to the CURRENT time, the treatment-time
++ * reading of AHA/ASA 2026 §4.6.3 Rec 2(a) ("within 9 hours from the midpoint of
++ * sleep"). This matches ExtendedIVTPathway (hoursSinceMidpoint <= 9) and is the
++ * conservative reading: the chip leaves the extended tier earlier, never later.
++ * All boundaries are inclusive. Minutes are whole, floored and clamped at 0.
++ * Rec 2(b) needs no clause in the wake-up rule because the midpoint is never
++ * before asleepAt, so mMin <= aMin always.
++ *
++ * Invalid input returns null. No returned number is ever NaN.
++ */
++
++export type IvtTier = 'standard' | 'extended' | 'outside';
++
++export interface WitnessedIvtWindow {
++  kind: 'witnessed';
++  tier: IvtTier;
++  elapsedMin: number;
++  /** 270 minus elapsedMin, floored at 0. Meaningful in the standard tier. */
++  minutesLeft: number;
++  /** Standard tier with 30 min or less remaining. */
++  lastHalfHour: boolean;
++}
++
++export interface WakeUpIvtWindow {
++  kind: 'wake-up';
++  tier: IvtTier;
++  /** Minutes since last asleep (the LKW clock). */
++  aMin: number;
++  /** Minutes since waking with symptoms. */
++  wMin: number;
++  /** Minutes since the sleep midpoint. */
++  mMin: number;
++  /** 270 minus aMin, floored at 0. */
++  minutesLeft: number;
++  lastHalfHour: boolean;
++  /** Woke within 270 min (Rec 1 route time-open). */
++  rec1Open: boolean;
++  /** Within 540 min of the sleep midpoint (Rec 2a route time-open). */
++  rec2aOpen: boolean;
++}
++
++export type IvtWindowResult = WitnessedIvtWindow | WakeUpIvtWindow;
++
++const STANDARD_MIN = 270;
++const EXTENDED_MIN = 540;
++const MS_PER_MIN = 60000;
++
++function validTime(d: Date | null | undefined): d is Date {
++  return d instanceof Date && Number.isFinite(d.getTime());
++}
++
++function wholeMinutes(ms: number): number {
++  return Math.max(0, Math.floor(ms / MS_PER_MIN));
++}
++
++export function classifyWitnessed(lkw: Date, now: Date): WitnessedIvtWindow | null {
++  if (!validTime(lkw) || !validTime(now)) return null;
++  // A future LKW clamps to 0 (standard).
++  const elapsedMin = wholeMinutes(now.getTime() - lkw.getTime());
++  const tier: IvtTier =
++    elapsedMin <= STANDARD_MIN ? 'standard' : elapsedMin <= EXTENDED_MIN ? 'extended' : 'outside';
++  const minutesLeft = Math.max(0, STANDARD_MIN - elapsedMin);
++  return {
++    kind: 'witnessed',
++    tier,
++    elapsedMin,
++    minutesLeft,
++    lastHalfHour: tier === 'standard' && minutesLeft <= 30,
++  };
++}
++
++export function classifyWakeUp(
++  asleepAt: Date | null | undefined,
++  wokeAt: Date | null | undefined,
++  now: Date,
++): WakeUpIvtWindow | null {
++  if (!validTime(asleepAt) || !validTime(wokeAt) || !validTime(now)) return null;
++  const a = asleepAt.getTime();
++  const w = wokeAt.getTime();
++  const n = now.getTime();
++  if (a > w) return null;
++  if (w > n) return null;
++  const midpoint = a + (w - a) / 2;
++  const aMin = wholeMinutes(n - a);
++  const wMin = wholeMinutes(n - w);
++  const mMin = wholeMinutes(n - midpoint);
++  const rec1Open = wMin <= STANDARD_MIN;
++  const rec2aOpen = mMin <= EXTENDED_MIN;
++  const tier: IvtTier =
++    aMin <= STANDARD_MIN ? 'standard' : rec1Open || rec2aOpen ? 'extended' : 'outside';
++  const minutesLeft = Math.max(0, STANDARD_MIN - aMin);
++  return {
++    kind: 'wake-up',
++    tier,
++    aMin,
++    wMin,
++    mMin,
++    minutesLeft,
++    lastHalfHour: tier === 'standard' && minutesLeft <= 30,
++    rec1Open,
++    rec2aOpen,
++  };
++}
++
++/**
++ * Witnessed result when `lkw` is a valid Date; wake-up result when `lkw` is null
++ * and `wakeUp` is present and valid; otherwise null (unset, unknown onset, or
++ * an unclassifiable wake-up entry).
++ */
++export function classifyIvtWindow(
++  input: { lkw: Date | null | undefined; wakeUp?: { asleepAt: Date; wokeAt: Date } },
++  now: Date,
++): IvtWindowResult | null {
++  if (input.lkw instanceof Date) {
++    return classifyWitnessed(input.lkw, now);
++  }
++  if (input.lkw === null && input.wakeUp) {
++    return classifyWakeUp(input.wakeUp.asleepAt, input.wakeUp.wokeAt, now);
++  }
++  return null;
++}
+diff --git a/src/utils/ivtWindow.test.ts b/src/utils/ivtWindow.test.ts
+new file mode 100644
+index 0000000..0ab1062
+--- /dev/null
++++ b/src/utils/ivtWindow.test.ts
+@@ -0,0 +1,189 @@
++import { describe, it, expect } from 'vitest';
++import { classifyWitnessed, classifyWakeUp, classifyIvtWindow } from './ivtWindow';
++
++/** Build a Date on 2026-03-10 plus a day offset, local time. */
++const t = (hh: number, mm: number, dayOffset = 0, ss = 0) =>
++  new Date(2026, 2, 10 + dayOffset, hh, mm, ss);
++
++function noNaN(r: object | null) {
++  if (!r) return;
++  for (const v of Object.values(r)) {
++    if (typeof v === 'number') expect(Number.isNaN(v)).toBe(false);
++  }
++}
++
++describe('classifyWakeUp, spec section 7 boundary rows', () => {
++  it('row 1: short nap, standard', () => {
++    const r = classifyWakeUp(t(14, 0), t(15, 0), t(17, 30))!;
++    expect([r.aMin, r.wMin, r.mMin]).toEqual([210, 150, 180]);
++    expect(r.tier).toBe('standard');
++    expect(r.lastHalfHour).toBe(false);
++    noNaN(r);
++  });
++  it('row 2: standard with 20 min left', () => {
++    const r = classifyWakeUp(t(14, 0), t(15, 0), t(18, 10))!;
++    expect([r.aMin, r.wMin, r.mMin]).toEqual([250, 190, 220]);
++    expect(r.tier).toBe('standard');
++    expect(r.minutesLeft).toBe(20);
++    expect(r.lastHalfHour).toBe(true);
++  });
++  it('row 3: Rec 1 and Rec 2a both open', () => {
++    const r = classifyWakeUp(t(23, 0), t(6, 0, 1), t(7, 0, 1))!;
++    expect([r.aMin, r.wMin, r.mMin]).toEqual([480, 60, 270]);
++    expect(r.tier).toBe('extended');
++    expect(r.rec1Open).toBe(true);
++    expect(r.rec2aOpen).toBe(true);
++  });
++  it('row 4: Rec 1 only', () => {
++    const r = classifyWakeUp(t(20, 0), t(10, 0, 1), t(13, 0, 1))!;
++    expect([r.aMin, r.wMin, r.mMin]).toEqual([1020, 180, 600]);
++    expect(r.tier).toBe('extended');
++    expect(r.rec1Open).toBe(true);
++    expect(r.rec2aOpen).toBe(false);
++  });
++  it('row 5: Rec 2a only, midpoint exactly 9 h (inclusive)', () => {
++    const r = classifyWakeUp(t(22, 0), t(6, 0, 1), t(11, 0, 1))!;
++    expect([r.aMin, r.wMin, r.mMin]).toEqual([780, 300, 540]);
++    expect(r.tier).toBe('extended');
++    expect(r.rec1Open).toBe(false);
++    expect(r.rec2aOpen).toBe(true);
++  });
++  it('row 6: both clocks expired, outside', () => {
++    const r = classifyWakeUp(t(22, 0), t(6, 0, 1), t(11, 1, 1))!;
++    expect([r.aMin, r.wMin, r.mMin]).toEqual([781, 301, 541]);
++    expect(r.tier).toBe('outside');
++    expect(r.rec1Open).toBe(false);
++    expect(r.rec2aOpen).toBe(false);
++  });
++  it('row 7: woke exactly 4.5 h (inclusive)', () => {
++    const r = classifyWakeUp(t(20, 0), t(10, 0, 1), t(14, 30, 1))!;
++    expect([r.aMin, r.wMin, r.mMin]).toEqual([1110, 270, 690]);
++    expect(r.tier).toBe('extended');
++    expect(r.rec1Open).toBe(true);
++  });
++  it('row 8: everything past', () => {
++    const r = classifyWakeUp(t(20, 0), t(10, 0, 1), t(14, 31, 1))!;
++    expect([r.aMin, r.wMin, r.mMin]).toEqual([1111, 271, 691]);
++    expect(r.tier).toBe('outside');
++  });
++  it('row 9: LKW exactly 4.5 h, standard with 0 min left', () => {
++    const r = classifyWakeUp(t(1, 0), t(3, 0), t(5, 30))!;
++    expect([r.aMin, r.wMin, r.mMin]).toEqual([270, 150, 210]);
++    expect(r.tier).toBe('standard');
++    expect(r.minutesLeft).toBe(0);
++    expect(r.lastHalfHour).toBe(true);
++  });
++  it('row 10: no gap after standard', () => {
++    const r = classifyWakeUp(t(1, 0), t(3, 0), t(5, 31))!;
++    expect([r.aMin, r.wMin, r.mMin]).toEqual([271, 151, 211]);
++    expect(r.tier).toBe('extended');
++    expect(r.minutesLeft).toBe(0);
++    expect(r.lastHalfHour).toBe(false);
++  });
++  it('row 11: everything expired', () => {
++    const r = classifyWakeUp(t(22, 0), t(6, 0, 1), t(12, 0, 1))!;
++    expect([r.aMin, r.wMin, r.mMin]).toEqual([840, 360, 600]);
++    expect(r.tier).toBe('outside');
++  });
++  it('row 12: invalid order returns null', () => {
++    expect(classifyWakeUp(t(6, 0), t(5, 0), t(9, 0))).toBeNull();
++    expect(classifyWakeUp(t(6, 0), t(5, 0), t(23, 0))).toBeNull();
++  });
++});
++
++describe('classifyWitnessed regressions', () => {
++  const lkw = t(8, 0);
++  const at = (min: number) => new Date(lkw.getTime() + min * 60000);
++  it('270 min is standard', () => {
++    const r = classifyWitnessed(lkw, at(270))!;
++    expect(r.tier).toBe('standard');
++    expect(r.elapsedMin).toBe(270);
++    expect(r.minutesLeft).toBe(0);
++  });
++  it('271 min is extended', () => {
++    expect(classifyWitnessed(lkw, at(271))!.tier).toBe('extended');
++  });
++  it('540 min is extended', () => {
++    expect(classifyWitnessed(lkw, at(540))!.tier).toBe('extended');
++  });
++  it('541 min is outside', () => {
++    expect(classifyWitnessed(lkw, at(541))!.tier).toBe('outside');
++  });
++  it('future LKW clamps to 0 and is standard', () => {
++    const r = classifyWitnessed(at(60), lkw)!;
++    expect(r.elapsedMin).toBe(0);
++    expect(r.tier).toBe('standard');
++    expect(r.minutesLeft).toBe(270);
++    noNaN(r);
++  });
++  it('invalid Date returns null', () => {
++    expect(classifyWitnessed(new Date(NaN), lkw)).toBeNull();
++  });
++});
++
++describe('classifyWakeUp, C15 additions', () => {
++  it('13: Rec 2a-only with aMin <= 540', () => {
++    const r = classifyWakeUp(t(1, 0), t(3, 0), t(9, 30))!;
++    expect([r.aMin, r.wMin, r.mMin]).toEqual([510, 390, 450]);
++    expect(r.tier).toBe('extended');
++    expect(r.rec1Open).toBe(false);
++    expect(r.rec2aOpen).toBe(true);
++  });
++  it('14: wokeAt after now returns null', () => {
++    expect(classifyWakeUp(t(1, 0), t(6, 0), t(5, 0))).toBeNull();
++  });
++  it('15: asleepAt equals wokeAt', () => {
++    const r = classifyWakeUp(t(10, 0), t(10, 0), t(14, 30))!;
++    expect([r.aMin, r.wMin, r.mMin]).toEqual([270, 270, 270]);
++    expect(r.tier).toBe('standard');
++    expect(r.minutesLeft).toBe(0);
++    noNaN(r);
++  });
++  it('16a: sub-minute flooring keeps 270 min 59 s in standard', () => {
++    const r = classifyWakeUp(t(10, 0), t(10, 30), t(14, 30, 0, 59))!;
++    expect(r.aMin).toBe(270);
++    expect(r.tier).toBe('standard');
++  });
++  it('16b: odd-minute midpoint is floored (asleep 22:00, woke 06:01, now 11:00:59)', () => {
++    // Span 481 min, midpoint 02:00:30. now minus midpoint = 540 min 29 s, floored to 540.
++    const r = classifyWakeUp(t(22, 0), t(6, 1, 1), t(11, 0, 1, 59))!;
++    expect(r.aMin).toBe(780);
++    expect(r.wMin).toBe(299);
++    expect(r.mMin).toBe(540);
++    expect(r.tier).toBe('extended');
++    expect(r.rec2aOpen).toBe(true);
++  });
++  it('17: missing or invalid inputs return null', () => {
++    expect(classifyWakeUp(undefined, t(6, 0), t(9, 0))).toBeNull();
++    expect(classifyWakeUp(t(1, 0), undefined, t(9, 0))).toBeNull();
++    expect(classifyWakeUp(null, null, t(9, 0))).toBeNull();
++    expect(classifyWakeUp(new Date(NaN), t(6, 0), t(9, 0))).toBeNull();
++    expect(classifyWakeUp(t(1, 0), t(6, 0), new Date(NaN))).toBeNull();
++  });
++});
++
++describe('classifyIvtWindow dispatch', () => {
++  const now = t(12, 0);
++  it('returns the witnessed result for a valid LKW', () => {
++    const r = classifyIvtWindow({ lkw: t(10, 0) }, now)!;
++    expect(r.kind).toBe('witnessed');
++  });
++  it('returns the wake-up result when lkw is null and wakeUp present', () => {
++    const r = classifyIvtWindow({ lkw: null, wakeUp: { asleepAt: t(1, 0), wokeAt: t(3, 0) } }, now)!;
++    expect(r.kind).toBe('wake-up');
++  });
++  it('returns null for unknown onset, unset, and invalid wake-up', () => {
++    expect(classifyIvtWindow({ lkw: null }, now)).toBeNull();
++    expect(classifyIvtWindow({ lkw: undefined }, now)).toBeNull();
++    expect(
++      classifyIvtWindow({ lkw: null, wakeUp: { asleepAt: t(6, 0), wokeAt: t(5, 0) } }, now),
++    ).toBeNull();
++  });
++  it('prefers the witnessed clock when lkw is a Date even if wakeUp is present', () => {
++    const r = classifyIvtWindow(
++      { lkw: t(10, 0), wakeUp: { asleepAt: t(1, 0), wokeAt: t(3, 0) } },
++      now,
++    )!;
++    expect(r.kind).toBe('witnessed');
++  });
++});
+diff --git a/src/components/article/stroke/step1Gating.ts b/src/components/article/stroke/step1Gating.ts
+new file mode 100644
+index 0000000..f26a7b8
+--- /dev/null
++++ b/src/components/article/stroke/step1Gating.ts
+@@ -0,0 +1,72 @@
++import type { IvtWindowResult } from '../../../utils/ivtWindow';
++
++/**
++ * Pure derivation of the Stroke Code Step 1 gating flags from the shared IVT
++ * window classifier. No user-facing strings. Keeps the Step 1 gates and the
++ * panel chip on one tier so they cannot disagree.
++ *
++ * Witnessed behaviour is identical to the pre-classifier code. A wake-up entry
++ * (lkw null with asleep and woke times) follows its tier: the standard tier
++ * gets the witnessed toolset (BP 185/110 gate, disabling-symptoms checklist,
++ * DAPT path); extended gets what wake-up got before (neither flag); outside
++ * behaves like witnessed more than 9 h. An unclassifiable wake-up entry falls
++ * back to unknown-onset behaviour.
++ */
++export interface Step1GatingInput {
++  lkw: Date | null | undefined;
++  wakeUp?: { asleepAt: Date; wokeAt: Date };
++  ivtWindow: IvtWindowResult | null;
++  nihssScore: number;
++  systolicBP: number;
++  diastolicBP: number;
++  hasDisablingSymptom: boolean;
++}
++
++export interface Step1Gating {
++  lkwEntered: boolean;
++  trulyUnknownOnset: boolean;
++  withinTPAWindow: boolean;
++  outsideThromboWindow: boolean;
++  showDisablingSymptomsChecklist: boolean;
++  bpTooHigh: boolean;
++  onDaptPath: boolean;
++  weightRequired: boolean;
++  bpControlWaived: boolean;
++  showWakeUpNotice: boolean;
++  showExtendedIvtLink: boolean;
++}
++
++export function deriveStep1Gating(input: Step1GatingInput): Step1Gating {
++  const { lkw, wakeUp, ivtWindow, nihssScore, systolicBP, diastolicBP, hasDisablingSymptom } = input;
++  const lkwEntered = lkw !== undefined;
++  const trulyUnknownOnset = lkw === null && (!wakeUp || ivtWindow === null);
++  const withinTPAWindow = ivtWindow?.tier === 'standard';
++  const outsideThromboWindow = ivtWindow?.tier === 'outside';
++  const showDisablingSymptomsChecklist =
++    withinTPAWindow && nihssScore >= 1 && nihssScore <= 5 && !trulyUnknownOnset;
++  const bpTooHigh = withinTPAWindow
++    ? systolicBP > 185 || diastolicBP > 110
++    : systolicBP > 220 || diastolicBP > 120;
++  const onDaptPath =
++    withinTPAWindow && nihssScore >= 1 && nihssScore <= 3 && !hasDisablingSymptom;
++  const weightRequired = !outsideThromboWindow && !onDaptPath;
++  const bpControlWaived = trulyUnknownOnset;
++  const showWakeUpNotice =
++    trulyUnknownOnset ||
++    (ivtWindow?.kind === 'wake-up' && ivtWindow.tier === 'extended' && ivtWindow.rec1Open);
++  const showExtendedIvtLink =
++    lkwEntered && (trulyUnknownOnset || (ivtWindow != null && ivtWindow.tier !== 'standard'));
++  return {
++    lkwEntered,
++    trulyUnknownOnset,
++    withinTPAWindow,
++    outsideThromboWindow,
++    showDisablingSymptomsChecklist,
++    bpTooHigh,
++    onDaptPath,
++    weightRequired,
++    bpControlWaived,
++    showWakeUpNotice,
++    showExtendedIvtLink,
++  };
++}
+diff --git a/src/components/article/stroke/step1Gating.test.ts b/src/components/article/stroke/step1Gating.test.ts
+new file mode 100644
+index 0000000..2c16a6e
+--- /dev/null
++++ b/src/components/article/stroke/step1Gating.test.ts
+@@ -0,0 +1,160 @@
++import { describe, it, expect } from 'vitest';
++import { deriveStep1Gating, type Step1GatingInput } from './step1Gating';
++import { classifyIvtWindow } from '../../../utils/ivtWindow';
++
++const t = (hh: number, mm: number, dayOffset = 0) => new Date(2026, 2, 10 + dayOffset, hh, mm);
++
++function wakeUpInput(
++  asleepAt: Date,
++  wokeAt: Date,
++  now: Date,
++  over: Partial<Step1GatingInput> = {},
++): Step1GatingInput {
++  const wakeUp = { asleepAt, wokeAt };
++  return {
++    lkw: null,
++    wakeUp,
++    ivtWindow: classifyIvtWindow({ lkw: null, wakeUp }, now),
++    nihssScore: 0,
++    systolicBP: 140,
++    diastolicBP: 80,
++    hasDisablingSymptom: false,
++    ...over,
++  };
++}
++
++function witnessedInput(hoursAgo: number, over: Partial<Step1GatingInput> = {}): Step1GatingInput {
++  const now = t(12, 0);
++  const lkw = new Date(now.getTime() - hoursAgo * 3600000);
++  return {
++    lkw,
++    ivtWindow: classifyIvtWindow({ lkw }, now),
++    nihssScore: 0,
++    systolicBP: 140,
++    diastolicBP: 80,
++    hasDisablingSymptom: false,
++    ...over,
++  };
++}
++
++describe('deriveStep1Gating, witnessed', () => {
++  it('3 h behaves as within the window', () => {
++    const g = deriveStep1Gating(witnessedInput(3, { nihssScore: 3, systolicBP: 190 }));
++    expect(g.withinTPAWindow).toBe(true);
++    expect(g.outsideThromboWindow).toBe(false);
++    expect(g.bpTooHigh).toBe(true);
++    expect(g.showDisablingSymptomsChecklist).toBe(true);
++    expect(g.onDaptPath).toBe(true);
++    expect(g.weightRequired).toBe(false);
++    expect(g.bpControlWaived).toBe(false);
++    expect(g.showExtendedIvtLink).toBe(false);
++    expect(g.showWakeUpNotice).toBe(false);
++  });
++  it('6 h is unchanged: not within, not outside, 220/120 BP limit, link shown, weight required', () => {
++    const g = deriveStep1Gating(witnessedInput(6, { nihssScore: 3, systolicBP: 200, diastolicBP: 100 }));
++    expect(g.withinTPAWindow).toBe(false);
++    expect(g.outsideThromboWindow).toBe(false);
++    expect(g.bpTooHigh).toBe(false);
++    expect(g.showDisablingSymptomsChecklist).toBe(false);
++    expect(g.onDaptPath).toBe(false);
++    expect(g.weightRequired).toBe(true);
++    expect(g.showExtendedIvtLink).toBe(true);
++    expect(g.showWakeUpNotice).toBe(false);
++    expect(deriveStep1Gating(witnessedInput(6, { systolicBP: 221 })).bpTooHigh).toBe(true);
++  });
++  it('10 h is unchanged: outside, weight not required, link shown', () => {
++    const g = deriveStep1Gating(witnessedInput(10));
++    expect(g.outsideThromboWindow).toBe(true);
++    expect(g.withinTPAWindow).toBe(false);
++    expect(g.weightRequired).toBe(false);
++    expect(g.showExtendedIvtLink).toBe(true);
++  });
++  it('unset LKW shows nothing and is not entered', () => {
++    const g = deriveStep1Gating({
++      lkw: undefined,
++      ivtWindow: null,
++      nihssScore: 0,
++      systolicBP: 0,
++      diastolicBP: 0,
++      hasDisablingSymptom: false,
++    });
++    expect(g.lkwEntered).toBe(false);
++    expect(g.trulyUnknownOnset).toBe(false);
++    expect(g.showExtendedIvtLink).toBe(false);
++    expect(g.showWakeUpNotice).toBe(false);
++  });
++});
++
++describe('deriveStep1Gating, truly unknown onset', () => {
++  const unknown: Step1GatingInput = {
++    lkw: null,
++    ivtWindow: null,
++    nihssScore: 3,
++    systolicBP: 200,
++    diastolicBP: 100,
++    hasDisablingSymptom: false,
++  };
++  it('keeps the BP waiver, hides the checklist, shows notice and link', () => {
++    const g = deriveStep1Gating(unknown);
++    expect(g.trulyUnknownOnset).toBe(true);
++    expect(g.bpControlWaived).toBe(true);
++    expect(g.showDisablingSymptomsChecklist).toBe(false);
++    expect(g.withinTPAWindow).toBe(false);
++    expect(g.weightRequired).toBe(true);
++    expect(g.showWakeUpNotice).toBe(true);
++    expect(g.showExtendedIvtLink).toBe(true);
++  });
++  it('an unclassifiable wake-up entry falls back to unknown-onset behaviour', () => {
++    const g = deriveStep1Gating({
++      ...unknown,
++      wakeUp: { asleepAt: t(6, 0), wokeAt: t(5, 0) },
++    });
++    expect(g.trulyUnknownOnset).toBe(true);
++    expect(g.bpControlWaived).toBe(true);
++    expect(g.showWakeUpNotice).toBe(true);
++  });
++});
++
++describe('deriveStep1Gating, wake-up entries (C15 items 18 to 21)', () => {
++  // Spec rows: 1 = 14:00/15:00 now 17:30; 3 = 23:00/06:00+1 now 07:00+1;
++  // 5 = 22:00/06:00+1 now 11:00+1; 6 = same, now 11:01+1.
++  it('18: standard tier with BP 200/115 makes bpTooHigh true and BP control required', () => {
++    const g = deriveStep1Gating(wakeUpInput(t(14, 0), t(15, 0), t(17, 30), { systolicBP: 200, diastolicBP: 115 }));
++    expect(g.withinTPAWindow).toBe(true);
++    expect(g.bpTooHigh).toBe(true);
++    expect(g.bpControlWaived).toBe(false);
++  });
++  it('19: standard tier with NIHSS 3 shows the disabling-symptoms checklist', () => {
++    const g = deriveStep1Gating(wakeUpInput(t(14, 0), t(15, 0), t(17, 30), { nihssScore: 3 }));
++    expect(g.showDisablingSymptomsChecklist).toBe(true);
++    expect(g.onDaptPath).toBe(true);
++    expect(g.weightRequired).toBe(false);
++  });
++  it('20: outside tier gives weightRequired false, same as witnessed beyond 9 h', () => {
++    const g = deriveStep1Gating(wakeUpInput(t(22, 0), t(6, 0, 1), t(11, 1, 1)));
++    expect(g.outsideThromboWindow).toBe(true);
++    expect(g.weightRequired).toBe(false);
++    expect(g.weightRequired).toBe(deriveStep1Gating(witnessedInput(10)).weightRequired);
++  });
++  it('extended tier gets neither the checklist nor the within-window BP limit', () => {
++    const g = deriveStep1Gating(
++      wakeUpInput(t(23, 0), t(6, 0, 1), t(7, 0, 1), { nihssScore: 3, systolicBP: 200 }),
++    );
++    expect(g.withinTPAWindow).toBe(false);
++    expect(g.outsideThromboWindow).toBe(false);
++    expect(g.showDisablingSymptomsChecklist).toBe(false);
++    expect(g.bpTooHigh).toBe(false);
++    expect(g.weightRequired).toBe(true);
++  });
++  it('21: notice visibility for spec rows 1, 3, 5, 6', () => {
++    expect(deriveStep1Gating(wakeUpInput(t(14, 0), t(15, 0), t(17, 30))).showWakeUpNotice).toBe(false);
++    expect(deriveStep1Gating(wakeUpInput(t(23, 0), t(6, 0, 1), t(7, 0, 1))).showWakeUpNotice).toBe(true);
++    expect(deriveStep1Gating(wakeUpInput(t(22, 0), t(6, 0, 1), t(11, 0, 1))).showWakeUpNotice).toBe(false);
++    expect(deriveStep1Gating(wakeUpInput(t(22, 0), t(6, 0, 1), t(11, 1, 1))).showWakeUpNotice).toBe(false);
++  });
++  it('Extended-IVT link: hidden in standard, shown in extended and outside', () => {
++    expect(deriveStep1Gating(wakeUpInput(t(14, 0), t(15, 0), t(17, 30))).showExtendedIvtLink).toBe(false);
++    expect(deriveStep1Gating(wakeUpInput(t(23, 0), t(6, 0, 1), t(7, 0, 1))).showExtendedIvtLink).toBe(true);
++    expect(deriveStep1Gating(wakeUpInput(t(22, 0), t(6, 0, 1), t(11, 1, 1))).showExtendedIvtLink).toBe(true);
++  });
++});
+diff --git a/src/components/shared/patientContextPanel.windowChip.test.tsx b/src/components/shared/patientContextPanel.windowChip.test.tsx
+new file mode 100644
+index 0000000..551956a
+--- /dev/null
++++ b/src/components/shared/patientContextPanel.windowChip.test.tsx
+@@ -0,0 +1,186 @@
++import { describe, it, expect, afterEach, vi } from 'vitest';
++import React from 'react';
++import { renderToStaticMarkup } from 'react-dom/server';
++import {
++  PatientContextPanel,
++  EMPTY_PATIENT_CONTEXT,
++  type PatientContextValues,
++} from './PatientContextPanel';
++
++const t = (hh: number, mm: number, dayOffset = 0) => new Date(2026, 2, 10 + dayOffset, hh, mm);
++
++type Mode = 'timing' | 'chip';
++
++function render(values: PatientContextValues, mode: Mode): string {
++  return renderToStaticMarkup(
++    <PatientContextPanel
++      values={values}
++      onChange={() => {}}
++      defaultExpanded
++      showThrombolysisTiming={mode === 'timing'}
++      showWindowChip={mode === 'chip'}
++    />,
++  );
++}
++
++/** The tagged chip container's inner text, tags stripped. */
++function chipBlock(html: string, claim: string): string | null {
++  const m = html.match(new RegExp(`data-claim="${claim}"[^>]*>(.*?)</div>`));
++  if (!m) return null;
++  // First span is the chip; everything after it is the elapsed line.
++  const parts = m[1].match(/^<span[^>]*>(.*?)<\/span>(.*)$/);
++  if (!parts) return null;
++  const strip = (h: string) => h.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
++  return `${strip(parts[2])}|${strip(parts[1])}`;
++}
++
++const base = (over: Partial<PatientContextValues>): PatientContextValues => ({
++  ...EMPTY_PATIENT_CONTEXT,
++  ...over,
++});
++
++afterEach(() => {
++  vi.useRealTimers();
++});
++
++describe('PatientContextPanel window chip', () => {
++  const MODES: Mode[] = ['timing', 'chip'];
++
++  it('(a) witnessed 6 h ago: same chip and line in both modes, witnessed claim tag', () => {
++    vi.useFakeTimers();
++    vi.setSystemTime(t(12, 0));
++    const values = base({ lkw: t(6, 0) });
++    const [h1, h2] = MODES.map((m) => render(values, m));
++    const b1 = chipBlock(h1, 'ivt-window-4.5h');
++    expect(b1).toBe('~6 h 0 min since last known well|4.5–9h window');
++    expect(chipBlock(h2, 'ivt-window-4.5h')).toBe(b1);
++    expect(h1).not.toContain('data-claim="ivt-window-wake-up"');
++    expect(h1).not.toContain('Wake-up or unknown onset');
++  });
++
++  it('(b) wake-up spec row 3: extended, both clocks shown, wake-up claim tag', () => {
++    vi.useFakeTimers();
++    vi.setSystemTime(t(7, 0, 1));
++    const values = base({ lkw: null, wakeUp: { asleepAt: t(23, 0), wokeAt: t(6, 0, 1) } });
++    const [h1, h2] = MODES.map((m) => render(values, m));
++    const b1 = chipBlock(h1, 'ivt-window-wake-up');
++    expect(b1).toBe('~1 h 0 min since woke · ~4 h 30 min since sleep midpoint|Extended window');
++    expect(chipBlock(h2, 'ivt-window-wake-up')).toBe(b1);
++    expect(h1).not.toContain('data-claim="ivt-window-4.5h"');
++    expect(h1).not.toContain('Wake-up or unknown onset');
++  });
++
++  it('(c) wake-up spec row 6: past the wake-up windows', () => {
++    vi.useFakeTimers();
++    vi.setSystemTime(t(11, 1, 1));
++    const values = base({ lkw: null, wakeUp: { asleepAt: t(22, 0), wokeAt: t(6, 0, 1) } });
++    const [h1, h2] = MODES.map((m) => render(values, m));
++    const b1 = chipBlock(h1, 'ivt-window-wake-up');
++    expect(b1).toBe('~5 h 1 min since woke · ~9 h 1 min since sleep midpoint|Past wake-up windows');
++    expect(chipBlock(h2, 'ivt-window-wake-up')).toBe(b1);
++    expect(h1).toContain('text-rose-700');
++  });
++
++  it('(d) wake-up spec row 1: standard tier, since last asleep, Within 4.5h', () => {
++    vi.useFakeTimers();
++    vi.setSystemTime(t(17, 30));
++    const values = base({ lkw: null, wakeUp: { asleepAt: t(14, 0), wokeAt: t(15, 0) } });
++    const [h1, h2] = MODES.map((m) => render(values, m));
++    const b1 = chipBlock(h1, 'ivt-window-wake-up');
++    expect(b1).toBe('~3 h 30 min since last asleep|Within 4.5h');
++    expect(chipBlock(h2, 'ivt-window-wake-up')).toBe(b1);
++    expect(h1).toContain('text-emerald-700');
++  });
++
++  it('(e) unknown onset: sentence only, no chip, in both modes', () => {
++    vi.useFakeTimers();
++    vi.setSystemTime(t(12, 0));
++    const values = base({ lkw: null });
++    for (const m of MODES) {
++      const html = render(values, m);
++      expect(html).toContain('Wake-up or unknown onset, so time since onset is not shown.');
++      expect(html).not.toContain('data-claim="ivt-window-4.5h"');
++      expect(html).not.toContain('data-claim="ivt-window-wake-up"');
++    }
++  });
++
++  it('the sentence is absent for a wake-up entry and a witnessed LKW', () => {
++    vi.useFakeTimers();
++    vi.setSystemTime(t(17, 30));
++    const wake = base({ lkw: null, wakeUp: { asleepAt: t(14, 0), wokeAt: t(15, 0) } });
++    const wit = base({ lkw: t(15, 0) });
++    for (const m of MODES) {
++      expect(render(wake, m)).not.toContain('Wake-up or unknown onset');
++      expect(render(wit, m)).not.toContain('Wake-up or unknown onset');
++    }
++  });
++
++  it('countdown chip in the final 30 min, witnessed and wake-up', () => {
++    vi.useFakeTimers();
++    vi.setSystemTime(t(12, 0));
++    expect(chipBlock(render(base({ lkw: t(7, 40) }), 'chip'), 'ivt-window-4.5h')).toBe(
++      '~4 h 20 min since last known well|10 min left',
++    );
++    vi.setSystemTime(t(18, 10));
++    expect(
++      chipBlock(
++        render(base({ lkw: null, wakeUp: { asleepAt: t(14, 0), wokeAt: t(15, 0) } }), 'timing'),
++        'ivt-window-wake-up',
++      ),
++    ).toBe('~4 h 10 min since last asleep|20 min left');
++  });
++
++  it('no chip when neither flag is set', () => {
++    vi.useFakeTimers();
++    vi.setSystemTime(t(12, 0));
++    const html = renderToStaticMarkup(
++      <PatientContextPanel values={base({ lkw: t(6, 0) })} onChange={() => {}} defaultExpanded />,
++    );
++    expect(html).not.toContain('data-claim="ivt-window-4.5h"');
++    expect(html).not.toContain('Wake-up or unknown onset');
++  });
++});
++
++describe('PatientContextPanel in-panel BP note', () => {
++  const HIGH_BP = { systolic: '190', diastolic: '100' };
++
++  it('Stroke Code (showWindowChip only) keeps the generic note for a witnessed in-window time', () => {
++    vi.useFakeTimers();
++    vi.setSystemTime(t(12, 0));
++    const html = render(base({ lkw: t(9, 0), ...HIGH_BP }), 'chip');
++    expect(html).toContain('BP above tPA/TNK threshold. Lower to ≤185/110 before treatment');
++    expect(html).not.toContain('If thrombolysis planned');
++  });
++
++  it('Stroke Code keeps the generic note out of window and for a wake-up entry too', () => {
++    vi.useFakeTimers();
++    vi.setSystemTime(t(11, 1, 1));
++    const out = render(
++      base({ lkw: null, wakeUp: { asleepAt: t(22, 0), wokeAt: t(6, 0, 1) }, ...HIGH_BP }),
++      'chip',
++    );
++    expect(out).toContain('BP above tPA/TNK threshold. Lower to ≤185/110 before treatment');
++  });
++
++  it('NIHSS shows the conditional prompt for a wake-up entry in the standard tier', () => {
++    vi.useFakeTimers();
++    vi.setSystemTime(t(17, 30));
++    const html = render(
++      base({ lkw: null, wakeUp: { asleepAt: t(14, 0), wokeAt: t(15, 0) }, ...HIGH_BP }),
++      'timing',
++    );
++    expect(html).toContain('If thrombolysis planned: BP goal &lt;185/110');
++    expect(html).not.toContain('BP above tPA/TNK threshold');
++  });
++
++  it('NIHSS shows no BP note for a wake-up entry in the extended tier', () => {
++    vi.useFakeTimers();
++    vi.setSystemTime(t(7, 0, 1));
++    const html = render(
++      base({ lkw: null, wakeUp: { asleepAt: t(23, 0), wokeAt: t(6, 0, 1) }, ...HIGH_BP }),
++      'timing',
++    );
++    expect(html).not.toContain('If thrombolysis planned');
++    expect(html).not.toContain('BP above tPA/TNK threshold');
++  });
++});

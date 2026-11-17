@@ -19,6 +19,7 @@ type BrowserWindow = Window & {
 };
 import { formatClinicalDateShort } from '../../utils/clinicalDateTime';
 import { getTNKDose, getTpaDoses, getTNKVolumeMl, isLowWeightBandCaveat, toKg } from '../../utils/strokeDosing';
+import { classifyIvtWindow } from '../../utils/ivtWindow';
 import { LKWTimePicker } from '../article/stroke/LKWTimePicker';
 import { MrsPickerModal } from '../calculators/MrsPickerModal';
 
@@ -196,15 +197,26 @@ interface PatientContextPanelProps {
    */
   extraRows?: PatientContextRow[];
   /**
-   * Opt-in thrombolysis-timing aid (currently NIHSS). When true and a
-   * witnessed LKW timestamp is set, the panel shows time since onset, a
-   * within/beyond-4.5h window chip, and reframes the elevated-BP note as a
-   * "Thrombolytic candidate: BP goal <185/110" prompt while in window. These
-   * are live bedside aids and are not part of any copy export. Off by default
-   * so the Stroke Code steps and the mRS picker that share this panel are
-   * unchanged.
+   * Opt-in thrombolysis-timing aid (currently NIHSS). Turns on the window chip
+   * and elapsed line (see showWindowChip) and adds the thrombolysis-specific
+   * blocks: the elevated-BP note reframed as an "If thrombolysis planned: BP
+   * goal <185/110" prompt while the patient is in the standard tier (a
+   * witnessed LKW, or a wake-up entry measured from last asleep), plus the
+   * glucose, anticoagulant and eligibility aids. These are live bedside aids
+   * and are not part of any copy export. Off by default so the Stroke Code
+   * steps and the mRS picker that share this panel are unchanged.
    */
   showThrombolysisTiming?: boolean;
+  /**
+   * Show only the time-window chip and elapsed line directly under the Last
+   * known well row, without any of the other thrombolysis-timing blocks.
+   * Stroke Code Step 1 uses this. Witnessed LKW: green within 4.5h (amber
+   * minutes-left countdown in the final 30 min), orange 4.5 to 9h, rose beyond
+   * 9h. Wake-up entry (asleep and woke times): same standard tier measured from
+   * last asleep, orange extended window, rose past the wake-up windows. The
+   * chip is implied by showThrombolysisTiming, so NIHSS needs only that flag.
+   */
+  showWindowChip?: boolean;
   /**
    * Optional pathway shortcuts rendered beneath the thrombolysis-timing row.
    * Gated on showThrombolysisTiming so only the NIHSS surface shows them.
@@ -250,6 +262,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
   lockExpanded = false,
   extraRows,
   showThrombolysisTiming = false,
+  showWindowChip = false,
   pathwayActions,
 }) => {
   const [expanded, setExpanded] = useState(lockExpanded || defaultExpanded);
@@ -405,40 +418,31 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
         : 'Unknown'
       : formatClinicalDateShort(values.lkw);
 
-  // Thrombolysis-timing aid (opt-in via showThrombolysisTiming, currently
-  // NIHSS). Computes time since a witnessed LKW and the IV thrombolysis window
-  // tier. Recomputed each render so it stays current as the clinician
-  // interacts. Returns null unless a real LKW Date is set (wake-up / unknown /
-  // unset have no onset clock). Standard ≤4.5h per AHA/ASA 2026 §4.6.1/§4.6.2;
-  // perfusion/MRI-selected extended 4.5–9h per EXTEND + WAKE-UP (COR 2a). Note:
-  // §4.6.3 is the separate late-window TNK-for-LVO recommendation (4.5–24h), not
-  // this extended IVT window.
-  const ivt = (() => {
-    if (!showThrombolysisTiming || !(values.lkw instanceof Date)) return null;
-    const elapsedMin = Math.max(0, Math.floor((Date.now() - values.lkw.getTime()) / 60000));
-    const hh = Math.floor(elapsedMin / 60);
-    const mm = elapsedMin % 60;
-    const elapsedLabel = hh > 0 ? `${hh} h ${mm} min` : `${mm} min`;
-    const elapsedHours = elapsedMin / 60;
-    // Three tiers: standard ≤4.5h, perfusion-selected extended 4.5–9h, outside
-    // >9h. inWindow stays the ≤4.5h standard window (it gates the BP prompt and
-    // the countdown; V direction: BP prompt only in the 4.5h window).
-    const tier = elapsedHours <= 4.5 ? 'standard' : elapsedHours <= 9 ? 'extended' : 'outside';
-    const inWindow = tier === 'standard';
-    const minutesLeft = Math.max(0, Math.round((4.5 - elapsedHours) * 60));
-    const lastHalfHour = inWindow && minutesLeft <= 30;
-    // Window-chip appearance: green standard, orange extended, red outside.
-    // The amber countdown sits between green and orange in the final 30 min.
-    const chip =
-      tier === 'standard'
-        ? lastHalfHour
-          ? { cls: 'text-amber-700 bg-amber-50 border-amber-200', label: `${minutesLeft} min left` }
-          : { cls: 'text-emerald-700 bg-emerald-50 border-emerald-200', label: 'Within 4.5h' }
-        : tier === 'extended'
-        ? { cls: 'text-orange-700 bg-orange-50 border-orange-200', label: '4.5–9h window' }
-        : { cls: 'text-rose-700 bg-rose-50 border-rose-200', label: 'Beyond 9h' };
-    return { elapsedLabel, inWindow, minutesLeft, lastHalfHour, tier, chip };
-  })();
+  // Window chip and elapsed line: on when showWindowChip is set or the
+  // thrombolysis-timing aid is on (NIHSS).
+  const windowChip = showWindowChip || showThrombolysisTiming;
+
+  // Standard ≤4.5 h from LKW per AHA/ASA 2026 §4.6.1/§4.6.2. Extended tiers per
+  // §4.6.3 Rec 1 (wake-up, ≤4.5 h from symptom recognition, MRI DWI-FLAIR
+  // selected) and Rec 2 (≤9 h from sleep midpoint, or 4.5–9 h from LKW,
+  // perfusion selected). The chip states a time category only.
+  // Recomputed each render so it stays current as the clinician interacts.
+  const ivt = windowChip
+    ? classifyIvtWindow({ lkw: values.lkw, wakeUp: values.wakeUp }, new Date())
+    : null;
+  // The in-panel BP note belongs to the thrombolysis-timing surface only. On
+  // Stroke Code (showWindowChip alone) its text and visibility are unchanged.
+  const timingInWindow = showThrombolysisTiming && ivt?.tier === 'standard';
+
+  const formatElapsed = (totalMin: number): string => {
+    const hh = Math.floor(totalMin / 60);
+    const mm = totalMin % 60;
+    return hh > 0 ? `${hh} h ${mm} min` : `${mm} min`;
+  };
+  const CHIP_EMERALD = 'text-emerald-700 bg-emerald-50 border-emerald-200';
+  const CHIP_AMBER = 'text-amber-700 bg-amber-50 border-amber-200';
+  const CHIP_ORANGE = 'text-orange-700 bg-orange-50 border-orange-200';
+  const CHIP_ROSE = 'text-rose-700 bg-rose-50 border-rose-200';
 
   return (
     <div className="bg-white border border-slate-100 rounded-xl overflow-hidden">
@@ -502,37 +506,114 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
           <button
             type="button"
             onClick={() => setLkwModalOpen(true)}
-            className="w-full min-h-[44px] flex items-center justify-between px-4 py-2 gap-3 hover:bg-slate-50 transition-colors text-left focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+            className={`w-full min-h-[44px] flex items-center justify-between px-4 py-2 ${values.lkw === null && values.wakeUp ? 'flex-wrap gap-x-2 gap-y-0.5' : 'gap-3'} hover:bg-slate-50 transition-colors text-left focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none`}
             aria-haspopup="dialog"
             aria-label={`Set last known well time, currently ${lkwDisplay}`}
           >
-            <span className="text-xs font-medium text-slate-600 flex-shrink-0">Last known well</span>
-            <span className="flex items-center gap-1 min-w-0">
-              <span className={`text-sm text-right break-words min-w-0 ${values.lkw === undefined ? 'text-slate-400' : 'text-slate-900'}`}>{lkwDisplay}</span>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400" aria-hidden />
-            </span>
+            {values.lkw === null && values.wakeUp ? (
+              <>
+                {/* Wake-up entry: two short lines (asleep / woke) so the value
+                    does not wrap raggedly on a phone. Where the panel is too
+                    narrow to hold label and times side by side (Stroke Code
+                    on a phone), the times drop to their own right-aligned
+                    lines under the label. The full sentence stays in the
+                    aria-label. */}
+                <span className="text-xs font-medium text-slate-600 flex-shrink-0">Last known well</span>
+                <span className="flex items-center gap-1 flex-shrink-0 ml-auto">
+                  <span className="text-[13px] leading-snug text-right text-slate-900">
+                    <span className="block whitespace-nowrap">Asleep {formatClinicalDateShort(values.wakeUp.asleepAt)}</span>
+                    <span className="block whitespace-nowrap">Woke {formatClinicalDateShort(values.wakeUp.wokeAt)}</span>
+                  </span>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" aria-hidden />
+                </span>
+              </>
+            ) : (
+              <>
+                <span className="text-xs font-medium text-slate-600 flex-shrink-0">Last known well</span>
+                <span className="flex items-center gap-1 min-w-0">
+                  <span className={`text-sm text-right break-words min-w-0 ${values.lkw === undefined ? 'text-slate-400' : 'text-slate-900'}`}>{lkwDisplay}</span>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" aria-hidden />
+                </span>
+              </>
+            )}
           </button>
 
-          {/* Thrombolysis timing — opt-in (NIHSS). Time since onset plus a
-              three-tier window chip (green ≤4.5h, orange 4.5–9h, red >9h).
-              Live bedside aid; the chip is not part of the copy export (only
-              the time-since-onset line is). */}
-          {ivt && (
+          {/* Window chip and elapsed line, directly under the Last known well
+              row (NIHSS via showThrombolysisTiming, Stroke Code via
+              showWindowChip). The chip comes first so the badge sits right
+              under the time; the clocks follow and never break mid-phrase.
+              Two literal branches because the claims scanner only matches
+              literal data-claim attributes. Witnessed LKW: green
+              within 4.5h, amber countdown in the final 30 min, orange 4.5 to
+              9h, rose beyond 9h. Wake-up entry: green within 4.5h of last
+              asleep, orange extended window, rose past the wake-up windows.
+              Live bedside aid, not part of the copy export. */}
+          {ivt?.kind === 'witnessed' && (
             <div
               data-claim="ivt-window-4.5h"
-              className="px-4 pb-2 -mt-0.5 flex items-center gap-2 flex-wrap"
+              className="px-4 pb-2 -mt-0.5 text-xs leading-6 text-slate-500"
               role="status"
               aria-live="polite"
             >
-              <span className="text-xs text-slate-500">~{ivt.elapsedLabel} since onset</span>
               <span
-                className={`inline-flex items-center text-[11px] font-semibold rounded-full px-2 py-0.5 border ${ivt.chip.cls}`}
+                className={`inline-flex items-center align-middle mr-2 text-[11px] leading-4 font-semibold rounded-full px-2 py-0.5 border ${
+                  ivt.tier === 'standard'
+                    ? ivt.lastHalfHour
+                      ? CHIP_AMBER
+                      : CHIP_EMERALD
+                    : ivt.tier === 'extended'
+                    ? CHIP_ORANGE
+                    : CHIP_ROSE
+                }`}
               >
-                {ivt.chip.label}
+                {ivt.tier === 'standard'
+                  ? ivt.lastHalfHour
+                    ? `${ivt.minutesLeft} min left`
+                    : 'Within 4.5h'
+                  : ivt.tier === 'extended'
+                  ? '4.5–9h window'
+                  : 'Beyond 9h'}
               </span>
+              <span className="whitespace-nowrap">~{formatElapsed(ivt.elapsedMin)} since last known well</span>
             </div>
           )}
-          {showThrombolysisTiming && values.lkw === null && (
+          {ivt?.kind === 'wake-up' && (
+            <div
+              data-claim="ivt-window-wake-up"
+              className="px-4 pb-2 -mt-0.5 text-xs leading-6 text-slate-500"
+              role="status"
+              aria-live="polite"
+            >
+              <span
+                className={`inline-flex items-center align-middle mr-2 text-[11px] leading-4 font-semibold rounded-full px-2 py-0.5 border ${
+                  ivt.tier === 'standard'
+                    ? ivt.lastHalfHour
+                      ? CHIP_AMBER
+                      : CHIP_EMERALD
+                    : ivt.tier === 'extended'
+                    ? CHIP_ORANGE
+                    : CHIP_ROSE
+                }`}
+              >
+                {ivt.tier === 'standard'
+                  ? ivt.lastHalfHour
+                    ? `${ivt.minutesLeft} min left`
+                    : 'Within 4.5h'
+                  : ivt.tier === 'extended'
+                  ? 'Extended window'
+                  : 'Past wake-up windows'}
+              </span>
+              {ivt.tier === 'standard' ? (
+                <span className="whitespace-nowrap">~{formatElapsed(ivt.aMin)} since last asleep</span>
+              ) : (
+                <>
+                  <span className="whitespace-nowrap">~{formatElapsed(ivt.wMin)} since woke ·</span>{' '}
+                  <span className="whitespace-nowrap">~{formatElapsed(ivt.mMin)} since sleep midpoint</span>
+                </>
+              )}
+            </div>
+          )}
+          {windowChip && values.lkw === null && !values.wakeUp && (
             <div className="px-4 pb-2 -mt-0.5">
               <span className="text-xs text-slate-400">
                 Wake-up or unknown onset, so time since onset is not shown.
@@ -584,7 +665,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
             // of window, or before LKW is entered, the <185/110 pre-thrombolysis
             // target does not apply, so no BP prompt is shown. Surfaces without
             // the timing aid keep the generic note. (V direction 2026-06-10.)
-            if (showThrombolysisTiming && !ivt?.inWindow) return null;
+            if (showThrombolysisTiming && !timingInWindow) return null;
             return (
               <div
                 data-claim="bp-ivt-threshold-185-110"
@@ -594,7 +675,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
               >
                 <span className="text-amber-600 text-xs font-bold flex-shrink-0 leading-snug" aria-hidden="true">!</span>
                 <p className="text-xs text-amber-700 leading-snug">
-                  {ivt?.inWindow
+                  {timingInWindow
                     ? 'If thrombolysis planned: BP goal <185/110'
                     : 'BP above tPA/TNK threshold. Lower to ≤185/110 before treatment'}
                 </p>

@@ -701,10 +701,11 @@ const NihssCalculator: React.FC = () => {
       warfarin: 'Warfarin',
       heparin: 'Heparin/LMWH',
     };
-    // Time since onset for the copy export. Uses LKW as onset, shown only when
-    // a witnessed LKW timestamp is set. Computed at copy time. The on-screen
-    // within/beyond-4.5h chip is intentionally NOT exported (live bedside aid).
-    // V direction 2026-06-10.
+    // Time since last known well for the copy export, shown only when a
+    // witnessed LKW timestamp is set. Computed at copy time. The line reads
+    // "since last known well" (the clock is LKW, not necessarily onset;
+    // clinical review 2026-11-16). The on-screen window chip is intentionally
+    // NOT exported (live bedside aid). V direction 2026-06-10.
     const elapsedSinceOnset = (from: Date): string => {
       const min = Math.max(0, Math.floor((Date.now() - from.getTime()) / 60000));
       const hh = Math.floor(min / 60);
@@ -772,7 +773,7 @@ const NihssCalculator: React.FC = () => {
         ? `LKW: ${formatClinicalDateTime(patientContext.lkw)}`
         : `LKW: Not entered`,
       patientContext.lkw instanceof Date
-        ? `~${elapsedSinceOnset(patientContext.lkw)} since onset`
+        ? `~${elapsedSinceOnset(patientContext.lkw)} since last known well`
         : null,
       formatBpLine(patientContext.systolic, patientContext.diastolic),
       patientContext.glucose
